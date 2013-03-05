@@ -43,12 +43,13 @@ return array(
         //'cache_dir' => $stringPath,
 
         // Whether or not to enable modules dependency checking.
-        // Enabled by default, prevents usage of modules that depend on other modules
-        // that weren't loaded.
+        // Enabled by default, prevents usage of modules that depend on
+        // other modules that weren't loaded.
         // 'check_dependencies' => true,
     ),
 
-    // Used to create an own service manager. May contain one or more child arrays.
+    // Used to create an own service manager.
+    // May contain one or more child arrays.
     //'service_listener_options' => array(
     //     array(
     //         'service_manager' => $stringServiceManagerName,
