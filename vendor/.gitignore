@@ -4,3 +4,5 @@ composer
 zendframework
 autoload.php
 bin
+symfony
+phpunit
