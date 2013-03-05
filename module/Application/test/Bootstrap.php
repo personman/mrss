@@ -78,10 +78,9 @@ class Bootstrap
         if (is_readable($vendorPath . '/autoload.php')) {
             $loader = include $vendorPath . '/autoload.php';
         } else {
-            $zfPath = getenv('ZF2_PATH') ?
-                (defined('ZF2_PATH') ?
-                    ZF2_PATH : (is_dir($vendorPath . '/ZF2/library') ?
-                        $vendorPath . '/ZF2/library' : false));
+            $zfPath = getenv('ZF2_PATH') ?: (defined('ZF2_PATH') ? ZF2_PATH :
+                (is_dir($vendorPath . '/ZF2/library') ?
+                    $vendorPath . '/ZF2/library' : false));
 
             if (!$zfPath) {
                 throw new RuntimeException(
