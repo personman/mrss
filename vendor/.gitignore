@@ -6,3 +6,4 @@ autoload.php
 bin
 symfony
 phpunit
+phing

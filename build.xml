@@ -1,0 +1,21 @@
+<project name="DfSkeleton" default="test">
+   <target name="Code Inspection" description="Run PHP_Codesniffer">
+      <!-- PHP CodeSniffer -->
+      <phpcodesniffer standard="ZEND"
+                      file="module" />
+   </target>
+
+
+   <target name="Code Testing">
+      <phpunit printsummary="true" haltonfailure="true" bootstrap="module/Application/test/Bootstrap.php">
+         <batchtest>
+            <fileset dir="ApplicationTest/Controller/">
+               <include name="*Test.php"/>
+            </fileset>
+         </batchtest>
+      </phpunit>
+
+   </target>
+
+   <target name="test" depends="Code Inspection,Code Testing"/>
+</project>
