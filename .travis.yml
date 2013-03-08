@@ -1,6 +1,5 @@
 language: php
 php:
-  - "5.3"
   - "5.4"
 
 before_script:
@@ -9,6 +8,7 @@ before_script:
   - pear install pear/PHP_CodeSniffer
   - php composer.phar update --dev
   - phpenv rehash
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' = '5.4' ]; then echo 'starting PHP server on port 8080'; php -S localhost:8080 -t public/ & fi"
 
 
 script:
