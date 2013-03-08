@@ -14,6 +14,6 @@ before_script:
 script:
   - phpcs --standard=zend -p --ignore=*/vendor/*,*.min.css,*.min.js .
   - ./vendor/bin/behat
-  #- cd module/Application/test
+  - cd module/Application/test
   - phpunit
 
