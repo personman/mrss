@@ -7,6 +7,7 @@ before_script:
   - git submodule update --init --recursive
   - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
   - pear install pear/PHP_CodeSniffer
+  - php composer.phar update --dev
   - phpenv rehash
 
 
