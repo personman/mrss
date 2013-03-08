@@ -1,0 +1,6 @@
+default:
+    extensions:
+        Behat\MinkExtension\Extension:
+            base_url: http://skel.dan.com/
+            goutte: ~
+            selenium2: ~

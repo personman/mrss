@@ -6,3 +6,8 @@ autoload.php
 bin
 symfony
 phpunit
+behat
+fabpot
+guzzle
+instaclick
+psr
