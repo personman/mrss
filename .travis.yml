@@ -12,7 +12,7 @@ before_script:
 
 
 script:
-  - phpcs --standard=zend -p --ignore=*/vendor/*,*.min.css,*.min.js .
+  - phpcs --standard=zend -p --ignore=*/bin/*,*/vendor/*,*.min.css,*.min.js .
   - ./bin/behat
   - ./bin/phpunit
 
