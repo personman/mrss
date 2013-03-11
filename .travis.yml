@@ -13,6 +13,6 @@ before_script:
 
 script:
   - phpcs --standard=zend -p --ignore=*/vendor/*,*.min.css,*.min.js .
-  - ./vendor/bin/behat
-  - ./vendor/bin/phpunit
+  - ./bin/behat
+  - ./bin/phpunit
 

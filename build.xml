@@ -7,7 +7,7 @@
 
 
    <target name="Code Testing">
-      <exec command="vendor/bin/behat" passthru="true"></exec>
+      <exec command="/bin/behat" passthru="true"></exec>
 
       <phpunit printsummary="true" haltonfailure="true" bootstrap="module/Application/test/Bootstrap.php">
          <batchtest>

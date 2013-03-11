@@ -10,9 +10,9 @@ use Behat\MinkExtension\Context\MinkContext;
 class FeatureContext extends MinkContext
 {
     /**
-     * @Given /^that I am logged out$/
+     * @Given /^I am logged out$/
      */
-    public function thatIAmLoggedOut()
+    public function iAmLoggedOut()
     {
         $this->getSession()->visit("/user/logout");
     }

@@ -23,5 +23,8 @@
         "behat/mink-zombie-driver": "*",
         "symfony/http-kernel": "*"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "config": {
+        "bin-dir": "bin/"
+    }
 }
