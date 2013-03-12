@@ -4,15 +4,13 @@ php:
 
 before_script:
   - git submodule update --init --recursive
-  - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
-  - pear install pear/PHP_CodeSniffer
   - php composer.phar update --dev
   - phpenv rehash
   - sh -c "if [ '$TRAVIS_PHP_VERSION' = '5.4' ]; then echo 'starting PHP server on port 8080'; php -S localhost:8080 -t public/ & fi"
 
 
 script:
-  - phpcs --standard=zend -p --ignore=*/bin/*,*/vendor/*,*.min.css,*.min.js .
+  - ./bin/phpcs --standard=zend -p --ignore=*/bin/*,*/vendor/*,*.min.css,*.min.js .
   - ./bin/behat
   - ./bin/phpunit
 
