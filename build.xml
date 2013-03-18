@@ -1,25 +1,86 @@
 <project name="DfSkeleton" default="test">
-   <target name="Code Inspection" description="Run PHP_Codesniffer">
-      <!-- PHP CodeSniffer -->
-      <phpcodesniffer standard="ZEND"
-                      file="module" />
-   </target>
+    <target name="codesniffer" description="Run PHP_Codesniffer">
+        <!-- PHP CodeSniffer -->
+        <exec command  ="export PATH=./bin:$PATH" />
+        <echo message="Starting PHP_Codesniffer..." />
+
+        <exec command="phpcs --standard=zend module" outputProperty="codesniffer.output" />
+
+        <if>
+            <equals arg1="" arg2="${codesniffer.output}" />
+            <then>
+                <echo message="Code conforms to Zend coding standard." />
+            </then>
+            <else>
+                <fail message="${codesniffer.output}" />
+            </else>
+        </if>
+
+        <!--
+        <phpcodesniffer
+                standard="zend"
+                ignorePatterns="*/bin/*,*/vendor/*,*.min.css,*.min.js"
+                skipversioncheck="true"
+                format="summary"
+                allowedFileExtensions="php html js css"
+                verbosity="0"
+                showWarnings="true"
+
+                showSources="true"
+                file="module">
+            <formatter type="default"/>
+        </phpcodesniffer>
+        -->
 
 
-   <target name="Code Testing">
-      <exec command="/bin/behat" passthru="true"></exec>
-
-      <phpunit printsummary="true" haltonfailure="true" bootstrap="module/Application/test/Bootstrap.php">
-         <batchtest>
-            <fileset dir="ApplicationTest/Controller/">
-               <include name="*Test.php"/>
-            </fileset>
-         </batchtest>
-      </phpunit>
+    </target>
 
 
+    <target name="phpunit">
+        <echo message="Starting PHPUnit..." />
+        <phpunit printsummary="true" haltonfailure="true" bootstrap="module/Application/test/Bootstrap.php">
+            <batchtest>
+                <fileset dir="ApplicationTest/Controller/">
+                    <include name="*Test.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit>
+        <echo message="Finished PHPUnit." />
+    </target>
 
-   </target>
 
-   <target name="test" depends="Code Inspection,Code Testing"/>
+    <target name="behat">
+        <echo message="Starting PHP's built-in web server..." />
+        <exec command="php -S localhost:8080 -t public/" spawn="true" />
+        <echo message="Server running on localhost:8080." />
+
+        <echo msg="Running Behat scenarios in ${project.basedir}" />
+        <exec command="./bin/behat --format failed"  description="Behat" outputProperty="behat.output"></exec>
+        <if>
+            <equals arg1="" arg2="${behat.output}" />
+            <then>
+                <echo message="Behat tests passed." />
+            </then>
+            <else>
+                <fail message="The following Behat scenarios failed: \n${behat.output}" />
+
+            </else>
+
+        </if>
+
+        <echo message="Stopping PHP's built-in web server." />
+        <exec command="kill %%" />
+
+    </target>
+
+    <target name="clean">
+        <delete dir="vendor" />
+        <delete dir="bin" />
+    </target>
+
+    <target name="composer">
+        <exec command="php composer.phar update" passthru="true" />
+    </target>
+
+    <target name="test" depends="codesniffer,behat,phpunit"/>
 </project>

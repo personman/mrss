@@ -15,9 +15,5 @@
    <testsuite name="Test all modules">
       <directory>./module/Application/test/ApplicationTest</directory>
    </testsuite>
-   <filter>
-      <whitelist addUncoveredFilesFromWhitelist="true">
-         <directory suffix=".php">./module/Application/src</directory>
-      </whitelist>
-   </filter>
+
 </phpunit>
