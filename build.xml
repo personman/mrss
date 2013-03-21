@@ -82,5 +82,10 @@
         <exec command="php composer.phar update" passthru="true" />
     </target>
 
+
+    <target name="phinx" description="DB migrations with Phinx">
+        <exec command="php ./public/index.php phinx migrate" passthru="true" />
+    </target>
+
     <target name="test" depends="codesniffer,behat,phpunit"/>
 </project>
