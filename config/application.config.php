@@ -4,7 +4,8 @@ return array(
     'modules' => array(
         'Application',
         'ZfcBase',
-        'ZfcUser'
+        'ZfcUser',
+        'PhinxModule'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

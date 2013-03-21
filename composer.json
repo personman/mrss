@@ -11,7 +11,8 @@
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.*",
         "phing/phing": "2.5.*",
-        "zf-commons/zfc-user": "dev-master"
+        "zf-commons/zfc-user": "dev-master",
+        "valorin/zf2-phinx-module":"0.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.*",
