@@ -10,3 +10,4 @@ composer.lock
 bin
 vendor
 config/phinx.yml
+config/autoload/db.php

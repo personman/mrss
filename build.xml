@@ -84,8 +84,44 @@
 
 
     <target name="phinx" description="DB migrations with Phinx">
+        <echo message="Running DB migrations with Phinx" />
         <exec command="php ./public/index.php phinx migrate" passthru="true" />
     </target>
 
-    <target name="test" depends="codesniffer,behat,phpunit"/>
+
+
+    <target name="test-db" description="Create the test db and write the credentials to a config file.">
+        <!-- This is the credentials for the db we're about to create -->
+        <property name="db.name" value="mrss_test" />
+        <property name="db.username" value="mrss_tester" />
+        <property name="db.password" value="testdbpass" />
+
+        <!-- And here are the credentials needed to actually create the db. This mysql user has to be set up ahead of time -->
+        <property name="db-admin.username" value="root" />
+        <property name="db-admin.password" value="root" />
+
+        <!-- Create the db -->
+        <property name="db.create_command" value="mysql -u ${db-admin.username} -p${db-admin.password} -e &quot;DROP DATABASE IF EXISTS ${db.name}; CREATE database ${db.name}; GRANT ALL ON ${db.name}.* TO '${db.username}'@'localhost' IDENTIFIED BY '${db.password}';&quot;" />
+
+        <echo message="Creating test database for acceptance testing." />
+        <exec command="${db.create_command}" passthru="true" />
+
+        <!-- Back up the existing db config -->
+        <exec command="mv config/autoload/db.php config/autoload/db.php.bak" />
+
+        <!-- Now write the credentials out to a config file -->
+        <echo message="&lt;?php $dbParams = array('database' => '${db.name}', 'username'  => '${db.username}', 'password'  => '${db.password}',   'hostname'  => 'localhost');" file="config/autoload/db.php" />
+
+    </target>
+
+
+
+    <target name="test-db-teardown" description="Undo the changes made in the test-db task">
+        <exec command="mv config/autoload/db.php.bak config/autoload/db.php" />
+
+    </target>
+
+    <target name="test" depends="codesniffer,behat-with-test-db,phpunit"/>
+
+    <target name="behat-with-test-db" depends="test-db,phinx,behat,test-db-teardown" />
 </project>
