@@ -85,8 +85,11 @@
 
     <target name="phinx" description="DB migrations with Phinx">
         <echo message="Running DB migrations with Phinx" />
-        <exec command="php ./public/index.php phinx migrate" passthru="true" outputProperty="phinx.output" />
+        <exec command="php ./public/index.php phinx --verbose migrate" passthru="true" outputProperty="phinx.output" />
+
+        <!-- Debugging -->
         <echo message="phinx output: ${phinx.output}" />
+        <exec command="cat config/phinx.yml" passthru="true" />
     </target>
 
 
