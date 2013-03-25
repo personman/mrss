@@ -11,6 +11,6 @@ before_script:
 
 script:
   - ./bin/phpcs --standard=zend --ignore=*/bin/*,*/vendor/*,*.min.css,*.min.js module
-  - ./bin/behat
+  #- ./bin/behat
   - ./bin/phpunit
 

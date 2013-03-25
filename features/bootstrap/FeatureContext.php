@@ -27,6 +27,7 @@ class FeatureContext extends MinkContext
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
 
+        // @todo: Move this to a lazy-loading method of its own
         if (self::$zendApp == null) {
             $path = __DIR__ . '/../../config/application.config.php';
 
@@ -38,6 +39,12 @@ class FeatureContext extends MinkContext
 
         // Get the db config from ZF
         $config = self::$zendApp->getConfig();
+
+        if (empty($config['db'])) {
+            echo '$config: ';
+            print_r($config);
+        }
+
         $dbConfig = $config['db'];
         preg_match('/dbname\=(.*)\;/', $dbConfig['dsn'], $matches);
         $dbName = $matches[1];
