@@ -18,10 +18,6 @@ class Bootstrap
 
     public static function init()
     {
-        // Show errors:
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
-
         // Load the user-defined test configuration file, if it exists
         if (is_readable(__DIR__ . '/TestConfig.php')) {
             $testConfig = include __DIR__ . '/TestConfig.php';

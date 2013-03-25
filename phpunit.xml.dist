@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- works fine with PHPUnit-3.6.10 -->
 <phpunit
-      bootstrap="module/Application/test/Bootstrap.php"
+      bootstrap="module/Mrss/test/Bootstrap.php"
       colors="true"
       convertErrorsToExceptions="true"
       convertNoticesToExceptions="true"
@@ -13,7 +13,8 @@
       syntaxCheck="true"
       >
    <testsuite name="Test all modules">
-      <directory>./module/Application/test/ApplicationTest</directory>
+      <!--<directory>./module/Application/test/ApplicationTest</directory>-->
+      <directory>./module/Mrss/test/MrssTest</directory>
    </testsuite>
 
 </phpunit>

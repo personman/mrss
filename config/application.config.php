@@ -5,7 +5,8 @@ return array(
         'Application',
         'ZfcBase',
         'ZfcUser',
-        'PhinxModule'
+        'PhinxModule',
+        'Mrss'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
