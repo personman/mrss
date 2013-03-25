@@ -85,12 +85,10 @@
 
     <target name="phinx" description="DB migrations with Phinx">
         <echo message="Running DB migrations with Phinx" />
-        <exec command="php ./public/index.php phinx --verbose migrate" passthru="true" outputProperty="phinx.output" />
+        <exec command="php ./public/index.php phinx sync" passthru="true" />
 
-        <!-- Debugging -->
+        <!-- Doing this in two steps works better than just calling index.php phinx migrate. not sure why -->
         <exec command="phinx migrate -c config/phinx.yml" description="Try running phinx directly" passthru="true" />
-        <echo message="phinx output: ${phinx.output}" />
-        <exec command="cat config/phinx.yml" passthru="true" />
 
 
     </target>
@@ -127,9 +125,6 @@
         <if>
             <equals arg1="${db.configFile}" arg2="${db.configFileExists}" />
             <then>
-                <echo message="db.php is ok" />
-                <exec command="cat ${db.configFile}" outputProperty="db.configDetails" />
-                <echo message="db.php: ${db.configDetails}." />
             </then>
             <else>
                 <echo message="db.php is not there." />
