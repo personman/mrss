@@ -100,6 +100,8 @@
         <property name="db-admin.username" value="root" />
         <property name="db-admin.password" value="root" />
 
+        <property name="db.configFile" value="config/autoload/db.php" />
+
         <!-- Create the db -->
         <property name="db.create_command" value="mysql -u ${db-admin.username} -p${db-admin.password} -e &quot;DROP DATABASE IF EXISTS ${db.name}; CREATE database ${db.name}; GRANT ALL ON ${db.name}.* TO '${db.username}'@'localhost' IDENTIFIED BY '${db.password}';&quot;" />
 
@@ -107,10 +109,24 @@
         <exec command="${db.create_command}" passthru="true" />
 
         <!-- Back up the existing db config -->
-        <exec command="mv config/autoload/db.php config/autoload/db.php.bak" />
+        <exec command="mv ${db.configFile} config/autoload/db.php.bak" />
 
         <!-- Now write the credentials out to a config file -->
-        <echo message="&lt;?php $dbParams = array('database' => '${db.name}', 'username'  => '${db.username}', 'password'  => '${db.password}',   'hostname'  => 'localhost');" file="config/autoload/db.php" />
+        <exec command="touch ${db.configFile}" passthru="true" />
+        <echo message="&lt;?php $dbParams = array('database' => '${db.name}', 'username'  => '${db.username}', 'password'  => '${db.password}',   'hostname'  => 'localhost');" file="${db.configFile}" />
+
+        <!-- Make sure the db.php file is there -->
+        <exec command="ls ${db.configFile}" outputProperty="db.configFileExists" />
+        <if>
+            <equals arg1="${db.configFile}" arg2="${db.configFileExists}" />
+            <then>
+                <echo message="db.php is ok" />
+            </then>
+            <else>
+                <echo message="db.php is not there." />
+                <fail message="test db config (db.php) was not written." />
+            </else>
+        </if>
 
     </target>
 

@@ -36,7 +36,6 @@ class FeatureContext extends MinkContext
             );
         }
 
-
         // Get the db config from ZF
         $config = self::$zendApp->getConfig();
 
@@ -71,7 +70,10 @@ class FeatureContext extends MinkContext
 
 
 
-    /** @BeforeScenario */
+    /**
+     * Alternatively, we could have a step(s) that triggers this so we don't run it unnecessarily
+     *
+     * @BeforeScenario */
     public static function testDbSetup()
     {
         shell_exec(self::$sqlPrepareCommand);
