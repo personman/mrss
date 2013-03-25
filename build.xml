@@ -122,6 +122,8 @@
             <equals arg1="${db.configFile}" arg2="${db.configFileExists}" />
             <then>
                 <echo message="db.php is ok" />
+                <exec command="cat ${db.configFile}" outputProperty="db.configDetails" />
+                <echo message="db.php: ${db.configDetails}." />
             </then>
             <else>
                 <echo message="db.php is not there." />
