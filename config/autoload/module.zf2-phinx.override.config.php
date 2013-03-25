@@ -55,7 +55,7 @@ return array(
         ),
     ),
     'phinx-module' => Array(
-        'zf2-config'   => getcwd().'/config/autoload/database.local.php',
+        'zf2-config'   => getcwd().'/config/autoload/database.global.php',
         'phinx-config' => getcwd().'/config/phinx.yml',
         'migrations'   => getcwd().'/data/migrations',
     ),
