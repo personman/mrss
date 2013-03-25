@@ -4,4 +4,4 @@
 TRUNCATE user;
 
 -- Now add some test data
-INSERT INTO user (email, display_name,password) VALUES ('dfergu15@jccc.edu', 'Dan McTest', 'baAy105yI1l35FcS6WfC3uqQH4XorZf2Cl8KKMqzrQ9X3sGZB1U4G');
+INSERT INTO user (email, display_name,password) VALUES ('dfergu15@jccc.edu', 'Dan McTest', '$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');
