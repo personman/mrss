@@ -88,8 +88,11 @@
         <exec command="php ./public/index.php phinx --verbose migrate" passthru="true" outputProperty="phinx.output" />
 
         <!-- Debugging -->
+        <exec command="phinx migrate -c config/phinx.yml" description="Try running phinx directly" passthru="true" />
         <echo message="phinx output: ${phinx.output}" />
         <exec command="cat config/phinx.yml" passthru="true" />
+
+
     </target>
 
 
