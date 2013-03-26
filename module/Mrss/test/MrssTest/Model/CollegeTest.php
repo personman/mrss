@@ -1,12 +1,24 @@
 <?php
-
+/**
+ * Test the college entity
+ */
 namespace MrssTest\Model;
 
 use Mrss\Model\College;
 use PHPUnit_Framework_TestCase;
 
+/**
+ * Class CollegeTest
+ *
+ * @package MrssTest\Model
+ */
 class CollegeTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Are the class variables initialized correctly?
+     *
+     * @return null
+     */
     public function testCollegeInitialState()
     {
         ini_set('display_errors', 1);
@@ -20,6 +32,11 @@ class CollegeTest extends PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * Test that the class can be populated with array data.
+     *
+     * @return null
+     */
     public function testExchangeArraySetsPropertiesCorrectly()
     {
         $college = new College();
@@ -32,13 +49,21 @@ class CollegeTest extends PHPUnit_Framework_TestCase
 
         $college->exchangeArray($data);
 
-        $this->assertSame($data['name'], $college->name, '"name" was not set correctly');
+        $this->assertSame($data['name'], $college->name, '"name" not set correctly');
         $this->assertSame($data['id'], $college->id, '"id" was not set correctly');
-        $this->assertSame($data['ipeds'], $college->ipeds, '"ipeds" was not set correctly');
-        $this->assertSame($data['city'], $college->city, '"city" was not set correctly');
+        $this->assertSame(
+            $data['ipeds'],
+            $college->ipeds,
+            '"ipeds" not set correctly'
+        );
+        $this->assertSame($data['city'], $college->city, '"city" not set correctly');
     }
 
-
+    /**
+     * Test that the data array can nullify properties.
+     *
+     * @return null
+     */
     public function testExchangeArraySetsPropertiesToNullIfKeysAreNotPresent()
     {
         $college = new College();
@@ -61,5 +86,4 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertNull($college->ipeds, '"ipeds" should have defaulted to null');
         $this->assertNull($college->city, '"city" should have defaulted to null');
     }
-
 }

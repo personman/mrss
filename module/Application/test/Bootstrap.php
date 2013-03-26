@@ -12,9 +12,9 @@ chdir(__DIR__);
 
 class Bootstrap
 {
-    protected static $_serviceManager;
-    protected static $_config;
-    protected static $_bootstrap;
+    protected static $serviceManager;
+    protected static $config;
+    protected static $bootstrap;
 
     public static function init()
     {
@@ -35,7 +35,7 @@ class Bootstrap
             $modulePaths =
                 $testConfig['module_listener_options']['module_paths'];
             foreach ($modulePaths as $modulePath) {
-                if (($path = static::findParentPath($modulePath)) ) {
+                if (($path = static::findParentPath($modulePath))) {
                     $zfModulePaths[] = $path;
                 }
             }
@@ -61,18 +61,18 @@ class Bootstrap
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
 
-        static::$_serviceManager = $serviceManager;
-        static::$_config = $config;
+        static::$serviceManager = $serviceManager;
+        static::$config = $config;
     }
 
     public static function getServiceManager()
     {
-        return static::$_serviceManager;
+        return static::$serviceManager;
     }
 
     public static function getConfig()
     {
-        return static::$_config;
+        return static::$config;
     }
 
     protected static function initAutoloader()
@@ -115,7 +115,10 @@ class Bootstrap
         $previousDir = '.';
         while (!is_dir($dir . '/' . $path)) {
             $dir = dirname($dir);
-            if ($previousDir === $dir) return false;
+            if ($previousDir === $dir) {
+                return false;
+            }
+
             $previousDir = $dir;
         }
         return $dir . '/' . $path;

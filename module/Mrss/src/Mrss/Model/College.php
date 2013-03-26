@@ -16,7 +16,9 @@ class College
         $this->name = (isset($data['name'])) ? $data['name'] : null;
         $this->ipeds  = (isset($data['ipeds'])) ? $data['ipeds'] : null;
         $this->city  = (isset($data['city'])) ? $data['city'] : null;
-        $this->latitude  = (isset($data['latitude'])) ? $data['latitude'] : null;
-        $this->longitude  = (isset($data['longitude'])) ? $data['longitude'] : null;
+        $this->latitude
+            = (isset($data['latitude'])) ? $data['latitude'] : null;
+        $this->longitude
+            = (isset($data['longitude'])) ? $data['longitude'] : null;
     }
 }
