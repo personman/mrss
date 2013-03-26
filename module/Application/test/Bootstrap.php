@@ -7,7 +7,6 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\ArrayUtils;
 use RuntimeException;
 
-
 class Bootstrap
 {
     protected static $serviceManager;

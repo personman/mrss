@@ -4,7 +4,8 @@
         <exec command  ="export PATH=./bin:$PATH" />
         <echo message="Starting PHP_Codesniffer..." />
 
-        <exec command="phpcs --standard=PSR2 module" outputProperty="codesniffer.output" />
+        <exec command="phpcs --standard=PSR2 --ignore=*Bootstrap* module"
+              outputProperty="codesniffer.output" />
 
         <if>
             <equals arg1="" arg2="${codesniffer.output}" />
@@ -38,13 +39,32 @@
 
     <target name="phpunit">
         <echo message="Starting PHPUnit..." />
-        <phpunit printsummary="true" haltonfailure="true" bootstrap="module/Application/test/Bootstrap.php">
+        <exec command="phpunit" passthru="false" outputProperty="phpunit.results"
+            />
+
+
+        <echo message="PHPunit result: ${phpunit.results}" />
+        <if>
+            <contains string="${phpunit.results}" substring="failure" />
+            <then>
+                <fail message="PHPUnit failure." />
+            </then>
+            <else>
+                <echo message="PHPUnit OK." />
+            </else>
+        </if>
+
+        <!-- The Phing PHPUnit task doesn't fail the build when tests fail -->
+        <!--<phpunit printsummary="true"
+                 haltonfailure="true"
+                 haltonerror="true"
+                 configuration="phpunit.xml.dist">
             <batchtest>
-                <fileset dir="ApplicationTest/Controller/">
+                <fileset dir="MrssTest/Model">
                     <include name="*Test.php"/>
                 </fileset>
             </batchtest>
-        </phpunit>
+        </phpunit>-->
         <echo message="Finished PHPUnit." />
     </target>
 

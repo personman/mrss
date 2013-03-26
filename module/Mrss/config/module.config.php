@@ -66,7 +66,7 @@ return array(
             'Mrss\Controller\IndexController'
         ),
     ),
-    'view_manager' => array(
+    /*'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
         'doctype'                  => 'HTML5',
@@ -82,5 +82,5 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
-    ),
+    ),*/
 );

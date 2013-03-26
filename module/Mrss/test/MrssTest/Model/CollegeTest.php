@@ -29,7 +29,6 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertNull($college->name, '"name" should initially be null');
         $this->assertNull($college->id, '"id" should initially be null');
         $this->assertNull($college->city, '"city" should initially be null');
-
     }
 
     /**
