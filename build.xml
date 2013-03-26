@@ -4,7 +4,7 @@
         <exec command  ="export PATH=./bin:$PATH" />
         <echo message="Starting PHP_Codesniffer..." />
 
-        <exec command="phpcs --standard=zend module" outputProperty="codesniffer.output" />
+        <exec command="phpcs --standard=PSR2 module" outputProperty="codesniffer.output" />
 
         <if>
             <equals arg1="" arg2="${codesniffer.output}" />
