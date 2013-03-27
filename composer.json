@@ -10,9 +10,13 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.*",
+        "zendframework/zend-developer-tools": "*",
         "phing/phing": "2.5.*",
-        "zf-commons/zfc-user": "dev-master",
-        "valorin/zf2-phinx-module":"0.*"
+        "zf-commons/zfc-user": "0.*",
+        "zf-commons/zfc-user-doctrine-orm": "dev-master",
+        "valorin/zf2-phinx-module":"0.*",
+        "doctrine/doctrine-orm-module": "0.*",
+        "doctrine/migrations": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.*",
