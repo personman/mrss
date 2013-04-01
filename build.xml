@@ -113,7 +113,9 @@
 
     </target>
 
-
+    <target name="migrate">
+        <exec command="doctrine-module migrations:migrate -n" passthru="true" />
+    </target>
 
     <target name="test-db" description="Create the test db and write the credentials to a config file.">
         <!-- This is the credentials for the db we're about to create -->
@@ -163,5 +165,6 @@
 
     <target name="test" depends="codesniffer,behat-with-test-db,phpunit"/>
 
-    <target name="behat-with-test-db" depends="test-db,behat,test-db-teardown" />
+    <target name="behat-with-test-db"
+            depends="test-db,migrate,behat,test-db-teardown" />
 </project>
