@@ -43,4 +43,5 @@ That one command should put the app through its paces like this (as defined by b
 + Restore original db config
 + Run unit tests with [PHP Unit] (https://github.com/sebastianbergmann/phpunit/)
 
-If the build fails for any reason, you'll see red text. If it succeeds, you'll see: __BUILD PASSED__
+If the build fails for any reason, you'll see red text. If it succeeds,
+you'll see: __BUILD PASSED__.
