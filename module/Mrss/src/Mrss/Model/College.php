@@ -1,4 +1,6 @@
 <?php
+//die('deprecated in favor of doctrine: ' . __FILE__);
+
 namespace Mrss\Model;
 
 class College
