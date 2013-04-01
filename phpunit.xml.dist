@@ -25,7 +25,8 @@
     </filter>
 
     <logging>
-        <log type="coverage-html" target="report" highlight="true" />
+        <log type="coverage-html" target="report/coverage" highlight="true" />
+        <log type="coverage-clover" target="report/coverage/coverage.xml" />
     </logging>
 
 </phpunit>
