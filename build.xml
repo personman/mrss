@@ -3,6 +3,7 @@
         <!-- PHP CodeSniffer -->
         <exec command  ="export PATH=./bin:$PATH" />
         <echo message="Starting PHP_Codesniffer..." />
+        <exec command="echo $PATH" passthru="true" />
 
         <exec command="phpcs --standard=PSR2 --ignore=*Bootstrap* module"
               outputProperty="codesniffer.output" />
