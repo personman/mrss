@@ -17,4 +17,15 @@
       <directory>./module/Mrss/test/MrssTest</directory>
    </testsuite>
 
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">module/Mrss/src</directory>
+            <directory suffix=".php">module/Application/src</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="report" highlight="true" />
+    </logging>
+
 </phpunit>

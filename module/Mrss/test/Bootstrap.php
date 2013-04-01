@@ -1,5 +1,5 @@
 <?php
-namespace ApplicationTest;
+namespace MrssTest;
 
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
@@ -15,6 +15,7 @@ class Bootstrap
 
     public static function init()
     {
+        ini_set('display_errors', true);
         error_reporting(E_ALL | E_STRICT);
         chdir(__DIR__);
 
