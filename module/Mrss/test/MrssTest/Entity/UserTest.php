@@ -23,16 +23,35 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $user = new User();
 
-        $this->assertNull($user->getUsername(), '"username" should initially
-        be null');
-        $this->assertNull($user->getId(), '"id" should initially be null');
-        $this->assertNull($user->getEmail(), '"email" should initially be null');
-        $this->assertNull($user->getDisplayName(), '"display name" should initially
-        be null');
-        $this->assertNull($user->getPassword(), '"password" should initially be
-        null');
-        $this->assertNull($user->getState(), '"state" should initially be
-        null');
+        $this->assertNull(
+            $user->getUsername(),
+            '"username" should initially be null'
+        );
+
+        $this->assertNull(
+            $user->getId(),
+            '"id" should initially be null'
+        );
+
+        $this->assertNull(
+            $user->getEmail(),
+            '"email" should initially be null'
+        );
+
+        $this->assertNull(
+            $user->getDisplayName(),
+            '"display name" should initially be null'
+        );
+
+        $this->assertNull(
+            $user->getPassword(),
+            '"password" should initially be null'
+        );
+
+        $this->assertNull(
+            $user->getState(),
+            '"state" should initially be null'
+        );
 
     }
 
