@@ -5,6 +5,10 @@
  */
 chdir(dirname(__DIR__));
 
+
+define('REQUEST_MICROTIME', microtime(true));
+
+
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
