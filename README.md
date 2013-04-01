@@ -33,11 +33,12 @@ MRSS uses the build tool [Phing] (http://www.phing.info/). To do a test build, i
 
      phing
      
-That one command should put the app through its paces like this:
+That one command should put the app through its paces like this (as defined by build.xml):
 
 + Check coding standard compliance (PSR2) with [PHP_CodeSniffer] (http://pear.php.net/package/PHP_CodeSniffer)
 + Create a test database (Assumes you have a mysql user named _root_ with password _root_ that has permission to create a database.)
 + Run db migrations to bring the db structure up to date (uses Doctrine migrations)
++ Start the built-in web server
 + Run [Behat] (http://behat.org/) scenarios (behavior driven development)
 + Restore original db config
 + Run unit tests with [PHP Unit] (https://github.com/sebastianbergmann/phpunit/)
