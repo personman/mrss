@@ -15,6 +15,24 @@ return array(
                     'hostname'  => $dbParams['hostname'],
                 ));
             },
+            'nccbp-db' => function($sm) {
+                // @todo: move this someplace else.
+                $ndb = array(
+                    'database' => 'nccbp', 
+                    'username'  => 'root', 
+                    'password'  => 'root',   
+                    'hostname'  => 'localhost'    
+                );
+                
+                return new Zend\Db\Adapter\Adapter(array(
+                    'driver' => 'pdo',
+                    'dsn' => 'mysql:dbname='.$ndb['database'].';host='.$ndb['hostname'],
+                    'database'  => $ndb['database'],
+                    'username'  => $ndb['username'],
+                    'password'  => $ndb['password'],
+                    'hostname'  => $ndb['hostname'],
+                ));  
+            },
         ),
     ),
 

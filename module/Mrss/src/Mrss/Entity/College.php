@@ -19,18 +19,39 @@ class College
     /** @ORM\Column(type="string") */
     protected $name;
 
-    /** @ORM\Column(type="string") */
+    /**
+     * @ORM\Column(type="string")
+     */
     protected $ipeds;
 
-    /** @ORM\Column(type="string", length=10) */
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
     protected $city;
 
-    /** @ORM\Column(type="float") */
+    /**
+     * @ORM\Column(type="float")
+     */
     protected $latitude;
 
-    /** @ORM\Column(type="float") */
+    /**
+     * @ORM\Column(type="float")
+     */
     protected $longitude;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Observation", mappedBy="college")
+     */
+    protected $observations;
+
+    /**
+     * Construct the college entity
+     * Populate the observations property with a placeholder
+     */
+    public function __construct()
+    {
+        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function getName()
     {
