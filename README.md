@@ -33,7 +33,7 @@ MRSS uses the build tool [Phing] (http://www.phing.info/). To do a test build, i
 
      phing
      
-That one command should put the app through its paces like this:
+That one command should put the app through its paces like this (as defined by build.xml):
 
 + Check coding standard compliance (PSR2) with [PHP_CodeSniffer] (http://pear.php.net/package/PHP_CodeSniffer)
 + Create a test database (Assumes you have a mysql user named _root_ with password _root_ that has permission to create a database.)
