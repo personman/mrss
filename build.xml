@@ -114,7 +114,8 @@
     </target>
 
     <target name="migrate">
-        <exec command="doctrine-module migrations:migrate -n" passthru="true" />
+        <echo message="Running database migration." />
+        <exec command="doctrine-module migrations:migrate -q -n" passthru="true" />
     </target>
 
     <target name="test-db" description="Create the test db and write the credentials to a config file.">
