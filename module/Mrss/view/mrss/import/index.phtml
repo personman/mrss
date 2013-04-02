@@ -1,0 +1,25 @@
+<h2>Colleges</h2>
+
+<table class="style1">
+    <tr>
+        <th>IPEDS</th>
+        <th>College</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip</th>
+    </tr>
+
+    <?php foreach ($this->colleges as $college): ?>
+
+        <tr>
+            <td><?= $college->getIpeds() ?></td>
+            <td><?= $college->getName() ?></td>
+            <td><?= $college->getAddress() ?></td>
+            <td><?= $college->getCity() ?></td>
+            <td><?= $college->getState() ?></td>
+            <td><?= $college->getZip() ?></td>
+        </tr>
+
+    <?php endforeach ?>
+</table>

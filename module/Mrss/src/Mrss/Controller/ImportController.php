@@ -6,29 +6,32 @@ namespace Mrss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Debug\Debug;
-use Mrss\Service;
+use Mrss\Service\ImportNccbp;
 
 class ImportController extends AbstractActionController
 {
 
     public function indexAction()
     {
+        // Should the DI/servicelocator be able to load these dependencies for me?
         $sm = $this->getServiceLocator();
         $nccbpDb = $sm->get('nccbp-db');
+        $em = $sm->get('doctrine.entitymanager.orm_default');
 
-        $importer = new ImportNccbp();
+        // Run the importer
+        $importer = new ImportNccbp($nccbpDb, $em);
+        $importer->importColleges();
 
-        Debug::dump($importer);die;
-    }
+        // Now find all the colleges
+        // I want this ugly stuff tucked away under a nicer api,
+        // like $something->findColleges() or $something->find()
+        $colleges = $em->getRepository('Mrss\Entity\College')->findBy(
+            array(),
+            array('name' => 'ASC')
+        );
 
-    protected function getTestQuery()
-    {
-        $query = "select n.title, y.field_data_entry_year_value as year, sss.*
-from content_type_group_form18_stud_serv_staff sss
-inner join node n on n.nid = sss.nid
-inner join content_field_data_entry_year y on y.nid = n.nid
-where field_18_stud_act_staff_ratio_value is not null";
-
-        return $query;
+        return array(
+            'colleges' => $colleges
+        );
     }
 }

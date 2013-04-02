@@ -99,6 +99,7 @@
     <target name="clean">
         <delete dir="vendor" />
         <delete dir="bin" />
+        <delete dir="report" />
     </target>
 
     <target name="composer">

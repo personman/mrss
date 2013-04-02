@@ -68,6 +68,11 @@ return array(
             'Mrss\Controller\ImportController'
         ),
     ),
+    'view_manager' => array(
+        'template_path_stack' => array(
+            'mrss' => __DIR__ . '/../view',
+        ),
+    ),
     /*'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
