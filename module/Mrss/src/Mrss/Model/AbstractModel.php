@@ -42,5 +42,4 @@ abstract class AbstractModel
 
         return $this->repository;
     }
-
 }

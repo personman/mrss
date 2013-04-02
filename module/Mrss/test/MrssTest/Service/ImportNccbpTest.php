@@ -36,6 +36,10 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mrss\Service\ImportNccbp', $this->import);
     }
 
+    /**
+     * @todo: May be better of just mocking the model, instead of the ORM stuff.
+     * This test is currently covering Mrss\Model\College. That shouldn't be.
+     */
     public function testImportColleges()
     {
         $statementMock = $this->getMock('Zend\Db\Statement', array('execute'));
