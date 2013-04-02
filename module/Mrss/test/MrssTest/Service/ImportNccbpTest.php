@@ -156,6 +156,7 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $emMock->expects($this->any())
             ->method('flush')
             ->will($this->returnValue(null));
+
         return $emMock;
     }
 }

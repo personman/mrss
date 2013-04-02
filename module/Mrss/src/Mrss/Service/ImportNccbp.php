@@ -4,6 +4,7 @@ namespace Mrss\Service;
 
 use Zend\Debug\Debug;
 use Mrss\Entity\College;
+use Mrss\Model;
 
 /**
  * Import data from NCCBP database
@@ -62,9 +63,22 @@ inner join node g on a.group_nid = g.nid";
             $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
 
             // Does this college already exist?
-            $existingCollege = $this->entityManager
+            // Good:
+            /*$existingCollege = $this->entityManager
                 ->getRepository('Mrss\Entity\College')
-                ->findOneBy(array('ipeds' => $ipeds));
+                ->findOneBy(array('ipeds' => $ipeds));*/
+
+            // Better:
+            $Colleges = new \Mrss\Model\College();
+            $Colleges->setEntityManager($this->entityManager);
+            $existingCollege = $Colleges->findOneByIpeds($ipeds);
+
+            // Best:
+            // @todo: move this to service locator
+            // Once that's done, this class will need to know very little about
+            // Doctrine ORM. We do still have the persist() call below.
+
+
 
             if (!empty($existingCollege)) {
                 // Skip this college as we've already imported it
@@ -86,14 +100,10 @@ inner join node g on a.group_nid = g.nid";
             $college->setState($row['field_state_value']);
             $college->setZip($row['field_zip_code_value']);
 
-            $this->entityManager->persist($college);
-
-
-            //Debug::dump($row, 'Row');
+            $Colleges->save($college);
         }
 
         $this->entityManager->flush();
-        //die('did it work?');
     }
 
 
