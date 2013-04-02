@@ -8,7 +8,7 @@
         <exec command="echo $SHELL" passthru="true" />
 
         <exec command="phpcs --standard=PSR2 --ignore=*Bootstrap* module"
-              outputProperty="codesniffer.output" />
+              outputProperty="codesniffer.output" passthru="false" />
 
         <if>
             <equals arg1="" arg2="${codesniffer.output}" />

@@ -42,19 +42,21 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $statementMock
             ->expects($this->once())
             ->method('execute')
-            ->will($this->returnValue(
-                array(
+            ->will(
+                $this->returnValue(
                     array(
-                        'field_ipeds_id_value' => '123',
-                        'field_institution_name_value' => 'blah',
-                        'field_address_value' => '123 Main',
-                        'field_city_value' => 'Overland Park',
-                        'field_state_value' => 'KS',
-                        'field_zip_code_value' => '66101'
+                        array(
+                            'field_ipeds_id_value' => '123',
+                            'field_institution_name_value' => 'blah',
+                            'field_address_value' => '123 Main',
+                            'field_city_value' => 'Overland Park',
+                            'field_state_value' => 'KS',
+                            'field_zip_code_value' => '66101'
 
+                        )
                     )
                 )
-            ));
+            );
 
 
         $this->db
@@ -135,8 +137,13 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
             array('findOneBy')
         );
 
-        $emMock  = $this->getMock('\Doctrine\ORM\EntityManager',
-            array('getRepository', 'getClassMetadata', 'persist', 'flush'), array(), '', false);
+        $emMock  = $this->getMock(
+            '\Doctrine\ORM\EntityManager',
+            array('getRepository', 'getClassMetadata', 'persist', 'flush'),
+            array(),
+            '',
+            false
+        );
         $emMock->expects($this->any())
             ->method('getRepository')
             ->will($this->returnValue($repositoryMock));
