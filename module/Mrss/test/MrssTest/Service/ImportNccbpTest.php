@@ -73,6 +73,14 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $this->import->importColleges();
     }
 
+    public function testGetStats()
+    {
+        $stats = $this->import->getStats();
+
+        $this->assertEquals(0, $stats['imported']);
+        $this->assertEquals(0, $stats['skipped']);
+    }
+
     /**
      * @param $nccbpField
      * @param $converted

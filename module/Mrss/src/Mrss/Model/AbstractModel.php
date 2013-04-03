@@ -3,6 +3,7 @@
 namespace Mrss\Model;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 abstract class AbstractModel
 {
@@ -34,6 +35,21 @@ abstract class AbstractModel
         return $this->entityManager;
     }
 
+    /**
+     * Inject the repository
+     *
+     * @param EntityRepository $repository
+     */
+    public function setRepository(EntityRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Get the repository for the entity name in $this->entity
+     *
+     * @return \Doctrine\ORM\EntityRepository
+     */
     protected function getRepository()
     {
         if (null === $this->repository) {
