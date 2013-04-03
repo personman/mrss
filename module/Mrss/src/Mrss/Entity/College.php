@@ -60,6 +60,11 @@ class College
     protected $observations;
 
     /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="college")
+     */
+    protected $users;
+
+    /**
      * Construct the college entity
      * Populate the observations property with a placeholder
      */

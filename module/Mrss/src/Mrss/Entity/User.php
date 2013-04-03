@@ -49,6 +49,11 @@ class User implements UserInterface
     protected $state;
 
     /**
+     * @ORM\ManyToOne(targetEntity="College", inversedBy="users")
+     */
+    protected $college;
+
+    /**
      * Get id.
      *
      * @return int

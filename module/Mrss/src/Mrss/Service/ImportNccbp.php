@@ -25,6 +25,11 @@ class ImportNccbp
      */
     protected $entityManager;
 
+    /**
+     * @var array
+     */
+    protected $stats = array('imported' => 0, 'skipped' => 0);
+
 
     public function __construct($dbAdapter, $entityManager)
     {
@@ -82,6 +87,8 @@ inner join node g on a.group_nid = g.nid";
 
             if (!empty($existingCollege)) {
                 // Skip this college as we've already imported it
+                $this->stats['skipped']++;
+
                 continue;
             }
 
@@ -101,6 +108,8 @@ inner join node g on a.group_nid = g.nid";
             $college->setZip($row['field_zip_code_value']);
 
             $Colleges->save($college);
+
+            $this->stats['imported']++;
         }
 
         $this->entityManager->flush();
@@ -140,6 +149,11 @@ inner join node g on a.group_nid = g.nid";
         $ipeds = str_pad($ipeds, 6, '0', STR_PAD_LEFT);
 
         return $ipeds;
+    }
+
+    public function getStats()
+    {
+        return $this->stats;
     }
 
     protected function getTestQuery()

@@ -3,6 +3,7 @@
 namespace Mrss\Model;
 
 use \Mrss\Entity\College as CollegeEntity;
+use Zend\Debug\Debug;
 
 /**
  * Class College
@@ -20,6 +21,15 @@ class College extends AbstractModel
     public function findOneByIpeds($ipeds)
     {
         return $this->getRepository()->findOneBy(array('ipeds' => $ipeds));
+    }
+
+    /**
+     * Find all colleges, ordered by name
+     */
+    public function findAll()
+    {
+        $c = $this->getRepository()->findBy(array(), array('name' => 'ASC'));
+        return $c;
     }
 
     public function save(CollegeEntity $college)

@@ -3,6 +3,20 @@
 return array(
     'router' => array(
         'routes' => array(
+            'general' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/[:controller[/:action]]',
+                    'constraints' => array(
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'college' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -62,10 +76,9 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Mrss\Controller\Index' =>
-            'Mrss\Controller\IndexController',
-            'Mrss\Controller\Import' =>
-            'Mrss\Controller\ImportController'
+            'index' => 'Mrss\Controller\IndexController',
+            'import' => 'Mrss\Controller\ImportController',
+            'colleges' => 'Mrss\Controller\CollegeController'
         ),
     ),
     'view_manager' => array(

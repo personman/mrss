@@ -21,17 +21,12 @@ class ImportController extends AbstractActionController
         // Run the importer
         $importer = new ImportNccbp($nccbpDb, $em);
         $importer->importColleges();
+        $stats = $importer->getStats();
 
-        // Now find all the colleges
-        // I want this ugly stuff tucked away under a nicer api,
-        // like $something->findColleges() or $something->find()
-        $colleges = $em->getRepository('Mrss\Entity\College')->findBy(
-            array(),
-            array('name' => 'ASC')
-        );
-
-        return array(
-            'colleges' => $colleges
-        );
+        // Redirect
+        $message = "College import complete. Imported: $stats[imported],
+        skipped: $stats[skipped].";
+        $this->flashMessenger()->addSuccessMessage($message);
+        $this->redirect()->toUrl('/colleges');
     }
 }
