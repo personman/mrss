@@ -27,4 +27,12 @@ class ImportController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($message);
         $this->redirect()->toUrl('/colleges');
     }
+
+    public function obsAction()
+    {
+        $importer = $this->getServiceLocator()->get('import.nccbp');
+
+        $importer->importObservations();
+        die('done');
+    }
 }

@@ -136,6 +136,43 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($padded, $this->import->padIpeds($original));
     }
 
+    /**
+     * @dataProvider getTitleIpeds
+     * @param $title
+     * @param $ipeds
+     */
+    public function testExtractIpedsFromTitle($title, $ipeds)
+    {
+        $extracted = $this->import->extractIpedsFromTitle($title);
+
+        $this->assertEquals($ipeds, $extracted);
+    }
+
+    /**
+     * Titles and expecged ipeds for extractIpedsFromTitle()
+     *
+     * @return array
+     */
+    public function getTitleIpeds()
+    {
+        return array(
+            array(
+                'form18_stud_serv_staff_Hutchinson Community College_155195',
+                '155195'
+            ),
+            array(
+                'form18_stud_serv_staff_Ivy Tech Community College of
+                Indiana-Southwest_151050',
+                '151050'
+            ),
+            array(
+                'form18_stud_serv_staff_Ivy Tech Community College of Indiana-Northeast_151032',
+                '151032'
+            ),
+
+        );
+    }
+
     public function getIpeds()
     {
         return array(

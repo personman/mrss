@@ -35,19 +35,71 @@ class Observation
 
 
     // NCCBP form 18:
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $tot_undup_cr_hd;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $tot_fte_career_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $tot_fte_counc_adv_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $tot_fte_recr_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $tot_fte_fin_aid_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $tot_fte_stud_act_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $tot_fte_test_ass_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $career_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $couns_adv_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $recr_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $fin_aid_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $stud_act_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $test_ass_staff_ratio;
+
 
     public function getYear()
     {
@@ -71,6 +123,30 @@ class Observation
         $this->id = $id;
 
         return $this;
+    }
+
+    public function setCollege($college)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
+    public function getCollege()
+    {
+        return $this->college;
+    }
+
+    public function setCipCode($cipCode)
+    {
+        $this->cipCode = $cipCode;
+
+        return $this;
+    }
+
+    public function getCipCode()
+    {
+        return $this->cipCode;
     }
 
     /**

@@ -2,8 +2,10 @@
 
 namespace Mrss\Service;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Debug\Debug;
 use Mrss\Entity\College;
+use Mrss\Entity\Observation;
 use Mrss\Model;
 
 /**
@@ -31,6 +33,11 @@ class ImportNccbp
     protected $collegeModel;
 
     /**
+     * @var \Mrss\Model\Observation
+     */
+    protected $observationModel;
+
+    /**
      * @var array
      */
     protected $stats = array('imported' => 0, 'skipped' => 0);
@@ -38,13 +45,11 @@ class ImportNccbp
     /**
      * Constructor
      *
-     * @param \Zend\Db\Adapter $dbAdapter
+     * @param \Zend\Db\Adapter\Adapter $dbAdapter
      * @param \Doctrine\ORM\EntityManager $entityManager
      */
-    public function __construct(
-        \Zend\Db\Adapter $dbAdapter,
-        \Doctrine\ORM\EntityManager $entityManager
-    ) {
+    public function __construct($dbAdapter, $entityManager)
+    {
         $this->dbAdapter = $dbAdapter;
         $this->entityManager = $entityManager;
     }
@@ -110,9 +115,89 @@ inner join node g on a.group_nid = g.nid";
      */
     public function importObservations()
     {
+        $query = "select n.title, y.field_data_entry_year_value as year, sss.*
+from content_type_group_form18_stud_serv_staff sss
+inner join node n on n.nid = sss.nid
+inner join content_field_data_entry_year y on y.nid = n.nid
+where field_18_stud_act_staff_ratio_value is not null";
 
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $i = 0;
+        foreach ($result as $row) {
+            /*if ($i++ > 30) {
+                break;
+            }*/
+
+            $ipeds = $this->extractIpedsFromTitle($row['title']);
+            $ipeds = $this->padIpeds($ipeds);
+            $year = $row['year'];
+
+            // First we've got to look up the college
+            $college = $this->getCollegeModel()->findOneByIpeds($ipeds);
+
+            if (empty($college)) {
+                $this->stats['skipped']++;
+
+                continue;
+            }
+
+            // Now see if an observation exists already
+            $observation = $this->getObservationModel()->findOne(
+                $college->getId(),
+                $year
+            );
+
+            // If not, create one
+            if (empty($observation)) {
+                $observation = new Observation();
+            } else {
+                // Don't update existing records:
+                continue;
+            }
+
+            // Now we have a new or existing observation and we can populate it
+            $observation->setYear($year);
+            $observation->setCollege($college);
+            $observation->setCipCode(0);
+
+
+            // Loop over the row's columns, convert the field name and set the value
+            foreach ($row as $key => $value) {
+                // If the fieldname isn't converted, just skip it
+                try {
+                    $fieldName = $this->convertFieldName($key);
+                    $observation->set($fieldName, $value);
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            $this->getObservationModel()->save($observation);
+
+            $this->stats['imported']++;
+
+            // Write to the db every 20 rows
+            if ($i++ % 20 == 0) {
+                $this->entityManager->flush();
+            }
+        }
+
+        // Save the data to the db
+        $this->entityManager->flush();
+
+        $stats = $this->getStats();
+        //Debug::dump($stats); die('done.');
     }
 
+    public function extractIpedsFromTitle($title)
+    {
+        $titleParts = explode('_', $title);
+        $ipeds = array_pop($titleParts);
+
+        return $ipeds;
+    }
 
     /**
      * Convert from nccbp field name to mrss field name
@@ -164,5 +249,17 @@ inner join node g on a.group_nid = g.nid";
     protected function getCollegeModel()
     {
         return $this->collegeModel;
+    }
+
+    public function setObservationModel($model)
+    {
+        $this->observationModel = $model;
+
+        return $this;
+    }
+
+    protected function getObservationModel()
+    {
+        return $this->observationModel;
     }
 }

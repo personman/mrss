@@ -51,6 +51,10 @@ class Module
                     $collegeModel = $sm->get('model.college');
                     $importer->setCollegeModel($collegeModel);
 
+                    // Inject the observation model
+                    $observationModel = $sm->get('model.observation');
+                    $importer->setObservationModel($observationModel);
+
                     return $importer;
                 },
                 // Perhaps there should be a generic model factory
@@ -62,6 +66,14 @@ class Module
                     $collegeModel->setEntityManager($em);
 
                     return $collegeModel;
+                },
+                'model.observation' => function ($sm) {
+                    $observationModel = new \Mrss\Model\Observation();
+                    $em = $sm->get('em');
+
+                    $observationModel->setEntityManager($em);
+
+                    return $observationModel;
                 }
             ),
         );
