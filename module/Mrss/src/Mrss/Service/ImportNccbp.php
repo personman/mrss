@@ -35,13 +35,26 @@ class ImportNccbp
      */
     protected $stats = array('imported' => 0, 'skipped' => 0);
 
-
-    public function __construct($dbAdapter, $entityManager)
-    {
+    /**
+     * Constructor
+     *
+     * @param \Zend\Db\Adapter $dbAdapter
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     */
+    public function __construct(
+        \Zend\Db\Adapter $dbAdapter,
+        \Doctrine\ORM\EntityManager $entityManager
+    ) {
         $this->dbAdapter = $dbAdapter;
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * Import colleges from NCCBP
+     *
+     * Connect to the db with Zend_Db, query for colleges, check for dupliates,
+     * make an entity out of each college, save
+     */
     public function importColleges()
     {
         $query = "select g.title, i.*
@@ -57,20 +70,10 @@ inner join node g on a.group_nid = g.nid";
             $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
 
             // Does this college already exist?
-            // Good:
-            /*$existingCollege = $this->entityManager
-                ->getRepository('Mrss\Entity\College')
-                ->findOneBy(array('ipeds' => $ipeds));*/
-
-            // Better:
             $existingCollege = $this->getCollegeModel()->findOneByIpeds($ipeds);
 
-            // Best:
-            // @todo: move this to service locator
-            // Once that's done, this class will need to know very little about
+            // This class will need to know very little about
             // Doctrine ORM. We do still have the flush() call below.
-
-
 
             if (!empty($existingCollege)) {
                 // Skip this college as we've already imported it
@@ -100,6 +103,14 @@ inner join node g on a.group_nid = g.nid";
         }
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * Import Observations
+     */
+    public function importObservations()
+    {
+
     }
 
 
