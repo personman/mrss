@@ -12,11 +12,20 @@ class CollegeController extends AbstractActionController
 
     public function indexAction()
     {
-        $sm = $this->getServiceLocator();
-        $em = $sm->get('doctrine.entitymanager.orm_default');
+        $Colleges = $this->getServiceLocator()->get('model.college');
 
-        $Colleges = new \Mrss\Model\College();
-        $Colleges->setEntityManager($em);
+        return array('colleges' => $Colleges->findAll());
+    }
+
+    /**
+     * This is very slow. Need to store the lat/lng of each college instead of
+     * letting the map script look it up by address.
+     *
+     * @return array
+     */
+    public function mapAction()
+    {
+        $Colleges = $this->getServiceLocator()->get('model.college');
 
         return array('colleges' => $Colleges->findAll());
     }
