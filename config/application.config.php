@@ -10,7 +10,7 @@ return array(
         'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
-        'Application',
+        //'Application',
     ),
 
     'doctrine' => array(
