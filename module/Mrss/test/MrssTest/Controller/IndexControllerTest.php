@@ -2,26 +2,20 @@
 
 namespace MrssTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-
 /**
  * Class IndexControllerTest
  *
- * Extending AbstractHttpControllerTestCase is the new way to test ZF2 controllers
- *
  * @package MrssTest\Controller
  */
-class IndexControllerTest extends AbstractHttpControllerTestCase
+class IndexControllerTest extends AbstractControllerTestCase
 {
     public function setUp()
     {
-        $configPath = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-        ) .
-            '/config/application.config.php';
         $this->setApplicationConfig(
-            include $configPath
+            include $this->getConfigPath()
         );
         parent::setUp();
+
     }
 
     public function testIndexActionCanBeAccessed()

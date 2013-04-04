@@ -20,7 +20,6 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">module/Mrss/src</directory>
-            <directory suffix=".php">module/Application/src</directory>
         </whitelist>
     </filter>
 

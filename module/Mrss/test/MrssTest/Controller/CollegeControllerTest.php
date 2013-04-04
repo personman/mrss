@@ -2,8 +2,6 @@
 
 namespace MrssTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-
 /**
  * Class CollegeControllerTest
  *
@@ -11,15 +9,12 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  *
  * @package MrssTest\Controller
  */
-class CollegeControllerTest extends AbstractHttpControllerTestCase
+class CollegeControllerTest extends AbstractControllerTestCase
 {
     public function setUp()
     {
-        $configPath = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-        ) .
-            '/config/application.config.php';
         $this->setApplicationConfig(
-            include $configPath
+            include $this->getConfigPath()
         );
         parent::setUp();
     }

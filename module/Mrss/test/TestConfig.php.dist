@@ -1,7 +1,6 @@
 <?php
 return array(
     'modules' => array(
-        'Application',
         'Mrss',
     ),
     'module_listener_options' => array(
