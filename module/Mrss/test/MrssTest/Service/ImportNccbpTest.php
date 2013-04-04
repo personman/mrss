@@ -52,24 +52,46 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
                         array(
                             'field_ipeds_id_value' => '123',
                             'field_institution_name_value' => 'blah',
+                            'field_ipeds_id_value' => '555555',
                             'field_address_value' => '123 Main',
                             'field_city_value' => 'Overland Park',
                             'field_state_value' => 'KS',
                             'field_zip_code_value' => '66101'
-
+                        ),
+                        array(
+                            'field_ipeds_id_value' => '1234',
+                            'field_institution_name_value' => 'blah',
+                            'field_ipeds_id_value' => '444444',
+                            'field_address_value' => '123 Main',
+                            'field_city_value' => 'Overland Park',
+                            'field_state_value' => 'KS',
+                            'field_zip_code_value' => '66101'
                         )
+
                     )
                 )
             );
 
-
+        // Zend Db mock
         $this->db
             ->expects($this->once())
             ->method('query')
             ->will($this->returnValue($statementMock));
 
 
+        // CollegeModel mock
+        $collegeModelMock = $this->getMock(
+            '\Mrss\Model\College',
+            array('findOneByIpeds', 'save')
+        );
 
+        $collegeModelMock->expects($this->any())
+            ->method('findOneByIpeds')
+            ->will($this->onConsecutiveCalls(null, 'something'));
+
+        $this->import->setCollegeModel($collegeModelMock);
+
+        // Trigger the import itself
         $this->import->importColleges();
     }
 

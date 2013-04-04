@@ -13,13 +13,11 @@ class ImportController extends AbstractActionController
 
     public function indexAction()
     {
-        // Should the DI/servicelocator be able to load these dependencies for me?
+        // Load the importer from the service manager
         $sm = $this->getServiceLocator();
-        $nccbpDb = $sm->get('nccbp-db');
-        $em = $sm->get('doctrine.entitymanager.orm_default');
+        $importer = $sm->get('import.nccbp');
 
-        // Run the importer
-        $importer = new ImportNccbp($nccbpDb, $em);
+        // Import the colleges from nccbp
         $importer->importColleges();
         $stats = $importer->getStats();
 

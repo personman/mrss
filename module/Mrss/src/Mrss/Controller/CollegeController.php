@@ -18,8 +18,6 @@ class CollegeController extends AbstractActionController
         $Colleges = new \Mrss\Model\College();
         $Colleges->setEntityManager($em);
 
-        return array(
-            'colleges' => $Colleges->findAll()
-        );
+        return array('colleges' => $Colleges->findAll());
     }
 }

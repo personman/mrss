@@ -9,8 +9,8 @@ use Zend;
 
 class IndexController extends AbstractActionController
 {
-    /*public function indexAction()
+    public function indexAction()
     {
         return new ViewModel();
-    }*/
+    }
 }

@@ -30,4 +30,40 @@ class Module
             ),
         );
     }
+
+    public function getServiceConfig()
+    {
+        return array(
+            'abstract_factories' => array(),
+            'aliases' => array(
+                'em' => 'doctrine.entitymanager.orm_default',
+            ),
+            'invokables' => array(),
+            'services' => array(),
+            'factories' => array(
+                'import.nccbp' => function ($sm) {
+                    // Prepare the importer with the db to import from and the em
+                    $nccbpDb = $sm->get('nccbp-db');
+                    $em = $sm->get('em');
+                    $importer = new \Mrss\Service\ImportNccbp($nccbpDb, $em);
+
+                    // Inject the college Model
+                    $collegeModel = $sm->get('model.college');
+                    $importer->setCollegeModel($collegeModel);
+
+                    return $importer;
+                },
+                // Perhaps there should be a generic model factory
+                // That injects the em
+                'model.college' => function ($sm) {
+                    $collegeModel = new \Mrss\Model\College;
+                    $em = $sm->get('em');
+
+                    $collegeModel->setEntityManager($em);
+
+                    return $collegeModel;
+                }
+            ),
+        );
+    }
 }

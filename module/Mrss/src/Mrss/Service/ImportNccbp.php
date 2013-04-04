@@ -26,6 +26,11 @@ class ImportNccbp
     protected $entityManager;
 
     /**
+     * @var \Mrss\Model\College
+     */
+    protected $collegeModel;
+
+    /**
      * @var array
      */
     protected $stats = array('imported' => 0, 'skipped' => 0);
@@ -36,22 +41,6 @@ class ImportNccbp
         $this->dbAdapter = $dbAdapter;
         $this->entityManager = $entityManager;
     }
-
-    public function import()
-    {
-        $query = $this->getTestQuery();
-        $statement = $this->dbAdapter->query($query);
-        $result = $statement->execute();
-
-        foreach ($result as $row) {
-            // Does the college already exist in mrss?
-            //if (!$this->)
-            Debug::dump($row, 'Row');
-        }
-
-        Debug::dump($result, 'Result');
-    }
-
 
     public function importColleges()
     {
@@ -74,14 +63,12 @@ inner join node g on a.group_nid = g.nid";
                 ->findOneBy(array('ipeds' => $ipeds));*/
 
             // Better:
-            $Colleges = new \Mrss\Model\College();
-            $Colleges->setEntityManager($this->entityManager);
-            $existingCollege = $Colleges->findOneByIpeds($ipeds);
+            $existingCollege = $this->getCollegeModel()->findOneByIpeds($ipeds);
 
             // Best:
             // @todo: move this to service locator
             // Once that's done, this class will need to know very little about
-            // Doctrine ORM. We do still have the persist() call below.
+            // Doctrine ORM. We do still have the flush() call below.
 
 
 
@@ -107,7 +94,7 @@ inner join node g on a.group_nid = g.nid";
             $college->setState($row['field_state_value']);
             $college->setZip($row['field_zip_code_value']);
 
-            $Colleges->save($college);
+            $this->getCollegeModel()->save($college);
 
             $this->stats['imported']++;
         }
@@ -156,14 +143,15 @@ inner join node g on a.group_nid = g.nid";
         return $this->stats;
     }
 
-    protected function getTestQuery()
+    public function setCollegeModel($model)
     {
-        $query = "select n.title, y.field_data_entry_year_value as year, sss.*
-from content_type_group_form18_stud_serv_staff sss
-inner join node n on n.nid = sss.nid
-inner join content_field_data_entry_year y on y.nid = n.nid
-where field_18_stud_act_staff_ratio_value is not null";
+        $this->collegeModel = $model;
 
-        return $query;
+        return $this;
+    }
+
+    protected function getCollegeModel()
+    {
+        return $this->collegeModel;
     }
 }

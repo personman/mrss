@@ -14,6 +14,9 @@ use PHPUnit_Framework_TestCase;
  */
 class CollegeTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Mrss\Model\College
+     */
     protected $model;
 
     public function setUp()
@@ -51,6 +54,41 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $result = $this->model->findAll();
 
         $this->assertEquals('placeholder', $result);
+    }
+
+    public function testFindOneByIpeds()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findOneByIpeds('111111');
+
+        $this->assertEquals('placeholder', $result);
+    }
+
+    public function testSave()
+    {
+        $emMock = $this->getEmMock();
+
+        // Expect a call to persist()
+        $emMock->expects($this->once())
+            ->method('persist');
+
+        $this->model->setEntityManager($emMock);
+
+        $this->model->save(new \Mrss\Entity\College);
     }
 
     protected function getEmMock()

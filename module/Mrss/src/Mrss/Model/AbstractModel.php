@@ -18,7 +18,7 @@ abstract class AbstractModel
     /**
      * Set the entity manager
      *
-     * @param EntityManager $entityManager $entityManager
+     * @param EntityManager $entityManager
      */
     public function setEntityManager(EntityManager $entityManager)
     {
