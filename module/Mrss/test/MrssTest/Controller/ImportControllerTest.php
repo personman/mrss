@@ -20,7 +20,7 @@ class ImportControllerTest extends AbstractControllerTestCase
     }
 
     /**
-     * This isn't actually working. It doesn't execute the entire indexAction()
+     * Test import action for colleges
      */
     public function testIndexActionCanBeAccessed()
     {
@@ -50,11 +50,39 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('general');
     }
 
-    protected function getServiceLocator()
+    /**
+     * Test import action for observations
+     */
+    public function testObsActionCanBeAccessed()
     {
-        $sm = $this->getApplicationServiceLocator();
-        $sm->setAllowOverride(true);
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('importObservations'),
+            array(),
+            '',
+            false
+        );
 
-        return $sm;
+        $importerMock->expects($this->once())
+            ->method('importObservations');
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+
+        // Make sure sm will hand that mock back to us
+        $importer = $sm->get('import.nccbp');
+        $this->assertSame($importerMock, $importer);
+
+        // Dispatch the request
+        $this->dispatch('/import/obs');
+
+        // It should redirect:
+        $this->assertResponseStatusCode(302);
+
+        $this->assertModuleName('mrss');
+        $this->assertControllerName('import');
+        $this->assertActionName('obs');
+        $this->assertControllerClass('ImportController');
+        $this->assertMatchedRouteName('general');
     }
 }

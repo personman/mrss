@@ -6,7 +6,6 @@ namespace Mrss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Debug\Debug;
-use Mrss\Service\ImportNccbp;
 
 class ImportController extends AbstractActionController
 {
@@ -33,6 +32,12 @@ class ImportController extends AbstractActionController
         $importer = $this->getServiceLocator()->get('import.nccbp');
 
         $importer->importObservations();
-        die('done');
+        $stats = $importer->getStats();
+
+        // Redirect
+        $message = "Observation import complete. Imported: $stats[imported],
+        skipped: $stats[skipped].";
+        $this->flashMessenger()->addSuccessMessage($message);
+        $this->redirect()->toUrl('/colleges');
     }
 }

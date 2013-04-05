@@ -14,7 +14,10 @@ class CollegeController extends AbstractActionController
     {
         $Colleges = $this->getServiceLocator()->get('model.college');
 
-        return array('colleges' => $Colleges->findAll());
+        return array(
+            'colleges' => $Colleges->findAll(),
+            'blah' => rand(0,100)
+        );
     }
 
     public function viewAction()

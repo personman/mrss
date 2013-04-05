@@ -20,4 +20,12 @@ class AbstractControllerTestCase extends AbstractHttpControllerTestCase
 
         return $configPath;
     }
+
+    protected function getServiceLocator()
+    {
+        $sm = $this->getApplicationServiceLocator();
+        $sm->setAllowOverride(true);
+
+        return $sm;
+    }
 }
