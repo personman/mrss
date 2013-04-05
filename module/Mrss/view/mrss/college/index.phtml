@@ -14,7 +14,18 @@
 
         <tr>
             <td><?= $college->getIpeds() ?></td>
-            <td><?= $college->getName() ?></td>
+            <td>
+                <a href="<?= $this->url(
+                    'general',
+                    array(
+                        'controller' => 'colleges',
+                        'action' => 'view',
+                        'id' => $college->getId()
+                    )
+                ); ?>">
+                    <?= $college->getName() ?>
+                </a>
+            </td>
             <td><?= $college->getAddress() ?></td>
             <td><?= $college->getCity() ?></td>
             <td><?= $college->getState() ?></td>

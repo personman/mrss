@@ -1,0 +1,44 @@
+<h3><?= $this->college->getName() ?></h3>
+
+<table class="style1">
+    <tr>
+        <td>
+            IPEDS:
+        </td>
+        <td>
+            <?= $this->college->getIpeds() ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Address:
+        </td>
+        <td>
+            <?= $this->college->getFullAddress() ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Data:
+        </td>
+        <td>
+            <ul>
+                <?php foreach ($this->college->getObservations() as $ob): ?>
+                    <li>
+                        <a href="<?= $this->url(
+                            'general',
+                            array(
+                                'controller' => 'observations',
+                                'action' => 'view',
+                                'id' => $ob->getId()
+                            )
+                        ) ?>">
+                            <?= $ob->getYear() ?>
+                        </a>
+                    </li>
+
+                <?php endforeach ?>
+            </ul>
+        </td>
+    </tr>
+</table>

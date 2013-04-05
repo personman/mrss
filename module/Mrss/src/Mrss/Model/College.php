@@ -23,6 +23,11 @@ class College extends AbstractModel
         return $this->getRepository()->findOneBy(array('ipeds' => $ipeds));
     }
 
+    public function find($id)
+    {
+        return $this->getRepository()->find($id);
+    }
+
     /**
      * Find all colleges, ordered by name
      */

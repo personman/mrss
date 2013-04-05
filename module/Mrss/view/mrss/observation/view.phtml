@@ -1,0 +1,18 @@
+<h3>
+    <?= $this->observation->getCollege()->getName() ?>:
+    <?= $this->observation->getYear() ?>
+</h3>
+
+<table class="style1">
+    <tr>
+        <th>Benchmark</th>
+        <th>Value</th>
+    </tr>
+
+    <?php foreach ($this->fields as $key => $label): ?>
+    <tr>
+        <td><?= $label ?></td>
+        <td><?= $this->observation->get($key) ?></td>
+    </tr>
+    <?php endforeach ?>
+</table>

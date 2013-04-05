@@ -13,3 +13,4 @@ config/phinx.yml
 config/autoload/db.php
 config/autoload/db.php.bak
 report
+data/DoctrineORMModule/Proxy/

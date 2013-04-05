@@ -56,6 +56,7 @@ class College
 
     /**
      * @ORM\OneToMany(targetEntity="Observation", mappedBy="college")
+     * @ORM\OrderBy({"year" = "ASC"})
      */
     protected $observations;
 
@@ -71,6 +72,7 @@ class College
     public function __construct()
     {
         $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -148,5 +150,20 @@ class College
         $this->zip = $zip;
 
         return $this;
+    }
+
+    public function getObservations()
+    {
+        return $this->observations;
+    }
+
+    public function getFullAddress()
+    {
+        $address = $this->getAddress() . "<br>\n"
+            . $this->getCity() . ", "
+            . $this->getState() . " "
+            . $this->getZip();
+
+        return $address;
     }
 }

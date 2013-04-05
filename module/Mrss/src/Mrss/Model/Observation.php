@@ -18,6 +18,11 @@ class Observation extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Observation';
 
+    public function find($id)
+    {
+        return $this->getRepository()->find($id);
+    }
+
     public function findOne($collegeId, $year, $cipCode = 0)
     {
         return $this->getRepository()->findOneBy(
