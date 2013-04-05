@@ -125,7 +125,7 @@ class Observation
         return $this;
     }
 
-    public function setCollege($college)
+    public function setCollege(College $college)
     {
         $this->college = $college;
 

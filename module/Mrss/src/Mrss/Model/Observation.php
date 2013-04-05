@@ -16,13 +16,32 @@ use Zend\Debug\Debug;
  */
 class Observation extends AbstractModel
 {
+    /**
+     * The entity we're working with
+     *
+     * @var string
+     */
     protected $entity = 'Mrss\Entity\Observation';
 
+    /**
+     * Find an observation by its id
+     *
+     * @param $id
+     * @return null|object
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);
     }
 
+    /**
+     * Find an observation by college, year, cipcode
+     *
+     * @param $collegeId
+     * @param $year
+     * @param int $cipCode
+     * @return null|object
+     */
     public function findOne($collegeId, $year, $cipCode = 0)
     {
         return $this->getRepository()->findOneBy(
@@ -34,6 +53,11 @@ class Observation extends AbstractModel
         );
     }
 
+    /**
+     * Save an observation
+     *
+     * @param ObservationEntity $observation
+     */
     public function save(ObservationEntity $observation)
     {
         $this->getEntityManager()->persist($observation);

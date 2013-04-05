@@ -28,8 +28,15 @@ class ObservationTest extends PHPUnit_Framework_TestCase
             '"year" should initially be null'
         );
 
+        $this->assertNull(
+            $observation->getCollege(),
+            '"college" should initially be null'
+        );
 
-
+        $this->assertNull(
+            $observation->getCipCode(),
+            '"cipCode" should initially be null'
+        );
     }
 
     public function testSetters()
@@ -43,6 +50,13 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         // setId
         $observation->setId(25);
         $this->assertEquals(25, $observation->getId());
+
+        $observation->setCipCode('5555.55');
+        $this->assertEquals('5555.55', $observation->getCipCode());
+
+        $college = $this->getMock('Mrss\Entity\College');
+        $observation->setCollege($college);
+        $this->assertSame($college, $observation->getCollege());
     }
 
     /**

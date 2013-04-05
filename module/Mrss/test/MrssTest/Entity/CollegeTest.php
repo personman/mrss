@@ -27,6 +27,11 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $college = new College();
 
         $this->assertNull(
+            $college->getId(),
+            '"id" should initially be null'
+        );
+
+        $this->assertNull(
             $college->getName(),
             '"name" should initially be null'
         );
@@ -55,6 +60,11 @@ class CollegeTest extends PHPUnit_Framework_TestCase
             $college->getZip(),
             '"zip" should initially be null'
         );
+
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $college->getObservations()
+        );
     }
 
     /**
@@ -80,6 +90,23 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($collegeData['city'], $college->getCity());
         $this->assertEquals($collegeData['state'], $college->getState());
         $this->assertEquals($collegeData['zip'], $college->getZip());
+    }
+
+    /**
+     * Test address formatting.
+     */
+    public function testGetFullAddress()
+    {
+        $college = new College();
+
+        $college->setAddress('123 Main');
+        $college->setCity('Overland Park');
+        $college->setState('KS');
+        $college->setZip('66101');
+
+        $expected = "123 Main<br>\nOverland Park, KS 66101";
+
+        $this->assertEquals($expected, $college->getFullAddress());
     }
 
     /**

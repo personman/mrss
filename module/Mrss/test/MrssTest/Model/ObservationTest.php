@@ -1,27 +1,27 @@
 <?php
 /**
- * Test the college model
+ * Test the observation model
  */
 namespace MrssTest\Model;
 
-use Mrss\Model\College;
+use Mrss\Model\Observation;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Class CollegeTest
+ * Class ObservationTest
  *
  * @package MrssTest\Model
  */
-class CollegeTest extends PHPUnit_Framework_TestCase
+class ObservationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Mrss\Model\College
+     * @var \Mrss\Model\Observation
      */
     protected $model;
 
     public function setUp()
     {
-        $this->model = new \Mrss\Model\College();
+        $this->model = new \Mrss\Model\Observation();
     }
 
     public function tearDown()
@@ -31,51 +31,7 @@ class CollegeTest extends PHPUnit_Framework_TestCase
 
     public function testInitialState()
     {
-        $this->assertInstanceOf('Mrss\Model\College', $this->model);
-    }
-
-    public function testFindAll()
-    {
-        $repoMock = $this->getMock(
-            'Doctrine\ORM\EntityRepository',
-            array('findBy', 'getUnitOfWork'),
-            array(),
-            '',
-            false
-        );
-
-        $repoMock->expects($this->once())
-            ->method('findBy')
-            ->will($this->returnValue('placeholder'));
-
-        $this->model->setRepository($repoMock);
-        $this->model->setEntityManager($this->getEmMock());
-
-        $result = $this->model->findAll();
-
-        $this->assertEquals('placeholder', $result);
-    }
-
-    public function testFindOneByIpeds()
-    {
-        $repoMock = $this->getMock(
-            'Doctrine\ORM\EntityRepository',
-            array('findOneBy', 'getUnitOfWork'),
-            array(),
-            '',
-            false
-        );
-
-        $repoMock->expects($this->once())
-            ->method('findOneBy')
-            ->will($this->returnValue('placeholder'));
-
-        $this->model->setRepository($repoMock);
-        $this->model->setEntityManager($this->getEmMock());
-
-        $result = $this->model->findOneByIpeds('111111');
-
-        $this->assertEquals('placeholder', $result);
+        $this->assertInstanceOf('Mrss\Model\Observation', $this->model);
     }
 
     /**
@@ -104,6 +60,38 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('placeholder', $result);
     }
 
+    /**
+     * Find by college, year, cipCode
+     */
+    public function testFindOne()
+    {
+        $collegeId = 2;
+        $year = 2013;
+        $cipCode = 0;
+
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findOne($collegeId, $year, $cipCode);
+
+        $this->assertEquals('placeholder', $result);
+    }
+
+    /**
+     * Test saving an observation entity
+     */
     public function testSave()
     {
         $emMock = $this->getEmMock();
@@ -114,8 +102,9 @@ class CollegeTest extends PHPUnit_Framework_TestCase
 
         $this->model->setEntityManager($emMock);
 
-        $this->model->save(new \Mrss\Entity\College);
+        $this->model->save(new \Mrss\Entity\Observation);
     }
+
 
     protected function getEmMock()
     {

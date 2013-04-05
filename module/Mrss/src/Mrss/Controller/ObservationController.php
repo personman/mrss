@@ -15,7 +15,7 @@ class ObservationController extends AbstractActionController
 
         return array(
             'observation' => $Observations->find($this->params('id')),
-            'fields' => $this->getFields();
+            'fields' => $this->getFields()
         );
     }
 
