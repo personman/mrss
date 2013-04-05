@@ -71,7 +71,7 @@
         <echo message="Finished PHPUnit." />
     </target>
 
-
+    <!-- Note: On the Jenkins build server, behat fails for no reason once in a while -->
     <target name="behat">
         <echo message="Starting PHP's built-in web server..." />
         <exec command="php -S localhost:8080 -t public/" spawn="true" />
