@@ -64,6 +64,22 @@ class CollegeControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('general');
     }
 
+    public function testViewWithInvalidId()
+    {
+        // Mock of the college model, returning null
+        $collegeModelMock = $this->getCollegeModelMock();
+        $collegeModelMock->expects($this->once())
+            ->method('find')
+            ->will($this->returnValue(null));
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('model.college', $collegeModelMock);
+
+        $this->dispatch('/colleges/view/5');
+
+        $this->assertRedirect();
+    }
+
     public function testMapActionCanBeAccessed()
     {
         $this->dispatch('/colleges/map');
