@@ -111,5 +111,4 @@ class Benchmark
     {
         return $this->benchmarkGroup;
     }
-
 }
