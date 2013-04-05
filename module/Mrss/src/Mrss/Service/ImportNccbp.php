@@ -115,6 +115,9 @@ inner join node g on a.group_nid = g.nid";
      */
     public function importObservations()
     {
+        // This may take some time
+        set_time_limit(600);
+
         $query = "select n.title, y.field_data_entry_year_value as year, sss.*
 from content_type_group_form18_stud_serv_staff sss
 inner join node n on n.nid = sss.nid

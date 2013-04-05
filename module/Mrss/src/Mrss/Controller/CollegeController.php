@@ -22,8 +22,15 @@ class CollegeController extends AbstractActionController
     public function viewAction()
     {
         $Colleges = $this->getServiceLocator()->get('model.college');
+        $college = $Colleges->find($this->params('id'));
 
-        return array('college' => $Colleges->find($this->params('id')));
+        // Handle invalid id
+        if (empty($college)) {
+            $this->flashMessenger()->addErrorMessage("Invalide college id.");
+            $this->redirect()->toUrl('/colleges');
+        }
+
+        return array('college' => $college);
     }
 
     /**

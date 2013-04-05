@@ -22,7 +22,7 @@ class ObservationController extends AbstractActionController
     protected function getFields()
     {
         return array(
-
+            'tot_fte_career_staff' => 'Career Staff'
         );
     }
 }
