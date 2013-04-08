@@ -12,6 +12,18 @@ class CollegeController extends AbstractActionController
 
     public function indexAction()
     {
+        /*
+        $guest = new \Mrss\Entity\Role;
+        $guest->setRoleId('guest');
+        $em = $this->getServiceLocator()->get('em');
+        $em->persist($role);
+
+        $role2
+
+        $em->flush();
+        die('ok');
+        */
+
         $Colleges = $this->getServiceLocator()->get('model.college');
 
         return array(

@@ -10,6 +10,7 @@ return array(
         'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
+        'BjyAuthorize'
     ),
 
     'doctrine' => array(
