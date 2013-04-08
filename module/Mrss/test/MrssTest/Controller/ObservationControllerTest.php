@@ -33,7 +33,7 @@ class ObservationControllerTest extends AbstractControllerTestCase
             array('getCollege')
         );
         $observationMock->expects($this->once())
-            ->method('getCollege')
+            ->method('getCollege', 'get')
             ->will($this->returnValue($collegeMock));
 
         // Mock the model
@@ -49,11 +49,40 @@ class ObservationControllerTest extends AbstractControllerTestCase
             ->will($this->returnValue($observationMock));
 
 
+        // Mock the benchmark entity
+        $benchmarkMock = $this->getMock(
+            'Mrss\Entity\Benchmark',
+            array('getDbColumn', 'getName')
+        );
+        $benchmarkMock->expects($this->once())
+            ->method('getDbColumn')
+            ->will($this->returnValue('tot_fte_counc_adv_staff'));
+        $benchmarkMock->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('blee'));
+
+        // Mock the benchmark model
+        $benchmarkModelMock = $this->getMock(
+            '\Mrss\Model\Benchmark',
+            array('findAll'),
+            array(),
+            '',
+            false
+        );
+        $benchmarkModelMock->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue(array($benchmarkMock)));
+
+
         // Put the mocks in the service locator
         $sm = $this->getServiceLocator();
         $sm->setService('model.observation', $observationModelMock);
+        $sm->setService('model.benchmark', $benchmarkModelMock);
 
         $this->dispatch('/observations/view/5');
+        $r = $this->getResponse()->getContent();
+        //\Zend\Debug\Debug::dump($r);die;
+        //echo $r; die;
         $this->assertResponseStatusCode(200);
 
         $this->assertModuleName('mrss');

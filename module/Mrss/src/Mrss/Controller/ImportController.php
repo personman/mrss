@@ -40,4 +40,17 @@ class ImportController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($message);
         $this->redirect()->toUrl('/colleges');
     }
+
+    public function metaAction()
+    {
+        $importer = $this->getServiceLocator()->get('import.nccbp');
+
+        $importer->importFieldMetadata();
+
+        $stats = $importer->getStats();
+        $message = "Benchmark metadata import complete. Imported:
+            $stats[imported], skipped: $stats[skipped].";
+        $this->flashMessenger()->addSuccessMessage($message);
+        $this->redirect()->toUrl('/colleges');
+    }
 }

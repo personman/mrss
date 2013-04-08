@@ -55,6 +55,10 @@ class Module
                     $observationModel = $sm->get('model.observation');
                     $importer->setObservationModel($observationModel);
 
+                    // Inject the benchmark model
+                    $benchmarkModel = $sm->get('model.benchmark');
+                    $importer->setBenchmarkModel($benchmarkModel);
+
                     return $importer;
                 },
                 // Perhaps there should be a generic model factory
@@ -74,6 +78,14 @@ class Module
                     $observationModel->setEntityManager($em);
 
                     return $observationModel;
+                },
+                'model.benchmark' => function ($sm) {
+                    $benchmarkModel = new \Mrss\Model\Benchmark();
+                    $em = $sm->get('em');
+
+                    $benchmarkModel->setEntityManager($em);
+
+                    return $benchmarkModel;
                 }
             ),
         );

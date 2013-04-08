@@ -2,11 +2,15 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\BenchmarkGroup;
+use Mrss\Entity\Exception\InvalidBenchmarkException;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Debug\Debug;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
+use Mrss\Entity\Benchmark;
 use Mrss\Model;
+use Zend\Db\Sql\Sql;
 
 /**
  * Import data from NCCBP database
@@ -36,6 +40,11 @@ class ImportNccbp
      * @var \Mrss\Model\Observation
      */
     protected $observationModel;
+
+    /**
+     * @var \Mrss\Model\Benchmark
+     */
+    protected $benchmarkModel;
 
     /**
      * @var array
@@ -194,6 +203,91 @@ where field_18_stud_act_staff_ratio_value is not null";
         //Debug::dump($stats); die('done.');
     }
 
+    public function importFieldMetadata()
+    {
+
+        $sql = new Sql($this->dbAdapter);
+        $select = $sql->select();
+
+        $select->from('content_node_field_instance');
+        $select->columns(
+            array(
+                'field_name',
+                'label',
+                'description',
+                'weight',
+                'widget_type'
+            )
+        );
+
+        $statement = $sql->prepareStatementForSqlObject($select);
+
+        $results = $statement->execute();
+
+        // Observation entity for seeing what fields we have
+        $exampleObservation = new Observation();
+
+        foreach ($results as $result) {
+            try {
+                $dbColumn = $this->convertFieldName(
+                    $result['field_name'],
+                    false
+                );
+            } catch (\Exception $e) {
+                continue;
+            }
+
+
+            if ($exampleObservation->has($dbColumn)) {
+                Debug::dump($result);
+                // Find or create the Benchmark entity
+                $benchmark = $this->getBenchmarkModel()
+                    ->findOneByDbColumn($dbColumn);
+                
+                if (empty($benchmark)) {
+                    $benchmark = new Benchmark;
+                }
+
+                // Populate the benchmark
+                $benchmark->setDbColumn($dbColumn);
+                $benchmark->setName($result['label']);
+                $benchmark->setDescription($result['description']);
+                $benchmark->setSequence($result['weight']);
+                $inputType = $this->convertInputType($result['widget_type']);
+                $benchmark->setInputType($inputType);
+
+                $this->getBenchmarkModel()->save($benchmark);
+                $this->stats['imported']++;
+            } else {
+                $this->stats['skipped']++;
+            }
+        }
+
+        // Save the data to the db
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Get the column names from the observations table, minus some.
+     *
+     * @return array
+     */
+    public function getObservationFields()
+    {
+        $schemaManager = $this->entityManager->getConnection()->getSchemaManager();
+
+        $allColumns = $schemaManager->listTableColumns('observations');
+        $exclude = array('id', 'college_id', 'year', 'cipCode');
+        $columns = array();
+        foreach ($allColumns as $column) {
+            if (!in_array($column->getName(), $exclude)) {
+                $columns[] = $column->getName();
+            }
+        }
+
+        return $columns;
+    }
+
     public function extractIpedsFromTitle($title)
     {
         $titleParts = explode('_', $title);
@@ -206,20 +300,50 @@ where field_18_stud_act_staff_ratio_value is not null";
      * Convert from nccbp field name to mrss field name
      *
      * @param $fieldName
-     * @return string
+     * @param bool $includeValue
      * @throws \Exception
+     * @return string
      */
-    public function convertFieldName($fieldName)
+    public function convertFieldName($fieldName, $includeValue = true)
     {
         // This takes the format 'field_18_tot_fte_fin_aid_staff_value'
         // and converts it to this: 'tot_fte_fin_aid_staff'
-        preg_match('/^field_(.\d)_(.*)_value$/', $fieldName, $matches);
+        $pattern = '/^field_(.\d)_(.*)_value$/';
+        if (!$includeValue) {
+            $pattern = '/^field_(.\d)_(.*)$/';
+        }
+
+        preg_match($pattern, $fieldName, $matches);
 
         if (empty($matches[2])) {
             throw new \Exception("'$fieldName' is not a valid field.");
         }
 
         $converted = $matches[2];
+
+        return $converted;
+    }
+
+    public function convertInputType($inputType)
+    {
+        $conversionMap = array(
+            'text_textfield' => 'text',
+            'text_textarea' => 'textarea',
+            'number' => 'number',
+            'optionwidgets_select' => 'select',
+            'computed' => 'computed',
+            'link' => 'link',
+            'userreference_select' => 'user',
+            'nodereference_select' => 'node',
+            'imagefield_widget' => 'image',
+            'optionwidgets_buttons' => 'button'
+        );
+
+        if (!empty($conversionMap[$inputType])) {
+            $converted = $conversionMap[$inputType];
+        } else {
+            $converted = $inputType;
+        }
 
         return $converted;
     }
@@ -264,5 +388,17 @@ where field_18_stud_act_staff_ratio_value is not null";
     protected function getObservationModel()
     {
         return $this->observationModel;
+    }
+
+    public function setBenchmarkModel($model)
+    {
+        $this->benchmarkModel = $model;
+
+        return $this;
+    }
+
+    protected function getBenchmarkModel()
+    {
+        return $this->benchmarkModel;
     }
 }

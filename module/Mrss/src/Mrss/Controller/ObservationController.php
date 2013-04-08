@@ -11,18 +11,24 @@ class ObservationController extends AbstractActionController
 {
     public function viewAction()
     {
-        $Observations = $this->getServiceLocator()->get('model.observation');
+        $ObservationModel = $this->getServiceLocator()->get('model.observation');
 
         return array(
-            'observation' => $Observations->find($this->params('id')),
+            'observation' => $ObservationModel->find($this->params('id')),
             'fields' => $this->getFields()
         );
     }
 
     protected function getFields()
     {
-        return array(
-            'tot_fte_career_staff' => 'Career Staff'
-        );
+        $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
+
+        $benchmarks = $benchmarkModel->findAll();
+        $fields = array();
+        foreach ($benchmarks as $benchmark) {
+            $fields[$benchmark->getDbColumn()] = $benchmark->getName();
+        }
+
+        return $fields;
     }
 }

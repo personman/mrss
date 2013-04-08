@@ -46,6 +46,16 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             $benchmark->getSequence(),
             '"sequence" should initially be null'
         );
+
+        $this->assertNull(
+            $benchmark->getInputType(),
+            '"inputType" should initially be null'
+        );
+
+        $this->assertNull(
+            $benchmark->getStatus(),
+            '"status" should initially be null'
+        );
     }
 
     public function testSetters()
@@ -67,6 +77,14 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         // Set sequence
         $benchmark->setSequence(2);
         $this->assertEquals(2, $benchmark->getSequence());
+
+        // Set input type
+        $benchmark->setInputType('text');
+        $this->assertEquals('text', $benchmark->getInputType());
+
+        // Set status
+        $benchmark->setStatus(1);
+        $this->assertEquals(1, $benchmark->getStatus());
     }
 
     public function testAssociationMethods()

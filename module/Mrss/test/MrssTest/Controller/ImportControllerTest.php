@@ -85,4 +85,38 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->assertControllerClass('ImportController');
         $this->assertMatchedRouteName('general');
     }
+
+    public function testMetaAction()
+    {
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('importFieldMetadata'),
+            array(),
+            '',
+            false
+        );
+
+        $importerMock->expects($this->once())
+            ->method('importFieldMetadata');
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+
+        // Make sure sm will hand that mock back to us
+        $importer = $sm->get('import.nccbp');
+        $this->assertSame($importerMock, $importer);
+
+        // Dispatch the request
+        $this->dispatch('/import/meta');
+        //echo $this->getResponse()->getContent();
+
+        // It should redirect:
+        $this->assertResponseStatusCode(302);
+
+        $this->assertModuleName('mrss');
+        $this->assertControllerName('import');
+        $this->assertActionName('meta');
+        $this->assertControllerClass('ImportController');
+        $this->assertMatchedRouteName('general');
+    }
 }

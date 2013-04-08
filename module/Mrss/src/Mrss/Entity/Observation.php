@@ -149,6 +149,12 @@ class Observation
         return $this->cipCode;
     }
 
+    public function has($benchmark)
+    {
+        return property_exists($this, $benchmark);
+    }
+
+
     /**
      * @param $benchmark
      * @return mixed
@@ -156,7 +162,7 @@ class Observation
      */
     public function get($benchmark)
     {
-        if (!property_exists($this, $benchmark)) {
+        if (!$this->has($benchmark)) {
             throw new Exception\InvalidBenchmarkException(
                 "'$benchmark' is not a valid benchmark."
             );

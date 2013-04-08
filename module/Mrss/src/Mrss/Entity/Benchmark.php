@@ -43,6 +43,16 @@ class Benchmark
     protected $sequence;
 
     /**
+     * @ORM\Column(type="string", length=30)
+     */
+    protected $inputType;
+
+    /**
+     * @ORM\Column(type="integer", length=3, nullable=true)
+     */
+    protected $status;
+
+    /**
      * @ORM\ManyToOne(targetEntity="BenchmarkGroup", inversedBy="benchmarks")
      */
     protected $benchmarkGroup;
@@ -105,6 +115,30 @@ class Benchmark
         $this->benchmarkGroup = $benchmarkGroup;
 
         return $this;
+    }
+
+    public function setInputType($inputType)
+    {
+        $this->inputType = $inputType;
+
+        return $this;
+    }
+
+    public function getInputType()
+    {
+        return $this->inputType;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     public function getBenchmarkGroup()
