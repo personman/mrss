@@ -308,9 +308,9 @@ where field_18_stud_act_staff_ratio_value is not null";
     {
         // This takes the format 'field_18_tot_fte_fin_aid_staff_value'
         // and converts it to this: 'tot_fte_fin_aid_staff'
-        $pattern = '/^field_(.\d)_(.*)_value$/';
+        $pattern = '/^field_(.\d)[a-z]?_(.*)_value$/';
         if (!$includeValue) {
-            $pattern = '/^field_(.\d)_(.*)$/';
+            $pattern = '/^field_(.\d)[a-z]?_(.*)$/';
         }
 
         preg_match($pattern, $fieldName, $matches);
@@ -385,7 +385,7 @@ where field_18_stud_act_staff_ratio_value is not null";
         return $this;
     }
 
-    protected function getObservationModel()
+    public function getObservationModel()
     {
         return $this->observationModel;
     }
@@ -397,7 +397,7 @@ where field_18_stud_act_staff_ratio_value is not null";
         return $this;
     }
 
-    protected function getBenchmarkModel()
+    public function getBenchmarkModel()
     {
         return $this->benchmarkModel;
     }

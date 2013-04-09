@@ -16,6 +16,10 @@ use Zend\Debug\Debug;
 class ImportNccbpTest extends PHPUnit_Framework_TestCase
 {
     protected $db;
+
+    /**
+     * @var \Mrss\Service\ImportNccbp
+     */
     protected $import;
 
     public function setUp()
@@ -127,6 +131,18 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $nccbpField
+     * @param $converted
+     * @dataProvider getFieldConversionsNoValue
+     */
+    public function testConvertFieldNameNoIncludeValue($nccbpField, $converted)
+    {
+        $result = $this->import->convertFieldName($nccbpField, false);
+
+        $this->assertEquals($converted, $result);
+    }
+
+    /**
      * @param $original
      * @param $padded
      * @dataProvider getIpeds
@@ -146,6 +162,27 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $extracted = $this->import->extractIpedsFromTitle($title);
 
         $this->assertEquals($ipeds, $extracted);
+    }
+
+    /**
+     * @param $type
+     * @param $expected
+     * @dataProvider getInputTypes
+     */
+    public function testConvertInputType($type, $expected)
+    {
+        $converted = $this->import->convertInputType($type);
+
+        $this->assertEquals($expected, $converted);
+    }
+
+    public function testModelSetters()
+    {
+        $this->import->setObservationModel('placeholder');
+        $this->assertEquals('placeholder', $this->import->getObservationModel());
+
+        $this->import->setBenchmarkModel('placeholder');
+        $this->assertEquals('placeholder', $this->import->getBenchmarkModel());
     }
 
     /**
@@ -186,7 +223,8 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('field_18_tot_fte_fin_aid_staff_value', 'tot_fte_fin_aid_staff'),
-            array('field_18_tot_fte_recr_staff_value', 'tot_fte_recr_staff')
+            array('field_18_tot_fte_recr_staff_value', 'tot_fte_recr_staff'),
+            array('field_18b_tot_fte_recr_staff_value', 'tot_fte_recr_staff')
         );
     }
 
@@ -197,6 +235,25 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
             array('field_19_blah_blah'),
             array('field_19_value'),
             array('this_wont_work')
+        );
+    }
+
+    public function getFieldConversionsNoValue()
+    {
+        return array(
+            array('field_18_tot_fte_fin_aid_staff', 'tot_fte_fin_aid_staff'),
+            array('field_18_tot_fte_recr_staff', 'tot_fte_recr_staff'),
+            array('field_18a_tot_fte_recr_staff', 'tot_fte_recr_staff')
+        );
+    }
+
+    public function getInputTypes()
+    {
+        return array(
+            array('text_textfield', 'text'),
+            array('number', 'number'),
+            array('userreference_select', 'user'),
+            array('something_made_up', 'something_made_up')
         );
     }
 
