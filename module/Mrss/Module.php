@@ -86,6 +86,19 @@ class Module
                     $benchmarkModel->setEntityManager($em);
 
                     return $benchmarkModel;
+                },
+                'model.benchmarkGroup' => function ($sm) {
+                    $benchmarkGroupkModel = new \Mrss\Model\BenchmarkGroup();
+                    $em = $sm->get('em');
+
+                    $benchmarkGroupkModel->setEntityManager($em);
+
+                    return $benchmarkGroupkModel;
+                },
+                'service.formBuilder' => function ($sm) {
+                    $service = new \Mrss\Service\FormBuilder;
+
+                    return $service;
                 }
             ),
         );

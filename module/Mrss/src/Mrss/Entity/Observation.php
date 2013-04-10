@@ -183,4 +183,14 @@ class Observation
 
         return $this;
     }
+
+    public function getArrayCopy()
+    {
+        $arrayCopy = array();
+        foreach ($this as $key => $value) {
+            $arrayCopy[$key] = $value;
+        }
+
+        return $arrayCopy;
+    }
 }

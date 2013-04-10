@@ -108,6 +108,18 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         $observation->set($field, 5);
     }
 
+    public function testGetArrayCopy()
+    {
+        $observation = new Observation;
+
+        $observation->setYear(2010);
+        $observation->set('tot_fte_recr_staff', 52);
+        
+        $arrayCopy = $observation->getArrayCopy();
+
+        $this->assertEquals(2010, $arrayCopy['year']);
+        $this->assertEquals(52, $arrayCopy['tot_fte_recr_staff']);
+    }
 
     /**
      * Some valid benchmark fields

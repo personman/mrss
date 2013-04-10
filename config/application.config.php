@@ -10,7 +10,8 @@ return array(
         'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
-        'BjyAuthorize'
+        'BjyAuthorize',
+        'ZfcTwitterBootstrap'
     ),
 
     'doctrine' => array(

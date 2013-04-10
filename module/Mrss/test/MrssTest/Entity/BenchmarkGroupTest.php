@@ -68,4 +68,23 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
             $benchmarkGroup->getBenchmarks()
         );
     }
+
+    public function testGetElements()
+    {
+        $benchmarkGroup = new BenchmarkGroup;
+
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $benchmarkGroup->getElements()
+        );
+    }
+
+    public function testGetLabel()
+    {
+        $benchmarkGroup = new BenchmarkGroup;
+
+        $benchmarkGroup->setName('Form 18');
+
+        $this->assertEquals('Form 18', $benchmarkGroup->getLabel());
+    }
 }

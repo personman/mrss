@@ -98,4 +98,13 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($benchmarkGroupMock, $benchmark->getBenchmarkGroup());
     }
+
+    public function testGetFormElement()
+    {
+        $benchmark = new Benchmark;
+
+        $formElement = $benchmark->getFormElement();
+
+        $this->assertTrue(is_array($formElement));
+    }
 }

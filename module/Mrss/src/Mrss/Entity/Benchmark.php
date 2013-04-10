@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="benchmarks")
  */
-class Benchmark
+class Benchmark implements FormElementProviderInterface
 {
     /**
      * @ORM\Id
@@ -144,5 +144,24 @@ class Benchmark
     public function getBenchmarkGroup()
     {
         return $this->benchmarkGroup;
+    }
+
+    /**
+     * Implement the FormElementProviderInterface
+     *
+     * @todo: different number types (int, percentage, float, etc)
+     */
+    public function getFormElement()
+    {
+        return array(
+            'name' => $this->getDbColumn(),
+            'options' => array(
+                'label' => $this->getName(),
+                'help-block' => $this->getDescription()
+            ),
+            'attributes' => array(
+                'class' => 'input-small'
+            )
+        );
     }
 }

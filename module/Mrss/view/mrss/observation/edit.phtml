@@ -1,0 +1,17 @@
+<h3>
+    <?= $this->observation->getCollege()->getName() ?>:
+    <?= $this->observation->getYear() ?>
+</h3>
+
+<?php $this->form->prepare() ?>
+
+<?= $this->ztbForm($this->form) ?>
+
+
+<? /*=$this->form()->openTag($this->form) ?>
+
+    <?php foreach ($this->form->getElements() as $element): ?>
+        <?= $this->formRow($element) ?>
+    <?php endforeach ?>
+
+<?= $this->form()->closeTag() */?>

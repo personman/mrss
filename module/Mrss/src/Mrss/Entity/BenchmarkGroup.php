@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="benchmark_groups")
  */
-class BenchmarkGroup
+class BenchmarkGroup implements FormFieldsetProviderInterface
 {
     /**
      * @ORM\Id
@@ -95,5 +95,17 @@ class BenchmarkGroup
     public function getBenchmarks()
     {
         return $this->benchmarks;
+    }
+
+    // Implement the FormFieldSetProvider interface so this can be turned
+    // into a fieldset.
+    public function getElements()
+    {
+        return $this->getBenchmarks();
+    }
+
+    public function getLabel()
+    {
+        return $this->getName();
     }
 }
