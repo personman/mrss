@@ -80,16 +80,30 @@
 											<li><a href="#" class="link-icon24 link-icon24-4">128</a></li>
 										</ul>
 									</div> */ ?>
-									<?php /*<a href="#" class="image image-full"><img src="/images/n33-robot-invader.jpg" alt="" /></a> */ ?>
+                            <?php /*<a href="#" class="image image-full"><img src="/images/n33-robot-invader.jpg" alt="" /></a> */ ?>
 
-                                    <?= $this->flashMessenger()->render('error'); ?>
-                                    <?= $this->flashMessenger()->render('info'); ?>
-                                    <?= $this->flashMessenger()->render('success');?>
-                                    <?= $this->flashMessenger()->render('default');?>
+                            <? //session_start() ?>
 
+                            <? // FlashMessenger. Bootstrap method doesn't work ?>
+                            <? $dump = false; ?>
+                            <? if ($dump) var_dump($_SESSION); ?>
 
+                            <? if (true): ?>
 
-                                    <?php echo $this->content; ?>
+                            <?= $this->flashMessenger()->render('error'); ?>
+                            <?= $this->flashMessenger()->render('info'); ?>
+                            <?= $this->flashMessenger()->render('success'); ?>
+                            <?= $this->flashMessenger()->render('default'); ?>
+
+                            <? else: ?>
+
+                            <?= $this->ztbFlashMessenger()->render(); ?>
+
+                            <? endif ?>
+
+                            <? if ($dump) var_dump($_SESSION); ?>
+
+                            <?php echo $this->content; ?>
 
 
 

@@ -49,7 +49,12 @@ class ImportNccbp
     /**
      * @var array
      */
-    protected $stats = array('imported' => 0, 'skipped' => 0);
+    protected $stats = array(
+        'imported' => 0,
+        'skipped' => 0,
+        'start' => '',
+        'elapsed' => ''
+    );
 
     /**
      * Constructor
@@ -61,6 +66,7 @@ class ImportNccbp
     {
         $this->dbAdapter = $dbAdapter;
         $this->entityManager = $entityManager;
+        $this->stats['start'] = microtime(true);
     }
 
     /**
@@ -363,6 +369,11 @@ where field_18_stud_act_staff_ratio_value is not null";
 
     public function getStats()
     {
+        // Calculate elapsed time
+        $end = microtime(true);
+        $elapsed = $end - $this->stats['start'];
+        $this->stats['elapsed'] = round($elapsed, 3);
+
         return $this->stats;
     }
 

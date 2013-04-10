@@ -36,7 +36,7 @@ class ImportController extends AbstractActionController
 
         // Redirect
         $message = "Observation import complete. Imported: $stats[imported],
-        skipped: $stats[skipped].";
+        skipped: $stats[skipped], Elapsed time: $stats[elapsed] seconds.";
         $this->flashMessenger()->addSuccessMessage($message);
         $this->redirect()->toUrl('/colleges');
     }
