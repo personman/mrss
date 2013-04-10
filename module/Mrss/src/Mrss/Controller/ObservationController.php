@@ -39,7 +39,7 @@ class ObservationController extends AbstractActionController
 
         $form->setAttribute('class', 'form-horizontal');
 
-        // @todo: bind observation to form
+        // bind observation to form, which will populate it with values
         $form->bind($observation);
 
         return array(
