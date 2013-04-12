@@ -39,10 +39,10 @@ class AbstractControllerTestCase extends AbstractHttpControllerTestCase
     protected function mockNavService()
     {
         // Always mock the navigation service
-    $nav = $this->getMock(
-    'Zend\Navigation\AbstractContainer'
-    );
-    $this->getServiceLocator()->setService('navigation', $nav);
+        $nav = $this->getMock(
+            'Zend\Navigation\AbstractContainer'
+        );
+        $this->getServiceLocator()->setService('navigation', $nav);
 
     }
 }
