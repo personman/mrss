@@ -95,7 +95,8 @@ return array(
             'error/403' => __DIR__ . '/../../'
                 . 'vendor/bjyoungblood/bjy-authorize/view/error/403.phtml',
             'zend-developer-tools/toolbar/bjy-authorize-role'
-                => __DIR__ . '/../view/zend-developer-tools/toolbar/bjy-authorize-role.phtml',
+                => __DIR__ . '/../../vendor/bjyoungblood/bjy-authorize/view/'
+                . 'zend-developer-tools/toolbar/bjy-authorize-role.phtml',
         ),
     ),
 
