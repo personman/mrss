@@ -12,5 +12,20 @@
  */
 
 return array(
-    // ...
+    'navigation' => array(
+        'default' => array(
+            array(
+                'label' => 'Home',
+                'uri' => '/'
+            ),
+            array(
+                'label' => 'Imports',
+                'uri' => '/import'
+            ),
+            array(
+                'label' => 'Colleges',
+                'uri' => '/colleges'
+            )
+        )
+    )
 );

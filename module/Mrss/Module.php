@@ -41,6 +41,7 @@ class Module
             'invokables' => array(),
             'services' => array(),
             'factories' => array(
+                'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
                 'import.nccbp' => function ($sm) {
                     // Prepare the importer with the db to import from and the em
                     $nccbpDb = $sm->get('nccbp-db');

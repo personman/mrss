@@ -106,6 +106,7 @@
 
                             <? if ($dump) var_dump($_SESSION); ?>
 
+
                             <?php echo $this->content; ?>
 
 
@@ -165,12 +166,16 @@
 					
 						<!-- Nav -->
 							<nav id="nav" class="mobileUI-site-nav">
-								<ul>
+
+                                <?= $this->navigation('navigation')->menu(); ?>
+
+
+								<? /*<ul>
 									<li class="current_page_item"><a href="#">Latest Post</a></li>
 									<li><a href="#">Archives</a></li>
 									<li><a href="#">About Me</a></li>
 									<li><a href="#">Contact Me</a></li>
-								</ul>
+								</ul>*/ ?>
 							</nav>
 
 						<? /*<!-- Search -->
