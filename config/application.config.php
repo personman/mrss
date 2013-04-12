@@ -5,7 +5,6 @@ return array(
         'ZfcBase',
         'ZfcUser',
         'ZfcUserDoctrineORM',
-        'PhinxModule',
         'Mrss',
         'ZendDeveloperTools',
         'DoctrineModule',
