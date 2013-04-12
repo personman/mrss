@@ -61,6 +61,21 @@ return array(
             ),
         ),
     ),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'import' => array(
+                    'options' => array(
+                        'route' => 'import <type>',
+                        'defaults' => array(
+                            'controller' => 'import',
+                            'action' => 'background'
+                        )
+                    )
+                )
+            )
+        )
+    ),
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
@@ -102,6 +117,9 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+        'strategies' => array(
+            'ViewJsonStrategy',
         ),
     ),
     'doctrine' => array(

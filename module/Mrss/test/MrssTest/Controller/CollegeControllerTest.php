@@ -92,6 +92,13 @@ class CollegeControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('general');
     }
 
+    public function testFlashMessenger()
+    {
+        $this->dispatch('/colleges/flashtest');
+
+        $this->assertRedirectTo('/colleges');
+    }
+
     protected function getCollegeModelMock()
     {
         $collegeModelMock = $this->getMock(

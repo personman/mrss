@@ -34,6 +34,190 @@ class Observation
     protected $college;
 
 
+
+    // NCCBP form 1:
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $unemp_rate;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $med_hhold_inc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_cr_head;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_cr_head;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $trans_cred;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $t_c_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $dev_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $crd_stud_minc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $fem_cred_stud;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $non_res_alien;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $blk_n_hisp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ind_alaska;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $asia_pacif;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $hisp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $wht_n_hisp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $race_eth_unk;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tuition_fees;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $unre_o_rev;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $loc_sour;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $state_sour;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tuition_fees_sour;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $total_pop;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ipeds_enr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $non_cr_hdct;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $non_res_alien_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $race_eth_unk_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $hisp_anyrace_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ind_alaska_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $asian_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $blk_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $haw_pacific_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $white_2012;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $two_or_more;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $hs_stud_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pell_grant_rec;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $hs_stud_hdct;
+
+
+
     // NCCBP form 18:
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -99,6 +283,9 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $test_ass_staff_ratio;
+
+
+
 
 
     public function getYear()

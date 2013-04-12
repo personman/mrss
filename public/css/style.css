@@ -767,3 +767,20 @@ form.form-horizontal .control-label {
 form.form-horizontal .controls {
     margin-left: 420px;
 }
+
+/* Import page */
+.row-fluid.paddedTop {
+    margin-top: 20px;
+}
+
+.progressInfo {
+    margin-top:7px;
+    min-height: 30px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.progressComplete img {
+    height: 30px;
+    margin-left:15px;
+}

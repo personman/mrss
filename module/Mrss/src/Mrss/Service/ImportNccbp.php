@@ -11,6 +11,8 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\Benchmark;
 use Mrss\Model;
 use Zend\Db\Sql\Sql;
+use Zend\Session\Container;
+use Zend\Json\Json;
 
 /**
  * Import data from NCCBP database
@@ -27,7 +29,7 @@ class ImportNccbp
 
     /**
      * The mrss doctrine entity manager
-     * @var
+     * @var \Doctrine\ORM\EntityManager
      */
     protected $entityManager;
 
@@ -46,6 +48,8 @@ class ImportNccbp
      */
     protected $benchmarkModel;
 
+    protected $progressFile = "/tmp/nccbp-import-progress";
+
     /**
      * @var array
      */
@@ -53,7 +57,12 @@ class ImportNccbp
         'imported' => 0,
         'skipped' => 0,
         'start' => '',
-        'elapsed' => ''
+        'elapsed' => '',
+        'processed' => 0,
+        'total' => null,
+        'percentage' => 0,
+        'tableProcessed' => 0,
+        'tableTotal' => null
     );
 
     /**
@@ -86,7 +95,16 @@ inner join node g on a.group_nid = g.nid";
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
 
+        $count = count($result);
+        //die("Count about to be set: $count");
+        $this->saveProgress(0, $count);
+
+        $i = 0;
         foreach ($result as $row) {
+            $i++;
+
+            $this->saveProgress($i - 1);
+
             $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
 
             // Does this college already exist?
@@ -122,28 +140,66 @@ inner join node g on a.group_nid = g.nid";
             $this->stats['imported']++;
         }
 
+        $this->saveProgress($count, $count);
+
         $this->entityManager->flush();
+    }
+
+    public function getTables()
+    {
+        $tables = array(
+            'content_type_group_form1_subscriber_info', // 1
+            //'content_type_group_form2_student_compl_tsf', // 2
+            //'content_type_group_form3_stu_perf_transf', // 3
+            //'content_type_group_form4_cred_stud_enr', // 4
+            //'content_type_group_form5_stud_satis_eng', // 5
+            'content_type_group_form18_stud_serv_staff' // 18
+        );
+
+        return $tables;
+    }
+
+    public function importAllObservations()
+    {
+        $tables = $this->getTables();
+        $this->stats['tableTotal'] = count($tables);
+
+        $i = 1;
+        foreach ($tables as $table) {
+            $this->stats['currentTable'] = $table;
+
+            $this->importObservations($table);
+
+            $this->setTableProcessed($i);
+
+            $i++;
+        }
     }
 
     /**
      * Import Observations
      */
-    public function importObservations()
+    public function importObservations($table)
     {
         // This may take some time
         set_time_limit(600);
 
-        $query = "select n.title, y.field_data_entry_year_value as year, sss.*
-from content_type_group_form18_stud_serv_staff sss
-inner join node n on n.nid = sss.nid
-inner join content_field_data_entry_year y on y.nid = n.nid
-where field_18_stud_act_staff_ratio_value is not null";
+        $query = "select n.title, y.field_data_entry_year_value as year, form.*
+from $table form
+inner join node n on n.nid = form.nid
+inner join content_field_data_entry_year y on y.nid = n.nid";
 
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
 
+        $total = count($result);
+        $this->saveProgress(0, $total);
+
         $i = 0;
         foreach ($result as $row) {
+            $i++;
+            $this->saveProgress($i);
+
             /*if ($i++ > 30) {
                 break;
             }*/
@@ -197,21 +253,22 @@ where field_18_stud_act_staff_ratio_value is not null";
             $this->stats['imported']++;
 
             // Write to the db every 20 rows
-            if ($i++ % 20 == 0) {
+            if ($i % 20 == 0) {
                 $this->entityManager->flush();
             }
         }
 
         // Save the data to the db
         $this->entityManager->flush();
-
-        $stats = $this->getStats();
-        //Debug::dump($stats); die('done.');
+        $this->saveProgress($i, $total);
     }
 
+    /**
+     * Import meta data about benchmarks, like label, description, data type,
+     * form id, etc.
+     */
     public function importFieldMetadata()
     {
-
         $sql = new Sql($this->dbAdapter);
         $select = $sql->select();
 
@@ -230,10 +287,15 @@ where field_18_stud_act_staff_ratio_value is not null";
 
         $results = $statement->execute();
 
+        $this->saveProgress(0, count($results));
+
         // Observation entity for seeing what fields we have
         $exampleObservation = new Observation();
 
+        $i = 0;
         foreach ($results as $result) {
+            $i++;
+
             try {
                 $dbColumn = $this->convertFieldName(
                     $result['field_name'],
@@ -243,9 +305,7 @@ where field_18_stud_act_staff_ratio_value is not null";
                 continue;
             }
 
-
             if ($exampleObservation->has($dbColumn)) {
-                Debug::dump($result);
                 // Find or create the Benchmark entity
                 $benchmark = $this->getBenchmarkModel()
                     ->findOneByDbColumn($dbColumn);
@@ -267,10 +327,14 @@ where field_18_stud_act_staff_ratio_value is not null";
             } else {
                 $this->stats['skipped']++;
             }
+
+            $this->saveProgress($i);
         }
 
         // Save the data to the db
         $this->entityManager->flush();
+
+        $this->saveProgress($i);
     }
 
     /**
@@ -314,9 +378,9 @@ where field_18_stud_act_staff_ratio_value is not null";
     {
         // This takes the format 'field_18_tot_fte_fin_aid_staff_value'
         // and converts it to this: 'tot_fte_fin_aid_staff'
-        $pattern = '/^field_(.\d)[a-z]?_(.*)_value$/';
+        $pattern = '/^field_(\d+)[a-z]?_(.*)_value$/';
         if (!$includeValue) {
-            $pattern = '/^field_(.\d)[a-z]?_(.*)$/';
+            $pattern = '/^field_(\d+)[a-z]?_(.*)$/';
         }
 
         preg_match($pattern, $fieldName, $matches);
@@ -367,6 +431,11 @@ where field_18_stud_act_staff_ratio_value is not null";
         return $ipeds;
     }
 
+    /**
+     * Get some stats about the current import
+     *
+     * @return array
+     */
     public function getStats()
     {
         // Calculate elapsed time
@@ -375,6 +444,76 @@ where field_18_stud_act_staff_ratio_value is not null";
         $this->stats['elapsed'] = round($elapsed, 3);
 
         return $this->stats;
+    }
+
+    /**
+     * Retrieve progress json from file
+     *
+     * @return array
+     */
+    public function getProgress()
+    {
+        if (file_exists($this->progressFile)) {
+            $statsJson = file_get_contents($this->progressFile);
+            $stats = Json::decode($statsJson, Json::TYPE_ARRAY);
+
+            // If it's complete, delete the file
+            if (isset($stats['processed']) && isset($stats['total']) &&
+                $stats['processed'] == $stats['total']) {
+                unlink($this->progressFile);
+            }
+        } else {
+            $stats = array();
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Write progress to a little json file so we can poll for it with ajax
+     *
+     * @param $completed
+     * @param null $total
+     */
+    protected function saveProgress($completed, $total = null)
+    {
+        $this->stats['processed'] = $completed;
+
+        if (!is_null($total)) {
+            $this->stats['total'] = $total;
+        }
+
+        // Calculate percentage
+        if ($this->stats['total'] > 0) {
+            $percentage = $this->stats['processed'] / $this->stats['total'] * 100;
+        } else {
+            $percentage = 0;
+        }
+
+        // If multiple tables are being imported, set a base percentage
+        if (!is_null($this->stats['tableTotal'])) {
+            // The base percentage is based on the completed tables
+            $basePercentage = $this->stats['tableProcessed'] /
+                $this->stats['tableTotal'] * 100;
+
+            // Reduce the percentage so it can be added in
+            $currentTablePercentage = $percentage / $this->stats['tableTotal'];
+
+            $percentage = $basePercentage + $currentTablePercentage;
+        }
+
+        $this->stats['percentage'] = $percentage;
+
+        // Write it to a file
+        file_put_contents($this->progressFile, Json::encode($this->stats));
+    }
+
+    /**
+     * @param integer $tablesProcessed
+     */
+    protected function setTableProcessed($tablesProcessed)
+    {
+        $this->stats['tableProcessed'] = $tablesProcessed;
     }
 
     public function setCollegeModel($model)

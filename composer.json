@@ -1,10 +1,10 @@
 {
-    "name": "zendframework/skeleton-application",
-    "description": "Skeleton Application for ZF2",
-    "license": "BSD-3-Clause",
+    "name": "nhebi/mrss",
+    "description": "Maximizing Resources for Student Success",
+    "license": "Copyright",
     "keywords": [
-        "framework",
-        "zf2"
+        "education",
+        "benchmarking"
     ],
     "homepage": "http://framework.zend.com/",
     "require": {
@@ -14,10 +14,10 @@
         "phing/phing": "2.5.*",
         "zf-commons/zfc-user": "0.*",
         "zf-commons/zfc-user-doctrine-orm": "dev-master",
-        "valorin/zf2-phinx-module":"0.*",
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "*",
-        "mwillbanks/zfc-twitter-bootstrap": "@dev"
+        "mwillbanks/zfc-twitter-bootstrap": "@dev",
+        "bjyoungblood/bjy-authorize": "1.2.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.*",
@@ -28,8 +28,7 @@
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*",
         "behat/mink-zombie-driver": "*",
-        "symfony/http-kernel": "*",
-        "bjyoungblood/bjy-authorize": "1.2.*"
+        "symfony/http-kernel": "*"
     },
     "minimum-stability": "dev",
     "config": {

@@ -22,7 +22,7 @@ class ImportControllerTest extends AbstractControllerTestCase
     /**
      * Test import action for colleges
      */
-    public function testIndexActionCanBeAccessed()
+    public function testCollegesActionCanBeAccessed()
     {
         $importerMock = $this->getMock(
             '\Mrss\Service\ImportNccbp',
@@ -38,14 +38,14 @@ class ImportControllerTest extends AbstractControllerTestCase
         $sm = $this->getServiceLocator();
         $sm->setService('import.nccbp', $importerMock);
 
-        $this->dispatch('/import');
+        $this->dispatch('/import/colleges');
 
         // It should redirect:
-        $this->assertResponseStatusCode(302);
+        $this->assertRedirectTo('/colleges');
 
         $this->assertModuleName('mrss');
         $this->assertControllerName('import');
-        $this->assertActionName('index');
+        $this->assertActionName('colleges');
         $this->assertControllerClass('ImportController');
         $this->assertMatchedRouteName('general');
     }
@@ -57,14 +57,14 @@ class ImportControllerTest extends AbstractControllerTestCase
     {
         $importerMock = $this->getMock(
             '\Mrss\Service\ImportNccbp',
-            array('importObservations'),
+            array('importAllObservations'),
             array(),
             '',
             false
         );
 
         $importerMock->expects($this->once())
-            ->method('importObservations');
+            ->method('importAllObservations');
 
         $sm = $this->getServiceLocator();
         $sm->setService('import.nccbp', $importerMock);

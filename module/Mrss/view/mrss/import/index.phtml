@@ -1,25 +1,42 @@
-<h2>Colleges</h2>
+<?php $this->headScript()->appendFile(
+'/js/import.js') ?>
 
-<table class="style1">
-    <tr>
-        <th>IPEDS</th>
-        <th>College</th>
-        <th>Address</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Zip</th>
-    </tr>
+<h2>Imports</h2>
 
-    <?php foreach ($this->colleges as $college): ?>
+<p>Import data from previous studies.</p>
 
-        <tr>
-            <td><?= $college->getIpeds() ?></td>
-            <td><?= $college->getName() ?></td>
-            <td><?= $college->getAddress() ?></td>
-            <td><?= $college->getCity() ?></td>
-            <td><?= $college->getState() ?></td>
-            <td><?= $college->getZip() ?></td>
-        </tr>
 
-    <?php endforeach ?>
-</table>
+
+<div class="row-fluid">
+    <div class="span2 offset10">
+        <button class="btn btn-primary" id="importAll">Import All</button>
+    </div>
+</div>
+
+<?php foreach ($this->imports as $key => $import): ?>
+    <div class="row-fluid paddedTop" id="row-<?= $key ?>">
+        <div class="span2">
+            <h4><?= $import['label'] ?></h4>
+        </div>
+
+        <div class="span8">
+            <div class="progress" style="margin-top:7px">
+                <div class="bar" style="width: 0%;"></div>
+            </div>
+
+            <div class="progressInfo">
+
+            </div>
+        </div>
+
+        <div class="span2">
+            <button class="btn" id="import-<?= $key ?>">Import</button>
+
+            <span class="progressComplete">
+
+            <span>
+        </div>
+
+
+    </div>
+<?php endforeach ?>
