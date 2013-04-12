@@ -42,11 +42,11 @@ class ImportController extends AbstractActionController
         }
 
         // Trigger the importer in the background
-        if (true) {
-            shell_exec("nohup php public/index.php import $type > /dev/null");
-        } else {
+        //if (false) {
+        //    shell_exec("nohup php public/index.php import $type > /dev/null");
+        //} else {
             $this->backgroundAction($type);
-        }
+        //}
 
         return new JsonModel(array('status' => 'ok'));
     }
@@ -59,18 +59,16 @@ class ImportController extends AbstractActionController
     public function backgroundAction($type = null)
     {
         if (is_null($type)) {
-            $type = $this->params('type');
+            $type = $this->params()->fromQuery('type');
         }
 
         $imports = $this->getImports();
 
         if (empty($imports[$type])) {
-            throw new \Exception('Invalid import type.');
+            throw new \Exception("'$type' is an invalid import type.");
         }
 
         $import = $imports[$type];
-
-        echo "Starting import of $import[label]...\n";
 
         // Load the importer from the service manager
         $sm = $this->getServiceLocator();
@@ -85,10 +83,7 @@ class ImportController extends AbstractActionController
         // This is the actual import
         $importer->$method();
 
-        $stats = $importer->getStats();
-        $message = "Import complete. Imported: $stats[imported],
-        skipped: $stats[skipped].\n";
-        echo $message;
+        return new JsonModel();
     }
 
     public function progressAction()
@@ -148,20 +143,6 @@ class ImportController extends AbstractActionController
 
     protected function getImports()
     {
-        return array(
-            'colleges' => array(
-                'label' => 'Colleges',
-                'method' => 'importColleges'
-            ),
-            'benchmarks' => array(
-                'label' => 'Benchmarks',
-                'method' => 'importFieldMetadata'
-            ),
-            'observations' => array(
-                'label' => 'Observations',
-                'method' => 'importAllObservations'
-            )
-        );
-
+        return $this->getServiceLocator()->get('import.nccbp')->getImports();
     }
 }

@@ -16,6 +16,7 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->setApplicationConfig(
             include $this->getConfigPath()
         );
+
         parent::setUp();
     }
 
@@ -108,7 +109,6 @@ class ImportControllerTest extends AbstractControllerTestCase
 
         // Dispatch the request
         $this->dispatch('/import/meta');
-        //echo $this->getResponse()->getContent();
 
         // It should redirect:
         $this->assertResponseStatusCode(302);
@@ -118,5 +118,201 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->assertActionName('meta');
         $this->assertControllerClass('ImportController');
         $this->assertMatchedRouteName('general');
+    }
+
+    public function testIndexAction()
+    {
+        // Mock some dependencies:
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('getImports'),
+            array(),
+            '',
+            false
+        );
+
+        $importerMock->expects($this->once())
+            ->method('getImports')
+            ->will($this->returnValue($this->getImports()));
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+
+        $this->dispatch('/import');
+
+        // It should redirect:
+        $this->assertResponseStatusCode(200);
+
+        $this->assertModuleName('mrss');
+        $this->assertControllerName('import');
+        $this->assertActionName('index');
+        $this->assertControllerClass('ImportController');
+        $this->assertMatchedRouteName('general');
+    }
+
+    public function testBackgroundAction()
+    {
+        // Mock some dependencies:
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('importColleges'),
+            array(),
+            '',
+            false
+        );
+
+        $importerMock->expects($this->once())
+            ->method('importColleges');
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+
+        // Dispatch
+        $this->dispatch('/import/background', 'GET', array('type' => 'colleges'));
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('mrss');
+        $this->assertControllerName('import');
+        $this->assertActionName('background');
+        $this->assertControllerClass('ImportController');
+        $this->assertMatchedRouteName('general');
+    }
+
+    public function testBackgroundActionWithInvalidType()
+    {
+        // Mock some dependencies:
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('getImports'),
+            array(),
+            '',
+            false
+        );
+
+        $importerMock->expects($this->once())
+            ->method('getImports')
+            ->will($this->returnValue($this->getImports()));
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+
+        $this->dispatch('/import/background', 'GET', array('type' => 'not-real'));
+        $this->assertResponseStatusCode(500);
+    }
+
+    public function testBackgroundActionWithInvalidImportMethod()
+    {
+        // Mock the importer
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('getImports'),
+            array(),
+            '',
+            false
+        );
+
+        $badImports = array(
+            'colleges' => array(
+                'method' => 'aMethodThatDoesNotExist'
+            )
+        );
+
+        $importerMock->expects($this->once())
+            ->method('getImports')
+            ->will($this->returnValue($badImports));
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+        $this->dispatch('/import/background', 'GET', array('type' => 'colleges'));
+        $this->assertResponseStatusCode(500);
+    }
+
+    public function testTriggerAction()
+    {
+        // Mock some dependencies:
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('importColleges'),
+            array(),
+            '',
+            false
+        );
+
+        $importerMock->expects($this->once())
+            ->method('importColleges');
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+
+        // Dispatch
+        $this->dispatch('/import/trigger', 'GET', array('type' => 'colleges'));
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('mrss');
+        $this->assertControllerName('import');
+        $this->assertActionName('trigger');
+        $this->assertControllerClass('ImportController');
+        $this->assertMatchedRouteName('general');
+    }
+
+    /**
+     * Giving a non-real import type should land you on an error page
+     */
+    public function testTriggerActionWithInvalidType()
+    {
+        // Mock some dependencies:
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('getImports'),
+            array(),
+            '',
+            false
+        );
+
+        $importerMock->expects($this->once())
+            ->method('getImports')
+            ->will($this->returnValue($this->getImports()));
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+        $this->dispatch('/import/trigger', 'GET', array('type' => 'not-real'));
+        $this->assertResponseStatusCode(500);
+    }
+
+    public function testProgressAction()
+    {
+        $importerMock = $this->getMock(
+            '\Mrss\Service\ImportNccbp',
+            array('getProgress'),
+            array(),
+            '',
+            false
+        );
+
+        $importerMock->expects($this->once())
+            ->method('getProgress');
+
+        $sm = $this->getServiceLocator();
+        $sm->setService('import.nccbp', $importerMock);
+
+        $this->dispatch('/import/progress');
+
+        $this->assertResponseStatusCode(200);
+    }
+
+    protected function getImports()
+    {
+        return array(
+            'colleges' => array(
+                'label' => 'Colleges',
+                'method' => 'importColleges'
+            ),
+            'benchmarks' => array(
+                'label' => 'Benchmarks',
+                'method' => 'importFieldMetadata'
+            ),
+            'observations' => array(
+                'label' => 'Observations',
+                'method' => 'importAllObservations'
+            )
+        );
     }
 }

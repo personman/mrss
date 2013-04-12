@@ -200,10 +200,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $i++;
             $this->saveProgress($i);
 
-            /*if ($i++ > 30) {
-                break;
-            }*/
-
             $ipeds = $this->extractIpedsFromTitle($row['title']);
             $ipeds = $this->padIpeds($ipeds);
             $year = $row['year'];
@@ -509,9 +505,32 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     }
 
     /**
+     * Return some import meta data
+     *
+     * @return array
+     */
+    public function getImports()
+    {
+        return array(
+            'colleges' => array(
+                'label' => 'Colleges',
+                'method' => 'importColleges'
+            ),
+            'benchmarks' => array(
+                'label' => 'Benchmarks',
+                'method' => 'importFieldMetadata'
+            ),
+            'observations' => array(
+                'label' => 'Observations',
+                'method' => 'importAllObservations'
+            )
+        );
+    }
+
+    /**
      * @param integer $tablesProcessed
      */
-    protected function setTableProcessed($tablesProcessed)
+    public function setTableProcessed($tablesProcessed)
     {
         $this->stats['tableProcessed'] = $tablesProcessed;
     }

@@ -185,6 +185,18 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('placeholder', $this->import->getBenchmarkModel());
     }
 
+    public function testGetTables()
+    {
+        $this->assertTrue(is_array($this->import->getTables()));
+    }
+
+    public function testSetTableProcessed()
+    {
+        $this->import->setTableProcessed('placeholder');
+        $stats = $this->import->getStats();
+        $this->assertEquals('placeholder', $stats['tableProcessed']);
+    }
+
     /**
      * Titles and expecged ipeds for extractIpedsFromTitle()
      *
