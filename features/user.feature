@@ -20,5 +20,5 @@ I need to be able to register and sign in
     And I fill in "identity" with "dfergu15@jccc.edu"
     And I fill in "credential" with "111111"
     And I press "Sign In"
-    #Then I should see "Hello"
+    Then I should see "Hello"
 
