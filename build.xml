@@ -3,9 +3,7 @@
         <!-- PHP CodeSniffer -->
         <exec command="export PATH=./bin:$PATH" />
         <echo message="Starting PHP_Codesniffer..." />
-        <exec command="echo $PATH" passthru="true" />
-        <exec command="pwd" passthru="true" />
-        <echo message="That was the PATH and pwd. " />
+       
         <!--<exec command="echo $SHELL" passthru="true" /-->
 
         <exec
