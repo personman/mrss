@@ -4,7 +4,8 @@
         <exec command="export PATH=./bin:$PATH" />
         <echo message="Starting PHP_Codesniffer..." />
         <exec command="echo $PATH" passthru="true" />
-        <echo message="That was the PATH. " />
+        <exec command="pwd" passthru="true" />
+        <echo message="That was the PATH and pwd. " />
         <!--<exec command="echo $SHELL" passthru="true" /-->
 
         <exec
@@ -14,7 +15,7 @@
         <if>
             <equals arg1="" arg2="${codesniffer.output}" />
             <then>
-                <echo message="Code conforms to Zend coding standard." />
+                <echo message="Code conforms to PSR2 coding standard." />
             </then>
             <else>
                 <fail message="${codesniffer.output}" />
