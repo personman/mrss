@@ -75,7 +75,7 @@
     <target name="behat">
         <echo message="Starting PHP's built-in web server..." />
         <exec command="php -S localhost:8182 -t public/" spawn="true" />
-        <echo message="Server running on localhost:8080." />
+        <echo message="Server running on localhost:8182." />
 
         <echo msg="Running Behat scenarios in ${project.basedir}" />
         <exec command="./bin/behat --format failed"  description="Behat"
@@ -125,7 +125,7 @@
     </target>
 
     <target name="test-db" description="Create the test db and write the credentials to a config file.">
-        <!-- This is the credentials for the db we're about to create -->
+        <!-- These is the credentials for the db we're about to create -->
         <property name="db.name" value="mrss_test" />
         <property name="db.username" value="mrss_tester" />
         <property name="db.password" value="testdbpass" />
@@ -143,9 +143,11 @@
         <exec command="${db.create_command}" passthru="true" />
 
         <!-- Back up the existing db config -->
+        <echo message="Backing up db config file." />
         <exec command="mv ${db.configFile} config/autoload/db.php.bak" />
 
         <!-- Now write the credentials out to a config file -->
+        <echo message="Writing config file." />
         <exec command="touch ${db.configFile}" passthru="true" />
         <echo message="&lt;?php $dbParams = array('database' => '${db.name}', 'username'  => '${db.username}', 'password'  => '${db.password}',   'hostname'  => 'localhost');" file="${db.configFile}" />
 
