@@ -3,7 +3,7 @@
         <!-- PHP CodeSniffer -->
         <exec command="export PATH=./bin:$PATH" />
         <echo message="Starting PHP_Codesniffer..." />
-       
+
         <!--<exec command="echo $SHELL" passthru="true" /-->
 
         <exec
@@ -119,7 +119,8 @@
 
     <target name="migrate">
         <echo message="Running database migration." />
-        <exec command="doctrine-module migrations:migrate -q -n" passthru="true" />
+        <exec command="./bin/doctrine-module migrations:migrate -q -n"
+              passthru="true" />
     </target>
 
     <target name="test-db" description="Create the test db and write the credentials to a config file.">
