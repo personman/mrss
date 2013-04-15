@@ -9,7 +9,7 @@
         <!--<exec command="echo $SHELL" passthru="true" /-->
 
         <exec
-              command="pwd;${application.startdir}/bin/phpcs --standard=PSR2 --ignore=*Bootstrap* module"
+              command="phpcs --standard=PSR2 --ignore=*Bootstrap* module"
               outputProperty="codesniffer.output" passthru="false" />
 
         <if>
