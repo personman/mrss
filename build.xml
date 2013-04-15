@@ -78,7 +78,9 @@
         <echo message="Server running on localhost:8080." />
 
         <echo msg="Running Behat scenarios in ${project.basedir}" />
-        <exec command="./bin/behat --format failed"  description="Behat" outputProperty="behat.output"></exec>
+        <exec command="php"
+        <exec command="./bin/behat --format failed"  description="Behat"
+              outputProperty="behat.output" />
         <if>
             <equals arg1="" arg2="${behat.output}" />
             <then>

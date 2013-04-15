@@ -6,7 +6,6 @@ require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 use Behat\MinkExtension\Context\MinkContext;
-use Zend;
 
 class FeatureContext extends MinkContext
 {
