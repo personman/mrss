@@ -8,7 +8,7 @@
         <!--<exec command="echo $SHELL" passthru="true" /-->
 
         <exec
-              command="${phing.home}/bin/phpcs --standard=PSR2 --ignore=*Bootstrap* module"
+              command="${application.startdir}/bin/phpcs --standard=PSR2 --ignore=*Bootstrap* module"
               outputProperty="codesniffer.output" passthru="false" />
 
         <if>
