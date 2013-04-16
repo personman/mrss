@@ -56,6 +56,32 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('placeholder', $result);
     }
 
+    public function testFindOneByShortName()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->with(
+                $this->equalTo(array('shortName' => 'test_short_name'))
+            )
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findOneByShortName('test_short_name');
+
+        $this->assertEquals('placeholder', $result);
+
+    }
+
     /**
      * Find by id
      */
@@ -93,6 +119,40 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         $this->model->setEntityManager($emMock);
 
         $this->model->save(new \Mrss\Entity\BenchmarkGroup);
+    }
+
+    public function testGetMaxSequence()
+    {
+        $lastBenchmarkGroupMock = $this->getMock(
+            'Mrss\Entity\BenchmarkGroup',
+            array('getSequence')
+        );
+        $lastBenchmarkGroupMock->expects($this->once())
+            ->method('getSequence')
+            ->will($this->returnValue(98));
+
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->with(
+                $this->equalTo(array()),
+                $this->equalTo(array('sequence' => 'DESC'))
+            )
+            ->will($this->returnValue($lastBenchmarkGroupMock));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->getMaxSequence();
+
+        $this->assertEquals(98, $result);
     }
 
     protected function getEmMock()

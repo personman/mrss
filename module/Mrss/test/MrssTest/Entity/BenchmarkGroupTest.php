@@ -32,6 +32,11 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertNull(
+            $benchmarkGroup->getShortName(),
+            '"shortName" should initially be null'
+        );
+
+        $this->assertNull(
             $benchmarkGroup->getDescription(),
             '"description" should initially be null'
         );
@@ -49,6 +54,10 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         // Set Label
         $benchmarkGroup->setName('Financial Data');
         $this->assertEquals('Financial Data', $benchmarkGroup->getName());
+
+        // Set shortName
+        $benchmarkGroup->setShortName('form_1');
+        $this->assertEquals('form_1', $benchmarkGroup->getShortName());
 
         // Set description
         $benchmarkGroup->setDescription('lorem ipsum');

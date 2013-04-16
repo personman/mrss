@@ -2,13 +2,13 @@
 
 namespace Mrss\Service;
 
-use Mrss\Entity\BenchmarkGroup;
 use Mrss\Entity\Exception\InvalidBenchmarkException;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Debug\Debug;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Benchmark;
+use Mrss\Entity\BenchmarkGroup;
 use Mrss\Model;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
@@ -47,6 +47,11 @@ class ImportNccbp
      * @var \Mrss\Model\Benchmark
      */
     protected $benchmarkModel;
+
+    /**
+     * @var \Mrss\Model\BenchmarkGroup
+     */
+    protected $benchmarkGroupModel;
 
     protected $progressFile = "/tmp/nccbp-import-progress";
 
@@ -272,6 +277,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $select->columns(
             array(
                 'field_name',
+                'type_name', // The foreign key for the benchmarkGroup
                 'label',
                 'description',
                 'weight',
@@ -318,11 +324,78 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 $inputType = $this->convertInputType($result['widget_type']);
                 $benchmark->setInputType($inputType);
 
+                // Find and set the benchmarkGroup
+                $benchmarkGroup = $this->getBenchmarkGroupModel()
+                    ->findOneByShortName($result['type_name']);
+                if (!empty($benchmarkGroup)) {
+                    $benchmark->setBenchmarkGroup($benchmarkGroup);
+                }
+
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->stats['imported']++;
             } else {
                 $this->stats['skipped']++;
             }
+
+            $this->saveProgress($i);
+        }
+
+        // Save the data to the db
+        $this->entityManager->flush();
+
+        $this->saveProgress($i);
+    }
+
+    /**
+     * Import benchmark groups (forms) from nccbp
+     */
+    public function importBenchmarkGroups()
+    {
+        $sql = new Sql($this->dbAdapter);
+        $select = $sql->select();
+
+        $select->from('node_type');
+        $select->columns(
+            array(
+                'name',
+                'type',
+                'description',
+                'help'
+            )
+        );
+
+        $statement = $sql->prepareStatementForSqlObject($select);
+
+        $results = $statement->execute();
+
+        $this->saveProgress(0, count($results));
+
+        $i = 0;
+        foreach ($results as $result) {
+            $i++;
+
+            // Skip content types that aren't benchmark forms
+            if (!strstr($result['name'], 'Form')) {
+                continue;
+            }
+
+            // Find or create the benchmarkGroup
+            $benchmarkGroup = $this->getBenchmarkGroupModel()
+                ->findOneByShortName($result['type']);
+
+            if (empty($benchmarkGroup)) {
+                $benchmarkGroup = new BenchmarkGroup();
+            }
+
+            // Populate the BenchmarkGroup
+            $benchmarkGroup->setName($result['name']);
+            $benchmarkGroup->setShortName($result['type']);
+
+            // Merge the description and help fields
+            $description = $result['description'] . '. ' . $result['help'];
+            $benchmarkGroup->setDescription($description);
+
+            $this->getBenchmarkGroupModel()->save($benchmarkGroup);
 
             $this->saveProgress($i);
         }
@@ -516,6 +589,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 'label' => 'Colleges',
                 'method' => 'importColleges'
             ),
+            'benchmarkGroups' => array(
+                'label' => 'Benchmark Groups',
+                'method' => 'importBenchmarkGroups'
+            ),
             'benchmarks' => array(
                 'label' => 'Benchmarks',
                 'method' => 'importFieldMetadata'
@@ -569,5 +646,17 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getBenchmarkModel()
     {
         return $this->benchmarkModel;
+    }
+
+    public function setBenchmarkGroupModel($model)
+    {
+        $this->benchmarkGroupModel = $model;
+
+        return $this;
+    }
+
+    public function getBenchmarkGroupModel()
+    {
+        return $this->benchmarkGroupModel;
     }
 }

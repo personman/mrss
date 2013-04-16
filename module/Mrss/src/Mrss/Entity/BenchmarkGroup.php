@@ -27,6 +27,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
     protected $name;
 
     /**
+     * Imported key used to match up with benchmarks
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $shortName;
+
+    /**
      * @ORM\Column(type="text")
      */
     protected $description;
@@ -66,6 +73,18 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    public function setShortName($shortName)
+    {
+        $this->shortName = $shortName;
+
+        return $this;
+    }
+
+    public function getShortName()
+    {
+        return $this->shortName;
     }
 
     public function setDescription($description)

@@ -13,22 +13,29 @@ $(function() {
         triggerImport('colleges')
     })
 
+    // Import benchmarks
+    $('button#import-benchmarks').click(function() {
+        importingAll = false
+        triggerImport('benchmarks')
+    })
+
+    // Import benchmark groups
+    $('button#import-benchmarkGroups').click(function() {
+        importingAll = false
+        triggerImport('benchmarkGroups')
+    })
+
     // Import observations
     $('button#import-observations').click(function() {
         importingAll = false
         triggerImport('observations')
     })
 
-    // Import benchmarks
-    $('button#import-benchmarks').click(function() {
-        importingAll = false
-        triggerImport('benchmarks')
-    })
 })
 
 function importAll()
 {
-    importStack = ['colleges', 'benchmarks', 'observations']
+    importStack = ['colleges', 'benchmarkGroups', 'benchmarks', 'observations']
     importingAll = true
 
     nextImport()
@@ -70,7 +77,6 @@ function pollProgress(type)
 {
     pollProgressUrl = '/import/progress'
     $.get(pollProgressUrl, {}, function(data) {
-        //console.log(data)
         total = data.total
         processed = data.processed
 
@@ -79,9 +85,7 @@ function pollProgress(type)
         }
 
         // Update progress bar
-        progressBar = $('#row-' + type + ' .progress .bar')
-        percentage = data.percentage
-        progressBar.css('width', percentage + '%')
+        updateProgressBar(type, data.percentage)
 
         // info text
         infoText = processed + ' / ' + total
@@ -99,10 +103,20 @@ function pollProgress(type)
     })
 }
 
+function getProgressBar(type)
+{
+    return $('#row-' + type + ' .progress .bar')
+}
+
+function updateProgressBar(type, percentage)
+{
+    progressBar = getProgressBar(type)
+    progressBar.css('width', percentage + '%')
+}
+
 function resetProgressBar(type)
 {
-    progressBar = $('#row-' + type + ' .progress .bar')
-
+    progressBar = getProgressBar(type)
     progressBar.css('width', '0%')
 
     info = $('#row-' + type + ' .progressInfo')
@@ -118,6 +132,9 @@ function completeProgressBar(type)
     // Add a slight delay so the checkmark doesn't appear before the bar transitions
     // to complete
     setInterval(function() {
+        progressBar = getProgressBar(type)
+        progressBar.css('width', '100%')
+
         completeDiv = $('#row-' + type + ' .progressComplete')
         img = "<img src='/images/check-mark.png' alt='Complete' />"
 

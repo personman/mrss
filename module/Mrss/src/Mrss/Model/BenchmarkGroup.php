@@ -18,6 +18,11 @@ class BenchmarkGroup extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\BenchmarkGroup';
 
+    public function findOneByShortName($shortName)
+    {
+        return $this->getRepository()->findOneBy(array('shortName' => $shortName));
+    }
+
     public function find($id)
     {
         return $this->getRepository()->find($id);
@@ -39,8 +44,31 @@ class BenchmarkGroup extends AbstractModel
      */
     public function save(BenchmarkGroupEntity $benchmarkGroup)
     {
+        // Confirm that the sequence is set
+        if (!$benchmarkGroup->getSequence()) {
+            $max = $this->getMaxSequence();
+            $newMax = $max + 1;
+            $benchmarkGroup->setSequence($newMax);
+        }
+
         $this->getEntityManager()->persist($benchmarkGroup);
 
         // Flush here or leave it to some other code?
+    }
+
+    public function getMaxSequence()
+    {
+        $lastBenchmarkGroup = $this->getRepository()->findOneBy(
+            array(),
+            array('sequence' => 'DESC')
+        );
+
+        if (!empty($lastBenchmarkGroup)) {
+            $max = $lastBenchmarkGroup->getSequence();
+        } else {
+            $max = 1;
+        }
+
+        return $max;
     }
 }
