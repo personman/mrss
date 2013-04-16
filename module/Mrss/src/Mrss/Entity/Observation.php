@@ -505,6 +505,277 @@ class Observation
      */
     protected $ova_impr;
 
+    // NCCBP form 6
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $grads_comp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $leave_noncomp;
+
+    // NCCBP form 7
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_grad_abcpdfw;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_grad_abcpdf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_grad_abcp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ret_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $enr_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $comp_succ_value;
+
+    // NCCBP form 8
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_tot_grad_dev_rem_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_abcpdf_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_abcp_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_tot_grad_dev_rem_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_abcpdf_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_abcp_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $rw_tot_grad_dev_rem_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $rw_abcpdf_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $rw_abcp_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $r_tot_grad_dev_rem_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $r_abcpdf_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $r_abcp_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_ret_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_ret_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $rw_ret_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $r_ret_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_enr_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_enr_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $rw_enr_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $r_enr_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_comp_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_comp_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $rw_comp_succ_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $r_comp_succ_value;
+
+    // NCCBP form 9
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_tot_abcp_hld_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_tot_abcp_hld_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_enr_coll_cour_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_enr_coll_cour_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_compl_abcpdf_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_compl_abcpdf_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_compl_abcp_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_compl_abcp_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_coll_lev_ret_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_coll_lev_ret_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_coll_lev_enr_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_coll_lev_enr_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $m_coll_lev_compl_rate_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $w_coll_lev_compl_rate_value;
+
+
+    // NCCBP form 10
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_compl_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $no_tot_empl_rel_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $no_tot_purs_edu_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_resp_empl_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $no_tot_purs_edu_perc_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $no_tot_emp_rel_perc_value;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $emp_satis_prep_perc_value;
+
     // NCCBP form 18:
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

@@ -17,7 +17,7 @@
                         'benchmarkGroupId' => $benchmarkGroup->getId())
                 ) ?>">
                     <?= $benchmarkGroup->getName() ?>
-                </a>
+                </a> (<?= count($benchmarkGroup->getBenchmarks()) ?> benchmarks)
             </li>
         <?php endforeach ?>
     </ul>

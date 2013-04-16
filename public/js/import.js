@@ -1,6 +1,7 @@
 
 var importStack
 var importingAll = false
+var pollingDelay = 1000 // milliseconds between progress polls
 
 $(function() {
     $('button#importAll').click(function() {
@@ -70,7 +71,7 @@ function triggerImport(type)
     // Start polling for status
     intervalId = setInterval(function() {
         pollProgress(type)
-    }, 500)
+    }, pollingDelay)
 }
 
 function pollProgress(type)
