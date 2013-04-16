@@ -75,20 +75,35 @@ class ObservationControllerTest extends AbstractControllerTestCase
             ->method('findAll')
             ->will($this->returnValue(array($benchmarkMock)));
 
+        // Mock the benchmarkGroup model
+        $benchmarkGroupModelMock = $this->getMock(
+            '\Mrss\Model\BenchmarkGroup',
+            array('find', 'findAll'),
+            array(),
+            '',
+            false
+        );
+        $benchmarkGroupModelMock
+            ->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue(array()));
 
         // Put the mocks in the service locator
         $sm = $this->getServiceLocator();
         $sm->setService('model.observation', $observationModelMock);
         $sm->setService('model.benchmark', $benchmarkModelMock);
+        $sm->setService('model.benchmarkGroup', $benchmarkGroupModelMock);
 
-        $this->dispatch('/observations/view/5');
+        $this->dispatch('/observations/5');
+        //print($this->getResponse()->getContent());die('viewActionCan');
         $this->assertResponseStatusCode(200);
+
 
         $this->assertModuleName('mrss');
         $this->assertControllerName('observations');
         $this->assertActionName('view');
         $this->assertControllerClass('ObservationController');
-        $this->assertMatchedRouteName('general');
+        $this->assertMatchedRouteName('observation');
     }
 
     public function testEditCanBeAccessed()

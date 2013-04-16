@@ -153,12 +153,12 @@ inner join node g on a.group_nid = g.nid";
     public function getTables()
     {
         $tables = array(
-            'content_type_group_form1_subscriber_info', // 1
+            //'content_type_group_form1_subscriber_info', // 1
             //'content_type_group_form2_student_compl_tsf', // 2
             //'content_type_group_form3_stu_perf_transf', // 3
-            //'content_type_group_form4_cred_stud_enr', // 4
+            'content_type_group_form4_cred_stud_enr', // 4
             //'content_type_group_form5_stud_satis_eng', // 5
-            'content_type_group_form18_stud_serv_staff' // 18
+            //'content_type_group_form18_stud_serv_staff' // 18
         );
 
         return $tables;
@@ -229,7 +229,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 $observation = new Observation();
             } else {
                 // Don't update existing records:
-                continue;
+                //continue;
             }
 
             // Now we have a new or existing observation and we can populate it
@@ -240,9 +240,14 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
             // Loop over the row's columns, convert the field name and set the value
             foreach ($row as $key => $value) {
+                if ($value === null) {
+                    continue;
+                }
+
                 // If the fieldname isn't converted, just skip it
                 try {
                     $fieldName = $this->convertFieldName($key);
+                    //echo "$fieldName: $value<br>\n";
                     $observation->set($fieldName, $value);
                 } catch (\Exception $e) {
                     continue;

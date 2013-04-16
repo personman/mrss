@@ -3,18 +3,57 @@
     <?= $this->observation->getYear() ?>
 </h3>
 
-<a href="/observations/edit/<?= $this->observation->getId() ?>">Edit</a>
+<?php if (empty($this->benchmarkGroup)): ?>
 
-<table class="style1">
-    <tr>
-        <th>Benchmark</th>
-        <th>Value</th>
-    </tr>
+    <h4>Select a Form</h4>
 
-    <?php foreach ($this->fields as $key => $label): ?>
-    <tr>
-        <td><?= $label ?></td>
-        <td><?= $this->observation->get($key) ?></td>
-    </tr>
-    <?php endforeach ?>
-</table>
+    <ul>
+        <?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
+            <li>
+                <a href="<?= $this->url(
+                    'observation/group',
+                    array(
+                        'id' => $this->observation->getId(),
+                        'benchmarkGroupId' => $benchmarkGroup->getId())
+                ) ?>">
+                    <?= $benchmarkGroup->getName() ?>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+
+<?php else: ?>
+
+    <h4><?= $this->benchmarkGroup->getName() ?></h4>
+    <div class="well">
+        <?= $this->benchmarkGroup->getDescription() ?>
+    </div>
+
+    <a href="<?= $this->url(
+        'observation/group/edit',
+        array(
+            'id' => $this->observation->getId(),
+            'benchmarkGroupId' => $this->benchmarkGroup->getId()
+        )
+    ) ?>">
+        Edit
+    </a>
+
+    <table class="style1">
+        <tr>
+            <th>Benchmark</th>
+            <th>Value</th>
+        </tr>
+
+        <?php foreach ($this->fields as $key => $label): ?>
+            <tr>
+                <td><?= $label ?></td>
+                <td><?= $this->observation->get($key) ?></td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+
+<?php endif ?>
+
+
+

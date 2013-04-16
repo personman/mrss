@@ -217,6 +217,293 @@ class Observation
     protected $hs_stud_hdct;
 
 
+    // NCCBP form 2
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_f_yminus4_headc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_f_yminus4_degr_cert;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_perc_comp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_f_yminus4_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_perc_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_perc_comp_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_f_yminus4_headc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_f_yminus4_degr_cert;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_perc_comp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_f_yminus4_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_perc_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_perc_comp_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $f_yminus7_headc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_yminus7_degr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_yminus7_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_minus7perc_comp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $percminus7_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $percminus7_comtran;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_fminus7_headc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_yminus7_degr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_yminus7_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_perminus7_comp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_percminus7_tran;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_pminus7_comtran;
+
+
+    // NCCBP form 3
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_stud_trans;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $fst_yr_gpa;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fst_yr_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $enro_next_yr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $avrg_1y_crh;
+
+    // NCCBP form 4
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_cr_st;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $grad_bef_spr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $enr_bef_spr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $enr_fall;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $grad_bef_fall;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $next_term_pers;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $fall_fall_pers;
+
+    // NCCBP form 5
+
+    // Class properties cannot begin with a number
+    //protected $96_exp;
+    //protected $97_ova_exp;
+    //protected $98_enr_again;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ac_adv_coun;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ac_serv;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $adm_fin_aid;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $camp_clim;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $camp_supp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $conc_indiv;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $instr_eff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $reg_eff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $resp_div_pop;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $safe_sec;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $serv_exc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $stud_centr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $act_coll_learn;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $stud_eff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $acad_chall;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $stud_fac_int;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $sup_learn;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $choo_again;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ova_impr;
 
     // NCCBP form 18:
     /**
@@ -381,3 +668,7 @@ class Observation
         return $arrayCopy;
     }
 }
+
+/**
+ * @ORM\Column(type="string", length=20, nullable=true)
+ */

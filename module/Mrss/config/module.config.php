@@ -29,6 +29,47 @@ return array(
                     ),
                 ),
             ),
+            'observation' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/observations/:id',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'observations',
+                        'action' => 'view',
+                        'id' => null
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'group' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/:benchmarkGroupId',
+                            'constraints' => array(
+                                'benchmarkGroupId' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'benchmarkGroupId' => 0
+                            )
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'edit' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/edit',
+                                    'defaults' => array(
+                                        'action' => 'edit'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them

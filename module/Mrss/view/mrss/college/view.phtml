@@ -26,10 +26,8 @@
                 <?php foreach ($this->college->getObservations() as $ob): ?>
                     <li>
                         <a href="<?= $this->url(
-                            'general',
+                            'observation',
                             array(
-                                'controller' => 'observations',
-                                'action' => 'view',
                                 'id' => $ob->getId()
                             )
                         ) ?>">

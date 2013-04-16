@@ -70,7 +70,7 @@ function triggerImport(type)
     // Start polling for status
     intervalId = setInterval(function() {
         pollProgress(type)
-    }, 300)
+    }, 500)
 }
 
 function pollProgress(type)
@@ -132,8 +132,7 @@ function completeProgressBar(type)
     // Add a slight delay so the checkmark doesn't appear before the bar transitions
     // to complete
     setInterval(function() {
-        progressBar = getProgressBar(type)
-        progressBar.css('width', '100%')
+        updateProgressBar(type, 100)
 
         completeDiv = $('#row-' + type + ' .progressComplete')
         img = "<img src='/images/check-mark.png' alt='Complete' />"

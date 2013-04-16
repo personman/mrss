@@ -14,17 +14,30 @@ class ObservationController extends AbstractActionController
     {
         $observationId = $this->params('id');
         $ObservationModel = $this->getServiceLocator()->get('model.observation');
+        $BenchmarkGroupModel = $this->getServiceLocator()
+            ->get('model.benchmarkGroup');
+
+        $benchmarkGroupId = $this->params('benchmarkGroupId');
+        if (!empty($benchmarkGroupId)) {
+            $benchmarkGroup =  $this->getServiceLocator()
+                ->get('model.benchmarkGroup')
+                ->find($benchmarkGroupId);
+        } else {
+            $benchmarkGroup = null;
+        }
 
         return array(
             'observation' => $ObservationModel->find($observationId),
-            'fields' => $this->getFields()
+            'benchmarkGroups' => $BenchmarkGroupModel->findAll(),
+            'benchmarkGroup' => $benchmarkGroup,
+            'fields' => $this->getFields($benchmarkGroup)
         );
     }
 
     public function editAction()
     {
         $observationId = $this->params('id');
-        $benchmarkGroupId = 1;
+        $benchmarkGroupId = $this->params('benchmarkGroupId');
 
         $ObservationModel = $this->getServiceLocator()->get('model.observation');
         $observation = $ObservationModel->find($observationId);
@@ -51,13 +64,21 @@ class ObservationController extends AbstractActionController
     /**
      * Get field metadata from the benchmark entity
      *
+     * @param $benchmarkGroup
      * @return array
      */
-    protected function getFields()
+    protected function getFields($benchmarkGroup = null)
     {
-        $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
+        if (empty($benchmarkGroup)) {
+            // Get them all
+            $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
 
-        $benchmarks = $benchmarkModel->findAll();
+            $benchmarks = $benchmarkModel->findAll();
+        } else {
+            $benchmarks = $benchmarkGroup->getBenchmarks();
+        }
+
+
         $fields = array();
         foreach ($benchmarks as $benchmark) {
             $fields[$benchmark->getDbColumn()] = $benchmark->getName();
