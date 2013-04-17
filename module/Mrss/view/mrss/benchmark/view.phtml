@@ -14,7 +14,14 @@
             ['2007',  1030,      540]
         ]);*/
 
-        var data = google.visualization.arrayToDataTable(<?= $this->observations ?>)
+        //var data = google.visualization.arrayToDataTable(<?= $this->observations
+        ?>)
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Year');
+        <?php foreach ($this->collegeIds as $collegeId): ?>
+            data.addColumn('number', 'c' + '<?= $collegeId ?>')
+        <?php endforeach ?>
+        data.addRows(<?= $this->observations ?>)
 
         var options = {
             title: '<?= $this->benchmark->getName() ?>'

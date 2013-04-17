@@ -5,7 +5,6 @@ namespace Mrss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Debug\Debug;
-use Zend\Json\Json;
 
 class BenchmarkController extends AbstractActionController
 {
@@ -21,6 +20,8 @@ class BenchmarkController extends AbstractActionController
 
     public function viewAction()
     {
+        $collegeIds = array(780, 782, 819, 884, 873, 931, 932, 1085, 1032);
+
         $benchmarkModel = $this->getServiceLocator()
             ->get('model.benchmark');
         $benchmark = $benchmarkModel->find($this->params('id'));
@@ -30,14 +31,14 @@ class BenchmarkController extends AbstractActionController
 
         $observations = $observationModel->findForChart(
             $benchmark->getDbColumn(),
-            array(780, 782, 819, 884, 873, 931, 932, 1085, 1032)
+            $collegeIds
         );
         $observations = json_encode($observations, JSON_NUMERIC_CHECK);
 
         return array(
             'benchmark' => $benchmark,
-            'observations' => $observations
+            'observations' => $observations,
+            'collegeIds' => $collegeIds
         );
     }
-
 }

@@ -95,7 +95,8 @@ class Observation extends AbstractModel
 
         $data = $qb->execute()->fetchAll();
 
-        return array_merge(array($headers), $data);
+        //return array_merge(array($headers), $data);
+        return $data;
     }
 
     /**
