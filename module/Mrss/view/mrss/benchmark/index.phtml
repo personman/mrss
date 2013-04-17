@@ -1,0 +1,22 @@
+<h2>Benchmarks</h2>
+
+<?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
+    <h3><?= $benchmarkGroup->getName() ?></h3>
+
+    <ol>
+        <?php foreach ($benchmarkGroup->getBenchmarks() as $benchmark): ?>
+            <li>
+                <a href="<?= $this->url(
+                    'general',
+                    array(
+                        'controller' => 'benchmarks',
+                        'action' => 'view',
+                        'id' => $benchmark->getId()
+                    )
+                ) ?>">
+                    <?= $benchmark->getName() ?>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ol>
+<?php endforeach ?>

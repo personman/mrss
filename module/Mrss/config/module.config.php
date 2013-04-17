@@ -137,7 +137,8 @@ return array(
             'index' => 'Mrss\Controller\IndexController',
             'import' => 'Mrss\Controller\ImportController',
             'colleges' => 'Mrss\Controller\CollegeController',
-            'observations' => 'Mrss\Controller\ObservationController'
+            'observations' => 'Mrss\Controller\ObservationController',
+            'benchmarks' => 'Mrss\Controller\BenchmarkController'
         ),
     ),
     'view_manager' => array(

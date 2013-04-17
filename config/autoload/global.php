@@ -25,6 +25,10 @@ return array(
             array(
                 'label' => 'Colleges',
                 'uri' => '/colleges'
+            ),
+            array(
+                'label' => 'Benchmarks',
+                'uri' => '/benchmarks'
             )
         )
     )

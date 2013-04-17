@@ -54,6 +54,51 @@ class Observation extends AbstractModel
     }
 
     /**
+     * Get all the observations
+     *
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->getRepository()->findAll(
+            array(),
+            array(
+                'year' => 'ASC',
+                'college_id' => 'ASC'
+            )
+        );
+    }
+
+    /**
+     * Return data for a single benchmark, multiple colleges, multiple years
+     */
+    public function findForChart($benchmarkColumn, $collegeIds)
+    {
+        // Headers based on colleges
+        $selects = array('year');
+        $headers = array('Year');
+        foreach ($collegeIds as $collegeId) {
+            $selects[] = "MAX( IF( college_id = $collegeId, $benchmarkColumn,
+            NULL)) AS c$collegeId";
+            $headers[] = "c" . $collegeId;
+        }
+
+        // Prepare a queryBuilder
+        $connection = $this->getEntityManager()->getConnection();
+        $connection->setFetchMode(\PDO::FETCH_NUM);
+        $qb = $connection->createQueryBuilder();
+
+        // The query
+        $qb->select($selects);
+        $qb->from('observations', 'o');
+        $qb->groupBy('year');
+
+        $data = $qb->execute()->fetchAll();
+
+        return array_merge(array($headers), $data);
+    }
+
+    /**
      * Save an observation
      *
      * @param ObservationEntity $observation
