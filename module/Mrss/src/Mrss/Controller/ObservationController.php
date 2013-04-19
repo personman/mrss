@@ -4,9 +4,7 @@
 namespace Mrss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\View\Http\ViewManager;
-use Zend\View\Model\ViewModel;
-use Zend\Debug\Debug;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class ObservationController extends AbstractActionController
 {
@@ -52,8 +50,32 @@ class ObservationController extends AbstractActionController
 
         $form->setAttribute('class', 'form-horizontal');
 
+        // Set up hydrator
+
         // bind observation to form, which will populate it with values
         $form->bind($observation);
+
+        // Handle form submission
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $ObservationModel->save($observation);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Data saved.');
+                $this->redirect()->toRoute(
+                    'observation/group',
+                    array(
+                        'id' => $observation->getId(),
+                        'benchmarkGroupId' => $benchmarkGroup->getId()
+                    )
+                );
+            }
+
+        }
 
         return array(
             'form' => $form,

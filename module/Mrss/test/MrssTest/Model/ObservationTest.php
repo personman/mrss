@@ -90,6 +90,79 @@ class ObservationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Find them all
+     */
+    public function testFindAll()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findAll', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findAll();
+
+        $this->assertEquals('placeholder', $result);
+    }
+
+    /**
+     * Find data for a chart
+     */
+    public function testFindForChart()
+    {
+        $statementMock = $this->getMock(
+            'Doctrine\DBAL\Query',
+            array('fetchAll')
+        );
+        $statementMock->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->returnValue('placeholder'));
+
+        $qbMock = $this->getMock(
+            'Doctrine\DBAL\Query\QueryBuilder',
+            array('select', 'from', 'groupBy', 'execute'),
+            array(),
+            '',
+            false
+        );
+        $qbMock->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue($statementMock));
+
+        $connectionMock = $this->getMock(
+            'Doctrine\DBAL\Connection',
+            array('createQueryBuilder'),
+            array(),
+            '',
+            false
+        );
+        $connectionMock->expects($this->once())
+            ->method('createQueryBuilder')
+            ->will($this->returnValue($qbMock));
+
+        $emMock = $this->getEmMock(array('getConnection'));
+
+        $emMock->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock));
+
+        $this->model->setEntityManager($emMock);
+
+        $result = $this->model->findForChart('no_tot_emp_rel_perc', array(1));
+
+        $this->assertEquals('placeholder', $result);
+    }
+
+    /**
      * Test saving an observation entity
      */
     public function testSave()
@@ -106,16 +179,24 @@ class ObservationTest extends PHPUnit_Framework_TestCase
     }
 
 
-    protected function getEmMock()
+    protected function getEmMock($additionalMethodsToMock = array())
     {
         $repositoryMock = $this->getMock(
             'Doctrine\Orm\Repository',
             array('findOneBy')
         );
 
+        $methodsToMock = array(
+            'getRepository',
+            'getClassMetadata',
+            'persist',
+            'flush'
+        );
+        $methodsToMock = array_merge($methodsToMock, $additionalMethodsToMock);
+
         $emMock  = $this->getMock(
             '\Doctrine\ORM\EntityManager',
-            array('getRepository', 'getClassMetadata', 'persist', 'flush'),
+            $methodsToMock,
             array(),
             '',
             false

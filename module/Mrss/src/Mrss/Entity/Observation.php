@@ -938,8 +938,18 @@ class Observation
 
         return $arrayCopy;
     }
-}
 
-/**
- * @ORM\Column(type="string", length=20, nullable=true)
- */
+    /**
+     * Hydrator method for putting form values into entity
+     *
+     * @param array $observationArray
+     */
+    public function populate($observationArray)
+    {
+        foreach ($observationArray as $key => $value) {
+            if ($this->has($key)) {
+                $this->set($key, $value);
+            }
+        }
+    }
+}

@@ -121,6 +121,19 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(52, $arrayCopy['tot_fte_recr_staff']);
     }
 
+    public function testPopulate()
+    {
+        $observation = new Observation;
+
+        $observation->populate(
+            array(
+                'no_tot_emp_rel_perc' => 55
+            )
+        );
+
+        $this->assertEquals(55, $observation->get('no_tot_emp_rel_perc'));
+    }
+
     /**
      * Some valid benchmark fields
      *

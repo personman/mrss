@@ -107,4 +107,31 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_array($formElement));
     }
+
+    public function testInputFilter()
+    {
+        $benchmark = new Benchmark;
+
+        $this->assertInstanceOf(
+            'Zend\InputFilter\InputFilterInterface',
+            $benchmark->getInputFilter()
+        );
+    }
+
+    public function testSetInputFilter()
+    {
+        $benchmark = new Benchmark;
+
+        $inputFilterMock = $this->getMock(
+            'Zend\InputFilter\BaseInputFilter',
+            array('add')
+        );
+
+        $benchmark->setInputFilter($inputFilterMock);
+
+        $this->assertInstanceOf(
+            'Zend\InputFilter\InputFilterInterface',
+            $benchmark->getInputFilter()
+        );
+    }
 }

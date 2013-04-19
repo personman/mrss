@@ -784,3 +784,8 @@ form.form-horizontal .controls {
     height: 30px;
     margin-left:15px;
 }
+
+/* Form styling */
+.control-group.error ul li {
+    color: #b94a48;
+}

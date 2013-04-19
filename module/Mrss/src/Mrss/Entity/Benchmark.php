@@ -3,6 +3,11 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Zend\Form\Annotation;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Benchmark metadata
@@ -13,12 +18,14 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="benchmarks")
  */
-class Benchmark implements FormElementProviderInterface
+class Benchmark implements FormElementProviderInterface, InputFilterAwareInterface
 {
+    protected $inputFilter;
+
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -39,6 +46,7 @@ class Benchmark implements FormElementProviderInterface
 
     /**
      * @ORM\Column(type="integer")
+     * @Annotation\Exclude()
      */
     protected $sequence;
 
@@ -163,5 +171,38 @@ class Benchmark implements FormElementProviderInterface
                 'class' => 'input-small'
             )
         );
+    }
+
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        $this->inputFilter = $inputFilter;
+    }
+
+    public function getInputFilter()
+    {
+        if (empty($this->inputFilter)) {
+            $inputFilter = new InputFilter();
+            $factory = new InputFactory();
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'name',
+                        'required' => true,
+                        'filters' => array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim')
+                        ),
+                        'validators' => array(
+                            array('name' => 'NotEmpty')
+                        )
+                    )
+                )
+            );
+
+            $this->inputFilter = $inputFilter;
+        }
+
+        return $this->inputFilter;
     }
 }

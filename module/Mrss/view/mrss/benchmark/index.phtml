@@ -16,6 +16,14 @@
                 ) ?>">
                     <?= $benchmark->getName() ?>
                 </a>
+                (<a href="<?= $this->url(
+                    'general',
+                    array(
+                        'controller' => 'benchmarks',
+                        'action' => 'edit',
+                        'id' => $benchmark->getId()
+                    )
+                ) ?>">Edit</a>)
             </li>
         <?php endforeach ?>
     </ol>
