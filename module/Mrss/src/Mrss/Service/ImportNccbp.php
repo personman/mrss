@@ -157,10 +157,10 @@ inner join node g on a.group_nid = g.nid";
             //'content_type_group_form2_student_compl_tsf', // 2
             //'content_type_group_form3_stu_perf_transf', // 3
             //'content_type_group_form4_cred_stud_enr', // 4
-            //'content_type_group_form5_stud_satis_eng', // 5
-            //'content_type_group_form6_stud_goal', // 6
+            'content_type_group_form5_stud_satis_eng', // 5
+            'content_type_group_form6_stud_goal', // 6
             //'content_type_group_form7_col_ret_succ', // 7
-            //'content_type_group_form8_dev_ret_succ', // 8
+            'content_type_group_form8_dev_ret_succ', // 8
             //'content_type_group_form9_dev_ret_succ_first_c', // 9
             'content_type_group_form10_career_comp', // 10
             //'content_type_group_form18_stud_serv_staff' // 18
