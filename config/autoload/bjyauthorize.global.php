@@ -39,9 +39,13 @@ return array(
         // Guard listeners to be attached to the application event manager
         'guards'                => array(
             'BjyAuthorize\Guard\Controller' => array(
-                // Guests can see the index controller
+                // Guests can see the index and user controller
                 array(
                     'controller' => 'index',
+                    'roles' => array('guest')
+                ),
+                array(
+                    'controller' => 'zfcuser',
                     'roles' => array('guest')
                 ),
                 // Only authenticated users can look at these:
@@ -55,6 +59,10 @@ return array(
                 ),
                 array(
                     'controller' => 'observations',
+                    'roles' => array('user')
+                ),
+                array(
+                    'controller' => 'benchmarks',
                     'roles' => array('user')
                 )
             )

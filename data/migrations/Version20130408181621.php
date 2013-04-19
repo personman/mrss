@@ -17,6 +17,13 @@ class Version20130408181621 extends AbstractMigration
         
         $this->addSql("CREATE TABLE roles (id INT AUTO_INCREMENT NOT NULL, parent_id INT DEFAULT NULL, roleId VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_B63E2EC7B8C2FD88 (roleId), INDEX IDX_B63E2EC7727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
         $this->addSql("ALTER TABLE roles ADD CONSTRAINT FK_B63E2EC7727ACA70 FOREIGN KEY (parent_id) REFERENCES roles (id)");
+        $this->addSql("INSERT INTO roles (parent_id, roleId) VALUES (NULL,
+        'guest')");
+        $this->addSql("INSERT INTO roles (parent_id, roleId) VALUES (1,
+        'user')");
+        $this->addSql("INSERT INTO roles (parent_id, roleId) VALUES (2,
+        'admin')");
+
         $this->addSql("CREATE TABLE IF NOT EXISTS `user_role` (
   `role_id` varchar(255) NOT NULL,
   `is_default` tinyint(1) NOT NULL,

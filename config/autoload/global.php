@@ -29,6 +29,10 @@ return array(
             array(
                 'label' => 'Benchmarks',
                 'uri' => '/benchmarks'
+            ),
+            array(
+                'label' => 'User',
+                'uri' => '/user'
             )
         )
     )
