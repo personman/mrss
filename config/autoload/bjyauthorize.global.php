@@ -38,12 +38,26 @@ return array(
 
         // Guard listeners to be attached to the application event manager
         'guards'                => array(
-            /*'BjyAuthorize\Guard\Controller' => array(
+            'BjyAuthorize\Guard\Controller' => array(
+                // Guests can see the index controller
+                array(
+                    'controller' => 'index',
+                    'roles' => array('guest')
+                ),
+                // Only authenticated users can look at these:
                 array(
                     'controller' => 'colleges',
-                    'roles' => array('guest')
+                    'roles' => array('user')
+                ),
+                array(
+                    'controller' => 'import',
+                    'roles' => array('user')
+                ),
+                array(
+                    'controller' => 'observations',
+                    'roles' => array('user')
                 )
-            )*/
+            )
         ),
 
         // strategy service name for the strategy listener to be used when permission-related errors are detected
