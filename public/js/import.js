@@ -1,44 +1,41 @@
 
 var importStack
 var importingAll = false
-var pollingDelay = 1000 // milliseconds between progress polls
+var pollingDelay = 1200 // milliseconds between progress polls
+var currentType
 
 $(function() {
+    $('button.import-button').each(function() {
+        $(this).click(function() {
+            importinAll = false
+            type = $(this).attr('id').substr(7)
+
+            triggerImport(type)
+        })
+    })
+
     $('button#importAll').click(function() {
+        $(this)
+            .attr('disabled', 'disabled')
+            .addClass('disabled')
+            .html('Loading...')
+
         importAll()
     })
-
-    // Import colleges
-    $('button#import-colleges').click(function() {
-        importingAll = false
-        triggerImport('colleges')
-    })
-
-    // Import benchmarks
-    $('button#import-benchmarks').click(function() {
-        importingAll = false
-        triggerImport('benchmarks')
-    })
-
-    // Import benchmark groups
-    $('button#import-benchmarkGroups').click(function() {
-        importingAll = false
-        triggerImport('benchmarkGroups')
-    })
-
-    // Import observations
-    $('button#import-observations').click(function() {
-        importingAll = false
-        triggerImport('observations')
-    })
-
 })
 
 function importAll()
 {
-    importStack = ['colleges', 'benchmarkGroups', 'benchmarks', 'observations']
     importingAll = true
 
+    types = []
+    $('button.import-button').each(function() {
+        type = $(this).attr('id').substr(7)
+        types.push(type);
+    })
+
+    importStack = types
+    //triggerImport(types[0])
     nextImport()
 }
 
@@ -57,27 +54,26 @@ function nextImport()
  */
 function triggerImport(type)
 {
-    var intervalId
+    currentType = type
 
     resetProgressBar(type)
 
-    url = '/import/trigger?type=' + type
+    url = '/import/trigger'
 
-    $.get(url, {}, function(data) {
-        clearInterval(intervalId)
-        completeProgressBar(type)
+    $.get(url, {type: type}, function(data) {
+        // Start polling for status
+        intervalId = setInterval(function() {
+            pollProgress(type)
+        }, pollingDelay)
+
+        $('body').data('intervalId-' + type, intervalId)
     })
-
-    // Start polling for status
-    intervalId = setInterval(function() {
-        pollProgress(type)
-    }, pollingDelay)
 }
 
 function pollProgress(type)
 {
     pollProgressUrl = '/import/progress'
-    $.get(pollProgressUrl, {}, function(data) {
+    $.get(pollProgressUrl, {type: type}, function(data) {
         total = data.total
         processed = data.processed
 
@@ -101,6 +97,11 @@ function pollProgress(type)
         // Display the info
         info = $('#row-' + type + ' .progressInfo')
         info.html(infoText)
+
+        // Is the import complete
+        if (data.percentage == 100) {
+            completeProgressBar(type)
+        }
     })
 }
 
@@ -130,9 +131,17 @@ function resetProgressBar(type)
 
 function completeProgressBar(type)
 {
+    // Stop polling
+    intervalId = $('body').data('intervalId-' + type)
+    if (typeof intervalId != 'undefined') {
+        clearInterval(intervalId)
+    } else {
+        console.log('Unable to find intervalId for stopping polling.')
+    }
+
     // Add a slight delay so the checkmark doesn't appear before the bar transitions
     // to complete
-    setInterval(function() {
+    setTimeout(function() {
         updateProgressBar(type, 100)
 
         completeDiv = $('#row-' + type + ' .progressComplete')
@@ -142,7 +151,9 @@ function completeProgressBar(type)
 
         // Trigger another import?
         if (importingAll) {
-            nextImport()
+            setTimeout(function() {
+                nextImport()
+            }, 400)
         }
     }, 1000)
 }

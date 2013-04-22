@@ -150,7 +150,7 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('general');
     }
 
-    public function testBackgroundAction()
+    /*public function testBackgroundAction()
     {
         // Mock some dependencies:
         $importerMock = $this->getMock(
@@ -175,7 +175,7 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->assertActionName('background');
         $this->assertControllerClass('ImportController');
         $this->assertMatchedRouteName('general');
-    }
+    }*/
 
     public function testBackgroundActionWithInvalidType()
     {
@@ -226,7 +226,7 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->assertResponseStatusCode(500);
     }
 
-    public function testTriggerAction()
+    /*public function testTriggerAction()
     {
         // Mock some dependencies:
         $importerMock = $this->getMock(
@@ -251,7 +251,7 @@ class ImportControllerTest extends AbstractControllerTestCase
         $this->assertActionName('trigger');
         $this->assertControllerClass('ImportController');
         $this->assertMatchedRouteName('general');
-    }
+    }*/
 
     /**
      * Giving a non-real import type should land you on an error page

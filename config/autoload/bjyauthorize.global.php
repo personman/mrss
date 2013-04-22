@@ -48,6 +48,12 @@ return array(
                     'controller' => 'zfcuser',
                     'roles' => array('guest')
                 ),
+                // Since the background action is fired by console, lift guard
+                array(
+                    'controller' => 'import',
+                    'action' => 'background',
+                    'roles' => array('guest')
+                ),
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'colleges',

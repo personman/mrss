@@ -113,6 +113,15 @@ return array(
                             'action' => 'background'
                         )
                     )
+                ),
+                'import2' => array(
+                    'options' => array(
+                        'route' => 'import2',
+                        'defaults' => array(
+                            'controller' => 'import',
+                            'action' => 'test'
+                        )
+                    )
                 )
             )
         )

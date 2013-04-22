@@ -10,6 +10,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Debug\Debug;
 use Zend\Session\Container;
 use Zend\Json\Json;
+use Zend\Console\Request as ConsoleRequest;
 
 class ImportController extends AbstractActionController
 {
@@ -21,14 +22,13 @@ class ImportController extends AbstractActionController
      */
     public function indexAction()
     {
-
         return array(
             'imports' => $this->getImports()
         );
     }
 
     /**
-     * This action should be hit by an ajax call. It just kicks off the backgroun
+     * This action should be hit by an ajax call. It just kicks off the background
      * import process.
      */
     public function triggerAction()
@@ -42,11 +42,11 @@ class ImportController extends AbstractActionController
         }
 
         // Trigger the importer in the background
-        //if (false) {
-        //    shell_exec("nohup php public/index.php import $type > /dev/null");
-        //} else {
+        if (true) {
+            exec("nohup nice -n 10 php public/index.php import $type > /dev/null &");
+        } else {
             $this->backgroundAction($type);
-        //}
+        }
 
         return new JsonModel(array('status' => 'ok'));
     }
@@ -58,8 +58,14 @@ class ImportController extends AbstractActionController
      */
     public function backgroundAction($type = null)
     {
+        if (!$this->getRequest() instanceof ConsoleRequest) {
+            //throw new \Exception('Console requests only.');
+        }
+
+        //return 'line ' . __LINE__ . "\n";
+
         if (is_null($type)) {
-            $type = $this->params()->fromQuery('type');
+            $type = $this->params('type');
         }
 
         $imports = $this->getImports();
@@ -81,17 +87,22 @@ class ImportController extends AbstractActionController
         }
 
         // This is the actual import
-        $importer->$method();
+        if (!empty($import['argument'])) {
+            $importer->$method($import['argument']);
+        } else {
+            $importer->$method();
+        }
 
         return new JsonModel();
     }
 
     public function progressAction()
     {
+        $type = $this->params()->fromQuery('type');
         $sm = $this->getServiceLocator();
         $importer = $sm->get('import.nccbp');
 
-        $stats = $importer->getProgress();
+        $stats = $importer->getProgress($type);
 
         // Return json with no layout
         return new JsonModel($stats);

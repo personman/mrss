@@ -55,6 +55,8 @@ class ImportNccbp
 
     protected $progressFile = "/tmp/nccbp-import-progress";
 
+    protected $type;
+
     /**
      * @var array
      */
@@ -91,6 +93,8 @@ class ImportNccbp
      */
     public function importColleges()
     {
+        $this->setType('colleges');
+
         $query = "select g.title, i.*
 from content_type_group_subs_info i
 inner join node n on n.nid = i.nid
@@ -153,17 +157,17 @@ inner join node g on a.group_nid = g.nid";
     public function getTables()
     {
         $tables = array(
-            //'content_type_group_form1_subscriber_info', // 1
-            //'content_type_group_form2_student_compl_tsf', // 2
-            //'content_type_group_form3_stu_perf_transf', // 3
-            //'content_type_group_form4_cred_stud_enr', // 4
+            'content_type_group_form1_subscriber_info', // 1
+            'content_type_group_form2_student_compl_tsf', // 2
+            'content_type_group_form3_stu_perf_transf', // 3
+            'content_type_group_form4_cred_stud_enr', // 4
             'content_type_group_form5_stud_satis_eng', // 5
             'content_type_group_form6_stud_goal', // 6
-            //'content_type_group_form7_col_ret_succ', // 7
+            'content_type_group_form7_col_ret_succ', // 7
             'content_type_group_form8_dev_ret_succ', // 8
-            //'content_type_group_form9_dev_ret_succ_first_c', // 9
+            'content_type_group_form9_dev_ret_succ_first_c', // 9
             'content_type_group_form10_career_comp', // 10
-            //'content_type_group_form18_stud_serv_staff' // 18
+            'content_type_group_form18_stud_serv_staff' // 18
         );
 
         return $tables;
@@ -191,6 +195,8 @@ inner join node g on a.group_nid = g.nid";
      */
     public function importObservations($table)
     {
+        $this->setType($table);
+
         // This may take some time
         set_time_limit(600);
 
@@ -264,7 +270,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $this->stats['imported']++;
 
             // Write to the db every 20 rows
-            if ($i % 20 == 0) {
+            if ($i % 30 == 0) {
                 $this->entityManager->flush();
             }
         }
@@ -280,6 +286,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
      */
     public function importFieldMetadata()
     {
+        $this->setType('benchmarks');
+
         $sql = new Sql($this->dbAdapter);
         $select = $sql->select();
 
@@ -361,6 +369,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
      */
     public function importBenchmarkGroups()
     {
+        $this->setType('benchmarkGroups');
+
         $sql = new Sql($this->dbAdapter);
         $select = $sql->select();
 
@@ -528,21 +538,24 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     /**
      * Retrieve progress json from file
      *
-     * @return array
+     * @param $type
+     * @return array|mixed
      */
-    public function getProgress()
+    public function getProgress($type)
     {
-        if (file_exists($this->progressFile)) {
-            $statsJson = file_get_contents($this->progressFile);
+        $filename = $this->progressFile . '-' . $type;
+
+        if (file_exists($filename)) {
+            $statsJson = file_get_contents($filename);
             $stats = Json::decode($statsJson, Json::TYPE_ARRAY);
 
             // If it's complete, delete the file
             if (isset($stats['processed']) && isset($stats['total']) &&
                 $stats['processed'] == $stats['total']) {
-                unlink($this->progressFile);
+                unlink($filename);
             }
         } else {
-            $stats = array();
+            $stats = array('status' => 'no import running');
         }
 
         return $stats;
@@ -584,7 +597,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $this->stats['percentage'] = $percentage;
 
         // Write it to a file
-        file_put_contents($this->progressFile, Json::encode($this->stats));
+        $filename = $this->progressFile . '-' . $this->getType();
+        file_put_contents($filename, Json::encode($this->stats));
     }
 
     /**
@@ -594,7 +608,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
      */
     public function getImports()
     {
-        return array(
+        $imports = array(
             'colleges' => array(
                 'label' => 'Colleges',
                 'method' => 'importColleges'
@@ -607,11 +621,35 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 'label' => 'Benchmarks',
                 'method' => 'importFieldMetadata'
             ),
-            'observations' => array(
+            /*'observations' => array(
                 'label' => 'Observations',
                 'method' => 'importAllObservations'
-            )
+            )*/
         );
+
+        // Add the observation tables
+        foreach ($this->getTables() as $table) {
+            $formNumber = preg_replace("/[^0-9]/", "", $table);
+            $imports[$table] = array(
+                'label' => 'Form ' . $formNumber,
+                'method' => 'importObservations',
+                'argument' => $table
+            );
+        }
+
+        return $imports;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
     }
 
     /**
