@@ -10,7 +10,8 @@ return array(
         'DoctrineModule',
         'DoctrineORMModule',
         'BjyAuthorize',
-        'ZfcTwitterBootstrap'
+        'ZfcTwitterBootstrap',
+        'Cms'
     ),
 
     'doctrine' => array(
