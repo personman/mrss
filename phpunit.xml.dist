@@ -15,11 +15,13 @@
    <testsuite name="Test all modules">
       <!--<directory>./module/Application/test/ApplicationTest</directory>-->
       <directory>./module/Mrss/test/MrssTest</directory>
+      <directory>./module/Cms/test/CmsTest</directory>
    </testsuite>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">module/Mrss/src</directory>
+            <directory suffix=".php">module/Cms/src</directory>
         </whitelist>
     </filter>
 

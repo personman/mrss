@@ -48,6 +48,11 @@ return array(
                     'controller' => 'zfcuser',
                     'roles' => array('guest')
                 ),
+                // Page controller
+                array(
+                    'controller' => 'pages',
+                    'roles' => array('guest')
+                ),
                 // Since the background action is fired by console, lift guard
                 array(
                     'controller' => 'import',
