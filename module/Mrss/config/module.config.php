@@ -5,7 +5,7 @@ return array(
         'routes' => array(
             'general' => array(
                 'type' => 'segment',
-                'priority' => 10,
+                'priority' => -10,
                 'options' => array(
                     'route' => '/[:controller[/:action[/:id]]]',
                     'constraints' => array(

@@ -31,6 +31,10 @@ return array(
                 'uri' => '/benchmarks'
             ),
             array(
+                'label' => 'Pages',
+                'uri' => '/pages'
+            ),
+            array(
                 'label' => 'User',
                 'uri' => '/user'
             )
