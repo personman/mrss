@@ -45,6 +45,11 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
             $benchmarkGroup->getSequence(),
             '"sequence" should initially be null'
         );
+
+        $this->assertNull(
+            $benchmarkGroup->getStudy(),
+            '"study" should initially be null'
+        );
     }
 
     public function testSetters()
@@ -66,6 +71,10 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         // Set sequence
         $benchmarkGroup->setSequence(2);
         $this->assertEquals(2, $benchmarkGroup->getSequence());
+
+        $studyMock = $this->getMock('Mrss\Entity\Study');
+        $benchmarkGroup->setStudy($studyMock);
+        $this->assertSame($studyMock, $benchmarkGroup->getStudy());
     }
 
     public function testBenchmarkAssociation()
@@ -95,5 +104,45 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         $benchmarkGroup->setName('Form 18');
 
         $this->assertEquals('Form 18', $benchmarkGroup->getLabel());
+    }
+
+    public function testGetCompletionPercentageForObservation()
+    {
+        $benchmarkGroup = new BenchmarkGroup;
+
+        $observationMock = $this->getMock(
+            'Mrss\Entity\Observation',
+            array('get')
+        );
+
+        $benchmarkMock = $this->getMock(
+            'Mrss\Entity\Benchmark',
+            array('getDbColumn')
+        );
+
+        // First test with no benchmarks
+        $percentage = $benchmarkGroup
+            ->getCompletionPercentageForObservation($observationMock);
+
+        $this->assertEquals(0, $percentage);
+
+
+        // Then again with mock benchmark
+        $benchmarkGroup->setBenchmarks(array($benchmarkMock));
+
+        $percentage = $benchmarkGroup
+            ->getCompletionPercentageForObservation($observationMock);
+
+        $this->assertEquals(0, $percentage);
+
+        // And once more with an actual non-null value
+        $observationMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue('555'));
+
+        $percentage = $benchmarkGroup
+            ->getCompletionPercentageForObservation($observationMock);
+
+        $this->assertEquals(100.0, $percentage);
     }
 }

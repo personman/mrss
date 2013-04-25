@@ -116,6 +116,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
         return $this->sequence;
     }
 
+    public function setBenchmarks($benchmarks)
+    {
+        $this->benchmarks = $benchmarks;
+
+        return $this;
+    }
+
     public function getBenchmarks()
     {
         return $this->benchmarks;

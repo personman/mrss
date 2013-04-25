@@ -94,8 +94,12 @@ class Study
             $completed += $benchmarkGroup->countCompleteFieldsInObservation($observation);
         }
 
-        $percentage = ($completed / $total * 100);
-        $percentage = round($percentage, 1);
+        if ($total > 0) {
+            $percentage = ($completed / $total * 100);
+            $percentage = round($percentage, 1);
+        } else {
+            $percentage = 0;
+        }
 
         return $percentage;
     }
