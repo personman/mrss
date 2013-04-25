@@ -3,6 +3,7 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 
 /** @ORM\Entity
  * @ORM\Table(name="colleges")
@@ -165,5 +166,35 @@ class College
             . $this->getZip();
 
         return $address;
+    }
+
+    public function getObservationForYear($year)
+    {
+        $observations = $this->getObservations();
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('year', $year));
+
+        $observations = $observations->matching($criteria);
+
+        // We just want one
+        if (count($observations) > 0) {
+            $observation = $observations[0];
+        } else {
+            $observation = null;
+        }
+
+        return $observation;
+    }
+
+    public function getCompletionPercentage($year, $study)
+    {
+        $observation = $this->getObservationForYear($year);
+
+        if (empty($observation)) {
+            return 0;
+        }
+
+        return $study->getCompletionPercentage($observation);
     }
 }

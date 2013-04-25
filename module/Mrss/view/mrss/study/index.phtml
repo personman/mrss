@@ -1,0 +1,18 @@
+<h2>Studies</h2>
+
+<ul>
+    <?php foreach ($this->studies as $study): ?>
+        <li>
+            <a href="<?= $this->url(
+                'general',
+                array(
+                    'controller' => 'studies',
+                    'action' => 'view',
+                    'id' => $study->getId()
+                )
+            ) ?>">
+                <?php echo $study->getName() ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+</ul>

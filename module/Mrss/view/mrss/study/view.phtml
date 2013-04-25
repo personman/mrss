@@ -1,0 +1,59 @@
+<h2>
+    <?= $this->study->getName() ?>
+</h2>
+
+<p>
+    <?= $this->study->getDescription() ?>
+</p>
+
+<h3>Completion</h3>
+
+<table class="table heatmap">
+    <thead>
+        <tr>
+            <th>College</th>
+
+            <?php foreach ($this->years as $year): ?>
+                <th>
+                    <?= $year ?>
+                </th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+
+    <tbody>
+        <?php foreach ($this->colleges as $college): ?>
+            <tr>
+                <td>
+                    <a href="<?= $this->url(
+                        'general',
+                        array(
+                            'controller' => 'colleges',
+                            'action' => 'view',
+                            'id' => $college->getId()
+                        )
+                    ) ?>">
+                        <?= $college->getName() ?>
+                    </a>
+                </td>
+
+                <?php foreach ($this->years as $year): ?>
+                    <td>
+                        <? $percentage = $college->getCompletionPercentage(
+                            $year,
+                            $this->study
+                        ) ?>
+                        <div
+                            class="heatmapCell"
+                            style="opacity: <?= $percentage / 100 ?>">
+                            <?= round($percentage) ?>%
+                        </div>
+                    </td>
+                <?php endforeach ?>
+
+            </tr>
+            <? //if (empty($i)) $i = 1; if ($i++ > 150) break ?>
+        <?php endforeach ?>
+
+    </tbody>
+</table>

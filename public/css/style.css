@@ -789,3 +789,26 @@ form.form-horizontal .controls {
 .control-group.error ul li {
     color: #b94a48;
 }
+
+/* BenchmarkGroup progress */
+.benchmarkGroupProgress {
+    width: 150px;
+    float: left;
+    margin-right: 20px;
+    height: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.heatmapCell {
+    background-color: green;
+    color: white;
+    text-align: center;
+    padding: 1px
+}
+
+.table.heatmap td {
+    padding: 0;
+}

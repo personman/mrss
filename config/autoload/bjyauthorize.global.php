@@ -48,6 +48,10 @@ return array(
                     'controller' => 'zfcuser',
                     'roles' => array('guest')
                 ),
+                array(
+                    'controller' => 'DoctrineORMModule\Yuml\YumlController',
+                    'roles' => array('guest')
+                ),
                 // Page controller
                 array(
                     'controller' => 'pages',
@@ -74,6 +78,10 @@ return array(
                 ),
                 array(
                     'controller' => 'benchmarks',
+                    'roles' => array('user')
+                ),
+                array(
+                    'controller' => 'studies',
                     'roles' => array('user')
                 )
             )

@@ -100,6 +100,14 @@ class Module
 
                     return $benchmarkGroupkModel;
                 },
+                'model.study' => function ($sm) {
+                    $studyModel = new \Mrss\Model\Study();
+                    $em = $sm->get('em');
+
+                    $studyModel->setEntityManager($em);
+
+                    return $studyModel;
+                },
                 'service.formBuilder' => function ($sm) {
                     $service = new \Mrss\Service\FormBuilder;
 

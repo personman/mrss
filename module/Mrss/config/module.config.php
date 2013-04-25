@@ -148,7 +148,8 @@ return array(
             'import' => 'Mrss\Controller\ImportController',
             'colleges' => 'Mrss\Controller\CollegeController',
             'observations' => 'Mrss\Controller\ObservationController',
-            'benchmarks' => 'Mrss\Controller\BenchmarkController'
+            'benchmarks' => 'Mrss\Controller\BenchmarkController',
+            'studies' => 'Mrss\Controller\StudyController'
         ),
     ),
     'view_manager' => array(

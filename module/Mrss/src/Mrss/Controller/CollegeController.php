@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Mrss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -12,18 +11,6 @@ class CollegeController extends AbstractActionController
 
     public function indexAction()
     {
-        /*
-        $guest = new \Mrss\Entity\Role;
-        $guest->setRoleId('guest');
-        $em = $this->getServiceLocator()->get('em');
-        $em->persist($role);
-
-        $role2
-
-        $em->flush();
-        die('ok');
-        */
-
         $Colleges = $this->getServiceLocator()->get('model.college');
 
         return array(
@@ -45,13 +32,18 @@ class CollegeController extends AbstractActionController
         $Colleges = $this->getServiceLocator()->get('model.college');
         $college = $Colleges->find($this->params('id'));
 
+        $Studies = $this->getServiceLocator()->get('model.study');
+
         // Handle invalid id
         if (empty($college)) {
             $this->flashMessenger()->addErrorMessage("Invalide college id.");
             return $this->redirect()->toUrl('/colleges');
         }
 
-        return array('college' => $college);
+        return array(
+            'college' => $college,
+            'study' => $Studies->find(1)
+        );
     }
 
     /**

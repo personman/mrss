@@ -10,6 +10,11 @@
     <ul>
         <?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
             <li>
+                <div class="progress benchmarkGroupProgress">
+                    <div class="bar" style="width: <?= $benchmarkGroup->getCompletionPercentageForObservation($this->observation) ?>%;
+                    "></div>
+                </div>
+
                 <a href="<?= $this->url(
                     'observation/group',
                     array(
@@ -18,6 +23,8 @@
                 ) ?>">
                     <?= $benchmarkGroup->getName() ?>
                 </a> (<?= count($benchmarkGroup->getBenchmarks()) ?> benchmarks)
+
+                <div class="clear"></div>
             </li>
         <?php endforeach ?>
     </ul>

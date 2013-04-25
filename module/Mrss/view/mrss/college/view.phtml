@@ -33,6 +33,8 @@
                         ) ?>">
                             <?= $ob->getYear() ?>
                         </a>
+
+                        (<?= $this->study->getCompletionPercentage($ob) ?>%)
                     </li>
 
                 <?php endforeach ?>

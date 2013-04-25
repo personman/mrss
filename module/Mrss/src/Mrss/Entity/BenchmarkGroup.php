@@ -50,6 +50,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
     protected $benchmarks;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Study", inversedBy="benchmarkGroups")
+     */
+    protected $study;
+
+    /**
      * Construct the benchmarkGroup entity
      * Populate the benchmarks property with a placeholder
      */
@@ -126,5 +131,58 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
     public function getLabel()
     {
         return $this->getName();
+    }
+
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
+    }
+
+    /**
+     * Percentage of completed benchmarks for this group in the given observation
+     *
+     * @param Observation $observation
+     * @return float
+     */
+    public function getCompletionPercentageForObservation(Observation $observation)
+    {
+        $total = count($this->getBenchmarks());
+        $completed = $this->countCompleteFieldsInObservation($observation);
+
+        if ($total > 0) {
+            $percentage = round($completed / $total * 100, 3);
+        } else {
+            $percentage = 0.0;
+        }
+
+        return $percentage;
+    }
+
+    /**
+     * Return the number of non-null fields in this group for the observation
+     *
+     * @param Observation $observation
+     * @return int
+     */
+    public function countCompleteFieldsInObservation(Observation $observation)
+    {
+        $complete = 0;
+
+        foreach ($this->getBenchmarks() as $benchmark) {
+            $value = $observation->get($benchmark->getDbColumn());
+
+            if ($value != null) {
+                $complete++;
+            }
+        }
+
+        return $complete;
     }
 }

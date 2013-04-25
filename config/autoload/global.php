@@ -19,6 +19,10 @@ return array(
                 'uri' => '/'
             ),
             array(
+                'label' => 'Studies',
+                'uri' => '/studies'
+            ),
+            array(
                 'label' => 'Imports',
                 'uri' => '/import'
             ),
