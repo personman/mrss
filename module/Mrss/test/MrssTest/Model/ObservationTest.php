@@ -5,14 +5,13 @@
 namespace MrssTest\Model;
 
 use Mrss\Model\Observation;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Class ObservationTest
  *
  * @package MrssTest\Model
  */
-class ObservationTest extends PHPUnit_Framework_TestCase
+class ObservationTest extends ModelTestAbstract
 {
     /**
      * @var \Mrss\Model\Observation
@@ -176,44 +175,5 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         $this->model->setEntityManager($emMock);
 
         $this->model->save(new \Mrss\Entity\Observation);
-    }
-
-
-    protected function getEmMock($additionalMethodsToMock = array())
-    {
-        $repositoryMock = $this->getMock(
-            'Doctrine\Orm\Repository',
-            array('findOneBy')
-        );
-
-        $methodsToMock = array(
-            'getRepository',
-            'getClassMetadata',
-            'persist',
-            'flush'
-        );
-        $methodsToMock = array_merge($methodsToMock, $additionalMethodsToMock);
-
-        $emMock  = $this->getMock(
-            '\Doctrine\ORM\EntityManager',
-            $methodsToMock,
-            array(),
-            '',
-            false
-        );
-        $emMock->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($repositoryMock));
-        $emMock->expects($this->any())
-            ->method('getClassMetadata')
-            ->will($this->returnValue((object)array('name' => 'aClass')));
-        $emMock->expects($this->any())
-            ->method('persist')
-            ->will($this->returnValue(null));
-        $emMock->expects($this->any())
-            ->method('flush')
-            ->will($this->returnValue(null));
-
-        return $emMock;
     }
 }

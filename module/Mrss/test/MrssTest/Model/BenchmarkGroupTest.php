@@ -5,14 +5,13 @@
 namespace MrssTest\Model;
 
 use Mrss\Model\BenchmarkGroup;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Class BenchmarkGroupTest
  *
  * @package MrssTest\Model
  */
-class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
+class BenchmarkGroupTest extends ModelTestAbstract
 {
     /**
      * @var \Mrss\Model\BenchmarkGroup
@@ -123,13 +122,13 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
 
     public function testGetMaxSequence()
     {
-        $lastBenchmarkGroupMock = $this->getMock(
+        $benchmarkGroupMock = $this->getMock(
             'Mrss\Entity\BenchmarkGroup',
             array('getSequence')
         );
-        $lastBenchmarkGroupMock->expects($this->once())
+        $benchmarkGroupMock->expects($this->once())
             ->method('getSequence')
-            ->will($this->returnValue(98));
+            ->will($this->returnValue(99));
 
         $repoMock = $this->getMock(
             'Doctrine\ORM\EntityRepository',
@@ -138,50 +137,12 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $repoMock->expects($this->once())
             ->method('findOneBy')
-            ->with(
-                $this->equalTo(array()),
-                $this->equalTo(array('sequence' => 'DESC'))
-            )
-            ->will($this->returnValue($lastBenchmarkGroupMock));
+            ->will($this->returnValue($benchmarkGroupMock));
 
         $this->model->setRepository($repoMock);
-        $this->model->setEntityManager($this->getEmMock());
 
-        $result = $this->model->getMaxSequence();
-
-        $this->assertEquals(98, $result);
-    }
-
-    protected function getEmMock()
-    {
-        $repositoryMock = $this->getMock(
-            'Doctrine\Orm\Repository',
-            array('findOneBy')
-        );
-
-        $emMock  = $this->getMock(
-            '\Doctrine\ORM\EntityManager',
-            array('getRepository', 'getClassMetadata', 'persist', 'flush'),
-            array(),
-            '',
-            false
-        );
-        $emMock->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($repositoryMock));
-        $emMock->expects($this->any())
-            ->method('getClassMetadata')
-            ->will($this->returnValue((object)array('name' => 'aClass')));
-        $emMock->expects($this->any())
-            ->method('persist')
-            ->will($this->returnValue(null));
-        $emMock->expects($this->any())
-            ->method('flush')
-            ->will($this->returnValue(null));
-
-        return $emMock;
+        $this->assertEquals(99, $this->model->getMaxSequence());
     }
 }

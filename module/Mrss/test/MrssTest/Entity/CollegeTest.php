@@ -109,6 +109,133 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $college->getFullAddress());
     }
 
+    public function testGetObservationForYear()
+    {
+        $college = new College();
+
+        $observationsMock = $this->getMock(
+            '\Doctrine\Common\Collections\ArrayCollection',
+            array('matching', 'first', 'count')
+        );
+
+        $observationsMock->expects($this->once())
+            ->method('matching')
+            ->will($this->returnValue($observationsMock));
+
+        // Return count of 1
+        $observationsMock->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(1));
+
+        // Return one observation
+        $observationsMock->expects($this->once())
+            ->method('first')
+            ->will($this->returnValue('placeholder'));
+
+        $college->setObservations($observationsMock);
+
+        $result = $college->getObservationForYear(2013);
+
+        $this->assertEquals('placeholder', $result);
+    }
+
+    public function testGetObservationForYearEmpty()
+    {
+        $college = new College();
+
+        $observationsMock = $this->getMock(
+            '\Doctrine\Common\Collections\ArrayCollection',
+            array('matching', 'count')
+        );
+
+        $observationsMock->expects($this->once())
+            ->method('matching')
+            ->will($this->returnValue($observationsMock));
+
+        // Return count of 1
+        $observationsMock->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(0));
+
+        $college->setObservations($observationsMock);
+
+        $result = $college->getObservationForYear(2013);
+
+        $this->assertNull($result);
+    }
+
+    public function testGetCompletionPercentage()
+    {
+        $college = new College();
+
+        $observationMock = $this->getMock('Mrss\Entity\Observation');
+
+        $observationsMock = $this->getMock(
+            '\Doctrine\Common\Collections\ArrayCollection',
+            array('matching', 'first', 'count')
+        );
+
+        $observationsMock->expects($this->once())
+            ->method('matching')
+            ->will($this->returnValue($observationsMock));
+
+        // Return count of 1
+        $observationsMock->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(1));
+
+        // Return one observation
+        $observationsMock->expects($this->once())
+            ->method('first')
+            ->will($this->returnValue($observationMock));
+
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getCompletionPercentage')
+        );
+        $studyMock->expects($this->once())
+            ->method('getCompletionPercentage')
+            ->will($this->returnValue('placeholder2'));
+
+        $college->setObservations($observationsMock);
+
+        $result = $college->getCompletionPercentage(2013, $studyMock);
+
+        $this->assertEquals('placeholder2', $result);
+    }
+
+    public function testGetCompletionPercentageEmpty()
+    {
+        $college = new College();
+
+        $observationMock = $this->getMock('Mrss\Entity\Observation');
+
+        $observationsMock = $this->getMock(
+            '\Doctrine\Common\Collections\ArrayCollection',
+            array('matching', 'first', 'count')
+        );
+
+        $observationsMock->expects($this->once())
+            ->method('matching')
+            ->will($this->returnValue($observationsMock));
+
+        // Return count of 0
+        $observationsMock->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(0));
+
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getCompletionPercentage')
+        );
+
+        $college->setObservations($observationsMock);
+
+        $result = $college->getCompletionPercentage(2013, $studyMock);
+
+        $this->assertEquals(0, $result);
+    }
+
     /**
      * Provides some valid college data
      *

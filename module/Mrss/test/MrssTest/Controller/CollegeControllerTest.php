@@ -40,7 +40,7 @@ class CollegeControllerTest extends AbstractControllerTestCase
         $this->assertMatchedRouteName('general');
     }
 
-    public function testViewActionCanBeAccessed()
+    /*public function testViewActionCanBeAccessed()
     {
         // Mock the returned college entity
         $collegeMock = $this->getMock('Mrss\Entity\College', array('getName'));
@@ -62,7 +62,7 @@ class CollegeControllerTest extends AbstractControllerTestCase
         $this->assertActionName('view');
         $this->assertControllerClass('CollegeController');
         $this->assertMatchedRouteName('general');
-    }
+    }*/
 
     public function testViewWithInvalidId()
     {

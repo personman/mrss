@@ -35,7 +35,7 @@ class College
      */
     protected $city;
 
-    /**
+        /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
     protected $state;
@@ -153,6 +153,13 @@ class College
         return $this;
     }
 
+    public function setObservations($observations)
+    {
+        $this->observations = $observations;
+
+        return $this;
+    }
+
     public function getObservations()
     {
         return $this->observations;
@@ -178,8 +185,8 @@ class College
         $observations = $observations->matching($criteria);
 
         // We just want one
-        if (count($observations) > 0) {
-            $observation = $observations[0];
+        if ($observations->count() > 0) {
+            $observation = $observations->first();
         } else {
             $observation = null;
         }
@@ -187,7 +194,7 @@ class College
         return $observation;
     }
 
-    public function getCompletionPercentage($year, $study)
+    public function getCompletionPercentage($year, Study $study)
     {
         $observation = $this->getObservationForYear($year);
 

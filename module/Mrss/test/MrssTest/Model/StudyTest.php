@@ -1,26 +1,26 @@
 <?php
 /**
- * Test the benchmark model
+ * Test the study model
  */
 namespace MrssTest\Model;
 
-use Mrss\Model\Benchmark;
+use Mrss\Model\Study;
 
 /**
- * Class BenchmarkTest
+ * Class StudyTest
  *
  * @package MrssTest\Model
  */
-class BenchmarkeTest extends ModelTestAbstract
+class StudyTest extends ModelTestAbstract
 {
     /**
-     * @var \Mrss\Model\Benchmark
+     * @var \Mrss\Model\Study
      */
     protected $model;
 
     public function setUp()
     {
-        $this->model = new \Mrss\Model\Benchmark;
+        $this->model = new \Mrss\Model\Study;
     }
 
     public function tearDown()
@@ -30,7 +30,7 @@ class BenchmarkeTest extends ModelTestAbstract
 
     public function testInitialState()
     {
-        $this->assertInstanceOf('Mrss\Model\Benchmark', $this->model);
+        $this->assertInstanceOf('Mrss\Model\Study', $this->model);
     }
 
     public function testFindAll()
@@ -51,28 +51,6 @@ class BenchmarkeTest extends ModelTestAbstract
         $this->model->setEntityManager($this->getEmMock());
 
         $result = $this->model->findAll();
-
-        $this->assertEquals('placeholder', $result);
-    }
-
-    public function testFindOneByDbColumn()
-    {
-        $repoMock = $this->getMock(
-            'Doctrine\ORM\EntityRepository',
-            array('findOneBy', 'getUnitOfWork'),
-            array(),
-            '',
-            false
-        );
-
-        $repoMock->expects($this->once())
-            ->method('findOneBy')
-            ->will($this->returnValue('placeholder'));
-
-        $this->model->setRepository($repoMock);
-        $this->model->setEntityManager($this->getEmMock());
-
-        $result = $this->model->findOneByDbColumn('111111');
 
         $this->assertEquals('placeholder', $result);
     }
@@ -113,6 +91,6 @@ class BenchmarkeTest extends ModelTestAbstract
 
         $this->model->setEntityManager($emMock);
 
-        $this->model->save(new \Mrss\Entity\Benchmark);
+        $this->model->save(new \Mrss\Entity\Study);
     }
 }
