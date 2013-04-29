@@ -97,6 +97,14 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $benchmark->setBenchmarkGroup($benchmarkGroupMock);
 
         $this->assertSame($benchmarkGroupMock, $benchmark->getBenchmarkGroup());
+
+
+        // Benchmark year
+        $yearMock = $this->getMock('Mrss\Entity\BenchmarkYear');
+        $benchmark->setYears(array($yearMock));
+
+        $result = $benchmark->getYears();
+        $this->assertSame($yearMock, $result[0]);
     }
 
     public function testGetFormElement()

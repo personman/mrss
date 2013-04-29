@@ -70,6 +70,25 @@ class Benchmark extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'yearsAvailable',
+                'type' => 'Zend\Form\Element\MultiCheckbox',
+                'options' => array(
+                    'label' => 'Years Available',
+                    'value_options' => $this->getYearsAvailable()
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
+    }
+
+    public function getYearsAvailable()
+    {
+        $range = range(2006, date('Y') + 3);
+        $combined = array_combine($range, $range);
+
+        return $combined;
     }
 }

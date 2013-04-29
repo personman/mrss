@@ -760,6 +760,9 @@ ul.info li {
 form.form-horizontal input {
     height: 30px;
 }
+form.form-horizontal input[type="checkbox"] {
+    height: 15px;
+}
 form.form-horizontal .control-label {
     font-weight: bold;
     width: 400px;

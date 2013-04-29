@@ -65,6 +65,20 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      */
     protected $benchmarkGroup;
 
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    protected $yearsAvailable;
+
+    /**
+     * Construct the benchmark entity
+     * Populate the years property with a placeholder
+     */
+    public function __construct()
+    {
+        $this->years = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     public function getId()
     {
         return $this->id;
@@ -152,6 +166,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getBenchmarkGroup()
     {
         return $this->benchmarkGroup;
+    }
+
+    public function setYearsAvailable($years)
+    {
+        $this->yearsAvailable = implode(',', $years);
+
+        return $this;
+    }
+
+    public function getYearsAvailable()
+    {
+        return explode(',', $this->yearsAvailable);
     }
 
     /**
