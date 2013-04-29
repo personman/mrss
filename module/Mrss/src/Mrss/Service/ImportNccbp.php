@@ -341,6 +341,9 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 $benchmark->setSequence($result['weight']);
                 $inputType = $this->convertInputType($result['widget_type']);
                 $benchmark->setInputType($inputType);
+                $benchmark->setYearsAvailable(
+                    $this->getYearsAvailable($result['field_name'])
+                );
 
                 // Find and set the benchmarkGroup
                 $benchmarkGroup = $this->getBenchmarkGroupModel()
@@ -453,6 +456,37 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $ipeds = array_pop($titleParts);
 
         return $ipeds;
+    }
+
+    protected function getYearsAvailable($field)
+    {
+        $sql = new Sql($this->dbAdapter);
+        $select = $sql->select();
+
+        $select->columns(
+            array(
+                'field_rf_years_available_value'
+            )
+        );
+        $select->from('content_field_rf_years_available');
+        $select->join(
+            'node',
+            'content_field_rf_years_available.nid = node.nid',
+            array()
+        );
+        $select->where(array('title' => $field));
+
+        $statement = $sql->prepareStatementForSqlObject($select);
+
+        $results = $statement->execute();
+
+        $years = array();
+        foreach ($results as $row) {
+            $years[] = $row['field_rf_years_available_value'];
+        }
+
+        return $years;
+
     }
 
     /**

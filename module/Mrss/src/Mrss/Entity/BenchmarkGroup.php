@@ -3,6 +3,7 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Benchmark Group metadata
@@ -152,6 +153,20 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
         return $this->study;
     }
 
+    public function getBenchmarksForYear($year)
+    {
+        $benchmarksForYear = array();
+
+        $benchmarks = $this->getBenchmarks();
+        foreach ($benchmarks as $benchmark) {
+            if ($benchmark->isAvailableForYear($year)) {
+                $benchmarksForYear[] = $benchmark;
+            }
+        }
+
+        return $benchmarksForYear;
+    }
+
     /**
      * Percentage of completed benchmarks for this group in the given observation
      *
@@ -160,7 +175,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
      */
     public function getCompletionPercentageForObservation(Observation $observation)
     {
-        $total = count($this->getBenchmarks());
+        $total = count($this->getBenchmarksForYear($observation->getYear()));
         $completed = $this->countCompleteFieldsInObservation($observation);
 
         if ($total > 0) {

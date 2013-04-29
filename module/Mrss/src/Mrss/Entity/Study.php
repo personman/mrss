@@ -90,8 +90,11 @@ class Study
 
         // Loop over each benchmarkGroup and sum up the counts
         foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
-            $total += count($benchmarkGroup->getBenchmarks());
-            $completed += $benchmarkGroup->countCompleteFieldsInObservation($observation);
+            $total += count(
+                $benchmarkGroup->getBenchmarksForYear($observation->getYear())
+            );
+            $completed += $benchmarkGroup
+                ->countCompleteFieldsInObservation($observation);
         }
 
         if ($total > 0) {
