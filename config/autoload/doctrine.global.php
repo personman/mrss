@@ -20,7 +20,7 @@ return array(
         ),
         'migrations_configuration' => array(
             'orm_default' => array(
-                'directory' => 'data/DoctrineORMModule/Migrations',
+                'directory' => 'data/migrations',
                 'namespace' => 'DoctrineMigrations',
                 'table'     => 'migrations',
             ),
