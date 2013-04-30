@@ -197,7 +197,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
     {
         $complete = 0;
 
-        foreach ($this->getBenchmarks() as $benchmark) {
+        foreach ($this->getBenchmarksForYear($observation->getYear()) as $benchmark) {
             $value = $observation->get($benchmark->getDbColumn());
 
             if ($value != null) {

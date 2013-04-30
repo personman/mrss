@@ -1,7 +1,7 @@
 {
     "name": "nhebi/mrss",
     "description": "Maximizing Resources for Student Success",
-    "license": "Copyright",
+    "license": "proprietary",
     "keywords": [
         "education",
         "benchmarking"
@@ -9,14 +9,14 @@
     "homepage": "http://framework.zend.com/",
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "2.*",
+        "zendframework/zendframework": "2.1.5",
         "zendframework/zend-developer-tools": "*",
         "phing/phing": "2.5.*",
         "zf-commons/zfc-user": "0.*",
-        "zf-commons/zfc-user-doctrine-orm": "dev-master",
+        "zf-commons/zfc-user-doctrine-orm": "*",
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "*",
-        "mwillbanks/zfc-twitter-bootstrap": "@dev",
+        "mwillbanks/zfc-twitter-bootstrap": "*",
         "bjyoungblood/bjy-authorize": "1.2.*"
     },
     "require-dev": {
