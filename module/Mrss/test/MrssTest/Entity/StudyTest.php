@@ -62,6 +62,15 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $percentage = $this->study->getCompletionPercentage($observationMock);
         $this->assertEquals(0, $percentage);
 
+        // Benchmark
+        $benchmarkMock = $this->getMock(
+            'Mrss\Entity\Benchmark',
+            array('isAvailableForYear')
+        );
+        $benchmarkMock->expects($this->once())
+            ->method('isAvailableForYear')
+            ->will($this->returnValue(true));
+
         // Now test it with benchmarkGroups
         $benchmarkGroupMock = $this->getMock(
             'Mrss\Entity\BenchmarkGroup',
@@ -69,7 +78,7 @@ class StudyTest extends PHPUnit_Framework_TestCase
         );
         $benchmarkGroupMock->expects($this->once())
             ->method('getBenchmarks')
-            ->will($this->returnValue(array(1, 2, 3, 4)));
+            ->will($this->returnValue(array($benchmarkMock)));
 
         $this->study->setBenchmarkGroups(array($benchmarkGroupMock));
 

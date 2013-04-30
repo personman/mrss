@@ -9,6 +9,7 @@ use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\BenchmarkGroup;
+use Mrss\Entity\Study;
 use Mrss\Model;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
@@ -52,6 +53,11 @@ class ImportNccbp
      * @var \Mrss\Model\BenchmarkGroup
      */
     protected $benchmarkGroupModel;
+
+    /**
+     * @var \Mrss\Model\Study
+     */
+    protected $studyModel;
 
     protected $progressFile = "/tmp/nccbp-import-progress";
 
@@ -372,6 +378,9 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
      */
     public function importBenchmarkGroups()
     {
+        // Make sure the study is there
+        $study = $this->getStudy();
+
         $this->setType('benchmarkGroups');
 
         $sql = new Sql($this->dbAdapter);
@@ -413,6 +422,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             // Populate the BenchmarkGroup
             $benchmarkGroup->setName($result['name']);
             $benchmarkGroup->setShortName($result['type']);
+            $benchmarkGroup->setStudy($study);
 
             // Merge the description and help fields
             $description = $result['description'] . '. ' . $result['help'];
@@ -427,6 +437,25 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $this->entityManager->flush();
 
         $this->saveProgress($i);
+    }
+
+    /**
+     * Fetch or create the NCCBP study
+     *
+     * @return Study
+     */
+    public function getStudy()
+    {
+        $study = $this->getStudyModel()->find(1);
+
+        if (empty($study)) {
+            $study = new Study;
+            $study->setName('NCCBP');
+            $study->setDescription('National Community College Benchmark Project');
+            $this->getStudyModel()->save($study);
+        }
+
+        return $study;
     }
 
     /**
@@ -740,5 +769,17 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getBenchmarkGroupModel()
     {
         return $this->benchmarkGroupModel;
+    }
+
+    public function setStudyModel($model)
+    {
+        $this->studyModel = $model;
+
+        return $this;
+    }
+
+    public function getStudyModel()
+    {
+        return $this->studyModel;
     }
 }

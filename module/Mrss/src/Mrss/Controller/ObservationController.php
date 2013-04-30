@@ -24,11 +24,13 @@ class ObservationController extends AbstractActionController
             $benchmarkGroup = null;
         }
 
+        $observation = $ObservationModel->find($observationId);
+
         return array(
-            'observation' => $ObservationModel->find($observationId),
+            'observation' => $observation,
             'benchmarkGroups' => $BenchmarkGroupModel->findAll(),
             'benchmarkGroup' => $benchmarkGroup,
-            'fields' => $this->getFields($benchmarkGroup)
+            'fields' => $this->getFields($observation->getYear(), $benchmarkGroup)
         );
     }
 
@@ -46,7 +48,7 @@ class ObservationController extends AbstractActionController
 
         $formService = $this->getServiceLocator()
             ->get('service.formBuilder');
-        $form = $formService->buildForm($benchmarkGroup);
+        $form = $formService->buildForm($benchmarkGroup, $observation->getYear());
 
         $form->setAttribute('class', 'form-horizontal');
 
@@ -86,10 +88,11 @@ class ObservationController extends AbstractActionController
     /**
      * Get field metadata from the benchmark entity
      *
-     * @param $benchmarkGroup
+     * @param integer $year
+     * @param \Mrss\Entity\BenchmarkGroup $benchmarkGroup
      * @return array
      */
-    protected function getFields($benchmarkGroup = null)
+    protected function getFields($year, $benchmarkGroup = null)
     {
         if (empty($benchmarkGroup)) {
             // Get them all
@@ -97,7 +100,7 @@ class ObservationController extends AbstractActionController
 
             $benchmarks = $benchmarkModel->findAll();
         } else {
-            $benchmarks = $benchmarkGroup->getBenchmarks();
+            $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
         }
 
 

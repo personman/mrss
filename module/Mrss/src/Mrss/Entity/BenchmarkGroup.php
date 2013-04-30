@@ -131,9 +131,9 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
 
     // Implement the FormFieldSetProvider interface so this can be turned
     // into a fieldset.
-    public function getElements()
+    public function getElements($year)
     {
-        return $this->getBenchmarks();
+        return $this->getBenchmarksForYear($year);
     }
 
     public function getLabel()

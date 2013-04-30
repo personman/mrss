@@ -15,15 +15,16 @@ class FormBuilder
      *
      * The provider is any object that implements the FieldsetProvider interface
      *
-     * @var FieldsetProvider $provider
+     * @param \Mrss\Entity\FormFieldsetProviderInterface $provider
+     * @param $year
      * @return \Zend\Form\Form
      */
-    public function buildForm(FieldsetProvider $provider)
+    public function buildForm(FieldsetProvider $provider, $year)
     {
         $form = new Form;
 
         // Add the elements from the provider
-        foreach ($provider->getElements() as $elementProvider) {
+        foreach ($provider->getElements($year) as $elementProvider) {
             $element = $this->getElement($elementProvider);
             $form->add($element);
         }

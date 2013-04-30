@@ -64,6 +64,10 @@ class Module
                     $benchmarkGroupModel = $sm->get('model.benchmarkGroup');
                     $importer->setBenchmarkGroupModel($benchmarkGroupModel);
 
+                    // Inject the study model
+                    $studyModel = $sm->get('model.study');
+                    $importer->setStudyModel($studyModel);
+
                     return $importer;
                 },
                 // Perhaps there should be a generic model factory

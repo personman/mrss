@@ -177,7 +177,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
     public function getYearsAvailable()
     {
-        return explode(',', $this->yearsAvailable);
+        return array_map('intval', explode(',', $this->yearsAvailable));
     }
 
     public function isAvailableForYear($year)

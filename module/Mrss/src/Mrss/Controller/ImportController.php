@@ -152,6 +152,19 @@ class ImportController extends AbstractActionController
         $this->redirect()->toUrl('/colleges');
     }
 
+    public function benchmarkgroupsAction()
+    {
+        $importer = $this->getServiceLocator()->get('import.nccbp');
+
+        $importer->importBenchmarkGroups();
+
+        $stats = $importer->getStats();
+        $message = "Benchmark groups import complete. Imported:
+            $stats[imported], skipped: $stats[skipped].";
+        $this->flashMessenger()->addSuccessMessage($message);
+        $this->redirect()->toUrl('/colleges');
+    }
+
     protected function getImports()
     {
         return $this->getServiceLocator()->get('import.nccbp')->getImports();

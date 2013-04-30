@@ -91,10 +91,7 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
     {
         $benchmarkGroup = new BenchmarkGroup;
 
-        $this->assertInstanceOf(
-            'Doctrine\Common\Collections\ArrayCollection',
-            $benchmarkGroup->getElements()
-        );
+        $this->assertTrue(is_array($benchmarkGroup->getElements(2013)));
     }
 
     public function testGetLabel()

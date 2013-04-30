@@ -4,7 +4,7 @@ namespace Mrss\Entity;
 
 interface FormFieldsetProviderInterface
 {
-    public function getElements();
+    public function getElements($year);
 
     public function getLabel();
 }

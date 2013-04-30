@@ -50,7 +50,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
             ->method('getElements')
             ->will($this->returnValue(array($benchmarkMock)));
 
-        $form = $formBuilder->buildForm($provider);
+        $form = $formBuilder->buildForm($provider, 2012);
 
         $this->assertInstanceOf('Zend\Form\Form', $form);
     }
