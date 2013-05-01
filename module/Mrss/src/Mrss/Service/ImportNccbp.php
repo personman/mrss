@@ -60,6 +60,7 @@ class ImportNccbp
     protected $studyModel;
 
     protected $progressFile = "/tmp/nccbp-import-progress";
+    //protected $progressFile = "data/cache/nccbp-import-progress";
 
     protected $type;
 
@@ -665,7 +666,11 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
         // Write it to a file
         $filename = $this->progressFile . '-' . $this->getType();
-        file_put_contents($filename, Json::encode($this->stats));
+        $result = file_put_contents($filename, Json::encode($this->stats));
+
+        if ($result === false) {
+            die('unable to write nccbp import progress file');
+        }
     }
 
     /**
