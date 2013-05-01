@@ -776,6 +776,318 @@ class Observation
      */
     protected $emp_satis_prep_perc;
 
+    // NCCBP form 11
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ec_i_abcpdfw;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ec_ii_abcpdfw;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $al_abcpdfw;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $sp_abcpdfw;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ec_i_abcpdf;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ec_ii_abcpdf;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $al_abcpdf;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $sp_abcpdf;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ec_i_abcp;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ec_ii_abcp;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $sp_abcp;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ec_i_retention_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ec_i_enr_suc_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ec_i_comp_suc_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ec_ii_retention_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ec_ii_enr_suc_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ec_ii_comp_suc_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $al_retention_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $al_enr_suc_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $al_comp_suc_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $sp_retention_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $sp_enr_suc_rate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $sp_comp_suc_rate;
+
+
+    // NCCBP form 12
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $a;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $b;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $c;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $d;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $f;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $p;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $w;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $total;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $a_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $b_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $c_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $p_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $d_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $f_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $w_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $withdrawal;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $completed;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $compl_succ;
+
+    //protected $enr_succ;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $anb;
+
+
+    // NCCBP form 13a
+
+    protected $empl_inst_pop;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $serv_ar_min;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $empl_tot_inst_min_pop;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $stud_tot_inst_min_pop;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $stud_inst_pop;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $perc_inst_min;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $perc_inst_min_empl;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $stud_inst_serv_ratio;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $empl_inst_serv_ratio;
+
+
+    // NCCBP form 13b:
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $pub_hs_spr_hs_grad;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $pub_hs_fall;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $priv_hs_spr_hs_grad;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $priv_hs_fall;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $tot_hs_spr_hs_grad;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $tot_tot_hs_fall;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pub_perc_enr;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $priv_perc_enr;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $tot_perc_enr;
+
+
+
     // NCCBP form 18:
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -841,8 +1153,6 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $test_ass_staff_ratio;
-
-
 
 
 

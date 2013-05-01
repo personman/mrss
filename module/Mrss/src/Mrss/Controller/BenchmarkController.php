@@ -16,13 +16,14 @@ class BenchmarkController extends AbstractActionController
             ->get('model.benchmarkGroup');
 
         return array(
-            'benchmarkGroups' => $benchmarkGroupModel->findAll()
+            'benchmarkGroups' => $benchmarkGroupModel->findAll(),
+            'yearsToShow' => range(2007, date('Y'))
         );
     }
 
     public function viewAction()
     {
-        $collegeIds = array(780, 782, 819, 884, 873, 931, 932, 1085, 1032);
+        $collegeIds = array(95, 96, 97, 98, 99, 100, 101, 102, 103);
 
         $benchmarkModel = $this->getServiceLocator()
             ->get('model.benchmark');

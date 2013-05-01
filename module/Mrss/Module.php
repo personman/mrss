@@ -13,6 +13,15 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        // Set up model injector
+        $sm = $e->getApplication()->getServiceManager();
+        $sm->get('em')
+            ->getEventManager()
+            ->addEventListener(
+                array(\Doctrine\ORM\Events::postLoad),
+                new \Mrss\Service\ModelInjector($sm)
+            );
     }
 
     public function getConfig()
