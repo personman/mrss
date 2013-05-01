@@ -71,7 +71,8 @@ class ImportController extends AbstractActionController
         if (empty($imports[$type])) {
             throw new \Exception("'$type' is an invalid import type.");
         }
-
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
         $import = $imports[$type];
 
         // Load the importer from the service manager

@@ -65,6 +65,8 @@
         <echo message="Starting PHP's built-in web server..." />
         <exec command="php -S localhost:8182 -t public/" spawn="true" />
         <echo message="Server running on localhost:8182." />
+        <exec command="whoami" outputProperty="behat.whoami" />
+        <echo message="As user: ${behat.whoami}" />
 
         <echo msg="Running Behat scenarios in ${project.basedir}" />
         <exec command="./bin/behat --format failed"  description="Behat"
