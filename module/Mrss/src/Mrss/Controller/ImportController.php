@@ -62,10 +62,8 @@ class ImportController extends AbstractActionController
             //throw new \Exception('Console requests only.');
         }
 
-        //return 'line ' . __LINE__ . "\n";
-
         if (is_null($type)) {
-            $type = $this->params('type');
+            $type = $this->params()->fromQuery('type');
         }
 
         $imports = $this->getImports();

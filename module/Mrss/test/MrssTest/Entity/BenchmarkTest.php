@@ -153,7 +153,8 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             'Mrss\Model\Benchmark',
             array('getCompletionPercentages')
         );
-        $benchmarkModelMock->expects ($this->once())
+
+        $benchmarkModelMock->expects($this->once())
             ->method('getCompletionPercentages')
             ->will($this->returnValue($percentages));
 
