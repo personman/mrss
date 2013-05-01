@@ -95,6 +95,15 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
 
         $this->import->setCollegeModel($collegeModelMock);
 
+        // Settings mock
+        $settingsMock = $this->getMock(
+            '\Mrss\Model\Setting',
+            array('setValueForIdentifier')
+        );
+
+        $this->import->setSettingModel($settingsMock);
+
+
         // Trigger the import itself
         $this->import->importColleges();
     }

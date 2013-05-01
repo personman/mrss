@@ -58,8 +58,15 @@ class ImportController extends AbstractActionController
      */
     public function backgroundAction($type = null)
     {
+        $this->disableQueryLogging();
+
+        //phpinfo(); die;
         if (!$this->getRequest() instanceof ConsoleRequest) {
             //throw new \Exception('Console requests only.');
+        }
+
+        if (is_null($type)) {
+            $type = $this->params('type');
         }
 
         if (is_null($type)) {
@@ -85,11 +92,15 @@ class ImportController extends AbstractActionController
             throw new \Exception("Method $method does not exist for importer.");
         }
 
-        // This is the actual import
-        if (!empty($import['argument'])) {
-            $importer->$method($import['argument']);
-        } else {
-            $importer->$method();
+        try {
+            // This is the actual import
+            if (!empty($import['argument'])) {
+                $importer->$method($import['argument']);
+            } else {
+                $importer->$method();
+            }
+        } catch (\Exception $e) {
+            throw $e;
         }
 
         return new JsonModel();
@@ -167,5 +178,15 @@ class ImportController extends AbstractActionController
     protected function getImports()
     {
         return $this->getServiceLocator()->get('import.nccbp')->getImports();
+    }
+
+    public function disableQueryLogging()
+    {
+        // Turn off query logging
+        $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
     }
 }

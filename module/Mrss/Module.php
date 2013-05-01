@@ -77,6 +77,10 @@ class Module
                     $studyModel = $sm->get('model.study');
                     $importer->setStudyModel($studyModel);
 
+                    // Inject settings
+                    $settingModel = $sm->get('model.setting');
+                    $importer->setSettingModel($settingModel);
+
                     return $importer;
                 },
                 // Perhaps there should be a generic model factory
@@ -120,6 +124,14 @@ class Module
                     $studyModel->setEntityManager($em);
 
                     return $studyModel;
+                },
+                'model.setting' => function ($sm) {
+                    $settingModel = new \Mrss\Model\Setting();
+                    $em = $sm->get('em');
+
+                    $settingModel->setEntityManager($em);
+
+                    return $settingModel;
                 },
                 'service.formBuilder' => function ($sm) {
                     $service = new \Mrss\Service\FormBuilder;

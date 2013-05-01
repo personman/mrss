@@ -59,8 +59,12 @@ class ImportNccbp
      */
     protected $studyModel;
 
-    protected $progressFile = "/tmp/nccbp-import-progress";
-    //protected $progressFile = "data/cache/nccbp-import-progress";
+    /**
+     * @var \Mrss\Model\Setting
+     */
+    protected $settingModel;
+
+    protected $importProgressPrefix = 'nccbp-import-';
 
     protected $type;
 
@@ -119,7 +123,9 @@ inner join node g on a.group_nid = g.nid";
         foreach ($result as $row) {
             $i++;
 
-            $this->saveProgress($i - 1);
+            if ($i % 20 == 0) {
+                $this->saveProgress($i - 1);
+            }
 
             $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
 
@@ -208,8 +214,9 @@ inner join node g on a.group_nid = g.nid";
     {
         $this->setType($table);
 
-        // This may take some time
-        set_time_limit(600);
+        // This may take some time (and RAM)
+        set_time_limit(1200);
+        ini_set('memory_limit', '256M');
 
         $query = "select n.title, y.field_data_entry_year_value as year, form.*
 from $table form
@@ -225,7 +232,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $i = 0;
         foreach ($result as $row) {
             $i++;
-            $this->saveProgress($i);
 
             $ipeds = $this->extractIpedsFromTitle($row['title']);
             $ipeds = $this->padIpeds($ipeds);
@@ -282,7 +288,9 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
             // Write to the db every 20 rows
             if ($i % 30 == 0) {
-                $this->entityManager->flush();
+                $this->saveProgress($i);
+                // SaveProgress triggers a flush.
+                //$this->entityManager->flush();
             }
         }
 
@@ -611,16 +619,27 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
      */
     public function getProgress($type)
     {
-        $filename = $this->progressFile . '-' . $type;
+        //$filename = $this->progressFile . '-' . $type;
 
-        if (file_exists($filename)) {
-            $statsJson = file_get_contents($filename);
-            $stats = Json::decode($statsJson, Json::TYPE_ARRAY);
+        //$session = new \Zend\Session\Container('nccbp');
+        //$stats = Json::decode($session->$type);
 
-            // If it's complete, delete the file
+        $stats = $this->getSettingModel()->getValueForIdentifier(
+            $this->importProgressPrefix . $type
+        );
+
+
+        if (!empty($stats)) {
+            $stats = Json::decode($stats, \Zend\Json\Json::TYPE_ARRAY);
+
+            // If it's complete, clear the progress
             if (isset($stats['processed']) && isset($stats['total']) &&
                 $stats['processed'] == $stats['total']) {
-                unlink($filename);
+
+                $this->getSettingModel()->setValueForIdentifier(
+                    $this->importProgressPrefix . $type,
+                    ''
+                );
             }
         } else {
             $stats = array('status' => 'no import running');
@@ -665,12 +684,20 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $this->stats['percentage'] = $percentage;
 
         // Write it to a file
-        $filename = $this->progressFile . '-' . $this->getType();
-        $result = file_put_contents($filename, Json::encode($this->stats));
+        //$filename = $this->progressFile . '-' . $this->getType();
+        //$result = file_put_contents($filename, Json::encode($this->stats));
 
-        if ($result === false) {
-            die('unable to write nccbp import progress file');
-        }
+        // Write to a session
+        //$session = new \Zend\Session\Container('nccbp');
+        //$type = $this->getType();
+        //$session->$type = Json::encode($this->stats);
+        //var_dump(Json::encode($this->stats)); die('saveProgress');
+
+        // Write it to the db
+        $this->getSettingModel()->setValueForIdentifier(
+            $this->importProgressPrefix . $this->getType(),
+            Json::encode($this->stats)
+        );
     }
 
     /**
@@ -790,5 +817,17 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getStudyModel()
     {
         return $this->studyModel;
+    }
+
+    public function setSettingModel($model)
+    {
+        $this->settingModel = $model;
+
+        return $this;
+    }
+
+    public function getSettingModel()
+    {
+        return $this->settingModel;
     }
 }
