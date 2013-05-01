@@ -84,7 +84,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedOut()
     {
-        $this->getSession()->visit("/user/logout");
+        $this->visit("/user/logout");
     }
 
 }
