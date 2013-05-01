@@ -129,7 +129,7 @@ inner join node g on a.group_nid = g.nid";
             // Doctrine ORM. We do still have the flush() call below.
 
             if (!empty($existingCollege)) {
-                // Skip this college as we've already imported it
+                // Skip this college as we've already imp   orted it
                 $this->stats['skipped']++;
 
                 continue;
@@ -173,6 +173,10 @@ inner join node g on a.group_nid = g.nid";
             'content_type_group_form8_dev_ret_succ', // 8
             'content_type_group_form9_dev_ret_succ_first_c', // 9
             'content_type_group_form10_career_comp', // 10
+            'content_type_group_form11_ret_succ_core', // 11
+            'content_type_group_form12_instw_cred_grad', // 12
+            'content_type_group_form13a_minority', // 13a
+            'content_type_group_form13b_hschool_grads', // 13b
             'content_type_group_form18_stud_serv_staff' // 18
         );
 

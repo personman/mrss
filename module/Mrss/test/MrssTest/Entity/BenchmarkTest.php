@@ -142,4 +142,24 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             $benchmark->getInputFilter()
         );
     }
+
+    public function testGetCompletionPercentage()
+    {
+        $benchmark = new Benchmark;
+
+        $percentages = array(2010 => 50);
+
+        $benchmarkModelMock = $this->getMock(
+            'Mrss\Model\Benchmark',
+            array('getCompletionPercentages')
+        );
+        $benchmarkModelMock->expects ($this->once())
+            ->method('getCompletionPercentages')
+            ->will($this->returnValue($percentages));
+
+        $benchmark->setBenchmarkModel($benchmarkModelMock);
+
+        $this->assertEquals(50, $benchmark->getCompletionPercentage(2010));
+        $this->assertEquals(null, $benchmark->getCompletionPercentage(2012));
+    }
 }

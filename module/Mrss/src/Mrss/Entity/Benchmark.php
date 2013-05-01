@@ -46,7 +46,6 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
     /**
      * @ORM\Column(type="integer")
-     * @Annotation\Exclude()
      */
     protected $sequence;
 
@@ -69,6 +68,9 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      * @ORM\Column(type="string", length=60)
      */
     protected $yearsAvailable;
+
+    protected $benchmarkModel;
+    protected $completionPercentages;
 
     /**
      * Construct the benchmark entity
@@ -187,6 +189,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return in_array($year, $available);
     }
 
+    public function setBenchmarkModel($model)
+    {
+        $this->benchmarkModel = $model;
+    }
+
     /**
      * Implement the FormElementProviderInterface
      *
@@ -237,5 +244,31 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         }
 
         return $this->inputFilter;
+    }
+
+    public function getCompletionPercentages()
+    {
+        if (empty($this->completionPercentages)) {
+            $this->completionPercentages = $this->benchmarkModel
+                ->getCompletionPercentages(
+                    $this->getDbColumn(),
+                    $this->getYearsAvailable()
+                );
+        }
+
+        return $this->completionPercentages;
+    }
+
+    public function getCompletionPercentage($year)
+    {
+        $years = $this->getCompletionPercentages();
+
+        if (!empty($years[$year])) {
+            $percentage = $years[$year];
+        } else {
+            $percentage = null;
+        }
+
+        return $percentage;
     }
 }

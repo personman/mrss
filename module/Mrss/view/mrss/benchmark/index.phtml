@@ -3,28 +3,61 @@
 <?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
     <h3><?= $benchmarkGroup->getName() ?></h3>
 
-    <ol>
+    <table class="table table-striped heatmap">
+        <thead>
+            <tr>
+                <th>Benchmark</th>
+                <th>Action</th>
+                <?php foreach ($this->yearsToShow as $year): ?>
+                    <th><?= $year ?></th>
+                <?php endforeach ?>
+            </tr>
+        </thead>
+        <tbody>
         <?php foreach ($benchmarkGroup->getBenchmarks() as $benchmark): ?>
-            <li>
-                <a href="<?= $this->url(
-                    'general',
-                    array(
-                        'controller' => 'benchmarks',
-                        'action' => 'view',
-                        'id' => $benchmark->getId()
-                    )
-                ) ?>">
-                    <?= $benchmark->getName() ?>
-                </a>
-                (<a href="<?= $this->url(
-                    'general',
-                    array(
-                        'controller' => 'benchmarks',
-                        'action' => 'edit',
-                        'id' => $benchmark->getId()
-                    )
-                ) ?>">Edit</a>)
-            </li>
+            <tr>
+                <td>
+                    <a href="<?= $this->url(
+                        'general',
+                        array(
+                            'controller' => 'benchmarks',
+                            'action' => 'view',
+                            'id' => $benchmark->getId()
+                        )
+                    ) ?>">
+                        <?= $benchmark->getName() ?>
+                    </a>
+                </td>
+
+                <td>
+                    <a href="<?= $this->url(
+                        'general',
+                        array(
+                            'controller' => 'benchmarks',
+                            'action' => 'edit',
+                            'id' => $benchmark->getId()
+                        )
+                    ) ?>">Edit</a>
+                </td>
+
+                <?php foreach ($this->yearsToShow as $year): ?>
+                    <td>
+                        <?php if ($benchmark->isAvailableForYear($year)): ?>
+                            <? $percentage = round(
+                                $benchmark->getCompletionPercentage($year)
+                            )?>
+                            <div
+                                class="heatmapCell"
+                                style="opacity: <?= $percentage / 100 ?>">
+                                <?= $percentage ?>%
+                            </div>
+                        <?php else: ?>
+                            <div style="color:#ccc; text-align:center">N/A</div>
+                        <?php endif ?>
+                    </td>
+                <?php endforeach ?>
+            </tr>
         <?php endforeach ?>
-    </ol>
+        </tbody>
+    </table>
 <?php endforeach ?>
