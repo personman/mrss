@@ -7,6 +7,7 @@ namespace MrssTest\Service;
 use Mrss\Service\ImportNccbp;
 use PHPUnit_Framework_TestCase;
 use Zend\Debug\Debug;
+use Zend\Json\Json;
 
 /**
  * Class ImportNccbp
@@ -204,6 +205,87 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
         $this->import->setTableProcessed('placeholder');
         $stats = $this->import->getStats();
         $this->assertEquals('placeholder', $stats['tableProcessed']);
+    }
+
+    public function testGetProgress()
+    {
+        $stats = array(
+            'test' => 'test2',
+            'processed' => 20,
+            'total' => 20
+        );
+        $statsJson = Json::encode($stats);
+
+        $settingModelMock = $this->getMock(
+            'Mrss\Model\Setting',
+            array('getValueForIdentifier', 'setValueForIdentifier')
+        );
+
+        $settingModelMock->expects($this->once())
+            ->method('getValueForIdentifier')
+            ->will($this->returnValue($statsJson));
+
+        $settingModelMock->expects($this->once())
+            ->method('setValueForIdentifier');
+
+        $this->import->setSettingModel($settingModelMock);
+
+        // Get the progress
+        $result = $this->import->getProgress('some-type');
+
+        $this->assertEquals($stats, $result);
+    }
+
+    public function testGetProgressNoImportRunning()
+    {
+        // Return null instead of a setting entity
+        $settingModelMock = $this->getMock(
+            'Mrss\Model\Setting',
+            array('getValueForIdentifier')
+        );
+        $settingModelMock->expects($this->once())
+            ->method('getValueForIdentifier')
+            ->will($this->returnValue(null));
+
+        $this->import->setSettingModel($settingModelMock);
+
+        $expected = array('status' => 'no import running');
+        $result = $this->import->getProgress('some-type');
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testGetStudy()
+    {
+        // Mock the study model and return null
+        $studyModelMock = $this->getMock(
+            'Mrss\Model\Study',
+            array('find', 'save')
+        );
+        $studyModelMock->expects($this->once())
+            ->method('find')
+            ->will($this->returnValue(null));
+        $studyModelMock->expects($this->once())
+            ->method('save');
+
+        $this->import->setStudyModel($studyModelMock);
+
+        $study = $this->import->getStudy();
+        $this->assertInstanceOf('Mrss\Entity\Study', $study);
+    }
+
+    public function testSetBenchmarkGroupModel()
+    {
+        $benchmarkGroupModelMock = $this->getMock(
+            'Mrss\Model\BenchmarkGroup'
+        );
+
+        $this->import->setBenchmarkGroupModel($benchmarkGroupModelMock);
+
+        $this->assertSame(
+            $benchmarkGroupModelMock,
+            $this->import->getBenchmarkGroupModel()
+        );
     }
 
     /**
