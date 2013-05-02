@@ -115,4 +115,112 @@ class BenchmarkeTest extends ModelTestAbstract
 
         $this->model->save(new \Mrss\Entity\Benchmark);
     }
+
+    public function testGetCompletionPercentagesWithNoYear()
+    {
+        $this->assertEquals(
+            array(),
+            $this->model->getCompletionPercentages('something', null)
+        );
+
+    }
+
+    public function testGetCompletionPercentage()
+    {
+        $percentages = array(
+            array(
+                'year' => 2013,
+                'percentage' => 50.1
+            )
+        );
+
+        $statementMock = $this->getMock(
+            'Doctrine\DBAL\Statement',
+            array('fetchAll'),
+            array(),
+            '',
+            false
+        );
+        $statementMock->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->returnValue($percentages));
+
+        $queryBuilderMock = $this->getMock(
+            'Doctrine\DBAL\Query\QueryBuilder',
+            array('select', 'from', 'where', 'groupBy', 'execute'),
+            array(),
+            '',
+            false
+        );
+        $queryBuilderMock->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue($statementMock));
+
+        $connectionMock = $this->getMock(
+            'Doctrine\DBAL\Connection',
+            array('createQueryBuilder'),
+            array(),
+            '',
+            false
+        );
+        $connectionMock->expects($this->once())
+            ->method('createQueryBuilder')
+            ->will($this->returnValue($queryBuilderMock));
+
+        $emMock = $this->getEmMock(array('getConnection'));
+        $emMock->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock));
+
+        $this->model->setEntityManager($emMock);
+
+        $result =$this->model->getCompletionPercentages('someColumn', array(2013));
+        $this->assertEquals(array('2013' => 50.1), $result);
+    }
+
+    public function testGetCompletionPercentageWithException()
+    {
+        $statementMock = $this->getMock(
+            'Doctrine\DBAL\Statement',
+            array('fetchAll'),
+            array(),
+            '',
+            false
+        );
+        $statementMock->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->throwException(new \Exception()));
+
+        $queryBuilderMock = $this->getMock(
+            'Doctrine\DBAL\Query\QueryBuilder',
+            array('select', 'from', 'where', 'groupBy', 'execute'),
+            array(),
+            '',
+            false
+        );
+        $queryBuilderMock->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue($statementMock));
+
+        $connectionMock = $this->getMock(
+            'Doctrine\DBAL\Connection',
+            array('createQueryBuilder'),
+            array(),
+            '',
+            false
+        );
+        $connectionMock->expects($this->once())
+            ->method('createQueryBuilder')
+            ->will($this->returnValue($queryBuilderMock));
+
+        $emMock = $this->getEmMock(array('getConnection'));
+        $emMock->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock));
+
+        $this->model->setEntityManager($emMock);
+
+        $result =$this->model->getCompletionPercentages('someColumn', array(2013));
+        $this->assertEquals(array(), $result);
+    }
 }

@@ -31,7 +31,7 @@ class Setting
 
     public function getIdentifier()
     {
-        return $this->identifiery;
+        return $this->identifier;
     }
 
     public function setValue($value)

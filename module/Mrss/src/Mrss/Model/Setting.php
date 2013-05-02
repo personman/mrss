@@ -50,20 +50,6 @@ class Setting extends AbstractModel
         return $this->getRepository()->findOneBy(array('identifier' => $identifier));
     }
 
-    public function find($id)
-    {
-        return $this->getRepository()->find($id);
-    }
-
-    /**
-     * Find all colleges, ordered by name
-     */
-    public function findAll()
-    {
-        $c = $this->getRepository()->findBy(array(), array('name' => 'ASC'));
-        return $c;
-    }
-
     public function save(SettingEntity $setting)
     {
         $this->getEntityManager()->persist($setting);
