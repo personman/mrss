@@ -42,7 +42,8 @@
 
     <target name="phpunit">
         <echo message="Starting PHPUnit..." />
-        <exec command="phpunit" passthru="false" outputProperty="phpunit.results"
+        <exec command="bin/phpunit" passthru="false"
+              outputProperty="phpunit.results"
             />
 
 
