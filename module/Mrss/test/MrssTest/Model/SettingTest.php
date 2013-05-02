@@ -155,5 +155,4 @@ class SettingTest extends ModelTestAbstract
 
         $this->model->save(new \Mrss\Entity\Setting);
     }
-
 }
