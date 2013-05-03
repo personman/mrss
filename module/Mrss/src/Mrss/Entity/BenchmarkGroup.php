@@ -124,21 +124,49 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\Benchmark[]
+     */
     public function getBenchmarks()
     {
         return $this->benchmarks;
     }
 
-    // Implement the FormFieldSetProvider interface so this can be turned
-    // into a fieldset.
+    /**
+     * Implement the FormFieldSetProvider interface so this can be turned
+     * into a fieldset.
+     *
+     * @param $year
+     * @return array
+     */
     public function getElements($year)
     {
-        return $this->getBenchmarksForYear($year);
+        return $this->getNonComputedBenchmarksForYear($year);
     }
 
     public function getLabel()
     {
         return $this->getName();
+    }
+
+    /**
+     * Leave out computed benchmarks, we don't need to show them in the form
+     *
+     * @param $year
+     * @return \Mrss\Entity\Benchmark[]
+     */
+    public function getNonComputedBenchmarksForYear($year)
+    {
+        $benchmarks = $this->getBenchmarksForYear($year);
+        $nonComputedBenchmarks = array();
+
+        foreach ($benchmarks as $benchmark) {
+            if ($benchmark->getInputType() != 'computed') {
+                $nonComputedBenchmarks[] = $benchmark;
+            }
+        }
+
+        return $nonComputedBenchmarks;
     }
 
     public function setStudy(Study $study)
@@ -153,6 +181,10 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
         return $this->study;
     }
 
+    /**
+     * @param $year
+     * @return \Mrss\Entity\Benchmark[]
+     */
     public function getBenchmarksForYear($year)
     {
         $benchmarksForYear = array();
