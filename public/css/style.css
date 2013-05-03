@@ -812,6 +812,10 @@ form.form-horizontal .controls {
     padding: 1px
 }
 
+.heatmapCellBlue {
+    background-color: blue;
+}
+
 .table.heatmap td {
     padding: 0;
 }
