@@ -78,4 +78,13 @@ Feature: Subscribe
     And I should see "Data Confidentiality and Use Agreement"
     And I should see "I agree to the terms above"
     And I should see "I hereby authorize my institution"
+    When I check "agree"
+    And I check "authorization"
+    And I fill in "Electronic Signature" with "John Doe"
+    And I fill in "Title" with "Chief Tester"
+    And I press "Continue"
+    Then I should see "Select Payment Type"
+    And I should see "Pay by Credit Card"
+    And I should see "Request an Invoice"
+    And I should see "Paid by System"
 

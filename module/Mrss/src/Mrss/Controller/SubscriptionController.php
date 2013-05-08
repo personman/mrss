@@ -2,6 +2,9 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Form\Payment;
+use Mrss\Form\SubscriptionInvoice;
+use Mrss\Form\SubscriptionSystem;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Form\Form;
 use Zend\Form\Fieldset;
@@ -54,6 +57,8 @@ class SubscriptionController extends AbstractActionController
      */
     public function agreementAction()
     {
+        // @todo: Confirm that the session data is present
+
         $message = null;
 
         $form = new Form('agreement');
@@ -83,8 +88,8 @@ class SubscriptionController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                var_dump($form->getData());
-                die('is valid');
+                // Once they've agreed to the terms, redirect to the payment page
+                $this->redirect()->toRoute('subscribe/payment');
             } else {
                 $message = "Please correct the problems below.";
             }
@@ -99,7 +104,17 @@ class SubscriptionController extends AbstractActionController
 
     public function paymentAction()
     {
+        // @todo: Confirm that the session data is present
 
+        $ccForm = new Payment();
+        $invoiceForm = new SubscriptionInvoice();
+        $systemForm = new SubscriptionSystem();
+
+        return array(
+            'ccForm' => $ccForm,
+            'invoiceForm' => $invoiceForm,
+            'systemForm' => $systemForm
+        );
     }
 
     public function saveSubscriptionToSession($subscriptionForm)
