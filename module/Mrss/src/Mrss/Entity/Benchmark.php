@@ -240,6 +240,21 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 )
             );
 
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'dbColumn',
+                        'required' => true,
+                        'filters' => array(
+                            array('name' => 'StringTrim')
+                        ),
+                        'validators' => array(
+                            array('name' => 'NotEmpty')
+                        )
+                    )
+                )
+            );
+
             $this->inputFilter = $inputFilter;
         }
 

@@ -34,7 +34,44 @@ class User implements UserInterface
      * @ORM\Column(type="string", nullable=true)
      * @var string
      */
+    protected $prefix;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $firstName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+
+    protected $lastName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
     protected $displayName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $title;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $phone;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $extension;
 
     /**
      * @ORM\Column(type="string")

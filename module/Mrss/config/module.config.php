@@ -20,6 +20,17 @@ return array(
                     )
                 )
             ),
+            'subscribe' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'options' => array(
+                    'route' => '/subscribe',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'add'
+                    )
+                )
+            ),
             'college' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -149,6 +160,7 @@ return array(
             'colleges' => 'Mrss\Controller\CollegeController',
             'observations' => 'Mrss\Controller\ObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',
+            'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController'
         ),
     ),

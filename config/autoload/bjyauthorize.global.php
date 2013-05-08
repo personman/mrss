@@ -45,6 +45,10 @@ return array(
                     'roles' => array('guest')
                 ),
                 array(
+                    'controller' => 'subscription',
+                    'roles' => array('guest')
+                ),
+                array(
                     'controller' => 'zfcuser',
                     'roles' => array('guest')
                 ),

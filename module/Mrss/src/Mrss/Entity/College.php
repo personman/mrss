@@ -31,6 +31,11 @@ class College
     protected $address;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $address2;
+
+    /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
     protected $city;
@@ -62,6 +67,12 @@ class College
     protected $observations;
 
     /**
+     * @ORM\OneToMany(targetEntity="Subscription", mappedBy="college")
+     * @ORM\OrderBy({"year" = "ASC"})
+     */
+    protected $subscriptions;
+
+    /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="college")
      */
     protected $users;
@@ -73,6 +84,7 @@ class College
     public function __construct()
     {
         $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
