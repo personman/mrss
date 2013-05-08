@@ -4,7 +4,10 @@ namespace Mrss\Form\Fieldset;
 
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\Validator;
+use Zend\Validator\EmailAddress as EmailValidator;
+use Zend\Validator\EmailAddress;
+use Zend\Validator\Identical;
+use Zend\Validator\Regex;
 
 class User extends Fieldset implements InputFilterProviderInterface
 {
@@ -92,8 +95,8 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'options' => array(
                     'label' => 'E-Mail Address'
                 ),
-                'validators' => array(
-                    new Validator\EmailAddress()
+                'attributes' => array(
+                    'id' => $name . '-email'
                 )
             )
         );
@@ -106,8 +109,8 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'options' => array(
                     'label' => 'Confirm E-Mail Address'
                 ),
-                'validators' => array(
-                    new Validator\EmailAddress()
+                'attributes' => array(
+                    'id' => $name . '-emailConfirm'
                 )
             )
         );
@@ -121,6 +124,12 @@ class User extends Fieldset implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
+        $emailConfirmValidator = new Identical('email');
+        $emailConfirmValidator->setMessage(
+            'E-Mail addresses do not match',
+            Identical::NOT_SAME
+        );
+
         return array(
             'prefix' => array(
                 'required' => true
@@ -138,10 +147,17 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'required' => true
             ),
             'email' => array(
-                'required' => true
+                'required' => true,
+                'validators' => array(
+                    new EmailValidator()
+                )
             ),
             'emailConfirm' => array(
-                'required' => true
+                'required' => true,
+                'validators' => array(
+                    new EmailValidator(),
+                    $emailConfirmValidator
+                )
             )
         );
     }

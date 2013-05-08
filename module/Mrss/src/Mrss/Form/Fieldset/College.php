@@ -4,7 +4,6 @@ namespace Mrss\Form\Fieldset;
 
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\I18n\Validator\PostCode;
 use Zend\Validator\Regex;
 
 class College extends Fieldset implements InputFilterProviderInterface
@@ -21,6 +20,9 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Name of Institution'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-name'
                 )
             )
         );
@@ -31,6 +33,9 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'IPEDS Unit ID'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-ipdeds'
                 )
             )
         );
@@ -41,6 +46,9 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Address'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-address'
                 )
             )
         );
@@ -51,6 +59,9 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Address 2'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-address2'
                 )
             )
         );
@@ -62,6 +73,9 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'options' => array(
                     'label' => 'City'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-city'
                 )
             )
         );
@@ -75,7 +89,8 @@ class College extends Fieldset implements InputFilterProviderInterface
                     'label' => 'State'
                 ),
                 'attributes' => array(
-                    'options' => $this->getStates()
+                    'options' => $this->getStates(),
+                    'id' => 'institution-state'
                 )
             )
         );
@@ -87,6 +102,9 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'options' => array(
                     'label' => 'Zip Code'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-zip'
                 )
             )
         );
