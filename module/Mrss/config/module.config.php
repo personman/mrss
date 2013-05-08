@@ -29,6 +29,27 @@ return array(
                         'controller' => 'subscription',
                         'action' => 'add'
                     )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'user-agreement' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/user-agreement',
+                            'defaults' => array(
+                                'action' => 'agreement'
+                            )
+                        )
+                    ),
+                    'payment' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/payment',
+                            'defaults' => array(
+                                'action' => 'payment'
+                            )
+                        )
+                    )
                 )
             ),
             'college' => array(
