@@ -69,10 +69,13 @@ class College extends Fieldset implements InputFilterProviderInterface
         $this->add(
             array(
                 'name' => 'state',
-                'type' => 'Text',
+                'type' => 'Select',
                 'required' => true,
                 'options' => array(
                     'label' => 'State'
+                ),
+                'attributes' => array(
+                    'options' => $this->getStates()
                 )
             )
         );
@@ -91,10 +94,16 @@ class College extends Fieldset implements InputFilterProviderInterface
 
     public function getInputFilterSpecification()
     {
-        //$validator = new PostCode('en_US');
+        $ipedsValidator = new Regex(array('pattern' => '/^\d{6}$/'));
+        $ipedsValidator->setMessage(
+            'Use the format "123456"',
+            Regex::NOT_MATCH
+        );
+
+
         $zipValidator = new Regex(array('pattern' => '/^\d{5}(?:[-\s]\d{4})?$/'));
         $zipValidator->setMessage(
-            'Zip code should be in the format "12345" or "12345-6789"',
+            'Use the format "12345" or "12345-6789"',
             Regex::NOT_MATCH
         );
 
@@ -103,7 +112,10 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'required' => true
             ),
             'ipeds' => array(
-                'required' => true
+                'required' => true,
+                'validators' => array(
+                    $ipedsValidator
+                )
             ),
             'address' => array(
                 'required' => true
@@ -122,6 +134,64 @@ class College extends Fieldset implements InputFilterProviderInterface
                     $zipValidator
                 )
             )
+        );
+    }
+    
+    public function getStates()
+    {
+        return array(
+            '' => 'Select State',
+            'AL' => 'Alabama',
+            'AK' => 'Alaska',
+            'AZ' => 'Arizona',
+            'AR' => 'Arkansas',
+            'CA' => 'California',
+            'CO' => 'Colorado',
+            'CT' => 'Connecticut',
+            'DE' => 'Delaware',
+            'DC' => 'District Of Columbia',
+            'FL' => 'Florida',
+            'GA' => 'Georgia',
+            'HI' => 'Hawaii',
+            'ID' => 'Idaho',
+            'IL' => 'Illinois',
+            'IN' => 'Indiana',
+            'IA' => 'Iowa',
+            'KS' => 'Kansas',
+            'KY' => 'Kentucky',
+            'LA' => 'Louisiana',
+            'ME' => 'Maine',
+            'MD' => 'Maryland',
+            'MA' => 'Massachusetts',
+            'MI' => 'Michigan',
+            'MN' => 'Minnesota',
+            'MS' => 'Mississippi',
+            'MO' => 'Missouri',
+            'MT' => 'Montana',
+            'NE' => 'Nebraska',
+            'NV' => 'Nevada',
+            'NH' => 'New Hampshire',
+            'NJ' => 'New Jersey',
+            'NM' => 'New Mexico',
+            'NY' => 'New York',
+            'NC' => 'North Carolina',
+            'ND' => 'North Dakota',
+            'OH' => 'Ohio',
+            'OK' => 'Oklahoma',
+            'OR' => 'Oregon',
+            'PA' => 'Pennsylvania',
+            'RI' => 'Rhode Island',
+            'SC' => 'South Carolina',
+            'SD' => 'South Dakota',
+            'TN' => 'Tennessee',
+            'TX' => 'Texas',
+            'UT' => 'Utah',
+            'VT' => 'Vermont',
+            'VA' => 'Virginia',
+            'WA' => 'Washington',
+            'WV' => 'West Virginia',
+            'WI' => 'Wisconsin',
+            'WY' => 'Wyoming'
         );
     }
 }
