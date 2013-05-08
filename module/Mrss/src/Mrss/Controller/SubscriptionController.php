@@ -8,7 +8,6 @@ use Zend\Form\Fieldset;
 use Mrss\Form\Subscription as SubscriptionForm;
 use Mrss\Form\Fieldset\Agreement;
 
-
 class SubscriptionController extends AbstractActionController
 {
     public function addAction()
