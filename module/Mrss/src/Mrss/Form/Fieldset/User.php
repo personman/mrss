@@ -23,6 +23,7 @@ class User extends Fieldset implements InputFilterProviderInterface
                     'label' => 'Prefix'
                 ),
                 'attributes' => array(
+                    'id' => $name . '-prefix',
                     'options' => array(
                         '' => 'Select Prefix',
                         'Dr.' => 'Dr.',
@@ -40,6 +41,9 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'options' => array(
                     'label' => 'First Name'
+                ),
+                'attributes' => array(
+                    'id' => $name . '-firstName'
                 )
             )
         );
@@ -51,6 +55,9 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'options' => array(
                     'label' => 'Last Name'
+                ),
+                'attributes' => array(
+                    'id' => $name . '-lastName'
                 )
             )
         );
@@ -62,6 +69,9 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'options' => array(
                     'label' => 'Title'
+                ),
+                'attributes' => array(
+                    'id' => $name . '-title'
                 )
             )
         );
@@ -73,6 +83,9 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'options' => array(
                     'label' => 'Phone'
+                ),
+                'attributes' => array(
+                    'id' => $name . '-phone'
                 )
             )
         );
@@ -83,6 +96,9 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Extension'
+                ),
+                'attributes' => array(
+                    'id' => $name . '-extension'
                 )
             )
         );

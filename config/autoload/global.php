@@ -19,6 +19,10 @@ return array(
                 'uri' => '/'
             ),
             array(
+                'label' => 'Subscribe',
+                'uri' => '/subscribe'
+            ),
+            array(
                 'label' => 'Studies',
                 'uri' => '/studies'
             ),
