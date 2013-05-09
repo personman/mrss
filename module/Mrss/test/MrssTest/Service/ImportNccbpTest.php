@@ -257,21 +257,19 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
 
     public function testGetStudy()
     {
-        // Mock the study model and return null
+        // Mock the study model and return placeholder
         $studyModelMock = $this->getMock(
             'Mrss\Model\Study',
             array('find', 'save')
         );
         $studyModelMock->expects($this->once())
             ->method('find')
-            ->will($this->returnValue(null));
-        $studyModelMock->expects($this->once())
-            ->method('save');
+            ->will($this->returnValue('placeholder'));
 
         $this->import->setStudyModel($studyModelMock);
 
         $study = $this->import->getStudy();
-        $this->assertInstanceOf('Mrss\Entity\Study', $study);
+        $this->assertEquals('placeholder', $study);
     }
 
     public function testSetBenchmarkGroupModel()
