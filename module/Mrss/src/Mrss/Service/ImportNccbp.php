@@ -461,12 +461,13 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     {
         $study = $this->getStudyModel()->find(1);
 
+        /* This is handled in a migration now
         if (empty($study)) {
             $study = new Study;
             $study->setName('NCCBP');
             $study->setDescription('National Community College Benchmark Project');
             $this->getStudyModel()->save($study);
-        }
+        }*/
 
         return $study;
     }
