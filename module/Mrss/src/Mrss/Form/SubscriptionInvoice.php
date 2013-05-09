@@ -13,6 +13,18 @@ class SubscriptionInvoice extends AbstractForm
         // Call the parent constructor
         parent::__construct('subscriptionInvoice');
 
+        $this->setAttribute('method', 'post');
+
+        $this->add(
+            array(
+                'name' => 'paymentType',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'value' => 'invoice'
+                )
+            )
+        );
+
 
         // Submit button
         $this->add(

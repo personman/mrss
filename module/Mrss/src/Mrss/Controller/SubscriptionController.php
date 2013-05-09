@@ -11,6 +11,7 @@ use Zend\Form\Fieldset;
 use Zend\Session\Container;
 use Mrss\Form\Subscription as SubscriptionForm;
 use Mrss\Form\Fieldset\Agreement;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 /**
  * Class SubscriptionController
@@ -21,6 +22,8 @@ use Mrss\Form\Fieldset\Agreement;
  */
 class SubscriptionController extends AbstractActionController
 {
+    protected $sessionContainer;
+
     public function addAction()
     {
         $form = new SubscriptionForm;
@@ -57,7 +60,7 @@ class SubscriptionController extends AbstractActionController
      */
     public function agreementAction()
     {
-        // @todo: Confirm that the session data is present
+        $this->checkSubscriptionIsInProgress();
 
         $message = null;
 
@@ -104,11 +107,17 @@ class SubscriptionController extends AbstractActionController
 
     public function paymentAction()
     {
-        // @todo: Confirm that the session data is present
+        $this->checkSubscriptionIsInProgress();
 
         $ccForm = new Payment();
+
         $invoiceForm = new SubscriptionInvoice();
+        $invoiceForm->setAttribute('action', '/subscribe/invoice');
+
         $systemForm = new SubscriptionSystem();
+        //$systemForm->setAttribute('action', '/subscribe/complete');
+
+
 
         return array(
             'ccForm' => $ccForm,
@@ -117,17 +126,231 @@ class SubscriptionController extends AbstractActionController
         );
     }
 
+    public function completeAction()
+    {
+
+    }
+
+    public function invoiceAction()
+    {
+        $this->checkSubscriptionIsInProgress();
+
+        $invoiceForm = new SubscriptionInvoice();
+
+        // Handle form submissions
+        if ($this->getRequest()->isPost()) {
+            $invoiceForm->setData($this->params()->fromPost());
+
+            if ($invoiceForm->isValid()) {
+                $this->completeSubscription(
+                    $this->getSessionContainer()->subscribeForm,
+                    $invoiceForm->getData()
+                );
+
+                // @todo: send invoice email like NCCCPP
+
+                $this->flashMessenger()->addSuccessMessage(
+                    "Thank you for subscribing. "
+                );
+
+                $this->redirect()->toUrl('/');
+            }
+        }
+    }
+
+    public function checkSubscriptionIsInProgress()
+    {
+        if (!$sub = $this->getSubscriptionFromSession()) {
+            throw new \Exception('Subscription not present in session.');
+        }
+    }
+
     public function saveSubscriptionToSession($subscriptionForm)
     {
-        $container = new Container('subscribe');
-        $container->subscribeForm = $subscriptionForm;
+        $this->getSessionContainer()->subscribeForm = $subscriptionForm;
 
     }
 
     public function getSubscriptionFromSession()
     {
-        $container = new Container('subscribe');
+        return $this->getSessionContainer()->subscribeForm;
+    }
 
-        return $container->subscribeForm;
+    public function getSessionContainer()
+    {
+        if (empty($this->sessionContainer)) {
+            $this->sessionContainer = new Container('subscribe');
+        }
+
+        return $this->sessionContainer;
+    }
+
+    /**
+     * Complete the subscription, creating college and users as needed
+     *
+     * @param $subscriptionForm
+     * @param $paymentForm
+     */
+    public function completeSubscription($subscriptionForm, $paymentForm)
+    {
+        // Create or fetch the college
+        $institutionForm = $subscriptionForm['institution'];
+        $college = $this->createOrUpdateCollege($institutionForm);
+
+        // Create the observation
+        $observation = $this->createOrUpdateObservation($college);
+
+        // Create the subscription record with payment info
+        $this->createOrUpdateSubscription($paymentForm, $college, $observation);
+
+        // Create the users, if needed
+        // @todo: set different roles
+        
+        // Admin first
+        $adminContactForm = $subscriptionForm['adminContact'];
+        $this->createOrUpdateUser($adminContactForm, 'user', $college);
+
+        // Now data user
+        $dataContactForm = $subscriptionForm['dataContact'];
+        $this->createOrUpdateUser($dataContactForm, 'user', $college);
+
+        // Save it all to the db
+        $this->getServiceLocator()->get('em')->flush();
+    }
+
+    protected function getCurrentYear()
+    {
+        return 2013;
+    }
+
+    public function createOrUpdateCollege($institutionForm)
+    {
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $college = $collegeModel->findOneByIpeds($institutionForm['ipeds']);
+
+        if (empty($college)) {
+            $college = new \Mrss\Entity\College;
+        }
+
+        $hydrator = new DoctrineHydrator(
+            $this->getServiceLocator()->get('em'),
+            'Mrss\Entity\College'
+        );
+        $college = $hydrator->hydrate($institutionForm, $college);
+        $collegeModel->save($college);
+
+        return $college;
+    }
+
+    public function createOrUpdateUser($data, $role, $college)
+    {
+        $email = $data['email'];
+
+        /** @var \Mrss\Model\User $userModel */
+        $userModel = $this->getServiceLocator()->get('model.user');
+
+        $user = $userModel->findOneByEmail($email);
+
+        if (empty($user)) {
+            $user = new \Mrss\Entity\User;
+            $createUser = true;
+        }
+
+        $user->setCollege($college);
+        $user->setEmail($email);
+        $user->setPrefix($data['prefix']);
+        $user->setFirstName($data['firstName']);
+        $user->setLastName($data['lastName']);
+        $user->setTitle($data['title']);
+        $user->setPhone($data['phone']);
+        $user->setExtension($data['extension']);
+        $user->setPassword('test');
+        
+        // @todo: set role
+        
+
+        $userModel->save($user);
+
+        if (!empty($createUser)) {
+            // @todo: Send out email with one-time login link
+        }
+
+        return $user;
+    }
+
+    public function createOrUpdateSubscription($paymentForm, $college, $observation)
+    {
+        // Payment method
+        $method = $paymentForm['paymentType'];
+
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        // Make sure they're not already subscribed.
+        $subscription = $subscriptionModel->findOne(
+            $this->getCurrentYear(),
+            $college->getId(),
+            $this->getStudy()->getId()
+        );
+
+        if (empty($subscription)) {
+            $subscription = new \Mrss\Entity\Subscription();
+        }
+
+        $subscription->setYear($this->getCurrentYear());
+        $subscription->setStatus('complete');
+        $subscription->setCollege($college);
+        $subscription->setPaymentMethod($method);
+        $subscription->setObservation($observation);
+
+        $subscriptionModel->save($subscription);
+
+        return $subscription;
+    }
+    
+    public function createOrUpdateObservation(\Mrss\Entity\College $college)
+    {
+        /** @var \Mrss\Model\Observation $observationModel */
+        $observationModel = $this->getServiceLocator()->get('model.observation');
+
+        $observation = $observationModel->findOne(
+            $college->getId(),
+            $this->getCurrentYear()
+        );
+
+        if (empty($observation)) {
+            $observation = new \Mrss\Entity\Observation;
+        }
+
+        $observation->setYear($this->getCurrentYear());
+        $observation->setCollege($college);
+
+        $observationModel->save($observation);
+
+        return $observation;
+    }
+
+
+    /**
+     * Get the study that they're subscribing to
+     *
+     * @throws \Exception
+     * @return \Mrss\Entity\Study
+     */
+    protected function getStudy()
+    {
+        // @todo: make this dynamic
+        $studyId = 1;
+
+        /** @var \Mrss\Model\Study $studyModel */
+        $studyModel = $this->getServiceLocator()->get('model.study');
+        $study = $studyModel->find($studyId);
+
+        if (empty($study)) {
+            throw new \Exception("Study with id $studyId not found.");
+        }
+
+        return $study;
     }
 }

@@ -85,6 +85,14 @@ class Module
                 },
                 // Perhaps there should be a generic model factory
                 // That injects the em
+                'model.user' => function ($sm) {
+                    $userModel = new \Mrss\Model\User();
+                    $em = $sm->get('em');
+
+                    $userModel->setEntityManager($em);
+
+                    return $userModel;
+                },
                 'model.college' => function ($sm) {
                     $collegeModel = new \Mrss\Model\College;
                     $em = $sm->get('em');
@@ -124,6 +132,14 @@ class Module
                     $studyModel->setEntityManager($em);
 
                     return $studyModel;
+                },
+                'model.subscription' => function ($sm) {
+                    $subscriptionModel = new \Mrss\Model\Subscription();
+                    $em = $sm->get('em');
+
+                    $subscriptionModel->setEntityManager($em);
+
+                    return $subscriptionModel;
                 },
                 'model.setting' => function ($sm) {
                     $settingModel = new \Mrss\Model\Setting();

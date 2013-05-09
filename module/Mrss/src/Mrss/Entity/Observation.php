@@ -24,7 +24,7 @@ class Observation
     protected $year;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $cipCode;
 

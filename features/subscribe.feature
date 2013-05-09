@@ -87,4 +87,7 @@ Feature: Subscribe
     And I should see "Pay by Credit Card"
     And I should see "Request an Invoice"
     And I should see "Paid by System"
+    When I press "Request an Invoice"
+    Then I should be on "/"
+    And I should see "Thank you for subscribing"
 

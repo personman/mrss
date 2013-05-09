@@ -49,6 +49,15 @@ return array(
                                 'action' => 'payment'
                             )
                         )
+                    ),
+                    'invoice' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/invoice',
+                            'defaults' => array(
+                                'action' => 'invoice'
+                            )
+                        )
                     )
                 )
             ),

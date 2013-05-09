@@ -221,4 +221,88 @@ class User implements UserInterface
         $this->state = $state;
         return $this;
     }
+
+    public function setCollege(\Mrss\Entity\College $college)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
+    public function getCollege()
+    {
+        return $this->college;
+    }
+
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    public function setExtension($extension)
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
+    public function getExtension()
+    {
+        return $this->extension;
+    }
 }

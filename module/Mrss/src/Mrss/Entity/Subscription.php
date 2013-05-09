@@ -3,6 +3,8 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mrss\Entity\College;
+use Mrss\Entity\Study;
 
 /** @ORM\Entity
  * @ORM\Table(name="subscriptions")
@@ -31,6 +33,11 @@ class Subscription
      * @ORM\ManyToOne(targetEntity="College", inversedBy="subscriptions")
      */
     protected $college;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Study")
+     */
+    protected $study;
 
     /**
      * @ORM\OneToOne(targetEntity="Observation")
@@ -96,4 +103,95 @@ class Subscription
      * @ORM\Column(type="string", nullable=true)
      */
     protected $paymentTransactionId;
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    public function setYear($year)
+    {
+        $this->year = $year;
+        
+        return $this;
+    }
+    
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * @param College $college
+     * @return $this
+     */
+    public function setCollege(College $college)
+    {
+        $this->college = $college;
+        
+        return $this;
+    }
+
+    /**
+     * @return College
+     */
+    public function getCollege()
+    {
+        return $this->college;
+    }
+
+    /**
+     * @param Study $study
+     * @return $this
+     */
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    /**
+     * @return Study
+     */
+    public function getStudy()
+    {
+        return $this->study;
+    }
+
+    public function setPaymentMethod($method)
+    {
+        $this->paymentMethod = $method;
+
+        return $this;
+    }
+
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setObservation(\Mrss\Entity\Observation $observation)
+    {
+        $this->observation = $observation;
+
+        return $this;
+    }
+
+    public function getObservation()
+    {
+        return $this->observation;
+    }
 }

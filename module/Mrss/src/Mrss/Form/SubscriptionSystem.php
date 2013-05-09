@@ -12,6 +12,8 @@ class SubscriptionSystem extends AbstractForm
         // Call the parent constructor
         parent::__construct('system');
 
+        $this->setAttribute('method', 'post');
+
         // Add elements
         $this->add(
             array(
@@ -19,6 +21,16 @@ class SubscriptionSystem extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'College System or State System'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'paymentType',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'value' => 'system'
                 )
             )
         );
