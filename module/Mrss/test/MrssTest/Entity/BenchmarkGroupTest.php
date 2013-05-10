@@ -91,6 +91,21 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
     {
         $benchmarkGroup = new BenchmarkGroup;
 
+        // Mock up a benchmark to attach
+        $benchmarkMock = $this->getMock(
+            'Mrss\Entity\Benchmark',
+            array('isAvailableForYear', 'getInputType')
+        );
+        $benchmarkMock->expects($this->once())
+            ->method('isAvailableForYear')
+            ->will($this->returnValue(true));
+        $benchmarkMock->expects($this->once())
+            ->method('getInputType')
+            ->will($this->returnValue('number'));
+
+        $benchmarkGroup->setBenchmarks(array($benchmarkMock));
+
+
         $this->assertTrue(is_array($benchmarkGroup->getElements(2013)));
     }
 
