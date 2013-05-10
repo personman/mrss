@@ -32,14 +32,6 @@ class SubscriptionInvoice extends AbstractForm
         );
     }
 
-    public function getUserFieldset($name, $label)
-    {
-        $fieldset = new UserFieldset($name);
-        $fieldset->setLabel($label);
-
-        return $fieldset;
-    }
-
     public function getSubmitFieldset()
     {
         $fieldset = new Fieldset('submit');
