@@ -103,7 +103,17 @@ class Subscription
      * @ORM\Column(type="string", nullable=true)
      */
     protected $paymentTransactionId;
-    
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $digitalSignature;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $digitalSignatureTitle;
+
     public function getId()
     {
         return $this->id;
@@ -193,5 +203,29 @@ class Subscription
     public function getObservation()
     {
         return $this->observation;
+    }
+
+    public function setDigitalSignature($digitalSignature)
+    {
+        $this->digitalSignature = $digitalSignature;
+
+        return $this;
+    }
+
+    public function getDigitalSignature()
+    {
+        return $this->digitalSignature;
+    }
+
+    public function setDigitalSignatureTitle($digitalSignatureTitle)
+    {
+        $this->digitalSignatureTitle = $digitalSignatureTitle;
+
+        return $this;
+    }
+
+    public function getDigitalSignatureTitle()
+    {
+        return $this->digitalSignatureTitle;
     }
 }

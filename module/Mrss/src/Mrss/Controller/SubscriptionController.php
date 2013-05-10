@@ -93,6 +93,11 @@ class SubscriptionController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
+                // Save the digital signature and title
+                $formData = $form->getData();
+                $agreementData = $formData['agreement'];
+                $this->saveAgreementToSession($agreementData);
+
                 // Once they've agreed to the terms, redirect to the payment page
                 $this->redirect()->toRoute('subscribe/payment');
             } else {
@@ -176,6 +181,16 @@ class SubscriptionController extends AbstractActionController
     public function getSubscriptionFromSession()
     {
         return $this->getSessionContainer()->subscribeForm;
+    }
+
+    public function saveAgreementToSession($agreementForm)
+    {
+        $this->getSessionContainer()->agreement = $agreementForm;
+    }
+
+    public function getAgreementFromSession()
+    {
+        return $this->getSessionContainer()->agreement;
     }
 
     public function getSessionContainer()
@@ -309,16 +324,12 @@ class SubscriptionController extends AbstractActionController
             $this->getStudy()->getId()
         );
 
-        /*$year = $this->getCurrentYear();
-        $collegeId = $college->getId();
-        $studyId = $this->getStudy()->getId();
-        echo "\n\n year: $year, college: $collegeId, study: $studyId \n";
-        var_dump($subscription);
-        die();*/
-
         if (empty($subscription)) {
             $subscription = new \Mrss\Entity\Subscription();
         }
+
+        // Get the agreement data from the session
+        $agreement = $this->getAgreementFromSession();
 
         $subscription->setYear($this->getCurrentYear());
         $subscription->setStatus('complete');
@@ -326,6 +337,8 @@ class SubscriptionController extends AbstractActionController
         $subscription->setStudy($this->getStudy());
         $subscription->setPaymentMethod($method);
         $subscription->setObservation($observation);
+        $subscription->setDigitalSignature($agreement['signature']);
+        $subscription->setDigitalSignatureTitle($agreement['title']);
 
         $subscriptionModel->save($subscription);
 

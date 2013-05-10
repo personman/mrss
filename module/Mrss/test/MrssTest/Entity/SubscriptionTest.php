@@ -21,41 +21,56 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
      */
     public function testInitialState()
     {
-        $role = new Subscription();
+        $subscription = new Subscription();
 
         $this->assertNull(
-            $role->getId(),
+            $subscription->getId(),
             '"id" should initially be null'
         );
 
         $this->assertNull(
-            $role->getStatus(),
+            $subscription->getStatus(),
             '"status" should initially be null'
         );
 
         $this->assertNull(
-            $role->getYear(),
+            $subscription->getYear(),
             '"year" should initially be null'
         );
 
         $this->assertNull(
-            $role->getCollege(),
+            $subscription->getCollege(),
             '"college" should initially be null'
         );
 
         $this->assertNull(
-            $role->getStudy(),
+            $subscription->getStudy(),
             '"study" should initially be null'
         );
 
         $this->assertNull(
-            $role->getPaymentMethod(),
+            $subscription->getPaymentMethod(),
             '"paymentMethod" should initially be null'
         );
 
         $this->assertNull(
-            $role->getObservation(),
+            $subscription->getObservation(),
             '"observation" should initially be null'
+        );
+
+        $this->assertNull(
+            $subscription->getObservation(),
+            '"observation" should initially be null'
+        );
+
+        $this->assertNull(
+            $subscription->getDigitalSignature(),
+            '"digitalSignature" should initially be null'
+        );
+
+        $this->assertNull(
+            $subscription->getDigitalSignatureTitle(),
+            '"digitalSignatureTitle" should initially be null'
         );
     }
 
@@ -74,6 +89,12 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
 
         $subscription->setPaymentMethod('invoice');
         $this->assertEquals('invoice', $subscription->getPaymentMethod());
+
+        $subscription->setDigitalSignature('John Doe');
+        $this->assertEquals('John Doe', $subscription->getDigitalSignature());
+
+        $subscription->setDigitalSignatureTitle('Tester');
+        $this->assertEquals('Tester', $subscription->getDigitalSignatureTitle());
 
         $collegeMock = $this->getMock('Mrss\Entity\College');
         $subscription->setCollege($collegeMock);
