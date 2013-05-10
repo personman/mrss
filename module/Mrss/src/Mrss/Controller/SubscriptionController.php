@@ -2,6 +2,8 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\College;
+use Mrss\Entity\Observation;
 use Mrss\Form\Payment;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionSystem;
@@ -223,6 +225,10 @@ class SubscriptionController extends AbstractActionController
         return 2013;
     }
 
+    /**
+     * @param $institutionForm
+     * @return \Mrss\Entity\College
+     */
     public function createOrUpdateCollege($institutionForm)
     {
         /** @var \Mrss\Model\College $collegeModel */
@@ -231,6 +237,7 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($college)) {
             $college = new \Mrss\Entity\College;
+            $needFlush = true;
         }
 
         $hydrator = new DoctrineHydrator(
@@ -239,6 +246,11 @@ class SubscriptionController extends AbstractActionController
         );
         $college = $hydrator->hydrate($institutionForm, $college);
         $collegeModel->save($college);
+
+        if (!empty($needFlush)) {
+            // Flush so we'll have an id
+            $this->getServiceLocator()->get('em')->flush();
+        }
 
         return $college;
     }
@@ -279,8 +291,11 @@ class SubscriptionController extends AbstractActionController
         return $user;
     }
 
-    public function createOrUpdateSubscription($paymentForm, $college, $observation)
-    {
+    public function createOrUpdateSubscription(
+        $paymentForm,
+        College $college,
+        Observation $observation
+    ) {
         // Payment method
         $method = $paymentForm['paymentType'];
 
@@ -294,6 +309,13 @@ class SubscriptionController extends AbstractActionController
             $this->getStudy()->getId()
         );
 
+        /*$year = $this->getCurrentYear();
+        $collegeId = $college->getId();
+        $studyId = $this->getStudy()->getId();
+        echo "\n\n year: $year, college: $collegeId, study: $studyId \n";
+        var_dump($subscription);
+        die();*/
+
         if (empty($subscription)) {
             $subscription = new \Mrss\Entity\Subscription();
         }
@@ -301,6 +323,7 @@ class SubscriptionController extends AbstractActionController
         $subscription->setYear($this->getCurrentYear());
         $subscription->setStatus('complete');
         $subscription->setCollege($college);
+        $subscription->setStudy($this->getStudy());
         $subscription->setPaymentMethod($method);
         $subscription->setObservation($observation);
 
