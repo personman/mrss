@@ -2,13 +2,14 @@
 
 namespace Mrss\Entity;
 
+use BjyAuthorize\Provider\Role\ProviderInterface;
 use Doctrine\ORM\Mapping as ORM;
 use ZfcUser\Entity\UserInterface;
 
 /** @ORM\Entity
  * @ORM\Table(name="users")
  */
-class User implements UserInterface
+class User implements UserInterface, ProviderInterface
 {
     /**
      * @var int
@@ -89,6 +90,11 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity="College", inversedBy="users")
      */
     protected $college;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $role;
 
     /**
      * Get id.
@@ -304,5 +310,30 @@ class User implements UserInterface
     public function getExtension()
     {
         return $this->extension;
+    }
+
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getRole()
+    {
+        $role = $this->role;
+        if (empty($role)) {
+            $role = 'user';
+        }
+
+        return $role;
+    }
+
+    /**
+     * @return \Zend\Permissions\Acl\Role\RoleInterface[]
+     */
+    public function getRoles()
+    {
+        return array($this->getRole());
     }
 }

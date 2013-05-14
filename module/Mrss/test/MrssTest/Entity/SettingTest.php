@@ -1,6 +1,6 @@
 <?php
 /**
- * Test the settings entity
+ * Test the setting entity
  */
 namespace MrssTest\Entity;
 

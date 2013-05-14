@@ -88,6 +88,26 @@ class UserTest extends PHPUnit_Framework_TestCase
             '"extension" should initially be null'
         );
 
+        $this->assertEquals(
+            'user',
+            $user->getRole()
+        );
+
+    }
+
+    public function testInterfaces()
+    {
+        $user = new User();
+
+        $this->assertInstanceOf(
+            'BjyAuthorize\Provider\Role\ProviderInterface',
+            $user
+        );
+
+        $this->assertInstanceOf(
+            'ZfcUser\Entity\UserInterface',
+            $user
+        );
     }
 
     public function testSetters()
@@ -106,7 +126,8 @@ class UserTest extends PHPUnit_Framework_TestCase
             'lastName' => 'Doe',
             'title' => 'Tester',
             'phone' => '111-111-1111',
-            'extension' => '1234'
+            'extension' => '1234',
+            'role' => 'user'
         );
 
         $user->setId($userData['id']);
@@ -144,6 +165,18 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $user->setExtension($userData['extension']);
         $this->assertEquals($userData['extension'], $user->getExtension());
+
+        $user->setRole($userData['role']);
+        $this->assertEquals($userData['role'], $user->getRole());
+    }
+
+    public function testGetRoles()
+    {
+        $user = new User;
+
+        $user->setRole('admin');
+
+        $this->assertEquals(array('admin'), $user->getRoles());
     }
 
     public function testSetCollege()

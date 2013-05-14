@@ -5,4 +5,4 @@ TRUNCATE users;
 
 
 -- Now add some test data
-INSERT INTO users (email, displayName,password) VALUES ('dfergu15@jccc.edu', 'Dan McTest', '$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');
+INSERT INTO users (email, displayName, password, role) VALUES ('dfergu15@jccc.edu', 'Dan McTest', '$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC', 'admin');

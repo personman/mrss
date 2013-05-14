@@ -34,6 +34,7 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->study->getId());
         $this->assertNull($this->study->getName());
         $this->assertNull($this->study->getDescription());
+        $this->assertNull($this->study->getCurrentYear());
 
         $this->assertInstanceOf(
             '\Doctrine\Common\Collections\ArrayCollection',
@@ -48,6 +49,9 @@ class StudyTest extends PHPUnit_Framework_TestCase
 
         $this->study->setDescription('lorem');
         $this->assertEquals('lorem', $this->study->getDescription());
+
+        $this->study->setCurrentYear(2013);
+        $this->assertEquals(2013, $this->study->getCurrentYear());
 
         $groupsMock = array('placeholder');
         $this->study->setBenchmarkGroups($groupsMock);

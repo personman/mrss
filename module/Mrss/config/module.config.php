@@ -3,7 +3,7 @@
 return array(
     'router' => array(
         'routes' => array(
-            'general' => array(
+            /**/'general' => array(
                 'type' => 'segment',
                 'priority' => -10,
                 'options' => array(
@@ -17,6 +17,39 @@ return array(
                         'controller' => 'index',
                         'action' => 'index',
                         'id' => 0
+                    )
+                )
+            ),/**/
+            'studies' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/studies',
+                    'defaults' => array(
+                        'controller' => 'studies',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'view' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/view/:id',
+                            'defaults' => array(
+                                'action' => 'view',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => 0
+                            )
+                        )
                     )
                 )
             ),
@@ -112,6 +145,17 @@ return array(
                     )
                 )
             ),
+            'settings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/settings',
+                    'defaults' => array(
+                        'controller' => 'settings',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -191,7 +235,8 @@ return array(
             'observations' => 'Mrss\Controller\ObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',
             'subscription' => 'Mrss\Controller\SubscriptionController',
-            'studies' => 'Mrss\Controller\StudyController'
+            'studies' => 'Mrss\Controller\StudyController',
+            'settings' => 'Mrss\Controller\SettingController'
         ),
     ),
     'view_manager' => array(

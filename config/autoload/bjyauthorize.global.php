@@ -87,6 +87,10 @@ return array(
                 array(
                     'controller' => 'studies',
                     'roles' => array('user')
+                ),
+                array(
+                    'controller' => 'settings',
+                    'roles' => array('admin')
                 )
             )
         ),

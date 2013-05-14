@@ -45,6 +45,11 @@ class Setting extends AbstractModel
         return $value;
     }
 
+    public function findAll()
+    {
+        return $this->getRepository()->findAll();
+    }
+
     public function findOneByIdentifier($identifier)
     {
         return $this->getRepository()->findOneBy(array('identifier' => $identifier));

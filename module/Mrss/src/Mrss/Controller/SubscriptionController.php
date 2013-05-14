@@ -26,6 +26,11 @@ class SubscriptionController extends AbstractActionController
 {
     protected $sessionContainer;
 
+    /**
+     * @var \Mrss\Entity\Study
+     */
+    protected $study;
+
     public function addAction()
     {
         $form = new SubscriptionForm;
@@ -237,7 +242,7 @@ class SubscriptionController extends AbstractActionController
 
     protected function getCurrentYear()
     {
-        return 2013;
+        return $this->getStudy()->getCurrentYear();
     }
 
     /**
@@ -367,7 +372,6 @@ class SubscriptionController extends AbstractActionController
         return $observation;
     }
 
-
     /**
      * Get the study that they're subscribing to
      *
@@ -376,17 +380,19 @@ class SubscriptionController extends AbstractActionController
      */
     protected function getStudy()
     {
-        // @todo: make this dynamic
-        $studyId = 1;
+        if (empty($this->study)) {
+            // @todo: make this dynamic
+            $studyId = 2;
 
-        /** @var \Mrss\Model\Study $studyModel */
-        $studyModel = $this->getServiceLocator()->get('model.study');
-        $study = $studyModel->find($studyId);
+            /** @var \Mrss\Model\Study $studyModel */
+            $studyModel = $this->getServiceLocator()->get('model.study');
+            $this->study = $studyModel->find($studyId);
 
-        if (empty($study)) {
-            throw new \Exception("Study with id $studyId not found.");
+            if (empty($this->study)) {
+                throw new \Exception("Study with id $studyId not found.");
+            }
         }
 
-        return $study;
+        return $this->study;
     }
 }

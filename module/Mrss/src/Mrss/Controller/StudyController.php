@@ -3,6 +3,8 @@
 namespace Mrss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Mrss\Form\Study;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\ViewModel;
 
 class StudyController extends AbstractActionController
@@ -46,6 +48,49 @@ class StudyController extends AbstractActionController
             'study' => $study,
             'years' => $years,
             'colleges' => $colleges
+        );
+    }
+
+    public function editAction()
+    {
+        $id = $this->params('id');
+        if (empty($id) && $this->getRequest()->isPost()) {
+            $id = $this->params()->fromPost('id');
+        }
+
+        $studyModel = $this->getServiceLocator()->get('model.study');
+        $study = $studyModel->find($id);
+
+        if (empty($study)) {
+            throw new \Exception('Study not found.');
+        }
+
+        $form = new Study;
+        $form->setHydrator(
+            new DoctrineHydrator(
+                $this->getServiceLocator()->get('em'),
+                'Mrss\Entity\Study'
+            )
+        );
+        $form->bind($study);
+
+        // Handle form submission
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $studyModel->save($study);
+
+                $this->flashMessenger()->addSuccessMessage('Study saved.');
+                $this->redirect()->toRoute('studies');
+            }
+
+        }
+
+        return array(
+            'form' => $form
         );
     }
 }

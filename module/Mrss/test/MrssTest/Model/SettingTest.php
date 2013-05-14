@@ -48,6 +48,28 @@ class SettingTest extends ModelTestAbstract
         $this->assertEquals('placeholder', $result);
     }
 
+    public function testFindAll()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findAll', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findAll();
+
+        $this->assertEquals('placeholder', $result);
+    }
+
     public function testSetValueForIdentifier()
     {
         $settingMock = $this->getMock(

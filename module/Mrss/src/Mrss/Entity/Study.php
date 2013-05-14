@@ -32,6 +32,11 @@ class Study
     protected $description;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $currentYear;
+
+    /**
      * @ORM\OneToMany(targetEntity="BenchmarkGroup", mappedBy="study")
      * @ORM\OrderBy({"sequence" = "ASC"})
      */
@@ -81,6 +86,18 @@ class Study
     public function getBenchmarkGroups()
     {
         return $this->benchmarkGroups;
+    }
+
+    public function setCurrentYear($year)
+    {
+        $this->currentYear = $year;
+
+        return $this;
+    }
+
+    public function getCurrentYear()
+    {
+        return $this->currentYear;
     }
 
     public function getCompletionPercentage(Observation $observation)
