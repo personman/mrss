@@ -96,6 +96,9 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
         $subscription->setDigitalSignatureTitle('Tester');
         $this->assertEquals('Tester', $subscription->getDigitalSignatureTitle());
 
+        $subscription->setPaymentAmount(100);
+        $this->assertEquals(100, $subscription->getPaymentAmount());
+
         $collegeMock = $this->getMock('Mrss\Entity\College');
         $subscription->setCollege($collegeMock);
         $this->assertSame($collegeMock, $subscription->getCollege());

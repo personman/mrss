@@ -14,6 +14,7 @@ use Zend\Session\Container;
 use Mrss\Form\Subscription as SubscriptionForm;
 use Mrss\Form\Fieldset\Agreement;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\Mail\Message;
 
 /**
  * Class SubscriptionController
@@ -156,10 +157,9 @@ class SubscriptionController extends AbstractActionController
             if ($invoiceForm->isValid()) {
                 $this->completeSubscription(
                     $this->getSessionContainer()->subscribeForm,
-                    $invoiceForm->getData()
+                    $invoiceForm->getData(),
+                    true
                 );
-
-                // @todo: send invoice email like NCCCPP
 
                 $this->flashMessenger()->addSuccessMessage(
                     "Thank you for subscribing. "
@@ -212,9 +212,13 @@ class SubscriptionController extends AbstractActionController
      *
      * @param $subscriptionForm
      * @param $paymentForm
+     * @param bool $sendInvoice
      */
-    public function completeSubscription($subscriptionForm, $paymentForm)
-    {
+    public function completeSubscription(
+        $subscriptionForm,
+        $paymentForm,
+        $sendInvoice = false
+    ) {
         // Create or fetch the college
         $institutionForm = $subscriptionForm['institution'];
         $college = $this->createOrUpdateCollege($institutionForm);
@@ -223,7 +227,11 @@ class SubscriptionController extends AbstractActionController
         $observation = $this->createOrUpdateObservation($college);
 
         // Create the subscription record with payment info
-        $this->createOrUpdateSubscription($paymentForm, $college, $observation);
+        $subscription = $this->createOrUpdateSubscription(
+            $paymentForm,
+            $college,
+            $observation
+        );
 
         // Create the users, if needed
         // @todo: set different roles
@@ -238,6 +246,11 @@ class SubscriptionController extends AbstractActionController
 
         // Save it all to the db
         $this->getServiceLocator()->get('em')->flush();
+
+        // Send invoice, if needed
+        if ($sendInvoice) {
+            $this->sendInvoice($subscription);
+        }
     }
 
     protected function getCurrentYear()
@@ -344,6 +357,7 @@ class SubscriptionController extends AbstractActionController
         $subscription->setObservation($observation);
         $subscription->setDigitalSignature($agreement['signature']);
         $subscription->setDigitalSignatureTitle($agreement['title']);
+        $subscription->setPaymentAmount(1000);
 
         $subscriptionModel->save($subscription);
 
@@ -394,5 +408,47 @@ class SubscriptionController extends AbstractActionController
         }
 
         return $this->study;
+    }
+
+    protected function sendInvoice(\Mrss\Entity\Subscription $subscription)
+    {
+        $college = $subscription->getCollege();
+
+        $invoice = new Message();
+        $invoice->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
+        $invoice->addTo('dfergu15@jccc.edu');
+
+        $study = $subscription->getStudy();
+        $studyName = $study->getName();
+
+        $collegeName = $college->getName();
+
+        $year = $subscription->getYear();
+
+        $invoice->setSubject(
+            "Invoice: $collegeName subscribed to $studyName for $year"
+        );
+
+        $date = date('Y-m-d');
+
+        $amountDue = number_format($subscription->getPaymentAmount(), 2);
+
+        $invoice->setBody(
+            "
+            Study: {$study->getName()}
+            Year: $year
+            Institution: {$college->getName()}
+            Amount Due: $amountDue
+            Date: $date
+            Address: {$college->getAddress()} {$college->getAddress2()}
+            City: {$college->getCity()}
+            State: {$college->getState()}
+            Zip: {$college->getZip()}
+            Digital Signature: {$subscription->getDigitalSignature()}
+            Title: {$subscription->getDigitalSignatureTitle()}
+            "
+        );
+
+        $this->getServiceLocator()->get('mail.transport')->send($invoice);
     }
 }

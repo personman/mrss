@@ -80,6 +80,7 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $college->setName($collegeData['name']);
         $college->setIpeds($collegeData['ipeds']);
         $college->setAddress($collegeData['address']);
+        $college->setAddress2($collegeData['address2']);
         $college->setCity($collegeData['city']);
         $college->setState($collegeData['state']);
         $college->setZip($collegeData['zip']);
@@ -87,6 +88,7 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($collegeData['name'], $college->getName());
         $this->assertEquals($collegeData['ipeds'], $college->getIpeds());
         $this->assertEquals($collegeData['address'], $college->getAddress());
+        $this->assertEquals($collegeData['address2'], $college->getAddress2());
         $this->assertEquals($collegeData['city'], $college->getCity());
         $this->assertEquals($collegeData['state'], $college->getState());
         $this->assertEquals($collegeData['zip'], $college->getZip());
@@ -249,6 +251,7 @@ class CollegeTest extends PHPUnit_Framework_TestCase
                     'name' => 'Highland Community College',
                     'ipeds' => '192100',
                     'address' => '606 West Main Street',
+                    'address2' => 'OCB 204',
                     'city' => 'Highland',
                     'state' => 'KS',
                     'zip' => 66035

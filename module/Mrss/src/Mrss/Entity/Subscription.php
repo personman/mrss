@@ -181,6 +181,18 @@ class Subscription
         return $this->study;
     }
 
+    public function setPaymentAmount($amount)
+    {
+        $this->paymentAmount = $amount;
+
+        return $this;
+    }
+
+    public function getPaymentAmount()
+    {
+        return $this->paymentAmount;
+    }
+
     public function setPaymentMethod($method)
     {
         $this->paymentMethod = $method;

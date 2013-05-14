@@ -2,6 +2,7 @@
 
 namespace Mrss;
 
+use Zend\Mail\Transport\Sendmail;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
@@ -153,6 +154,27 @@ class Module
                     $service = new \Mrss\Service\FormBuilder;
 
                     return $service;
+                },
+                'mail.transport' => function ($sm) {
+                    //return new \Zend\Mail\Transport\Sendmail();
+
+                    $transport = new \Zend\Mail\Transport\Smtp();
+                    $options = new \Zend\Mail\Transport\SmtpOptions(
+                        array(
+                            'host' => 'smtp.gmail.com',
+                            'connection_class' => 'login',
+                            'connection_config' => array(
+                                'ssl' => 'tls',
+                                'username' => 'dan.ferguson.mo@gmail.com',
+                                'password' => 'nhebiemail'
+                            ),
+                            'port' => 587
+                        )
+                    );
+
+                    $transport->setOptions($options);
+
+                    return $transport;
                 }
             ),
         );

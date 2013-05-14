@@ -129,6 +129,18 @@ class College
         return $this;
     }
 
+    public function getAddress2()
+    {
+        return $this->address2;
+    }
+
+    public function setAddress2($address)
+    {
+        $this->address2 = $address;
+
+        return $this;
+    }
+
     public function getCity()
     {
         return $this->city;
