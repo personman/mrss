@@ -122,7 +122,14 @@ class SubscriptionController extends AbstractActionController
     {
         $this->checkSubscriptionIsInProgress();
 
-        $ccForm = new Payment();
+        // @todo: move this to a config file:
+        $uPaySiteId = 3;
+
+        // @todo: get this dynamically based on study and date
+        $amount = 102;
+
+
+        $ccForm = new Payment($uPaySiteId, $amount);
 
         $invoiceForm = new SubscriptionInvoice();
         $invoiceForm->setAttribute('action', '/subscribe/invoice');
