@@ -157,6 +157,7 @@ class Module
                 },
                 'mail.transport' => function ($sm) {
                     //return new \Zend\Mail\Transport\Sendmail();
+                    // @todo: Consider merging this with the GoalioMailService
 
                     $transport = new \Zend\Mail\Transport\Smtp();
                     $options = new \Zend\Mail\Transport\SmtpOptions(

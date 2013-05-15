@@ -56,6 +56,10 @@ return array(
                     'controller' => 'DoctrineORMModule\Yuml\YumlController',
                     'roles' => array('guest')
                 ),
+                array(
+                    'controller' => 'goalioforgotpassword_forgot',
+                    'roles' => array('guest')
+                ),
                 // Page controller
                 array(
                     'controller' => 'pages',
