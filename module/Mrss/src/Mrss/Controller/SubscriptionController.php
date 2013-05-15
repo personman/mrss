@@ -27,6 +27,8 @@ class SubscriptionController extends AbstractActionController
 {
     protected $sessionContainer;
 
+    protected $passwordService;
+
     /**
      * @var \Mrss\Entity\Study
      */
@@ -324,8 +326,13 @@ class SubscriptionController extends AbstractActionController
 
         $userModel->save($user);
 
+        // Flush to db so id is set
+        $this->getServiceLocator()->get('em')->flush();
+
         if (!empty($createUser)) {
-            // @todo: Send out email with one-time login link
+            // Send out email with one-time login link
+            $this->getPasswordService()
+                ->sendProcessForgotRequest($user->getId(), $user->getEmail());
         }
 
         return $user;
@@ -463,5 +470,14 @@ class SubscriptionController extends AbstractActionController
         );
 
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
+    }
+
+    public function getPasswordService()
+    {
+        if (!$this->passwordService) {
+            $this->passwordService = $this->getServiceLocator()
+                ->get('goalioforgotpassword_password_service');
+        }
+        return $this->passwordService;
     }
 }
