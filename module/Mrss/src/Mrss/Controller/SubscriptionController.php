@@ -419,6 +419,12 @@ class SubscriptionController extends AbstractActionController
 
     protected function sendInvoice(\Mrss\Entity\Subscription $subscription)
     {
+        // Check config to see if emails are being suppressed (by Behat, probably)
+        $config = $this->getServiceLocator()->get('config');
+        if (!empty($config['suppressEmail'])) {
+            return false;
+        }
+
         $college = $subscription->getCollege();
 
         $invoice = new Message();

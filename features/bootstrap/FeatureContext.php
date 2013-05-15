@@ -62,6 +62,32 @@ class FeatureContext extends MinkContext
         //$u = $db->query("delete from user", 'execute');
     }
 
+    /**
+     * Wrie Behat config file to suppress emails
+     *
+     * @BeforeSuite
+     */
+    public static function addConfigFile()
+    {
+        $source = 'features/bootstrap/behat.local.php';
+        $destination = 'config/autoload/behat.local.php';
+
+        copy($source, $destination);
+    }
+
+    /**
+     * Remove the config file
+     *
+     * @AfterSuite
+     */
+    public static function removeConfigFile()
+    {
+        $destination = 'config/autoload/behat.local.php';
+
+        unlink($destination);
+    }
+
+
     protected static function getZfDbAdapter()
     {
         return self::$zendApp->getServiceManager()->get('Zend\Db\Adapter\Adapter');
