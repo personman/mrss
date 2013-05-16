@@ -14,3 +14,45 @@
     color: #3F3F3F;
     line-height: 24px;
 }
+
+/* Table styles */
+table
+{
+    width: 100%;
+}
+
+table.style1
+{
+}
+
+table.style1 tbody tr:nth-child(2n+2)
+{
+    background: #f4f4f4;
+}
+
+table.style1 td
+{
+    padding: 0.5em 1em 0.5em 1em;
+}
+
+table.style1 th
+{
+    text-align: left;
+    font-weight: 700;
+    padding: 0.75em 1em 0.75em 1em;
+}
+
+table.style1 thead
+{
+    border-bottom: solid 1px #ddd;
+}
+
+table.style1 tfoot
+{
+    border-top: solid 1px #ddd;
+    background: #eee;
+}
+
+table.style1 tbody
+{
+}
