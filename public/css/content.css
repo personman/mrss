@@ -1,0 +1,16 @@
+#content{
+    margin-bottom: 90px;
+    margin-top: 70px;
+}
+#content .intro h6{
+    font-size: 21px;
+    font-style: italic;
+    color: #252526;
+    line-height: 29px;
+    font-weight: normal;
+    margin: 0 0 16px 0;
+}
+#content .intro p{
+    color: #3F3F3F;
+    line-height: 24px;
+}
