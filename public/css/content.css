@@ -1,6 +1,6 @@
 #content{
     margin-bottom: 90px;
-    margin-top: 70px;
+    margin-top: 90px;
 }
 #content .intro h6{
     font-size: 21px;
@@ -55,4 +55,8 @@ table.style1 tfoot
 
 table.style1 tbody
 {
+}
+
+.alert {
+    margin: 90px 20px 10px 20px;
 }

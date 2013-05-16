@@ -37,7 +37,6 @@ class SubscriptionController extends AbstractActionController
     public function addAction()
     {
         $form = new SubscriptionForm;
-        $message = null;
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
@@ -50,15 +49,16 @@ class SubscriptionController extends AbstractActionController
                 // the agreement page
                 $this->saveSubscriptionToSession($form->getData());
 
-                $this->redirect()->toRoute('subscribe/user-agreement');
+                return $this->redirect()->toRoute('subscribe/user-agreement');
             } else {
-                $message = "Please correct the problems below.";
+                $this->flashMessenger()->addErrorMessage(
+                    "Please correct the problems below."
+                );
             }
         }
 
         return array(
-            'form' => $form,
-            'message' => $message
+            'form' => $form
         );
     }
 
@@ -71,8 +71,6 @@ class SubscriptionController extends AbstractActionController
     public function agreementAction()
     {
         $this->checkSubscriptionIsInProgress();
-
-        $message = null;
 
         $form = new Form('agreement');
         $fieldset = new Agreement();
@@ -107,15 +105,16 @@ class SubscriptionController extends AbstractActionController
                 $this->saveAgreementToSession($agreementData);
 
                 // Once they've agreed to the terms, redirect to the payment page
-                $this->redirect()->toRoute('subscribe/payment');
+                return $this->redirect()->toRoute('subscribe/payment');
             } else {
-                $message = "Please correct the problems below.";
+                $this->flashMessenger()->addErrorMessage(
+                    "Please correct the problems below."
+                );
             }
         }
 
         return array(
             'form' => $form,
-            'message' => $message,
             'subscription' => $this->getSubscriptionFromSession()
         );
     }
@@ -174,7 +173,7 @@ class SubscriptionController extends AbstractActionController
                     "Thank you for subscribing. "
                 );
 
-                $this->redirect()->toUrl('/');
+                return $this->redirect()->toUrl('/');
             }
         }
     }

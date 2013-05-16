@@ -46,8 +46,17 @@
     <?= $this->flashMessenger()->render('success'); ?>
     <?= $this->flashMessenger()->render('default'); ?>
 
+<? elseif (true): ?>
+    <?php foreach ($this->flashMessages(true) as $namespace => $messages) : ?>
+        <?php if (count($messages)) : ?>
+            <?php foreach ($messages as $message) : ?>
+                <div class="alert alert-<?=$namespace?>">
+                    <?php echo $message; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
 <? else: ?>
-
     <?= $this->ztbFlashMessenger()->render(); ?>
 
 <? endif ?>

@@ -24,7 +24,7 @@ class CollegeController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage('Success!');
         $this->flashMessenger()->addErrorMessage('Error!');
 
-        $this->redirect()->toUrl('/colleges');
+        return $this->redirect()->toUrl('/colleges');
     }
 
     public function viewAction()

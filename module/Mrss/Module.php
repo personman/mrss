@@ -5,6 +5,7 @@ namespace Mrss;
 use Zend\Mail\Transport\Sendmail;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Mrss\View\Helper\FlashMessages;
 
 class Module
 {
@@ -176,6 +177,25 @@ class Module
                     $transport->setOptions($options);
 
                     return $transport;
+                }
+            ),
+        );
+    }
+
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'flashMessages' => function($sm) {
+                    //die('why?');
+                    $flashmessenger = $sm->getServiceLocator()
+                        ->get('ControllerPluginManager')
+                        ->get('flashmessenger');
+
+                    $messages = new FlashMessages();
+                    $messages->setFlashMessenger($flashmessenger);
+
+                    return $messages;
                 }
             ),
         );

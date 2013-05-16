@@ -68,7 +68,7 @@ class ObservationController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Data saved.');
-                $this->redirect()->toRoute(
+                return $this->redirect()->toRoute(
                     'observation/group',
                     array(
                         'id' => $observation->getId(),

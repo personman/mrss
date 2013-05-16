@@ -84,7 +84,7 @@ class StudyController extends AbstractActionController
                 $studyModel->save($study);
 
                 $this->flashMessenger()->addSuccessMessage('Study saved.');
-                $this->redirect()->toRoute('studies');
+                return $this->redirect()->toRoute('studies');
             }
 
         }

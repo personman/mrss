@@ -132,7 +132,7 @@ class ImportController extends AbstractActionController
         $message = "College import complete. Imported: $stats[imported],
         skipped: $stats[skipped].";
         $this->flashMessenger()->addSuccessMessage($message);
-        $this->redirect()->toUrl('/colleges');
+        return $this->redirect()->toUrl('/colleges');
     }
 
     public function obsAction()
@@ -146,7 +146,7 @@ class ImportController extends AbstractActionController
         $message = "Observation import complete. Imported: $stats[imported],
         skipped: $stats[skipped], Elapsed time: $stats[elapsed] seconds.";
         $this->flashMessenger()->addSuccessMessage($message);
-        $this->redirect()->toUrl('/colleges');
+        return $this->redirect()->toUrl('/colleges');
     }
 
     public function metaAction()
@@ -159,7 +159,7 @@ class ImportController extends AbstractActionController
         $message = "Benchmark metadata import complete. Imported:
             $stats[imported], skipped: $stats[skipped].";
         $this->flashMessenger()->addSuccessMessage($message);
-        $this->redirect()->toUrl('/colleges');
+        return $this->redirect()->toUrl('/colleges');
     }
 
     public function benchmarkgroupsAction()
@@ -172,7 +172,7 @@ class ImportController extends AbstractActionController
         $message = "Benchmark groups import complete. Imported:
             $stats[imported], skipped: $stats[skipped].";
         $this->flashMessenger()->addSuccessMessage($message);
-        $this->redirect()->toUrl('/colleges');
+        return $this->redirect()->toUrl('/colleges');
     }
 
     protected function getImports()

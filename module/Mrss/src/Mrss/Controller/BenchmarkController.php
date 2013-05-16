@@ -75,7 +75,7 @@ class BenchmarkController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
-                $this->redirect()->toRoute(
+                return $this->redirect()->toRoute(
                     'general',
                     array(
                         'controller' => 'benchmarks',
