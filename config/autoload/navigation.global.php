@@ -23,7 +23,8 @@ return array(
             ),
             array(
                 'label' => 'Subscribe',
-                'route' => 'subscribe'
+                'route' => 'subscribe',
+                'controller' => 'subscription'
             ),
             array(
                 'label' => 'Studies',
