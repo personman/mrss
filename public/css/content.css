@@ -60,3 +60,23 @@ table.style1 tbody
 .alert {
     margin: 90px 20px 10px 20px;
 }
+
+/* Form styles */
+.control-label {
+    font-weight: bold;
+}
+
+@media (min-width: 980px) {
+    .form-horizontal .control-label {
+        width: 40%;
+    }
+
+    .form-horizontal .controls {
+        margin-left: 42%;
+    }
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+
+}
