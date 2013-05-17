@@ -8,11 +8,10 @@ I need to be able to register and sign in
     Then I should see "Sign In"
     And I should see "Password"
 
-  Scenario: Show user registration form
+  Scenario: Registration is disabled
     When I go to "/user/register"
     Then I should see "Register"
-    And I should see "Password Verify"
-    And I should see "Display Name"
+    And I should see "Registration is disabled"
 
   Scenario: User login
     Given I am logged out
