@@ -31,9 +31,12 @@
                 <strong>Maximizing Resources<br>for Student Success</strong>
             </a>
             <div class="nav-collapse collapse">
-                <? $menuOptions = array('ulClass' => 'nav pull-right') ?>
-                <?= $this->navigation('navigation')->menu()
-                    ->renderMenu(null, $menuOptions); ?>
+                <?php $menuOptions = array('ulClass' => 'nav pull-right') ?>
+                <?php $partial = array('mrss/menu/navigation.phtml', 'default') ?>
+                <?php $this->navigation('navigation')->menu()
+                    ->setPartial($partial) ?>
+                <?= $this->navigation('navigation')->menu()->setPartial($partial)
+                    ->render(); ?>
             </div>
         </div>
     </div>
@@ -191,9 +194,9 @@
 
 <!-- Scripts -->
 <script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/theme.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/theme.js"></script>
 
-<script type="text/javascript" src="js/index-slider.js"></script>
+<script type="text/javascript" src="/js/index-slider.js"></script>
 </body>
 </html>

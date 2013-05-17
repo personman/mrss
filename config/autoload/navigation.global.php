@@ -61,7 +61,26 @@ return array(
                 'label' => 'User',
                 'route' => 'zfcuser',
                 'controller' => 'zfcuser',
-                'action' => 'index'
+                'action' => 'index',
+                'ulClass' => 'dropdown-menu',
+            ),
+            array(
+                'label' => 'Dropdown',
+                'uri' => '#',
+                'pages' => array(
+                    array(
+                        'label' => 'Test 1',
+                        'uri' => '/user/logout'
+                    ),
+                    array(
+                        'label' => 'Test 2',
+                        'uri' => '/user/logout'
+                    ),
+                    array(
+                        'label' => 'Test 3',
+                        'uri' => '/user/logout'
+                    )
+                )
             )
         )
     )
