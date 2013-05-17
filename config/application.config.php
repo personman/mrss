@@ -7,14 +7,14 @@ return array(
         'ZfcBase',
         'ZfcUser',
         'ZfcUserDoctrineORM',
-        'Mrss',
         'ZendDeveloperTools',
         'BjyAuthorize',
         'ZfcTwitterBootstrap',
         'Cms',
         'GoalioMailService',
         'GoalioForgotPassword',
-        'GoalioForgotPasswordDoctrineORM'
+        'GoalioForgotPasswordDoctrineORM',
+        'Mrss'
     ),
 
     'doctrine' => array(
