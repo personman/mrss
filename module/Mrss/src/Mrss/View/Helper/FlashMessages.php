@@ -41,37 +41,4 @@ class FlashMessages extends AbstractHelper
 
         return $messages;
     }
-
-    public function flashMessenger(
-        $key = 'fm-bad',
-        $template = '<span class="flashMessenger %s">%s</span>'
-    ) {
-        $flashMessenger = $this->_getFlashMessenger();
-
-        //get messages from previous requests
-        $messages = $flashMessenger->getMessages();
-
-        //add any messages from this request
-        if ($flashMessenger->hasCurrentMessages()) {
-            $messages = array_merge(
-                $messages,
-                $flashMessenger->getCurrentMessages()
-            );
-            //we don't need to display them twice.
-            $flashMessenger->clearCurrentMessages();
-        }
-
-        //initialise return string
-        $output = '';
-
-        //process messages
-        foreach ($messages as $message) {
-            if (is_array($message)) {
-                list($key, $message) = each($message);
-            }
-            $output .= sprintf($template, $key, $message);
-        }
-
-        return $output;
-    }
 }
