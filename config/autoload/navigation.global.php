@@ -16,35 +16,51 @@ return array(
         'default' => array(
             array(
                 'label' => 'Home',
-                'uri' => '/'
+                'uri' => '/',
+                'controller' => 'index',
+                'action' => 'index',
+                'route' => 'general'
             ),
             array(
                 'label' => 'Subscribe',
-                'uri' => '/subscribe'
+                'route' => 'subscribe'
             ),
             array(
                 'label' => 'Studies',
-                'uri' => '/studies'
+                'controller' => 'studies',
+                'route' => 'studies'
             ),
             array(
                 'label' => 'Imports',
-                'uri' => '/import'
+                'controller' => 'import',
+                'action' => 'index',
+                'route' => 'general'
             ),
             array(
                 'label' => 'Colleges',
-                'uri' => '/colleges'
+                'uri' => '/colleges',
+                'controller' => 'colleges',
+                'action' => 'index',
+                'route' => 'general'
             ),
             array(
                 'label' => 'Benchmarks',
-                'uri' => '/benchmarks'
+                'uri' => '/benchmarks',
+                'controller' => 'benchmarks',
+                'action' => 'index',
+                'route' => 'general'
             ),
             array(
                 'label' => 'Pages',
-                'uri' => '/pages'
+                'route' => 'pages',
+                'controller' => 'pages',
+                'action' => 'index'
             ),
             array(
                 'label' => 'User',
-                'uri' => '/user'
+                'route' => 'zfcuser',
+                'controller' => 'zfcuser',
+                'action' => 'index'
             )
         )
     )
