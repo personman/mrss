@@ -42,9 +42,10 @@ class FlashMessages extends AbstractHelper
         return $messages;
     }
 
-    public function flashMessenger($key = 'fm-bad',
-        $template='<span class="flashMessenger %s">%s</span>')
-    {
+    public function flashMessenger(
+        $key = 'fm-bad',
+        $template = '<span class="flashMessenger %s">%s</span>'
+    ) {
         $flashMessenger = $this->_getFlashMessenger();
 
         //get messages from previous requests
@@ -61,15 +62,14 @@ class FlashMessages extends AbstractHelper
         }
 
         //initialise return string
-        $output ='';
+        $output = '';
 
         //process messages
-        foreach ($messages as $message)
-        {
+        foreach ($messages as $message) {
             if (is_array($message)) {
-                list($key,$message) = each($message);
+                list($key, $message) = each($message);
             }
-            $output .= sprintf($template,$key,$message);
+            $output .= sprintf($template, $key, $message);
         }
 
         return $output;
