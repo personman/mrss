@@ -56,6 +56,11 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             $benchmark->getStatus(),
             '"status" should initially be null'
         );
+
+        $this->assertNull(
+            $benchmark->getEquation(),
+            "'equation' should initially be null"
+        );
     }
 
     public function testSetters()
@@ -85,6 +90,10 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         // Set status
         $benchmark->setStatus(1);
         $this->assertEquals(1, $benchmark->getStatus());
+
+        // Set equation
+        $benchmark->setEquation("5 + 3");
+        $this->assertEquals("5 + 3", $benchmark->getEquation());
     }
 
     public function testAssociationMethods()

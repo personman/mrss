@@ -69,6 +69,12 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      */
     protected $yearsAvailable;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $equation;
+
+
     protected $benchmarkModel;
     protected $completionPercentages;
 
@@ -192,6 +198,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function setBenchmarkModel($model)
     {
         $this->benchmarkModel = $model;
+    }
+
+    public function setEquation($equation)
+    {
+        $this->equation = $equation;
+
+        return $this;
+    }
+
+    public function getEquation()
+    {
+        return $this->equation;
     }
 
     /**
