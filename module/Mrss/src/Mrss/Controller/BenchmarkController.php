@@ -12,11 +12,19 @@ class BenchmarkController extends AbstractActionController
 {
     public function indexAction()
     {
-        $benchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmarkGroup');
+        $studyId = $this->params()->fromRoute('study');
+        $studyModel = $this->getServiceLocator()
+            ->get('model.study');
+        $study = $studyModel->find($studyId);
+        $benchmarkGroups = $study->getBenchmarkGroups();
+
+        //$benchmarkGroupModel = $this->getServiceLocator()
+        //    ->get('model.benchmarkGroup');
 
         return array(
-            'benchmarkGroups' => $benchmarkGroupModel->findAll(),
+            //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
+            'benchmarkGroups' => $benchmarkGroups,
+            'study' => $study,
             'yearsToShow' => range(2007, date('Y'))
         );
     }
@@ -43,6 +51,20 @@ class BenchmarkController extends AbstractActionController
             'observations' => $observations,
             'collegeIds' => $collegeIds
         );
+    }
+
+    public function addAction()
+    {
+        $studyId = $this->params('study');
+        $studyModel = $this->getServiceLocator()
+            ->get('model.study');
+        $study = $studyModel->find($studyId);
+
+        if (empty($study)) {
+            throw new \Exception('Study not found.');
+        }
+
+        // Wait, this is for adding a benchmark group. why is it here?
     }
 
     public function editAction()

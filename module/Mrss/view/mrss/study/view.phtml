@@ -1,0 +1,21 @@
+<h2><?= $study->getName() ?></h2>
+
+<ul>
+    <li>
+        <a href="<?= $this->url(
+            'benchmarks',
+            array('study' => $study->getId())
+        ) ?>">
+            Benchmark Groups
+        </a>
+    </li>
+
+    <li>
+        <a href="<?= $this->url(
+            'studies/completion',
+            array('id' => $study->getId())
+        ) ?>">
+            Completion
+        </a>
+    </li>
+</ul>

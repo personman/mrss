@@ -3,6 +3,7 @@
 return array(
     'router' => array(
         'routes' => array(
+            // @todo: get rid of this general route
             /**/'general' => array(
                 'type' => 'segment',
                 'priority' => -10,
@@ -113,6 +114,74 @@ return array(
                         'action'     => 'index',
                     ),
                 ),
+            ),
+            'colleges' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/colleges',
+                    'defaults' => array(
+                        'controller' => 'colleges',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'view' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/view/:id',
+                            'defaults' => array(
+                                'action' => 'view',
+                                'id' => 0
+                            )
+                        )
+                    )
+                )
+            ),
+            'benchmarks' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/benchmarks[/study/:study]',
+                    'defaults' => array(
+                        'controller' => 'benchmarks',
+                        'study' => 1,
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'view' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/view/:id',
+                            'defaults' => array(
+                                'action' => 'view',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add/study/:study',
+                            'defaults' => array(
+                                'action' => 'add',
+                                'study' => 0
+                            )
+                        )
+                    )
+                )
             ),
             'observation' => array(
                 'type' => 'segment',

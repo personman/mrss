@@ -4,23 +4,32 @@ namespace Mrss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Study;
+use Mrss\Model\Study as StudyModel;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\ViewModel;
 
 class StudyController extends AbstractActionController
 {
+    /**
+     * @var \Mrss\Model\Study
+     */
+    protected $studyModel;
+
     public function indexAction()
     {
-        $studyModel = $this->getServiceLocator()->get('model.study');
-
         return array(
-            'studies' => $studyModel->findAll()
+            'studies' => $this->getStudyModel()->findAll()
         );
     }
 
     public function viewAction()
     {
-        
+        $id = $this->params('id');
+        $study = $this->getStudy($id);
+
+        return array(
+            'study' => $study
+        );
     }
 
     public function completionAction()
@@ -28,7 +37,7 @@ class StudyController extends AbstractActionController
         set_time_limit(1200);
         ini_set('memory_limit', '256M');
 
-        // Turn off query logging
+        // Turn off query logging so we don't exhaust our RAM
         $this->getServiceLocator()
             ->get('em')
             ->getConnection()
@@ -36,12 +45,7 @@ class StudyController extends AbstractActionController
             ->setSQLLogger(null);
 
         $id = $this->params('id');
-        $studyModel = $this->getServiceLocator()->get('model.study');
-        $study = $studyModel->find($id);
-
-        if (empty($study)) {
-            throw new \Exception('Study not found.');
-        }
+        $study = $this->getStudyModel()->find($id);
 
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $colleges = $collegeModel->findAll();
@@ -63,12 +67,7 @@ class StudyController extends AbstractActionController
             $id = $this->params()->fromPost('id');
         }
 
-        $studyModel = $this->getServiceLocator()->get('model.study');
-        $study = $studyModel->find($id);
-
-        if (empty($study)) {
-            throw new \Exception('Study not found.');
-        }
+        $study = $this->getStudy($id);
 
         $form = new Study;
         $form->setHydrator(
@@ -86,7 +85,7 @@ class StudyController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $studyModel->save($study);
+                $this->getStudyModel()->save($study);
 
                 $this->flashMessenger()->addSuccessMessage('Study saved.');
                 return $this->redirect()->toRoute('studies');
@@ -97,5 +96,44 @@ class StudyController extends AbstractActionController
         return array(
             'form' => $form
         );
+    }
+
+    /**
+     * @param integer $id
+     * @throws \Exception
+     * @return Study
+     */
+    protected function getStudy($id)
+    {
+        $study = $this->getStudyModel()->find($id);
+
+        if (empty($study)) {
+            throw new \Exception('Study not found.');
+        }
+
+        return $study;
+    }
+
+    /**
+     * @param StudyModel $studyModel
+     * @return $this
+     */
+    public function setStudyModel(StudyModel $studyModel)
+    {
+        $this->studyModel = $studyModel;
+
+        return $this;
+    }
+
+    /**
+     * @return StudyModel
+     */
+    protected function getStudyModel()
+    {
+        if (empty($this->studyModel)) {
+            $this->studyModel = $this->getServiceLocator()->get('model.study');
+        }
+
+        return $this->studyModel;
     }
 }

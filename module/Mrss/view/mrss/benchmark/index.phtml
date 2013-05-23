@@ -1,5 +1,12 @@
 <h2>Benchmarks</h2>
 
+<a href="<?= $this->url(
+    'benchmarks/add',
+    array('study' => $study->getId())
+)?>">
+    Add a benchmark group
+</a>
+
 <?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
     <h3><?= $benchmarkGroup->getName() ?></h3>
 

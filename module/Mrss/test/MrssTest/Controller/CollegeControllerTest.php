@@ -37,7 +37,7 @@ class CollegeControllerTest extends AbstractControllerTestCase
         $this->assertControllerName('colleges');
         $this->assertActionName('index');
         $this->assertControllerClass('CollegeController');
-        $this->assertMatchedRouteName('general');
+        $this->assertMatchedRouteName('colleges');
     }
 
     /*public function testViewActionCanBeAccessed()

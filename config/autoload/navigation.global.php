@@ -16,7 +16,6 @@ return array(
         'default' => array(
             array(
                 'label' => 'Home',
-                'uri' => '/',
                 'controller' => 'index',
                 'action' => 'index',
                 'route' => 'general'
@@ -39,17 +38,13 @@ return array(
             ),
             array(
                 'label' => 'Colleges',
-                'uri' => '/colleges',
                 'controller' => 'colleges',
                 'action' => 'index',
-                'route' => 'general'
+                'route' => 'colleges'
             ),
             array(
                 'label' => 'Benchmarks',
-                'uri' => '/benchmarks',
-                'controller' => 'benchmarks',
-                'action' => 'index',
-                'route' => 'general'
+                'route' => 'benchmarks'
             ),
             array(
                 'label' => 'Pages',
