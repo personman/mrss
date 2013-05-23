@@ -41,6 +41,16 @@ return array(
                             )
                         )
                     ),
+                    'completion' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/completion/:id',
+                            'defaults' => array(
+                                'action' => 'completion',
+                                'id' => 0
+                            )
+                        )
+                    ),
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(

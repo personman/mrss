@@ -20,6 +20,11 @@ class StudyController extends AbstractActionController
 
     public function viewAction()
     {
+        
+    }
+
+    public function completionAction()
+    {
         set_time_limit(1200);
         ini_set('memory_limit', '256M');
 
