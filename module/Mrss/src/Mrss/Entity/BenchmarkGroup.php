@@ -18,7 +18,7 @@ use Zend\InputFilter\Factory as InputFactory;
  * @ORM\Table(name="benchmark_groups")
  */
 class BenchmarkGroup implements FormFieldsetProviderInterface,
-    InputFilterAwareInterface
+ InputFilterAwareInterface
 {
     protected $inputFilter;
 

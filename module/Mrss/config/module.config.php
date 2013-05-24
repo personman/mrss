@@ -174,10 +174,10 @@ return array(
                     'add' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/add/study/:study',
+                            'route' => '/add/benchmarkgroup/:benchmarkGroup',
                             'defaults' => array(
                                 'action' => 'add',
-                                'study' => 0
+                                'benchmarkGroup' => 0
                             )
                         )
                     )
