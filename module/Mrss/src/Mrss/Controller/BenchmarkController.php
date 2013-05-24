@@ -114,7 +114,7 @@ class BenchmarkController extends AbstractActionController
     }
 
     /**
-     * Build a form from annotations. Bind the passed BenchmarkEntity to the form.
+     * Get the form and bind the entity
      *
      * @param BenchmarkEntity $benchmark
      * @return \Zend\Form\Form

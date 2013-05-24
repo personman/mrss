@@ -1,14 +1,33 @@
 <h2>Benchmarks</h2>
 
-<a href="<?= $this->url(
-    'benchmarks/add',
-    array('study' => $study->getId())
-)?>">
-    Add a benchmark group
-</a>
+<ul>
+    <li>
+        <a href="<?= $this->url(
+            'benchmarkgroups/add',
+            array('study' => $study->getId())
+        )?>">
+            Add a benchmark group
+        </a>
+    </li>
+</ul>
 
 <?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
     <h3><?= $benchmarkGroup->getName() ?></h3>
+
+    <ul>
+        <li>
+            <a href="<?= $this->url(
+                'benchmarkgroups/edit',
+                array('id' => $benchmarkGroup->getId())
+            ) ?>">Edit benchmark group</a>
+        </li>
+
+        <li>
+            <a href="<?= $this->url(
+                'benchmarks/add'
+            ) ?>">Add benchmark</a>
+        </li>
+    </ul>
 
     <table class="table table-striped heatmap">
         <thead>

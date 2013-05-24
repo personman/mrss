@@ -1,0 +1,11 @@
+<h2>Edit Benchmark Group</h2>
+
+<?php
+// Add an action and submit button to the form
+$form->setAttribute('action', $this->url('benchmarkgroups/edit', array(
+            'id' => $benchmarkGroup->getId(),
+        )));
+
+?>
+
+<?= $this->ztbForm($this->form->prepare()) ?>

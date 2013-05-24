@@ -183,6 +183,39 @@ return array(
                     )
                 )
             ),
+            'benchmarkgroups' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/benchmarkgroups',
+                    'defaults' => array(
+                        'controller' => 'benchmarkgroups',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add/study/:study',
+                            'defaults' => array(
+                                'action' => 'add',
+                                'study' => 0
+                            )
+                        )
+                    )
+                )
+            ),
             'observation' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -313,6 +346,7 @@ return array(
             'colleges' => 'Mrss\Controller\CollegeController',
             'observations' => 'Mrss\Controller\ObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',
+            'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
             'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController',
             'settings' => 'Mrss\Controller\SettingController'

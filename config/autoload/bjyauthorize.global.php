@@ -89,6 +89,10 @@ return array(
                     'roles' => array('user')
                 ),
                 array(
+                    'controller' => 'benchmarkgroups',
+                    'roles' => array('user')
+                ),
+                array(
                     'controller' => 'studies',
                     'roles' => array('user')
                 ),

@@ -4,6 +4,10 @@ namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\Factory as InputFactory;
 
 /**
  * Benchmark Group metadata
@@ -13,8 +17,11 @@ use Doctrine\Common\Collections\Criteria;
  * @ORM\Entity
  * @ORM\Table(name="benchmark_groups")
  */
-class BenchmarkGroup implements FormFieldsetProviderInterface
+class BenchmarkGroup implements FormFieldsetProviderInterface,
+    InputFilterAwareInterface
 {
+    protected $inputFilter;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -238,5 +245,53 @@ class BenchmarkGroup implements FormFieldsetProviderInterface
         }
 
         return $complete;
+    }
+
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        $this->inputFilter = $inputFilter;
+    }
+
+    public function getInputFilter()
+    {
+        if (empty($this->inputFilter)) {
+            $inputFilter = new InputFilter();
+            $factory = new InputFactory();
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'name',
+                        'required' => true,
+                        'filters' => array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim')
+                        ),
+                        'validators' => array(
+                            array('name' => 'NotEmpty')
+                        )
+                    )
+                )
+            );
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'shortName',
+                        'required' => true,
+                        'filters' => array(
+                            array('name' => 'StringTrim')
+                        ),
+                        'validators' => array(
+                            array('name' => 'NotEmpty')
+                        )
+                    )
+                )
+            );
+
+            $this->inputFilter = $inputFilter;
+        }
+
+        return $this->inputFilter;
     }
 }
