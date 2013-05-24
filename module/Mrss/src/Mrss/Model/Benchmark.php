@@ -39,10 +39,34 @@ class Benchmark extends AbstractModel
 
     public function save(BenchmarkEntity $benchmark)
     {
+        // Confirm that the sequence is set
+        if (!$benchmark->getSequence()) {
+            $max = $this->getMaxSequence();
+            $newMax = $max + 1;
+            $benchmark->setSequence($newMax);
+        }
+
         $this->getEntityManager()->persist($benchmark);
 
         // Flush here or leave it to some other code?
     }
+
+    public function getMaxSequence()
+    {
+        $lastBenchmark = $this->getRepository()->findOneBy(
+            array(),
+            array('sequence' => 'DESC')
+        );
+
+        if (!empty($lastBenchmark)) {
+            $max = $lastBenchmark->getSequence();
+        } else {
+            $max = 1;
+        }
+
+        return $max;
+    }
+
 
     public function getCompletionPercentages($dbColumn, $years)
     {

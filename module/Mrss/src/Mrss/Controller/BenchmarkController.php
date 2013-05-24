@@ -3,6 +3,7 @@
 namespace Mrss\Controller;
 
 use Mrss\Entity\Benchmark as BenchmarkEntity;
+use Mrss\Entity\Benchmark;
 use Mrss\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -10,6 +11,8 @@ use Zend\Form\Element;
 
 class BenchmarkController extends AbstractActionController
 {
+    protected $benchmarkModel;
+
     public function indexAction()
     {
         $studyId = $this->params()->fromRoute('study');
@@ -33,9 +36,7 @@ class BenchmarkController extends AbstractActionController
     {
         $collegeIds = array(95, 96, 97, 98, 99, 100, 101, 102, 103);
 
-        $benchmarkModel = $this->getServiceLocator()
-            ->get('model.benchmark');
-        $benchmark = $benchmarkModel->find($this->params('id'));
+        $benchmark = $this->getBenchmarkModel()->find($this->params('id'));
 
         $observationModel = $this->getServiceLocator()
             ->get('model.observation');
@@ -55,16 +56,45 @@ class BenchmarkController extends AbstractActionController
 
     public function addAction()
     {
-        $studyId = $this->params('study');
-        $studyModel = $this->getServiceLocator()
-            ->get('model.study');
-        $study = $studyModel->find($studyId);
+        $benchmarkGroupId = $this->params('benchmarkGroup');
+        $benchmarkGroupModel = $this->getServiceLocator()
+            ->get('model.benchmarkGroup');
 
-        if (empty($study)) {
-            throw new \Exception('Study not found.');
+        $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
+
+        if (empty($benchmarkGroup)) {
+            throw new \Exception('Benchmark group not found.');
         }
 
-        // Wait, this is for adding a benchmark group. why is it here?
+        $benchmark = new Benchmark;
+        $benchmark->setBenchmarkGroup($benchmarkGroup);
+
+        // Get the form
+        $form = $this->getBenchmarkForm($benchmark);
+
+        // Handle form submission
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $this->getBenchmarkModel()->save($benchmark);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
+                return $this->redirect()->toRoute(
+                    'benchmarks',
+                    array('study' => $benchmarkGroup->getStudy()->getId())
+                );
+            }
+
+        }
+
+        return array(
+            'form' => $form,
+            'benchmarkGroup' => $benchmarkGroup
+        );
     }
 
     public function editAction()
@@ -74,9 +104,7 @@ class BenchmarkController extends AbstractActionController
             $id = $this->params()->fromPost('id');
         }
 
-        $benchmarkModel = $this->getServiceLocator()
-            ->get('model.benchmark');
-        $benchmark = $benchmarkModel->find($id);
+        $benchmark = $this->getBenchmarkModel()->find($id);
 
         // Don't proceed if the benchmark isn't found
         if (empty($benchmark)) {
@@ -93,16 +121,14 @@ class BenchmarkController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $benchmarkModel->save($benchmark);
+                $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
                 return $this->redirect()->toRoute(
-                    'general',
-                    array(
-                        'controller' => 'benchmarks',
-                        'action' => 'index'
-                    )
+                    'benchmarks',
+                    array('study' => $benchmark->getBenchmarkGroup()
+                        ->getStudy()->getId())
                 );
             }
 
@@ -130,5 +156,22 @@ class BenchmarkController extends AbstractActionController
         $form->bind($benchmark);
 
         return $form;
+    }
+
+    public function setBenchmarkModel(\Mrss\Model\Benchmark $model)
+    {
+        $this->benchmarkModel = $model;
+
+        return $this;
+    }
+
+    public function getBenchmarkModel()
+    {
+        if (empty($this->benchmarkModel)) {
+            $this->benchmarkModel = $this->getServiceLocator()
+                ->get('model.benchmark');
+        }
+
+        return $this->benchmarkModel;
     }
 }
