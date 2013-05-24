@@ -55,17 +55,31 @@ class Benchmark extends AbstractForm
         $this->add(
             array(
                 'name' => 'inputType',
-                'type' => 'Zend\Form\Element\Select',
+                'type' => 'Select',
                 'options' => array(
                     'label' => 'Input Type'
                 ),
                 'attributes' => array(
+                    'id' => 'inputType',
                     'options' => array(
                         'number' => 'Number',
                         'percent' => 'Percent',
                         'text' => 'Text',
                         'computed' => 'Computed'
                     )
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'equation',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Equation'
+                ),
+                'attributes' => array(
+                    'id' => 'equation'
                 )
             )
         );
