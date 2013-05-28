@@ -55,6 +55,28 @@ class BenchmarkeTest extends ModelTestAbstract
         $this->assertEquals('placeholder', $result);
     }
 
+    public function testFindComputed()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findBy')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findComputed();
+
+        $this->assertEquals('placeholder', $result);
+    }
+
     public function testFindOneByDbColumn()
     {
         $repoMock = $this->getMock(
@@ -101,6 +123,35 @@ class BenchmarkeTest extends ModelTestAbstract
         $result = $this->model->find(5);
 
         $this->assertEquals('placeholder', $result);
+    }
+
+    public function testGetMaxSequence()
+    {
+        $lastBenchmarkMock = $this->getMock(
+            'Mrss\Entity\Benchmark',
+            array('getSequence')
+        );
+
+        $lastBenchmarkMock->expects($this->once())
+            ->method('getSequence')
+            ->will($this->returnValue(5));
+
+
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue($lastBenchmarkMock));
+
+        $this->model->setRepository($repoMock);
+
+        $this->assertEquals(5, $this->model->getMaxSequence());
     }
 
     public function testSave()

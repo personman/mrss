@@ -50,6 +50,9 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
             $benchmarkGroup->getStudy(),
             '"study" should initially be null'
         );
+
+        $filter = $benchmarkGroup->getInputFilter();
+        $this->assertInstanceOf('Zend\InputFilter\InputFilterInterface', $filter);
     }
 
     public function testSetters()
@@ -75,6 +78,12 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         $studyMock = $this->getMock('Mrss\Entity\Study');
         $benchmarkGroup->setStudy($studyMock);
         $this->assertSame($studyMock, $benchmarkGroup->getStudy());
+
+        $inputFilterMock = $this->getMock(
+            'Zend\InputFilter\InputFilterInterface'
+        );
+        $benchmarkGroup->setInputFilter($inputFilterMock);
+        $this->assertSame($inputFilterMock, $benchmarkGroup->getInputFilter());
     }
 
     public function testBenchmarkAssociation()
