@@ -1154,6 +1154,27 @@ class Observation
      */
     protected $test_ass_staff_ratio;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $test_student_count;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $test_green_eye_count;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $test_green_eye_percentage;
+
+
+
+
+
+
+
 
 
     public function getYear()

@@ -37,6 +37,11 @@ class Benchmark extends AbstractModel
         return $c;
     }
 
+    public function findComputed()
+    {
+        return $this->getRepository()->findBy(array('inputType' => 'computed'));
+    }
+
     public function save(BenchmarkEntity $benchmark)
     {
         // Confirm that the sequence is set

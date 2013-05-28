@@ -85,6 +85,17 @@ class Module
 
                     return $importer;
                 },
+                'computedFields' => function ($sm) {
+                    $computedFields = new \Mrss\Service\ComputedFields();
+
+                    $benchmarkModel = $sm->get('model.benchmark');
+                    $computedFields->setBenchmarkModel($benchmarkModel);
+
+                    $observationModel = $sm->get('model.observation');
+                    $computedFields->setObservationModel($observationModel);
+
+                    return $computedFields;
+                },
                 // Perhaps there should be a generic model factory
                 // That injects the em
                 'model.user' => function ($sm) {

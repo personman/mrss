@@ -65,6 +65,9 @@ class ObservationController extends AbstractActionController
 
             if ($form->isValid()) {
                 $ObservationModel->save($observation);
+                $this->getServiceLocator()->get('computedFields')
+                    ->calculateAllForObservation($observation);
+
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Data saved.');

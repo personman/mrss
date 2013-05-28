@@ -20,7 +20,8 @@
         "bjyoungblood/bjy-authorize": "1.2.*",
         "goalio/goalio-mailservice": "0.*",
         "goalio/goalio-forgotpassword": "0.*",
-        "goalio/goalio-forgotpassword-doctrine-orm": "dev-master"
+        "goalio/goalio-forgotpassword-doctrine-orm": "dev-master",
+        "rezzza/exprlib": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.*",

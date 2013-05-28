@@ -3,7 +3,32 @@
         '/js/benchmark-form.js',
         'text/javascript'
     );
+    $this->headScript()->appendFile(
+        '/js/jquery-ui.triggeredAutocomplete.js',
+        'text/javascript'
+    );
 ?>
+
+<?php /*
+<script type="text/javascript">
+    $(function() {
+        $('#equation').triggeredAutocomplete({
+            trigger: "$",
+            source: new Array(
+                {
+                    "value": "test",
+                    "label": "The Thing"
+                },
+                {
+                    "value": "test2",
+                    "label": "Something"
+                }
+            )
+        })
+    })
+</script>
+*/ ?>
+
 
 <h2>Edit Benchmark</h2>
 
