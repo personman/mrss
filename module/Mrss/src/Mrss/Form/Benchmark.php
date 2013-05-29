@@ -77,7 +77,12 @@ class Benchmark extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Equation',
-                    'help-block' => '<a href="/benchmarks/equation" data-toggle="modal" data-target="#myModal">Add a benchmark to the equation</a>.<div class="modal hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    'help-block' => '<a href="/benchmarks/equation"
+                    data-toggle="modal" data-target="#myModal">
+                        Add a benchmark to the equation
+                    </a>.
+                    <div class="modal hide" id="myModal" tabindex="-1"
+                    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Select a Benchmark</h3>
