@@ -96,6 +96,14 @@ class Module
 
                     return $computedFields;
                 },
+                'validator.equation' => function ($sm) {
+                    $validator = new \Mrss\Validator\Equation(
+                        $sm->get('computedFields'),
+                        $sm->get('model.benchmark')
+                    );
+
+                    return $validator;
+                },
                 // Perhaps there should be a generic model factory
                 // That injects the em
                 'model.user' => function ($sm) {

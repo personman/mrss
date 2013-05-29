@@ -148,6 +148,9 @@ class BenchmarkController extends AbstractActionController
     public function getBenchmarkForm(BenchmarkEntity $benchmark)
     {
         $em = $this->getServiceLocator()->get('em');
+        $benchmark->setEquationValidator(
+            $this->getServiceLocator()->get('validator.equation')
+        );
 
         // Build form
         $form = new Form\Benchmark;

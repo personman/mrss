@@ -40,14 +40,32 @@ class ComputedFields
         $this->getObservationModel()->save($observation);
     }
 
-    public function prepareEquation($equation, Observation $observation)
+    public function getVariables($equation)
     {
         // Extract the variables
         preg_match_all('/{{(.*?)}}/', $equation, $matches);
 
         $variables = $matches[1];
 
-        $equation = MathParser::build($equation);
+        return $variables;
+    }
+
+    /**
+     * Accept a string equation and return the matchparser
+     *
+     * @param string $equation
+     * @return MathParser
+     */
+    public function buildEquation($equation)
+    {
+        return MathParser::build($equation);
+    }
+
+    public function prepareEquation($equation, Observation $observation)
+    {
+        $variables = $this->getVariables($equation);
+
+        $equation = $this->buildEquation($equation);
 
         $vars = array();
         foreach ($variables as $variable) {

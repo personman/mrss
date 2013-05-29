@@ -349,7 +349,8 @@ return array(
             'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
             'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController',
-            'settings' => 'Mrss\Controller\SettingController'
+            'settings' => 'Mrss\Controller\SettingController',
+            'EquationValidator' => '\Mrss\Validator\Equation'
         ),
     ),
     'view_manager' => array(

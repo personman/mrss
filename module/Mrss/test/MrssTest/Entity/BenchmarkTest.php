@@ -152,6 +152,26 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetEquationValidator()
+    {
+        $benchmark = new Benchmark;
+
+        $equationValidatorMock = $this->getMock(
+            'Mrss\Validator\Equation',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $benchmark->setEquationValidator($equationValidatorMock);
+
+        $this->assertInstanceOf(
+            'Zend\InputFilter\InputFilterInterface',
+            $benchmark->getInputFilter()
+        );
+    }
+
     public function testGetCompletionPercentage()
     {
         $benchmark = new Benchmark;

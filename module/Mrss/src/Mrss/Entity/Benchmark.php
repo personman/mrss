@@ -21,6 +21,7 @@ use Zend\InputFilter\InputFilterInterface;
 class Benchmark implements FormElementProviderInterface, InputFilterAwareInterface
 {
     protected $inputFilter;
+    protected $equationValidator;
 
     /**
      * @ORM\Id
@@ -273,6 +274,19 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 )
             );
 
+            if ($equationValidator = $this->getEquationValidator()) {
+                $inputFilter->add(
+                    $factory->createInput(
+                        array(
+                            'name' => 'equation',
+                            'validators' => array(
+                                $equationValidator
+                            )
+                        )
+                    )
+                );
+            }
+
             $this->inputFilter = $inputFilter;
         }
 
@@ -303,5 +317,17 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         }
 
         return $percentage;
+    }
+
+    public function setEquationValidator($equationValidator)
+    {
+        $this->equationValidator = $equationValidator;
+
+        return $this;
+    }
+
+    public function getEquationValidator()
+    {
+        return $this->equationValidator;
     }
 }
