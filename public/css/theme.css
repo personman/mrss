@@ -375,9 +375,13 @@ header {
 	#footer .sections .contact > *{
 		/*margin-left: 80px;*/
 	}
+
+    form input, form textarea {
+        width: 450px;
+    }
 }
 @media (min-width: 980px) {
-	
+
 }
 @media (max-width: 979px) {
 	.navbar.transparent.navbar-fixed-top, 
