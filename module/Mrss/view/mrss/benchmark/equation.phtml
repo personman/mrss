@@ -1,0 +1,73 @@
+<ul class="nav nav-tabs">
+    <?php foreach ($studies as $study): ?>
+        <li>
+            <a href="#<?= $study->getName() ?>" data-toggle="tab">
+                <?= $study->getName() ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+
+</ul>
+
+<div class="tab-content">
+    <?php foreach ($studies as $study): ?>
+        <div class="tab-pane" id="<?= $study->getName() ?>">
+            <h4><?= $study->getDescription() ?></h4>
+
+            <?php foreach ($study->getBenchmarkGroups() as $benchmarkGroup): ?>
+
+                <table class="table table-striped">
+                    <thead>
+                        <th colspan="3">
+                            <?= $benchmarkGroup->getName() ?>
+                        </th>
+                    </thead>
+
+                    <tbody>
+                        <?php foreach ($benchmarkGroup->getBenchmarks() as
+                                       $benchmark): ?>
+                            <tr>
+                                <td>
+                                    <?= $benchmark->getName() ?>
+                                </td>
+                                <td class="dbColumn">
+                                    <?= $benchmark->getDbColumn() ?>
+                                </td>
+                                <td>
+                                    <button class="btn btn-small addToEquation"
+                                            type="button">
+                                        <i class="icon-plus-sign"></i>
+                                        Add to equation
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+
+                </table>
+
+            <?php endforeach ?>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // When the "Add to equation button" is clicked
+        $('.addToEquation').click(function() {
+            // Find the column to add
+            dbColumn = $(this).parent().parent().find('.dbColumn').html().trim()
+
+            // Wrap it in {{}}
+            benchmarkToAdd = "{{" + dbColumn + "}}"
+
+            // Append it to the equation field
+            equation = $('form #equation').val()
+            equation = equation + benchmarkToAdd
+            $('form #equation').val(equation)
+
+            // Close the modal
+            $('#myModal').modal('hide')
+        })
+    })
+</script>

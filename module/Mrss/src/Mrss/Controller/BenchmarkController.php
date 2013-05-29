@@ -8,6 +8,7 @@ use Mrss\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Element;
+use Zend\View\Model\ViewModel;
 
 class BenchmarkController extends AbstractActionController
 {
@@ -137,6 +138,26 @@ class BenchmarkController extends AbstractActionController
         return array(
             'form' => $form
         );
+    }
+
+    /**
+     * Show a list of benchmarks that can be added to the equation
+     *
+     * @return ViewModel
+     */
+    public function equationAction()
+    {
+        // Get the studies
+        $studies = $this->getServiceLocator()->get('model.study')->findAll();
+
+        $viewModel = new ViewModel(
+            array(
+                'studies' => $studies
+            )
+        );
+        $viewModel->setTerminal(true);
+
+        return $viewModel;
     }
 
     /**
