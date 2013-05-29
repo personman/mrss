@@ -205,6 +205,18 @@ class Subscription
         return $this->paymentMethod;
     }
 
+    public function setPaymentSystemName($systemName)
+    {
+        $this->paymentSystemName = $systemName;
+
+        return $this;
+    }
+
+    public function getPaymentSystemName()
+    {
+        return $this->paymentSystemName;
+    }
+
     public function setObservation(\Mrss\Entity\Observation $observation)
     {
         $this->observation = $observation;

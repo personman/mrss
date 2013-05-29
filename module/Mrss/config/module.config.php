@@ -102,6 +102,24 @@ return array(
                                 'action' => 'invoice'
                             )
                         )
+                    ),
+                    'system' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/system',
+                            'defaults' => array(
+                                'action' => 'system'
+                            )
+                        )
+                    ),
+                    'complete' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/complete',
+                            'defaults' => array(
+                                'action' => 'complete'
+                            )
+                        )
                     )
                 )
             ),

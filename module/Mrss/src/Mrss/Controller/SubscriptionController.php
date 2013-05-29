@@ -123,6 +123,23 @@ class SubscriptionController extends AbstractActionController
     {
         $this->checkSubscriptionIsInProgress();
 
+        // Catch subscription completion via credit card
+        if ($this->params()->fromQuery('UPAY_SITE_ID')) {
+
+            $this->completeSubscription(
+                $this->getSessionContainer()->subscribeForm,
+                array('paymentType' => 'creditCard'),
+                false
+            );
+
+            $this->flashMessenger()->addSuccessMessage(
+                "Payment processed."
+            );
+            return $this->redirect()->toRoute('subscribe/complete');
+        }
+
+        // Show payment forms
+
         // @todo: move this to a config file:
         $uPaySiteId = 3;
 
@@ -136,7 +153,7 @@ class SubscriptionController extends AbstractActionController
         $invoiceForm->setAttribute('action', '/subscribe/invoice');
 
         $systemForm = new SubscriptionSystem();
-        //$systemForm->setAttribute('action', '/subscribe/complete');
+        $systemForm->setAttribute('action', '/subscribe/system');
 
 
 
@@ -145,6 +162,32 @@ class SubscriptionController extends AbstractActionController
             'invoiceForm' => $invoiceForm,
             'systemForm' => $systemForm
         );
+    }
+
+    public function systemAction()
+    {
+        $this->checkSubscriptionIsInProgress();
+
+        $systemForm = new SubscriptionSystem();
+        $systemForm->setAttribute('action', '/subscribe/system');
+
+        if ($this->getRequest()->isPost()) {
+            $systemForm->setData($this->params()->fromPost());
+
+            if ($systemForm->isValid()) {
+                $this->completeSubscription(
+                    $this->getSessionContainer()->subscribeForm,
+                    $systemForm->getData(),
+                    true
+                );
+
+                $this->flashMessenger()->addSuccessMessage(
+                    "Thank you for subscribing. "
+                );
+
+                return $this->redirect()->toRoute('subscribe/complete');
+            }
+        }
     }
 
     public function completeAction()
@@ -173,7 +216,7 @@ class SubscriptionController extends AbstractActionController
                     "Thank you for subscribing. "
                 );
 
-                return $this->redirect()->toUrl('/');
+                return $this->redirect()->toRoute('subscribe/complete');
             }
         }
     }
@@ -359,11 +402,21 @@ class SubscriptionController extends AbstractActionController
             $subscription = new \Mrss\Entity\Subscription();
         }
 
+        // Status: cc = complete, invoice or system = pending
+        if ($method == 'creditCard') {
+            $status = 'complete';
+        } elseif ($method == 'system') {
+            $subscription->setPaymentSystemName($paymentForm['system']);
+            $status = 'pending';
+        } else {
+            $status = 'pending';
+        }
+
         // Get the agreement data from the session
         $agreement = $this->getAgreementFromSession();
 
         $subscription->setYear($this->getCurrentYear());
-        $subscription->setStatus('complete');
+        $subscription->setStatus($status);
         $subscription->setCollege($college);
         $subscription->setStudy($this->getStudy());
         $subscription->setPaymentMethod($method);
