@@ -36,6 +36,25 @@ class SubscriptionController extends AbstractActionController
 
     public function addAction()
     {
+        // password reset email test
+        $email = 'dfergu15@jccc.edu';
+        $userModel = $this->getServiceLocator()->get('model.user');
+
+        $user = $userModel->findOneByEmail($email);
+
+        /** @var \GoalioForgotPassword\Service\Password $pwService */
+        $pwService = $this->getPasswordService();
+        $pwService->getOptions()->setResetEmailSubjectLine('Welcome to MRSS');
+        $pwService->getOptions()
+            ->setResetEmailTemplate('email/subscription/newuser');
+        $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
+
+
+
+
+
+
+
         $form = new SubscriptionForm;
 
         // Handle form submission

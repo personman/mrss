@@ -1,0 +1,6 @@
+Welcome to Maximizing Resources for Student Success!
+
+Your user account was created when your institution subscribed to MRSS. In order
+to activate your account, please click the link below and then set your password:
+
+<?php echo $this->serverUrl($this->url('zfcuser/resetpassword', array('userId' => $this->record->getUserId(), 'token' => $this->record->getRequestKey()))); ?>
