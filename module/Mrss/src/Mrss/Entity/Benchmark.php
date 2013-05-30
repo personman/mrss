@@ -279,7 +279,10 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     $factory->createInput(
                         array(
                             'name' => 'equation',
+                            'required' => false,
+                            //'allow_empty' => true,
                             'validators' => array(
+                                //array('name' => 'NotEmpty'),
                                 $equationValidator
                             )
                         )
