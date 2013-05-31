@@ -274,20 +274,21 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 )
             );
 
+            /**
+             * Equation validator. We need empty values to get processed by the
+             * equation validator as they may be valid depending on whether
+             * it's a computed value or not.
+             * http://stackoverflow.com/questions/14910431/empty-values-passed-to-zend-framework-2-validators
+             */
             if ($equationValidator = $this->getEquationValidator()) {
-                $inputFilter->add(
-                    $factory->createInput(
-                        array(
-                            'name' => 'equation',
-                            'required' => false,
-                            //'allow_empty' => true,
-                            'validators' => array(
-                                //array('name' => 'NotEmpty'),
-                                $equationValidator
-                            )
-                        )
+                $input = new \Zend\InputFilter\Input('equation');
+                $input->getValidatorChain()
+                    ->attach(
+                        new \Zend\Validator\NotEmpty('null')
                     )
-                );
+                    ->attach($equationValidator);
+
+                $inputFilter->add($input);
             }
 
             $this->inputFilter = $inputFilter;
