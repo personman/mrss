@@ -23,6 +23,16 @@ class Benchmark extends AbstractModel
         return $this->getRepository()->findOneBy(array('dbColumn' => $dbColumn));
     }
 
+    public function findOneByDbColumnAndGroup($dbColumn, $benchmarkGroup)
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+                'dbColumn' => $dbColumn,
+                'benchmarkGroup' => $benchmarkGroup
+            )
+        );
+    }
+
     public function find($id)
     {
         return $this->getRepository()->find($id);

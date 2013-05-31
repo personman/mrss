@@ -99,6 +99,28 @@ class BenchmarkeTest extends ModelTestAbstract
         $this->assertEquals('placeholder', $result);
     }
 
+    public function testFindOneByDbColumnAndGroup()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findOneByDbColumn('111111', 7);
+
+        $this->assertEquals('placeholder', $result);
+    }
+
     /**
      * Find by id
      */
