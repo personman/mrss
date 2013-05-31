@@ -729,7 +729,12 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
         // Add the observation tables
         foreach ($this->getTables() as $table) {
-            $formNumber = preg_replace("/[^0-9]/", "", $table);
+            preg_match('/(form([0-9]+)([a-z]?)_)/', $table, $matches);
+            $formNumber = $matches[2];
+            if (!empty($matches[3])) {
+                $formNumber .= ' ' . strtoupper($matches[3]);
+            }
+
             $imports[$table] = array(
                 'label' => 'Form ' . $formNumber,
                 'method' => 'importObservations',
