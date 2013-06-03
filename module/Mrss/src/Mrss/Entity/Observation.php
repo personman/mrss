@@ -405,10 +405,21 @@ class Observation
 
     // NCCBP form 5
 
-    // Class properties cannot begin with a number
-    //protected $96_exp;
-    //protected $97_ova_exp;
-    //protected $98_enr_again;
+    // Class properties cannot begin with a number, so prepend an 'n'
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $n96_exp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $n97_ova_exp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $n98_enr_again;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

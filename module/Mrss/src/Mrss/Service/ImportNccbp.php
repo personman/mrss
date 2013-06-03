@@ -572,6 +572,11 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
         $converted = $matches[2];
 
+        // Since class properties can't begin with a number, prepend an 'n'
+        if (preg_match('/^\d/', $converted)) {
+            $converted = 'n' . $converted;
+        }
+
         return $converted;
     }
 
