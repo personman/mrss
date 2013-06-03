@@ -1101,69 +1101,6 @@ class Observation
     protected $tot_perc_enr;
 
 
-
-    // NCCBP form 18:
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $tot_undup_cr_hd;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $tot_fte_career_staff;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $tot_fte_counc_adv_staff;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $tot_fte_recr_staff;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $tot_fte_fin_aid_staff;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $tot_fte_stud_act_staff;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $tot_fte_test_ass_staff;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $career_staff_ratio;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $couns_adv_ratio;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $recr_staff_ratio;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $fin_aid_staff_ratio;
-
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $stud_act_staff_ratio;
-
-
     // Form 14a
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -1482,6 +1419,186 @@ class Observation
 
 
 
+    // NCCBP form 18:
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_undup_cr_hd;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_career_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_counc_adv_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_recr_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_fin_aid_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_stud_act_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_test_ass_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $career_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $couns_adv_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $recr_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $fin_aid_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $stud_act_staff_ratio;
+
+
+
+
+
+
+    // Form 19a
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_ft_reg_empl;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ret;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $dep;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ret_occ_rate;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $dep_occ_rate;
+
+
+
+    // Form 19b
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_empl;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $griev;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $harass;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $griev_occ_rate;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $harass_occ_rate;
+
+
+
+
+    // Form 20a
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_dir_exp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fy_stud_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_stud;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $cst_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $cst_fte_stud;
+
+
+
+
+    // Form 20b
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_dev_train_exp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_cred_fac;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_staff;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fte_empl;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $exp_fte_empl;
+
+
+    
     // Test fields
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

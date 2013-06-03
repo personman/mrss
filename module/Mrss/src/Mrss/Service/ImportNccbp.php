@@ -192,7 +192,11 @@ inner join node g on a.group_nid = g.nid";
             'content_type_group_form16c_inst_fac_load', // 16c
             'content_type_group_form17a_dist_lear_sec_cred', // 17a
             'content_type_group_form17b_dist_learn_grad', // 17b
-            'content_type_group_form18_stud_serv_staff' // 18
+            'content_type_group_form18_stud_serv_staff', // 18
+            'content_type_group_form19a_ret_dept', // 19a
+            'content_type_group_form19b_griev_har', // 19b
+            'content_type_group_form20a_cst_crh_fte_stud', // 20a
+            'content_type_group_form20b_dev_train_per_empl' // 20b
         );
 
         return $tables;
