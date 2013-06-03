@@ -345,12 +345,29 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             }
 
             if ($exampleObservation->has($dbColumn)) {
+
+                // Find the benchmarkGroup
+                $benchmarkGroupShortName = $result['type_name'];
+                $benchmarkGroup = $this->getBenchmarkGroupModel()
+                    ->findOneByShortName($benchmarkGroupShortName);
+
                 // Find or create the Benchmark entity
                 $benchmark = $this->getBenchmarkModel()
-                    ->findOneByDbColumn($dbColumn);
-                
+                    ->findOneByDbColumnAndGroup($dbColumn, $benchmarkGroup);
+
+                // Create the benchmark
                 if (empty($benchmark)) {
                     $benchmark = new Benchmark;
+
+                    // Now check to see if there are possible duplicates
+                    $existingBenchmark = $this->getBenchmarkModel()
+                        ->findOneByDbColumn($dbColumn);
+
+                    if (!empty($existingBenchmark)) {
+                        // Since a benchmark with this dbColumn (but not this
+                        // benchmark group) already exists, modify the dbColumn
+                        $dbColumn = $benchmarkGroupShortName . '_' . $dbColumn;
+                    }
                 }
 
                 // Populate the benchmark
@@ -364,9 +381,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                     $this->getYearsAvailable($result['field_name'])
                 );
 
-                // Find and set the benchmarkGroup
-                $benchmarkGroup = $this->getBenchmarkGroupModel()
-                    ->findOneByShortName($result['type_name']);
+                // Set the benchmark group
                 if (!empty($benchmarkGroup)) {
                     $benchmark->setBenchmarkGroup($benchmarkGroup);
                 }

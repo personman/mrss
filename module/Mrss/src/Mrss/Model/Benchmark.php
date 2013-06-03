@@ -25,12 +25,28 @@ class Benchmark extends AbstractModel
 
     public function findOneByDbColumnAndGroup($dbColumn, $benchmarkGroup)
     {
-        return $this->getRepository()->findOneBy(
+        // First try without the dbColumn prefix
+        $benchmark = $this->getRepository()->findOneBy(
             array(
                 'dbColumn' => $dbColumn,
                 'benchmarkGroup' => $benchmarkGroup
             )
         );
+
+        if (empty($benchmark)) {
+            // If that returns nothing, try with the benchmark group prefix on the
+            // dbColumn
+            $dbColumn = $benchmarkGroup->getShortName() . '_' . $dbColumn;
+
+            $benchmark = $this->getRepository()->findOneBy(
+                array(
+                    'dbColumn' => $dbColumn,
+                    'benchmarkGroup' => $benchmarkGroup
+                )
+            );
+        }
+
+        return $benchmark;
     }
 
     public function find($id)

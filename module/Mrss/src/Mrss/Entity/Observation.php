@@ -986,7 +986,10 @@ class Observation
      */
     protected $compl_succ;
 
-    //protected $enr_succ;
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $group_form12_instw_cred_grad_enr_succ;
 
     /**
      * @ORM\Column(type="float", nullable=true)
