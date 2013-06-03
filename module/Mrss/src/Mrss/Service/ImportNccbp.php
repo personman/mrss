@@ -184,6 +184,8 @@ inner join node g on a.group_nid = g.nid";
             'content_type_group_form12_instw_cred_grad', // 12
             'content_type_group_form13a_minority', // 13a
             'content_type_group_form13b_hschool_grads', // 13b
+            'content_type_group_form14a_market_pen_stud', // 14a
+            'content_type_group_form14b_market_pen_com', // 14b
             'content_type_group_form18_stud_serv_staff' // 18
         );
 

@@ -1163,6 +1163,71 @@ class Observation
      */
     protected $stud_act_staff_ratio;
 
+
+    // Form 14a
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $undup_cre_head;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $undup_non_cre_head;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $serv_pop;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $cre_stud_pen_rate;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ncre_stud_pen_rate;
+
+
+    // Form 14b
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $cul_act_dupl_head;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pub_meet_dupl_head;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $spo_dupl_head;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form14b_serv_pop;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $cul_com_part;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pub_com_part;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $spo_com_part;
+
+    // Test fields
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
