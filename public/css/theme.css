@@ -1,13 +1,24 @@
 html {
 	margin: 0;
+    height: 100%;
 }
 body {
 	position: relative;
-	background: #DDDCE2 url(../img/body_bg.jpg) repeat left top;
+	background: #252528;
 	-webkit-font-smoothing: antialiased;
 	font-family: 'Lato', sans-serif !important;
 	padding-top: 107px;
+    height: 100%;
 }
+
+#wrapper {
+    /*min-height: 100%;
+    height: auto !important;
+    height: 100%;*/
+    /*margin: 0 auto -460px;*/
+    background: #DDDCE2 url(../img/body_bg.jpg) repeat left top;
+}
+
 @media (max-width: 979px) {
 	body { padding-top: 0 !important; }
 }
@@ -111,7 +122,7 @@ header {
 -------------------------------------------------- */
 #footer {
 	min-height: 260px;
-	margin-top: 140px;
+	margin-top:140px;
 	background-color: #252528;
 	color: #fff;
 	padding-top: 35px;
