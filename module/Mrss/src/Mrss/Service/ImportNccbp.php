@@ -186,6 +186,12 @@ inner join node g on a.group_nid = g.nid";
             'content_type_group_form13b_hschool_grads', // 13b
             'content_type_group_form14a_market_pen_stud', // 14a
             'content_type_group_form14b_market_pen_com', // 14b
+            'content_type_group_form15_fy_bni', // 15
+            'content_type_group_form16a_av_cred_sect', // 16a
+            'content_type_group_form16b_cred_co_stud_fac', // 16b
+            'content_type_group_form16c_inst_fac_load', // 16c
+            'content_type_group_form17a_dist_lear_sec_cred', // 17a
+            'content_type_group_form17b_dist_learn_grad', // 17b
             'content_type_group_form18_stud_serv_staff' // 18
         );
 

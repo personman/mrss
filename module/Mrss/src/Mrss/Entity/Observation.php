@@ -1227,6 +1227,261 @@ class Observation
      */
     protected $spo_com_part;
 
+
+
+    // Form 15
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $fy_dup_headc_bni;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $comp_serv;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_inst_adm_cst;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_rev;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $net_revenue_usd;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $net_revenue_perc;
+
+
+
+    // Form 16a
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_cred_cou_sec;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_cred_stud;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $av_cred_sec_size;
+
+
+    // Form 16c
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_tot_fac;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_tot_stud_crhrs_tght;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_tot_cred_sec_tght;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_tot_fac;
+
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_tot_stud_crhrs_tght;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_tot_cred_sec_tght;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_fac;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_cred_hrs;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_perc_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_perc_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_cred_sec;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_perc_sec;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $pt_perc_sec;
+
+
+    // Form 17a
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_dis_lear_stud_hrs;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_dis_lear_sec;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_crh_tght;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_crs_tght;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $dist_prop_crh;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $dist_prop_crs;
+
+
+    // Form 17b
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_a;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_b;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_c;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_d;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_p;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_f;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_w;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_total;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_a_perc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_b_perc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_c_perc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_d_perc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_p_perc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_f_perc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_w_perc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_withdrawal;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_completed;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $completer_succ;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_enr_succ;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $group_form17b_anb;
+
+
+
     // Test fields
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
