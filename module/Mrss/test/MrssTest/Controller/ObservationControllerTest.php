@@ -21,7 +21,7 @@ class ObservationControllerTest extends AbstractControllerTestCase
     {
         $this->assertTrue(true);
     }
-    
+
     /**
      * It takes a lot of mocking to get all the way through the view.
      * Is there a way to disable view rendering and just inspect the viewModel
