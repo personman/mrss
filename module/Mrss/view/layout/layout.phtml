@@ -43,11 +43,12 @@
                 Student Success" />
             </a>
             <div class="nav-collapse collapse">
-                <?php $menuOptions = array('ulClass' => 'nav pull-right') ?>
+                <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
                 <?php $partial = array('mrss/menu/navigation.phtml', 'default') ?>
-                <?php $this->navigation('navigation')->menu()
-                    ->setPartial($partial) ?>
-                <?= $this->navigation('navigation')->menu()->setPartial($partial)
+                <?php //$this->navigation('navigation')->menu()
+                    //->setPartial($partial) ?>
+                <?= $this->navigation()->menu('navigation')->setPartial
+                    ($partial)
                     ->render(); ?>
             </div>
         </div>
@@ -79,9 +80,26 @@
 
 <?php if (empty($this->noWrapper)): ?>
     <div id="content">
-        <div class="container">
-            <div class="row">
-                <div class="span12">
+        <div class="container-fluid container">
+            <div class="row-fluid">
+
+                <?php if ($this->isAllowed('adminMenu', 'view')): ?>
+                <div class="span2 adminNavigation">
+                    <h3>Admin</h3>
+
+                    <?php $partial = array('mrss/menu/navigation.phtml',
+                        'default') ?>
+                    <?php //$this->navigation('navigation')->menu()
+                        //->setPartial($partial) ?>
+                    <?= $this->navigation('admin_navigation')
+                        ->menu()
+                        //->setPartial($partial)
+                        //->setContainer('admin')
+                        ->render(); ?>
+                </div>
+                <?php endif ?>
+
+                <div class="span10">
                     <?php echo $this->content; ?>
                 </div>
             </div>

@@ -26,6 +26,26 @@ return array(
                 'controller' => 'subscription'
             ),
             array(
+                'label' => 'Dropdown',
+                'uri' => '#',
+                'pages' => array(
+                    array(
+                        'label' => 'Test 1',
+                        'uri' => '/user/logout'
+                    ),
+                    array(
+                        'label' => 'Test 2',
+                        'uri' => '/user/logout'
+                    ),
+                    array(
+                        'label' => 'Test 3',
+                        'uri' => '/user/logout'
+                    )
+                )
+            )
+        ),
+        'admin' => array(
+            array(
                 'label' => 'Studies',
                 'controller' => 'studies',
                 'route' => 'studies'
@@ -59,24 +79,6 @@ return array(
                 'action' => 'index',
                 'ulClass' => 'dropdown-menu',
             ),
-            array(
-                'label' => 'Dropdown',
-                'uri' => '#',
-                'pages' => array(
-                    array(
-                        'label' => 'Test 1',
-                        'uri' => '/user/logout'
-                    ),
-                    array(
-                        'label' => 'Test 2',
-                        'uri' => '/user/logout'
-                    ),
-                    array(
-                        'label' => 'Test 3',
-                        'uri' => '/user/logout'
-                    )
-                )
-            )
         )
     )
 );

@@ -30,11 +30,23 @@ return array(
 
         // Resource providers to be used to load all available resources into Zend\Permissions\Acl\Acl
         // Keys are the provider service names, values are the options to be passed to the provider
-        'resource_providers'    => array(),
+        'resource_providers'    => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                'adminMenu' => array(),
+            ),
+        ),
 
         // Rule providers to be used to load all available rules into Zend\Permissions\Acl\Acl
         // Keys are the provider service names, values are the options to be passed to the provider
-        'rule_providers'        => array(),
+        'rule_providers'        => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    // allow guests and users (and admins, through inheritance)
+                    // the "wear" privilege on the resource "pants"
+                    array(array('user'), 'adminMenu', 'view')
+                ),
+            ),
+        ),
 
         // Guard listeners to be attached to the application event manager
         'guards'                => array(

@@ -118,6 +118,14 @@ header {
 	margin:0;
 }
 
+/* Admin navigation */
+.adminNavigation {
+    border: 1px solid #ccc;
+    background: #ddd;
+    padding: 10px;
+}
+
+
 /* Footer
 -------------------------------------------------- */
 #footer {

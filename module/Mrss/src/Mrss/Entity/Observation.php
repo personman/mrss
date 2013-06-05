@@ -1598,7 +1598,7 @@ class Observation
     protected $exp_fte_empl;
 
 
-    
+
     // Test fields
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

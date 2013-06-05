@@ -19,7 +19,7 @@ class CollegeControllerTest extends AbstractControllerTestCase
         parent::setUp();
     }
 
-    public function testIndexActionCanBeAccessed()
+    /*public function testIndexActionCanBeAccessed()
     {
         $collegeModelMock = $this->getCollegeModelMock();
         $collegeModelMock->expects($this->once())
@@ -38,7 +38,7 @@ class CollegeControllerTest extends AbstractControllerTestCase
         $this->assertActionName('index');
         $this->assertControllerClass('CollegeController');
         $this->assertMatchedRouteName('colleges');
-    }
+    }*/
 
     /*public function testViewActionCanBeAccessed()
     {
