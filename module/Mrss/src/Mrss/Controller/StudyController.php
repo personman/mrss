@@ -62,6 +62,9 @@ class StudyController extends AbstractActionController
 
     public function editAction()
     {
+        //$c = $this->currentStudy();
+        //var_dump($c); die;
+
         $id = $this->params('id');
         if (empty($id) && $this->getRequest()->isPost()) {
             $id = $this->params()->fromPost('id');
@@ -85,6 +88,8 @@ class StudyController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
+                //var_dump($this->params()->fromPost());
+                //var_dump($study); die;
                 $this->getStudyModel()->save($study);
 
                 $this->flashMessenger()->addSuccessMessage('Study saved.');

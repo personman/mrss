@@ -2,7 +2,6 @@
 
 namespace Mrss;
 
-use Zend\Mail\Transport\Sendmail;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Mrss\View\Helper\FlashMessages;
@@ -203,12 +202,39 @@ class Module
         );
     }
 
+    public function getControllerPluginConfig()
+    {
+        return array(
+            'factories' => array(
+                'currentStudy' => function ($sm) {
+                    $plugin = new \Mrss\Controller\Plugin\CurrentStudy;
+
+                    // Inject the study model so we can look up the study entity
+                    $studyModel = $sm->getServiceLocator()->get('model.study');
+                    $plugin->setStudyModel($studyModel);
+
+                    // The current base url
+                    $url = $sm->getServiceLocator()
+                        ->get('request')
+                        ->getUri()
+                        ->getHost();
+                    $plugin->setUrl($url);
+
+                    $config = $sm->getServiceLocator()->get('Config');
+                    $studyConfig = $config['studies'];
+                    $plugin->setConfig($studyConfig);
+
+                    return $plugin;
+                },
+            ),
+        );
+    }
+
     public function getViewHelperConfig()
     {
         return array(
             'factories' => array(
                 'flashMessages' => function($sm) {
-                    //die('why?');
                     $flashmessenger = $sm->getServiceLocator()
                         ->get('ControllerPluginManager')
                         ->get('flashmessenger');
@@ -217,6 +243,18 @@ class Module
                     $messages->setFlashMessenger($flashmessenger);
 
                     return $messages;
+                },
+                'currentStudy' => function($sm) {
+                    // First get the controller plugin
+                    $plugin = $sm->getServiceLocator()
+                        ->get('ControllerPluginManager')
+                        ->get('currentStudy');
+
+                    // Now inject the plugin
+                    $helper = new \Mrss\View\Helper\CurrentStudy;
+                    $helper->setPlugin($plugin);
+
+                    return $helper;
                 }
             ),
         );

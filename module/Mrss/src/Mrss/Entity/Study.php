@@ -42,6 +42,48 @@ class Study
      */
     protected $benchmarkGroups;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    protected $price;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    protected $earlyPrice;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    protected $earlyPriceDate;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $enrollmentOpen;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $dataEntryOpen;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $reportsOpen;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $uPayUrl;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $uPaySiteId;
+
+
+
     public function __construct()
     {
         $this->benchmarkGroups = new \Doctrine\Common\Collections\ArrayCollection();
@@ -98,6 +140,100 @@ class Study
     public function getCurrentYear()
     {
         return $this->currentYear;
+    }
+
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function setEarlyPrice($earlyPrice)
+    {
+        $this->earlyPrice = $earlyPrice;
+
+        return $this;
+    }
+
+    public function getEarlyPrice()
+    {
+        return $this->earlyPrice;
+    }
+
+    public function setEarlyPriceDate($date)
+    {
+        $this->earlyPriceDate = $date;
+
+        return $this;
+    }
+
+    public function getEarlyPriceDate()
+    {
+        return $this->earlyPriceDate;
+    }
+
+    public function setEnrollmentOpen($enrollmentOpen)
+    {
+        $this->enrollmentOpen = $enrollmentOpen;
+
+        return $this;
+    }
+
+    public function getEnrollmentOpen()
+    {
+        return $this->enrollmentOpen;
+    }
+
+    public function setDataEntryOpen($dataEntryOpen)
+    {
+        $this->dataEntryOpen = $dataEntryOpen;
+
+        return $this;
+    }
+
+    public function getDataEntryOpen()
+    {
+        return $this->dataEntryOpen;
+    }
+
+    public function setReportsOpen($reportsOpen)
+    {
+        $this->reportsOpen = $reportsOpen;
+    }
+
+    public function getReportsOpen()
+    {
+        return $this->reportsOpen;
+    }
+
+    public function setUPayUrl($uPayUrl)
+    {
+        $this->uPayUrl = $uPayUrl;
+
+        return $this;
+    }
+
+    public function getUPayUrl()
+    {
+        return $this->uPayUrl;
+    }
+
+    public function setUPaySiteId($uPaySiteId)
+    {
+        $this->uPaySiteId = $uPaySiteId;
+
+        return $this;
+    }
+
+    public function getUPaySiteId()
+    {
+        return $this->uPaySiteId;
     }
 
     public function getCompletionPercentage(Observation $observation)

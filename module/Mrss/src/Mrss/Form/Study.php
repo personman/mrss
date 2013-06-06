@@ -54,6 +54,86 @@ class Study extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'price',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Price'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'earlyPrice',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Early-Bird Price'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'earlyPriceDate',
+                'type' => 'Date',
+                'options' => array(
+                    'label' => 'Early-Bird Price Deadline'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'enrollmentOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Enrollment Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'dataEntryOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Data Entry Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'reportsOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Reports Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'uPayUrl',
+                'type' => 'Url',
+                'options' => array(
+                    'label' => 'uPay Url'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'uPaySiteId',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'uPay Site ID'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 

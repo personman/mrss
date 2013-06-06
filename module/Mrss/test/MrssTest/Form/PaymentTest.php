@@ -16,7 +16,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->form = new Payment(5, 100);
+        $this->form = new Payment(5, 'http://test.com', 100);
     }
 
     public function testFormConstruction()

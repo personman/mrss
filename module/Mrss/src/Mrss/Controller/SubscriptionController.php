@@ -140,14 +140,15 @@ class SubscriptionController extends AbstractActionController
 
         // Show payment forms
 
-        // @todo: move this to a config file:
-        $uPaySiteId = 3;
+        // Get the uPay info from the study config
+        $uPaySiteId = $this->currentStudy()->getUPaySiteId();
+        $uPayUrl = $this->currentStudy()->getUPayUrl();
 
         // @todo: get this dynamically based on study and date
         $amount = 102;
 
 
-        $ccForm = new Payment($uPaySiteId, $amount);
+        $ccForm = new Payment($uPaySiteId, $uPayUrl, $amount);
 
         $invoiceForm = new SubscriptionInvoice();
         $invoiceForm->setAttribute('action', '/subscribe/invoice');

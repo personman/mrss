@@ -14,17 +14,19 @@ use Zend\Form\Fieldset;
  */
 class Payment extends AbstractForm
 {
-    public function __construct($uPaySiteId, $amount)
+    public function __construct($uPaySiteId, $uPayUrl, $amount)
     {
+        if (empty($uPaySiteId)) {
+            throw new \Exception("Payment form requires uPaySiteId");
+        }
+        if (empty($uPayUrl)) {
+            throw new \Exception("Payment form requires uPayUrl");
+        }
+
         // Call the parent constructor
         parent::__construct('payment');
 
-        // Production:
-        //$upayUrl = 'https://secure.touchnet.com/C20110_upay/web/index.jsp';
-
-        // Test:
-        $upayUrl = 'https://secure.touchnet.com:8443/C20110test_upay/web/index.jsp';
-        $this->setAttribute('action', $upayUrl);
+        $this->setAttribute('action', $uPayUrl);
         $this->setAttribute('method', 'post');
 
             // Add elements

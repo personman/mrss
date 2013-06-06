@@ -371,6 +371,11 @@ return array(
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),
     ),
+    'controller_plugins' => array(
+        'invokables' => array(
+            //'CurrentStudy' => 'Mrss\Controller\Plugin\CurrentStudy',
+        )
+    ),
     'view_manager' => array(
         'template_path_stack' => array(
             'mrss' => __DIR__ . '/../view',
