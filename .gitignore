@@ -14,3 +14,4 @@ config/autoload/db.php.bak
 report
 build
 data/DoctrineORMModule/Proxy/
+error_log
