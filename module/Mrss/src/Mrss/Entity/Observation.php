@@ -1599,6 +1599,162 @@ class Observation
 
 
 
+
+    // NCCWTP
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $enrollment_information_duplicated_enrollment;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $enrollment_information_unduplicated_enrollment;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $enrollment_information_organizations_served;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $enrollment_information_training_contracts;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $enrollment_information_total_contact_hours;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $retention_returning_organizations;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $retention_returning_students;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $staffing_full_time_instructors;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $staffing_part_time_instructors;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $staffing_independent_contractors;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $staffing_full_time_support_staff;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $staffing_part_time_support_staff;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $transition_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_federal;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_state;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_local;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_grants;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_earned_revenue;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_contract_training;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_continuing_education;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_total;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_benefits;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_supplies;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_marketing;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_capital_equipment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_travel;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_contract_training;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_continuing_education;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_total;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_overhead;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $retained_revenue_contract_training;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $retained_revenue_continuing_education;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $retained_revenue_total;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $retained_revenue_roi;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $satisfaction_client;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $satisfaction_student;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_credit_enrollment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $institutional_demographics_operating_revenue;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $institutional_demographics_campus_environment;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $institutional_demographics_faculty_unionized;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $institutional_demographics_staff_unionized;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_total_population;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_total_companies;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_companies_less_than_50;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_companies_50_to_99;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_companies_100_to_499;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_companies_500_or_greater;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $institutional_demographics_unemployment_rate;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $institutional_demographics_median_household_income;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_credentials_awarded;
+
+
     // Test fields
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -1704,6 +1860,11 @@ class Observation
             throw new Exception\InvalidBenchmarkException(
                 "'$benchmark' is not a valid benchmark."
             );
+        }
+
+        // Convert empty strings to null so they don't end up as 0
+        if ($value == '') {
+            $value = null;
         }
 
         $this->$benchmark = $value;

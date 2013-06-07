@@ -86,6 +86,25 @@ class Module
 
                     return $importer;
                 },
+                'import.nccwtp' => function ($sm) {
+                    $nccwtp = new \Mrss\Service\ImportNccwtp();
+
+                    return $nccwtp;
+                },
+                'import.csv' => function ($sm) {
+                    $importer = new \Mrss\Service\ImportBenchmarks();
+
+                    // Models
+                    $benchmarkModel = $sm->get('model.benchmark');
+                    $importer->setBenchmarkModel($benchmarkModel);
+
+                    $benchmarkGroupModel = $sm->get('model.benchmarkGroup');
+                    $importer->setBenchmarkGroupModel($benchmarkGroupModel);
+
+                    $importer->setEntityManager($sm->get('em'));
+
+                    return $importer;
+                },
                 'computedFields' => function ($sm) {
                     $computedFields = new \Mrss\Service\ComputedFields();
 

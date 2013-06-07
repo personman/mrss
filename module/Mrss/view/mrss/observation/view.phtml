@@ -32,9 +32,12 @@
 <?php else: ?>
 
     <h4><?= $this->benchmarkGroup->getName() ?></h4>
+
+    <?php if ($description = $benchmarkGroup->getDescription()): ?>
     <div class="well">
-        <?= $this->benchmarkGroup->getDescription() ?>
+        <?= $description ?>
     </div>
+    <?php endif ?>
 
     <a href="<?= $this->url(
         'observation/group/edit',

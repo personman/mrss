@@ -18,6 +18,11 @@ class BenchmarkGroup extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\BenchmarkGroup';
 
+    public function findOneByName($name)
+    {
+        return $this->getRepository()->findOneBy(array('name' => $name));
+    }
+
     public function findOneByShortName($shortName)
     {
         return $this->getRepository()->findOneBy(array('shortName' => $shortName));

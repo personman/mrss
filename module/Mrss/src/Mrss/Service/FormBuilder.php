@@ -31,7 +31,7 @@ class FormBuilder
 
         $buttons = new Fieldset('buttons');
         $buttons->setAttribute('class', 'well well-small');
-        $buttons->setLabel('Submit Fieldset');
+        $buttons->setLabel('');
 
         // Add the save button
         $save = new Element\Submit('submit');

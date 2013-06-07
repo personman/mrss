@@ -32,6 +32,10 @@ class ComputedFields
         // Populate variables
         $equation = $this->prepareEquation($equation, $observation);
 
+        if (empty($equation)) {
+            return false;
+        }
+
         // the Calculation
         $result = $equation->evaluate();
 
@@ -70,6 +74,12 @@ class ComputedFields
         $vars = array();
         foreach ($variables as $variable) {
             $value = $observation->get($variable);
+
+            // If any of the variables are null or '', bail out
+            if ($value === null || $value === '') {
+                return false;
+            }
+
             $vars[$variable] = $value;
         }
 

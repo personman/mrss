@@ -27,6 +27,38 @@ class ImportController extends AbstractActionController
         );
     }
 
+    public function csvAction()
+    {
+        $studyId = 3;
+        $filename = 'data/imports/nccwtp-benchmarks.csv';
+
+        /** @var \Mrss\Service\ImportBenchmarks $importer */
+        $importer = $this->getServiceLocator()->get('import.csv');
+
+        // Pass in the study we're importing to
+        $studyModel = $this->getServiceLocator()->get('model.study');
+        $study = $studyModel->find($studyId);
+        $importer->setStudy($study);
+
+        $importer->import($filename);
+        $this->getServiceLocator()->get('em')->flush();
+
+        //die('csv import action');
+
+        // Output properties that need to be added to Observation
+        return array(
+            'propertiesToAdd' => $importer->getObservationPropertiesToAdd()
+        );
+    }
+
+    public function nccwtpAction()
+    {
+        $importer = $this->getServiceLocator()->get('import.nccwtp');
+        $importer->import();
+
+        die('import done');
+    }
+
     /**
      * This action should be hit by an ajax call. It just kicks off the background
      * import process.
