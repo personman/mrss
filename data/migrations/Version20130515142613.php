@@ -17,10 +17,10 @@ class Version20130515142613 extends AbstractMigration
 
         // Create the NCCBP study. Use "ON DUPLICATE KEY" for when it's already
         // there. "id=id" means it just does nothing.
-        $this->addSql("INSERT INTO studies (id, name, description, currentYear) VALUES (1, 'NCCBP', 'National Community College Benchmark Project', 2013) ON DUPLICATE KEY UPDATE id=id");
+        $this->addSql("INSERT INTO studies (id, name, description, currentYear, uPaySiteId, uPayUrl) VALUES (1, 'NCCBP', 'National Community College Benchmark Project', 2013, 3, 'http://test.com') ON DUPLICATE KEY UPDATE id=id");
 
         // Now add MRSS
-        $this->addSql("INSERT INTO studies (id, name, description, currentYear) VALUES (2, 'MRSS', 'Maximizing Resources for Student Success', 2013) ON DUPLICATE KEY UPDATE id=id");
+        $this->addSql("INSERT INTO studies (id, name, description, currentYear, uPaySiteId, uPayUrl) VALUES (2, 'MRSS', 'Maximizing Resources for Student Success', 2013, 3, 'http://test.com') ON DUPLICATE KEY UPDATE id=id");
 
     }
 
