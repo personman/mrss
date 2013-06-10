@@ -7,6 +7,7 @@ use Zend\Form\Element;
 use Zend\Form\Fieldset;
 use Mrss\Entity\FormFieldsetProviderInterface as FieldsetProvider;
 use Mrss\Entity\FormElementProviderInterface as FormElementProvider;
+use Zend\InputFilter\InputFilter;
 
 class FormBuilder
 {
@@ -22,11 +23,13 @@ class FormBuilder
     public function buildForm(FieldsetProvider $provider, $year)
     {
         $form = new Form;
+        $inputFilter = new InputFilter();
 
         // Add the elements from the provider
         foreach ($provider->getElements($year) as $elementProvider) {
             $element = $this->getElement($elementProvider);
             $form->add($element);
+            $inputFilter->add($elementProvider->getFormElementInputFilter());
         }
 
         $buttons = new Fieldset('buttons');
@@ -40,6 +43,8 @@ class FormBuilder
         $buttons->add($save);
 
         $form->add($buttons);
+
+        $form->setInputFilter($inputFilter);
 
 
         return $form;

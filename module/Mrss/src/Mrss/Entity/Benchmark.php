@@ -73,6 +73,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     /**
      * @ORM\Column(type="string", nullable=true)
      */
+    protected $options;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     protected $equation;
 
 
@@ -213,6 +218,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $this->equation;
     }
 
+    public function setOptions($options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
     /**
      * Implement the FormElementProviderInterface
      *
@@ -220,15 +237,37 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      */
     public function getFormElement()
     {
-        return array(
+        $element = array(
             'name' => $this->getDbColumn(),
+            'allow_empty' => true,
             'options' => array(
                 'label' => $this->getName(),
                 'help-block' => $this->getDescription()
             ),
             'attributes' => array(
+                'id' => $this->getDbColumn(),
                 'class' => 'input-small'
             )
+        );
+
+        // Radio type:
+        if ($this->getInputType() == 'radio') {
+            $element['type'] = 'Select';
+
+            $options = explode(',', $this->getOptions());
+            $options = array_combine($options, $options);
+            $element['attributes']['options'] = $options;
+            $element['options']['empty_option'] = '---';
+        }
+
+        return $element;
+    }
+
+    public function getFormElementInputFilter()
+    {
+        return array(
+            'name' => $this->getDbColumn(),
+            'allow_empty' => true
         );
     }
 

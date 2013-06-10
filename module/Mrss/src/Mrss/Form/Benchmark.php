@@ -64,9 +64,21 @@ class Benchmark extends AbstractForm
                     'options' => array(
                         'number' => 'Number',
                         'percent' => 'Percent',
+                        'dollars' => 'Dollars',
                         'text' => 'Text',
-                        'computed' => 'Computed'
+                        'computed' => 'Computed',
+                        'radio' => 'Radio'
                     )
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'options',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Options'
                 )
             )
         );

@@ -108,6 +108,7 @@ class ImportBenchmarks
         $benchmark->setDbColumn($row['dbColumn']);
         $benchmark->setInputType($row['inputType']);
         $benchmark->setDescription($row['description']);
+        $benchmark->setOptions($row['options']);
         $benchmark->setEquation(($row['equation']));
         $benchmark->setYearsAvailable($this->getYears());
 
@@ -160,8 +161,9 @@ class ImportBenchmarks
         $year = date('Y');
         $year2 = $year + 1;
         $year3 = $year + 2;
+        $year0 = $year - 1;
 
-        return array($year, $year2, $year3);
+        return array($year0, $year, $year2, $year3);
     }
 
     public function setStudy(Study $study)
