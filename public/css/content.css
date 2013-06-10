@@ -68,11 +68,11 @@ table.style1 tbody
 
 @media (min-width: 980px) {
     .form-horizontal .control-label {
-        width: 40%;
+        width: 16%;
     }
 
     .form-horizontal .controls {
-        margin-left: 42%;
+        margin-left: 18%;
     }
 }
 

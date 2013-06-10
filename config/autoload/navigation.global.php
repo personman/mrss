@@ -21,27 +21,27 @@ return array(
                 'route' => 'general'
             ),
             array(
-                'label' => 'Subscribe',
-                'route' => 'subscribe',
-                'controller' => 'subscription'
-            ),
-            array(
-                'label' => 'Dropdown',
+                'label' => 'About Us',
                 'uri' => '#',
                 'pages' => array(
                     array(
-                        'label' => 'Test 1',
-                        'uri' => '/user/logout'
+                        'label' => 'About MRSS',
+                        'uri' => '/mrss'
                     ),
                     array(
-                        'label' => 'Test 2',
-                        'uri' => '/user/logout'
+                        'label' => 'Our Staff',
+                        'uri' => '/staff'
                     ),
                     array(
-                        'label' => 'Test 3',
-                        'uri' => '/user/logout'
+                        'label' => 'Testimonials',
+                        'uri' => '/testimonials'
                     )
                 )
+            ),
+            array(
+                'label' => 'Subscribe',
+                'route' => 'subscribe',
+                'controller' => 'subscription'
             )
         ),
         'admin' => array(
