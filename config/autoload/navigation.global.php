@@ -35,6 +35,10 @@ return array(
                     array(
                         'label' => 'Testimonials',
                         'uri' => '/testimonials'
+                    ),
+                    array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
                     )
                 )
             ),
@@ -42,6 +46,10 @@ return array(
                 'label' => 'Subscribe',
                 'route' => 'subscribe',
                 'controller' => 'subscription'
+            ),
+            array(
+                'label' => 'Contact Us',
+                'uri' => '/contact'
             )
         ),
         'admin' => array(

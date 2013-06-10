@@ -1,0 +1,34 @@
+<?php $this->headTitle()->prepend('Contact'); ?>
+<section class="contact">
+    <h2>Contact Us</h2>
+
+    <p>
+        Contact us about benchmarks, data collection and reporting, subscription, peer comparison, or to simply comment on <?= $this->currentStudy()->getName()
+?>. </p>
+
+    <p>
+        Privacy Note: Your contact message will contain a return e-mail address. If you include other identifying information, we may use that information when we respond, but it will be destroyed when we've completed our correspondence. Also, e-mail may not be secure, so send only information that is necessary to respond to your request.
+    </p>
+
+    <?php if ($this->error): ?>
+        <p class="error">
+            There were one or more isues with your submission. Please correct them as
+            indicated below.
+        </p>
+    <?php endif ?>
+
+    <?php
+    $form = $this->form;
+    $form->prepare();
+    $form->setAttribute('action', $this->url('contact/process'));
+    $form->setAttribute('method', 'post');
+
+    // Use the Bootstrap btn class
+    $form->get('Send')->setAttribute('class', 'btn btn-primary');
+
+    // Make the body a little taller
+    $form->get('body')->setAttribute('rows', 5);
+    ?>
+
+    <?= $this->ztbForm($form) ?>
+</section>

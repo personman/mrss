@@ -57,6 +57,10 @@ return array(
                     'roles' => array('guest')
                 ),
                 array(
+                    'controller' => 'PhlyContact\Controller\Contact',
+                    'roles' => array('guest')
+                ),
+                array(
                     'controller' => 'subscription',
                     'roles' => array('guest')
                 ),

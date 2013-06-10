@@ -14,6 +14,7 @@ return array(
         'GoalioMailService',
         'GoalioForgotPassword',
         'GoalioForgotPasswordDoctrineORM',
+        'PhlyContact',
         'Mrss'
     ),
 

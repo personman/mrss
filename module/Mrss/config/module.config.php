@@ -393,7 +393,10 @@ return array(
             'error/index' => __DIR__ . '/../view/error/index.phtml',
             'zfc-user/user/login' => __DIR__ . '/../view/mrss/user/login.phtml',
             'goalio-forgot-password/forgot/forgot' => __DIR__ .
-            '/../view/mrss/user/forgot.phtml'
+            '/../view/mrss/user/forgot.phtml',
+            // Override the PhlyContact view
+            'phly-contact/contact/index' => __DIR__ .
+            '/../view/mrss/contact/index.phtml'
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
