@@ -42,6 +42,8 @@ class ComputedFields
         // Save the computed value
         $observation->set($benchmarkColumn, $result);
         $this->getObservationModel()->save($observation);
+
+        return true;
     }
 
     public function getVariables($equation)

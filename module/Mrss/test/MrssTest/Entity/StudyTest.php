@@ -35,6 +35,14 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->study->getName());
         $this->assertNull($this->study->getDescription());
         $this->assertNull($this->study->getCurrentYear());
+        $this->assertNull($this->study->getPrice());
+        $this->assertNull($this->study->getEarlyPrice());
+        $this->assertNull($this->study->getEarlyPriceDate());
+        $this->assertNull($this->study->getEnrollmentOpen());
+        $this->assertNull($this->study->getDataEntryOpen());
+        $this->assertNull($this->study->getReportsOpen());
+        $this->assertNull($this->study->getUPayUrl());
+        $this->assertNull($this->study->getUPaySiteId());
 
         $this->assertInstanceOf(
             '\Doctrine\Common\Collections\ArrayCollection',
@@ -56,6 +64,30 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $groupsMock = array('placeholder');
         $this->study->setBenchmarkGroups($groupsMock);
         $this->assertEquals($groupsMock, $this->study->getBenchmarkGroups());
+
+        $this->study->setPrice(1400);
+        $this->assertEquals(1400, $this->study->getPrice());
+
+        $this->study->setEarlyPrice(1200);
+        $this->assertEquals(1200, $this->study->getEarlyPrice());
+
+        $this->study->setEarlyPriceDate('2013-07-01');
+        $this->assertEquals('2013-07-01', $this->study->getEarlyPriceDate());
+
+        $this->study->setEnrollmentOpen(true);
+        $this->assertTrue($this->study->getEnrollmentOpen());
+
+        $this->study->setDataEntryOpen(true);
+        $this->assertTrue($this->study->getDataEntryOpen());
+
+        $this->study->setReportsOpen(true);
+        $this->assertTrue($this->study->getReportsOpen());
+
+        $this->study->setUPayUrl('http://test.com');
+        $this->assertEquals('http://test.com', $this->study->getUPayUrl());
+
+        $this->study->setUPaySiteId(3);
+        $this->assertEquals(3, $this->study->getUPaySiteId());
     }
 
     public function testCompletionPercentage()

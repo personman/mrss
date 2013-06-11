@@ -81,6 +81,32 @@ class BenchmarkGroupTest extends ModelTestAbstract
 
     }
 
+    public function testFindOneByName()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->with(
+                $this->equalTo(array('name' => 'Test name'))
+            )
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findOneByName('Test name');
+
+        $this->assertEquals('placeholder', $result);
+
+    }
+
     /**
      * Find by id
      */

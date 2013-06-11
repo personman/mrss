@@ -99,7 +99,7 @@ class ObservationTest extends PHPUnit_Framework_TestCase
     /**
      * @param $field
      * @dataProvider getInvalidFields
-     * @expectedException Mrss\Entity\Exception\InvalidBenchmarkException
+     * @expectedException \Mrss\Entity\Exception\InvalidBenchmarkException
      */
     public function testDynamicSetterWithInvalid($field)
     {
@@ -172,7 +172,8 @@ class ObservationTest extends PHPUnit_Framework_TestCase
             array('tot_undup_cr_hd', 5),
             array('tot_fte_career_staff', 6.3),
             array('tot_fte_counc_adv_staff', -44),
-            array('tot_fte_counc_adv_staff', 10555555)
+            array('tot_fte_counc_adv_staff', 10555555),
+            array('tot_fte_counc_adv_staff', '')
         );
     }
 }

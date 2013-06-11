@@ -7,17 +7,17 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class AdminNavigationFactory extends DefaultNavigationFactory
 {
-    protected function getName()
+    public function getName()
     {
         return 'admin';
     }
 
-    public function getPages(ServiceLocatorInterface $serviceLocator)
+    /*public function getPages(ServiceLocatorInterface $serviceLocator)
     {
         $pages = parent::getPages($serviceLocator);
 
         // change pages here
 
         return $pages;
-    }
+    }*/
 }

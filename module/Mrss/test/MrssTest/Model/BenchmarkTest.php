@@ -11,7 +11,7 @@ use Mrss\Model\Benchmark;
  *
  * @package MrssTest\Model
  */
-class BenchmarkeTest extends ModelTestAbstract
+class BenchmarkTest extends ModelTestAbstract
 {
     /**
      * @var \Mrss\Model\Benchmark
@@ -113,13 +113,48 @@ class BenchmarkeTest extends ModelTestAbstract
             ->method('findOneBy')
             ->will($this->returnValue('placeholder'));
 
+        $benchmarkGroupMock = $this->getMock(
+            'Mrss\Entity\BenchmarkGroup',
+            array('getShortName')
+        );
+
         $this->model->setRepository($repoMock);
         $this->model->setEntityManager($this->getEmMock());
 
-        $result = $this->model->findOneByDbColumn('111111', 7);
+        $result = $this->model
+            ->findOneByDbColumnAndGroup('111111', $benchmarkGroupMock);
 
         $this->assertEquals('placeholder', $result);
     }
+
+    public function testFindOneByDbColumnAndGroupEmpty()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->any())
+            ->method('findOneBy')
+            ->will($this->returnValue(null));
+
+        $benchmarkGroupMock = $this->getMock(
+            'Mrss\Entity\BenchmarkGroup',
+            array('getShortName')
+        );
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model
+            ->findOneByDbColumnAndGroup('111111', $benchmarkGroupMock);
+
+        $this->assertEquals(null, $result);
+    }
+
 
     /**
      * Find by id

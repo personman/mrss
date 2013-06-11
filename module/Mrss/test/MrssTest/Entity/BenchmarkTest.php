@@ -94,6 +94,10 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         // Set equation
         $benchmark->setEquation("5 + 3");
         $this->assertEquals("5 + 3", $benchmark->getEquation());
+
+        // Set options
+        $benchmark->setOptions(array('one', 'two'));
+        $this->assertEquals(array('one', 'two'), $benchmark->getOptions());
     }
 
     public function testAssociationMethods()
@@ -191,5 +195,15 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(50, $benchmark->getCompletionPercentage(2010));
         $this->assertEquals(null, $benchmark->getCompletionPercentage(2012));
+    }
+
+    public function testGetRadioInput()
+    {
+        $benchmark = new Benchmark;
+
+        $benchmark->setInputType('radio');
+        $element = $benchmark->getFormElement();
+
+        $this->assertEquals('Select', $element['type']);
     }
 }

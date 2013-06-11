@@ -72,6 +72,16 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
             $subscription->getDigitalSignatureTitle(),
             '"digitalSignatureTitle" should initially be null'
         );
+
+        $this->assertNull(
+            $subscription->getDigitalSignatureTitle(),
+            '"digitalSignatureTitle" should initially be null'
+        );
+
+        $this->assertNull(
+            $subscription->getPaymentSystemName(),
+            '"paymentSystemName" should initially be null'
+        );
     }
 
     /**
@@ -110,5 +120,8 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
         $obMock = $this->getMock('Mrss\Entity\Observation');
         $subscription->setObservation($obMock);
         $this->assertSame($obMock, $subscription->getObservation());
+
+        $subscription->setPaymentSystemName('SUNY');
+        $this->assertEquals('SUNY', $subscription->getPaymentSystemName());
     }
 }
