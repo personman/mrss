@@ -23,13 +23,14 @@
         "goalio/goalio-mailservice": "0.*",
         "goalio/goalio-forgotpassword": "0.*",
         "goalio/goalio-forgotpassword-doctrine-orm": "dev-master",
-        "rezzza/exprlib": "*"
+        "rezzza/exprlib": "*",
+        "guzzle/guzzle": "3.5.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.*",
         "phpunit/phpunit": "3.7.*",
-        "behat/behat": "2.4.*@stable",
-        "behat/mink": "1.5.*",
+        "behat/behat": "*",
+        "behat/mink": "*",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*",
