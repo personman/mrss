@@ -12,12 +12,13 @@ class AdminNavigationFactory extends DefaultNavigationFactory
         return 'admin';
     }
 
-    /*public function getPages(ServiceLocatorInterface $serviceLocator)
+    public function getPages(ServiceLocatorInterface $serviceLocator)
     {
         $pages = parent::getPages($serviceLocator);
 
         // change pages here
+        //unset($pages['studies']);
 
         return $pages;
-    }*/
+    }
 }

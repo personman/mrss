@@ -21,3 +21,8 @@ I need to be able to register and sign in
     And I press "Sign In"
     Then I should see "Hello"
 
+  Scenario: Login link
+    Given I am logged out
+    When I go to "/"
+    Then I should see "Log In"
+

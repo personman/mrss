@@ -51,7 +51,7 @@ class Module
             'invokables' => array(),
             'services' => array(),
             'factories' => array(
-                'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+                'navigation' => 'Mrss\Service\NavigationFactory',
                 'admin_navigation' =>
                 'Mrss\Service\AdminNavigationFactory',
                 'import.nccbp' => function ($sm) {

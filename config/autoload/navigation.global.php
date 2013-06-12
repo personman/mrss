@@ -42,7 +42,7 @@ return array(
                     )
                 )
             ),
-            array(
+            'subscribe' => array(
                 'label' => 'Subscribe',
                 'route' => 'subscribe',
                 'controller' => 'subscription'
@@ -50,10 +50,18 @@ return array(
             array(
                 'label' => 'Contact Us',
                 'uri' => '/contact'
+            ),
+            'login' => array(
+                'label' => 'Log In',
+                'route' => 'zfcuser/login'
+            ),
+            'logout' => array(
+                'label' => 'Log Out',
+                'route' => 'zfcuser/logout'
             )
         ),
         'admin' => array(
-            array(
+            'studies' => array(
                 'label' => 'Studies',
                 'controller' => 'studies',
                 'route' => 'studies'
