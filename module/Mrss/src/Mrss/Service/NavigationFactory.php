@@ -14,8 +14,9 @@ class NavigationFactory extends DefaultNavigationFactory
         // Alter the nav based on auth
         $auth = $serviceLocator->get('zfcuser_auth_service');
         if ($auth->hasIdentity()) {
-            // If the user is logged in, hide the login button
+            // If the user is logged in, hide the login and subscription links
             unset($pages['login']);
+            unset($pages['subscribe']);
         } else {
             // If they're logged out, hide the logout button
             unset($pages['logout']);
