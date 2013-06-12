@@ -286,6 +286,16 @@ return array(
                 ),
                 'may_terminate' => true
             ),
+            'glossary' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/glossary',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action' => 'glossary'
+                    )
+                )
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them

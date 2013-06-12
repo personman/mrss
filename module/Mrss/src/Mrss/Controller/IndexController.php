@@ -15,4 +15,9 @@ class IndexController extends AbstractActionController
 
         return new ViewModel();
     }
+
+    public function glossaryAction()
+    {
+        return new ViewModel();
+    }
 }

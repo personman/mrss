@@ -42,6 +42,16 @@ return array(
                     )
                 )
             ),
+            array(
+                'label' => 'Help',
+                'uri' => '#',
+                'pages' => array(
+                    array(
+                        'label' => 'Glossary',
+                        'uri' => '/glossary'
+                    )
+                )
+            ),
             'subscribe' => array(
                 'label' => 'Subscribe',
                 'route' => 'subscribe',
