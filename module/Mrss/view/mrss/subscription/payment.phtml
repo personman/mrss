@@ -1,24 +1,44 @@
 <h2>Select Payment Type</h2>
 
-<div class="well">
-    <h3>Option 1: Pay by Credit Card</h3>
+<?php if ($this->currentStudy()->getEnrollmentOpen()): ?>
 
-    <?= $this->ztbForm($ccForm->prepare()) ?>
-</div>
+    <div class="well">
+        <h3>Option 1: Pay by Credit Card</h3>
 
-<div class="well">
-    <h3>Option 2: Request an Invoice</h3>
+        <?= $this->ztbForm($ccForm->prepare()) ?>
+    </div>
 
-    <p>If your institution wishes to receive an invoice from our Billing Department, click the "Request an Invoice" button.</p>
+    <div class="well">
+        <h3>Option 2: Request an Invoice</h3>
 
-    <?= $this->ztbForm($invoiceForm->prepare()) ?>
-</div>
+        <p>If your institution wishes to receive an invoice from our Billing Department, click the "Request an Invoice" button.</p>
 
-<div class="well">
+        <?= $this->ztbForm($invoiceForm->prepare()) ?>
+    </div>
 
-<h3>Option 3: Paid by System</h3>
+    <div class="well">
 
-    <p>If funding is provided by a College System or State Sytem, please enter the name of the College System or State System below and click the "Paid by System" button.</p>
+    <h3>Option 3: Paid by System</h3>
 
-    <?= $this->ztbForm($systemForm->prepare()) ?>
-</div>
+        <p>If funding is provided by a College System or State Sytem, please enter the name of the College System or State System below and click the "Paid by System" button.</p>
+
+        <?= $this->ztbForm($systemForm->prepare()) ?>
+    </div>
+
+<?php endif ?>
+
+
+<?php if ($this->currentStudy()->getPilotOpen()): ?>
+
+    <div class="well">
+
+        <h3>Pilot Program: Free</h3>
+
+        <p>Participation in the pilot program is free of charge. To complete
+            your pilot subscription, click this button:</p>
+
+        <?= $this->ztbForm($pilotForm->prepare()) ?>
+    </div>
+
+
+<?php endif ?>

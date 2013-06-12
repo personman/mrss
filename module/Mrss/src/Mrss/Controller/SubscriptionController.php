@@ -6,6 +6,7 @@ use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Form\Payment;
 use Mrss\Form\SubscriptionInvoice;
+use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Form\Form;
@@ -122,6 +123,7 @@ class SubscriptionController extends AbstractActionController
     public function paymentAction()
     {
         $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
 
         // Catch subscription completion via credit card
         if ($this->params()->fromQuery('UPAY_SITE_ID')) {
@@ -156,18 +158,21 @@ class SubscriptionController extends AbstractActionController
         $systemForm = new SubscriptionSystem();
         $systemForm->setAttribute('action', '/subscribe/system');
 
-
+        $pilotForm = new SubscriptionPilot();
+        $pilotForm->setAttribute('action', '/subscribe/invoice');
 
         return array(
             'ccForm' => $ccForm,
             'invoiceForm' => $invoiceForm,
-            'systemForm' => $systemForm
+            'systemForm' => $systemForm,
+            'pilotForm' => $pilotForm
         );
     }
 
     public function systemAction()
     {
         $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
 
         $systemForm = new SubscriptionSystem();
         $systemForm->setAttribute('action', '/subscribe/system');
@@ -199,6 +204,7 @@ class SubscriptionController extends AbstractActionController
     public function invoiceAction()
     {
         $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
 
         $invoiceForm = new SubscriptionInvoice();
 
@@ -222,10 +228,56 @@ class SubscriptionController extends AbstractActionController
         }
     }
 
+    public function pilotAction()
+    {
+        $this->checkSubscriptionIsInProgress();
+        $this->checkPilotIsOpen();
+
+        $pilotForm = new SubscriptionPilot();
+
+        // Handle form submissions
+        if ($this->getRequest()->isPost()) {
+            $pilotForm->setData($this->params()->fromPost());
+
+            if ($pilotForm->isValid()) {
+                $this->completeSubscription(
+                    $this->getSessionContainer()->subscribeForm,
+                    $pilotForm->getData(),
+                    true
+                );
+
+                $this->flashMessenger()->addSuccessMessage(
+                    "Thank you for subscribing. "
+                );
+
+                return $this->redirect()->toRoute('subscribe/complete');
+            }
+        }
+    }
+
     public function checkSubscriptionIsInProgress()
     {
         if (!$sub = $this->getSubscriptionFromSession()) {
             throw new \Exception('Subscription not present in session.');
+        }
+    }
+
+    /**
+     * Make sure no one is able to enroll when enrollment is closed
+     *
+     * @throws \Exception
+     */
+    public function checkEnrollmentIsOpen()
+    {
+        if (!$this->currentStudy()->getEnrollmentOpen()) {
+            throw new \Exception('Enrollment is not open for this study');
+        }
+    }
+
+    public function checkPilotIsOpen()
+    {
+        if (!$this->currentStudy()->getPilotOpen()) {
+            throw new \Exception('Pilot is not open for this study');
         }
     }
 
@@ -409,6 +461,8 @@ class SubscriptionController extends AbstractActionController
         } elseif ($method == 'system') {
             $subscription->setPaymentSystemName($paymentForm['system']);
             $status = 'pending';
+        } elseif ($method == 'pilot') {
+            $status = 'pilot';
         } else {
             $status = 'pending';
         }
@@ -498,8 +552,15 @@ class SubscriptionController extends AbstractActionController
 
         $year = $subscription->getYear();
 
+        // Email subject
+        if ($subscription->getPaymentMethod() == 'pilot') {
+            $subjectIntro = 'Pilot';
+        } else {
+            $subjectIntro = 'Invoice';
+        }
+
         $invoice->setSubject(
-            "Invoice: $collegeName subscribed to $studyName for $year"
+            "$subjectIntro: $collegeName subscribed to $studyName for $year"
         );
 
         $date = date('Y-m-d');

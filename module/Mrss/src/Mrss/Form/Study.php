@@ -86,6 +86,16 @@ class Study extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'pilotOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Pilot Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'enrollmentOpen',
                 'type' => 'Checkbox',
                 'options' => array(

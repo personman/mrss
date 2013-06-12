@@ -545,3 +545,8 @@ header {
 .cmsPage {
     padding: 0px 15px;
 }
+
+/* recaptcha on contact form */
+.recaptcha_r7_c1, .recaptcha_r8_c1 {
+    display: none;
+}

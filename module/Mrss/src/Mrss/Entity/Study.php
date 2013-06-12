@@ -65,6 +65,11 @@ class Study
     /**
      * @ORM\Column(type="boolean")
      */
+    protected $pilotOpen;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
     protected $dataEntryOpen;
 
     /**
@@ -176,6 +181,18 @@ class Study
     public function getEarlyPriceDate()
     {
         return $this->earlyPriceDate;
+    }
+
+    public function setPilotOpen($pilotOpen)
+    {
+        $this->pilotOpen = $pilotOpen;
+
+        return $this;
+    }
+
+    public function getPilotOpen()
+    {
+        return $this->pilotOpen;
     }
 
     public function setEnrollmentOpen($enrollmentOpen)
