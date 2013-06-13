@@ -42,6 +42,13 @@ return array(
                     )
                 )
             ),
+            'data-entry' => array(
+                'label' => 'Data Entry',
+                'uri' => '#',
+                'pages' => array(
+
+                )
+            ),
             array(
                 'label' => 'Help',
                 'uri' => '#',

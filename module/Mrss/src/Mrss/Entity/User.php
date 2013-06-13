@@ -235,6 +235,9 @@ class User implements UserInterface, ProviderInterface
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\College
+     */
     public function getCollege()
     {
         return $this->college;

@@ -21,6 +21,24 @@ return array(
                     )
                 )
             ),/**/
+            // Data entry route with benchmarkGroup id
+            // We could support a benchmarkGroup short name for nicer urls in the
+            // future
+            'data-entry' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/data-entry/:benchmarkGroup',
+                    'constraints' => array(
+                        'benchmarkGroup' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'observations',
+                        'action' => 'dataEntry',
+                        'benchmarkGroup' => 0
+                    )
+                )
+            ),
             'studies' => array(
                 'type' => 'segment',
                 'may_terminate' => true,

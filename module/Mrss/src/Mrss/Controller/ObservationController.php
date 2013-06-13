@@ -88,6 +88,73 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    public function dataEntryAction()
+    {
+        // Fetch the form
+        $benchmarkGroupId = $this->params('benchmarkGroup');
+        $benchmarkGroup = $this->getServiceLocator()
+            ->get('model.benchmarkGroup')
+            ->find($benchmarkGroupId);
+
+        if (empty($benchmarkGroup)) {
+            throw new \Exception('Benchmark group not found');
+        }
+
+        // Find the observation by the year and theuser's college
+        /** @var \Mrss\Entity\User $user */
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $collegeId = $user->getCollege()->getId();
+
+        $year = $this->currentStudy()->getCurrentYear();
+
+        $ObservationModel = $this->getServiceLocator()->get('model.observation');
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $ObservationModel->findOne($collegeId, $year);
+
+
+        $formService = $this->getServiceLocator()
+            ->get('service.formBuilder');
+        $form = $formService->buildForm($benchmarkGroup, $observation->getYear());
+
+        $form->setAttribute('class', 'form-horizontal');
+
+        // Set up hydrator
+
+        // bind observation to form, which will populate it with values
+        $form->bind($observation);
+
+        // Handle form submission
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $ObservationModel->save($observation);
+                $this->getServiceLocator()->get('computedFields')
+                    ->calculateAllForObservation($observation);
+
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Data saved.');
+                return $this->redirect()->toRoute(
+                    'observation/group',
+                    array(
+                        'id' => $observation->getId(),
+                        'benchmarkGroupId' => $benchmarkGroup->getId()
+                    )
+                );
+            }
+
+        }
+
+        return array(
+            'form' => $form,
+            'observation' => $observation,
+            'benchmarkGroup' => $benchmarkGroup
+        );
+    }
+
     /**
      * Get field metadata from the benchmark entity
      *
