@@ -26,23 +26,41 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['logout']);
         }
 
-        // Add the data entry links
-        if ($currentStudy = $this->getCurrentStudy($serviceLocator)) {
-            $dataEntryPages = array();
-            foreach ($currentStudy->getBenchmarkGroups() as $bGroup) {
-                $dataEntryPages[] = array(
-                    'label' => $bGroup->getName(),
-                    'route' => 'data-entry'
-                );
-            }
+        // Add the data entry links (if they're logged in
+        if ($auth->hasIdentity()) {
+            if ($currentStudy = $this->getCurrentStudy($serviceLocator)) {
+                $dataEntryPages = array();
+                foreach ($currentStudy->getBenchmarkGroups() as $bGroup) {
+                    $dataEntryPages[] = array(
+                        'label' => $bGroup->getName(),
+                        'route' => 'data-entry',
+                        'params' => array(
+                            'benchmarkGroup' => $bGroup->getId()
+                        )
+                    );
+                }
 
-            $pages['data-entry']['pages'] = $dataEntryPages;
+                $pages['data-entry']['pages'] = $dataEntryPages;
+            } else {
+                // If there aren't any forms to show, drop the data entry menu item
+                unset($pages['data-entry']);
+            }
         } else {
-            // If there aren't any forms to show, drop the data entry menu item
             unset($pages['data-entry']);
         }
 
-        return $pages;
+
+        //$configuration['navigation'][$this->getName()] = array();
+
+        $application = $serviceLocator->get('Application');
+        $routeMatch  = $application->getMvcEvent()->getRouteMatch();
+        $router      = $application->getMvcEvent()->getRouter();
+        //$pages       = $this->getPagesFromConfig
+        //($configuration['navigation'][$this->getName()]);
+
+        $this->pages = $this->injectComponents($pages, $routeMatch, $router);
+
+        return $this->pages;
     }
 
     public function setCurrentStudy(Study $study)
