@@ -69,10 +69,6 @@ return array(
                     'roles' => array('guest')
                 ),
                 array(
-                    'controller' => 'DoctrineORMModule\Yuml\YumlController',
-                    'roles' => array('guest')
-                ),
-                array(
                     'controller' => 'goalioforgotpassword_forgot',
                     'roles' => array('guest')
                 ),
@@ -81,21 +77,7 @@ return array(
                     'controller' => 'pages',
                     'roles' => array('guest')
                 ),
-                // Since the background action is fired by console, lift guard
-                array(
-                    'controller' => 'import',
-                    'action' => 'background',
-                    'roles' => array('guest')
-                ),
                 // Only authenticated users can look at these:
-                array(
-                    'controller' => 'colleges',
-                    'roles' => array('user')
-                ),
-                array(
-                    'controller' => 'import',
-                    'roles' => array('user')
-                ),
                 array(
                     'controller' => 'observations',
                     'roles' => array('user')
@@ -105,17 +87,36 @@ return array(
                     'roles' => array('user')
                 ),
                 array(
-                    'controller' => 'benchmarkgroups',
-                    'roles' => array('user')
-                ),
-                array(
                     'controller' => 'studies',
                     'roles' => array('user')
+                ),
+                // Admin stuff
+                array(
+                    'controller' => 'import',
+                    'roles' => array('admin')
+                ),
+                // Since the background action is fired by console, lift guard
+                array(
+                    'controller' => 'import',
+                    'action' => 'background',
+                    'roles' => array('guest')
                 ),
                 array(
                     'controller' => 'settings',
                     'roles' => array('admin')
-                )
+                ),
+                array(
+                    'controller' => 'benchmarkgroups',
+                    'roles' => array('admin')
+                ),
+                array(
+                    'controller' => 'DoctrineORMModule\Yuml\YumlController',
+                    'roles' => array('admin')
+                ),
+                array(
+                    'controller' => 'colleges',
+                    'roles' => array('user')
+                ),
             )
         ),
 
