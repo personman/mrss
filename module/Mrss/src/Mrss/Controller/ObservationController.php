@@ -88,6 +88,38 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    public function overviewAction()
+    {
+        $currentStudy = $this->currentStudy();
+        $benchmarkGroups = $currentStudy->getBenchmarkGroups();
+        $observation = $this->getCurrentObservation();
+        $completionPercentage = $currentStudy
+            ->getCompletionPercentage($observation);
+
+        return array(
+            'currentStudy' => $currentStudy,
+            'benchmarkGroups' => $benchmarkGroups,
+            'observation' => $observation,
+            'completionPercentage' => $completionPercentage
+        );
+    }
+
+    public function getCurrentObservation()
+    {
+        // Find the observation by the year and the user's college
+        /** @var \Mrss\Entity\User $user */
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $collegeId = $user->getCollege()->getId();
+
+        $year = $this->currentStudy()->getCurrentYear();
+
+        $ObservationModel = $this->getServiceLocator()->get('model.observation');
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $ObservationModel->findOne($collegeId, $year);
+
+        return $observation;
+    }
+
     public function dataEntryAction()
     {
         // Fetch the form
@@ -100,25 +132,13 @@ class ObservationController extends AbstractActionController
             throw new \Exception('Benchmark group not found');
         }
 
-        // Find the observation by the year and theuser's college
-        /** @var \Mrss\Entity\User $user */
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $collegeId = $user->getCollege()->getId();
-
-        $year = $this->currentStudy()->getCurrentYear();
-
-        $ObservationModel = $this->getServiceLocator()->get('model.observation');
-        /** @var \Mrss\Entity\Observation $observation */
-        $observation = $ObservationModel->findOne($collegeId, $year);
-
+        $observation = $this->getCurrentObservation();
 
         $formService = $this->getServiceLocator()
             ->get('service.formBuilder');
         $form = $formService->buildForm($benchmarkGroup, $observation->getYear());
 
         $form->setAttribute('class', 'form-horizontal');
-
-        // Set up hydrator
 
         // bind observation to form, which will populate it with values
         $form->bind($observation);
@@ -130,6 +150,7 @@ class ObservationController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
+                $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
@@ -137,13 +158,7 @@ class ObservationController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Data saved.');
-                return $this->redirect()->toRoute(
-                    'observation/group',
-                    array(
-                        'id' => $observation->getId(),
-                        'benchmarkGroupId' => $benchmarkGroup->getId()
-                    )
-                );
+                return $this->redirect()->toRoute('data-entry');
             }
 
         }

@@ -28,14 +28,25 @@ return array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/data-entry/:benchmarkGroup',
-                    'constraints' => array(
-                        'benchmarkGroup' => '[0-9]+'
-                    ),
+                    'route' => '/data-entry',
                     'defaults' => array(
                         'controller' => 'observations',
-                        'action' => 'dataEntry',
-                        'benchmarkGroup' => 0
+                        'action' => 'overview',
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/:benchmarkGroup',
+                            'constraints' => array(
+                                'benchmarkGroup' => '[0-9]+'
+                            ),
+                            'defaults' => array(
+                                'action' => 'dataEntry',
+                                'benchmarkGroup' => 0
+                            )
+                        )
                     )
                 )
             ),

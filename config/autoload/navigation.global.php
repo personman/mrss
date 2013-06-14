@@ -44,7 +44,7 @@ return array(
             ),
             'data-entry' => array(
                 'label' => 'Data Entry',
-                'uri' => '#',
+                'route' => 'data-entry',
                 'pages' => array(
 
                 )

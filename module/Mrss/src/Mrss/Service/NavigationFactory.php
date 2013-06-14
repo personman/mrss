@@ -6,6 +6,14 @@ use Zend\Navigation\Service\DefaultNavigationFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Mrss\Entity\Study;
 
+/**
+ * Class NavigationFactory
+ *
+ * @todo: Cache this. Will need to be at the college level as it changes for each
+ * college
+ *
+ * @package Mrss\Service
+ */
 class NavigationFactory extends DefaultNavigationFactory
 {
     /** @var Study */
@@ -30,10 +38,18 @@ class NavigationFactory extends DefaultNavigationFactory
         if ($auth->hasIdentity()) {
             if ($currentStudy = $this->getCurrentStudy($serviceLocator)) {
                 $dataEntryPages = array();
+
+                // Add the overview page
+                $dataEntryPages[] = array(
+                    'label' => 'Overview',
+                    'route' => 'data-entry'
+                );
+
+                // Now add each form
                 foreach ($currentStudy->getBenchmarkGroups() as $bGroup) {
                     $dataEntryPages[] = array(
                         'label' => $bGroup->getName(),
-                        'route' => 'data-entry',
+                        'route' => 'data-entry/edit',
                         'params' => array(
                             'benchmarkGroup' => $bGroup->getId()
                         )
