@@ -117,6 +117,10 @@ class ObservationController extends AbstractActionController
         /** @var \Mrss\Entity\Observation $observation */
         $observation = $ObservationModel->findOne($collegeId, $year);
 
+        if (empty($observation)) {
+            throw new \Exception('Unable to get current observation.');
+        }
+
         return $observation;
     }
 
