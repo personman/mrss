@@ -87,6 +87,11 @@ class Study
      */
     protected $uPaySiteId;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $logo;
+
 
 
     public function __construct()
@@ -251,6 +256,18 @@ class Study
     public function getUPaySiteId()
     {
         return $this->uPaySiteId;
+    }
+
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getLogo()
+    {
+        return $this->logo;
     }
 
     public function getCompletionPercentage(Observation $observation)

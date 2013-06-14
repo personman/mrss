@@ -144,6 +144,16 @@ class Study extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'logo',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Logo'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 

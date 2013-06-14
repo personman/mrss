@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Maximizing Resources for Student Success</title>
+    <title><?= $this->currentStudy()->getDescription() ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -39,8 +39,13 @@
                 <span class="icon-bar"></span>
             </a>
             <a class="brand" href="/">
+                <?php if (true): ?>
+                <img src="<?= $this->currentStudy()->getLogo() ?>"
+                     alt="<?= $this->currentStudy()->getDescription() ?>" />
+                <?php else: ?>
                 <img src="/img/mrss-logo.png" alt="Maximizing Resources for
                 Student Success" />
+                <?php endif ?>
             </a>
             <div class="nav-collapse collapse">
                 <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
