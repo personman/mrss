@@ -16,10 +16,8 @@
             <td><?= $college->getIpeds() ?></td>
             <td>
                 <a href="<?= $this->url(
-                    'general',
+                    'colleges/view',
                     array(
-                        'controller' => 'colleges',
-                        'action' => 'view',
                         'id' => $college->getId()
                     )
                 ); ?>">

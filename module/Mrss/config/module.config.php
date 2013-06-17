@@ -4,7 +4,7 @@ return array(
     'router' => array(
         'routes' => array(
             // @todo: get rid of this general route
-            /**/'general' => array(
+            /*'general' => array(
                 'type' => 'segment',
                 'priority' => -10,
                 'options' => array(
@@ -21,6 +21,17 @@ return array(
                     )
                 )
             ),/**/
+            'home' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action' => 'index'
+                    )
+                )
+            ),
+
             // Data entry route with benchmarkGroup id
             // We could support a benchmarkGroup short name for nicer urls in the
             // future
@@ -322,6 +333,17 @@ return array(
                     'defaults' => array(
                         'controller' => 'index',
                         'action' => 'glossary'
+                    )
+                )
+            ),
+            'import' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/import[/:action]',
+                    'defaults' => array(
+                        'controller' => 'import',
+                        'action' => 'index'
                     )
                 )
             ),

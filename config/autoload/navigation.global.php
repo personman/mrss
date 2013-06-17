@@ -16,9 +16,7 @@ return array(
         'default' => array(
             array(
                 'label' => 'Home',
-                'controller' => 'index',
-                'action' => 'index',
-                'route' => 'general'
+                'route' => 'home'
             ),
             array(
                 'label' => 'About Us',
@@ -85,9 +83,7 @@ return array(
             ),
             array(
                 'label' => 'Imports',
-                'controller' => 'import',
-                'action' => 'index',
-                'route' => 'general'
+                'route' => 'import'
             ),
             array(
                 'label' => 'Colleges',
