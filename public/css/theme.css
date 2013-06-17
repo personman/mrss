@@ -366,6 +366,25 @@ header {
 	margin-left: 30px;
 }
 
+#footer .nav-collapse li {
+    float: left;
+    margin-right: 15px;
+}
+#footer .nav-collapse li a {
+    color: white;
+}
+#footer .nav-collapse .pull-right {
+    float: none;
+}
+#footer li.dropdown .caret {
+    border-top-color: #999999;
+    border-bottom-color: #999999;
+}
+#footer .navbar-inverse {
+    margin: 10px auto;
+    max-width: 430px;
+}
+
 /* Global
 -------------------------------------------------- */
 .page_header {
