@@ -240,7 +240,13 @@ class Module
                     $plugin->setUrl($url);
 
                     $config = $sm->getServiceLocator()->get('Config');
+
+                    if (empty($config)) {
+                        throw new \Exception('Study url config is missing');
+                    }
+
                     $studyConfig = $config['studies'];
+
                     $plugin->setConfig($studyConfig);
 
                     return $plugin;

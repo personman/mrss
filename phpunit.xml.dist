@@ -12,16 +12,28 @@
       backupGlobals="false"
       syntaxCheck="true"
       >
-   <testsuite name="Test all modules">
-      <!--<directory>./module/Application/test/ApplicationTest</directory>-->
-      <directory>./module/Mrss/test/MrssTest</directory>
-      <directory>./module/Cms/test/CmsTest</directory>
-   </testsuite>
+
+    <testsuites>
+        <testsuite name="MRSS tests">
+            <directory>./module/Mrss/test/MrssTest/Entity</directory>
+            <directory>./module/Mrss/test/MrssTest/Model</directory>
+            <directory>./module/Mrss/test/MrssTest/Service</directory>
+            <directory>./module/Mrss/test/MrssTest/Form</directory>
+            <directory>./module/Mrss/test/MrssTest/Validator</directory>
+            <directory>./module/Mrss/test/MrssTest/View</directory>
+            <!--directory>./module/Cms/test/CmsTest</directory-->
+        </testsuite>
+    </testsuites>
 
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">module/Mrss/src</directory>
-            <directory suffix=".php">module/Cms/src</directory>
+        <whitelist>
+            <directory suffix=".php">module/Mrss/src/Mrss/Entity</directory>
+            <directory suffix=".php">module/Mrss/src/Mrss/Model</directory>
+            <directory suffix=".php">module/Mrss/src/Mrss/Service</directory>
+            <directory suffix=".php">module/Mrss/src/Mrss/Form</directory>
+            <directory suffix=".php">module/Mrss/src/Mrss/Validator</directory>
+            <directory suffix=".php">module/Mrss/src/Mrss/View</directory>
+            <!--directory suffix=".php">module/Cms/src</directory-->
         </whitelist>
     </filter>
 

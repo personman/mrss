@@ -39,6 +39,7 @@ class CurrentStudy extends AbstractPlugin
         if (empty($this->study)) {
             // Get the study id by the url
             $studiesConfig = $this->getConfig();
+
             $url = $this->getUrl();
 
             // Does the url match a config option?
