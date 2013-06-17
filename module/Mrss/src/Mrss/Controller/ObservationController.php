@@ -116,7 +116,11 @@ class ObservationController extends AbstractActionController
         $ObservationModel = $this->getServiceLocator()->get('model.observation');
         /** @var \Mrss\Entity\Observation $observation */
         $observation = $ObservationModel->findOne($collegeId, $year);
-
+        echo 'college id: ';
+        var_dump($collegeId);
+        echo 'Year: ';
+        var_dump($year);
+        die('test');
         if (empty($observation)) {
             throw new \Exception('Unable to get current observation.');
         }

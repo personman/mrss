@@ -273,7 +273,7 @@ class SubscriptionController extends AbstractActionController
         if ($this->currentStudy()->getPilotOpen()) {
             return true;
         }
-        
+
         if (!$this->currentStudy()->getEnrollmentOpen()) {
             throw new \Exception('Enrollment is not open for this study');
         }
