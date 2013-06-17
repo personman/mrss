@@ -38,11 +38,13 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->study->getPrice());
         $this->assertNull($this->study->getEarlyPrice());
         $this->assertNull($this->study->getEarlyPriceDate());
+        $this->assertNull($this->study->getPilotOpen());
         $this->assertNull($this->study->getEnrollmentOpen());
         $this->assertNull($this->study->getDataEntryOpen());
         $this->assertNull($this->study->getReportsOpen());
         $this->assertNull($this->study->getUPayUrl());
         $this->assertNull($this->study->getUPaySiteId());
+        $this->assertNull($this->study->getLogo());
 
         $this->assertInstanceOf(
             '\Doctrine\Common\Collections\ArrayCollection',
@@ -74,6 +76,9 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->study->setEarlyPriceDate('2013-07-01');
         $this->assertEquals('2013-07-01', $this->study->getEarlyPriceDate());
 
+        $this->study->setPilotOpen(true);
+        $this->assertTrue($this->study->getPilotOpen());
+
         $this->study->setEnrollmentOpen(true);
         $this->assertTrue($this->study->getEnrollmentOpen());
 
@@ -88,6 +93,9 @@ class StudyTest extends PHPUnit_Framework_TestCase
 
         $this->study->setUPaySiteId(3);
         $this->assertEquals(3, $this->study->getUPaySiteId());
+
+        $this->study->setLogo('/test.png');
+        $this->assertEquals('/test.png', $this->study->getLogo());
     }
 
     public function testCompletionPercentage()
