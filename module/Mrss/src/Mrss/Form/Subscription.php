@@ -6,6 +6,7 @@ use Mrss\Form\AbstractForm;
 use Zend\Form\Fieldset;
 use Zend\Validator;
 use Zend\Filter;
+use Zend\Form\Element;
 use Mrss\Form\Fieldset\User as UserFieldset;
 
 class Subscription extends AbstractForm
@@ -20,7 +21,7 @@ class Subscription extends AbstractForm
 
         // Administrative Contact
         $this->add(
-            $this->getUserFieldset(
+            $this->getAdminUserFieldset(
                 'adminContact',
                 'Administrative Contact'
             )
@@ -28,7 +29,7 @@ class Subscription extends AbstractForm
 
         // Data Contact
         $this->add(
-            $this->getUserFieldset(
+            $this->getDataUserFieldset(
                 'dataContact',
                 'Data Contact'
             )
@@ -40,10 +41,25 @@ class Subscription extends AbstractForm
         );
     }
 
-    public function getUserFieldset($name, $label)
+    public function getAdminUserFieldset($name, $label)
     {
         $fieldset = new UserFieldset($name);
         $fieldset->setLabel($label);
+
+        return $fieldset;
+    }
+
+    public function getDataUserFieldset($name, $label)
+    {
+        $fieldset = new UserFieldset($name);
+        $fieldset->setLabel($label);
+
+        // Checkbox for making both users the same
+        $same = new Element\Checkbox('same');
+        $same->setLabel('Same as Administrative Contact');
+        $same->setAttribute('id', 'same-as-admin');
+
+        $fieldset->add($same, array('priority' => 1));
 
         return $fieldset;
     }
