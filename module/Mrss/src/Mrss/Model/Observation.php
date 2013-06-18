@@ -44,13 +44,16 @@ class Observation extends AbstractModel
      */
     public function findOne($collegeId, $year, $cipCode = 0)
     {
-        return $this->getRepository()->findOneBy(
-            array(
-                'college' => $collegeId,
-                'year' => $year,
-                'cipCode' => $cipCode
-            )
+        $criteria = array(
+            'college' => $collegeId,
+            'year' => $year,
         );
+
+        if ($cipCode) {
+            $criteria['cipCode'] = $cipCode;
+        }
+
+        return $this->getRepository()->findOneBy($criteria);
     }
 
     /**
