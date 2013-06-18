@@ -1,0 +1,9 @@
+@media (min-width: 980px) {
+    .form-horizontal .control-label {
+        width: 32%;
+    }
+
+    .form-horizontal .controls {
+        margin-left: 34%;
+    }
+}
