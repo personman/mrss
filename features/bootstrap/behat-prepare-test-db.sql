@@ -5,8 +5,10 @@ TRUNCATE users;
 
 
 -- Now add some test data
-INSERT INTO users (email, displayName, password, role, college_id) VALUES ('dfergu15@jccc.edu', 'Dan McTest', '$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC',
- 'admin', 1);
+INSERT INTO users (email, displayName, password, role, college_id)
+SELECT 'dfergu15@jccc.edu', 'Dan McTest',
+'$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC',
+'admin', (SELECT id FROM colleges WHERE ipeds = '155210' LIMIT 1);
 
 
 -- Open up enrollment

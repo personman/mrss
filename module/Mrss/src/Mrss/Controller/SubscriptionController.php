@@ -20,8 +20,6 @@ use Zend\Mail\Message;
 /**
  * Class SubscriptionController
  *
- * @todo: Make this handle subscribing to any study
- *
  * @package Mrss\Controller
  */
 class SubscriptionController extends AbstractActionController
@@ -419,7 +417,7 @@ class SubscriptionController extends AbstractActionController
         $user->setTitle($data['title']);
         $user->setPhone($data['phone']);
         $user->setExtension($data['extension']);
-        $user->setPassword('test');
+        $user->setPassword(null);
         
         // @todo: set role
         
