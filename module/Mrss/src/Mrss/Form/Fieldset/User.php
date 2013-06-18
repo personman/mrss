@@ -147,6 +147,9 @@ class User extends Fieldset implements InputFilterProviderInterface
         );
 
         return array(
+            'same' => array(
+                'required' => false
+            ),
             'prefix' => array(
                 'required' => true
             ),
