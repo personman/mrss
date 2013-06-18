@@ -50,7 +50,6 @@ Feature: Subscribe
     Then I should see "E-Mail addresses do not match"
     And I should be on "/subscribe"
 
-  @javascript
   Scenario: Submit valid form
     Given I am on "/subscribe"
     When I fill in "Name of Institution" with "Johnson County Community College"
@@ -74,6 +73,7 @@ Feature: Subscribe
     And I fill in "dataContact[phone]" with "111-111-1111"
     And I fill in "dataContact[email]" with "dfergu15@jccc.edu"
     And I fill in "dataContact[emailConfirm]" with "dfergu15@jccc.edu"
+    And I check "Same as Administrative Contact"
     And I press "Continue"
     Then I should be on "/subscribe/user-agreement"
     And I should see "Data Confidentiality and Use Agreement"
