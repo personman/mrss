@@ -21,6 +21,8 @@ function handleSameAsCheckbox()
     // When the form is submitted and the checkbox is checked, copy values
     dataFieldset.parents('form').submit(function() {
         copyValues(adminFieldset, dataFieldset)
+
+        return true
     })
 }
 
