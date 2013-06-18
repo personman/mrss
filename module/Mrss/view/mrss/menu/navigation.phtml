@@ -1,3 +1,5 @@
+<?php $unique = rand(1, 100); ?>
+
 <ul class="nav pull-right">
     <?php $count = 0 ?>
     <?php foreach ($this->container as $page): ?>
@@ -18,7 +20,8 @@
                 <span><?php echo $this->translate($page->getLabel()) ?></span>
                 <b class="caret"></b>
             </a>
-            <ul class="dropdown-menu" id="page_<?php echo $count ?>">
+            <ul class="dropdown-menu" id="page_<?php echo $count ?>_<?php echo
+            $unique ?>">
                 <?php foreach($page->getPages() as $child): ?>
                     <?php // when using partials we need to manually check for ACL conditions ?>
                     <?php if( ! $child->isVisible() || !$this->navigation()->accept($child)) continue; ?>
