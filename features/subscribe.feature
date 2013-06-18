@@ -50,6 +50,7 @@ Feature: Subscribe
     Then I should see "E-Mail addresses do not match"
     And I should be on "/subscribe"
 
+  @javascript
   Scenario: Submit valid form
     Given I am on "/subscribe"
     When I fill in "Name of Institution" with "Johnson County Community College"
