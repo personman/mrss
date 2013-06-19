@@ -32,7 +32,11 @@ return array(
                 'address' => 'contact@your.tld'
             ),
              */
-            'to' => 'dfergu15@jccc.edu',
+            'to' => array(
+                'dfergu15@jccc.edu',
+                'mtaylo24@jccc.edu'
+            ),
+
             'from' => 'dfergu15@jccc.edu'
         ),
 
