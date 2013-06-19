@@ -64,6 +64,10 @@ header {
     /*background: rgba(0,0,0,0.8);*/
     border-bottom: 1px solid #252525;
 }
+
+.navbar-inverse .navbar-inner {
+    background: #333333 !important;
+}
 .navbar-inverse .navbar-inner.sticky .container {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
