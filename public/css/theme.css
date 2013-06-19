@@ -5,8 +5,7 @@ html {
 body {
 	position: relative;
 	/*background: #252528;*/
-    /*background: #DDDCE2 url(../img/body_bg.jpg) repeat left top;*/
-    background-color: blue;
+    background: #DDDCE2 url(../img/body_bg.jpg) repeat left top;
     -webkit-font-smoothing: antialiased;
 	font-family: 'Lato', sans-serif !important;
 	padding-top: 107px;

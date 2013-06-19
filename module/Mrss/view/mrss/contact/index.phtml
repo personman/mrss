@@ -22,12 +22,15 @@
     $form->prepare();
     $form->setAttribute('action', $this->url('contact/process'));
     $form->setAttribute('method', 'post');
+    $form->setAttribute('class', 'form-horizontal');
 
     // Use the Bootstrap btn class
     $form->get('Send')->setAttribute('class', 'btn btn-primary');
 
     // Make the body a little taller
-    $form->get('body')->setAttribute('rows', 5);
+    $form->get('body')->setAttribute('rows', 5)->setLabel('Message');
+    $form->get('from')->setLabel('Your Email');
+    $form->get('subject')->setLabel('Subject');
     ?>
 
     <?= $this->ztbForm($form) ?>
