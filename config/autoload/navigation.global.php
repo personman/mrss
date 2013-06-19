@@ -22,10 +22,10 @@ return array(
                 'label' => 'About Us',
                 'uri' => '#',
                 'pages' => array(
-                    array(
+                    /*array(
                         'label' => 'About MRSS',
                         'uri' => '/mrss'
-                    ),
+                    ),*/
                     array(
                         'label' => 'Our Staff',
                         'uri' => '/staff'

@@ -501,6 +501,9 @@
     border-radius: 8px;
 }
 
+.feature_wrapper {
+    margin-bottom: 60px;
+}
 
 /* Responsive
 -------------------------------------------------- */
