@@ -43,7 +43,7 @@ return array(
                 'allow' => array(
                     // allow guests and users (and admins, through inheritance)
                     // the "wear" privilege on the resource "pants"
-                    array(array('user'), 'adminMenu', 'view')
+                    array(array('admin'), 'adminMenu', 'view')
                 ),
             ),
         ),
@@ -84,11 +84,11 @@ return array(
                 ),
                 array(
                     'controller' => 'benchmarks',
-                    'roles' => array('user')
+                    'roles' => array('admin')
                 ),
                 array(
                     'controller' => 'studies',
-                    'roles' => array('user')
+                    'roles' => array('admin')
                 ),
                 // Admin stuff
                 array(
@@ -115,7 +115,7 @@ return array(
                 ),
                 array(
                     'controller' => 'colleges',
-                    'roles' => array('user')
+                    'roles' => array('admin')
                 ),
             )
         ),
