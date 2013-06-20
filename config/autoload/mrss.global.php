@@ -3,6 +3,7 @@
 return array(
     'studies' => array(
         'nccwtbp.org' => 3,
+        'workforceproject.org' => 3,
         'mrss.dan.com' => 3,
         'wtp.dan.com' => 3,
         'beta.maximizingresources.org' => 2,
