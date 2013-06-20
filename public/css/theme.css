@@ -126,6 +126,10 @@ header {
     padding: 10px;
 }
 
+.navbar .brand img {
+    margin-left: 20px;
+}
+
 
 /* Footer
 -------------------------------------------------- */
