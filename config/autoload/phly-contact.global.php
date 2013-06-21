@@ -37,7 +37,7 @@ return array(
                 'mtaylo24@jccc.edu'
             ),
 
-            'from' => 'dfergu15@jccc.edu'
+            'from' => 'no-reply@workforceproject.org'
         ),
 
         // Transport consists of two keys: 
@@ -49,14 +49,14 @@ return array(
         'mail_transport' => array(
             'class'   => 'Zend\Mail\Transport\Smtp',
             'options' => array(
-                'host'             => 'smtp.gmail.com',
-                'port'             => 587,
-                'connectionClass'  => 'login',
-                'connectionConfig' => array(
-                    'ssl'      => 'tls',
-                    'username' => 'dan.ferguson.mo@gmail.com',
-                    'password' => 'nhebiemail'
+                'host' => 'localhost', // Will only work on the production server
+                'connection_class' => 'login',
+                'connection_config' => array(
+                    //'ssl' => 'tls',
+                    'username' => 'no-reply@workforceproject.org',
+                    'password' => 'p0w3r#U$3r_'
                 ),
+                'port' => 465
             ),
         ),
     ),

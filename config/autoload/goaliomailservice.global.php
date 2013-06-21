@@ -17,14 +17,20 @@ $settings = array(
     'options_class' => 'Zend\Mail\Transport\SmtpOptions',
     
     'options' => array(
-        'host' => 'smtp.gmail.com',
+        /*'host' => 'smtp.gmail.com',
         'connection_class' => 'login',
         'connection_config' => array(
             'ssl' => 'tls',
             'username' => 'dan.ferguson.mo@gmail.com',
-            'password' => 'nhebiemail'
+            'password' => 'nhebiemail' (port 587*/
+        'host' => 'max.maximizingresources.org',
+        'connection_class' => 'login',
+        'connection_config' => array(
+            'ssl' => 'tls',
+            'username' => 'no-reply@workforceproject.org',
+            'password' => 'p0w3r#U$3r_'
         ),
-        'port' => 587
+        'port' => 465
     ),
 
     /**
