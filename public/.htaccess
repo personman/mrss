@@ -1,4 +1,16 @@
 RewriteEngine On
+
+# Remove www.
+RewriteCond %{HTTP_HOST} ^www.nccwtbp.org$ [NC]
+RewriteRule ^(.*)$ http://nccwtbp.org/$1 [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^www.workforceproject.org$ [NC]
+RewriteRule ^(.*)$ http://workforceproject.org/$1 [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^www.maximizingresources.org$ [NC]
+RewriteRule ^(.*)$ http://maximizingresources.org/$1 [R=301,L]
+
+
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
 RewriteCond %{REQUEST_FILENAME} -s [OR]
