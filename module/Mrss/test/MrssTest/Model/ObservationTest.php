@@ -66,7 +66,7 @@ class ObservationTest extends ModelTestAbstract
     {
         $collegeId = 2;
         $year = 2013;
-        $cipCode = 0;
+        $cipCode = 1;
 
         $repoMock = $this->getMock(
             'Doctrine\ORM\EntityRepository',
