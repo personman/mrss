@@ -556,6 +556,7 @@ class SubscriptionController extends AbstractActionController
         $invoice = new Message();
         $invoice->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
         $invoice->addTo('dfergu15@jccc.edu');
+        $invoice->addTo('mtaylo24@jccc.edu');
 
         $study = $subscription->getStudy();
         $studyName = $study->getName();

@@ -12,10 +12,10 @@ $settings = array(
      *
      * Default: empty
      */
-    //'email_from_address' => array(
-    //	'email' => 'your_email_address@here.com',
-    //	'name' => 'Your name',
-	//),
+    'email_from_address' => array(
+    	'email' => 'dfergu15@jccc.edu',
+    	'name' => 'NHEBI Staff',
+	),
 
     /**
      * Subject line of the email message which is
