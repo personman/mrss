@@ -13,7 +13,7 @@ $settings = array(
      * Default: empty
      */
     'email_from_address' => array(
-    	'email' => 'no-reply@workforceproject.org',
+    	'email' => 'dfergu15@jccc.edu',
     	'name' => 'NHEBI Staff',
 	),
 

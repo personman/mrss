@@ -37,7 +37,7 @@ return array(
                 'mtaylo24@jccc.edu'
             ),
 
-            'from' => 'no-reply@workforceproject.org'
+            'from' => 'dfergu15@jccc.edu'
         ),
 
         // Transport consists of two keys: 
@@ -49,14 +49,14 @@ return array(
         'mail_transport' => array(
             'class'   => 'Zend\Mail\Transport\Smtp',
             'options' => array(
-                'host' => 'max.maximizingresources.org',
-                'connection_class' => 'login',
-                'connection_config' => array(
-                    //'ssl' => 'tls',
-                    'username' => 'no-reply@workforceproject.org',
-                    'password' => 'p0w3r#U$3r_'
+                'host'             => 'smtp.gmail.com',
+                'port'             => 587,
+                'connectionClass'  => 'login',
+                'connectionConfig' => array(
+                    'ssl'      => 'tls',
+                    'username' => 'dan.ferguson.mo@gmail.com',
+                    'password' => 'nhebiemail'
                 ),
-                'port' => 465
             ),
         ),
     ),
