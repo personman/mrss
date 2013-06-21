@@ -500,7 +500,9 @@ header {
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
-
+    .navbar .container .brand img {
+        width: 200px;
+    }
 }
 
 /* Icons
