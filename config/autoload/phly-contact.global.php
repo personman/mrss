@@ -49,7 +49,7 @@ return array(
         'mail_transport' => array(
             'class'   => 'Zend\Mail\Transport\Smtp',
             'options' => array(
-                'host' => 'localhost', // Will only work on the production server
+                'host' => 'max.maximizingresources.org',
                 'connection_class' => 'login',
                 'connection_config' => array(
                     //'ssl' => 'tls',
