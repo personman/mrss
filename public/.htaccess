@@ -10,6 +10,10 @@ RewriteRule ^(.*)$ http://workforceproject.org/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} ^www.maximizingresources.org$ [NC]
 RewriteRule ^(.*)$ http://maximizingresources.org/$1 [R=301,L]
 
+# Redirect workforceproject.org to nccwtbp.org
+RewriteCond %{HTTP_HOST} workforceproject\.org [NC]
+RewriteRule ^(.*)$ http://nccwtbp.org/$1 [R=301,L]
+
 
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
