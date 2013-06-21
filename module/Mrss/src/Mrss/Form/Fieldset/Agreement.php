@@ -35,7 +35,9 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 'name' => 'signature',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Electronic Signature'
+                    'label' => 'Electronic Signature',
+                    'help-block' => 'The name of the person at your institution ' .
+                    'who is authorizing participation'
                 ),
                 'attributes' => array(
                     //'required' => true,

@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\User;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Form\Payment;
@@ -345,18 +346,18 @@ class SubscriptionController extends AbstractActionController
         
         // Admin first
         $adminContactForm = $subscriptionForm['adminContact'];
-        $this->createOrUpdateUser($adminContactForm, 'user', $college);
+        $adminUser = $this->createOrUpdateUser($adminContactForm, 'user', $college);
 
         // Now data user
         $dataContactForm = $subscriptionForm['dataContact'];
-        $this->createOrUpdateUser($dataContactForm, 'user', $college);
+        $dataUser = $this->createOrUpdateUser($dataContactForm, 'user', $college);
 
         // Save it all to the db
         $this->getServiceLocator()->get('em')->flush();
 
         // Send invoice, if needed
         if ($sendInvoice) {
-            $this->sendInvoice($subscription);
+            $this->sendInvoice($subscription, $adminUser, $dataUser);
         }
     }
 
@@ -543,8 +544,11 @@ class SubscriptionController extends AbstractActionController
         return $this->study;
     }
 
-    protected function sendInvoice(\Mrss\Entity\Subscription $subscription)
-    {
+    protected function sendInvoice(
+        \Mrss\Entity\Subscription $subscription,
+        User $adminUser,
+        User $dataUser
+    ) {
         // Check config to see if emails are being suppressed (by Behat, probably)
         $config = $this->getServiceLocator()->get('config');
         if (!empty($config['suppressEmail'])) {
@@ -593,6 +597,18 @@ class SubscriptionController extends AbstractActionController
             Zip: {$college->getZip()}
             Digital Signature: {$subscription->getDigitalSignature()}
             Title: {$subscription->getDigitalSignatureTitle()}
+
+            Admin User:
+                {$adminUser->getFullName()}
+                {$adminUser->getTitle()}
+                {$adminUser->getEmail()}
+                {$adminUser->getPhone()} {$adminUser->getExtension()}
+
+            Data User:
+                {$dataUser->getFullName()}
+                {$dataUser->getTitle()}
+                {$dataUser->getEmail()}
+                {$dataUser->getPhone()} {$dataUser->getExtension()}
             "
         );
 

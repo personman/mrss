@@ -339,4 +339,10 @@ class User implements UserInterface, ProviderInterface
     {
         return array($this->getRole());
     }
+
+    public function getFullName()
+    {
+        return $this->getPrefix() . ' ' . $this->getFirstName() . ' ' .
+        $this->getLastName();
+    }
 }

@@ -4,5 +4,11 @@
     <?= $benchmarkGroup->getName() ?>
 </h3>
 
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+<div class="well">
+    <?= $description ?>
+</div>
+<?php endif ?>
+
 <?= $this->ztbForm($form->prepare()) ?>
 

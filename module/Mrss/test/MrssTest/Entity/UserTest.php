@@ -191,4 +191,15 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($collegeMock, $user->getCollege());
     }
+
+    public function testGetFullName()
+    {
+        $user = new User;
+
+        $user->setPrefix('Dr.');
+        $user->setFirstName('Tobias');
+        $user->setLastName('Funke');
+
+        $this->assertEquals('Dr. Tobias Funke', $user->getFullName());
+    }
 }
