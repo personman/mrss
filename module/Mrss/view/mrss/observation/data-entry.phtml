@@ -1,5 +1,11 @@
 <?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
 
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
 <h3>
     <?= $benchmarkGroup->getName() ?>
 </h3>
