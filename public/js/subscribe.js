@@ -20,7 +20,9 @@ function handleSameAsCheckbox()
 
     // When the form is submitted and the checkbox is checked, copy values
     dataFieldset.parents('form').submit(function() {
-        copyValues(adminFieldset, dataFieldset)
+        if (checkbox.is(':checked')) {
+            copyValues(adminFieldset, dataFieldset)
+        }
 
         return true
     })
