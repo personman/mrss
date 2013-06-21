@@ -72,7 +72,7 @@ class SubscriptionController extends AbstractActionController
         $this->checkSubscriptionIsInProgress();
 
         $form = new Form('agreement');
-        $fieldset = new Agreement();
+        $fieldset = new Agreement($this->currentStudy()->getDescription());
         $form->add($fieldset);
 
         // Add continue button

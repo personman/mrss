@@ -8,7 +8,7 @@ use Zend\Validator\Digits;
 
 class Agreement extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct()
+    public function __construct($studyName = 'MRSS')
     {
         parent::__construct('agreement');
 
@@ -66,7 +66,7 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 'options' => array(
                     'label' => 'Authorization',
                     'help-block' => 'I hereby authorize my institution\'s
-                    participation in Maximizing Resources for Student Success',
+                    participation in the ' . $studyName,
                     'checked_value' => 1,
                     'unchecked_value' => 'no'
                 ),
