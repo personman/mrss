@@ -432,8 +432,14 @@ class SubscriptionController extends AbstractActionController
 
         if (!empty($createUser)) {
             // Send out email with one-time login link
-            $this->getPasswordService()
-                ->sendProcessForgotRequest($user->getId(), $user->getEmail());
+            $pwService = $this->getPasswordService();
+            $pwService->getOptions()
+                ->setResetEmailTemplate('email/subscription/newuser');
+            $pwService->getOptions()->setResetEmailSubjectLine(
+                'Welcome to ' . $this->currentStudy()->getDescription()
+            );
+
+            $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
         }
 
         return $user;

@@ -422,6 +422,11 @@ header {
     form input, form textarea {
         width: 450px;
     }
+
+    /* Set a min-height on the content div so the footer doesn't levitate */
+    #content {
+        min-height: 700px;
+    }
 }
 @media (min-width: 980px) {
 
@@ -574,5 +579,5 @@ header {
 
 /* recaptcha on contact form */
 .recaptcha_r7_c1, .recaptcha_r8_c1 {
-    display: none;
+    /*display: none;*/
 }

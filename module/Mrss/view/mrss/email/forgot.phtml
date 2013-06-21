@@ -1,0 +1,7 @@
+
+You have received this email because you initiated a reset of your password. To continue with the process, please click the link below:
+
+<?php echo $this->serverUrl($this->url('zfcuser/resetpassword', array('userId' => $this->record->getUserId(), 'token' => $this->record->getRequestKey()))); ?>
+
+
+If you did not request a password reset, you can ignore this message.
