@@ -246,7 +246,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             ),
             'attributes' => array(
                 'id' => $this->getDbColumn(),
-                'class' => 'input-small'
+                'class' => 'input-small input-' . $this->getInputType()
             )
         );
 
