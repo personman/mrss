@@ -265,10 +265,29 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
     public function getFormElementInputFilter()
     {
-        return array(
+        $inputFilter =  array(
             'name' => $this->getDbColumn(),
-            'allow_empty' => true
+            'allow_empty' => true,
+            'validators' => array()
         );
+
+        // Check the format
+        if ($this->getInputType() == 'number') {
+            $inputFilter['validators'][] = array('name' => 'Digits');
+        } elseif ($this->getInputType() == 'dollars') {
+            $inputFilter['validators'][] = array(
+                'name' => 'Regex',
+                'options' => array(
+                    'pattern' => '/^\d+\.?(\d\d)?$/',
+                    'messages' => array(
+                        'regexNotMatch' => 'Use the format 1234 or 1234.56'
+                    )
+                )
+            );
+
+        }
+
+        return $inputFilter;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
