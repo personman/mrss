@@ -81,6 +81,28 @@ class SubscriptionTest extends ModelTestAbstract
         $this->assertEquals('placeholder', $result);
     }
 
+    public function testFindByStudyAndYear()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findBy')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findByStudyAndYear(5, 2013);
+
+        $this->assertEquals('placeholder', $result);
+    }
+
     public function testSave()
     {
         $emMock = $this->getEmMock();

@@ -29,6 +29,16 @@ class Subscription extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function findByStudyAndYear($studyId, $year)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'study' => $studyId,
+                'year' => $year
+            )
+        );
+    }
+
     public function save(SubscriptionEntity $subscription)
     {
         $this->getEntityManager()->persist($subscription);

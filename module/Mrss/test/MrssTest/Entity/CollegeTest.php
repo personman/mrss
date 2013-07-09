@@ -65,6 +65,16 @@ class CollegeTest extends PHPUnit_Framework_TestCase
             'Doctrine\Common\Collections\ArrayCollection',
             $college->getObservations()
         );
+
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $college->getUsers()
+        );
+
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $college->getSubscriptions()
+        );
     }
 
     /**
@@ -109,6 +119,22 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $expected = "123 Main<br>\nOverland Park, KS 66101";
 
         $this->assertEquals($expected, $college->getFullAddress());
+    }
+
+    public function testSetUsers()
+    {
+        $college = new College;
+        $college->setUsers('placeholder');
+
+        $this->assertEquals('placeholder', $college->getUsers());
+    }
+
+    public function testSetSubscriptions()
+    {
+        $college = new College;
+        $college->setSubscriptions('placeholder');
+
+        $this->assertEquals('placeholder', $college->getSubscriptions());
     }
 
     public function testGetObservationForYear()

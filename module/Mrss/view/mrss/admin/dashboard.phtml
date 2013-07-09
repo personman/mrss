@@ -1,0 +1,57 @@
+<h2>Subscriptions</h2>
+
+<?php if (count($subscriptions)): ?>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Completion</th>
+            <th>Institution</th>
+            <th>Users</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($subscriptions as $subscription): ?>
+            <tr>
+                <td>
+                    <a href="<?= $this->url(
+                        'observation',
+                        array('id' => $subscription->getObservation()->getId())
+                    ) ?>">
+                        <?= $this->currentStudy()->getCompletionPercentage(
+                            $subscription->getObservation()
+                        ) ?>%
+                    </a>
+                </td>
+                <td>
+                    <a href="<?= $this->url(
+                        'colleges/view',
+                        array('id' => $subscription->getCollege()->getId())
+                    ) ?>">
+                        <?= $subscription->getCollege()->getName() ?>
+                    </a>
+                </td>
+
+                <td>
+                    <?php
+                        $userList = array();
+                        foreach ($subscription->getCollege()->getUsers() as $user):
+                            $userList[] = $user->getFullName();
+                        endforeach;
+
+                        echo implode(', ', $userList);
+
+                    ?>
+                </td>
+
+                <td>
+                    <?= $subscription->getCreated()->format('Y-m-d') ?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+<?php else: ?>
+    <p>No one has signed up yet.</p>
+<?php endif ?>

@@ -129,6 +129,24 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($formElement));
     }
 
+    public function testGetFormElementInputFilterNumber()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('number');
+
+        $filter = $benchmark->getFormElementInputFilter();
+        $this->assertEquals('Digits', $filter['validators'][0]['name']);
+    }
+
+    public function testGetFormElementInputFilterDollars()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('dollars');
+
+        $filter = $benchmark->getFormElementInputFilter();
+        $this->assertEquals('Regex', $filter['validators'][0]['name']);
+    }
+
     public function testInputFilter()
     {
         $benchmark = new Benchmark;
