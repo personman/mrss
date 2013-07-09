@@ -19,24 +19,37 @@
     </tr>
     <tr>
         <td>
-            Data:
+            Subscriptions:
         </td>
         <td>
             <ul>
-                <?php foreach ($this->college->getObservations() as $ob): ?>
+                <?php foreach ($college->getSubscriptions() as $subscription): ?>
                     <li>
                         <a href="<?= $this->url(
                             'observation',
-                            array(
-                                'id' => $ob->getId()
-                            )
+                            array('id' => $subscription->getObservation()->getId())
                         ) ?>">
-                            <?= $ob->getYear() ?>
+                            <?= $subscription->getYear() ?>
+                            <?= $subscription->getStudy()->getName() ?>
                         </a>
-
-                        (<?= $this->study->getCompletionPercentage($ob) ?>%)
+                        (<?= $subscription->getStudy()->getCompletionPercentage(
+                            $subscription->getObservation()
+                        ) ?>%)
                     </li>
-
+                <?php endforeach ?>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Users:
+        </td>
+        <td>
+            <ul>
+                <?php foreach ($college->getUsers() as $user): ?>
+                    <li>
+                        <?= $user->getFullName() ?>
+                    </li>
                 <?php endforeach ?>
             </ul>
         </td>

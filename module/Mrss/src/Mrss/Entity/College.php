@@ -189,6 +189,30 @@ class College
         return $this->observations;
     }
 
+    public function setUsers($users)
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    public function setSubscriptions($subscriptions)
+    {
+        $this->subscriptions = $subscriptions;
+
+        return $this;
+    }
+
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
+    }
+
     public function getFullAddress()
     {
         $address = $this->getAddress() . "<br>\n"

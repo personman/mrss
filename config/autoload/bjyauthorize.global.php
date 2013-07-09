@@ -82,6 +82,11 @@ return array(
                     'controller' => 'observations',
                     'roles' => array('user')
                 ),
+                // Admin stuff
+                array(
+                    'controller' => 'Admin',
+                    'roles' => array('admin')
+                ),
                 array(
                     'controller' => 'benchmarks',
                     'roles' => array('admin')
@@ -90,7 +95,6 @@ return array(
                     'controller' => 'studies',
                     'roles' => array('admin')
                 ),
-                // Admin stuff
                 array(
                     'controller' => 'import',
                     'roles' => array('admin')

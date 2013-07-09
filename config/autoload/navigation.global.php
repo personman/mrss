@@ -76,6 +76,10 @@ return array(
             )
         ),
         'admin' => array(
+            'dashboard' => array(
+                'label' => 'Dashboard',
+                'route' => 'admin'
+            ),
             'studies' => array(
                 'label' => 'Studies',
                 'controller' => 'studies',

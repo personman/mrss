@@ -82,6 +82,11 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
             $subscription->getPaymentSystemName(),
             '"paymentSystemName" should initially be null'
         );
+
+        $this->assertNull(
+            $subscription->getCreated(),
+            '"created" should initially be null'
+        );
     }
 
     /**
@@ -123,5 +128,8 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
 
         $subscription->setPaymentSystemName('SUNY');
         $this->assertEquals('SUNY', $subscription->getPaymentSystemName());
+
+        $subscription->setCreated('2013-07-09');
+        $this->assertEquals('2013-07-09', $subscription->getCreated());
     }
 }

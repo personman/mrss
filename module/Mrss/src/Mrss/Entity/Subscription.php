@@ -114,6 +114,12 @@ class Subscription
      */
     protected $digitalSignatureTitle;
 
+    /**
+     * @Gedmo\Mapping\Annotation\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
     public function getId()
     {
         return $this->id;
@@ -251,5 +257,17 @@ class Subscription
     public function getDigitalSignatureTitle()
     {
         return $this->digitalSignatureTitle;
+    }
+
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getCreated()
+    {
+        return $this->created;
     }
 }

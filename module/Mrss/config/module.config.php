@@ -347,6 +347,16 @@ return array(
                     )
                 )
             ),
+            'admin' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/admin',
+                    'defaults' => array(
+                        'controller' => 'Admin',
+                        'action' => 'dashboard'
+                    )
+                )
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -421,6 +431,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'index' => 'Mrss\Controller\IndexController',
+            'admin' => 'Mrss\Controller\AdminController',
             'import' => 'Mrss\Controller\ImportController',
             'colleges' => 'Mrss\Controller\CollegeController',
             'observations' => 'Mrss\Controller\ObservationController',
@@ -472,6 +483,13 @@ return array(
         ),
     ),
     'doctrine' => array(
+        'eventmanager' => array(
+            'orm_default' => array(
+                'subscribers' => array(
+                    'Gedmo\Timestampable\TimestampableListener'
+                ),
+            ),
+        ),
         'driver' => array(
             // defines an annotation driver with two paths, and names it `my_annotation_driver`
             'my_annotation_driver' => array(
