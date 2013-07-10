@@ -22,18 +22,26 @@ return array(
                 'label' => 'About Us',
                 'uri' => '#',
                 'pages' => array(
-                    /*array(
-                        'label' => 'About MRSS',
-                        'uri' => '/mrss'
-                    ),*/
+                    array(
+                        'label' => 'The Project',
+                        'uri' => '/Workforce-Training-Benchmark-Project'
+                    ),
+                    array(
+                        'label' => 'The Benchmarking Institute',
+                        'uri' => '/National-Higher-Education-Benchmarking-Institute'
+                    ),
+                    array(
+                        'label' => 'NCCET',
+                        'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
+                    ),
                     array(
                         'label' => 'Our Staff',
                         'uri' => '/staff'
                     ),
-                    array(
+                    /*array(
                         'label' => 'Testimonials',
                         'uri' => '/testimonials'
-                    ),
+                    ),*/
                     array(
                         'label' => 'Contact Us',
                         'uri' => '/contact'
@@ -47,6 +55,33 @@ return array(
 
                 )
             ),
+            /*
+            // ToDo: before activating below code make sure that Membership Benefits don't show when logged in. PRA 130626
+            array(
+              'label' => 'Subscribe',
+              'uri' => '#',
+              'pages' => array(
+                array(
+                   'label' => 'Subscribe Now',
+                   'route' => 'subscribe',
+                   'controller' => 'subscription'
+                 ), 
+                array(
+                   'label' => 'Membership Benefits',
+                   'uri' => '/Membership-Benefits'
+                 ),
+               )
+            ),
+            */
+            'subscribe' => array(
+                'label' => 'Subscribe',
+                'route' => 'subscribe',
+                'controller' => 'subscription'
+            ),
+            'benchmarks' => array(
+                'label' => 'Benchmarks',
+                'uri' => '/Benchmarks',
+            ),
             array(
                 'label' => 'Help',
                 'uri' => '#',
@@ -56,11 +91,6 @@ return array(
                         'uri' => '/glossary'
                     )
                 )
-            ),
-            'subscribe' => array(
-                'label' => 'Subscribe',
-                'route' => 'subscribe',
-                'controller' => 'subscription'
             ),
             array(
                 'label' => 'Contact Us',
