@@ -72,7 +72,7 @@ return array(
             ),
             'logout' => array(
                 'label' => 'Log Out',
-                'route' => 'zfcuser/logout'
+                'route' => 'zfcuser/logout',
             )
         ),
         'admin' => array(

@@ -6,6 +6,7 @@ require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 use Behat\MinkExtension\Context\MinkContext;
+use Behat\Behat\Exception\PendingException;
 
 class FeatureContext extends MinkContext
 {
@@ -113,4 +114,27 @@ class FeatureContext extends MinkContext
         $this->visit("/user/logout");
     }
 
+    /**
+     * @Given /^I am logged in$/
+     */
+    public function iAmLoggedIn()
+    {
+        $this->getSession()->visit('/');
+
+        // Are we already logged in?
+        $logoutLink = $this->getSession()->getPage()
+            ->find('xpath', "//a[contains(@href, 'logout')]");
+
+        if (!empty($logoutLink)) {
+            return true;
+        }
+
+        $email = 'dfergu15@jccc.edu';
+        $password = '111111';
+
+        $this->visit('/user/login');
+        $this->fillField('identity', $email);
+        $this->fillField('credential', $password);
+        $this->pressButton('Sign In');
+    }
 }

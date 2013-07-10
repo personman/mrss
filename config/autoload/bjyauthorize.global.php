@@ -72,9 +72,9 @@ return array(
                     'controller' => 'goalioforgotpassword_forgot',
                     'roles' => array('guest')
                 ),
-                // Page controller
                 array(
                     'controller' => 'pages',
+                    'action' => 'view',
                     'roles' => array('guest')
                 ),
                 // Only authenticated users can look at these:
@@ -83,6 +83,10 @@ return array(
                     'roles' => array('user')
                 ),
                 // Admin stuff
+                array(
+                    'controller' => 'pages',
+                    'roles' => array('admin')
+                ),
                 array(
                     'controller' => 'Admin',
                     'roles' => array('admin')
