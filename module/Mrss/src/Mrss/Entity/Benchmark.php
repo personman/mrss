@@ -324,14 +324,16 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             // Validator to make sure the dbColumn is unique
             $repository = $this->getEntityManager()
                 ->getRepository('Mrss\Entity\Benchmark');
-            $dbColumnUniqueValidator = new \DoctrineModule\Validator\UniqueObject(array(
-                'object_repository' => $repository,
-                'object_manager' => $this->getEntityManager(),
-                'fields' => array('dbColumn'),
-                'messages' => array(
-                    'objectNotUnique' => 'The database column must be unique.'
+            $dbColumnUniqueValidator = new \DoctrineModule\Validator\UniqueObject(
+                array(
+                    'object_repository' => $repository,
+                    'object_manager' => $this->getEntityManager(),
+                    'fields' => array('dbColumn'),
+                    'messages' => array(
+                        'objectNotUnique' => 'The database column must be unique.'
+                    )
                 )
-            ));
+            );
 
             $inputFilter->add(
                 $factory->createInput(
