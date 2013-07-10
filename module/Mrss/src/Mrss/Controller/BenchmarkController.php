@@ -174,6 +174,9 @@ class BenchmarkController extends AbstractActionController
             $this->getServiceLocator()->get('validator.equation')
         );
 
+        // Pass in the entity manager for checking uniqueness
+        $benchmark->setEntityManager($em);
+
         // Build form
         $form = new Form\Benchmark;
 

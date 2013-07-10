@@ -23,6 +23,9 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $inputFilter;
     protected $equationValidator;
 
+    // We pass in the doctrine entity manager for validation of unique dbColumn
+    protected $entityManager;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -317,6 +320,19 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 )
             );
 
+
+            // Validator to make sure the dbColumn is unique
+            $repository = $this->getEntityManager()
+                ->getRepository('Mrss\Entity\Benchmark');
+            $dbColumnUniqueValidator = new \DoctrineModule\Validator\UniqueObject(array(
+                'object_repository' => $repository,
+                'object_manager' => $this->getEntityManager(),
+                'fields' => array('dbColumn'),
+                'messages' => array(
+                    'objectNotUnique' => 'The database column must be unique.'
+                )
+            ));
+
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -326,7 +342,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                             array('name' => 'StringTrim')
                         ),
                         'validators' => array(
-                            array('name' => 'NotEmpty')
+                            array('name' => 'NotEmpty'),
+                            $dbColumnUniqueValidator
                         )
                     )
                 )
@@ -391,5 +408,17 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getEquationValidator()
     {
         return $this->equationValidator;
+    }
+
+    public function setEntityManager($em)
+    {
+        $this->entityManager = $em;
+
+        return $this;
+    }
+
+    public function getEntityManager()
+    {
+        return $this->entityManager;
     }
 }
