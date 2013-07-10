@@ -7,6 +7,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Behat\Exception\PendingException;
+use Behat\Behat\Context\Step;
 
 class FeatureContext extends MinkContext
 {
@@ -119,7 +120,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedIn()
     {
-        $this->getSession()->visit('/');
+        $this->visit("/");
 
         // Are we already logged in?
         $logoutLink = $this->getSession()->getPage()
