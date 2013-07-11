@@ -39,6 +39,22 @@ class Subscription extends AbstractModel
         );
     }
 
+    /**
+     * Look up the subscription record for the current study and year
+     *
+     * @param $study
+     * @param $collegeId
+     * @return array
+     */
+    public function findCurrentSubscription($study, $collegeId)
+    {
+        return $this->findOne(
+            $study->getCurrentYear(),
+            $collegeId,
+            $study->getId()
+        );
+    }
+
     public function save(SubscriptionEntity $subscription)
     {
         $this->getEntityManager()->persist($subscription);

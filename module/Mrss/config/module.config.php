@@ -58,7 +58,25 @@ return array(
                                 'benchmarkGroup' => 0
                             )
                         )
-                    )
+                    ),
+                    'import' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import',
+                            'defaults' => array(
+                                'action' => 'import'
+                            )
+                        )
+                    ),
+                    'export' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/export',
+                            'defaults' => array(
+                                'action' => 'export'
+                            )
+                        )
+                    ),
                 )
             ),
             'studies' => array(

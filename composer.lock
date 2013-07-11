@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "dd0a261cb7839be8535d5b2d30c05503",
+    "hash": "07b053fddb7a581d97b1ea4454fe83f1",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -770,12 +770,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "78fc1296145dc798fdfa8e5657b6b91d58f8c184"
+                "reference": "0aed9595c3ceec81dcf44a4eefc24bb49051868e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/78fc1296145dc798fdfa8e5657b6b91d58f8c184",
-                "reference": "78fc1296145dc798fdfa8e5657b6b91d58f8c184",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/0aed9595c3ceec81dcf44a4eefc24bb49051868e",
+                "reference": "0aed9595c3ceec81dcf44a4eefc24bb49051868e",
                 "shasum": ""
             },
             "require": {
@@ -837,7 +837,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-07-07 19:37:55"
+            "time": "2013-07-11 11:56:13"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -845,12 +845,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "c0a38826d3a02333a2670744d52ac627882ef102"
+                "reference": "ef7119fc9076c3c0b652aa9c8266286472e24dc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/c0a38826d3a02333a2670744d52ac627882ef102",
-                "reference": "c0a38826d3a02333a2670744d52ac627882ef102",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/ef7119fc9076c3c0b652aa9c8266286472e24dc1",
+                "reference": "ef7119fc9076c3c0b652aa9c8266286472e24dc1",
                 "shasum": ""
             },
             "require": {
@@ -917,7 +917,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-07-05 05:32:00"
+            "time": "2013-07-10 19:03:29"
         },
         {
             "name": "goalio/goalio-forgotpassword",
@@ -1288,6 +1288,41 @@
                 "zf2"
             ],
             "time": "2012-09-14 23:16:25"
+        },
+        {
+            "name": "phpexcel/phpexcel",
+            "version": "v1.7.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/phpexcel",
+                "reference": "v1.7.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/ddeboer/phpexcel/zipball/v1.7.7",
+                "reference": "v1.7.7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPExcel": "Classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "description": "PHPExcel - OpenXML - Create Excel2007 documents in PHP - Spreadsheet engine",
+            "homepage": "http://phpexcel.codeplex.com",
+            "keywords": [
+                "excel",
+                "xls"
+            ],
+            "time": "2012-09-04 11:29:37"
         },
         {
             "name": "rezzza/exprlib",
@@ -1840,12 +1875,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "64052d951cfb21d75b0d34f5ccf79d5ac0adfc92"
+                "reference": "052be6cc2ac800f28a97067da8587bdd2f2683cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/64052d951cfb21d75b0d34f5ccf79d5ac0adfc92",
-                "reference": "64052d951cfb21d75b0d34f5ccf79d5ac0adfc92",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/052be6cc2ac800f28a97067da8587bdd2f2683cf",
+                "reference": "052be6cc2ac800f28a97067da8587bdd2f2683cf",
                 "shasum": ""
             },
             "require": {
@@ -1899,7 +1934,7 @@
                 "Behat",
                 "Symfony2"
             ],
-            "time": "2013-07-01 09:38:54"
+            "time": "2013-07-11 11:11:51"
         },
         {
             "name": "behat/gherkin",
@@ -2723,12 +2758,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "977c5327c5f9e2a0f08728a59389ee604e5b2f47"
+                "reference": "b07614827c82083615b981e6a9813092cec43073"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/977c5327c5f9e2a0f08728a59389ee604e5b2f47",
-                "reference": "977c5327c5f9e2a0f08728a59389ee604e5b2f47",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/b07614827c82083615b981e6a9813092cec43073",
+                "reference": "b07614827c82083615b981e6a9813092cec43073",
                 "shasum": ""
             },
             "require": {
@@ -2773,7 +2808,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2013-06-23 05:41:31"
+            "time": "2013-07-10 05:37:22"
         },
         {
             "name": "psr/log",

@@ -174,6 +174,30 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    public function importAction()
+    {
+
+    }
+
+    public function exportAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $collegeId = $user->getCollege()->getId();
+
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscription = $subscriptionModel->findCurrentSubscription(
+            $this->currentStudy(),
+            $collegeId
+        );
+
+        //var_dump($this->currentStudy());
+        //var_dump($subscription); die;
+
+        $excelService = new \Mrss\Service\Excel();
+        $excelService->getExcelForSubscription($subscription);
+
+    }
+
     /**
      * Get field metadata from the benchmark entity
      *
