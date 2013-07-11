@@ -1,4 +1,4 @@
-<project name="DfSkeleton" default="test">
+<project name="DfSkeleton" default="update">
     <target name="codesniffer" description="Run PHP_Codesniffer">
         <!-- PHP CodeSniffer -->
         <exec command="export PATH=./bin:$PATH" />
@@ -97,7 +97,7 @@
     </target>
 
     <target name="composer">
-        <exec command="php composer.phar update" passthru="true" />
+        <exec command="php composer.phar install" passthru="true" />
     </target>
 
 
@@ -158,7 +158,13 @@
 
     </target>
 
+    <target name="gitpull">
+        <exec command="git pull" passthru="true"/>
+    </target>
 
+
+    <target name="update" description="Update suitable for production"
+            depends="gitpull,composer,migrate" />
 
     <target name="test-db-teardown" description="Undo the changes made in the test-db task">
         <exec command="mv config/autoload/db.php.bak config/autoload/db.php" />
