@@ -150,6 +150,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
     public function testInputFilter()
     {
         $benchmark = new Benchmark;
+        $benchmark->setEntityManager($this->getEmMock());
 
         $this->assertInstanceOf(
             'Zend\InputFilter\InputFilterInterface',
@@ -160,6 +161,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
     public function testSetInputFilter()
     {
         $benchmark = new Benchmark;
+        $benchmark->setEntityManager($this->getEmMock());
 
         $inputFilterMock = $this->getMock(
             'Zend\InputFilter\BaseInputFilter',
@@ -177,6 +179,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
     public function testSetEquationValidator()
     {
         $benchmark = new Benchmark;
+        $benchmark->setEntityManager($this->getEmMock());
 
         $equationValidatorMock = $this->getMock(
             'Mrss\Validator\Equation',
@@ -223,5 +226,43 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $element = $benchmark->getFormElement();
 
         $this->assertEquals('Select', $element['type']);
+    }
+
+    protected function getEmMock($additionalMethodsToMock = array())
+    {
+        $repositoryMock = $this->getMock(
+            'Doctrine\Common\Persistence\ObjectRepository',
+            array('findOneBy', 'find', 'findAll', 'findBy', 'getClassName')
+        );
+
+        $methodsToMock = array(
+            'getRepository',
+            'getClassMetadata',
+            'persist',
+            'flush'
+        );
+        $methodsToMock = array_merge($methodsToMock, $additionalMethodsToMock);
+
+        $emMock  = $this->getMock(
+            '\Doctrine\ORM\EntityManager',
+            $methodsToMock,
+            array(),
+            '',
+            false
+        );
+        $emMock->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($repositoryMock));
+        $emMock->expects($this->any())
+            ->method('getClassMetadata')
+            ->will($this->returnValue((object)array('name' => 'aClass')));
+        $emMock->expects($this->any())
+            ->method('persist')
+            ->will($this->returnValue(null));
+        $emMock->expects($this->any())
+            ->method('flush')
+            ->will($this->returnValue(null));
+
+        return $emMock;
     }
 }

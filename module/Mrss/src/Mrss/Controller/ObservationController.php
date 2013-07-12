@@ -176,7 +176,92 @@ class ObservationController extends AbstractActionController
 
     public function importAction()
     {
+        // Get the import form
+        $form = new \Mrss\Form\ImportData('import');
 
+        $errorMessages = array();
+
+        // Handle the form
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                /**
+                 * Steps:
+                 *
+                 * Get data from excel
+                 * Check for errors using inputFilters
+                 * if there are errors, stop and show them
+                 * if not, merge into observation and save
+                 */
+
+                $filename = $data['file']['tmp_name'];
+                $excelService = new \Mrss\Service\Excel();
+                $data = $excelService->getObservationDataFromExcel($filename);
+
+                $inputFilter = $this->currentStudy()->getInputFilter();
+
+                /** We'll need the benchmark model so we can look up
+                 * the labels of any invalid ones
+                 *
+                 * @var \Mrss\Model\Benchmark $benchmarkModel
+                 */
+                $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
+
+                $inputFilter->setData($data);
+
+                // Is the data in the Excel file valid?
+                if ($inputFilter->isValid()) {
+                    // Now we actually save the data to the observation
+                    $observation = $this->getCurrentObservation();
+
+                    foreach ($data as $column => $value) {
+                        $observation->set($column, $value);
+                    }
+
+                    $observationModel = $this->getServiceLocator()
+                        ->get('model.observation');
+                    $observationModel->save($observation);
+                    $this->getServiceLocator()->get('em')->flush();
+
+                    $this->flashMessenger()->addSuccessMessage("Data imported.");
+                    return $this->redirect()->toRoute('data-entry');
+                } else {
+                    foreach ($inputFilter->getInvalidInput() as $error) {
+                        // Get the benchmark so we can show the label in the error
+                        $benchmark = $benchmarkModel->findOneByDbColumn(
+                            $error->getName()
+                        );
+
+                        $message = implode(
+                            ', ',
+                            $error->getMessages()
+                        );
+                        $message .= '. Your value: ' . $data[$error->getName()];
+
+                        $errorMessages[$benchmark->getName()] = $message;
+                    }
+
+                    $this->flashMessenger()->addErrorMessage(
+                        "Your data was not imported. Please correct the errors below
+                        and try again."
+                    );
+                }
+            }
+        }
+
+        return array(
+            'form' => $form,
+            'errorMessages' => $errorMessages
+        );
     }
 
     public function exportAction()

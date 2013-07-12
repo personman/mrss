@@ -63,8 +63,8 @@ class Excel
         // Loop over each benchmark, adding a row
         $row = 2;
         foreach ($subscription->getStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-            foreach ($benchmarkGroup->getNonComputedBenchmarksForYear($year)
-                     as $benchmark) {
+            $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($year);
+            foreach ($benchmarks as $benchmark) {
                 $this->writeRow($sheet, $row, $benchmark, $subscription);
                 $row++;
             }
@@ -85,6 +85,8 @@ class Excel
 
         // Write the db column
         $sheet->setCellValue('D' . $row, $benchmark->getDbColumn());
+
+        //
     }
 
     public function download($spreadsheet)
@@ -94,12 +96,46 @@ class Excel
             'Content-Type:
             application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         );
-        header('Content-Disposition: attachment;filename="myfile.xlsx"');
+        header('Content-Disposition: attachment;filename="data-export.xlsx"');
         header('Cache-Control: max-age=0');
 
         $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
         $objWriter->save('php://output');
 
         die;
+    }
+
+    public function getObservationDataFromExcel($filename)
+    {
+        $valueColumn = 1;
+        $dbColumnColumn = 3;
+
+        $excel = \PHPExcel_IOFactory::load($filename);
+        $sheet = $excel->getActiveSheet();
+
+        $data = array();
+        $headerRowSkipped = false;
+        foreach ($sheet->getRowIterator() as $row) {
+            if (!$headerRowSkipped) {
+                $headerRowSkipped = true;
+                continue;
+            }
+
+            $value = $sheet
+                ->getCellByColumnAndRow($valueColumn, $row->getRowIndex())
+                ->getValue();
+
+            $dbColumn = $sheet
+                ->getCellByColumnAndRow($dbColumnColumn, $row->getRowIndex())
+                ->getValue();
+
+            if (empty($dbColumn)) {
+                continue;
+            }
+
+            $data[$dbColumn] = $value;
+        }
+
+        return $data;
     }
 }

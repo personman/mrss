@@ -3,6 +3,7 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Zend\InputFilter\InputFilter;
 
 /**
  * Study/project
@@ -292,5 +293,22 @@ class Study
         }
 
         return $percentage;
+    }
+
+    /**
+     * Get the benchmarks for the current year and return all of their input filters
+     */
+    public function getInputFilter()
+    {
+        $inputFilter = new InputFilter();
+
+        foreach ($this->getBenchmarkGroups() as $group) {
+            $year = $this->getCurrentYear();
+            foreach ($group->getNonComputedBenchmarksForYear($year) as $benchmark) {
+                $inputFilter->add($benchmark->getFormElementInputFilter());
+            }
+        }
+
+        return $inputFilter;
     }
 }
