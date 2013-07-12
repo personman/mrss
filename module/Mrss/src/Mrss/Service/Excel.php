@@ -93,8 +93,9 @@ class Excel
     {
         // redirect output to client browser
         header(
-            'Content-Type:
-            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            'Content-Type: '.
+            
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         );
         header('Content-Disposition: attachment;filename="data-export.xlsx"');
         header('Cache-Control: max-age=0');
