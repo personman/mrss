@@ -203,9 +203,20 @@ class ObservationController extends AbstractActionController
                  * if not, merge into observation and save
                  */
 
-                $filename = $data['file']['tmp_name'];
-                $excelService = new \Mrss\Service\Excel();
-                $data = $excelService->getObservationDataFromExcel($filename);
+                try {
+                    $filename = $data['file']['tmp_name'];
+                    $excelService = new \Mrss\Service\Excel();
+                    $data = $excelService->getObservationDataFromExcel($filename);
+                } catch (\Exception $exception) {
+                    $this->flashMessenger()->addErrorMessage(
+                        'There was a problem processing your import file. Try ' .
+                        'downloading the export file again. If you continue to ' .
+                        'have trouble, contact us.'
+                    );
+
+                    return $this->redirect()->toRoute('data-entry/import');
+                }
+
 
                 $inputFilter = $this->currentStudy()->getInputFilter();
 
@@ -224,7 +235,16 @@ class ObservationController extends AbstractActionController
                     $observation = $this->getCurrentObservation();
 
                     foreach ($data as $column => $value) {
-                        $observation->set($column, $value);
+                        try {
+                            $observation->set($column, $value);
+                        } catch (\Exception $exception) {
+                            $this->flashMessenger()->addErrorMessage(
+                                'There was a problem importing your file. Please ' .
+                                'try again or contact us.'
+                            );
+
+                            return $this->redirect()->toRoute('data-entry/import');
+                        }
                     }
 
                     $observationModel = $this->getServiceLocator()

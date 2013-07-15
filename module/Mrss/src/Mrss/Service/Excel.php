@@ -7,6 +7,7 @@ use Mrss\Entity\Subscription;
 use Mrss\Entity\Benchmark;
 use PHPExcel;
 use PHPExcel_Worksheet;
+use PHPExcel_IOFactory;
 
 class Excel
 {
@@ -110,7 +111,7 @@ class Excel
         $valueColumn = 1;
         $dbColumnColumn = 3;
 
-        $excel = \PHPExcel_IOFactory::load($filename);
+        $excel = $this->openFile($filename);
         $sheet = $excel->getActiveSheet();
 
         $data = array();
@@ -136,6 +137,33 @@ class Excel
             $data[$dbColumn] = $value;
         }
 
+        // If $data is empty, then we're dealing with an invalid file
+        if (empty($data)) {
+            throw new \Exception('Empty import file');
+        }
+
         return $data;
+    }
+
+    public function openFile($filename)
+    {
+        // Check the file format first
+        $filetype = PHPExcel_IOFactory::identify($filename);
+        //var_dump($filetype); die;
+        switch ($filetype) {
+            case 'Excel2007':
+            case 'Excel2003XML':
+            case 'Excel5':
+            case 'OOCalc':
+            case 'SYLK':
+                break;
+            default:
+                throw new \Exception('Invalid file type');
+                break;
+        }
+
+        $excel = PHPExcel_IOFactory::load($filename);
+
+        return $excel;
     }
 }
