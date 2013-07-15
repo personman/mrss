@@ -115,4 +115,36 @@ class SubscriptionTest extends ModelTestAbstract
 
         $this->model->save(new \Mrss\Entity\Subscription());
     }
+
+    public function testFindCurrentSubscription()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findOneBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getCurrentYear', 'getId')
+        );
+        $studyMock->expects($this->once())
+            ->method('getCurrentYear')
+            ->will($this->returnValue(2013));
+        $studyMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(3));
+
+        $sub = $this->model->findCurrentSubscription($studyMock, 1);
+        $this->assertEquals('placeholder', $sub);
+    }
 }

@@ -13,3 +13,4 @@ SELECT 'dfergu15@jccc.edu', 'Dan McTest',
 
 -- Open up enrollment
 UPDATE studies SET enrollmentOpen = true WHERE id = 2;
+UPDATE studies SET enrollmentOpen = true WHERE id = 3;

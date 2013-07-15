@@ -129,4 +129,30 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $percentage = $this->study->getCompletionPercentage($observationMock);
         $this->assertEquals(0, $percentage);
     }
+
+    public function testGetInputFilter()
+    {
+        $filterMock = $this->getMock(
+            'Zend\InputFilter\InputFilter'
+        );
+
+        $benchmarkMock = $this->getMock(
+            'Mrss\Entity\Benchmark',
+            array('getFormElementInputFilter')
+        );
+        $benchmarkMock->expects($this->once())
+            ->method('getFormElementInputFilter')
+            ->will($this->returnValue($filterMock));
+
+        $benchmarkGroupMock = $this->getMock(
+            'Mrss\Entity\BenchmarkGroup',
+            array('getNonComputedBenchmarksForYear')
+        );
+        $benchmarkGroupMock->expects($this->once())
+            ->method('getNonComputedBenchmarksForYear')
+            ->will($this->returnValue(array($benchmarkMock)));
+
+        $this->study->setBenchmarkGroups(array($benchmarkGroupMock));
+        $filter = $this->study->getInputFilter();
+    }
 }
