@@ -295,8 +295,11 @@ class ObservationController extends AbstractActionController
             $collegeId
         );
 
-        //var_dump($this->currentStudy());
-        //var_dump($subscription); die;
+        if (empty($subscription)) {
+            throw new \Exception(
+                'Unable to download Excel file. Subscription not found.'
+            );
+        }
 
         $excelService = new \Mrss\Service\Excel();
         $excelService->getExcelForSubscription($subscription);
