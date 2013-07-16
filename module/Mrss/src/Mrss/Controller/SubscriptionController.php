@@ -529,8 +529,7 @@ class SubscriptionController extends AbstractActionController
     protected function getStudy()
     {
         if (empty($this->study)) {
-            // @todo: make this dynamic
-            $studyId = 2;
+            $studyId = $this->currentStudy()->getId();
 
             /** @var \Mrss\Model\Study $studyModel */
             $studyModel = $this->getServiceLocator()->get('model.study');
