@@ -9,7 +9,7 @@
         <?php $hasChildren = $page->hasPages() ?>
         <?php if( ! $hasChildren): ?>
             <li>
-            <a href="<?php echo $page->getHref() ?>" <?php echo ($page->isActive()) ? 'class="active"' : '' ?>>
+            <a href="<?php echo $page->getHref() ?>" <?php echo ($page->isActive()) ? 'class="active"' : '' ?>  title="<?php echo $page->getTitle() ?>">
                 <?php echo $this->translate($page->getLabel()) ?>
             </a>
         <?php else: ?>
@@ -24,7 +24,7 @@
                     <?php // when using partials we need to manually check for ACL conditions ?>
                     <?php if( ! $child->isVisible() || !$this->navigation()->accept($child)) continue; ?>
                     <li>
-                        <a href="<?php echo $child->getHref() ?>">
+                        <a href="<?php echo $child->getHref() ?>" title="<?php echo $child->getTitle() ?>">
                             <?php echo $this->translate($child->getLabel()) ?>
                         </a>
                     </li>

@@ -228,8 +228,8 @@
                     <div class="nav-collapse collapse">
                         <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
                         <?php $partial = array('mrss/menu/navigation.phtml', 'default') ?>
-                        <?= $this->navigation()->menu('navigation')->setPartial
-                            ($partial)
+                        <?= $this->navigation()->menu('footer_navigation')
+                            ->setPartial($partial)
                             ->render(); ?>
                     </div>
                 </div>

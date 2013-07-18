@@ -52,6 +52,7 @@ class Module
             'services' => array(),
             'factories' => array(
                 'navigation' => 'Mrss\Service\NavigationFactory',
+                'footer_navigation' => 'Mrss\Service\FooterNavigationFactory',
                 'admin_navigation' =>
                 'Mrss\Service\AdminNavigationFactory',
                 'import.nccbp' => function ($sm) {

@@ -21,6 +21,23 @@ class NavigationFactory extends DefaultNavigationFactory
 
     public function getPages(ServiceLocatorInterface $serviceLocator)
     {
+        $pages = $this->getPagesArray($serviceLocator);
+
+        //$configuration['navigation'][$this->getName()] = array();
+
+        $application = $serviceLocator->get('Application');
+        $routeMatch  = $application->getMvcEvent()->getRouteMatch();
+        $router      = $application->getMvcEvent()->getRouter();
+        //$pages       = $this->getPagesFromConfig
+        //($configuration['navigation'][$this->getName()]);
+
+        $this->pages = $this->injectComponents($pages, $routeMatch, $router);
+
+        return $this->pages;
+    }
+
+    public function getPagesArray(ServiceLocatorInterface $serviceLocator)
+    {
         $pages = parent::getPages($serviceLocator);
 
         // Alter the nav based on auth
@@ -65,18 +82,7 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['data-entry']);
         }
 
-
-        //$configuration['navigation'][$this->getName()] = array();
-
-        $application = $serviceLocator->get('Application');
-        $routeMatch  = $application->getMvcEvent()->getRouteMatch();
-        $router      = $application->getMvcEvent()->getRouter();
-        //$pages       = $this->getPagesFromConfig
-        //($configuration['navigation'][$this->getName()]);
-
-        $this->pages = $this->injectComponents($pages, $routeMatch, $router);
-
-        return $this->pages;
+        return $pages;
     }
 
     public function setCurrentStudy(Study $study)
