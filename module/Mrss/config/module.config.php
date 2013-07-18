@@ -119,6 +119,16 @@ return array(
                                 'id' => 0
                             )
                         )
+                    ),
+                    'import' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import/:id',
+                            'defaults' => array(
+                                'action' => 'import',
+                                'id' => 0
+                            )
+                        )
                     )
                 )
             ),

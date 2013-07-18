@@ -4,6 +4,15 @@ namespace Mrss\Service;
 
 use Zend\Dom\Query;
 
+/**
+ * Class ImportNccwtp
+ *
+ * This is no longer in use and only included for historical or analysis purposes
+ * This class just extracts some data from the old WTP html forms
+ *
+ * @package Mrss\Service
+ */
+
 class ImportNccwtp
 {
     protected $studyId = 3;

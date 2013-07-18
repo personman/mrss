@@ -33,6 +33,66 @@ class Observation
      */
     protected $college;
 
+    // MRSS
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_course_planning;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admissions;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counceling;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_library;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential;
 
 
     // NCCBP form 1:

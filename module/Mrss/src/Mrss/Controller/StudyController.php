@@ -103,6 +103,42 @@ class StudyController extends AbstractActionController
         );
     }
 
+    public function importAction()
+    {
+        $studyId = $this->params()->fromRoute('id');
+        $filename = $this->getCsvImportFileForStudy($studyId);
+
+        /** @var \Mrss\Service\ImportBenchmarks $importer */
+        $importer = $this->getServiceLocator()->get('import.csv');
+
+        // Pass in the study we're importing to
+        $studyModel = $this->getServiceLocator()->get('model.study');
+        $study = $studyModel->find($studyId);
+        $importer->setStudy($study);
+
+        $importer->import($filename);
+        $this->getServiceLocator()->get('em')->flush();
+
+        // Output properties that need to be added to Observation
+        return array(
+            'propertiesToAdd' => $importer->getObservationPropertiesToAdd()
+        );
+    }
+
+    public function getCsvImportFileForStudy($studyId)
+    {
+        $csvFiles = array(
+            2 => 'data/imports/mrss-benchmarks.csv',
+            3 => 'data/imports/nccwtp-benchmarks.csv'
+        );
+
+        if (empty($csvFiles[$studyId])) {
+            throw new \Exception('Import file not found for study ' . $studyId);
+        }
+
+        return $csvFiles[$studyId];
+    }
+
     /**
      * @param integer $id
      * @throws \Exception
