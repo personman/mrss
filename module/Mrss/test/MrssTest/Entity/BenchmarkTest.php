@@ -18,7 +18,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
      *
      * @return null
      */
-    public function testUserInitialState()
+    public function testInitialState()
     {
         $benchmark = new Benchmark;
 
