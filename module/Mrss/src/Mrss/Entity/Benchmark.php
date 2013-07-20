@@ -263,7 +263,17 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $element['options']['empty_option'] = '---';
         }
 
-        return $element;
+        // Some HTML 5 validation
+        if ($this->getInputType() == 'dollars') {
+            $element['attributes']['pattern'] = '\d+(\.\d+)?';
+            $element['attributes']['title'] = 'Use the format 1234 or 1234.56';
+        } elseif ($this->getInputType() == 'number') {
+            $element['attributes']['pattern'] = '\d+';
+            $element['attributes']['title'] = 'Use the format 1234';
+        }
+
+
+            return $element;
     }
 
     public function getFormElementInputFilter()
