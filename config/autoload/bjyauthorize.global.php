@@ -103,6 +103,10 @@ return array(
                     'controller' => 'import',
                     'roles' => array('admin')
                 ),
+                array(
+                    'controller' => 'systems',
+                    'roles' => array('admin')
+                ),
                 // Since the background action is fired by console, lift guard
                 array(
                     'controller' => 'import',

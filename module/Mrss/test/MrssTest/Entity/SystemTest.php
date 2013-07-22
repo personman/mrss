@@ -31,13 +31,48 @@ class SystemTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetters()
+    /**
+     * @dataProvider getSystemData
+     * @param $systemData
+     */
+    public function testSetters($systemData)
     {
-        $this->system->setId(5);
-        $this->system->setName('test');
+        $this->system->setId($systemData['id']);
+        $this->system->setName($systemData['name']);
+        $this->system->setIpeds($systemData['ipeds']);
+        $this->system->setAddress($systemData['address']);
+        $this->system->setAddress2($systemData['address2']);
+        $this->system->setCity($systemData['city']);
+        $this->system->setState($systemData['state']);
+        $this->system->setZip($systemData['zip']);
 
-        $this->assertEquals(5, $this->system->getId());
-        $this->assertEquals('test', $this->system->getName());
+        $this->assertEquals($systemData['id'], $this->system->getId());
+        $this->assertEquals($systemData['name'], $this->system->getName());
+        $this->assertEquals($systemData['ipeds'], $this->system->getIpeds());
+        $this->assertEquals($systemData['address'], $this->system->getAddress());
+        $this->assertEquals($systemData['address2'], $this->system->getAddress2());
+        $this->assertEquals($systemData['city'], $this->system->getCity());
+        $this->assertEquals($systemData['state'], $this->system->getState());
+        $this->assertEquals($systemData['zip'], $this->system->getZip());
+    }
+    
+    public function getSystemData()
+    {
+        return array(
+            array(
+                array(
+                    'id' => 1,
+                    'name' => 'Some College System',
+                    'ipeds' => '999999',
+                    'address' => '606 West Main Street',
+                    'address2' => 'OCB 204',
+                    'city' => 'Highland',
+                    'state' => 'KS',
+                    'zip' => 66035
+                )
+            )
+        );
+
     }
 
     public function testAssociations()

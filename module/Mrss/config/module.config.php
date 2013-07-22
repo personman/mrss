@@ -225,6 +225,28 @@ return array(
                     )
                 )
             ),
+            'systems' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/systems',
+                    'defaults' => array(
+                        'controller' => 'systems',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add',
+                            'defaults' => array(
+                                'action' => 'add'
+                            )
+                        )
+                    )
+                )
+            ),
             'benchmarks' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
@@ -462,6 +484,7 @@ return array(
             'admin' => 'Mrss\Controller\AdminController',
             'import' => 'Mrss\Controller\ImportController',
             'colleges' => 'Mrss\Controller\CollegeController',
+            'systems' => 'Mrss\Controller\SystemController',
             'observations' => 'Mrss\Controller\ObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',
             'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
