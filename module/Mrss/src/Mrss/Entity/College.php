@@ -78,6 +78,11 @@ class College
     protected $users;
 
     /**
+     * @ORM\ManyToOne(targetEntity="System", inversedBy="colleges")
+     */
+    protected $system;
+
+    /**
      * Construct the college entity
      * Populate the observations property with a placeholder
      */
@@ -211,6 +216,18 @@ class College
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    public function setSystem(System $system)
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    public function getSystem()
+    {
+        return $this->system;
     }
 
     public function getFullAddress()

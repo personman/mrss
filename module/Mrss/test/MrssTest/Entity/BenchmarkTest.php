@@ -129,6 +129,36 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($formElement));
     }
 
+    public function testGetFormElementDollars()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('dollars');
+
+        $formElement = $benchmark->getFormElement();
+
+        $this->assertTrue(is_array($formElement));
+        $this->assertEquals('\d+(\.\d+)?', $formElement['attributes']['pattern']);
+        $this->assertEquals(
+            'Use the format 1234 or 1234.56',
+            $formElement['attributes']['title']
+        );
+    }
+
+    public function testGetFormElementNumber()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('number');
+
+        $formElement = $benchmark->getFormElement();
+
+        $this->assertTrue(is_array($formElement));
+        $this->assertEquals('\d+', $formElement['attributes']['pattern']);
+        $this->assertEquals(
+            'Use the format 1234',
+            $formElement['attributes']['title']
+        );
+    }
+
     public function testGetFormElementInputFilterNumber()
     {
         $benchmark = new Benchmark;

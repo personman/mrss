@@ -3,6 +3,7 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity
  * @ORM\Table(name="college_systems")
@@ -27,7 +28,7 @@ class System
 
     public function __construct()
     {
-        $this->colleges = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->colleges = new ArrayCollection();
     }
 
     public function setId($id)

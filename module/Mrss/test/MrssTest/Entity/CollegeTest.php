@@ -75,6 +75,11 @@ class CollegeTest extends PHPUnit_Framework_TestCase
             'Doctrine\Common\Collections\ArrayCollection',
             $college->getSubscriptions()
         );
+
+        $this->assertNull(
+            $college->getSystem(),
+            '"system" should initially be null'
+        );
     }
 
     /**
@@ -94,6 +99,7 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $college->setCity($collegeData['city']);
         $college->setState($collegeData['state']);
         $college->setZip($collegeData['zip']);
+        $college->setSystem($this->getMock('Mrss\Entity\System'));
 
         $this->assertEquals($collegeData['name'], $college->getName());
         $this->assertEquals($collegeData['ipeds'], $college->getIpeds());
@@ -102,6 +108,7 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($collegeData['city'], $college->getCity());
         $this->assertEquals($collegeData['state'], $college->getState());
         $this->assertEquals($collegeData['zip'], $college->getZip());
+        $this->assertInstanceOf('Mrss\Entity\System', $college->getSystem());
     }
 
     /**
