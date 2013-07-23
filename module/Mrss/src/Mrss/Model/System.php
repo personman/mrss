@@ -17,4 +17,26 @@ use Zend\Debug\Debug;
 class System extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\System';
+
+    public function find($id)
+    {
+        return $this->getRepository()->find($id);
+    }
+
+    /**
+     * Find all systems, ordered by name
+     */
+    public function findAll()
+    {
+        $c = $this->getRepository()->findBy(array(), array('name' => 'ASC'));
+        return $c;
+    }
+
+
+    public function save(SystemEntity $system)
+    {
+        $this->getEntityManager()->persist($system);
+
+        // Flush here or leave it to some other code?
+    }
 }

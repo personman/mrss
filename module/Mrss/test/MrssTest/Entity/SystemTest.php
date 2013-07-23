@@ -90,4 +90,10 @@ class SystemTest extends PHPUnit_Framework_TestCase
             $colleges[0]
         );
     }
+
+    public function testInputFilter()
+    {
+        $inputFilter = $this->system->getInputFilter();
+        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $inputFilter);
+    }
 }

@@ -4,6 +4,11 @@ namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
 
 /** @ORM\Entity
  * @ORM\Table(name="college_systems")
@@ -168,5 +173,46 @@ class System
     public function getColleges()
     {
         return $this->colleges;
+    }
+
+    public function getInputFilter()
+    {
+        $inputFilter = new InputFilter();
+        $factory = new InputFactory();
+
+        $inputFilter->add(
+            $factory->createInput(
+                array(
+                    'name' => 'name',
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim')
+                    ),
+                    'validators' => array(
+                        array('name' => 'NotEmpty')
+                    )
+                )
+            )
+        );
+
+        $inputFilter->add(
+            $factory->createInput(
+                array(
+                    'name' => 'ipeds',
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim')
+                    ),
+                    'validators' => array(
+                        array('name' => 'NotEmpty'),
+                        array('name' => 'Digits')
+                    )
+                )
+            )
+        );
+
+        return $inputFilter;
     }
 }

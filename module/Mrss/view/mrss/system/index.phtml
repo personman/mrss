@@ -1,3 +1,26 @@
 <h2>Systems</h2>
 
-<a href="<?= $this->url('systems/add') ?>">Add a system</a>
+<a class="btn" href="<?= $this->url('systems/add') ?>">
+    <i class="icon-plus-sign"></i>
+    Add a system
+</a>
+
+<?php if (!empty($systems)): ?>
+
+    <table class="table">
+        <?php foreach ($systems as $system): ?>
+            <tr>
+                <td>
+                    <a href="<?= $this->url('systems/view', array('id' => $system->getId())) ?>">
+                        <?= $system->getName() ?>
+                    </a>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+
+<?php else: ?>
+
+    <p>There are no systems yet.</p>
+
+<?php endif ?>

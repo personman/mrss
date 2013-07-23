@@ -126,8 +126,8 @@ return array(
                 'route' => 'colleges'
             ),
             array(
-                'label' => 'Benchmarks',
-                'route' => 'benchmarks'
+                'label' => 'Systems',
+                'route' => 'systems'
             ),
             array(
                 'label' => 'Pages',

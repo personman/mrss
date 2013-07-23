@@ -218,7 +218,7 @@ class College
         return $this->subscriptions;
     }
 
-    public function setSystem(System $system)
+    public function setSystem($system)
     {
         $this->system = $system;
 

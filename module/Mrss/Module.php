@@ -143,6 +143,14 @@ class Module
 
                     return $collegeModel;
                 },
+                'model.system' => function ($sm) {
+                    $systemModel = new \Mrss\Model\System;
+                    $em = $sm->get('em');
+
+                    $systemModel->setEntityManager($em);
+
+                    return $systemModel;
+                },
                 'model.observation' => function ($sm) {
                     $observationModel = new \Mrss\Model\Observation();
                     $em = $sm->get('em');

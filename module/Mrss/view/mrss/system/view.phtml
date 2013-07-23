@@ -1,0 +1,34 @@
+<h2><?= $system->getName() ?></h2>
+
+<a class="btn" href="<?= $this->url('systems/edit', array('id' => $system->getId())) ?>">
+    <i class="icon-pencil"></i>
+    Edit
+</a>
+
+<h3>Institutions</h3>
+
+<a href="<?= $this->url('systems/addcollege', array('system_id' => $system->getId())) ?>" class="btn">
+    <i class="icon-plus-sign"></i>
+    Add an institution
+</a>
+
+<table class="table">
+    <?php foreach ($system->getColleges() as $college): ?>
+        <tr>
+            <td>
+                <?= $college->getName() ?>
+            </td>
+            <td>
+                <a href="<?= $this->url(
+                    'systems/removecollege',
+                    array('college_id' => $college->getId())
+                    ) ?>" title="Remove from system">
+                    X
+                </a>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>
+
+
+<h3>System Admin Users</h3>

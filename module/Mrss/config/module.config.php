@@ -244,7 +244,47 @@ return array(
                                 'action' => 'add'
                             )
                         )
-                    )
+                    ),
+                    'view' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/view/:id',
+                            'defaults' => array(
+                                'action' => 'view',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'add',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'addcollege' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/addcollege/:system_id',
+                            'defaults' => array(
+                                'action' => 'addcollege',
+                                'system_id' => 0
+                            )
+                        )
+                    ),
+                    'removecollege' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/removecollege/:college_id',
+                            'defaults' => array(
+                                'action' => 'removecollege',
+                                'college_id' => 0
+                            )
+                        )
+                    ),
                 )
             ),
             'benchmarks' => array(
