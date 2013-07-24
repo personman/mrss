@@ -175,6 +175,24 @@ class System
         return $this->colleges;
     }
 
+    /**
+     * Return a list of system admins for this system
+     */
+    public function getAdmins()
+    {
+        $systemAdmins = array();
+
+        foreach ($this->getColleges() as $college) {
+            foreach ($college->getUsers() as $user) {
+                if ($user->getRole() == 'system_admin') {
+                    $systemAdmins[] = $user;
+                }
+            }
+        }
+
+        return $systemAdmins;
+    }
+
     public function getInputFilter()
     {
         $inputFilter = new InputFilter();

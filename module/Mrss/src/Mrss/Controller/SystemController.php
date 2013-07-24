@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\System as SystemForm;
 use Mrss\Entity\System;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\View\Model\ViewModel;
 
 class SystemController extends AbstractActionController
 {
@@ -156,6 +157,85 @@ class SystemController extends AbstractActionController
             ->addSuccessMessage('Institution removed from system.');
         return $this->redirect()
             ->toRoute('systems/view', array('id' => $system->getId()));
+    }
+
+    /**
+     * Show a list of all users attached to colleges in the system and promote
+     * the selected user to system_admin
+     */
+    public function addadminAction()
+    {
+        $systemId = $this->params('system_id');
+        $systemModel = $this->getServiceLocator()->get('model.system');
+        $system = $systemModel->find($systemId);
+
+        if (empty($system)) {
+            throw new \Exception('System not found');
+        }
+
+        $form = new \Mrss\Form\SystemAdmin($system);
+
+        // Process the form, promoting the user
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                // Get the user
+                $userModel = $this->getServiceLocator()->get('model.user');
+                $user = $userModel->find($data['user_id']);
+
+                if (empty($user)) {
+                    throw new \Exception('User not found');
+                }
+
+                // Set the role and save
+                $user->setRole('system_admin');
+                $userModel->save($user);
+                $this->getServiceLocator()->get('em')->flush();
+
+                // Show a message and redirect
+                $this->flashMessenger()->addSuccessMessage('System admin added');
+                return $this->redirect()
+                    ->toRoute('systems/view', array('id' => $system->getId()));
+            }
+        }
+
+        $viewModel = new ViewModel(
+            array(
+                'form' => $form,
+                'system' => $system
+            )
+        );
+        //$viewModel->setTerminal(true);
+
+        return $viewModel;
+    }
+
+    public function removeadminAction()
+    {
+        $userId = $this->params('user_id');
+        $userModel = $this->getServiceLocator()->get('model.user');
+        $user = $userModel->find($userId);
+
+        if (empty($user)) {
+            throw new \Exception('User not found');
+        }
+
+        // What system were they in (for redirection)?
+        $system = $user->getCollege()->getSystem();
+
+        // Remove the system admin role
+        $user->setRole('user');
+        $userModel->save($user);
+        $this->getServiceLocator()->get('em')->flush();
+
+        $this->flashMessenger()
+            ->addSuccessMessage('System admin role removed from user.');
+        return $this->redirect()
+            ->toRoute('systems/view', array('id' => $system->getId()));
+
     }
 
     public function getSystem($id)

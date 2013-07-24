@@ -285,6 +285,26 @@ return array(
                             )
                         )
                     ),
+                    'addadmin' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/addadmin/:system_id',
+                            'defaults' => array(
+                                'action' => 'addadmin',
+                                'system_id' => 0
+                            )
+                        )
+                    ),
+                    'removeadmin' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/removeadmin/:user_id',
+                            'defaults' => array(
+                                'action' => 'removeadmin',
+                                'user_id' => 0
+                            )
+                        )
+                    ),
                 )
             ),
             'benchmarks' => array(

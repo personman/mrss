@@ -33,6 +33,7 @@ return array(
         'resource_providers'    => array(
             'BjyAuthorize\Provider\Resource\Config' => array(
                 'adminMenu' => array(),
+                'system_admin' => array(),
             ),
         ),
 

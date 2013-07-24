@@ -96,4 +96,31 @@ class SystemTest extends PHPUnit_Framework_TestCase
         $inputFilter = $this->system->getInputFilter();
         $this->assertInstanceOf('Zend\InputFilter\InputFilter', $inputFilter);
     }
+
+    public function testGetAdmins()
+    {
+        $userMock = $this->getMock(
+            'Mrss\Entity\User',
+            array('getRole')
+        );
+        $userMock->expects($this->once())
+            ->method('getRole')
+            ->will($this->returnValue('system_admin'));
+
+        $collegeMock = $this->getMock(
+            'Mrss\Entity\College',
+            array('getUsers')
+        );
+        $collegeMock->expects($this->once())
+            ->method('getUsers')
+            ->will($this->returnValue(array($userMock)));
+
+        $this->system->setColleges(array($collegeMock));
+        $admins = $this->system->getAdmins();
+
+        $this->assertInstanceOf(
+            'Mrss\Entity\User',
+            $admins[0]
+        );
+    }
 }
