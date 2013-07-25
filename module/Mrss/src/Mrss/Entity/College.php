@@ -269,4 +269,17 @@ class College
 
         return $study->getCompletionPercentage($observation);
     }
+
+    public function getSubscriptionByStudyAndYear($studyId, $year)
+    {
+        foreach ($this->getSubscriptions() as $subscription) {
+            if ($subscription->getYear() == $year) {
+                if ($subscription->getStudy()->getId() == $studyId) {
+                    return $subscription;
+                }
+            }
+        }
+
+        return false;
+    }
 }

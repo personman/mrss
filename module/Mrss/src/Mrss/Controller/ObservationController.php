@@ -5,9 +5,13 @@ namespace Mrss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class ObservationController extends AbstractActionController
 {
+    protected $systemAdminSessionContainer;
+
     public function viewAction()
     {
         $observationId = $this->params('id');
@@ -90,6 +94,14 @@ class ObservationController extends AbstractActionController
 
     public function overviewAction()
     {
+        // Handle system admins
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        if ($user->getRole() == 'system_admin'
+            && empty($this->getSystemAdminSessionContainer()->college)) {
+            return $this->systemadminoverviewAction();
+        }
+
+        // Regular users
         $currentStudy = $this->currentStudy();
         $benchmarkGroups = $currentStudy->getBenchmarkGroups();
         $observation = $this->getCurrentObservation();
@@ -104,12 +116,90 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    public function systemadminoverviewAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $system = $user->getCollege()->getSystem();
+
+        if (empty($system)) {
+            throw new \Exception('System not found');
+        }
+
+        $currentStudy = $this->currentStudy();
+
+        $view = new ViewModel(
+            array(
+                'currentStudy' => $currentStudy,
+                'system' => $system
+            )
+        );
+        $view->setTemplate('mrss/observation/systemadminoverview.phtml');
+
+        return $view;
+    }
+
+    /**
+     * Allow a system admin to switch the college they're entering data for
+     */
+    public function switchAction()
+    {
+        $collegeId = $this->params('college_id');
+
+        // Clear active college and return to system overview
+        if ($collegeId == 'overview') {
+            $this->getSystemAdminSessionContainer()->college = null;
+
+            return $this->redirect()->toRoute('data-entry');
+        }
+
+        // Make sure that this college belongs to the right system
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $college = $collegeModel->find($collegeId);
+        $targetSystem = $college->getSystem();
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $userSystem = $user->getCollege()->getSystem();
+        $role = $user->getRole();
+
+        if (empty($targetSystem) || empty($userSystem) || $role != 'system_admin'
+            || $userSystem != $targetSystem) {
+            throw new \Exception(
+                'You do not have permission to enter data for that college'
+            );
+        }
+
+        // Set the session variable
+        $this->getSystemAdminSessionContainer()->college = $collegeId;
+
+
+        // Redirect to the referrer
+        $url = $this->getRequest()->getHeader('Referer')->getUri();
+        return $this->redirect()->toUrl($url);
+    }
+
+    /**
+     * Return the user's college or the active college for a system_admin
+     */
+    public function getActiveCollege()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        if ($user->getRole() == 'system_admin'
+            && !empty($this->getSystemAdminSessionContainer()->college)) {
+            $collegeModel = $this->getServiceLocator()->get('model.college');
+            $college = $collegeModel->find(
+                $this->getSystemAdminSessionContainer()->college
+            );
+        } else {
+            $college = $user->getCollege();
+        }
+
+        return $college;
+    }
+
     public function getCurrentObservation()
     {
         // Find the observation by the year and the user's college
-        /** @var \Mrss\Entity\User $user */
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $collegeId = $user->getCollege()->getId();
+        $collegeId = $this->getActiveCollege()->getId();
 
         $year = $this->currentStudy()->getCurrentYear();
 
@@ -286,8 +376,7 @@ class ObservationController extends AbstractActionController
 
     public function exportAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $collegeId = $user->getCollege()->getId();
+        $collegeId = $this->getActiveCollege()->getId();
 
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $subscription = $subscriptionModel->findCurrentSubscription(
@@ -331,5 +420,15 @@ class ObservationController extends AbstractActionController
         }
 
         return $fields;
+    }
+
+    public function getSystemAdminSessionContainer()
+    {
+        if (empty($this->systemAdminSessionContainer)) {
+            $container = new Container('system_admin');
+            $this->systemAdminSessionContainer = $container;
+        }
+
+        return $this->systemAdminSessionContainer;
     }
 }

@@ -1,0 +1,36 @@
+<div class="page-header">
+    <h2>Data Entry for <?= $system->getName() ?></h2>
+</div>
+
+
+
+<?php foreach ($system->getColleges() as $college): ?>
+<?php if ($subscription = $college->getSubscriptionByStudyAndYear(
+    $currentStudy->getId(),
+    $currentStudy->getCurrentYear()
+)): ?>
+<div class="row row-fluid">
+    <div class="span1">
+
+    </div>
+
+    <div class="span3">
+        <div class="progress benchmarkGroupProgress">
+            <div class="bar" style="width: <?= $this->currentStudy()
+                ->getCompletionPercentage($subscription->getObservation()) ?>%;
+                "></div>
+        </div>
+    </div>
+
+    <div class="span8">
+        <a href="<?= $this->url(
+            'data-entry/switch',
+            array('college_id' => $college->getId())
+        ) ?>" title="Enter data for <?= $college->getName() ?>">
+            <?= $college->getName() ?>
+        </a>
+    </div>
+
+</div>
+<?php endif ?>
+<?php endforeach ?>
