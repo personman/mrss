@@ -232,4 +232,23 @@ class System
 
         return $inputFilter;
     }
+
+    public function getSubscriptionsByStudyAndYear($studyId, $year)
+    {
+        $colleges = $this->getColleges();
+        $subscriptions = array();
+        foreach ($colleges as $college) {
+            // Make sure there's a subscription
+            $subscription = $college->getSubscriptionByStudyAndYear(
+                $studyId,
+                $year
+            );
+
+            if (!empty($subscription)) {
+                $subscriptions[] = $subscription;
+            }
+        }
+
+        return $subscriptions;
+    }
 }

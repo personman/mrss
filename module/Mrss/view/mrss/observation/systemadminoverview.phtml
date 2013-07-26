@@ -4,7 +4,11 @@
     <h2>Data Entry for <?= $system->getName() ?></h2>
 </div>
 
-
+<p>
+    <a href="<?= $this->url('data-entry/importsystem') ?>">
+        Import/Export
+    </a>
+</p>
 
 <?php foreach ($system->getColleges() as $college): ?>
 <?php if ($subscription = $college->getSubscriptionByStudyAndYear(

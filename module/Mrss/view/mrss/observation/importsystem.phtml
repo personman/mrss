@@ -1,0 +1,31 @@
+<?php if (!empty($errorMessages)): ?>
+    <div class="well">
+        <h2>Invalid Data</h2>
+
+        <ul class="excelImportFailedMessages">
+            <?php foreach ($errorMessages as $field => $message): ?>
+                <li>
+                    <strong><?= $field ?>:</strong>
+                    <?= $message ?>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    </div>
+
+<?php endif ?>
+
+<h2>Import System Data</h2>
+
+<p>
+    <strong>Step 1:</strong>
+    <a href="<?= $this->url('data-entry/exportsystem') ?>">Export the current data as an
+        Excel file</a>. Data definitions are included.<br />
+
+    <strong>Step 2:</strong> Add your new data to the file in the green column.<br />
+
+    <strong>Step 3:</strong> Upload the updated file using the form below. If there
+    are any errors, the import will not be saved and the errors will be shown on the
+    next screen.
+</p>
+
+<?= $this->ztbForm($this->form->prepare()) ?>

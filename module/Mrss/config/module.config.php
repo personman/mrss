@@ -77,6 +77,24 @@ return array(
                             )
                         )
                     ),
+                    'importsystem' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/importsystem',
+                            'defaults' => array(
+                                'action' => 'importsystem'
+                            )
+                        )
+                    ),
+                    'exportsystem' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/exportsystem',
+                            'defaults' => array(
+                                'action' => 'exportsystem'
+                            )
+                        )
+                    ),
                     'switch' => array(
                         'type' => 'segment',
                         'options' => array(

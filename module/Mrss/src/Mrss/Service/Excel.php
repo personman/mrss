@@ -23,6 +23,20 @@ class Excel
         $this->download($excel);
     }
 
+    /**
+     * Export for multiple colleges (a system)
+     *
+     * @param array $subscriptions
+     */
+    public function getExcelForSubscriptions($subscriptions)
+    {
+        $excel = new PHPExcel();
+        $this->writeHeadersSystem($excel, $subscriptions);
+        $this->writeBodySystem($excel, $subscriptions);
+
+        $this->download($excel);
+    }
+
     public function writeHeaders(PHPExcel $spreadsheet)
     {
         $sheet = $spreadsheet->getActiveSheet();
@@ -56,6 +70,47 @@ class Excel
 
     }
 
+    public function writeHeadersSystem(PHPExcel $spreadsheet, $subscriptions)
+    {
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Benchmark label
+        $sheet->setCellValueByColumnAndRow(0, 1, 'Label');
+        $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+
+        // Label column align right
+        $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
+            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        $column = 1;
+        foreach ($subscriptions as $subscription) {
+            $college = $subscription->getCollege();
+            $collegeHeader = $college->getName() . " \r("
+                . $college->getIpeds() . ')';
+
+            $sheet->setCellValueByColumnAndRow($column, 1, $collegeHeader);
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+            $column++;
+        }
+
+        $sheet->setCellValueByColumnAndRow($column, 1, 'Data Definition');
+        $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        $column++;
+
+        // Hidden column
+        $sheet->getColumnDimensionByColumn($column)->setVisible(false);
+
+        // Bold header
+        $headerRow = $sheet->getStyle('A1:Z1');
+        $headerRow->getFont()->setBold(true);
+
+        // Value columns background
+        $lastValueColumn = $this->num2alpha(count($subscriptions));
+        $sheet->getStyle('B1:' . $lastValueColumn . $this->rowCount)->getFill()
+            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+            ->getStartColor()->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
+    }
+
     public function writeBody(PHPExcel $spreadsheet, Subscription $subscription)
     {
         $year = $subscription->getStudy()->getCurrentYear();
@@ -67,6 +122,25 @@ class Excel
             $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($year);
             foreach ($benchmarks as $benchmark) {
                 $this->writeRow($sheet, $row, $benchmark, $subscription);
+                $row++;
+            }
+        }
+    }
+
+    public function writeBodySystem(PHPExcel $spreadsheet, $subscriptions)
+    {
+        $exampleSubscription = $subscriptions[0];
+        $study = $exampleSubscription->getStudy();
+        $year = $study->getCurrentYear();
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Loop over each benchmark, adding a row
+        $row = 2;
+        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+            $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($year);
+            foreach ($benchmarks as $benchmark) {
+                $this->writeRowSystem($sheet, $row, $benchmark, $subscriptions);
                 $row++;
             }
         }
@@ -86,8 +160,36 @@ class Excel
 
         // Write the db column
         $sheet->setCellValue('D' . $row, $benchmark->getDbColumn());
+    }
 
-        //
+    public function writeRowSystem(
+        PHPExcel_Worksheet $sheet,
+        $row,
+        Benchmark $benchmark,
+        $subscriptions) {
+
+        // Write the label
+        $sheet->setCellValueByColumnAndRow(0, $row, $benchmark->getName());
+
+        // A value field for each subscription
+        $column = 1;
+        foreach ($subscriptions as $subscription) {
+            $value = $subscription->getObservation()->get($benchmark->getDbColumn());
+            $sheet->setCellValueByColumnAndRow($column, $row, $value);
+
+            $column++;
+        }
+
+        // Write the data definition
+        $sheet->setCellValueByColumnAndRow(
+            $column,
+            $row,
+            $benchmark->getDescription()
+        );
+        $column++;
+
+        // Write the db column
+        $sheet->setCellValueByColumnAndRow($column, $row, $benchmark->getDbColumn());
     }
 
     public function download($spreadsheet)
@@ -165,5 +267,22 @@ class Excel
         $excel = PHPExcel_IOFactory::load($filename);
 
         return $excel;
+    }
+
+    /**
+     * Converts an integer into the alphabet base (A-Z).
+     *
+     * @param int $n This is the number to convert.
+     * @return string The converted number.
+     * @author Theriault
+     *
+     */
+    public function num2alpha($n) {
+        $r = '';
+        for ($i = 1; $n >= 0 && $i < 10; $i++) {
+            $r = chr(0x41 + ($n % pow(26, $i) / pow(26, $i - 1))) . $r;
+            $n -= pow(26, $i);
+        }
+        return $r;
     }
 }

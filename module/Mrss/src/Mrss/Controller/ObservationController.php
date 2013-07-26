@@ -398,6 +398,33 @@ class ObservationController extends AbstractActionController
 
     }
 
+    public function importsystemAction()
+    {
+        // Get the import form
+        $form = new \Mrss\Form\ImportData('import');
+
+        $errorMessages = array();
+
+        return array(
+            'form' => $form,
+            'errorMessages' => $errorMessages
+        );
+    }
+
+    public function exportsystemAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $system = $user->getCollege()->getSystem();
+        $study = $this->currentStudy();
+        $subscriptions = $system->getSubscriptionsByStudyAndYear(
+            $study->getId(),
+            $study->getCurrentYear()
+        );
+
+        $excelService = new \Mrss\Service\Excel();
+        $excelService->getExcelForSubscriptions($subscriptions);
+    }
+
     /**
      * Get field metadata from the benchmark entity
      *

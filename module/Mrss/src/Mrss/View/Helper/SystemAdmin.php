@@ -5,7 +5,7 @@ namespace Mrss\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Mrss\Entity\User;
 use Mrss\Controller\Plugin\SystemActiveCollege;
-use Mrss\Controller\Plugin\CurrentStudy;
+use Mrss\Controller\Plugin\CurrentStudy as CurrentStudyPlugin;
 use Zend\Form\Form;
 
 /**
@@ -181,7 +181,7 @@ class SystemAdmin extends AbstractHelper
         return $this->activeCollege;
     }
 
-    public function setCurrentStudyPlugin(CurrentStudy $currentStudyPlugin)
+    public function setCurrentStudyPlugin(CurrentStudyPlugin $currentStudyPlugin)
     {
         $this->currentStudyPlugin = $currentStudyPlugin;
 
