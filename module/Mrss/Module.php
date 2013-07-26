@@ -317,6 +317,12 @@ class Module
                         ->get('systemActiveCollege');
                     $helper->setActiveCollegePlugin($plugin);
 
+                    // Inject the current study plugin
+                    $plugin = $sm->getServiceLocator()
+                        ->get('ControllerPluginManager')
+                        ->get('currentStudy');
+                    $helper->setCurrentStudyPlugin($plugin);
+
                     return $helper;
                 }
             ),

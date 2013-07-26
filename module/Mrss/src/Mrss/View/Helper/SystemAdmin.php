@@ -5,6 +5,7 @@ namespace Mrss\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Mrss\Entity\User;
 use Mrss\Controller\Plugin\SystemActiveCollege;
+use Mrss\Controller\Plugin\CurrentStudy;
 use Zend\Form\Form;
 
 /**
@@ -21,6 +22,11 @@ class SystemAdmin extends AbstractHelper
      * @var SystemActiveCollege
      */
     protected $activeCollegePlugin;
+
+    /**
+     * @var CurrentStudy
+     */
+    protected $currentStudyPlugin;
 
     protected $activeCollege;
 
@@ -107,6 +113,12 @@ class SystemAdmin extends AbstractHelper
         return $html;
     }
 
+    /**
+     * This should only return colleges that have a subscription for the
+     * current year and study.
+     * @return array
+     * @throws \Exception
+     */
     public function getColleges()
     {
         $system = $this->getUser()->getCollege()->getSystem();
@@ -115,9 +127,20 @@ class SystemAdmin extends AbstractHelper
             throw new \Exception('System not found');
         }
 
+        $study = $this->getCurrentStudyPlugin()->getCurrentStudy();
         $colleges = $system->getColleges();
         $collegesKeyed = array();
         foreach ($colleges as $college) {
+            // Make sure there's a subscription
+            $subscription = $college->getSubscriptionByStudyAndYear(
+                $study->getId(),
+                $study->getCurrentYear()
+            );
+
+            if (empty($subscription)) {
+                continue;
+            }
+
             $collegesKeyed[$college->getId()] = $college->getName();
         }
 
@@ -156,5 +179,17 @@ class SystemAdmin extends AbstractHelper
         }
 
         return $this->activeCollege;
+    }
+
+    public function setCurrentStudyPlugin(CurrentStudy $currentStudyPlugin)
+    {
+        $this->currentStudyPlugin = $currentStudyPlugin;
+
+        return $this;
+    }
+
+    public function getCurrentStudyPlugin()
+    {
+        return $this->currentStudyPlugin;
     }
 }
