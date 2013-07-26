@@ -9,7 +9,6 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-
 /** @ORM\Entity
  * @ORM\Table(name="college_systems")
  */

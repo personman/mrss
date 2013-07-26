@@ -260,6 +260,19 @@ class Module
 
                     return $plugin;
                 },
+                'systemActiveCollege' => function ($sm) {
+                    $plugin = new \Mrss\Controller\Plugin\SystemActiveCollege;
+
+                    // Inject the session container
+                    $session = new \Zend\Session\Container('system_admin');
+                    $plugin->setSessionContainer($session);
+
+                    // Inject the college model
+                    $collegeModel = $sm->getServiceLocator()->get('model.college');
+                    $plugin->setCollegeModel($collegeModel);
+
+                    return $plugin;
+                }
             ),
         );
     }
@@ -287,6 +300,22 @@ class Module
                     // Now inject the plugin
                     $helper = new \Mrss\View\Helper\CurrentStudy;
                     $helper->setPlugin($plugin);
+
+                    return $helper;
+                },
+                'systemAdmin' => function($sm) {
+                    $helper = new \Mrss\View\Helper\SystemAdmin;
+
+                    // Inject the user
+                    $auth = $sm->getServiceLocator()->get('zfcuser_auth_service');
+                    $user = $auth->getIdentity();
+                    $helper->setUser($user);
+
+                    // Inject the controller plugin
+                    $plugin = $sm->getServiceLocator()
+                        ->get('ControllerPluginManager')
+                        ->get('systemActiveCollege');
+                    $helper->setActiveCollegePlugin($plugin);
 
                     return $helper;
                 }

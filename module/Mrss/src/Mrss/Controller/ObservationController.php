@@ -144,6 +144,9 @@ class ObservationController extends AbstractActionController
     public function switchAction()
     {
         $collegeId = $this->params('college_id');
+        if (empty($collegeId)) {
+            $collegeId = $this->params()->fromQuery('college_id');
+        }
 
         // Clear active college and return to system overview
         if ($collegeId == 'overview') {

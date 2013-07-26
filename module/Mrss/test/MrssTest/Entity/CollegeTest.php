@@ -271,6 +271,63 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $result);
     }
 
+    public function testGetSubscription()
+    {
+        $college = new College;
+
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(10));
+
+        $subscriptionMock = $this->getMock(
+            'Mrss\Entity\Subscription',
+            array('getYear', 'getStudy')
+        );
+        $subscriptionMock->expects($this->once())
+            ->method('getYear')
+            ->will($this->returnValue(2013));
+        $subscriptionMock->expects($this->once())
+            ->method('getStudy')
+            ->will($this->returnValue($studyMock));
+
+        $college->setSubscriptions(array($subscriptionMock));
+
+        $subscription = $college->getSubscriptionByStudyAndYear(10, 2013);
+        $this->assertInstanceOf('Mrss\Entity\Subscription', $subscription);
+    }
+
+    public function testGetSubscriptionNone()
+    {
+        $college = new College;
+
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(11));
+
+        $subscriptionMock = $this->getMock(
+            'Mrss\Entity\Subscription',
+            array('getYear', 'getStudy')
+        );
+        $subscriptionMock->expects($this->once())
+            ->method('getYear')
+            ->will($this->returnValue(2013));
+        $subscriptionMock->expects($this->once())
+            ->method('getStudy')
+            ->will($this->returnValue($studyMock));
+
+        $college->setSubscriptions(array($subscriptionMock));
+
+        $this->assertFalse($college->getSubscriptionByStudyAndYear(10, 2013));
+    }
+
     /**
      * Provides some valid college data
      *
