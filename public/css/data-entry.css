@@ -16,3 +16,11 @@
 #control-group-institutional_demographics_companies_500_or_greater {
     margin-left: 100px;
 }
+
+/* System admin switching */
+form#system-admin-switch {
+    margin-top: 10px;
+}
+form#system-admin-switch select {
+    margin-right: 10px;
+}

@@ -72,6 +72,7 @@ class SystemAdmin extends AbstractHelper
         $form->setAttribute('method', 'get');
         $form->setAttribute('action', '/data-entry/switch');
         $form->setAttribute('class', 'form-horizontal');
+        $form->setAttribute('id', 'system-admin-switch');
 
         $form->add(
             array(
