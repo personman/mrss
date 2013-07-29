@@ -2,14 +2,19 @@
     <div class="well">
         <h2>Invalid Data</h2>
 
-        <ul class="excelImportFailedMessages">
-            <?php foreach ($errorMessages as $field => $message): ?>
-                <li>
-                    <strong><?= $field ?>:</strong>
-                    <?= $message ?>
-                </li>
-            <?php endforeach ?>
-        </ul>
+        <?php foreach ($errorMessages as $collegeMessage): ?>
+
+            <h5><?= $collegeMessage['college'] ?></h5>
+            <ul class="excelImportFailedMessages">
+                <? foreach ($collegeMessage['errors'] as $field => $message): ?>
+
+                    <li>
+                        <strong><?= $field ?>:</strong>
+                        <?= $message ?>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        <?php endforeach ?>
     </div>
 
 <?php endif ?>

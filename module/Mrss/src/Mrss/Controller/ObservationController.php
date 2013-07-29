@@ -199,6 +199,11 @@ class ObservationController extends AbstractActionController
         return $college;
     }
 
+    /**
+     *
+     * @return \Mrss\Entity\Observation
+     * @throws \Exception
+     */
     public function getCurrentObservation()
     {
         // Find the observation by the year and the user's college
@@ -209,6 +214,30 @@ class ObservationController extends AbstractActionController
         $ObservationModel = $this->getServiceLocator()->get('model.observation');
         /** @var \Mrss\Entity\Observation $observation */
         $observation = $ObservationModel->findOne($collegeId, $year);
+
+        if (empty($observation)) {
+            throw new \Exception('Unable to get current observation.');
+        }
+
+        return $observation;
+    }
+
+    public function getCurrentObservationByIpeds($ipeds)
+    {
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $college = $collegeModel->findOneByIpeds($ipeds);
+
+        if (empty($college)) {
+            throw new \Exception('No college found for ipeds id: ' . $ipeds);
+        }
+
+        $year = $this->currentStudy()->getCurrentYear();
+
+        $ObservationModel = $this->getServiceLocator()->get('model.observation');
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $ObservationModel->findOne($college->getId(), $year);
 
         if (empty($observation)) {
             throw new \Exception('Unable to get current observation.');
@@ -299,7 +328,7 @@ class ObservationController extends AbstractActionController
                 try {
                     $filename = $data['file']['tmp_name'];
                     $excelService = new \Mrss\Service\Excel();
-                    $data = $excelService->getObservationDataFromExcel($filename);
+                    $allData = $excelService->getObservationDataFromExcel($filename);
                 } catch (\Exception $exception) {
                     $this->flashMessenger()->addErrorMessage(
                         'There was a problem processing your import file. Try ' .
@@ -320,54 +349,78 @@ class ObservationController extends AbstractActionController
                  */
                 $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
 
-                $inputFilter->setData($data);
+                /** @var \Mrss\Model\College $collegeModel */
+                $collegeModel = $this->getServiceLocator()->get('model.college');
 
-                // Is the data in the Excel file valid?
-                if ($inputFilter->isValid()) {
-                    // Now we actually save the data to the observation
-                    $observation = $this->getCurrentObservation();
+                $observationModel = $this->getServiceLocator()
+                    ->get('model.observation');
 
-                    foreach ($data as $column => $value) {
-                        try {
-                            $observation->set($column, $value);
-                        } catch (\Exception $exception) {
-                            $this->flashMessenger()->addErrorMessage(
-                                'There was a problem importing your file. Please ' .
-                                'try again or contact us.'
+                foreach ($allData as $ipeds => $data) {
+                    $college = $collegeModel->findOneByIpeds($ipeds);
+
+                    // Make the sure the user has permission to do data-entry
+                    // for this college
+                    $this->checkPermissionsForImport($college);
+
+                    $collegeErrorMessages = array();
+                    $inputFilter->setData($data);
+
+                    // Is the data in the Excel file valid?
+                    if ($inputFilter->isValid()) {
+                        // Now we actually save the data to the observation
+                        $observation = $this->getCurrentObservationByIpeds($ipeds);
+
+                        foreach ($data as $column => $value) {
+                            try {
+                                $observation->set($column, $value);
+                            } catch (\Exception $exception) {
+                                $this->flashMessenger()->addErrorMessage(
+                                    'There was a problem importing your file. ' .
+                                    'Please try again or contact us.'
+                                );
+
+                                return $this->redirect()->toRoute('data-entry/import');
+                            }
+                        }
+
+                        $observationModel->save($observation);
+                    } else {
+
+                        foreach ($inputFilter->getInvalidInput() as $error) {
+                            // Get the benchmark so we can show the label in the error
+                            $benchmark = $benchmarkModel->findOneByDbColumn(
+                                $error->getName()
                             );
 
-                            return $this->redirect()->toRoute('data-entry/import');
+                            $message = implode(
+                                ', ',
+                                $error->getMessages()
+                            );
+                            $message .= '. Your value: ' . $data[$error->getName()];
+
+                            $collegeErrorMessages[$benchmark->getName()] = $message;
                         }
-                    }
 
-                    $observationModel = $this->getServiceLocator()
-                        ->get('model.observation');
-                    $observationModel->save($observation);
-                    $this->getServiceLocator()->get('em')->flush();
-
-                    $this->flashMessenger()->addSuccessMessage("Data imported.");
-                    return $this->redirect()->toRoute('data-entry');
-                } else {
-                    foreach ($inputFilter->getInvalidInput() as $error) {
-                        // Get the benchmark so we can show the label in the error
-                        $benchmark = $benchmarkModel->findOneByDbColumn(
-                            $error->getName()
+                        $errorMessages[] = array(
+                            'college' => $college->getName(),
+                            'errors' => $collegeErrorMessages
                         );
-
-                        $message = implode(
-                            ', ',
-                            $error->getMessages()
-                        );
-                        $message .= '. Your value: ' . $data[$error->getName()];
-
-                        $errorMessages[$benchmark->getName()] = $message;
                     }
-
-                    $this->flashMessenger()->addErrorMessage(
-                        "Your data was not imported. Please correct the errors below
-                        and try again."
-                    );
                 }
+            }
+
+            // How did that go?
+            if (empty($errorMessages)) {
+                // No errors, time to save to the db
+                $this->getServiceLocator()->get('em')->flush();
+                $this->flashMessenger()->addSuccessMessage("Data imported.");
+                return $this->redirect()->toRoute('data-entry');
+            } else {
+                // Something went wrong. We'll show the error messages
+                $this->flashMessenger()->addErrorMessage(
+                    "Your data was not imported. Please correct the errors below
+                    and try again."
+                );
             }
         }
 
@@ -394,12 +447,15 @@ class ObservationController extends AbstractActionController
         }
 
         $excelService = new \Mrss\Service\Excel();
-        $excelService->getExcelForSubscription($subscription);
+        $excelService->getExcelForSubscriptions(array($subscription));
 
     }
 
     public function importsystemAction()
     {
+        return $this->importAction();
+
+
         // Get the import form
         $form = new \Mrss\Form\ImportData('import');
 
@@ -423,6 +479,53 @@ class ObservationController extends AbstractActionController
 
         $excelService = new \Mrss\Service\Excel();
         $excelService->getExcelForSubscriptions($subscriptions);
+    }
+
+    /**
+     * A user is trying to import to this college. Make sure they're allowed. They
+     * should be either
+     * a) a user on the college (most common case)
+     * b) a system admin user in the same system as the college, or
+     * c) an admin user (those cats can do anything)
+     *
+     * @param \Mrss\Entity\College $college
+     * @throws \Exception
+     */
+    public function checkPermissionsForImport(\Mrss\Entity\College $college)
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $authorized = false;
+
+        // Do they belong to the college in question
+        if ($user->getCollege()->getId() == $college->getId()) {
+            $authorized = true;
+        }
+
+        // Is the college part of a system?
+        if ($collegeSystem = $college->getSystem()) {
+            // Is the user a system admin in that same system?
+            if ($user->getRole() == 'system_admin') {
+                $userSystem = $user->getCollege()->getSystem();
+                if (!empty($userSystem)
+                    && $userSystem->getId() == $collegeSystem->getId()
+                ) {
+                    $authorized = true;
+                }
+            }
+        }
+
+        // Finally, is the user an admin
+        if ($user->getRole() == 'admin') {
+            $authorized = true;
+        }
+
+        if (!$authorized) {
+            throw new \Exception(
+                'You are not authorized to manage data for ' .
+                $college->getName()
+            );
+        }
     }
 
     /**

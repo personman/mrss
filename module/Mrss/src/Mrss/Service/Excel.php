@@ -14,6 +14,12 @@ class Excel
     // Maximum row count
     protected $rowCount = 160;
 
+    // Green background for value column
+    protected $valueColumnBackground = 'A0F2A3';
+
+    // The Excel column index that holds the db_column
+    protected $dbColumnColumn;
+
     public function getExcelForSubscription(Subscription $subscription)
     {
         $excel = new PHPExcel();
@@ -97,7 +103,8 @@ class Excel
         $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         $column++;
 
-        // Hidden column
+        // Hidden column for db_column
+        $sheet->setCellValueByColumnAndRow($column, 1, 'Column');
         $sheet->getColumnDimensionByColumn($column)->setVisible(false);
 
         // Bold header
@@ -108,7 +115,7 @@ class Excel
         $lastValueColumn = $this->num2alpha(count($subscriptions));
         $sheet->getStyle('B1:' . $lastValueColumn . $this->rowCount)->getFill()
             ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
+            ->getStartColor()->setARGB($this->valueColumnBackground);
     }
 
     public function writeBody(PHPExcel $spreadsheet, Subscription $subscription)
@@ -166,7 +173,8 @@ class Excel
         PHPExcel_Worksheet $sheet,
         $row,
         Benchmark $benchmark,
-        $subscriptions) {
+        $subscriptions
+    ) {
 
         // Write the label
         $sheet->setCellValueByColumnAndRow(0, $row, $benchmark->getName());
@@ -208,43 +216,116 @@ class Excel
         die;
     }
 
+    /**
+     * Returns an array of arrays, top level keyed by ipeds number, lower level
+     * keyed by db_column
+     *
+     * @param $filename
+     * @return array
+     * @throws \Exception
+     */
     public function getObservationDataFromExcel($filename)
     {
-        $valueColumn = 1;
-        $dbColumnColumn = 3;
-
         $excel = $this->openFile($filename);
         $sheet = $excel->getActiveSheet();
 
+        $colleges = $this->getCollegesFromExcel($sheet);
         $data = array();
-        $headerRowSkipped = false;
-        foreach ($sheet->getRowIterator() as $row) {
-            if (!$headerRowSkipped) {
-                $headerRowSkipped = true;
-                continue;
+
+        foreach ($colleges as $college) {
+
+            $collegeData = array();
+            $headerRowSkipped = false;
+            foreach ($sheet->getRowIterator() as $row) {
+                if (!$headerRowSkipped) {
+                    $headerRowSkipped = true;
+                    continue;
+                }
+
+                $value = $sheet
+                    ->getCellByColumnAndRow($college['column'], $row->getRowIndex())
+                    ->getValue();
+
+                $dbColumn = $sheet
+                    ->getCellByColumnAndRow(
+                        $this->dbColumnColumn,
+                        $row->getRowIndex()
+                    )
+                    ->getValue();
+
+                if (empty($dbColumn)) {
+                    continue;
+                }
+
+                $collegeData[$dbColumn] = $value;
             }
 
-            $value = $sheet
-                ->getCellByColumnAndRow($valueColumn, $row->getRowIndex())
-                ->getValue();
-
-            $dbColumn = $sheet
-                ->getCellByColumnAndRow($dbColumnColumn, $row->getRowIndex())
-                ->getValue();
-
-            if (empty($dbColumn)) {
-                continue;
+            // If $data is empty, then we're dealing with an invalid file
+            if (empty($collegeData)) {
+                throw new \Exception('Empty import file');
             }
 
-            $data[$dbColumn] = $value;
-        }
+            $data[$college['ipeds']] = $collegeData;
 
-        // If $data is empty, then we're dealing with an invalid file
-        if (empty($data)) {
-            throw new \Exception('Empty import file');
         }
 
         return $data;
+    }
+
+    /**
+     * Find the colleges listed in the Excel header row. Identify them by their IPEDS
+     *
+     * @param PHPExcel_Worksheet $sheet
+     * @return array
+     */
+    public function getCollegesFromExcel(PHPExcel_Worksheet $sheet)
+    {
+        $colleges = array();
+
+        $rowIterator = $sheet->getRowIterator(1);
+        foreach ($rowIterator as $row) {
+
+            $column = 0;
+            foreach ($row->getCellIterator() as $cell) {
+                $value = $cell->getValue();
+
+                // Is it a college value column?
+                if ($ipeds = $this->extractIpeds($value)) {
+                    $colleges[] = array(
+                        'ipeds' => $ipeds,
+                        'column' => $column
+                    );
+                }
+
+                if ($value == 'Column') {
+                    $this->dbColumnColumn = $column;
+                }
+
+                $column++;
+            }
+            break;
+        }
+
+        return $colleges;
+    }
+
+    /**
+     * Return a six digit ipeds number, if it's there
+     *
+     * @param $value
+     * @return null|array
+     */
+    public function extractIpeds($value)
+    {
+        $pattern = '/\d{6}/';
+        $ipeds = null;
+        preg_match($pattern, $value, $matches);
+
+        if (!empty($matches[0])) {
+            $ipeds = $matches[0];
+        }
+
+        return $ipeds;
     }
 
     public function openFile($filename)
@@ -277,7 +358,8 @@ class Excel
      * @author Theriault
      *
      */
-    public function num2alpha($n) {
+    public function num2alpha($n)
+    {
         $r = '';
         for ($i = 1; $n >= 0 && $i < 10; $i++) {
             $r = chr(0x41 + ($n % pow(26, $i) / pow(26, $i - 1))) . $r;

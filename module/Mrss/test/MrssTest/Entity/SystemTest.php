@@ -123,4 +123,20 @@ class SystemTest extends PHPUnit_Framework_TestCase
             $admins[0]
         );
     }
+
+    public function testGetSubscription()
+    {
+        $collegeMock = $this->getMock(
+            'Mrss\Entity\College',
+            array('getSubscriptionByStudyAndYear')
+        );
+        $collegeMock->expects($this->once())
+            ->method('getSubscriptionByStudyAndYear')
+            ->will($this->returnValue('placeholder'));
+
+        $this->system->setColleges(array($collegeMock));
+
+        $subscriptions = $this->system->getSubscriptionsByStudyAndYear(1, 2013);
+        $this->assertEquals('placeholder', $subscriptions[0]);
+    }
 }
