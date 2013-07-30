@@ -83,6 +83,27 @@ return array(
                     'controller' => 'observations',
                     'roles' => array('user')
                 ),
+                // System admin
+                array(
+                    'controller' => 'observations',
+                    'action' => 'systemadminoverview',
+                    'roles' => array('system_admin')
+                ),
+                array(
+                    'controller' => 'observations',
+                    'action' => 'systemimport',
+                    'roles' => array('system_admin')
+                ),
+                array(
+                    'controller' => 'observations',
+                    'action' => 'systemexport',
+                    'roles' => array('system_admin')
+                ),
+                array(
+                    'controller' => 'observations',
+                    'action' => 'switch',
+                    'roles' => array('system_admin')
+                ),
                 // Admin stuff
                 array(
                     'controller' => 'pages',
@@ -108,12 +129,6 @@ return array(
                     'controller' => 'systems',
                     'roles' => array('admin')
                 ),
-                // Since the background action is fired by console, lift guard
-                array(
-                    'controller' => 'import',
-                    'action' => 'background',
-                    'roles' => array('guest')
-                ),
                 array(
                     'controller' => 'settings',
                     'roles' => array('admin')
@@ -129,6 +144,12 @@ return array(
                 array(
                     'controller' => 'colleges',
                     'roles' => array('admin')
+                ),
+                // Since the background action is fired by console, lift guard
+                array(
+                    'controller' => 'import',
+                    'action' => 'background',
+                    'roles' => array('guest')
                 ),
             )
         ),
