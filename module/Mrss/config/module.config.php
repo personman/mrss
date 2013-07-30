@@ -216,7 +216,16 @@ return array(
                                 'action' => 'complete'
                             )
                         )
-                    )
+                    ),
+                    'postback' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/postback',
+                            'defaults' => array(
+                                'action' => 'postback'
+                            )
+                        )
+                    ),
                 )
             ),
             'college' => array(

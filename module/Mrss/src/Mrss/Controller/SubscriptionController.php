@@ -254,6 +254,11 @@ class SubscriptionController extends AbstractActionController
         }
     }
 
+    public function postbackAction()
+    {
+
+    }
+
     public function checkSubscriptionIsInProgress()
     {
         if (!$sub = $this->getSubscriptionFromSession()) {
