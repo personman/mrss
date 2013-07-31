@@ -39,7 +39,7 @@ class PageController extends AbstractActionController
         $em = $this->getServiceLocator()->get('em');
 
         // Build form
-        $form = new PageForm;
+        $form = new PageForm($em);
 
         $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\Page'));
         $form->bind($page);

@@ -3,6 +3,7 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity
  * @ORM\Table(name="pages")
@@ -33,6 +34,17 @@ class Page
 
     /** @ORM\Column(type="datetime") */
     protected $updated;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Study")
+     * @ORM\JoinTable(name="pages_studies")
+     */
+    protected $studies;
+
+    public function __construct()
+    {
+        $this->studies = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -109,5 +121,31 @@ class Page
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    public function setStudies($studies)
+    {
+        $this->studies = $studies;
+
+        return $this;
+    }
+
+    public function getStudies()
+    {
+        return $this->studies;
+    }
+
+    public function addStudies($studies)
+    {
+        foreach ($studies as $study) {
+           $this->studies->add($study);
+        }
+    }
+
+    public function removeStudies($studies)
+    {
+        foreach ($studies as $study) {
+            $this->studies->removeElement($study);
+        }
     }
 }

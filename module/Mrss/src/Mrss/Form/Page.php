@@ -5,11 +5,17 @@ namespace Mrss\Form;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\Form\Fieldset;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class Page extends Form
+class Page extends Form implements ObjectManagerAwareInterface
 {
-    public function __construct()
+    protected $objectManager;
+
+    public function __construct(ObjectManager $objectManager)
     {
+        $this->setObjectManager($objectManager);
+
         // Call the parent constructor
         parent::__construct('page');
 
@@ -71,6 +77,19 @@ class Page extends Form
             )
         );
 
+        $this->add(
+            array(
+                'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
+                'name' => 'studies',
+                'options' => array(
+                    'label' => 'Studies',
+                    'object_manager' => $this->getObjectManager(),
+                    'target_class' => 'Mrss\Entity\Study',
+                    'property' => 'name'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 
@@ -94,5 +113,15 @@ class Page extends Form
         $buttons->add($delete);
 
         return $buttons;
+    }
+
+    public function setObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    public function getObjectManager()
+    {
+        return $this->objectManager;
     }
 }
