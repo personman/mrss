@@ -27,7 +27,18 @@ class Module
 
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+        $config = include __DIR__ . '/config/module.config.php';
+
+        // Get the cms page routes from a cache file
+        if (!empty($config['routeCacheFile'])
+            && file_exists($config['routeCacheFile'])) {
+            $cachedRoutes = file_get_contents($config['routeCacheFile']);
+
+            $config['router']['routes']['cmsPage']['options']
+            ['constraints']['pageRoute'] = $cachedRoutes;
+        }
+
+        return $config;
     }
 
     public function getAutoloaderConfig()
@@ -198,6 +209,29 @@ class Module
                     $settingModel->setEntityManager($em);
 
                     return $settingModel;
+                },
+                'model.page' => function ($sm) {
+                    $pageModel = new \Mrss\Model\Page;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $pageModel->setEntityManager($em);
+
+                    return $pageModel;
+                },
+                'service.routeCache' => function ($sm) {
+                    $routeCacheService = new \Mrss\Service\RouteCache;
+
+                    // Inject the page model
+                    $pageModel = $sm->get('model.page');
+                    $routeCacheService->setPageModel($pageModel);
+
+                    // Grab the cache file from the config and pass it in
+                    $config = $sm->get('Config');
+                    if (!empty($config['routeCacheFile'])) {
+                        $routeCacheService->setCacheFile($config['routeCacheFile']);
+                    }
+
+                    return $routeCacheService;
                 },
                 'service.formBuilder' => function ($sm) {
                     $service = new \Mrss\Service\FormBuilder;

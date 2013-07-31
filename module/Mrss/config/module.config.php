@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'routeCacheFile' => 'data/cache/cmsRoutes',
     'router' => array(
         'routes' => array(
             // @todo: get rid of this general route
@@ -504,6 +505,37 @@ return array(
                     )
                 )
             ),
+            // CMS:
+            'cmsPage' => array(
+                'type' => 'segment',
+                'priority' => 1,
+                'options' => array(
+                    'route' => '/:pageRoute',
+                    'constraints' => array(
+                        'pageRoute' => 'dynamically-populated-by-bootstrap'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'pages',
+                        'action' => 'view'
+                    )
+                )
+            ),
+            'pages' => array(
+                'type' => 'segment',
+                'priority' => 2,
+                'options' => array(
+                    'route' => '/pages[/:action[/:id]]',
+                    'constraints' => array(
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'         => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'pages',
+                        'action' => 'index',
+                        'id' => 0
+                    )
+                )
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -588,6 +620,7 @@ return array(
             'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController',
             'settings' => 'Mrss\Controller\SettingController',
+            'pages' => 'Mrss\Controller\PageController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),
     ),

@@ -10,7 +10,6 @@ return array(
         'ZendDeveloperTools',
         'BjyAuthorize',
         'ZfcTwitterBootstrap',
-        'Cms',
         'GoalioMailService',
         'GoalioForgotPassword',
         'GoalioForgotPasswordDoctrineORM',
