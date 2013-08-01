@@ -1,24 +1,31 @@
-<div class="page-header">
-    <h3><?php echo $this->escapeHtml($this->page->getTitle()) ?></h3>
+<?= $this->headLink()->appendStylesheet('/css/index.css') ?>
 
-    <?php if ($this->isAllowed('adminMenu', 'view')): ?>
-        <a href="<?= $this->url(
-            'pages',
-            array(
-                'action' => 'edit',
-                'id' => $this->page->getId()
-            )
-        ) ?>">
-            Edit
-        </a>
-    <?php endif ?>
-</div>
+<?php if ($page->getShowTitle()): ?>
+    <div class="page-header">
+        <h3><?php echo $this->escapeHtml($page->getTitle()) ?></h3>
 
-
-
-<div class="row cmsPage">
-    <div class="span12" id="cmsPageContent">
-        <?= $this->page->getContent() ?>
+        <?php if ($this->isAllowed('adminMenu', 'view')): ?>
+            <a href="<?= $this->url(
+                'pages',
+                array(
+                    'action' => 'edit',
+                    'id' => $page->getId()
+                )
+            ) ?>">
+                Edit
+            </a>
+        <?php endif ?>
     </div>
-</div>
+<?php endif ?>
+
+
+<?php if ($page->getShowWrapper()): ?>
+    <div class="row cmsPage">
+        <div class="span12" id="cmsPageContent">
+            <?= $page->getContent() ?>
+        </div>
+    </div>
+<?php else: ?>
+    <?= $page->getContent() ?>
+<?php endif ?>
 

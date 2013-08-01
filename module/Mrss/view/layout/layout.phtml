@@ -79,7 +79,7 @@
     <?= $this->ztbFlashMessenger()->render(); ?>
 
 <? endif ?>
-
+<?= $this->test ?>
 
 <?php if (empty($this->noWrapper)): ?>
     <div id="content">
@@ -92,12 +92,8 @@
 
                     <?php $partial = array('mrss/menu/navigation.phtml',
                         'default') ?>
-                    <?php //$this->navigation('navigation')->menu()
-                        //->setPartial($partial) ?>
                     <?= $this->navigation('admin_navigation')
                         ->menu()
-                        //->setPartial($partial)
-                        //->setContainer('admin')
                         ->render(); ?>
                     <div class="clearfix"></div>
                 </div>

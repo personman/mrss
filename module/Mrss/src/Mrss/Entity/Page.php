@@ -35,6 +35,12 @@ class Page
     /** @ORM\Column(type="datetime") */
     protected $updated;
 
+    /** @ORM\Column(type="boolean") */
+    protected $showTitle;
+
+    /** @ORM\Column(type="boolean") */
+    protected $showWrapper;
+
     /**
      * @ORM\ManyToMany(targetEntity="Study")
      * @ORM\JoinTable(name="pages_studies")
@@ -123,6 +129,30 @@ class Page
         return $this->updated;
     }
 
+    public function setShowTitle($showTitle)
+    {
+        $this->showTitle = $showTitle;
+
+        return $this;
+    }
+
+    public function getShowTitle()
+    {
+        return $this->showTitle;
+    }
+
+    public function setShowWrapper($showWrapper)
+    {
+        $this->showWrapper = $showWrapper;
+
+        return $this;
+    }
+
+    public function getShowWrapper()
+    {
+        return $this->showWrapper;
+    }
+
     public function setStudies($studies)
     {
         $this->studies = $studies;
@@ -138,7 +168,7 @@ class Page
     public function addStudies($studies)
     {
         foreach ($studies as $study) {
-           $this->studies->add($study);
+            $this->studies->add($study);
         }
     }
 

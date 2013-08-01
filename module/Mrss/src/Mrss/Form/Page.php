@@ -79,6 +79,26 @@ class Page extends Form implements ObjectManagerAwareInterface
 
         $this->add(
             array(
+                'name' => 'showTitle',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Show Title'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'showWrapper',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Show Wrapper'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
                 'name' => 'studies',
                 'options' => array(

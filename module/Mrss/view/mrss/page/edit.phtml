@@ -1,7 +1,13 @@
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
     $(function() {
-        CKEDITOR.replace('wysiwygContent')
+        CKEDITOR.replace(
+            'wysiwygContent',
+            {
+                allowedContent: true,
+                'contentCss': '/css/index.css'
+            }
+        )
     })
 </script>
 

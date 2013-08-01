@@ -23,6 +23,19 @@ class Page extends AbstractModel
         return $this->getRepository()->findOneBy(array('route' => $route));
     }
 
+    public function findOneByRouteAndStudy($route, $studyId)
+    {
+        $query = $this->getRepository()->createQueryBuilder('page');
+        $query->setParameter('route', $route);
+        $query->andWhere('page.route = :route');
+
+        $query->andWhere(':study MEMBER OF page.studies');
+        $query->setParameter('study', $studyId);
+
+        $result = $query->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
     public function find($id)
     {
         return $this->getRepository()->find($id);

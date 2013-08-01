@@ -92,10 +92,24 @@ class PageController extends AbstractActionController
     public function viewAction()
     {
         $pageRoute = $this->params('pageRoute');
+        if (empty($pageRoute)) {
+            $pageRoute = '';
+        }
 
         $pageModel = $this->getServiceLocator()
             ->get('model.page');
-        $page = $pageModel->findOneByRoute($pageRoute);
+        $page = $pageModel->findOneByRouteAndStudy(
+            $pageRoute,
+            $this->currentStudy()->getId()
+        );
+
+        if (!$page->getShowWrapper()) {
+            $this->layout()->noWrapper = true;
+        }
+
+        if (empty($page)) {
+            throw new \Exception('Page not found');
+        }
 
         return array(
             'page' => $page
