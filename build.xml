@@ -1,4 +1,4 @@
-<project name="DfSkeleton" default="update">
+<project name="MRSS" default="update">
     <target name="codesniffer" description="Run PHP_Codesniffer">
         <!-- PHP CodeSniffer -->
         <exec command="export PATH=./bin:$PATH" />
