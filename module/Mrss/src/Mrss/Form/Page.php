@@ -105,7 +105,10 @@ class Page extends Form implements ObjectManagerAwareInterface
                     'label' => 'Studies',
                     'object_manager' => $this->getObjectManager(),
                     'target_class' => 'Mrss\Entity\Study',
-                    'property' => 'name'
+                    'property' => 'name',
+                ),
+                'attributes' => array(
+                    'id' => 'test'
                 )
             )
         );

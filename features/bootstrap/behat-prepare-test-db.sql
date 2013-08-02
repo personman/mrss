@@ -10,6 +10,8 @@
 -- '$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC',
 -- 'admin', (SELECT id FROM colleges WHERE ipeds = '155210' LIMIT 1);
 
+UPDATE users set role = 'admin' WHERE email = 'dfergu15@jccc.edu';
+
 
 -- Open up enrollment
 UPDATE studies SET enrollmentOpen = true WHERE id = 2;

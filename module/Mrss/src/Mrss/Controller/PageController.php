@@ -43,6 +43,7 @@ class PageController extends AbstractActionController
 
         $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\Page'));
         $form->bind($page);
+        $form->setInputFilter($page->getInputFilter());
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {

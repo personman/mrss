@@ -138,4 +138,22 @@ class FeatureContext extends MinkContext
         $this->fillField('credential', $password);
         $this->pressButton('Sign In');
     }
+
+    /**
+     * @Then /^show the page$/
+     */
+    public function showThePage()
+    {
+        echo $this->getSession()->getPage()->getContent();
+    }
+
+
+    /**
+     * @Given /^I wait (\d+) seconds$/
+     */
+    public function iWaitSeconds($seconds)
+    {
+        //$this->getSession()->wait(1000*$seconds);
+        sleep(intval($seconds));
+    }
 }

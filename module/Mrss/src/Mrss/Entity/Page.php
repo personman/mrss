@@ -4,11 +4,15 @@ namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\Factory as InputFactory;
 
 /** @ORM\Entity
  * @ORM\Table(name="pages")
  */
-class Page
+class Page implements InputFilterAwareInterface
 {
     /**
      * @ORM\Id
@@ -46,6 +50,8 @@ class Page
      * @ORM\JoinTable(name="pages_studies")
      */
     protected $studies;
+
+    protected $inputFilter;
 
     public function __construct()
     {
@@ -177,5 +183,31 @@ class Page
         foreach ($studies as $study) {
             $this->studies->removeElement($study);
         }
+    }
+
+    public function getInputFilter()
+    {
+        if (empty($this->inputFilter)) {
+            $inputFilter = new InputFilter();
+            $factory = new InputFactory();
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'studies',
+                        'required' => false,
+                    )
+                )
+            );
+
+            $this->inputFilter = $inputFilter;
+        }
+
+        return $this->inputFilter;
+    }
+
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        $this->inputFilter = $inputFilter;
     }
 }
