@@ -19,6 +19,7 @@ I need to be able to register and sign in
     And I fill in "identity" with "dfergu15@jccc.edu"
     And I fill in "credential" with "111111"
     And I press "Sign In"
+    Then show the page
     Then I should be on "/data-entry"
 
   Scenario: Login link

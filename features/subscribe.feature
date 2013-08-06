@@ -83,7 +83,6 @@ Feature: Subscribe
     And I fill in "Electronic Signature" with "John Doe"
     And I fill in "Title" with "Chief Tester"
     And I press "Continue"
-    Then show the page
     Then I should see "Select Payment Type"
     And I should see "Pay by Credit Card"
     And I should see "Request an Invoice"
