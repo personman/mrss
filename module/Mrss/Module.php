@@ -10,6 +10,9 @@ class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
+        // Set the timezone
+        date_default_timezone_set('America/Chicago');
+
         //$e->getApplication()->getServiceManager()->get('translator');
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
