@@ -8,6 +8,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Behat\Exception\PendingException;
 use Behat\Behat\Context\Step;
+use Behat\Behat\Event\StepEvent;
 
 class FeatureContext extends MinkContext
 {
@@ -155,5 +156,17 @@ class FeatureContext extends MinkContext
     {
         //$this->getSession()->wait(1000*$seconds);
         sleep(intval($seconds));
+    }
+
+    /**
+     * If the step fails, show the full page
+     * @AfterStep
+     */
+    public function afterStep(StepEvent $event)
+    {
+        $result = $event->getResult();
+        if ($result == 4) {
+            $this->showThePage();
+        }
     }
 }
