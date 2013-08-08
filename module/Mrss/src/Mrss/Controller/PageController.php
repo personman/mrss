@@ -104,12 +104,12 @@ class PageController extends AbstractActionController
             $this->currentStudy()->getId()
         );
 
-        if (!$page->getShowWrapper()) {
-            $this->layout()->noWrapper = true;
-        }
-
         if (empty($page)) {
             throw new \Exception('Page not found');
+        }
+
+        if (!$page->getShowWrapper()) {
+            $this->layout()->noWrapper = true;
         }
 
         return array(

@@ -4,7 +4,8 @@ Feature: Subscribe
   I need to subscribe to a study
 
   Scenario: Subscribe link on homepage
-    Given I am on "/"
+    Given I am logged out
+    And I am on "/"
     When I follow "Subscribe"
     Then I should be on "/subscribe"
 
