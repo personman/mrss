@@ -70,7 +70,7 @@
         <echo message="As user: ${behat.whoami}" />
 
         <echo msg="Running Behat scenarios in ${project.basedir}" />
-        <exec command="./bin/behat --format failed"
+        <exec command="./bin/behat"
               description="Behat"
               outputProperty="behat.output" />
         <if>
