@@ -10,6 +10,7 @@ Feature: Data entry
 
   Scenario: View data entry overview
     Given I am logged in
+    And I go to "/studies/import/2"
     When I go to "/data-entry"
     Then I should see "Your Data Entry Progress"
     And I should see "Import/Export"
