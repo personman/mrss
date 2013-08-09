@@ -3,6 +3,11 @@ Feature: Data entry
   As a user
   I need to use the data entry form
 
+  Scenario: Import study
+    Given I am logged in
+    When I go to "/studies/import/2"
+    Then I should see "Import Complete"
+
   Scenario: View data entry overview
     Given I am logged in
     When I go to "/data-entry"
