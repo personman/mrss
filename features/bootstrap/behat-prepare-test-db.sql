@@ -19,3 +19,7 @@ WHERE email = 'dfergu15@jccc.edu';
 -- Open up enrollment
 UPDATE studies SET enrollmentOpen = true WHERE id = 2;
 UPDATE studies SET enrollmentOpen = true WHERE id = 3;
+
+-- Add the jccc/mrss observation and subscription
+INSERT INTO `observations` (college_id, year) VALUES (1,2013);
+INSERT INTO `subscriptions` VALUES (1,1,1,2013,'pending','invoice',1000,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2,'John Doe','Chief Tester','2013-08-12 08:45:30');
