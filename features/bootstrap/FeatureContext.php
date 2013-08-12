@@ -167,6 +167,13 @@ class FeatureContext extends MinkContext
         $result = $event->getResult();
         if ($result == 4) {
             $this->showThePage();
+
+            $this->dumpDb('mrss-failed-' . microtime(1) . '.sql');
         }
+    }
+
+    public function dumpDb($filename)
+    {
+        exec('mysqldump -u root -proot mrss_test > ' . $filename);
     }
 }

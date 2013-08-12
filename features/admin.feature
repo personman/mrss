@@ -4,7 +4,6 @@ Feature: Administration pages
   I need to use the admin pages
 
   Scenario: Dashboard
-    Given I am on "/studies/import/2
     Given I am logged in
     When I go to "/admin"
     Then I should see "Subscriptions"
