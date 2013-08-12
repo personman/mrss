@@ -256,7 +256,20 @@ class SubscriptionController extends AbstractActionController
 
     public function postbackAction()
     {
+        // For dev, log what the post includes
+        $filename = 'postback.log';
+        $logger = new \Zend\Log\Logger;
+        $writer = new \Zend\Log\Writer\Stream($filename);
+        $logger->addWriter($writer);
 
+        $message = "Postback received: \n";
+        $message .= date('r') . "\n";
+
+        $message .= print_r($_REQUEST, 1);
+
+        $logger->info($message);
+
+        die('ok');
     }
 
     public function checkSubscriptionIsInProgress()
