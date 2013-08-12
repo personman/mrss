@@ -159,6 +159,7 @@
     </target>
 
     <target name="gitpull">
+        <exec command="git checkout master" passthru="true"/>
         <exec command="git pull" passthru="true"/>
     </target>
 
