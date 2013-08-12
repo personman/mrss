@@ -62,9 +62,10 @@ class Benchmark extends AbstractForm
                 'attributes' => array(
                     'id' => 'inputType',
                     'options' => array(
-                        'number' => 'Number',
+                        'number' => 'Whole Number',
                         'percent' => 'Percent',
                         'dollars' => 'Dollars',
+                        'float' => 'Float',
                         'text' => 'Text',
                         'computed' => 'Computed',
                         'radio' => 'Radio'

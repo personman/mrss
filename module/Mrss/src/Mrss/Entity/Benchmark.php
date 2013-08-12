@@ -264,7 +264,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         }
 
         // Some HTML 5 validation
-        if ($this->getInputType() == 'dollars') {
+        if ($this->getInputType() == 'dollars' || $this->getInputType() == 'float') {
             $element['attributes']['pattern'] = '\d+(\.\d+)?';
             $element['attributes']['title'] = 'Use the format 1234 or 1234.56';
         } elseif ($this->getInputType() == 'number') {
@@ -297,8 +297,20 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     )
                 )
             );
-
+        } elseif ($this->getInputType() == 'float') {
+            $inputFilter['validators'][] = array(
+                'name' => 'Regex',
+                'options' => array(
+                    'pattern' => '/^\d+\.?(\d+)?$/',
+                    'messages' => array(
+                        'regexNotMatch' => 'Use the format 1234, 1234.5, 1234.56 '
+                            . 'or 1234.567'
+                    )
+                )
+            );
         }
+
+        // @todo: validation for percentage (under 100, over 0, with or without dec
 
         return $inputFilter;
     }
