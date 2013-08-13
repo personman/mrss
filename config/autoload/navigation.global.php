@@ -89,6 +89,10 @@ return array(
                     array(
                         'label' => 'Glossary',
                         'uri' => '/glossary'
+                    ),
+                    array(
+                        'label' => 'FAQ',
+                        'uri' => '/faq'
                     )
                 )
             ),
