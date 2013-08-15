@@ -97,6 +97,11 @@ class User implements UserInterface, ProviderInterface
     protected $role;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $lastAccess;
+
+    /**
      * Get id.
      *
      * @return int
@@ -338,6 +343,18 @@ class User implements UserInterface, ProviderInterface
     public function getRoles()
     {
         return array($this->getRole());
+    }
+
+    public function setLastAccess($lastAccess)
+    {
+        $this->lastAccess = $lastAccess;
+
+        return $this;
+    }
+
+    public function getLastAccess()
+    {
+        return $this->lastAccess;
     }
 
     public function getFullName()

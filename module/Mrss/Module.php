@@ -26,6 +26,20 @@ class Module
                 array(\Doctrine\ORM\Events::postLoad),
                 new \Mrss\Service\ModelInjector($sm)
             );
+
+        // Log access time
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, function($e) {
+            $sm = $e->getApplication()->getServiceManager();
+            $auth = $sm->get('zfcuser_auth_service');
+            if ($auth->hasIdentity()) {
+                $user = $auth->getIdentity();
+                $user->setLastAccess(new \DateTime('now'));
+
+                $userModel = $sm->get('model.user');
+                $userModel->save($user);
+                $sm->get('em')->flush();
+            }
+        });
     }
 
     public function getConfig()
