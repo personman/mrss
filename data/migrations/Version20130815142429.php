@@ -15,7 +15,7 @@ class Version20130815142429 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != "mysql", "Migration can only be executed safely on 'mysql'.");
         
-        $this->addSql("ALTER TABLE users ADD lastAccess DATETIME DEFAULT NULL, DROP lastLogin");
+        $this->addSql("ALTER TABLE users ADD lastAccess DATETIME DEFAULT NULL");
     }
 
     public function down(Schema $schema)
@@ -23,6 +23,6 @@ class Version20130815142429 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != "mysql", "Migration can only be executed safely on 'mysql'.");
         
-        $this->addSql("ALTER TABLE users ADD lastLogin DATE DEFAULT NULL, DROP lastAccess");
+        $this->addSql("ALTER TABLE users DROP lastAccess");
     }
 }
