@@ -15,3 +15,5 @@ report
 build
 data/DoctrineORMModule/Proxy/
 error_log
+postback.log
+public/.ftpquota
