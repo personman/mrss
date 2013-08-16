@@ -39,6 +39,7 @@ class NavigationFactory extends DefaultNavigationFactory
     public function getPagesArray(ServiceLocatorInterface $serviceLocator)
     {
         $pages = parent::getPages($serviceLocator);
+        $currentStudy = $this->getCurrentStudy($serviceLocator);
 
         // Alter the nav based on auth
         $auth = $serviceLocator->get('zfcuser_auth_service');
@@ -53,7 +54,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
         // Add the data entry links (if they're logged in
         if ($auth->hasIdentity()) {
-            if ($currentStudy = $this->getCurrentStudy($serviceLocator)) {
+            if (!empty($currentStudy)) {
                 $dataEntryPages = array();
 
                 // Add the overview page
@@ -74,18 +75,18 @@ class NavigationFactory extends DefaultNavigationFactory
                 }
 
                 $pages['data-entry']['pages'] = $dataEntryPages;
-
-                // Customize menu by study
-                // Only show NCCET for workforce
-                if ($currentStudy->getId() != 3) {
-                    unset($pages['about']['pages']['nccet']);
-                }
             } else {
                 // If there aren't any forms to show, drop the data entry menu item
                 unset($pages['data-entry']);
             }
         } else {
             unset($pages['data-entry']);
+        }
+
+        // Customize menu by study
+        // Only show NCCET for workforce
+        if ($currentStudy->getId() != 3) {
+            unset($pages['about']['pages']['nccet']);
         }
 
         return $pages;
