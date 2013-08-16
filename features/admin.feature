@@ -14,3 +14,11 @@ Feature: Administration pages
     Then I should see "Studies"
     And I should see "Imports"
     And I should see "Colleges"
+
+  Scenario: Manage studies
+    Given I am logged in
+    And I am on "/admin"
+    When I follow "Studies"
+    Then I should see "MRSS"
+    And I should see "Edit"
+    And I should see "NCCWTP"

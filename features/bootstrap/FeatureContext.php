@@ -166,7 +166,7 @@ class FeatureContext extends MinkContext
     {
         $result = $event->getResult();
         if ($result == 4) {
-            $this->showThePage();
+            //$this->showThePage();
 
             //$this->dumpDb('mrss-failed-' . microtime(1) . '.sql');
         }
