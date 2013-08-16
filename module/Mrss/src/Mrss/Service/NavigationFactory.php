@@ -74,6 +74,12 @@ class NavigationFactory extends DefaultNavigationFactory
                 }
 
                 $pages['data-entry']['pages'] = $dataEntryPages;
+
+                // Customize menu by study
+                // Only show NCCET for workforce
+                if ($currentStudy->getId() != 3) {
+                    unset($pages['about']['pages']['nccet']);
+                }
             } else {
                 // If there aren't any forms to show, drop the data entry menu item
                 unset($pages['data-entry']);

@@ -18,19 +18,19 @@ return array(
                 'label' => 'Home',
                 'route' => 'home'
             ),
-            array(
+            'about' => array(
                 'label' => 'About Us',
                 'uri' => '#',
                 'pages' => array(
                     array(
                         'label' => 'The Project',
-                        'uri' => '/Workforce-Training-Benchmark-Project'
+                        'uri' => '/about'
                     ),
                     array(
                         'label' => 'The Benchmarking Institute',
                         'uri' => '/National-Higher-Education-Benchmarking-Institute'
                     ),
-                    array(
+                    'nccet' => array(
                         'label' => 'NCCET',
                         'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
                     ),
