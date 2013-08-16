@@ -19,6 +19,17 @@ Feature: Administration pages
     Given I am logged in
     And I am on "/admin"
     When I follow "Studies"
-    Then I should see "MRSS"
+    Then I should be on "/studies"
+    And I should see "MRSS"
     And I should see "Edit"
     And I should see "NCCWTP"
+
+  Scenario: Edit a study
+    Given I am logged in
+    And I am on "/studies"
+    Then I should see "Edit"
+    When I follow "Edit"
+    Then I should see "Edit Study"
+    And I should see "Current Year"
+    And I should see "uPay Url"
+    And I should see "Enrollment Open"
