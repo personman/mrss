@@ -584,6 +584,9 @@ header {
 }
 
 /* Subscription form */
-form#payment .control-group {
+form#payment #control-group-UPAY_SITE_ID,
+form#payment #control-group-EXT_TRANS_ID,
+form#payment #control-group-VALIDATION_KEY,
+{
     display: none;
 }
