@@ -14,7 +14,7 @@ use Zend\Form\Fieldset;
  */
 class Payment extends AbstractForm
 {
-    public function __construct($uPaySiteId, $uPayUrl, $amount, $transId)
+    public function __construct($uPaySiteId, $uPayUrl, $amount, $transId, $val)
     {
         if (empty($uPaySiteId)) {
             throw new \Exception("Payment form requires uPaySiteId");
@@ -50,7 +50,7 @@ class Payment extends AbstractForm
             )
         );
 
-        /*$this->add(
+        $this->add(
             array(
                 'name' => 'AMT',
                 'type' => 'Hidden',
@@ -58,7 +58,17 @@ class Payment extends AbstractForm
                     'value' => $amount
                 )
             )
-        );*/
+        );
+
+        $this->add(
+            array(
+                'name' => 'VALIDATION_KEY',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'value' => $val
+                )
+            )
+        );
 
         // Submit button
         $this->add(

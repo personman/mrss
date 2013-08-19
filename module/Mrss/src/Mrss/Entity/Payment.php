@@ -86,7 +86,7 @@ class Payment
 
     public function getPostback()
     {
-        return json_decode($this->postback);
+        return json_decode($this->postback, true);
     }
 
     public function setProcessed($processed)

@@ -179,7 +179,9 @@ class SubscriptionController extends AbstractActionController
         $amount = 102;
 
         $transId = $this->getTransIdFromSession();
-        $ccForm = new Payment($uPaySiteId, $uPayUrl, $amount, $transId);
+        // @todo: put this in the db, too:
+        $val = 'kdifvn3e9oskndfk';
+        $ccForm = new Payment($uPaySiteId, $uPayUrl, $amount, $transId, $val);
 
         $invoiceForm = new SubscriptionInvoice();
         $invoiceForm->setAttribute('action', '/subscribe/invoice');
