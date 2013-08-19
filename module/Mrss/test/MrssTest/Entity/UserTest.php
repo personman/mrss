@@ -88,6 +88,11 @@ class UserTest extends PHPUnit_Framework_TestCase
             '"extension" should initially be null'
         );
 
+        $this->assertNull(
+            $user->getLastAccess(),
+            '"lastAccess should initially be null'
+        );
+
         $this->assertEquals(
             'user',
             $user->getRole()
@@ -127,7 +132,8 @@ class UserTest extends PHPUnit_Framework_TestCase
             'title' => 'Tester',
             'phone' => '111-111-1111',
             'extension' => '1234',
-            'role' => 'user'
+            'role' => 'user',
+            'lastAccess' => new \DateTime('now')
         );
 
         $user->setId($userData['id']);
@@ -165,6 +171,9 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $user->setExtension($userData['extension']);
         $this->assertEquals($userData['extension'], $user->getExtension());
+
+        $user->setLastAccess($userData['lastAccess']);
+        $this->assertEquals($userData['lastAccess'], $user->getLastAccess());
 
         $user->setRole($userData['role']);
         $this->assertEquals($userData['role'], $user->getRole());
