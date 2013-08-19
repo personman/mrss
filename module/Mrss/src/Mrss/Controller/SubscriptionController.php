@@ -148,8 +148,10 @@ class SubscriptionController extends AbstractActionController
                 $message->addTo('dfergu15@jccc.edu');
                 $message->setSubject("Postback issue");
                 $body = "Something went wrong while processing a postback: ";
+                $body .= "\n" . print_r($postback, 1);
                 $body .= "\n" . print_r($_REQUEST, 1);
                 $body .= "\n" . print_r($payment, 1);
+
 
                 $message->setBody($body);
                 $this->getServiceLocator()->get('mail.transport')->send($message);
