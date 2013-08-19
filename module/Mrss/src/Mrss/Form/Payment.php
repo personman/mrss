@@ -50,7 +50,7 @@ class Payment extends AbstractForm
             )
         );
 
-        $this->add(
+        /*$this->add(
             array(
                 'name' => 'AMT',
                 'type' => 'Hidden',
@@ -58,7 +58,7 @@ class Payment extends AbstractForm
                     'value' => $amount
                 )
             )
-        );
+        );*/
 
         // Submit button
         $this->add(
