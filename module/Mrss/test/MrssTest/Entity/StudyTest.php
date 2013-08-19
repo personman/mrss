@@ -155,4 +155,35 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->study->setBenchmarkGroups(array($benchmarkGroupMock));
         $filter = $this->study->getInputFilter();
     }
+
+    public function testGetEarlyPriceThisYear()
+    {
+        $date = new \DateTime('2011-08-04');
+        $this->study->setEarlyPriceDate($date);
+
+        $dateThisYear = $this->study->getEarlyPriceDateThisYear();
+        $this->assertEquals($dateThisYear->format('Y'), date('Y'));
+    }
+
+    public function testGetCurrentPrice()
+    {
+        $this->study->setPrice(1200);
+        $this->study->setEarlyPrice(1100);
+        $now = new \DateTime('now');
+
+        // Two days in the past
+        $interval = new \DateInterval('P2D');
+        $earlyPricePast = clone $now;
+        $earlyPricePast->sub($interval);
+        $earlyPriceFuture = clone $now;
+        $earlyPriceFuture->add($interval);
+
+        // Test with an early bird deadline in the past
+        $this->study->setEarlyPriceDate($earlyPricePast);
+        $this->assertEquals(1200, $this->study->getCurrentPrice());
+
+        // Test while early bird is still open
+        $this->study->setEarlyPriceDate($earlyPriceFuture);
+        $this->assertEquals(1100, $this->study->getCurrentPrice());
+    }
 }

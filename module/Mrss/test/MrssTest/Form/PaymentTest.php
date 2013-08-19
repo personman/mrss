@@ -16,7 +16,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->form = new Payment(5, 'http://test.com', 100);
+        $this->form = new Payment(5, 'http://test.com', 100, 'asdf', 'asdf');
     }
 
     public function testFormConstruction()
@@ -27,12 +27,12 @@ class PaymentTest extends PHPUnit_Framework_TestCase
     public function testEmptyConstructionParam()
     {
         $this->setExpectedException('\Exception');
-        $form = new Payment(null, 'http://test.com', 100);
+        $form = new Payment(null, 'http://test.com', 100, 'asdf', 'asdf');
     }
 
     public function testEmptyConstructionParamTwo()
     {
         $this->setExpectedException('\Exception');
-        $form = new Payment(5, null, 100);
+        $form = new Payment(5, null, 100, 'asdf', 'asdf');
     }
 }

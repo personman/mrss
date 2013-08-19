@@ -152,7 +152,6 @@ class SubscriptionController extends AbstractActionController
                 $body .= "\n" . print_r($_REQUEST, 1);
                 $body .= "\n" . print_r($payment, 1);
 
-
                 $message->setBody($body);
                 $this->getServiceLocator()->get('mail.transport')->send($message);
             }
@@ -178,8 +177,9 @@ class SubscriptionController extends AbstractActionController
         $uPayUrl = $this->currentStudy()->getUPayUrl();
 
         // @todo: get this dynamically based on study and date
-        $amount = 102;
+        $amount = $this->currentStudy()->getCurrentPrice();
 
+        // Calculate the validation key for uPay/TouchNet
         $transId = $this->getTransIdFromSession();
         // @todo: put this in the db, too:
         $val = 'kdifvn3e9oskndfk';

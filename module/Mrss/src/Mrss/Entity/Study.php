@@ -153,6 +153,24 @@ class Study
         return $this->currentYear;
     }
 
+    /**
+     * If it's before the early bird date, return the early price.
+     * If it's after, return the normal price. In any case, ignore the year.
+     */
+    public function getCurrentPrice()
+    {
+        $deadline = $this->getEarlyPriceDateThisYear();
+        $now = new \DateTime('now');
+
+        if ($deadline > $now) {
+            $price = $this->getEarlyPrice();
+        } else {
+            $price = $this->getPrice();
+        }
+
+        return $price;
+    }
+
     public function setPrice($price)
     {
         $this->price = $price;
@@ -187,6 +205,18 @@ class Study
     public function getEarlyPriceDate()
     {
         return $this->earlyPriceDate;
+    }
+
+    public function getEarlyPriceDateThisYear()
+    {
+        // Set the year to the current year.
+        $earlyBirdDeadline = $this->getEarlyPriceDate();
+        $thisYear = date('Y');
+        $month = $earlyBirdDeadline->format('m');
+        $day = $earlyBirdDeadline->format('d');
+        $earlyBirdDeadline->setDate($thisYear, $month, $day);
+
+        return $earlyBirdDeadline;
     }
 
     public function setPilotOpen($pilotOpen)
