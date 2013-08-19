@@ -582,3 +582,8 @@ header {
 .recaptcha_r7_c1, .recaptcha_r8_c1 {
     /*display: none;*/
 }
+
+/* Subscription form */
+form#payment .control-group {
+    display: none;
+}
