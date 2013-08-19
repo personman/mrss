@@ -235,6 +235,14 @@ class Module
 
                     return $pageModel;
                 },
+                'model.payment' => function ($sm) {
+                    $paymentModel = new \Mrss\Model\Payment;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $paymentModel->setEntityManager($em);
+
+                    return $paymentModel;
+                },
                 'service.routeCache' => function ($sm) {
                     $routeCacheService = new \Mrss\Service\RouteCache;
 

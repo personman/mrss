@@ -48,6 +48,7 @@ class SubscriptionController extends AbstractActionController
                 // If the form is valid, stash it in the session and go to
                 // the agreement page
                 $this->saveSubscriptionToSession($form->getData());
+                $this->saveTransIdToSession(uniqid());
 
                 return $this->redirect()->toRoute('subscribe/user-agreement');
             } else {
@@ -126,9 +127,38 @@ class SubscriptionController extends AbstractActionController
 
         // Catch subscription completion via credit card
         if ($this->params()->fromQuery('UPAY_SITE_ID')) {
+            // Find the postback from the payment queue
+            $transId = $this->getTransIdFromSession();
+            $paymentModel = $this->getServiceLocator()->get('model.payment');
+            $payment = $paymentModel->findByTransId($transId);
 
+            // The payment postback should be a success
+            $postback = $payment->getPostback();
+            if (!empty($postback['pmt_status'])
+                && $postback['pmt_status'] == 'success') {
+                $payment->setProcessed(true);
+                $payment->setProcessedDate(new \DateTime('now'));
+                $paymentModel->save($payment);
+            } else {
+                // Something went wrong
+                // Either there's no postback record matching the transId
+                // Or the postback payment status was failure
+                $message = new Message();
+                $message->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
+                $message->addTo('dfergu15@jccc.edu');
+                $message->setSubject("Postback issue");
+                $body = "Something went wrong while processing a postback: ";
+                $body .= "\n" . print_r($_REQUEST, 1);
+                $body .= "\n" . print_r($payment, 1);
+
+                $message->setBody($body);
+                $this->getServiceLocator()->get('mail.transport')->send($message);
+            }
+
+
+            // Complete the subscription
             $this->completeSubscription(
-                $this->getSessionContainer()->subscribeForm,
+                $this->getSubscriptionFromSession(),
                 array('paymentType' => 'creditCard'),
                 false
             );
@@ -148,8 +178,8 @@ class SubscriptionController extends AbstractActionController
         // @todo: get this dynamically based on study and date
         $amount = 102;
 
-
-        $ccForm = new Payment($uPaySiteId, $uPayUrl, $amount);
+        $transId = $this->getTransIdFromSession();
+        $ccForm = new Payment($uPaySiteId, $uPayUrl, $amount, $transId);
 
         $invoiceForm = new SubscriptionInvoice();
         $invoiceForm->setAttribute('action', '/subscribe/invoice');
@@ -181,7 +211,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($systemForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSessionContainer()->subscribeForm,
+                    $this->getSubscriptionFromSession(),
                     $systemForm->getData(),
                     true
                 );
@@ -213,7 +243,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($invoiceForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSessionContainer()->subscribeForm,
+                    $this->getSubscriptionFromSession(),
                     $invoiceForm->getData(),
                     true
                 );
@@ -240,7 +270,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($pilotForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSessionContainer()->subscribeForm,
+                    $this->getSubscriptionFromSession(),
                     $pilotForm->getData(),
                     true
                 );
@@ -268,6 +298,17 @@ class SubscriptionController extends AbstractActionController
         $message .= print_r($_REQUEST, 1);
 
         $logger->info($message);
+
+        // Save the postback to the db
+        $payment = new \Mrss\Entity\Payment;
+        $payment->setPostback($_REQUEST);
+
+        $transId = $this->params()->fromPost('EXT_TRANS_ID');
+        $payment->setTransId($transId);
+        $payment->setProcessed(false);
+
+        $paymentModel = $this->getServiceLocator()->get('model.payment');
+        $paymentModel->save($payment);
 
         die('ok');
     }
@@ -306,12 +347,21 @@ class SubscriptionController extends AbstractActionController
     public function saveSubscriptionToSession($subscriptionForm)
     {
         $this->getSessionContainer()->subscribeForm = $subscriptionForm;
-
     }
 
     public function getSubscriptionFromSession()
     {
         return $this->getSessionContainer()->subscribeForm;
+    }
+
+    public function saveTransIdToSession($transId)
+    {
+        $this->getSessionContainer()->transId = $transId;
+    }
+
+    public function getTransIdFromSession()
+    {
+        return $this->getSessionContainer()->transId;
     }
 
     public function saveAgreementToSession($agreementForm)
