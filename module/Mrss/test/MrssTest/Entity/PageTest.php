@@ -78,4 +78,25 @@ class PageTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Mrss\Entity\Study', $studies[0]);
     }
+
+    public function testGetInputFilter()
+    {
+        $page = new Page;
+
+        $inputFilter = $page->getInputFilter();
+
+        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $inputFilter);
+    }
+
+    public function testSetInputFilter()
+    {
+        $filterMock = $this->getMock(
+            'Zend\InputFilter\InputFilter',
+            array()
+        );
+
+        $page = new Page;
+        $page->setInputFilter($filterMock);
+        $this->assertSame($filterMock, $page->getInputFilter());
+    }
 }

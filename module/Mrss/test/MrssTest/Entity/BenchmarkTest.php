@@ -177,6 +177,17 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Regex', $filter['validators'][0]['name']);
     }
 
+    public function testGetFormElementInputFilterFloat()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('float');
+
+        $filter = $benchmark->getFormElementInputFilter();
+        $this->assertEquals('Regex', $filter['validators'][0]['name']);
+    }
+
+
+
     public function testInputFilter()
     {
         $benchmark = new Benchmark;
