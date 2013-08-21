@@ -34,7 +34,8 @@ return array(
              */
             'to' => array(
                 'dfergu15@jccc.edu',
-                'mtaylo24@jccc.edu'
+                'mtaylo24@jccc.edu',
+                'vdouglas@jccc.edu'
             ),
 
             'from' => 'dfergu15@jccc.edu'
