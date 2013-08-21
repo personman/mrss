@@ -95,6 +95,11 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['about']['pages']['nccet']);
         }
 
+        // Don't show the glossary for MRSS yet
+        if ($currentStudy->getId() == 2) {
+            unset($pages['help']['pages']['glossary']);
+        }
+
         return $pages;
     }
 

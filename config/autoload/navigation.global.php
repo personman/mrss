@@ -82,21 +82,21 @@ return array(
                 'label' => 'Benchmarks',
                 'uri' => '/Benchmarks',
             ),
-            array(
+            'help' => array(
                 'label' => 'Help',
                 'uri' => '#',
                 'pages' => array(
-                    array(
+                    'glossary' => array(
                         'label' => 'Glossary',
                         'uri' => '/glossary'
                     ),
-                    array(
+                    'faq' => array(
                         'label' => 'FAQ',
                         'uri' => '/faq'
                     )
                 )
             ),
-            array(
+            'contact' => array(
                 'label' => 'Contact Us',
                 'uri' => '/contact'
             ),
