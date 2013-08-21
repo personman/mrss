@@ -50,6 +50,12 @@ class NavigationFactory extends DefaultNavigationFactory
         } else {
             // If they're logged out, hide the logout button
             unset($pages['logout']);
+
+            // Don't show the subscribe link if enrollment/pilot isn't open
+            if (!$currentStudy->getEnrollmentOpen() &&
+                !$currentStudy->getPilotOpen()) {
+                unset($pages['subscribe']);
+            }
         }
 
         // Add the data entry links (if they're logged in
