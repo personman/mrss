@@ -623,6 +623,10 @@ return array(
             'pages' => 'Mrss\Controller\PageController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),
+        'factories' => array(
+            // Override the contact controller
+            'PhlyContact\Controller\Contact' => 'Mrss\Service\ContactControllerFactory',
+        ),
     ),
     'controller_plugins' => array(
         'invokables' => array(
