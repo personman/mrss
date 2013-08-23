@@ -20,6 +20,67 @@ class SystemAdminTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mrss\View\Helper\SystemAdmin', $this->helper);
     }
 
+    public function testSetUser()
+    {
+        $userMock = $this->getMock(
+            'Mrss\Entity\User',
+            array()
+        );
+
+        $this->helper->setUser($userMock);
+        $this->assertInstanceOf('Mrss\Entity\User', $this->helper->getUser());
+    }
+
+    public function testGetColleges()
+    {
+        $systemMock = $this->getMock(
+            'Mrss\Entity\System',
+            array('getColleges')
+        );
+        $systemMock->expects($this->once())
+            ->method('getColleges')
+            ->will($this->returnValue(array()));
+
+        $collegeMock = $this->getMock(
+            'Mrss\Entity\College',
+            array('getSystem')
+        );
+        $collegeMock->expects($this->once())
+            ->method('getSystem')
+            ->will($this->returnValue($systemMock));
+
+        $userMock = $this->getMock(
+            'Mrss\Entity\User',
+            array('getCollege')
+        );
+
+        $userMock->expects($this->once())
+            ->method('getCollege')
+            ->will($this->returnValue($collegeMock));
+
+        $this->helper->setUser($userMock);
+
+        // Current study mock
+        $currentStudyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getId', 'getCurrentYear')
+        );
+
+        // Current study plugin
+        $currentStudyPluginMock = $this->getMock(
+            'Mrss\Controller\Plugin\CurrentStudy',
+            array('getCurrentStudy')
+        );
+        $currentStudyPluginMock->expects($this->any())
+            ->method('getCurrentStudy')
+            ->will($this->returnValue($currentStudyMock));
+
+        $this->helper->setCurrentStudyPlugin($currentStudyPluginMock);
+
+        $colleges = $this->helper->getColleges();
+        $this->assertTrue(is_array($colleges));
+    }
+
     /*public function testSetPlugin()
     {
         // College list
