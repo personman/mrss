@@ -33,13 +33,41 @@ class SystemAdminTest extends PHPUnit_Framework_TestCase
 
     public function testGetColleges()
     {
+        $optionCollegeMock = $this->getMock(
+            'Mrss\Entity\College',
+            array('getSubscriptionByStudyAndYear')
+        );
+        $optionCollegeMock->expects($this->once())
+            ->method('getSubscriptionByStudyAndYear')
+            ->will($this->returnValue(null));
+
+        $optionCollegeMock2 = $this->getMock(
+            'Mrss\Entity\College',
+            array('getSubscriptionByStudyAndYear')
+        );
+        $subscriptionMock = $this->getMock(
+            'Mrss\Entity\Subscription',
+            array()
+        );
+        $optionCollegeMock2->expects($this->once())
+            ->method('getSubscriptionByStudyAndYear')
+            ->will($this->returnValue($subscriptionMock));
+
+
         $systemMock = $this->getMock(
             'Mrss\Entity\System',
             array('getColleges')
         );
         $systemMock->expects($this->once())
             ->method('getColleges')
-            ->will($this->returnValue(array()));
+            ->will(
+                $this->returnValue(
+                    array(
+                        $optionCollegeMock,
+                        $optionCollegeMock2
+                    )
+                )
+            );
 
         $collegeMock = $this->getMock(
             'Mrss\Entity\College',
@@ -79,6 +107,50 @@ class SystemAdminTest extends PHPUnit_Framework_TestCase
 
         $colleges = $this->helper->getColleges();
         $this->assertTrue(is_array($colleges));
+        $this->assertEquals(1, count($colleges));
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage System not found
+     */
+    public function testGetCollegesException()
+    {
+        $collegeMock = $this->getMock(
+            'Mrss\Entity\College',
+            array('getSystem')
+        );
+        $collegeMock->expects($this->once())
+            ->method('getSystem')
+            ->will($this->returnValue(null));
+
+        $userMock = $this->getMock(
+            'Mrss\Entity\User',
+            array('getCollege')
+        );
+
+        $userMock->expects($this->once())
+            ->method('getCollege')
+            ->will($this->returnValue($collegeMock));
+
+        $this->helper->setUser($userMock);
+
+        $colleges = $this->helper->getColleges();
+    }
+
+    public function testGetOverviewUrl()
+    {
+        $viewMock = $this->getMock(
+            'Zend\View\Renderer\ConsoleRenderer',
+            array('url')
+        );
+        $viewMock->expects($this->once())
+            ->method('url')
+            ->will($this->returnValue('/data-entry'));
+
+        $this->helper->setView($viewMock);
+
+        $this->assertEquals('/data-entry', $this->helper->getOverviewUrl());
     }
 
     /*public function testSetPlugin()
