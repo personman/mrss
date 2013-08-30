@@ -1,0 +1,35 @@
+.data-entry-grid .control-group {
+    padding: 0px !important;
+    margin-bottom: 1px !important;
+}
+
+.data-entry-grid td {
+    text-align: center;
+}
+
+.data-entry-grid .control-group input {
+    width: 40px;
+    margin: 0px auto;
+}
+
+.data-entry-grid td.grid-category, .data-entry-grid th {
+    font-weight: bold;
+    font-size: 108%;
+    text-align: center;
+    background: #888;
+    color: #eee;
+    vertical-align: middle !important;
+}
+
+.data-entry-grid.table tr.help-text td.grid-category {
+    border-top: none;
+}
+
+.data-entry-grid.table tr.help-text div {
+    width: 400px;
+    margin: 5px auto;
+}
+
+.data-entry-grid tr.help-text {
+    display: none;
+}

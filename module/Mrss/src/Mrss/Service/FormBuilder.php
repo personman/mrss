@@ -43,7 +43,7 @@ class FormBuilder
         $buttons->add($save);
 
         $form->add($buttons);
-
+        //echo '<pre>'; print_r($inputFilter);
         $form->setInputFilter($inputFilter);
 
 

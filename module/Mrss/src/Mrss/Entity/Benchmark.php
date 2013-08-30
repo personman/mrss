@@ -267,6 +267,9 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         if ($this->getInputType() == 'dollars' || $this->getInputType() == 'float') {
             $element['attributes']['pattern'] = '\d+(\.\d+)?';
             $element['attributes']['title'] = 'Use the format 1234 or 1234.56';
+        } elseif ($this->getInputType() == 'percent') {
+            $element['attributes']['pattern'] = '\d+(\.\d+)?';
+            $element['attributes']['title'] = 'Use the format 12, 12.3 or 12.34';
         } elseif ($this->getInputType() == 'number') {
             $element['attributes']['pattern'] = '\d+';
             $element['attributes']['title'] = 'Use the format 1234';
@@ -308,9 +311,25 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     )
                 )
             );
-        }
+        } elseif ($this->getInputType() == 'percent') {
+            $inputFilter['validators'][] = array(
+                'name' => 'Regex',
+                'options' => array(
+                    'pattern' => '/^\d+\.?(\d+)?$/',
+                    'messages' => array(
+                        'regexNotMatch' => 'Use the format 12, 12.3, 12.34 '
+                    )
+                )
+            );
 
-        // @todo: validation for percentage (under 100, over 0, with or without dec
+            $inputFilter['validators'][] = array(
+                'name' => 'Between',
+                'options' => array(
+                    'min' => 0,
+                    'max' => 100
+                )
+            );
+        }
 
         return $inputFilter;
     }

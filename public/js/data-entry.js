@@ -14,4 +14,22 @@ $(function() {
     $('input.input-percent').wrap('<div class="input-append" />')
     $('input.input-percent').after('<span class="add-on">%</span>')
 
+
+    // Wrap selected input in well to highlight it
+    $('.form-horizontal input, .form-horizontal select')
+        .focus(function(){
+            $(this).parents('.control-group').addClass('well');
+        }).blur(
+        function(){
+            $(this).parents('.control-group').removeClass('well');
+        });
+
+    // Show grid help text
+    $('.data-entry-grid input')
+        .focus(function() {
+            $(this).parents('tr').next().show()
+        }).blur(function() {
+            $(this).parents('tr').next().hide()
+        });
+
 })

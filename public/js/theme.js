@@ -62,17 +62,3 @@ var servicesCircle = {
 }
 
 
-
-
-/* Observation */
-$(function() {
-    $('input,select').focus(
-
-        function(){
-            $(this).parents('.control-group').addClass('well');
-        }).blur(
-        function(){
-            $(this).parents('.control-group').removeClass('well');
-        });
-
-})

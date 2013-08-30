@@ -275,6 +275,7 @@ class ObservationController extends AbstractActionController
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
+            //var_dump($form->getElements()); die;
             if ($form->isValid()) {
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
@@ -289,11 +290,33 @@ class ObservationController extends AbstractActionController
 
         }
 
-        return array(
-            'form' => $form,
-            'observation' => $observation,
-            'benchmarkGroup' => $benchmarkGroup
+        $view = new ViewModel(
+            array(
+                'form' => $form,
+                'observation' => $observation,
+                'benchmarkGroup' => $benchmarkGroup
+            )
         );
+
+        $this->checkForCustomTemplate($benchmarkGroup, $view);
+
+        return $view;
+    }
+
+    /**
+     * If a custom template is set up for this benchmarkGroup, switch to it.
+     * Get the id and file name from config (differs in production)
+     */
+    public function checkForCustomTemplate($benchmarkGroup, $view)
+    {
+        $config = $this->getServiceLocator()->get('Config');
+
+        $id = $benchmarkGroup->getId();
+
+        if (!empty($config['data_entry_templates'][$id])) {
+            $template = $config['data_entry_templates'][$id];
+            $view->setTemplate('mrss/observation/' . $template);
+        }
     }
 
     public function importAction()

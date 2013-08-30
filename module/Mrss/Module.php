@@ -383,6 +383,11 @@ class Module
                     $helper->setCurrentStudyPlugin($plugin);
 
                     return $helper;
+                },
+                'simpleFormElement' => function($sm) {
+                    $helper = new \Mrss\View\Helper\SimpleFormElement;
+
+                    return $helper;
                 }
             ),
         );

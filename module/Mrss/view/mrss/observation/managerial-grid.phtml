@@ -1,0 +1,183 @@
+<?php
+/**
+ * This is a special data-entry template that displays this form as a table
+ */
+?>
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+<?= $this->systemAdmin() ?>
+
+<h2>
+    <?= $benchmarkGroup->getName() ?>
+</h2>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+<table class="table table-condensed table-bordered data-entry-grid">
+    <thead>
+        <tr>
+            <th>Instructional Activities</th>
+            <th>Percentage of Time<br> Spent on Activity<br> for Full Time</th>
+            <th>Percentage of Time<br> Spent on Activity<br> for Part Time</th>
+            <th>Percentage of Time<br> Spent on Activity<br> for Other Full<br> Time Employees</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td class="grid-category">Program Development</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_program_dev')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_program_dev')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_program_dev')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_program_dev')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="grid-category">Course Development</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_course_dev')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_course_dev')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_course_dev')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_course_dev')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="grid-category">Teaching</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_teaching')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_teaching')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_teaching')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_teaching')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="grid-category">Tutoring</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_tutoring')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_tutoring')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_tutoring')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_tutoring')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="grid-category">Advising</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_advising')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_advising')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_advising')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_advising')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="grid-category">Academic Service</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_ac_service')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_ac_service')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_ac_service')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_ac_service')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="grid-category">Assessment and Grading</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_assessment')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_assessment')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_assessment')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_assessment')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="grid-category">Other</td>
+            <td><?= $this->simpleFormElement($form->get('inst_full_other')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_part_other')) ?></td>
+            <td><?= $this->simpleFormElement($form->get('inst_othr_other')) ?></td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div>
+                    <?= $form->get('inst_full_other')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+<fieldset id="fieldset-buttons" class="well well-small">
+    <div class="control-group" id="control-group-buttons[submit]">
+        <div class="controls" id="controls-buttons[submit]">
+            <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<?= $this->form()->closeTag() ?>
