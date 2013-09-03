@@ -32,4 +32,42 @@ $(function() {
             $(this).parents('tr').next().hide()
         });
 
+
+    // Totals for managerial grid
+    if ($('.data-entry-grid').length) {
+        updateGridTotals()
+        $('.data-entry-grid input').change(function() {
+            updateGridTotals()
+        })
+    }
 })
+
+function updateGridTotals()
+{
+    var columns = ['full', 'part', 'other']
+    for (i in columns) {
+        // The inputs in the column:
+        var inputs = $('.data-entry-grid td.' + columns[i] + '-value input')
+        var total = 0
+        inputs.each(function(i, e) {
+            value = parseFloat($(e).val())
+            if (!value) {
+                value = 0
+            }
+            total = total + value
+        })
+
+        // Show the total
+        var totalTd = $('#' + columns[i] + '-time-total')
+        totalTd.html(total + '%')
+
+        // Handle errors
+        if (total > 100) {
+            totalTd.addClass('error')
+            totalTd.html(totalTd.html() + "<br>Total should be 100% or less.")
+        } else {
+            totalTd.removeClass('error')
+        }
+
+    }
+}

@@ -40,10 +40,18 @@ $this->headScript()->appendFile(
 
     <tbody>
         <tr>
-            <td class="grid-category">Program Development</td>
-            <td><?= $this->simpleFormElement($form->get('inst_full_program_dev')) ?></td>
-            <td><?= $this->simpleFormElement($form->get('inst_part_program_dev')) ?></td>
-            <td><?= $this->simpleFormElement($form->get('inst_othr_program_dev')) ?></td>
+            <td class="grid-category">
+                Program Development
+            </td>
+            <td class="full-value">
+                <?= $this->simpleFormElement($form->get('inst_full_program_dev')) ?>
+            </td>
+            <td class="part-value">
+                <?= $this->simpleFormElement($form->get('inst_part_program_dev')) ?>
+            </td>
+            <td class="other-value">
+                <?= $this->simpleFormElement($form->get('inst_othr_program_dev')) ?>
+            </td>
         </tr>
 
         <tr class="help-text">
@@ -56,10 +64,18 @@ $this->headScript()->appendFile(
         </tr>
 
         <tr>
-            <td class="grid-category">Course Development</td>
-            <td><?= $this->simpleFormElement($form->get('inst_full_course_dev')) ?></td>
-            <td><?= $this->simpleFormElement($form->get('inst_part_course_dev')) ?></td>
-            <td><?= $this->simpleFormElement($form->get('inst_othr_course_dev')) ?></td>
+            <td class="grid-category">
+                Course Development
+            </td>
+            <td class="full-value">
+                <?= $this->simpleFormElement($form->get('inst_full_course_dev')) ?>
+            </td>
+            <td class="part-value">
+                <?= $this->simpleFormElement($form->get('inst_part_course_dev')) ?>
+            </td>
+            <td class="other-value">
+                <?= $this->simpleFormElement($form->get('inst_othr_course_dev')) ?>
+            </td>
         </tr>
 
         <tr class="help-text">
@@ -168,6 +184,12 @@ $this->headScript()->appendFile(
             </td>
         </tr>
 
+        <tr>
+            <td class="grid-category">Total</td>
+            <td id="full-time-total"></td>
+            <td id="part-time-total"></td>
+            <td id="other-time-total"></td>
+        </tr>
 
     </tbody>
 </table>

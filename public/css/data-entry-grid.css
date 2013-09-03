@@ -33,3 +33,7 @@
 .data-entry-grid tr.help-text {
     display: none;
 }
+
+td.error {
+    color: #B94A48;
+}
