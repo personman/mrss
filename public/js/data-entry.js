@@ -16,13 +16,16 @@ $(function() {
 
 
     // Wrap selected input in well to highlight it
-    $('.form-horizontal input, .form-horizontal select')
-        .focus(function(){
-            $(this).parents('.control-group').addClass('well');
-        }).blur(
-        function(){
-            $(this).parents('.control-group').removeClass('well');
-        });
+    if (!$('.data-entry-grid').length) {
+        $('.form-horizontal input, .form-horizontal select')
+            .focus(function(){
+                $(this).parents('.control-group').addClass('well');
+            }).blur(
+            function(){
+                $(this).parents('.control-group').removeClass('well');
+            });
+    }
+
 
     // Show grid help text
     $('.data-entry-grid input')

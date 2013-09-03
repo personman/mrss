@@ -37,3 +37,8 @@
 td.error {
     color: #B94A48;
 }
+
+#full-time-total, #part-time-total, #other-time-total {
+    font-weight: bold;
+    padding: 5px;
+}
