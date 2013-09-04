@@ -36,11 +36,19 @@ $(function() {
         });
 
 
-    // Totals for managerial grid
+    // Managerial grid page
     if ($('.data-entry-grid').length) {
+
+        // Totals for managerial grid
         updateGridTotals()
         $('.data-entry-grid input').change(function() {
             updateGridTotals()
+        })
+
+        // Specify fields: only show them when there's a value in other
+        showOrHideSpecifyFields()
+        $('.other-field').change(function() {
+            showOrHideSpecifyFields()
         })
     }
 })
@@ -72,5 +80,31 @@ function updateGridTotals()
             totalTd.removeClass('error')
         }
 
+    }
+}
+
+function showOrHideSpecifyFields()
+{
+    // Which other fields have a non-zero value?
+    fields = ['full', 'part', 'other']
+    activeFields = [];
+
+    for (i in fields) {
+        field = fields[i]
+        selector = '.' + field + '-value.other-field input'
+        value = $(selector).val()
+
+        value = parseFloat(value)
+
+        if (value) {
+            activeFields.push(field)
+        }
+    }
+
+    // If there are no values for other, hide the whole specify row
+    if (activeFields.length == 0) {
+        $('#specify-other').hide()
+    } else {
+        $('#specify-other').show()
     }
 }

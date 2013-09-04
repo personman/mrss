@@ -42,3 +42,11 @@ td.error {
     font-weight: bold;
     padding: 5px;
 }
+
+#specify-other input {
+    width: 200px;
+}
+
+#specify-other {
+    display: none;
+}

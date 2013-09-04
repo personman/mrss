@@ -184,6 +184,15 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_othr_other;
 
+    /** @ORM\Column(type="string", length=200, nullable=true) */
+    protected $inst_full_other_specify;
+
+    /** @ORM\Column(type="string", length=200, nullable=true) */
+    protected $inst_part_other_specify;
+
+    /** @ORM\Column(type="string", length=200, nullable=true) */
+    protected $inst_othr_other_specify;
+
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_total_program_dev;
 

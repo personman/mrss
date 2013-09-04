@@ -212,13 +212,13 @@ $this->headScript()->appendFile(
             <td class="grid-category">
                 Other
             </td>
-            <td class="full-value">
+            <td class="full-value other-field">
                 <?= $this->simpleFormElement($form->get('inst_full_other')) ?>
             </td>
-            <td class="part-value">
+            <td class="part-value other-field">
                 <?= $this->simpleFormElement($form->get('inst_part_other')) ?>
             </td>
-            <td class="other-value">
+            <td class="other-value other-field">
                 <?= $this->simpleFormElement($form->get('inst_othr_other')) ?>
             </td>
         </tr>
@@ -229,6 +229,22 @@ $this->headScript()->appendFile(
                 <div>
                     <?= $form->get('inst_full_other')->getOption('help-block') ?>
                 </div>
+            </td>
+        </tr>
+
+
+        <tr id="specify-other">
+            <td class="grid-category">
+                Specify Other
+            </td>
+            <td>
+                <?= $this->simpleFormElement($form->get('inst_full_other_specify')) ?>
+            </td>
+            <td>
+                <?= $this->simpleFormElement($form->get('inst_part_other_specify')) ?>
+            </td>
+            <td>
+                <?= $this->simpleFormElement($form->get('inst_othr_other_specify')) ?>
             </td>
         </tr>
 
