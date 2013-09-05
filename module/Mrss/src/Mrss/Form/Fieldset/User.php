@@ -11,8 +11,12 @@ use Zend\Validator\Regex;
 
 class User extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct($name)
+    protected $includeEmailConfirm = true;
+
+    public function __construct($name, $includeEmailConfirm = true)
     {
+        $this->includeEmailConfirm = $includeEmailConfirm;
+
         parent::__construct($name);
 
         $this->add(
@@ -117,19 +121,21 @@ class User extends Fieldset implements InputFilterProviderInterface
             )
         );
 
-        $this->add(
-            array(
-                'name' => 'emailConfirm',
-                'type' => 'Text',
-                'required' => true,
-                'options' => array(
-                    'label' => 'Confirm E-Mail Address'
-                ),
-                'attributes' => array(
-                    'id' => $name . '-emailConfirm'
+        if ($this->includeEmailConfirm) {
+            $this->add(
+                array(
+                    'name' => 'emailConfirm',
+                    'type' => 'Text',
+                    'required' => true,
+                    'options' => array(
+                        'label' => 'Confirm E-Mail Address'
+                    ),
+                    'attributes' => array(
+                        'id' => $name . '-emailConfirm'
+                    )
                 )
-            )
-        );
+            );
+        }
         
     }
 
@@ -140,13 +146,7 @@ class User extends Fieldset implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        $emailConfirmValidator = new Identical('email');
-        $emailConfirmValidator->setMessage(
-            'E-Mail addresses do not match',
-            Identical::NOT_SAME
-        );
-
-        return array(
+        $spec =  array(
             'same' => array(
                 'required' => false
             ),
@@ -170,14 +170,25 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'validators' => array(
                     new EmailValidator()
                 )
-            ),
-            'emailConfirm' => array(
+            )
+        );
+
+        if ($this->includeEmailConfirm) {
+            $emailConfirmValidator = new Identical('email');
+            $emailConfirmValidator->setMessage(
+                'E-Mail addresses do not match',
+                Identical::NOT_SAME
+            );
+
+            $spec['emailConfirm'] = array(
                 'required' => true,
                 'validators' => array(
                     new EmailValidator(),
                     $emailConfirmValidator
                 )
-            )
-        );
+            );
+        }
+
+        return $spec;
     }
 }

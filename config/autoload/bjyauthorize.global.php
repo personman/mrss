@@ -145,6 +145,10 @@ return array(
                     'controller' => 'colleges',
                     'roles' => array('admin')
                 ),
+                array(
+                    'controller' => 'users',
+                    'roles' => array('admin')
+                ),
                 // Since the background action is fired by console, lift guard
                 array(
                     'controller' => 'import',

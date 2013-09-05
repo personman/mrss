@@ -463,6 +463,28 @@ return array(
                     )
                 )
             ),
+            'users' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/users',
+                    'defaults' => array(
+                        'controller' => 'users',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => 0
+                            )
+                        )
+                    )
+                )
+            ),
             'settings' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -621,6 +643,7 @@ return array(
             'studies' => 'Mrss\Controller\StudyController',
             'settings' => 'Mrss\Controller\SettingController',
             'pages' => 'Mrss\Controller\PageController',
+            'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),
         'factories' => array(

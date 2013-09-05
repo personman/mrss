@@ -37,6 +37,14 @@
                         $userList = array();
                         foreach ($subscription->getCollege()->getUsers() as $user):
                             $item = $user->getFullName();
+
+                            // Wrap in a link
+                            $url = $this->url(
+                                'users/edit',
+                                array('id' => $user->getId())
+                            );
+                            $item = "<a href='$url'>$item</a>";
+
                             if ($access = $user->getLastAccess()) {
                                 $date = $access->format('Y-m-d H:i');
                                 $item .= " ($date)";
