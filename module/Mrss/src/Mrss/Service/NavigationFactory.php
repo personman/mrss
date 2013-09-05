@@ -87,6 +87,7 @@ class NavigationFactory extends DefaultNavigationFactory
             }
         } else {
             unset($pages['data-entry']);
+            unset($pages['account']);
         }
 
         // Customize menu by study

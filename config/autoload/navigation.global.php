@@ -100,6 +100,10 @@ return array(
                 'label' => 'Contact Us',
                 'uri' => '/contact'
             ),
+            'account' => array(
+                'label' => 'Your Account',
+                'route' => 'account'
+            ),
             'login' => array(
                 'label' => 'Log In',
                 'route' => 'zfcuser/login'

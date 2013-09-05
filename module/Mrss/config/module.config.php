@@ -485,6 +485,28 @@ return array(
                     )
                 )
             ),
+            'account' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/account',
+                    'defaults' => array(
+                        'controller' => 'users',
+                        'action' => 'account'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit',
+                            'defaults' => array(
+                                'action' => 'accountedit'
+                            )
+                        )
+                    )
+                )
+            ),
             'settings' => array(
                 'type' => 'segment',
                 'options' => array(

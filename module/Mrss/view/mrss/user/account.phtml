@@ -1,0 +1,19 @@
+<h2>Your Account</h2>
+
+<h4>Hello, <?= $user->getFullName() ?></h4>
+
+<p>
+    <a href="<?= $this->url('account/edit') ?>">
+        Edit your account details
+    </a>
+    <br>
+
+    <a href="<?= $this->url('zfcuser/changepassword') ?>">
+        Change your password
+    </a>
+    <br>
+
+    <a href="<?= $this->url('zfcuser/logout') ?>">
+        Log out
+    </a>
+</p>

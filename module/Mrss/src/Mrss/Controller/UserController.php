@@ -11,6 +11,12 @@ use Mrss\Form\Fieldset\User as UserForm;
 
 class UserController extends AbstractActionController
 {
+    /**
+     * For admins editing user accounts
+     *
+     * @return array|\Zend\Http\Response
+     * @throws \Exception
+     */
     public function editAction()
     {
         $id = $this->params('id');
@@ -26,26 +32,7 @@ class UserController extends AbstractActionController
         $userModel = $this->getServiceLocator()->get('model.user');
         $user = $userModel->find($id);
 
-        $form = new AbstractForm('user');
-
-        $fieldset = new UserForm('user', false);
-        $fieldset->add(
-            array(
-                'name' => 'id',
-                'type' => 'hidden'
-            )
-        );
-        $fieldset->setUseAsBaseFieldset(true);
-        $form->add($fieldset);
-        $form->add($form->getButtonFieldset());
-
-        $form->setHydrator(
-            new DoctrineHydrator(
-                $this->getServiceLocator()->get('em'),
-                'Mrss\Entity\User'
-            )
-        );
-        $form->bind($user);
+        $form = $this->getUserForm($user);
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
@@ -69,5 +56,71 @@ class UserController extends AbstractActionController
             'user' => $user,
             'form' => $form
         );
+    }
+
+    /**
+     * For users editing their own account
+     */
+    public function accounteditAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $form = $this->getUserForm($user);
+
+        // Handle form submission
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $userModel = $this->getServiceLocator()->get('model.user');
+                $userModel->save($user);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Account saved.');
+                return $this->redirect()->toRoute('account');
+            } else {
+                $this->flashMessenger()->addErrorMessage('Correct errors below.');
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
+    public function accountAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        return array(
+            'user' => $user
+        );
+    }
+
+    protected function getUserForm($user)
+    {
+        $form = new AbstractForm('user');
+
+        $fieldset = new UserForm('user', false);
+        $fieldset->add(
+            array(
+                'name' => 'id',
+                'type' => 'hidden'
+            )
+        );
+        $fieldset->setUseAsBaseFieldset(true);
+        $form->add($fieldset);
+        $form->add($form->getButtonFieldset());
+
+        $form->setHydrator(
+            new DoctrineHydrator(
+                $this->getServiceLocator()->get('em'),
+                'Mrss\Entity\User'
+            )
+        );
+        $form->bind($user);
+
+        return $form;
     }
 }

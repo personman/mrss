@@ -83,6 +83,11 @@ return array(
                     'controller' => 'observations',
                     'roles' => array('user')
                 ),
+                array(
+                    'controller' => 'users',
+                    'action' => array('account', 'accountedit'),
+                    'roles' => array('user')
+                ),
                 // System admin
                 array(
                     'controller' => 'observations',
