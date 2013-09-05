@@ -48,7 +48,12 @@
             <ul>
                 <?php foreach ($college->getUsers() as $user): ?>
                     <li>
-                        <?= $user->getFullName() ?>
+                        <a href="<?= $this->url(
+                            'users/edit',
+                            array('id' => $user->getId())
+                        ) ?>">
+                            <?= $user->getFullName() ?>
+                        </a>
                     </li>
                 <?php endforeach ?>
             </ul>
