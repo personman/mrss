@@ -79,7 +79,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $options;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=512, nullable=true)
      */
     protected $equation;
 
