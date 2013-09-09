@@ -30,7 +30,11 @@ $(function() {
     // Show grid help text
     $('.data-entry-grid input')
         .focus(function() {
-            $(this).parents('tr').next().show()
+            var helpRow = $(this).parents('tr').next()
+            var helpType = getHelpType($(this))
+            helpRow.find('div').hide()
+            helpRow.find('.' + helpType + '-help').show()
+            helpRow.show()
         }).blur(function() {
             $(this).parents('tr').next().hide()
         });
@@ -107,4 +111,23 @@ function showOrHideSpecifyFields()
     } else {
         $('#specify-other').show()
     }
+}
+
+function getHelpType(element)
+{
+    var columns = ['full', 'part', 'othr']
+    rowId = element.attr('id')
+
+    for (i in columns) {
+        column = columns[i]
+        if (rowId.search('_' + column + '_') > 0) {
+
+            if (column == 'othr') {
+                column = 'other'
+            }
+
+            return column
+        }
+    }
+
 }
