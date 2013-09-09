@@ -24,3 +24,19 @@ form#system-admin-switch {
 form#system-admin-switch select {
     margin-right: 10px;
 }
+
+
+/* Side-by-side fields in instruction form */
+#control-group-inst_full_total_expend,
+#control-group-inst_part_total_expend,
+#control-group-inst_other_total_expend,
+#control-group-inst_full_total_num,
+#control-group-inst_part_total_num,
+#control-group-inst_other_total_num {
+    width: 47%;
+    float: left;
+}
+
+#fieldset-buttons {
+    clear: both;
+}
