@@ -35,6 +35,7 @@ form#system-admin-switch select {
 #control-group-inst_other_total_num {
     width: 47%;
     float: left;
+    height: 100px;
 }
 
 #fieldset-buttons {
