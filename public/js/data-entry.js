@@ -58,7 +58,8 @@ $(function() {
 
     // Workforce revenue heading
     if ($('#control-group-revenue_federal').length) {
-        $('#control-group-revenue_federal').before("<h4 class='subheading'>Public Sources</h4>")
+        $('#control-group-revenue_federal').before("<h3 class='heading'>Revenue Base</h3><h4 class='subheading'>Public Sources</h4>")
+        $('#control-group-revenue_contract_training').before("<h3 class='heading'>Gross Revenue</h3>")
     }
 })
 
