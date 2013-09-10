@@ -55,6 +55,11 @@ $(function() {
             showOrHideSpecifyFields()
         })
     }
+
+    // Workforce revenue heading
+    if ($('#control-group-revenue_federal').length) {
+        $('#control-group-revenue_federal').before("<h4 class='subheading'>Public Sources</h4>")
+    }
 })
 
 function updateGridTotals()
