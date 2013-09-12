@@ -398,7 +398,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                         ),
                         'validators' => array(
                             array('name' => 'NotEmpty'),
-                            $dbColumnUniqueValidator
+                            // Allow dbColumn to be non-unique
+                            //$dbColumnUniqueValidator
                         )
                     )
                 )
