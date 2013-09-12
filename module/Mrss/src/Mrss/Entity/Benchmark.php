@@ -270,7 +270,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         } elseif ($this->getInputType() == 'percent') {
             $element['attributes']['pattern'] = '\d+(\.\d+)?';
             $element['attributes']['title'] = 'Use the format 12, 12.3 or 12.34';
-        } elseif ($this->getInputType() == 'number') {
+        } elseif ($this->getInputType() == 'number' ||
+            $this->getInputType() == 'wholedollars') {
             $element['attributes']['pattern'] = '\d+';
             $element['attributes']['title'] = 'Use the format 1234';
         }
@@ -297,6 +298,16 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     'pattern' => '/^\d+\.?(\d\d)?$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234 or 1234.56'
+                    )
+                )
+            );
+        } elseif ($this->getInputType() == 'wholedollars') {
+            $inputFilter['validators'][] = array(
+                'name' => 'Regex',
+                'options' => array(
+                    'pattern' => '/^\d+$/',
+                    'messages' => array(
+                        'regexNotMatch' => 'Use the format 1234'
                     )
                 )
             );

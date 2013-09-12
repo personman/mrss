@@ -10,6 +10,9 @@ $(function() {
     $('input.input-dollars').wrap('<div class="input-prepend" />')
     $('input.input-dollars').before('<span class="add-on">$</span>')
 
+    $('input.input-wholedollars').wrap('<div class="input-prepend" />')
+    $('input.input-wholedollars').before('<span class="add-on">$</span>')
+
     // Percentage
     $('input.input-percent').wrap('<div class="input-append" />')
     $('input.input-percent').after('<span class="add-on">%</span>')
