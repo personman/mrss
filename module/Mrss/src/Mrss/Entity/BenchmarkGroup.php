@@ -214,7 +214,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      */
     public function getCompletionPercentageForObservation(Observation $observation)
     {
-        $total = count($this->getBenchmarksForYear($observation->getYear()));
+        $total = count($this->getNonComputedBenchmarksForYear($observation->getYear()));
         $completed = $this->countCompleteFieldsInObservation($observation);
 
         if ($total > 0) {
@@ -236,7 +236,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     {
         $complete = 0;
 
-        foreach ($this->getBenchmarksForYear($observation->getYear()) as $benchmark) {
+        foreach ($this->getNonComputedBenchmarksForYear($observation->getYear()) as $benchmark) {
             $value = $observation->get($benchmark->getDbColumn());
 
             if ($value != null) {
