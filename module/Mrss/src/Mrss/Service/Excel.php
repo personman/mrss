@@ -20,6 +20,10 @@ class Excel
     // The Excel column index that holds the db_column
     protected $dbColumnColumn;
 
+    /**
+     * @deprecated
+     * @param Subscription $subscription
+     */
     public function getExcelForSubscription(Subscription $subscription)
     {
         $excel = new PHPExcel();
@@ -39,6 +43,15 @@ class Excel
         $excel = new PHPExcel();
         $this->writeHeadersSystem($excel, $subscriptions);
         $this->writeBodySystem($excel, $subscriptions);
+
+        // Per-study export customization
+        if (count($subscriptions) == 1) {
+            $subscription = $subscriptions[0];
+            if ($subscription->getStudy()->getId() == 2) {
+                $this->customizeForMrss($excel, $subscription);
+            }
+        }
+
 
         $this->download($excel);
     }
@@ -227,6 +240,7 @@ class Excel
     public function getObservationDataFromExcel($filename)
     {
         $excel = $this->openFile($filename);
+        $excel->setActiveSheetIndexByName('Worksheet');
         $sheet = $excel->getActiveSheet();
 
         $colleges = $this->getCollegesFromExcel($sheet);
@@ -244,7 +258,7 @@ class Excel
 
                 $value = $sheet
                     ->getCellByColumnAndRow($college['column'], $row->getRowIndex())
-                    ->getValue();
+                    ->getCalculatedValue();
 
                 $dbColumn = $sheet
                     ->getCellByColumnAndRow(
@@ -366,5 +380,144 @@ class Excel
             $n -= pow(26, $i);
         }
         return $r;
+    }
+
+    protected function customizeForMrss(PHPExcel $spreadsheet, Subscription $subscription)
+    {
+        // Open the template Excel file
+        $filename = 'data/imports/mrss-grid.xlsx';
+        $gridTemplate = PHPExcel_IOFactory::load($filename);
+
+        // Copy the grid sheet into the export file
+        $sheetTitle = 'Instructional';
+        $sheet = clone $gridTemplate->getSheetByName($sheetTitle);
+        $sheet->setTitle($sheetTitle);
+        $spreadsheet->addExternalSheet($sheet, 0);
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // Populate the grid
+        $this->populateMrssGrid($spreadsheet, $subscription);
+
+        // Connect to cells in the other sheet
+        $this->connectMrssGridCells($spreadsheet, $subscription);
+
+        // Hide those other sheet rows
+    }
+
+    protected function populateMrssGrid(PHPExcel $spreadsheet, Subscription $subscription)
+    {
+        $map = $this->getMrssGridMap();
+        $sheet = $spreadsheet->getActiveSheet();
+        $observation = $subscription->getObservation();
+
+        $currentRow = 8;
+        foreach ($map as $row) {
+            $currentCol = 5;
+
+            foreach ($row as $dbColumn) {
+                $value = $observation->get($dbColumn);
+                // The grid wants a decimal value
+                $value = $value / 100;
+                $sheet->setCellValueByColumnAndRow($currentCol, $currentRow, $value);
+
+                $currentCol++;
+            }
+
+            $currentRow++;
+        }
+    }
+
+    protected function connectMrssGridCells(PHPExcel $spreadsheet)
+    {
+        $sheetName = 'Instructional';
+
+        $currentRow = 8;
+        foreach ($this->getMrssGridMap() as $row) {
+            $currentCol = 5;
+
+            foreach ($row as $dbColumn) {
+                $columnLetter = $this->num2alpha($currentCol);
+                $reference = '=100*' . $sheetName . '!' . $columnLetter . $currentRow;
+
+                $this->placeReference($spreadsheet, $reference, $dbColumn);
+
+                $currentCol++;
+            }
+
+            $currentRow++;
+        }
+    }
+
+    protected function placeReference(PHPExcel $spreadsheet, $reference, $dbColumn)
+    {
+        $sheetName = 'Worksheet';
+        $sheet = $spreadsheet->getSheetByName($sheetName);
+
+        // Loop over the rows to find the one that needs this reference
+        foreach ($sheet->getRowIterator() as $row) {
+            $dbColumnCol = 'D';
+            $rowIndex = $row->getRowIndex();
+
+            $rowDbcolumn = $sheet->getCell($dbColumnCol . $rowIndex)->getValue();
+
+            if ($rowDbcolumn == $dbColumn) {
+                // We're in the right row
+                $valueCol = 'B';
+
+                // Set the reference
+                $sheet->setCellValue($valueCol . $rowIndex, $reference);
+
+                // Now hide the row so they only edit it in one place
+                $sheet->getRowDimension($rowIndex)->setVisible(false);
+
+                return true;
+            }
+        }
+    }
+
+    protected function getMrssGridMap()
+    {
+        return array(
+            array(
+                'inst_full_program_dev',
+                'inst_part_program_dev',
+                'inst_othr_program_dev'
+            ),
+            array(
+                'inst_full_course_dev',
+                'inst_part_course_dev',
+                'inst_othr_course_dev'
+            ),
+            array(
+                'inst_full_teaching',
+                'inst_part_teaching',
+                'inst_othr_teaching'
+            ),
+            array(
+                'inst_full_tutoring',
+                'inst_part_tutoring',
+                'inst_othr_tutoring'
+            ),
+            array(
+                'inst_full_advising',
+                'inst_part_advising',
+                'inst_othr_advising'
+            ),
+            array(
+                'inst_full_ac_service',
+                'inst_part_ac_service',
+                'inst_othr_ac_service'
+            ),
+            array(
+                'inst_full_assessment',
+                'inst_part_assessment',
+                'inst_othr_assessment'
+            ),
+            array(
+                'inst_full_other',
+                'inst_part_other',
+                'inst_othr_other'
+            )
+        );
     }
 }
