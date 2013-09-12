@@ -27,15 +27,10 @@ form#system-admin-switch select {
 
 
 /* Side-by-side fields in instruction form */
-#control-group-inst_full_total_expend,
-#control-group-inst_part_total_expend,
-#control-group-inst_other_total_expend,
-#control-group-inst_full_total_num,
-#control-group-inst_part_total_num,
-#control-group-inst_other_total_num {
+.two-col .control-group {
     width: 47%;
     float: left;
-    height: 100px;
+    height: 150px;
 }
 
 #fieldset-buttons {
@@ -58,4 +53,12 @@ h4.subheading {
 
 h3.heading {
     border-bottom: 1px solid #CCC;
+}
+
+/* Only show data definition when the field is focused */
+.control-group .help-block {
+    display: none
+}
+.control-group.focus .help-block {
+    display: block;
 }

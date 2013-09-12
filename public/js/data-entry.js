@@ -19,10 +19,10 @@ $(function() {
     if (!$('.data-entry-grid').length) {
         $('.form-horizontal input, .form-horizontal select')
             .focus(function(){
-                $(this).parents('.control-group').addClass('well');
+                $(this).parents('.control-group').addClass('focus');
             }).blur(
             function(){
-                $(this).parents('.control-group').removeClass('well');
+                $(this).parents('.control-group').removeClass('focus');
             });
     }
 
