@@ -124,19 +124,8 @@ function showOrHideSpecifyFields()
 
 function getHelpType(element)
 {
-    var columns = ['full', 'part', 'othr']
-    rowId = element.attr('id')
+    td = element.parents('td.grid-value')
+    helpType = td.attr('id').split('-').shift()
 
-    for (i in columns) {
-        column = columns[i]
-        if (rowId.search('_' + column + '_') > 0) {
-
-            if (column == 'othr') {
-                column = 'other'
-            }
-
-            return column
-        }
-    }
-
+    return helpType
 }

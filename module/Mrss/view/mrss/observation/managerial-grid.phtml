@@ -2,6 +2,52 @@
 /**
  * This is a special data-entry template that displays this form as a table
  */
+
+$tableConfig = array(
+    'Program Development' => array(
+        'inst_full_program_dev',
+        'inst_part_program_dev',
+        'inst_othr_program_dev'
+    ),
+    'Course Development' => array(
+        'inst_full_course_dev',
+        'inst_part_course_dev',
+        'inst_othr_course_dev'
+    ),
+    'Teaching' => array(
+        'inst_full_teaching',
+        'inst_part_teaching',
+        'inst_othr_teaching'
+    ),
+    'Tutoring' => array(
+        'inst_full_tutoring',
+        'inst_part_tutoring',
+        'inst_othr_tutoring'
+    ),
+    'Advising' => array(
+        'inst_full_advising',
+        'inst_part_advising',
+        'inst_othr_advising'
+    ),
+    'Academic Service' => array(
+        'inst_full_ac_service',
+        'inst_part_ac_service',
+        'inst_othr_ac_service'
+    ),
+    'Assessment and Grading' => array(
+        'inst_full_assessment',
+        'inst_part_assessment',
+        'inst_othr_assessment'
+    ),
+    'Other' => array(
+        'inst_full_other',
+        'inst_part_other',
+        'inst_othr_other'
+    )
+);
+
+$colClassConfig = array('full', 'part', 'other');
+
 ?>
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
@@ -39,246 +85,34 @@ $this->headScript()->appendFile(
     </thead>
 
     <tbody>
+
+    <?php foreach ($tableConfig as $label => $row): ?>
         <tr>
             <td class="grid-category">
-                Program Development
+                <?= $label ?>
             </td>
-            <td class="full-value">
-                <?= $this->simpleFormElement($form->get('inst_full_program_dev')) ?>
+
+            <?php foreach ($row as $i => $field): ?>
+            <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                <?= $this->simpleFormElement($form->get($field)) ?>
             </td>
-            <td class="part-value">
-                <?= $this->simpleFormElement($form->get('inst_part_program_dev')) ?>
-            </td>
-            <td class="other-value">
-                <?= $this->simpleFormElement($form->get('inst_othr_program_dev')) ?>
-            </td>
+            <?php endforeach ?>
         </tr>
 
         <tr class="help-text">
             <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_program_dev')->getOption('help-block') ?>
+            <td colspan="<?= count($row) ?>">
+
+                <?php foreach ($row as $i => $field): ?>
+                <div class="<?= $colClassConfig[$i] ?>-help">
+                    <?= $form->get($field)->getOption('help-block') ?>
                 </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_program_dev')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_program_dev')->getOption('help-block') ?>
-                </div>
+                <?php endforeach ?>
+
             </td>
         </tr>
-
-        <tr>
-            <td class="grid-category">
-                Course Development
-            </td>
-            <td class="full-value">
-                <?= $this->simpleFormElement($form->get('inst_full_course_dev')) ?>
-            </td>
-            <td class="part-value">
-                <?= $this->simpleFormElement($form->get('inst_part_course_dev')) ?>
-            </td>
-            <td class="other-value">
-                <?= $this->simpleFormElement($form->get('inst_othr_course_dev')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_course_dev')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_course_dev')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_course_dev')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
-
-
-        <tr>
-            <td class="grid-category">
-                Teaching
-            </td>
-            <td class="full-value">
-                <?= $this->simpleFormElement($form->get('inst_full_teaching')) ?>
-            </td>
-            <td class="part-value">
-                <?= $this->simpleFormElement($form->get('inst_part_teaching')) ?>
-            </td>
-            <td class="other-value">
-                <?= $this->simpleFormElement($form->get('inst_othr_teaching')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_teaching')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_teaching')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_teaching')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="grid-category">
-                Tutoring
-            </td>
-            <td class="full-value">
-                <?= $this->simpleFormElement($form->get('inst_full_tutoring')) ?>
-            </td>
-            <td class="part-value">
-                <?= $this->simpleFormElement($form->get('inst_part_tutoring')) ?>
-            </td>
-            <td class="other-value">
-                <?= $this->simpleFormElement($form->get('inst_othr_tutoring')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_tutoring')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_tutoring')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_tutoring')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="grid-category">
-                Advising
-            </td>
-            <td class="full-value">
-                <?= $this->simpleFormElement($form->get('inst_full_advising')) ?>
-            </td>
-            <td class="part-value">
-                <?= $this->simpleFormElement($form->get('inst_part_advising')) ?>
-            </td>
-            <td class="other-value">
-                <?= $this->simpleFormElement($form->get('inst_othr_advising')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_advising')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_advising')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_advising')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="grid-category">
-                Academic Service
-            </td>
-            <td class="full-value">
-                <?= $this->simpleFormElement($form->get('inst_full_ac_service')) ?>
-            </td>
-            <td class="part-value">
-                <?= $this->simpleFormElement($form->get('inst_part_ac_service')) ?>
-            </td>
-            <td class="other-value">
-                <?= $this->simpleFormElement($form->get('inst_othr_ac_service')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_ac_service')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_ac_service')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_ac_service')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="grid-category">
-                Assessment and Grading
-            </td>
-            <td class="full-value">
-                <?= $this->simpleFormElement($form->get('inst_full_assessment')) ?>
-            </td>
-            <td class="part-value">
-                <?= $this->simpleFormElement($form->get('inst_part_assessment')) ?>
-            </td>
-            <td class="other-value">
-                <?= $this->simpleFormElement($form->get('inst_othr_assessment')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_assessment')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_assessment')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_assessment')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="grid-category">
-                Other
-            </td>
-            <td class="full-value other-field">
-                <?= $this->simpleFormElement($form->get('inst_full_other')) ?>
-            </td>
-            <td class="part-value other-field">
-                <?= $this->simpleFormElement($form->get('inst_part_other')) ?>
-            </td>
-            <td class="other-value other-field">
-                <?= $this->simpleFormElement($form->get('inst_othr_other')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_other')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_other')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_other')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
+    <?php endforeach ?>
 
 
         <tr id="specify-other">
