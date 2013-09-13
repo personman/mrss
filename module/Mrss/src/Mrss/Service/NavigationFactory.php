@@ -86,8 +86,10 @@ class NavigationFactory extends DefaultNavigationFactory
                 unset($pages['data-entry']);
             }
         } else {
+            // Hide some pages from non-logged-in users
             unset($pages['data-entry']);
             unset($pages['account']);
+            unset($pages['help']);
         }
 
         // Customize menu by study
