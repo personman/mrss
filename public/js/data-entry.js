@@ -122,10 +122,14 @@ function showOrHideSpecifyFields()
     }
 }
 
+
 function getHelpType(element)
 {
     td = element.parents('td.grid-value')
-    helpType = td.attr('id').split('-').shift()
 
-    return helpType
+    if (td.length) {
+        helpType = td.attr('id').split('-').shift()
+
+        return helpType
+    }
 }

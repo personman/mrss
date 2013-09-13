@@ -39,15 +39,24 @@ $tableConfig = array(
         'inst_part_assessment',
         'inst_othr_assessment'
     ),
-    'Other' => array(
+    /*'Other' => array(
         'inst_full_other',
         'inst_part_other',
         'inst_othr_other'
-    )
+    )*/
 );
 
 $colClassConfig = array('full', 'part', 'other');
 
+/*$class = $form->get('inst_full_other')->getAttribute('class');
+$form->get('inst_full_other')->setAttribute('class', $class . ' full-value other-field');
+
+$class = $form->get('inst_part_other')->getAttribute('class');
+$form->get('inst_part_other')->setAttribute('class', $class . ' part-value other-field');
+
+$class = $form->get('inst_othr_other')->getAttribute('class');
+$form->get('inst_othr_other')->setAttribute('class', $class . ' other-field');
+*/
 ?>
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
@@ -114,6 +123,35 @@ $this->headScript()->appendFile(
         </tr>
     <?php endforeach ?>
 
+        <tr>
+            <td class="grid-category">
+                Other
+            </td>
+            <td class="grid-value full-value other-field" id="full-inst_full_other">
+                <?= $this->simpleFormElement($form->get('inst_full_other')) ?>
+            </td>
+            <td class="grid-value part-value other-field" id="part-inst_part_other">
+                <?= $this->simpleFormElement($form->get('inst_part_other')) ?>
+            </td>
+            <td class="grid-value other-value other-field" id="other-inst_othr_other">
+                <?= $this->simpleFormElement($form->get('inst_othr_other')) ?>
+            </td>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="3">
+                <div class="full-help">
+                    <?= $form->get('inst_full_other')->getOption('help-block') ?>
+                </div>
+                <div class="part-help">
+                    <?= $form->get('inst_part_other')->getOption('help-block') ?>
+                </div>
+                <div class="other-help">
+                    <?= $form->get('inst_othr_other')->getOption('help-block') ?>
+                </div>
+            </td>
+        </tr>
 
         <tr id="specify-other">
             <td class="grid-category">
