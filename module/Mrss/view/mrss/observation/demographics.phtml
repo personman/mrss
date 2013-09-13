@@ -1,0 +1,131 @@
+<?php
+/**
+ * This is a special data-entry template that displays the demographics form
+ * with section headers
+ */
+?>
+
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+<?= $this->systemAdmin() ?>
+
+<h2>
+    <?= $benchmarkGroup->getName() ?>
+</h2>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+<div class="demo-group">
+    <h3 class="heading">Instructional Environment</h3>
+
+    <?= $this->ztbFormElement($form->get('full_time_credit_hours_percent')) ?>
+    <?= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
+    <?= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_dev')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_online')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
+    <?= $this->ztbFormElement($form->get('Instructional_support')) ?>
+    <?= $this->ztbFormElement($form->get('trans_cred')) ?>
+    <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
+    <?= $this->ztbFormElement($form->get('dev_crh')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Enrollment Information</h3>
+
+    <?= $this->ztbFormElement($form->get('ipeds_enr')) ?>
+    <?= $this->ztbFormElement($form->get('enrollment_information_duplicated_enrollment')) ?>
+    <?= $this->ztbFormElement($form->get('ft_cr_head')) ?>
+    <?= $this->ztbFormElement($form->get('pt_cr_head')) ?>
+    <?= $this->ztbFormElement($form->get('hs_stud_hdct')) ?>
+    <?= $this->ztbFormElement($form->get('hs_stud_crh')) ?>
+    <?= $this->ztbFormElement($form->get('pell_grant_rec')) ?>
+    <?= $this->ztbFormElement($form->get('male_cred_stud')) ?>
+    <?= $this->ztbFormElement($form->get('fem_cred_stud')) ?>
+    <?= $this->ztbFormElement($form->get('first_gen_students')) ?>
+    <?= $this->ztbFormElement($form->get('crd_stud_minc')) ?>
+    <?= $this->ztbFormElement($form->get('fem_cred_stud')) ?>
+    <?= $this->ztbFormElement($form->get('crd_stud_minc')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Race/Ethnicity</h3>
+
+    <?= $this->ztbFormElement($form->get('non_res_alien_2012')) ?>
+    <?= $this->ztbFormElement($form->get('hisp_anyrace_2012')) ?>
+    <?= $this->ztbFormElement($form->get('ind_alaska_2012')) ?>
+    <?= $this->ztbFormElement($form->get('asian_2012')) ?>
+    <?= $this->ztbFormElement($form->get('blk_2012')) ?>
+    <?= $this->ztbFormElement($form->get('haw_pacific_2012')) ?>
+    <?= $this->ztbFormElement($form->get('white_2012')) ?>
+    <?= $this->ztbFormElement($form->get('two_or_more')) ?>
+    <?= $this->ztbFormElement($form->get('race_eth_unk_2012')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Fiscal Information</h3>
+
+    <?= $this->ztbFormElement($form->get('tuition_fees')) ?>
+    <?= $this->ztbFormElement($form->get('unre_o_rev')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Operating Revenue Sources</h3>
+
+    <?= $this->ztbFormElement($form->get('loc_sour')) ?>
+    <?= $this->ztbFormElement($form->get('state_sour')) ?>
+    <?= $this->ztbFormElement($form->get('tuition_fees_sour')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Campus Environment</h3>
+
+    <?= $this->ztbFormElement($form->get('institutional_demographics_faculty_unionized')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_demographics_staff_unionized')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_demographics_campus_environment')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_control')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_type')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Service Area</h3>
+
+    <?= $this->ztbFormElement($form->get('institutional_demographics_unemployment_rate')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_demographics_median_household_income')) ?>
+
+</div>
+
+
+
+
+<fieldset id="fieldset-buttons" class="well well-small">
+    <div class="control-group" id="control-group-buttons[submit]">
+        <div class="controls" id="controls-buttons[submit]">
+            <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<?= $this->form()->closeTag() ?>
