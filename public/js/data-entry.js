@@ -14,8 +14,8 @@ $(function() {
     $('input.input-wholedollars').before('<span class="add-on">$</span>')
 
     // Percentage
-    $('input.input-percent').wrap('<div class="input-append" />')
-    $('input.input-percent').after('<span class="add-on">%</span>')
+    $('input.input-percent, input.input-wholepercent').wrap('<div class="input-append" />')
+    $('input.input-percent, input.input-wholepercent').after('<span class="add-on">%</span>')
 
 
     // Wrap selected input in well to highlight it

@@ -64,6 +64,7 @@ class Benchmark extends AbstractForm
                     'options' => array(
                         'number' => 'Whole Number',
                         'percent' => 'Percent',
+                        'wholepercent' => 'Whole Percent',
                         'dollars' => 'Dollars',
                         'wholedollars' => 'Whole Dollars',
                         'float' => 'Float',

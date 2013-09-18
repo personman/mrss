@@ -34,22 +34,23 @@ $this->headScript()->appendFile(
     <h3 class="heading">Instructional Environment</h3>
 
     <?= $this->ztbFormElement($form->get('full_time_credit_hours_percent')) ?>
-    <?= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
+    <?//= $this->ztbFormElement($form->get('full_time_credit_hours')) ?>
     <?= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
-    <?= $this->ztbFormElement($form->get('instruction_dev')) ?>
+    <?= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
 
-    <h4 class="subheading">Instructional Modality</h4>
-
-    <div class="subgroup">
-        <?= $this->ztbFormElement($form->get('instruction_online')) ?>
-        <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
-        <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
-    </div>
 
     <?= $this->ztbFormElement($form->get('trans_cred')) ?>
     <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
     <?= $this->ztbFormElement($form->get('dev_crh')) ?>
 
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Instructional Modality</h3>
+
+    <?= $this->ztbFormElement($form->get('instruction_online')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
 </div>
 
 <div class="demo-group">
