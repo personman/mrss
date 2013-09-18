@@ -6,7 +6,7 @@
 ?>
 
 
-<?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=2') ?>
 
 <?php
 $this->headScript()->appendFile(
@@ -37,10 +37,15 @@ $this->headScript()->appendFile(
     <?= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
     <?= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
     <?= $this->ztbFormElement($form->get('instruction_dev')) ?>
-    <?= $this->ztbFormElement($form->get('instruction_online')) ?>
-    <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
-    <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
-    <?= $this->ztbFormElement($form->get('Instructional_support')) ?>
+
+    <h4 class="subheading">Instructional Modality</h4>
+
+    <div class="subgroup">
+        <?= $this->ztbFormElement($form->get('instruction_online')) ?>
+        <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
+        <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
+    </div>
+
     <?= $this->ztbFormElement($form->get('trans_cred')) ?>
     <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
     <?= $this->ztbFormElement($form->get('dev_crh')) ?>
@@ -49,6 +54,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
+    <p class="heading-notes">Please contact the Institutional Research, Institutional Effectiveness or Registrar's office for these data.</p>
 
     <?= $this->ztbFormElement($form->get('ipeds_enr')) ?>
     <?= $this->ztbFormElement($form->get('enrollment_information_duplicated_enrollment')) ?>
@@ -60,8 +66,6 @@ $this->headScript()->appendFile(
     <?= $this->ztbFormElement($form->get('male_cred_stud')) ?>
     <?= $this->ztbFormElement($form->get('fem_cred_stud')) ?>
     <?= $this->ztbFormElement($form->get('first_gen_students')) ?>
-    <?= $this->ztbFormElement($form->get('crd_stud_minc')) ?>
-    <?= $this->ztbFormElement($form->get('fem_cred_stud')) ?>
     <?= $this->ztbFormElement($form->get('crd_stud_minc')) ?>
 
 </div>
@@ -91,6 +95,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Operating Revenue Sources</h3>
+    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. May not add up to 100%.</p>
 
     <?= $this->ztbFormElement($form->get('loc_sour')) ?>
     <?= $this->ztbFormElement($form->get('state_sour')) ?>
@@ -111,6 +116,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Service Area</h3>
+    <p class="heading-notes">Use the legal definition of service area as defined by your State Higher Education Executive Officers Association (SHEEO) and most recent census estimates.</p>
 
     <?= $this->ztbFormElement($form->get('institutional_demographics_unemployment_rate')) ?>
     <?= $this->ztbFormElement($form->get('institutional_demographics_median_household_income')) ?>

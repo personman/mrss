@@ -47,13 +47,23 @@ form#system-admin-switch select {
     margin-left: 150px;
 }
 
+div.subgroup {
+    margin-left: 150px;
+}
+
 h4.subheading {
+    margin-top: 25px;
     margin-left: 180px;
 }
 
 h3.heading {
     border-bottom: 1px solid #CCC;
     margin-top: 30px;
+}
+
+.heading-notes {
+    font-style: italic;
+    margin-bottom: 20px;
 }
 
 /* Only show data definition when the field is focused */
