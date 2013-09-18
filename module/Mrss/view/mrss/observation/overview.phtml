@@ -45,13 +45,14 @@
 </div>
 
 <?php if ($this->currentStudy()->getId() == 2): ?>
-    <p>
-    Click on each category below to enter data.<br><br>
+    <p>Welcome to the MRfSS Data Section.</p>
 
-    To upload please use the <a href="<?= $this->url('data-entry/import') ?>">
-        MRfSS Data Entry Template
-    </a>.<br><br>
-    </p>
+    <p>If  you prefer to upload your data in an Excel  spreadsheet please use the <a href="<?= $this->url('data-entry/import') ?>">Data Entry Template</a>.</p>
+
+    <p>Please follow the links below to enter your institution's data.</p>
+    <br>
+    <br>
+
 <?php endif ?>
 
 <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
@@ -60,14 +61,7 @@
 
         </div>
 
-        <div class="span3">
-            <div class="progress benchmarkGroupProgress">
-                <div class="bar" style="width: <?= $benchmarkGroup->getCompletionPercentageForObservation($observation) ?>%;
-                    "></div>
-            </div>
-        </div>
-
-        <div class="span8">
+        <div class="span4">
             <a href="<?= $this->url(
                 'data-entry/edit',
                 array(
@@ -76,6 +70,13 @@
             ) ?>">
                 <?= $benchmarkGroup->getName() ?>
             </a>
+        </div>
+
+        <div class="span7">
+            <div class="progress benchmarkGroupProgress">
+                <div class="bar" style="width: <?= $benchmarkGroup->getCompletionPercentageForObservation($observation) ?>%;
+                    "></div>
+            </div>
         </div>
 
     </div>
