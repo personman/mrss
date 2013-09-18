@@ -43,7 +43,7 @@ $(function() {
 
             console.log(helpDiv.html())
 
-            if (helpDiv.html().length) {
+            if (helpDiv.html().trim().length) {
                 helpDiv.show()
                 helpRow.show()
             }
