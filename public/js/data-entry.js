@@ -36,8 +36,19 @@ $(function() {
             var helpRow = $(this).parents('tr').next()
             var helpType = getHelpType($(this))
             helpRow.find('div').hide()
-            helpRow.find('.' + helpType + '-help').show()
-            helpRow.show()
+            //helpRow.find('.' + helpType + '-help').show()
+            //helpRow.show()
+
+            helpDiv = helpRow.find('.' + helpType + '-help')
+
+            console.log(helpDiv.html())
+
+            if (helpDiv.html().length) {
+                helpDiv.show()
+                helpRow.show()
+            }
+
+
         }).blur(function() {
             $(this).parents('tr').next().hide()
         });
