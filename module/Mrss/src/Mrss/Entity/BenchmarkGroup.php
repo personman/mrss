@@ -193,6 +193,27 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $nonComputedBenchmarks;
     }
 
+    /**
+     * Leave out computed benchmarks and those those excluded from completion calc
+     *
+     * @param $year
+     * @return \Mrss\Entity\Benchmark[]
+     */
+    public function getBenchmarksForCompletionCalculationForYear($year)
+    {
+        $benchmarks = $this->getBenchmarksForYear($year);
+        $benchmarksForCompletion = array();
+
+        foreach ($benchmarks as $benchmark) {
+            if ($benchmark->getInputType() != 'computed'
+                && !$benchmark->getExcludeFromCompletion()) {
+                $benchmarksForCompletion[] = $benchmark;
+            }
+        }
+
+        return $benchmarksForCompletion;
+    }
+
     public function setStudy(Study $study)
     {
         $this->study = $study;
@@ -231,7 +252,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      */
     public function getCompletionPercentageForObservation(Observation $observation)
     {
-        $total = count($this->getNonComputedBenchmarksForYear($observation->getYear()));
+        $total = count($this->getBenchmarksForCompletionCalculationForYear($observation->getYear()));
         $completed = $this->countCompleteFieldsInObservation($observation);
 
         if ($total > 0) {
@@ -252,8 +273,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     public function countCompleteFieldsInObservation(Observation $observation)
     {
         $complete = 0;
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
 
-        foreach ($this->getNonComputedBenchmarksForYear($observation->getYear()) as $benchmark) {
+        foreach ($benchmarks as $benchmark) {
             $value = $observation->get($benchmark->getDbColumn());
 
             if ($value != null) {

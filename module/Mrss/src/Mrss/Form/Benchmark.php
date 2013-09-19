@@ -124,6 +124,16 @@ class Benchmark extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'excludeFromCompletion',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Exclude From Completion Calculations'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 

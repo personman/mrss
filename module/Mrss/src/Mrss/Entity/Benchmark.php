@@ -83,6 +83,10 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      */
     protected $equation;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $excludeFromCompletion;
 
     protected $benchmarkModel;
     protected $completionPercentages;
@@ -231,6 +235,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getOptions()
     {
         return $this->options;
+    }
+
+    public function setExcludeFromCompletion($excludeFromCompletion)
+    {
+        $this->excludeFromCompletion = $excludeFromCompletion;
+
+        return $this;
+    }
+
+    public function getExcludeFromCompletion()
+    {
+        return $this->excludeFromCompletion;
     }
 
     /**

@@ -310,6 +310,9 @@ class Observation
     /** @ORM\Column(type="integer", nullable=true) */
     protected $part_time_credit_hours;
 
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $full_time_credit_hours;
+
     /** @ORM\Column(type="float", nullable=true) */
     protected $full_time_credit_hours_percent;
 
