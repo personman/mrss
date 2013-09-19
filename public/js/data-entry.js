@@ -31,17 +31,14 @@ $(function() {
 
 
     // Show grid help text
+    var submitClicked = false
     $('.data-entry-grid input')
         .focus(function() {
             var helpRow = $(this).parents('tr').next()
             var helpType = getHelpType($(this))
             helpRow.find('div').hide()
-            //helpRow.find('.' + helpType + '-help').show()
-            //helpRow.show()
 
-            helpDiv = helpRow.find('.' + helpType + '-help')
-
-            console.log(helpDiv.html())
+            var helpDiv = helpRow.find('.' + helpType + '-help')
 
             if (helpDiv.html().trim().length) {
                 helpDiv.show()
@@ -50,9 +47,16 @@ $(function() {
 
 
         }).blur(function() {
-            $(this).parents('tr').next().hide()
+            if (!submitClicked) {
+                $(this).parents('tr').next().hide()
+            }
         });
 
+    // This prevents the hiding of the help text when clicking a button
+    // That was causing the button to jump away from the click.
+    $('.btn').mousedown(function() {
+        submitClicked = true
+    })
 
     // Managerial grid page
     if ($('.data-entry-grid').length) {
@@ -67,6 +71,14 @@ $(function() {
         showOrHideSpecifyFields()
         $('.other-field').change(function() {
             showOrHideSpecifyFields()
+        })
+    }
+
+    // Demographics
+    if ($('#race-ethnicity').length) {
+        updateRaceTotal()
+        $('#race-ethnicity input').change(function() {
+            updateRaceTotal()
         })
     }
 
@@ -143,4 +155,27 @@ function getHelpType(element)
 
         return helpType
     }
+}
+
+function updateRaceTotal()
+{
+    var total = 0
+    $('#race-ethnicity input').each(function() {
+
+        var percent = parseFloat($(this).val())
+
+        if (isNaN(percent)) {
+            percent = 0
+        }
+
+        total = total + percent
+    })
+
+    // Validation
+    if (total > 100) {
+        $('#race-ethnicity-total').addClass('error')
+    }
+
+    $('#race-ethnicity-total-value').html(total)
+
 }

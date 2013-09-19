@@ -7,6 +7,7 @@
 
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=2') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css?v=2') ?>
 
 <?php
 $this->headScript()->appendFile(
@@ -30,13 +31,77 @@ $this->headScript()->appendFile(
 <?php $form->prepare() ?>
 <?= $this->form()->openTag($form) ?>
 
+<?php
+$tableConfig = array(
+    '% Credit Hours Taught' => array(
+        'full_time_credit_hours_percent',
+        'part_time_credit_hours_percent',
+    ),
+    'Number of Credit Hours Taught' => array(
+        'full_time_credit_hours',
+        'part_time_credit_hours'
+    )
+);
+
+$colClassConfig = array('full', 'part');
+
+?>
 <div class="demo-group">
     <h3 class="heading">Instructional Environment</h3>
 
-    <?= $this->ztbFormElement($form->get('full_time_credit_hours_percent')) ?>
+    <table class="table table-condensed table-bordered data-entry-grid">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Full Time</th>
+            <th>Part Time</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <?php foreach ($tableConfig as $label => $row): ?>
+            <tr>
+                <td class="grid-category">
+                    <?= $label ?>
+                </td>
+
+                <?php foreach ($row as $i => $field): ?>
+                    <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                        id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                        <?= $this->simpleFormElement($form->get($field)) ?>
+                    </td>
+                <?php endforeach ?>
+            </tr>
+
+            <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help">
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
+
+                </td>
+            </tr>
+        <?php endforeach ?>
+
+        <?php /*<tr>
+            <td class="grid-category">Total</td>
+            <td id="full-time-total"></td>
+            <td id="part-time-total"></td>
+        </tr>*/ ?>
+
+        </tbody>
+    </table>
+
+
+    <?//= $this->ztbFormElement($form->get('full_time_credit_hours_percent')) ?>
     <?//= $this->ztbFormElement($form->get('full_time_credit_hours')) ?>
-    <?= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
-    <?= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
+    <?//= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
+    <?//= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
 
 
     <?= $this->ztbFormElement($form->get('trans_cred')) ?>
@@ -71,8 +136,90 @@ $this->headScript()->appendFile(
 
 </div>
 
-<div class="demo-group">
+<div class="demo-group" id="race-ethnicity">
     <h3 class="heading">Race/Ethnicity</h3>
+
+    <?php /*
+    $tableConfig = array(
+        'Nonresident Alien' => array(
+            'non_res_alien_2012',
+        ),
+        'Hispanic of Any Race' => array(
+            'hisp_anyrace_2012',
+        ),
+        'American Indian or Alaskan Native' => array(
+            'ind_alaska_2012'
+        ),
+        'Asian' => array(
+            'asian_2012'
+        ),
+        'Black of African American' => array(
+            'blk_2012'
+        ),
+        'Native Hawaiian or Other Pacific Islander' => array(
+            'haw_pacific_2012'
+        ),
+        'White' => array(
+            'white_2012'
+        ),
+        'Two or More Races' => array(
+            'two_or_more'
+        ),
+        'Race and Ethnicity Unknown' => array(
+            'race_eth_unk_2012'
+        )
+    );
+
+    $colClassConfig = array('full');
+
+    ?>
+
+    <table class="table table-condensed table-bordered data-entry-grid">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Race/Ethnicity</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <?php foreach ($tableConfig as $label => $row): ?>
+            <tr>
+                <td class="grid-category">
+                    <?= $label ?>
+                </td>
+
+                <?php foreach ($row as $i => $field): ?>
+                    <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                        id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                        <?= $this->simpleFormElement($form->get($field)) ?>
+                    </td>
+                <?php endforeach ?>
+            </tr>
+
+            <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help">
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
+
+                </td>
+            </tr>
+        <?php endforeach ?>
+
+        <tr>
+            <td class="grid-category">Total</td>
+            <td id="full-time-total"></td>
+        </tr>
+
+        </tbody>
+    </table>
+    */ ?>
 
     <?= $this->ztbFormElement($form->get('non_res_alien_2012')) ?>
     <?= $this->ztbFormElement($form->get('hisp_anyrace_2012')) ?>
@@ -83,6 +230,17 @@ $this->headScript()->appendFile(
     <?= $this->ztbFormElement($form->get('white_2012')) ?>
     <?= $this->ztbFormElement($form->get('two_or_more')) ?>
     <?= $this->ztbFormElement($form->get('race_eth_unk_2012')) ?>
+
+    <div class="control-group" id="control-group-race_eth_unk_2012">
+        <label class="control-label" for="race_eth_unk_2012">Total</label>
+        <div class="controls" id="race-ethnicity-total">
+            <span id="race-ethnicity-total-value">0</span>%
+            <div class="race-ethnicity-error">
+                Total should be 100% or less.
+            </div>
+        </div>
+    </div>
+
 
 </div>
 

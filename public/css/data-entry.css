@@ -73,3 +73,19 @@ h3.heading {
 .control-group.focus .help-block {
     display: block;
 }
+
+/* Demographics */
+#race-ethnicity-total {
+    padding: 5px 0px;
+    font-weight: bold;
+}
+#race-ethnicity-total.error {
+    color: #B94A48;
+}
+
+.race-ethnicity-error {
+    display: none;
+}
+.error .race-ethnicity-error {
+    display: block;
+}
