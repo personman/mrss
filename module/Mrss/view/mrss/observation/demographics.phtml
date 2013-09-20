@@ -49,6 +49,12 @@ $colClassConfig = array('full', 'part');
 <div class="demo-group">
     <h3 class="heading">Instructional Environment</h3>
 
+
+    <?= $this->ztbFormElement($form->get('trans_cred')) ?>
+    <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
+    <?= $this->ztbFormElement($form->get('dev_crh')) ?>
+
+
     <table class="table table-condensed table-bordered data-entry-grid">
         <thead>
         <tr>
@@ -102,11 +108,6 @@ $colClassConfig = array('full', 'part');
     <?//= $this->ztbFormElement($form->get('full_time_credit_hours')) ?>
     <?//= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
     <?//= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
-
-
-    <?= $this->ztbFormElement($form->get('trans_cred')) ?>
-    <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
-    <?= $this->ztbFormElement($form->get('dev_crh')) ?>
 
 </div>
 
