@@ -1,3 +1,5 @@
+var formErrorMessages = {}
+
 $(function() {
     // Some special formatting for form 9
     $('#control-group-institutional_demographics_companies_less_than_50').before(
@@ -87,14 +89,30 @@ $(function() {
         $('#control-group-revenue_federal').before("<h3 class='heading'>Revenue Base</h3><h4 class='subheading'>Public Sources</h4>")
         $('#control-group-revenue_contract_training').before("<h3 class='heading'>Gross Revenue</h3>")
     }
+
+    // Let's allow for some ad-hoc form validation
+    $('form').submit(function() {
+
+        if (Object.keys(formErrorMessages).length) {
+            var message;
+            message = ''
+            for (var prop in formErrorMessages) {
+                message = message + formErrorMessages[prop] + '  '
+            }
+
+            alert(message)
+            return false
+        }
+    })
 })
 
 function updateGridTotals()
 {
     var columns = ['full', 'part', 'other']
     for (i in columns) {
+        var column = columns[i]
         // The inputs in the column:
-        var inputs = $('.data-entry-grid td.' + columns[i] + '-value input')
+        var inputs = $('.data-entry-grid td.' + column + '-value input')
         var total = 0
         inputs.each(function(i, e) {
             value = parseFloat($(e).val())
@@ -105,15 +123,17 @@ function updateGridTotals()
         })
 
         // Show the total
-        var totalTd = $('#' + columns[i] + '-time-total')
+        var totalTd = $('#' + column + '-time-total')
         totalTd.html(total + '%')
 
         // Handle errors
         if (total > 100) {
             totalTd.addClass('error')
             totalTd.html(totalTd.html() + "<br>Total should be 100% or less.")
+            formErrorMessages['percent' + column] = 'Total of percentages should be 100% or less'
         } else {
             totalTd.removeClass('error')
+            delete formErrorMessages['percent' + column]
         }
 
     }
@@ -174,6 +194,10 @@ function updateRaceTotal()
     // Validation
     if (total > 100) {
         $('#race-ethnicity-total').addClass('error')
+        formErrorMessages.race = "Race/ethnicity percentages must total to 100% or less"
+    } else {
+        $('#race-ethnicity-total').removeClass('error')
+        delete formErrorMessages.race
     }
 
     $('#race-ethnicity-total-value').html(total)
