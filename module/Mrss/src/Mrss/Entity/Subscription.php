@@ -40,7 +40,7 @@ class Subscription
     protected $study;
 
     /**
-     * @ORM\OneToOne(targetEntity="Observation")
+     * @ORM\ManyToOne(targetEntity="Observation")
      */
     protected $observation;
 
