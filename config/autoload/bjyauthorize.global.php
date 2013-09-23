@@ -78,6 +78,11 @@ return array(
                     'action' => 'view',
                     'roles' => array('guest')
                 ),
+                array(
+                    'controller' => 'ipedsInstitutions',
+                    'action' => 'search',
+                    'roles' => array('guest')
+                ),
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'observations',
@@ -152,6 +157,11 @@ return array(
                 ),
                 array(
                     'controller' => 'users',
+                    'roles' => array('admin')
+                ),
+                array(
+                    'controller' => 'ipedsInstitutions',
+                    'action' => 'import',
                     'roles' => array('admin')
                 ),
                 // Since the background action is fired by console, lift guard

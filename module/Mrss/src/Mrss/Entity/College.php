@@ -36,7 +36,7 @@ class College
     protected $address2;
 
     /**
-     * @ORM\Column(type="string", length=10, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $city;
 

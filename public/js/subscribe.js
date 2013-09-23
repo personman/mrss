@@ -1,5 +1,6 @@
 $(function() {
     handleSameAsCheckbox()
+    setUpAutocomplete()
 })
 
 // Add a checkbox to duplicate data from admin to data contacts
@@ -49,5 +50,25 @@ function copyValues(from, to)
 
         // Make the copy
         to.find('#' + toId).val(value)
+    })
+}
+
+/**
+ * As the user types the college name in the subscription form, offer autocomplete
+ * options. When they select one, populate the ipeds, city and state.
+ */
+function setUpAutocomplete()
+{
+    $('#institution-name').autocomplete({
+        source: '/ipeds-institutions/search',
+        select: function(event, ui) {
+            ipeds = ui.item.ipeds
+            city = ui.item.city
+            state = ui.item.state
+
+            $('#institution-ipdeds').val(ipeds)
+            $('#institution-city').val(city)
+            $('#institution-state').val(state)
+        }
     })
 }

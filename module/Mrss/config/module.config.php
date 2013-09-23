@@ -518,6 +518,38 @@ return array(
                 ),
                 'may_terminate' => true
             ),
+            'ipeds-institutions' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/ipeds-institutions',
+                    'defaults' => array(
+                        'controller' => 'ipedsInstitutions',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'import' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import',
+                            'defaults' => array(
+                                'action' => 'import'
+                            )
+                        )
+                    ),
+                    'search' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/search',
+                            'defaults' => array(
+                                'action' => 'search',
+                                'term' => null
+                            )
+                        )
+                    )
+                )
+            ),
             'glossary' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -657,6 +689,7 @@ return array(
             'admin' => 'Mrss\Controller\AdminController',
             'import' => 'Mrss\Controller\ImportController',
             'colleges' => 'Mrss\Controller\CollegeController',
+            'ipedsInstitutions' => 'Mrss\Controller\IpedsInstitutionController',
             'systems' => 'Mrss\Controller\SystemController',
             'observations' => 'Mrss\Controller\ObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',
