@@ -21,6 +21,11 @@
     vertical-align: middle !important;
 }
 
+.data-entry-grid td.grid-category {
+    text-align: left;
+    padding-left: 10px;
+}
+
 .data-entry-grid.table tr.help-text td.grid-category {
     border-top: none;
 }
@@ -28,6 +33,7 @@
 .data-entry-grid.table tr.help-text div {
     width: 400px;
     margin: 5px auto;
+    text-align: left;
 }
 
 .data-entry-grid tr.help-text {

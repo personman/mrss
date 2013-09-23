@@ -21,7 +21,7 @@ $(function() {
 
 
     // Wrap selected input in well to highlight it
-    if (!$('.data-entry-grid').length) {
+    //if (!$('.data-entry-grid').length) {
         $('.form-horizontal input, .form-horizontal select')
             .focus(function(){
                 $(this).parents('.control-group').addClass('focus');
@@ -29,7 +29,7 @@ $(function() {
             function(){
                 $(this).parents('.control-group').removeClass('focus');
             });
-    }
+    //}
 
 
     // Show grid help text
@@ -46,10 +46,9 @@ $(function() {
                 helpDiv.show()
                 helpRow.show()
             }
-
-
         }).blur(function() {
-            if (!submitClicked && !$(this).attr('id').search('other_specify')) {
+            if (!submitClicked && $(this).attr('id').search('other_specify') == -1) {
+                console.log($(this).attr('id').search('other_specify'))
                 $(this).parents('tr').next().hide()
             }
         });
