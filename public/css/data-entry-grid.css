@@ -14,10 +14,10 @@
 
 .data-entry-grid td.grid-category, .data-entry-grid th {
     font-weight: bold;
-    font-size: 108%;
+    /*font-size: 108%;*/
     text-align: center;
-    background: #888;
-    color: #eee;
+    background: #DDD;
+    color: #000;
     vertical-align: middle !important;
 }
 
