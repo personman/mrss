@@ -63,12 +63,16 @@ function setUpAutocomplete()
         source: '/ipeds-institutions/search',
         select: function(event, ui) {
             ipeds = ui.item.ipeds
+            address = ui.item.address
             city = ui.item.city
             state = ui.item.state
+            zip = ui.item.zip
 
             $('#institution-ipdeds').val(ipeds)
+            $('#institution-address').val(address)
             $('#institution-city').val(city)
             $('#institution-state').val(state)
+            $('#institution-zip').val(zip)
         }
     })
 }

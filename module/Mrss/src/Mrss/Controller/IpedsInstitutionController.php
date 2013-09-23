@@ -32,8 +32,10 @@ class IpedsInstitutionController extends AbstractActionController
                 'label' => $institution->getName(),
                 'value' => $institution->getName(),
                 'ipeds' => $institution->getIpeds(),
+                'address' => $institution->getAddress(),
                 'city' => $institution->getCity(),
-                'state' => $institution->getState()
+                'state' => $institution->getState(),
+                'zip' => $institution->getZip()
             );
         }
         //var_dump($institutions);
@@ -49,6 +51,7 @@ class IpedsInstitutionController extends AbstractActionController
     {
         $file = 'data/imports/ipeds_institutions.csv';
         $model = $this->getServiceLocator()->get('model.ipedsInstitution');
+        $collegeModel = $this->getServiceLocator()->get('model.college');
 
         if (($handle = fopen($file, "r")) !== FALSE) {
             $headerSkipped = false;
@@ -66,18 +69,27 @@ class IpedsInstitutionController extends AbstractActionController
                 $state = $data[3];
 
                 // Check for a duplicate
-                $dupe = $model->findOneByIpeds($ipeds);
+                $institution = $model->findOneByIpeds($ipeds);
+                $college = $collegeModel->findOneByIpeds($ipeds);
 
-                if (!$dupe) {
+                if (!$institution) {
                     $institution = new IpedsInstitution();
-                    $institution->setIpeds($ipeds);
-                    $institution->setName($name);
-                    $institution->setCity($city);
-                    $institution->setState($state);
-
-                    $model->save($institution);
-                    $count++;
                 }
+
+                $institution->setIpeds($ipeds);
+                $institution->setName($name);
+                $institution->setCity($city);
+                $institution->setState($state);
+
+                // Load the address and zip from our subscribers, if possible
+                if ($college) {
+                    $institution->setAddress($college->getAddress());
+                    $institution->setZip($college->getZip());
+                }
+
+                $model->save($institution);
+                $count++;
+
             }
 
             $this->getServiceLocator()->get('em')->flush();

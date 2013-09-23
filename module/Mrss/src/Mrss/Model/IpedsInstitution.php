@@ -29,7 +29,9 @@ class IpedsInstitution extends AbstractModel
 
 
         $em = $this->getEntityManager();
-        $q = $em->createQuery("SELECT i FROM Mrss\Entity\IpedsInstitution i WHERE i.name LIKE ?1");
+        $q = $em->createQuery(
+            "SELECT i FROM Mrss\Entity\IpedsInstitution i WHERE i.name LIKE ?1"
+        );
         $q->setParameter(1, '%' . $term . '%');
 
         try {
