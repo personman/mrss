@@ -42,14 +42,14 @@ $(function() {
 
             var helpDiv = helpRow.find('.' + helpType + '-help')
 
-            if (helpDiv.html().trim().length) {
+            if (helpDiv.html() && helpDiv.html().trim().length) {
                 helpDiv.show()
                 helpRow.show()
             }
 
 
         }).blur(function() {
-            if (!submitClicked) {
+            if (!submitClicked && !$(this).attr('id').search('other_specify')) {
                 $(this).parents('tr').next().hide()
             }
         });
