@@ -16,6 +16,14 @@
     </p>
 <?php endif ?>
 
+<?php if ($this->currentStudy()->getId() == 2): ?>
+    <p>Welcome to the Maximizing Resources for Student Success Data Section.</p>
+
+    <p>Please follow the links below to enter your institution's data.</p>
+    <br>
+
+
+<?php endif ?>
 
 
 <div class="well">
@@ -44,16 +52,6 @@
 
 </div>
 
-<?php if ($this->currentStudy()->getId() == 2): ?>
-    <p>Welcome to the MRfSS Data Section.</p>
-
-    <p>If  you prefer to upload your data in an Excel  spreadsheet please use the <a href="<?= $this->url('data-entry/import') ?>">Data Entry Template</a>.</p>
-
-    <p>Please follow the links below to enter your institution's data.</p>
-    <br>
-    <br>
-
-<?php endif ?>
 
 <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
     <div class="row row-fluid">
@@ -81,3 +79,7 @@
 
     </div>
 <?php endforeach ?>
+
+<br>
+
+<p>If  you prefer to upload your data in an Excel  spreadsheet please use the <a href="<?= $this->url('data-entry/import') ?>">Data Entry Template</a>.</p>
