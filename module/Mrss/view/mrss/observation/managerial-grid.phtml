@@ -83,10 +83,12 @@ $this->headScript()->appendFile(
 <?php $form->prepare() ?>
 <?= $this->form()->openTag($form) ?>
 
-<h3 class="table-title">Percent of Time Spent on Activities</h3>
-
 <table class="table table-condensed table-bordered data-entry-grid">
     <thead>
+    <tr>
+        <th></th>
+        <th colspan="3" class="top-table-heading">Percent of Time Spent on Activities</th>
+    </tr>
         <tr>
             <th></th>
             <th>Full Time</th>
