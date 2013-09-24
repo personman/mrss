@@ -23,16 +23,20 @@ class IpedsInstitution extends AbstractModel
         return $this->getRepository()->findOneBy(array('ipeds' => $ipeds));
     }
 
-    public function searchByName($term)
+    public function searchByName($term, $limit = 10)
     {
         $term = strtolower($term);
-
+        $limit = intval($limit);
 
         $em = $this->getEntityManager();
         $q = $em->createQuery(
-            "SELECT i FROM Mrss\Entity\IpedsInstitution i WHERE i.name LIKE ?1"
+            "SELECT i
+            FROM Mrss\Entity\IpedsInstitution i
+            WHERE i.name LIKE ?1
+            ORDER BY i.name"
         );
         $q->setParameter(1, '%' . $term . '%');
+        $q->setMaxResults($limit);
 
         try {
             $results = $q->getResult();

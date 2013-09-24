@@ -61,6 +61,7 @@ function setUpAutocomplete()
 {
     $('#institution-name').autocomplete({
         source: '/ipeds-institutions/search',
+        minLength: 3,
         select: function(event, ui) {
             ipeds = ui.item.ipeds
             address = ui.item.address
