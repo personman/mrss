@@ -56,3 +56,6 @@ td.error {
 #specify-other {
     display: none;
 }
+.table-title {
+    text-align: center;
+}
