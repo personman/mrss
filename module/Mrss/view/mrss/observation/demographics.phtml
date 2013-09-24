@@ -33,11 +33,11 @@ $this->headScript()->appendFile(
 
 <?php
 $tableConfig = array(
-    '% Credit Hours Taught' => array(
+    '% Credit Hours Taught by' => array(
         'full_time_credit_hours_percent',
         'part_time_credit_hours_percent',
     ),
-    'Number of Credit Hours Taught' => array(
+    'Number of Credit Hours Taught by' => array(
         'full_time_credit_hours',
         'part_time_credit_hours'
     )
@@ -58,6 +58,10 @@ $colClassConfig = array('full', 'part');
 
     <table class="table table-condensed table-bordered data-entry-grid">
         <thead>
+        <tr>
+            <th></th>
+            <th colspan="2" class="top-table-heading">Teaching Load</th>
+        </tr>
         <tr>
             <th></th>
             <th>Full Time</th>
