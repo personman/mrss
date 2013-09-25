@@ -34,6 +34,10 @@ return array(
                         'label' => 'NCCET',
                         'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
                     ),
+                    'partners' => array(
+                        'label' => 'Project Partners',
+                        'uri' => '/partners'
+                    ),
                     array(
                         'label' => 'Our Staff',
                         'uri' => '/staff'

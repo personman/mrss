@@ -98,6 +98,11 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['about']['pages']['nccet']);
         }
 
+        // Hide the partners page for non-MRSS sites
+        if ($currentStudy->getId() != 2) {
+            unset($pages['about']['pages']['partners']);
+        }
+
         // Don't show the glossary for MRSS yet
         if ($currentStudy->getId() == 2) {
             unset($pages['help']['pages']['glossary']);
