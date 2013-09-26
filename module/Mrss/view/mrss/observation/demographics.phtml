@@ -1,0 +1,305 @@
+<?php
+/**
+ * This is a special data-entry template that displays the demographics form
+ * with section headers
+ */
+?>
+
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=2') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css?v=2') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+<?= $this->systemAdmin() ?>
+
+<h2>
+    <?= $benchmarkGroup->getName() ?>
+</h2>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+<?php
+$tableConfig = array(
+    '% Credit Hours Taught by' => array(
+        'full_time_credit_hours_percent',
+        'part_time_credit_hours_percent',
+    ),
+    'Number of Credit Hours Taught by' => array(
+        'full_time_credit_hours',
+        'part_time_credit_hours'
+    )
+);
+
+$colClassConfig = array('full', 'part');
+
+?>
+<div class="demo-group">
+    <h3 class="heading">Instructional Environment</h3>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
+
+
+    <?= $this->ztbFormElement($form->get('trans_cred')) ?>
+    <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
+    <?= $this->ztbFormElement($form->get('dev_crh')) ?>
+
+
+    <table class="table table-condensed table-bordered data-entry-grid">
+        <thead>
+        <tr>
+            <th></th>
+            <th colspan="2" class="top-table-heading">Teaching Load</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th>Full Time</th>
+            <th>Part Time</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <?php foreach ($tableConfig as $label => $row): ?>
+            <tr>
+                <td class="grid-category">
+                    <?= $label ?>
+                </td>
+
+                <?php foreach ($row as $i => $field): ?>
+                    <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                        id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                        <?= $this->simpleFormElement($form->get($field)) ?>
+                    </td>
+                <?php endforeach ?>
+            </tr>
+
+            <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help">
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
+
+                </td>
+            </tr>
+        <?php endforeach ?>
+
+        <?php /*<tr>
+            <td class="grid-category">Total</td>
+            <td id="full-time-total"></td>
+            <td id="part-time-total"></td>
+        </tr>*/ ?>
+
+        </tbody>
+    </table>
+
+
+    <?//= $this->ztbFormElement($form->get('full_time_credit_hours_percent')) ?>
+    <?//= $this->ztbFormElement($form->get('full_time_credit_hours')) ?>
+    <?//= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
+    <?//= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Instructional Modality</h3>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
+
+    <?= $this->ztbFormElement($form->get('instruction_online')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
+    <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Enrollment Information</h3>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Please contact the Institutional Research, Institutional Effectiveness or Registrar's office for these data.</p>
+
+    <?= $this->ztbFormElement($form->get('ipeds_enr')) ?>
+    <?= $this->ztbFormElement($form->get('enrollment_information_duplicated_enrollment')) ?>
+    <?= $this->ztbFormElement($form->get('ft_cr_head')) ?>
+    <?= $this->ztbFormElement($form->get('pt_cr_head')) ?>
+    <?= $this->ztbFormElement($form->get('hs_stud_hdct')) ?>
+    <?= $this->ztbFormElement($form->get('hs_stud_crh')) ?>
+    <?= $this->ztbFormElement($form->get('pell_grant_rec')) ?>
+    <?= $this->ztbFormElement($form->get('male_cred_stud')) ?>
+    <?= $this->ztbFormElement($form->get('fem_cred_stud')) ?>
+    <?= $this->ztbFormElement($form->get('first_gen_students')) ?>
+    <?= $this->ztbFormElement($form->get('crd_stud_minc')) ?>
+
+</div>
+
+<div class="demo-group" id="race-ethnicity">
+    <h3 class="heading">Race/Ethnicity</h3>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
+
+    <?php /*
+    $tableConfig = array(
+        'Nonresident Alien' => array(
+            'non_res_alien_2012',
+        ),
+        'Hispanic of Any Race' => array(
+            'hisp_anyrace_2012',
+        ),
+        'American Indian or Alaskan Native' => array(
+            'ind_alaska_2012'
+        ),
+        'Asian' => array(
+            'asian_2012'
+        ),
+        'Black of African American' => array(
+            'blk_2012'
+        ),
+        'Native Hawaiian or Other Pacific Islander' => array(
+            'haw_pacific_2012'
+        ),
+        'White' => array(
+            'white_2012'
+        ),
+        'Two or More Races' => array(
+            'two_or_more'
+        ),
+        'Race and Ethnicity Unknown' => array(
+            'race_eth_unk_2012'
+        )
+    );
+
+    $colClassConfig = array('full');
+
+    ?>
+
+    <table class="table table-condensed table-bordered data-entry-grid">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Race/Ethnicity</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <?php foreach ($tableConfig as $label => $row): ?>
+            <tr>
+                <td class="grid-category">
+                    <?= $label ?>
+                </td>
+
+                <?php foreach ($row as $i => $field): ?>
+                    <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                        id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                        <?= $this->simpleFormElement($form->get($field)) ?>
+                    </td>
+                <?php endforeach ?>
+            </tr>
+
+            <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help">
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
+
+                </td>
+            </tr>
+        <?php endforeach ?>
+
+        <tr>
+            <td class="grid-category">Total</td>
+            <td id="full-time-total"></td>
+        </tr>
+
+        </tbody>
+    </table>
+    */ ?>
+
+    <?= $this->ztbFormElement($form->get('non_res_alien_2012')) ?>
+    <?= $this->ztbFormElement($form->get('hisp_anyrace_2012')) ?>
+    <?= $this->ztbFormElement($form->get('ind_alaska_2012')) ?>
+    <?= $this->ztbFormElement($form->get('asian_2012')) ?>
+    <?= $this->ztbFormElement($form->get('blk_2012')) ?>
+    <?= $this->ztbFormElement($form->get('haw_pacific_2012')) ?>
+    <?= $this->ztbFormElement($form->get('white_2012')) ?>
+    <?= $this->ztbFormElement($form->get('two_or_more')) ?>
+    <?= $this->ztbFormElement($form->get('race_eth_unk_2012')) ?>
+
+    <div class="control-group" id="control-group-race_eth_unk_2012">
+        <label class="control-label" for="race_eth_unk_2012">Total</label>
+        <div class="controls" id="race-ethnicity-total">
+            <span id="race-ethnicity-total-value">0</span>%
+            <div class="race-ethnicity-error">
+                Total should be 100% or less.
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Fiscal Information</h3>
+    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
+
+    <?= $this->ztbFormElement($form->get('tuition_fees')) ?>
+    <?= $this->ztbFormElement($form->get('unre_o_rev')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Operating Revenue Sources</h3>
+    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. May not add up to 100%.</p>
+
+    <?= $this->ztbFormElement($form->get('loc_sour')) ?>
+    <?= $this->ztbFormElement($form->get('state_sour')) ?>
+    <?= $this->ztbFormElement($form->get('tuition_fees_sour')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Campus Environment</h3>
+
+    <?= $this->ztbFormElement($form->get('institutional_demographics_faculty_unionized')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_demographics_staff_unionized')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_demographics_campus_environment')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_control')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_type')) ?>
+
+</div>
+
+<div class="demo-group">
+    <h3 class="heading">Service Area</h3>
+    <p class="heading-notes">Use the legal definition of service area as defined by your State Higher Education Executive Officers Association (SHEEO) and most recent census estimates.</p>
+
+    <?= $this->ztbFormElement($form->get('institutional_demographics_unemployment_rate')) ?>
+    <?= $this->ztbFormElement($form->get('institutional_demographics_median_household_income')) ?>
+
+</div>
+
+
+
+
+<fieldset id="fieldset-buttons" class="well well-small">
+    <div class="control-group" id="control-group-buttons[submit]">
+        <div class="controls" id="controls-buttons[submit]">
+            <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<?= $this->form()->closeTag() ?>

@@ -86,14 +86,21 @@ class NavigationFactory extends DefaultNavigationFactory
                 unset($pages['data-entry']);
             }
         } else {
+            // Hide some pages from non-logged-in users
             unset($pages['data-entry']);
             unset($pages['account']);
+            unset($pages['help']);
         }
 
         // Customize menu by study
         // Only show NCCET for workforce
         if ($currentStudy->getId() != 3) {
             unset($pages['about']['pages']['nccet']);
+        }
+
+        // Hide the partners page for non-MRSS sites
+        if ($currentStudy->getId() != 2) {
+            unset($pages['about']['pages']['partners']);
         }
 
         // Don't show the glossary for MRSS yet

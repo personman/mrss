@@ -1,0 +1,99 @@
+<?php
+/**
+ * This is a special data-entry template that displays this form as a table
+ */
+
+$tableConfig = array(
+    'Instructional Technology Support' => array(
+        'as_tech_total',
+        'as_tech_contract',
+    ),
+    'Library Services' => array(
+        'as_library_total',
+        'as_library_contract',
+    ),
+    'Experiential Education' => array(
+        'as_experiential_total',
+        'as_experiential_contract',
+    ),
+);
+
+$colClassConfig = array('expenditures', 'contract');
+
+?>
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+<?= $this->systemAdmin() ?>
+
+<h2>
+    <?= $benchmarkGroup->getName() ?>
+</h2>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+<table class="table table-condensed table-bordered data-entry-grid">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Salaries and Benefits</th>
+        <th>Contracted Services</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <?php foreach ($tableConfig as $label => $row): ?>
+        <tr>
+            <td class="grid-category">
+                <?= $label ?>
+            </td>
+
+            <?php foreach ($row as $i => $field): ?>
+                <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                    id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                    <?= $this->simpleFormElement($form->get($field)) ?>
+                </td>
+            <?php endforeach ?>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="<?= count($row) ?>">
+
+                <?php foreach ($row as $i => $field): ?>
+                    <div class="<?= $colClassConfig[$i] ?>-help">
+                        <?= $form->get($field)->getOption('help-block') ?>
+                    </div>
+                <?php endforeach ?>
+
+            </td>
+        </tr>
+    <?php endforeach ?>
+
+    </tbody>
+</table>
+
+<fieldset id="fieldset-buttons" class="well well-small">
+    <div class="control-group" id="control-group-buttons[submit]">
+        <div class="controls" id="controls-buttons[submit]">
+            <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<?= $this->form()->closeTag() ?>

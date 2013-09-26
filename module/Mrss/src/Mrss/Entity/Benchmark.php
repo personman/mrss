@@ -79,10 +79,14 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $options;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=512, nullable=true)
      */
     protected $equation;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $excludeFromCompletion;
 
     protected $benchmarkModel;
     protected $completionPercentages;
@@ -233,6 +237,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $this->options;
     }
 
+    public function setExcludeFromCompletion($excludeFromCompletion)
+    {
+        $this->excludeFromCompletion = $excludeFromCompletion;
+
+        return $this;
+    }
+
+    public function getExcludeFromCompletion()
+    {
+        return $this->excludeFromCompletion;
+    }
+
     /**
      * Implement the FormElementProviderInterface
      *
@@ -270,7 +286,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         } elseif ($this->getInputType() == 'percent') {
             $element['attributes']['pattern'] = '\d+(\.\d+)?';
             $element['attributes']['title'] = 'Use the format 12, 12.3 or 12.34';
-        } elseif ($this->getInputType() == 'number') {
+        } elseif ($this->getInputType() == 'wholepercent') {
+            $element['attributes']['pattern'] = '\d+?';
+            $element['attributes']['title'] = 'Use the format 12';
+        } elseif ($this->getInputType() == 'number' ||
+            $this->getInputType() == 'wholedollars') {
             $element['attributes']['pattern'] = '\d+';
             $element['attributes']['title'] = 'Use the format 1234';
         }
@@ -300,6 +320,16 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     )
                 )
             );
+        } elseif ($this->getInputType() == 'wholedollars') {
+            $inputFilter['validators'][] = array(
+                'name' => 'Regex',
+                'options' => array(
+                    'pattern' => '/^\d+$/',
+                    'messages' => array(
+                        'regexNotMatch' => 'Use the format 1234'
+                    )
+                )
+            );
         } elseif ($this->getInputType() == 'float') {
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
@@ -318,6 +348,24 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     'pattern' => '/^\d+\.?(\d+)?$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 12, 12.3, 12.34 '
+                    )
+                )
+            );
+
+            $inputFilter['validators'][] = array(
+                'name' => 'Between',
+                'options' => array(
+                    'min' => 0,
+                    'max' => 100
+                )
+            );
+       } elseif ($this->getInputType() == 'wholepercent') {
+            $inputFilter['validators'][] = array(
+                'name' => 'Regex',
+                'options' => array(
+                    'pattern' => '/^\d+$/',
+                    'messages' => array(
+                        'regexNotMatch' => 'Use the format 12'
                     )
                 )
             );
@@ -387,7 +435,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                         ),
                         'validators' => array(
                             array('name' => 'NotEmpty'),
-                            $dbColumnUniqueValidator
+                            // Allow dbColumn to be non-unique
+                            //$dbColumnUniqueValidator
                         )
                     )
                 )

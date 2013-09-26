@@ -171,6 +171,14 @@ class Module
 
                     return $collegeModel;
                 },
+                'model.ipedsInstitution' => function ($sm) {
+                    $model = new \Mrss\Model\IpedsInstitution;
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.system' => function ($sm) {
                     $systemModel = new \Mrss\Model\System;
                     $em = $sm->get('em');

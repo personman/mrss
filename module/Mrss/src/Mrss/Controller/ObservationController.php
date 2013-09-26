@@ -264,7 +264,12 @@ class ObservationController extends AbstractActionController
             ->get('service.formBuilder');
         $form = $formService->buildForm($benchmarkGroup, $observation->getYear());
 
-        $form->setAttribute('class', 'form-horizontal');
+
+        $class = 'form-horizontal ' . $benchmarkGroup->getFormat();
+
+        $form->setAttribute('class', $class);
+
+
 
         // bind observation to form, which will populate it with values
         $form->bind($observation);

@@ -8,17 +8,22 @@
 }
 
 .data-entry-grid .control-group input {
-    width: 40px;
+    width: 70px;
     margin: 0px auto;
 }
 
 .data-entry-grid td.grid-category, .data-entry-grid th {
     font-weight: bold;
-    font-size: 108%;
+    /*font-size: 108%;*/
     text-align: center;
-    background: #888;
-    color: #eee;
+    background: #DDD;
+    color: #000;
     vertical-align: middle !important;
+}
+
+.data-entry-grid td.grid-category {
+    text-align: left;
+    padding-left: 10px;
 }
 
 .data-entry-grid.table tr.help-text td.grid-category {
@@ -28,6 +33,7 @@
 .data-entry-grid.table tr.help-text div {
     width: 400px;
     margin: 5px auto;
+    text-align: left;
 }
 
 .data-entry-grid tr.help-text {
@@ -49,4 +55,7 @@ td.error {
 
 #specify-other {
     display: none;
+}
+.top-table-heading {
+    text-align: center;
 }

@@ -40,6 +40,22 @@ class BenchmarkGroup extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'format',
+                'type' => 'Select',
+                'options' => array(
+                    'label' => 'Format'
+                ),
+                'attributes' => array(
+                    'options' => array(
+                        'one-col' => 'One column',
+                        'two-col' => 'Two columns'
+                    )
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'description',
                 'type' => 'Textarea',
                 'options' => array(

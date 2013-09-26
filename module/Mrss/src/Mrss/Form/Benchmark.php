@@ -64,7 +64,9 @@ class Benchmark extends AbstractForm
                     'options' => array(
                         'number' => 'Whole Number',
                         'percent' => 'Percent',
+                        'wholepercent' => 'Whole Percent',
                         'dollars' => 'Dollars',
+                        'wholedollars' => 'Whole Dollars',
                         'float' => 'Float',
                         'text' => 'Text',
                         'computed' => 'Computed',
@@ -118,6 +120,16 @@ class Benchmark extends AbstractForm
                 'options' => array(
                     'label' => 'Years Available',
                     'value_options' => $this->getYearsAvailable()
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'excludeFromCompletion',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Exclude From Completion Calculations'
                 )
             )
         );

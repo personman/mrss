@@ -153,6 +153,13 @@ class Study
         return $this->currentYear;
     }
 
+    public function getCurrentYearMinus($minus)
+    {
+        $minus = intval($minus);
+
+        return $this->currentYear - $minus;
+    }
+
     /**
      * If it's before the early bird date, return the early price.
      * If it's after, return the normal price. In any case, ignore the year.
