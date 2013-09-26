@@ -359,7 +359,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     'max' => 100
                 )
             );
-       } elseif ($this->getInputType() == 'wholepercent') {
+        } elseif ($this->getInputType() == 'wholepercent') {
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(

@@ -53,11 +53,11 @@ class IpedsInstitutionController extends AbstractActionController
         $model = $this->getServiceLocator()->get('model.ipedsInstitution');
         $collegeModel = $this->getServiceLocator()->get('model.college');
 
-        if (($handle = fopen($file, "r")) !== FALSE) {
+        if (($handle = fopen($file, "r")) !== false) {
             $headerSkipped = false;
             $count = 0;
 
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 if (!$headerSkipped) {
                     $headerSkipped = true;
                     continue;
