@@ -48,7 +48,7 @@ $colClassConfig = array('full', 'part');
 ?>
 <div class="demo-group">
     <h3 class="heading">Instructional Environment</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
 
 
     <?= $this->ztbFormElement($form->get('trans_cred')) ?>
@@ -118,7 +118,7 @@ $colClassConfig = array('full', 'part');
 
 <div class="demo-group">
     <h3 class="heading">Instructional Modality</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
 
     <?= $this->ztbFormElement($form->get('instruction_online')) ?>
     <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
@@ -127,7 +127,7 @@ $colClassConfig = array('full', 'part');
 
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Please contact the Institutional Research, Institutional Effectiveness or Registrar's office for these data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Please contact the Institutional Research, Institutional Effectiveness or Registrar's office for these data.</p>
 
     <?= $this->ztbFormElement($form->get('ipeds_enr')) ?>
     <?= $this->ztbFormElement($form->get('enrollment_information_duplicated_enrollment')) ?>
@@ -145,7 +145,7 @@ $colClassConfig = array('full', 'part');
 
 <div class="demo-group" id="race-ethnicity">
     <h3 class="heading">Race/Ethnicity</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
 
     <?php /*
     $tableConfig = array(
