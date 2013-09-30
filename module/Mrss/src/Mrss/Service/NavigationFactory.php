@@ -92,9 +92,9 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['help']);
         }
 
-        // Customize menu by study
-        // Only show NCCET for workforce
+        // Customize menu by study: Workforce
         if ($currentStudy->getId() != 3) {
+            // Only show NCCET for workforce
             unset($pages['about']['pages']['nccet']);
         }
 
