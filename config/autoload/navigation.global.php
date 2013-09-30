@@ -59,6 +59,10 @@ return array(
 
                 )
             ),
+            'reports' => array(
+                'label' => 'Reports',
+                'uri' => '/reports'
+            ),
             /*
             // ToDo: before activating below code make sure that Membership Benefits don't show when logged in. PRA 130626
             array(
@@ -80,7 +84,25 @@ return array(
             'subscribe' => array(
                 'label' => 'Subscribe',
                 'route' => 'subscribe',
-                'controller' => 'subscription'
+                'controller' => 'subscription',
+                'pages' => array(
+                    'subscribe' => array(
+                        'label' => 'Subscribe Now',
+                        'uri' => 'subscription'
+                    ),
+                    'membership-benefits' => array(
+                        'label' => 'Membership Benefits',
+                        'uri' => '/Membership-Benefits'
+                    ),
+                    'timeline' => array(
+                        'label' => 'Timeline',
+                        'uri' => 'timeline'
+                    ),
+                    'confidentiality' => array(
+                        'label' => 'Conidentiality',
+                        'uri' => 'confidentiality'
+                    )
+                )
             ),
             'benchmarks' => array(
                 'label' => 'Benchmarks',
