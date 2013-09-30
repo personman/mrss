@@ -197,3 +197,72 @@ h2 {
 #showcase .feature .img_box{
   border-radius:10px;
 }
+
+#ideas.slide .info {
+    position: relative;
+    top: 150px;
+    left: 10%;
+    width: 25%;
+    text-align: right;
+}
+
+#ideas.slide .info h2 {
+    color: #FFFFFF;
+    font-size: 45px;
+    font-weight: normal;
+    line-height: 57px;
+    text-shadow: 1px 1px 1px #3B3262;
+}
+
+#timeline h4 {
+  background-color:#0065a1;
+  color: #FFFFFF;
+  width: 20%;
+  valign:center;
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  padding: 10px 1% 10px 1%;
+  text-align:right;
+  float: left;
+  clear: none;
+}
+
+#timeline p {
+  width: 74%;
+  float: left;
+  padding: 10px 2% 10px 2%;
+}
+
+#timeline div {
+  float: left;
+  width:100%;
+  border-bottom:1px solid #AAAAAA;
+}
+
+#firsttimediv {
+  border-top:1px solid #AAAAAA;
+}
+
+@media (max-width: 575px) {
+#timeline h4 {
+  width: 35%;
+  valign:center;
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  padding: 10px 2% 10px 2%;
+  text-align:right;
+  float: left;
+  clear: none;
+}
+
+#timeline p {
+  width: 55%;
+  float: left;
+  padding: 10px 4% 10px 2%;
+}
+
+}
