@@ -89,24 +89,27 @@
 <?= $this->test ?>
 
 <?php if (empty($this->noWrapper)): ?>
+    <?php if ($this->isAllowed('adminMenu', 'view')): ?>
+        <div class="adminNavigation">
+            <h3>Admin</h3>
+
+            <?php $partial = array('mrss/menu/navigation.phtml',
+                'default') ?>
+            <?= $this->navigation('admin_navigation')
+                ->menu()
+                ->render(); ?>
+            <div class="clearfix"></div>
+        </div>
+    <?php endif ?>
+
     <div id="content">
+
         <div class="container-fluid container">
             <div class="row-fluid">
 
-                <?php if ($this->isAllowed('adminMenu', 'view')): ?>
-                <div class="span2 adminNavigation">
-                    <h3>Admin</h3>
 
-                    <?php $partial = array('mrss/menu/navigation.phtml',
-                        'default') ?>
-                    <?= $this->navigation('admin_navigation')
-                        ->menu()
-                        ->render(); ?>
-                    <div class="clearfix"></div>
-                </div>
-                <?php endif ?>
 
-                <div class="span10">
+                <div class="span12">
                     <?php echo $this->content; ?>
                 </div>
             </div>
