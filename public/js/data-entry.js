@@ -1,12 +1,6 @@
 var formErrorMessages = {}
 
 $(function() {
-    // Some special formatting for form 9
-    $('#control-group-institutional_demographics_companies_less_than_50').before(
-        '<h3>Companies by employee size:</h3>' +
-            '<p>Companies by size (Use the US Economic Census, County Business Patterns to obtain these data)</p>'
-    )
-
     // Type hints:
     // Dollars
     $('input.input-dollars').wrap('<div class="input-prepend" />')
@@ -83,11 +77,8 @@ $(function() {
         })
     }
 
-    // Workforce revenue heading
-    if ($('#control-group-revenue_federal').length) {
-        $('#control-group-revenue_federal').before("<h3 class='heading'>Revenue Base</h3><h4 class='subheading'>Public Sources</h4>")
-        $('#control-group-revenue_contract_training').before("<h3 class='heading'>Gross Revenue</h3>")
-    }
+    addWorkForceCustomizations()
+
 
     // Let's allow for some ad-hoc form validation
     $('form').submit(function() {
@@ -200,5 +191,60 @@ function updateRaceTotal()
     }
 
     $('#race-ethnicity-total-value').html(total)
+
+}
+
+function addWorkForceCustomizations()
+{
+    // Workforce revenue heading
+    if ($('#control-group-revenue_federal').length) {
+        $('#control-group-revenue_federal').before("<h3 class='heading'>Revenue Base</h3><h4 class='subheading'>Public Sources</h4>")
+        $('#control-group-revenue_contract_training').before("<h3 class='heading'>Gross Revenue</h3>")
+    }
+
+    // Form 6 expenditures headings
+    if ($('#control-group-expenditures_salaries').length) {
+        $('#control-group-expenditures_salaries').before("<h3 class='heading'>Total Expenditures For</h3>")
+    }
+
+    if ($('#control-group-expenditures_contract_training').length) {
+        $('#control-group-expenditures_contract_training').before("<h3 class='heading'>Expenditures For</h3>")
+    }
+
+    if ($('#control-group-expenditures_total').length) {
+        $('#control-group-expenditures_total').before("<h3 class='heading'>Total Expenditures</h3>")
+    }
+
+    if ($('#control-group-expenditures_overhead').length) {
+        $('#control-group-expenditures_overhead').before("<h3 class='heading'>Overhead</h3>")
+    }
+
+
+    // Form 7
+    if ($('#control-group-retained_revenue_contract_training').length) {
+        $('#control-group-retained_revenue_contract_training').before("<h3 class='heading'>Retained Revenue For</h3>")
+    }
+    if ($('#control-group-retained_revenue_total').length) {
+        $('#control-group-retained_revenue_total').before("<h3 class='heading'>Total Retained Revenue</h3>")
+    }
+
+    // Some special formatting for form 9
+    if ($('#control-group-institutional_demographics_credit_enrollment').length) {
+        $('#control-group-institutional_demographics_credit_enrollment').before("<h3 class='heading'>Campus Characteristics</h3>")
+    }
+
+    if ($('#control-group-institutional_demographics_total_population').length) {
+        $('#control-group-institutional_demographics_total_population').before("<h3 class='heading'>Service Area Characteristics</h3>")
+    }
+
+    if ($('#control-group-institutional_demographics_credentials_awarded').length) {
+        $('#control-group-institutional_demographics_credentials_awarded').before("<h3 class='heading'>Credentials Awarded</h3>")
+    }
+
+    $('#control-group-institutional_demographics_companies_less_than_50').before(
+        '<h4 class="subheading">Companies by employee size:</h4>' +
+            '<p class="subheading-notes">Companies by size (Use the US Economic Census, County Business Patterns to obtain these data)</p>'
+    )
+
 
 }

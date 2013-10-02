@@ -66,6 +66,12 @@ h3.heading {
     margin-bottom: 20px;
 }
 
+.subheading-notes {
+    font-style: italic;
+    margin-bottom: 20px;
+    margin-left: 180px;
+}
+
 /* Only show data definition when the field is focused */
 .control-group .help-block {
     display: none
