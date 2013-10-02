@@ -127,6 +127,14 @@ header {
     padding: 10px;
 }
 
+.adminNavigation li {
+    float: left;
+    padding-left: 15px;
+}
+.adminNavigation h3 {
+    width: 200px;
+    float: left;
+}
 .navbar .brand img {
     margin-left: 20px;
 }
