@@ -14,7 +14,7 @@
 return array(
     'navigation' => array(
         'default' => array(
-            array(
+            'home' => array(
                 'label' => 'Home',
                 'route' => 'home'
             ),

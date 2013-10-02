@@ -155,7 +155,7 @@ $settings = array(
      * Accepted values: A valid route name within your application
      *
      */
-    'login_redirect_route' => 'data-entry',
+    'login_redirect_route' => '/members',
 
     /**
      * Logout Redirect Route
