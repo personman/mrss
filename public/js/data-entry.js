@@ -196,11 +196,13 @@ function updateRaceTotal()
 
 function addWorkForceCustomizations()
 {
-    // Workforce revenue heading
+    // Workforce revenue heading, form 5
     if ($('#control-group-revenue_federal').length) {
         $('#control-group-revenue_federal').before("<h3 class='heading'>Revenue Base</h3><h4 class='subheading'>Public Sources</h4>")
         $('#control-group-revenue_contract_training').before("<h3 class='heading'>Gross Revenue</h3>")
+        $('#control-group-revenue_total').before("<h3 class='heading'>Total Gross Revenue</h3>")
     }
+
 
     // Form 6 expenditures headings
     if ($('#control-group-expenditures_salaries').length) {
@@ -234,7 +236,7 @@ function addWorkForceCustomizations()
     }
 
     if ($('#control-group-institutional_demographics_total_population').length) {
-        $('#control-group-institutional_demographics_total_population').before("<h3 class='heading'>Service Area Characteristics</h3>")
+        $('#control-group-institutional_demographics_total_population').before("<h3 class='heading'>Service Area Characteristics</h3><p class='heading-notes'>Use your institution's legal definition of service area and most recent U.S. Census estimates.</p>")
     }
 
     if ($('#control-group-institutional_demographics_credentials_awarded').length) {
