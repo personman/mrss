@@ -1937,7 +1937,7 @@ class Observation
     /** @ORM\Column(type="integer", nullable=true) */
     protected $staffing_part_time_support_staff;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $transition_students;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -2163,7 +2163,7 @@ class Observation
         }
 
         // Convert empty strings to null so they don't end up as 0
-        if ($value == '') {
+        if ($value === '') {
             $value = null;
         }
 
