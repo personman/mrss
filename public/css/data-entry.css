@@ -53,7 +53,8 @@ div.subgroup {
 
 h4.subheading {
     margin-top: 25px;
-    margin-left: 180px;
+    width: 32%;
+    text-align: right;
 }
 
 h3.heading {
@@ -64,6 +65,13 @@ h3.heading {
 .heading-notes {
     font-style: italic;
     margin-bottom: 20px;
+}
+
+.subheading-notes {
+    font-style: italic;
+    margin-bottom: 20px;
+    width: 32%;
+    text-align: right;
 }
 
 /* Only show data definition when the field is focused */

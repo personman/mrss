@@ -47,6 +47,10 @@ class NavigationFactory extends DefaultNavigationFactory
             // If the user is logged in, hide the login and subscription links
             unset($pages['login']);
             unset($pages['subscribe']);
+
+            // Since they're logged in, also change the home page
+            unset($pages['home']['route']);
+            $pages['home']['uri'] = '/members';
         } else {
             // If they're logged out, hide the logout button
             unset($pages['logout']);
@@ -96,6 +100,9 @@ class NavigationFactory extends DefaultNavigationFactory
         if ($currentStudy->getId() != 3) {
             // Only show NCCET for workforce
             unset($pages['about']['pages']['nccet']);
+
+            // Only show reports for workforce (for now)
+            unset($pages['reports']);
         }
 
         // Hide the partners page for non-MRSS sites

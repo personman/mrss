@@ -14,7 +14,7 @@
 return array(
     'navigation' => array(
         'default' => array(
-            array(
+            'home' => array(
                 'label' => 'Home',
                 'route' => 'home'
             ),
@@ -88,7 +88,7 @@ return array(
                 'pages' => array(
                     'subscribe' => array(
                         'label' => 'Subscribe Now',
-                        'uri' => 'subscription'
+                        'uri' => '/subscription'
                     ),
                     'membership-benefits' => array(
                         'label' => 'Membership Benefits',
