@@ -74,6 +74,10 @@ h3.heading {
     text-align: right;
 }
 
+.lightLabel {
+    color: #CCC;
+}
+
 /* Only show data definition when the field is focused */
 .control-group .help-block {
     display: none
