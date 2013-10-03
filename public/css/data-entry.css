@@ -16,6 +16,12 @@
 #control-group-institutional_demographics_companies_500_or_greater {
     margin-left: 100px;
 }
+#control-group-institutional_demographics_companies_less_than_50 label,
+#control-group-institutional_demographics_companies_50_to_99 label,
+#control-group-institutional_demographics_companies_100_to_499 label,
+#control-group-institutional_demographics_companies_500_or_greater label {
+    font-size: 82%;
+}
 
 /* System admin switching */
 form#system-admin-switch {
@@ -46,6 +52,11 @@ form#system-admin-switch select {
 #control-group-revenue_local {
     margin-left: 150px;
 }
+#control-group-revenue_federal label,
+#control-group-revenue_state label,
+#control-group-revenue_local label {
+    font-size: 82%;
+}
 
 div.subgroup {
     margin-left: 150px;
@@ -55,6 +66,7 @@ h4.subheading {
     margin-top: 25px;
     width: 32%;
     text-align: right;
+    font-size: 14px;
 }
 
 h3.heading {
