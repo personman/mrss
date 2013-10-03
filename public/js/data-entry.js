@@ -244,9 +244,20 @@ function addWorkForceCustomizations()
     }
 
     $('#control-group-institutional_demographics_companies_less_than_50').before(
-        '<h4 class="subheading">Companies by employee size:</h4>' +
+        '<h4 class="subheading">Companies by Employee Size</h4>' +
             '<p class="subheading-notes">Companies by size (Use the US Economic Census, County Business Patterns to obtain these data)</p>'
     )
+
+    if ($('#control-group-enrollment_information_duplicated_enrollment').length) {
+        $('label.control-label').each(function() {
+            label = $(this).html()
+            label = label.replace(
+                '(for the most recent completed fiscal year)',
+                '<br><span class="lightLabel">(for the most recent completed fiscal year)</span>'
+            )
+            $(this).html(label)
+        })
+    }
 
 
 }
