@@ -252,8 +252,8 @@ function addWorkForceCustomizations()
         $('label.control-label').each(function() {
             label = $(this).html()
             label = label.replace(
-                '(for the most recent completed fiscal year)',
-                '<br><span class="lightLabel">(for the most recent completed fiscal year)</span>'
+                '(for the 2012/2013 fiscal year)',
+                '<br><span class="lightLabel">(for the 2012/2013 fiscal year)</span>'
             )
             $(this).html(label)
         })
