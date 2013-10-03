@@ -20,7 +20,6 @@ h4 {
 
 #feature_slider {
   margin-top:-20px;
-  color: white;
 }
 
 .slide#ideas .info {
@@ -551,7 +550,35 @@ legend + .control-group {
   clear:right;
 }
 
+#responsive.slide .info {
+  top:100px;
+}
+
+#ideas.slide .info {
+  top:100px;
+}
+
 @media (min-width:768px) and (max-width: 979px) {
+
+#responsive.slide .info {
+  top:75px;
+}
+
+#responsive.slide .info h3 {
+  line-height:normal;
+}
+
+#tour.slide .info h3 {
+  line-height:normal;
+}
+
+#ideas.slide .info {
+  top:25px;
+}
+
+#ideas.slide .info h3 {
+  line-height:normal;
+}
 
 #control-group-institution-city {
   width:35%;
