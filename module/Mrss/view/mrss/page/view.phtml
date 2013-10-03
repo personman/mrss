@@ -1,6 +1,6 @@
 <?php if ($page->getShowTitle()): ?>
     <div class="page-header">
-        <h2><?php echo $this->escapeHtml($page->getTitle()) ?></h2>
+        <h2><?php echo $page->getTitle() ?></h2>
 
         <?php if ($this->isAllowed('adminMenu', 'view')): ?>
             <a href="<?= $this->url(
