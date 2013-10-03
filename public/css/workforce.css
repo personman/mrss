@@ -10,6 +10,10 @@ h2 {
   color: #0065a1;
 }
 
+h4 {
+  margin: 20px 0px 5px 0px;
+}
+
 .navbar {
   border-bottom: 5px solid #0065a1;
 }
@@ -128,14 +132,25 @@ h2 {
   border-left:1px solid #0065a1;
   border-right:1px solid #0065a1;
   display:inline-block;
-  margin-top:0px;
-  padding:0px;
   background-color: #FFFFFF;
+  padding:15px;
+}
+
+.roundedtable tbody {
+  width:100%;
+}
+
+.roundedtable tr {
+  width:100%;
 }
 
 .roundedtable td {
+  width:100%;
   border: none;
-  border-bottom:1px solid #0065a1;
+}
+
+.roundedtable tbody tr td p {
+  width:100%;
 }
 
 .roundedtable tr:last-child td {
@@ -184,10 +199,69 @@ h2 {
   border-right:1px solid #0065a1;
   display:inline-block;
   padding:15px;
+  margin-bottom:15px;
 }
 
-.sidebar p {
+.sidebar h2 {
   color:#FFFFFF;
+}
+
+.sidebar h3 {
+  color:#FFFFFF;
+  line-height:125%;
+}
+
+.sidebar h4 {
+  color:#FFFFFF;
+}
+
+.sidebarinset h4 {
+  margin:0px;
+}
+
+
+.sidebar p {
+  margin-top:10px;
+  color:#FFFFFF;
+}
+
+.sidebar p a {
+  color:#FFFFFF;
+}
+
+.sidebar p a:hover {
+  color:#002c57;
+}
+
+.sidebarinset {
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  border-top:3px solid #0065a1;
+  border-bottom:3px solid #0065a1;
+  border-left:1px solid #0065a1;
+  border-right:1px solid #0065a1;
+  display:inline-block;
+  margin-top:0px;
+  padding:15px;
+  background-color: #FFFFFF;
+}
+
+.sidebarinset h4 {
+  margin:0px;
+}
+
+.sidebar .sidebarinset p {
+  color:#000000;
+}
+
+.sidebar .sidebarinset a {
+  color:#0065a1
+}
+
+.sidebar .sidebarinset p a:hover {
+  color: #002c57;
 }
 
 .roundedtable p {
@@ -243,6 +317,469 @@ h2 {
 
 #firsttimediv {
   border-top:1px solid #AAAAAA;
+}
+
+#subscription fieldset {
+  display:inline-block;
+  width:100%;
+  margin-top:20px;
+}
+
+#subscription legend {
+  border-bottom-left-radius:0px;
+  border-bottom-right-radius:0px;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  border-top:1px solid #0065a1;
+  border-bottom:1px solid #0065a1;
+  border-left:1px solid #0065a1;
+  border-right:1px solid #0065a1;
+  display:inline-block;
+  width:100%;
+  background-color:#0065a1;
+  color:#FFFFFF;
+  margin-bottom:0px;
+  padding-left:10px;
+}
+
+#subscription label {
+  width:100%;
+  text-align:left;
+}
+
+.controls {
+  width:100%;
+  padding:0px
+  margin:0px;
+}
+
+.form-horizontal .controls {
+  margin:0px;
+}
+
+#subscription .control-group {
+  padding:0% 1%;
+  margin-bottom:0px !important;
+}
+
+#subscription .control-group input {
+  width:100%;
+}
+
+#subscription #fieldset-submit .btn-primary {
+  width:auto;
+}
+
+#subscription .well {
+  background-color: none;
+  padding:0%;
+  border:0px;
+}
+
+#subscription .btn{
+  float: right;
+  margin: 1% 0%;
+}
+
+legend + .control-group {
+  margin-top:0px;
+}
+
+#control-group-institution-name {
+  width:60%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-institution-ipdeds {
+  width:30%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-address{
+  width:45%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-institution-address2{
+  width:45%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-city {
+  width:42%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-institution-state {
+  width:26%;
+  margin:5px 0% 5px 5%;
+  float:left;
+}
+
+#control-group-institution-zip {
+  width:15%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-prefix{
+  width:26%;
+  margin:5px 0%;
+  clear:right;
+}
+
+#control-group-adminContact-firstName {
+  width:45%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-adminContact-lastName {
+  width:45%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-title {
+  width:45%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-adminContact-phone {
+  width:28%;
+  margin:5px 0% 5px 5%;
+  float:left;
+}
+
+#control-group-adminContact-extension {
+  width:10%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-email {
+  width:45%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-adminContact-emailConfirm {
+  width:45%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-same-as-admin  {
+  width:95%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-same-as-admin label{
+  width:30%;
+  margin:5px 0%;
+  float:left;
+}
+
+#subscription #controls-same-as-admin input {
+  width:5%;
+  margin:12px 0%;
+  float:left;
+}
+
+#control-group-dataContact-prefix{
+  width:26%;
+  margin:5px 0%;
+  clear:right;
+}
+
+#control-group-dataContact-firstName {
+  width:45%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-dataContact-lastName {
+  width:45%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-title {
+  width:45%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-dataContact-phone {
+  width:28%;
+  margin:5px 0% 5px 5%;
+  float:left;
+}
+
+#control-group-dataContact-extension {
+  width:10%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-email {
+  width:45%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-dataContact-emailConfirm {
+  width:45%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+@media (min-width:768px) and (max-width: 979px) {
+
+#control-group-institution-city {
+  width:35%;
+  margin:5px 0%;
+  float:left;
+}
+
+#control-group-institution-state {
+  width:33%;
+  margin:5px 0% 5px 5%;
+  float:left;
+}
+
+#control-group-institution-zip {
+  width:15%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+}
+
+@media (min-width:480px) and (max-width: 767px) {
+
+#control-group-institution-city {
+  width:97%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-state {
+  width:45%;
+  margin:5px 0% 5px 0%;
+  float:left;
+}
+
+#control-group-institution-zip {
+  width:45%;
+  margin:5px 0% 5px 5%;
+  float:left;
+  clear:right;
+}
+
+}
+
+@media (max-width: 479px) {
+
+#control-group-institution-name {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-ipdeds {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-address{
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-address2{
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-city {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-state {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-institution-zip {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-prefix{
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-firstName {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-lastName {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-title {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-phone {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-extension {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-email {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-adminContact-emailConfirm {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-same-as-admin  {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-same-as-admin label{
+  width:47%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#subscription #controls-same-as-admin input {
+  width:5%;
+  margin:5px 0% 5px 4%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-prefix{
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-firstName {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-lastName {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-title {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-phone {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-extension {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-email {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
+
+#control-group-dataContact-emailConfirm {
+  width:98%;
+  margin:5px 0%;
+  float:left;
+  clear:right;
+}
 }
 
 @media (max-width: 575px) {
