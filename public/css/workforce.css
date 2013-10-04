@@ -243,13 +243,14 @@ h4 {
   border-left:1px solid #0065a1;
   border-right:1px solid #0065a1;
   display:inline-block;
-  margin-top:0px;
+  margin-top:15px;
   padding:15px;
   background-color: #FFFFFF;
 }
 
 .sidebarinset h4 {
   margin:0px;
+  color: #0065a1;
 }
 
 .sidebar .sidebarinset p {
@@ -297,16 +298,18 @@ h4 {
   border-bottom-right-radius:10px;
   border-top-left-radius:10px;
   border-top-right-radius:10px;
-  padding: 10px 1% 10px 1%;
+  padding: 10px 1%;
   text-align:right;
   float: left;
   clear: none;
+  margin:20px 0px;
 }
 
 #timeline p {
   width: 74%;
   float: left;
-  padding: 10px 2% 10px 2%;
+  padding: 0px 2%;
+  margin: 15px 0px 20px 0px;
 }
 
 #timeline div {
@@ -317,6 +320,12 @@ h4 {
 
 #firsttimediv {
   border-top:1px solid #AAAAAA;
+}
+
+#membertime p{
+  border-left:5px solid #0065a1;
+  margin:15px;
+  padding:0px 10px 0px 10px;
 }
 
 #subscription fieldset {
