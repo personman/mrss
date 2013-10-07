@@ -53,7 +53,8 @@
 <?php if ($this->currentStudy()->getPilotOpen()): ?>
 <? else: ?>
     <a name="agreement"></a>
-    <strong>Acknowledgements of <?= $this->currentStudy()->getDescription() ?> Agreement</strong>. I agree that my institution will abide by the confidentiality and use agreement set out above --including the provision regarding the posting of <?= $this->currentStudy()->getDescription() ?> reports that makes them available to non-subscribers --and I understand that my institution will pay an annual subscription fee of $<?= number_format($this->currentStudy()->getEarlyPrice()) ?> (institution registers until <?= $this->currentStudy()->getEarlyPriceDateForStudyYear()->format('F j') ?>) or $<?= number_format($this->currentStudy()->getPrice()) ?> (institution registers later than <?= $this->currentStudy()->getEarlyPriceDateForStudyYear()->format('F j') ?>) for our participation in the <?= $this->currentStudy()->getDescription() ?> (<?= $this->currentStudy()->getDescription() ?>).          <br>
+    <strong>Acknowledgements of <?= $this->currentStudy()->getDescription() ?> Agreement</strong>. I agree that my institution will abide by the confidentiality and use agreement set out above --including the provision regarding the posting of <?= $this->currentStudy()->getDescription() ?> reports that makes them available to non-subscribers --and I understand that my institution will pay an annual subscription fee of $<?= number_format($this->currentStudy()->getEarlyPrice()) ?> (institution registers until <?= $this->currentStudy()->getEarlyPriceDateForStudyYear()->format('F j') ?>) or $<?= number_format($this->currentStudy()->getPrice()) ?> (institution registers later than <?= $this->currentStudy()->getEarlyPriceDateForStudyYear()->format('F j') ?>) for our participation in the <?= $this->currentStudy()->getDescription() ?>.
+    <br>
     <br>
 
 <?php endif ?>
