@@ -2,6 +2,7 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\Observation;
 use Mrss\Entity\Subscription;
 
 use Mrss\Entity\Benchmark;
@@ -19,6 +20,12 @@ class Excel
 
     // The Excel column index that holds the db_column
     protected $dbColumnColumn;
+
+    // Which row holds the header?
+    protected $headerRowIndex = 1;
+
+    // Current study
+    protected $currentStudy;
 
     /**
      * @deprecated
@@ -49,6 +56,10 @@ class Excel
             $subscription = $subscriptions[0];
             if ($subscription->getStudy()->getId() == 2) {
                 $this->customizeForMrss($excel, $subscription);
+            }
+
+            if ($subscription->getStudy()->getId() == 3) {
+                $this->customizeForWorkforce($excel, $subscription);
             }
         }
 
@@ -243,6 +254,11 @@ class Excel
         $excel->setActiveSheetIndexByName('Worksheet');
         $sheet = $excel->getActiveSheet();
 
+        // For testing whether a dbColumn is valid
+        $emptyObservation = new Observation();
+
+        $this->applyImportCustomizations();
+
         $colleges = $this->getCollegesFromExcel($sheet);
         $data = array();
 
@@ -267,7 +283,7 @@ class Excel
                     )
                     ->getValue();
 
-                if (empty($dbColumn)) {
+                if (empty($dbColumn) || !$emptyObservation->has($dbColumn)) {
                     continue;
                 }
 
@@ -286,6 +302,14 @@ class Excel
         return $data;
     }
 
+    protected function applyImportCustomizations()
+    {
+        // Workforce import customizations
+        if ($this->getCurrentStudy()->getId() == 3) {
+            $this->headerRowIndex = 5;
+        }
+    }
+
     /**
      * Find the colleges listed in the Excel header row. Identify them by their IPEDS
      *
@@ -296,7 +320,7 @@ class Excel
     {
         $colleges = array();
 
-        $rowIterator = $sheet->getRowIterator(1);
+        $rowIterator = $sheet->getRowIterator($this->headerRowIndex);
         foreach ($rowIterator as $row) {
 
             $column = 0;
@@ -319,7 +343,6 @@ class Excel
             }
             break;
         }
-
         return $colleges;
     }
 
@@ -359,6 +382,7 @@ class Excel
                 break;
         }
 
+        //var_dump($filename);
         $excel = PHPExcel_IOFactory::load($filename);
 
         return $excel;
@@ -382,9 +406,58 @@ class Excel
         return $r;
     }
 
+    protected function customizeForWorkforce(
+        PHPExcel $spreadsheet,
+        Subscription $subscription
+    ) {
+        // Open the template file
+        $filename = 'data/imports/workforce.xlsx';
+        $excel = PHPExcel_IOFactory::load($filename);
+
+        // Remove the old sheet
+        $spreadsheet->removeSheetByIndex(0);
+
+        // Place the sheet
+        $sheetTitle = 'Worksheet';
+        $sheet = clone $excel->getSheetByName($sheetTitle);
+        $sheet->setTitle($sheetTitle);
+        $spreadsheet->addExternalSheet($sheet, 0);
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // Populate the values
+        $this->populateWorkforceValues($spreadsheet, $subscription);
+
+        // Set the college name
+        $college = $subscription->getCollege();
+        $collegeHeader = $college->getName() . " \r("
+            . $college->getIpeds() . ')';
+        $spreadsheet->getActiveSheet()->setCellValue('B5', $collegeHeader);
+    }
+
+    protected function populateWorkforceValues(PHPExcel $spreadsheet, Subscription $subscription)
+    {
+        // Loop over the rows and insert the observation value based on the dbColumn
+        // in col D
+        $sheet = $spreadsheet->getActiveSheet();
+        $valueColumn = 'B';
+        $dbColumnCol = 'D';
+        $observation = $subscription->getObservation();
+
+        foreach ($sheet->getRowIterator() as $row) {
+            $rowIndex = $row->getRowIndex();
+
+            $rowDbcolumn = $sheet->getCell($dbColumnCol . $rowIndex)->getValue();
+
+            if ($rowDbcolumn && $observation->has($rowDbcolumn)) {
+                $value = $observation->get($rowDbcolumn);
+                $sheet->setCellValue($valueColumn . $rowIndex, $value);
+            }
+        }
+    }
+
     protected function customizeForMrss(PHPExcel $spreadsheet, Subscription $subscription)
     {
-        // Open the template Excel file
+        // Open the template Excel  file
         $filename = 'data/imports/mrss-grid.xlsx';
         $gridTemplate = PHPExcel_IOFactory::load($filename);
 
@@ -519,5 +592,17 @@ class Excel
                 'inst_othr_other'
             )
         );
+    }
+
+    public function setCurrentStudy($study)
+    {
+        $this->currentStudy = $study;
+
+        return $this;
+    }
+
+    public function getCurrentStudy()
+    {
+        return $this->currentStudy;
     }
 }

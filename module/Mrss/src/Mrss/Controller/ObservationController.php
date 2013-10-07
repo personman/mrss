@@ -356,8 +356,10 @@ class ObservationController extends AbstractActionController
                 try {
                     $filename = $data['file']['tmp_name'];
                     $excelService = new \Mrss\Service\Excel();
+                    $excelService->setCurrentStudy($this->currentStudy());
                     $allData = $excelService->getObservationDataFromExcel($filename);
                 } catch (\Exception $exception) {
+                    //var_dump($exception->getMessage()); die;
                     $this->flashMessenger()->addErrorMessage(
                         'There was a problem processing your import file. Try ' .
                         'downloading the export file again. If you continue to ' .

@@ -176,7 +176,7 @@ class SubscriptionController extends AbstractActionController
         $uPaySiteId = $this->currentStudy()->getUPaySiteId();
         $uPayUrl = $this->currentStudy()->getUPayUrl();
 
-        // @todo: get this dynamically based on study and date
+        // Get this dynamically based on study and date
         $amount = $this->currentStudy()->getCurrentPrice();
 
         // Calculate the validation key for uPay/TouchNet
