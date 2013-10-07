@@ -226,6 +226,18 @@ class Study
         return $earlyBirdDeadline;
     }
 
+    public function getEarlyPriceDateForStudyYear()
+    {
+        // Set the year to the current year.
+        $earlyBirdDeadline = $this->getEarlyPriceDate();
+        $thisYear = $this->getCurrentYear();
+        $month = $earlyBirdDeadline->format('m');
+        $day = $earlyBirdDeadline->format('d');
+        $earlyBirdDeadline->setDate($thisYear, $month, $day);
+
+        return $earlyBirdDeadline;
+    }
+
     public function setPilotOpen($pilotOpen)
     {
         $this->pilotOpen = $pilotOpen;
