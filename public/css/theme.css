@@ -778,3 +778,6 @@ form#system #control-group-paymentType {
     display:inline-block;
     padding:15px;
 }
+.roundedtable p {
+    color: #333333;
+}
