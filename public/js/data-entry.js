@@ -34,7 +34,7 @@ $(function() {
             var helpType = getHelpType($(this))
             helpRow.find('div').hide()
 
-            var helpDiv = helpRow.find('.' + helpType + '-help')
+            var helpDiv = helpRow.find('.' + helpType + '-help');
 
             if (
                 helpDiv
