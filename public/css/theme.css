@@ -698,3 +698,83 @@ form#system #control-group-paymentType {
 #orgbox .span4 img{
     padding-bottom:15px;
 }
+
+
+/* Rounded table (/about) */
+
+.roundedimages img {
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    display:block;
+    margin:0 auto;
+    max-width:100%;
+}
+
+.profileimages {
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    display:block;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+.tablemargin p {
+    margin: 5px;
+}
+
+.roundedtable {
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    border-top:3px solid #0065a1;
+    border-bottom:3px solid #0065a1;
+    border-left:1px solid #0065a1;
+    border-right:1px solid #0065a1;
+    display:inline-block;
+    background-color: #FFFFFF;
+    padding:15px;
+}
+
+.roundedtable tbody {
+    width:100%;
+}
+
+.roundedtable tr {
+    width:100%;
+}
+
+.roundedtable td {
+    width:100%;
+    border: none;
+}
+
+.roundedtable tbody tr td p {
+    width:100%;
+}
+
+.roundedtable tr:last-child td {
+    border-bottom:none;
+    padding-bottom:3px;
+}
+
+.roundedtable tr:first-child td {
+    padding-top:3px;
+}
+
+.roundedbox {
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    border-top:3px solid #0065a1;
+    border-bottom:3px solid #0065a1;
+    border-left:1px solid #0065a1;
+    border-right:1px solid #0065a1;
+    display:inline-block;
+    padding:15px;
+}
