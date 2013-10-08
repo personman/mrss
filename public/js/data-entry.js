@@ -42,7 +42,6 @@ $(function() {
             }
         }).blur(function() {
             if (!submitClicked && $(this).attr('id').search('other_specify') == -1) {
-                console.log($(this).attr('id').search('other_specify'))
                 $(this).parents('tr').next().hide()
             }
         });
