@@ -115,6 +115,11 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['help']['pages']['glossary']);
         }
 
+        // If the help section is empty, drop it from the menu
+        if (empty($pages['help']['pages'])) {
+            unset($pages['help']);
+        }
+
         return $pages;
     }
 
