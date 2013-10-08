@@ -36,7 +36,11 @@ $(function() {
 
             var helpDiv = helpRow.find('.' + helpType + '-help')
 
-            if (helpDiv && helpDiv.html() && helpDiv.html().trim().length) {
+            if (
+                helpDiv
+                    && helpDiv.html()
+                    && helpDiv.html().trim().length
+                ) {
                 helpDiv.show()
                 helpRow.show()
             }
