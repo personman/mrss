@@ -558,6 +558,7 @@ class SubscriptionController extends AbstractActionController
 
         // Get the agreement data from the session
         $agreement = $this->getAgreementFromSession();
+        $amount = $this->currentStudy()->getCurrentPrice();
 
         $subscription->setYear($this->getCurrentYear());
         $subscription->setStatus($status);
@@ -567,7 +568,7 @@ class SubscriptionController extends AbstractActionController
         $subscription->setObservation($observation);
         $subscription->setDigitalSignature($agreement['signature']);
         $subscription->setDigitalSignatureTitle($agreement['title']);
-        $subscription->setPaymentAmount(1000);
+        $subscription->setPaymentAmount($amount);
 
         $subscriptionModel->save($subscription);
 
