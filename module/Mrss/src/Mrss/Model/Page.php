@@ -32,6 +32,10 @@ class Page extends AbstractModel
         $query->andWhere(':study MEMBER OF page.studies');
         $query->setParameter('study', $studyId);
 
+        // Limit to published pages
+        $query->andWhere('page.status = :status');
+        $query->setParameter('status', 'published');
+
         $result = $query->getQuery()->getOneOrNullResult();
         return $result;
     }
