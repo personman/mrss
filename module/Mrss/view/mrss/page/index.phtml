@@ -11,6 +11,7 @@
     <thead>
         <tr>
             <th>Title</th>
+            <th>Study</th>
             <th>Route</th>
             <th>Status</th>
             <th>Actions</th>
@@ -22,6 +23,14 @@
         <tr>
             <td>
                 <?php echo $this->escapeHtml($page->getTitle()) ?>
+            </td>
+
+            <td>
+                <?php $studies = array(); ?>
+                <?php foreach ($page->getStudies() as $study): ?>
+                    <?php $studies[] = $study->getName() ?>
+                <?php endforeach ?>
+                <?= implode('<br>', $studies) ?>
             </td>
 
             <td>
