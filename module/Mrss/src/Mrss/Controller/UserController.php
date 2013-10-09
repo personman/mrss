@@ -118,10 +118,8 @@ class UserController extends AbstractActionController
         $impersonationService = $this->getServiceLocator()
             ->get('zfcuserimpersonate_user_service');
 
-
         // Impersonate
         $impersonationService->impersonate($id);
-
 
         // And redirect
         $this->flashMessenger()
