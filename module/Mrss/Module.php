@@ -20,7 +20,7 @@ class Module
 
         // Set up model injector
         $sm = $e->getApplication()->getServiceManager();
-        $sm->get('em')
+        $sm->get('doctrine.entitymanager.orm_default')
             ->getEventManager()
             ->addEventListener(
                 array(\Doctrine\ORM\Events::postLoad),

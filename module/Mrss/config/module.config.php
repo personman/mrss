@@ -482,6 +482,16 @@ return array(
                                 'id' => 0
                             )
                         )
+                    ),
+                    'impersonate' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/impersonate/:id',
+                            'defaults' => array(
+                                'action' => 'impersonate',
+                                'id' => 0
+                            )
+                        )
                     )
                 )
             ),

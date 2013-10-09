@@ -7,6 +7,7 @@ return array(
         'ZfcBase',
         'ZfcUser',
         'ZfcUserDoctrineORM',
+        'ZfcUserImpersonate',
         'ZendDeveloperTools',
         'BjyAuthorize',
         'ZfcTwitterBootstrap',
