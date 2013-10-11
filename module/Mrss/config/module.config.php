@@ -492,6 +492,15 @@ return array(
                                 'id' => 0
                             )
                         )
+                    ),
+                    'unimpersonate' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/unimpersonate',
+                            'defaults' => array(
+                                'action' => 'unimpersonate'
+                            )
+                        )
                     )
                 )
             ),

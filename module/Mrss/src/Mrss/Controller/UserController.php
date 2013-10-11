@@ -123,7 +123,22 @@ class UserController extends AbstractActionController
 
         // And redirect
         $this->flashMessenger()
-            ->addSuccessMessage("You are now impersonating $name");
+            ->addSuccessMessage("You are now impersonating $name.");
+        return $this->redirect()->toUrl('/members');
+    }
+
+    public function unimpersonateAction()
+    {
+        // Get the impersonation service
+        $impersonationService = $this->getServiceLocator()
+            ->get('zfcuserimpersonate_user_service');
+
+        // Impersonate
+        $impersonationService->unimpersonate();
+
+        // And redirect
+        $this->flashMessenger()
+            ->addSuccessMessage("You are no longer impersonating.");
         return $this->redirect()->toUrl('/members');
     }
 
