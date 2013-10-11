@@ -18,7 +18,7 @@ class ContactController extends PhlyController
 
         $from    = $data['from'];
         $subject = "[Contact Form: $study] " . $data['subject'];
-        $body    = $data['body'];
+        $body    = "From: $from\n\n" . $data['body'];
 
         $this->message->addFrom($from)
             ->addReplyTo($from)
