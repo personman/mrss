@@ -16,7 +16,7 @@
         "phing/phing": "2.5.*",
         "zf-commons/zfc-user": "0.*",
         "zf-commons/zfc-user-doctrine-orm": "*",
-        "doctrine/doctrine-orm-module": "0.7",
+        "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "*",
         "gedmo/doctrine-extensions": "2.3.*",
         "phpexcel/phpexcel": "1.7.*",
