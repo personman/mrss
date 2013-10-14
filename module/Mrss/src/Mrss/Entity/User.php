@@ -174,7 +174,8 @@ class User implements UserInterface, ProviderInterface
      */
     public function getDisplayName()
     {
-        return $this->displayName;
+        //return $this->displayName;
+        return $this->getFullName();
     }
 
     /**

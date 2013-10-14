@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c3c6badef72c44b4a889eddd58725b00",
+    "hash": "90ceb118ae0a7e5da227ac24e2207450",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -81,12 +81,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "40db0c96985aab2822edbc4848b3bd2429e02670"
+                "reference": "v1.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/40db0c96985aab2822edbc4848b3bd2429e02670",
-                "reference": "40db0c96985aab2822edbc4848b3bd2429e02670",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/v1.1.2",
+                "reference": "v1.1.2",
                 "shasum": ""
             },
             "require": {
@@ -701,7 +701,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -928,12 +928,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/goalio/GoalioForgotPassword.git",
-                "reference": "f4f982772563e042317181c629d5e42e30917cd6"
+                "reference": "0.1.2-p2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/goalio/GoalioForgotPassword/zipball/f4f982772563e042317181c629d5e42e30917cd6",
-                "reference": "f4f982772563e042317181c629d5e42e30917cd6",
+                "url": "https://api.github.com/repos/goalio/GoalioForgotPassword/zipball/0.1.2-p2",
+                "reference": "0.1.2-p2",
                 "shasum": ""
             },
             "require": {
@@ -1017,12 +1017,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/goalio/GoalioMailService.git",
-                "reference": "0e1bebb61b78b8af7f7cd20a1c5067dc1d0e593a"
+                "reference": "0.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/goalio/GoalioMailService/zipball/0e1bebb61b78b8af7f7cd20a1c5067dc1d0e593a",
-                "reference": "0e1bebb61b78b8af7f7cd20a1c5067dc1d0e593a",
+                "url": "https://api.github.com/repos/goalio/GoalioMailService/zipball/0.1.1",
+                "reference": "0.1.1",
                 "shasum": ""
             },
             "require": {
@@ -1051,7 +1051,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2013-08-13 10:08:53"
+            "time": "2013-08-13 09:07:30"
         },
         {
             "name": "guzzle/guzzle",
@@ -1059,12 +1059,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "e97207d07d0385eac269a976628b7a5f9eeb4e07"
+                "reference": "v3.5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/e97207d07d0385eac269a976628b7a5f9eeb4e07",
-                "reference": "e97207d07d0385eac269a976628b7a5f9eeb4e07",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/v3.5.0",
+                "reference": "v3.5.0",
                 "shasum": ""
             },
             "require": {
@@ -1147,16 +1147,16 @@
         },
         {
             "name": "mtudor/zfc-user-impersonate",
-            "version": "dev-master",
+            "version": "0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mtudor/ZfcUserImpersonate.git",
-                "reference": "554f80c4c43e3fdc2e3db43364572d997e8c6ff0"
+                "reference": "77c108e1296d14cf3d5704bca11a137b9b47d7f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mtudor/ZfcUserImpersonate/zipball/554f80c4c43e3fdc2e3db43364572d997e8c6ff0",
-                "reference": "554f80c4c43e3fdc2e3db43364572d997e8c6ff0",
+                "url": "https://api.github.com/repos/mtudor/ZfcUserImpersonate/zipball/77c108e1296d14cf3d5704bca11a137b9b47d7f2",
+                "reference": "77c108e1296d14cf3d5704bca11a137b9b47d7f2",
                 "shasum": ""
             },
             "require": {
@@ -1185,7 +1185,7 @@
                 "zf2",
                 "zfcuser"
             ],
-            "time": "2013-07-11 07:24:27"
+            "time": "2013-10-13 18:27:31"
         },
         {
             "name": "mwillbanks/zfc-twitter-bootstrap",
@@ -1244,12 +1244,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "62b6e0e03c093b8b18084a0994be1146b753a267"
+                "reference": "2.5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/62b6e0e03c093b8b18084a0994be1146b753a267",
-                "reference": "62b6e0e03c093b8b18084a0994be1146b753a267",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/2.5.0",
+                "reference": "2.5.0",
                 "shasum": ""
             },
             "require": {
@@ -1295,12 +1295,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phly/PhlyContact.git",
+                "url": "https://github.com/weierophinney/PhlyContact.git",
                 "reference": "337cefe68214902e7a88f365c6c8601c6eee7e2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phly/PhlyContact/zipball/337cefe68214902e7a88f365c6c8601c6eee7e2b",
+                "url": "https://api.github.com/repos/weierophinney/PhlyContact/zipball/337cefe68214902e7a88f365c6c8601c6eee7e2b",
                 "reference": "337cefe68214902e7a88f365c6c8601c6eee7e2b",
                 "shasum": ""
             },
@@ -1322,8 +1322,7 @@
                 {
                     "name": "Matthew Weier O'Phinney",
                     "email": "matthew@weierophinney.net",
-                    "homepage": "http://mwop.net/",
-                    "role": "Developer"
+                    "homepage": "http://mwop.net/"
                 }
             ],
             "description": "ZF2 Module implementing contact form functionality",
@@ -1340,13 +1339,13 @@
             "version": "v1.7.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ddeboer/phpexcel.git",
-                "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2"
+                "url": "https://github.com/ddeboer/phpexcel",
+                "reference": "v1.7.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/phpexcel/zipball/de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
-                "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
+                "url": "https://github.com/ddeboer/phpexcel/zipball/v1.7.7",
+                "reference": "v1.7.7",
                 "shasum": ""
             },
             "require": {
@@ -1368,7 +1367,7 @@
                 "excel",
                 "xls"
             ],
-            "time": "2012-09-04 18:29:37"
+            "time": "2012-09-04 11:29:37"
         },
         {
             "name": "rezzza/exprlib",
@@ -1597,12 +1596,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf2.git",
-                "reference": "dd327e7fbea8b70a3ed8277d3a386b1359b51f58"
+                "reference": "ccaba8bb231cce22c55b2a3b7b06490c014b099e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf2/zipball/dd327e7fbea8b70a3ed8277d3a386b1359b51f58",
-                "reference": "dd327e7fbea8b70a3ed8277d3a386b1359b51f58",
+                "url": "https://api.github.com/repos/zendframework/zf2/zipball/ccaba8bb231cce22c55b2a3b7b06490c014b099e",
+                "reference": "ccaba8bb231cce22c55b2a3b7b06490c014b099e",
                 "shasum": ""
             },
             "require": {
@@ -1703,7 +1702,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "2013-10-09 07:43:12"
+            "time": "2013-10-12 22:38:47"
         },
         {
             "name": "zendframework/zendservice-recaptcha",
@@ -1757,23 +1756,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcBase.git",
-                "reference": "fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf"
+                "reference": "v0.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf",
-                "reference": "fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/v0.1.2",
+                "reference": "v0.1.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "zendframework/zend-db": "~2.1",
-                "zendframework/zend-eventmanager": "~2.1",
-                "zendframework/zend-loader": "~2.1",
-                "zendframework/zend-modulemanager": "~2.1",
-                "zendframework/zend-mvc": "~2.1",
-                "zendframework/zend-servicemanager": "~2.1",
-                "zendframework/zend-stdlib": "~2.1"
+                "zendframework/zend-db": ">=2.1,<3.0",
+                "zendframework/zend-eventmanager": ">=2.1,<3.0",
+                "zendframework/zend-loader": ">=2.1,<3.0",
+                "zendframework/zend-modulemanager": ">=2.1,<3.0",
+                "zendframework/zend-mvc": ">=2.1,<3.0",
+                "zendframework/zend-servicemanager": ">=2.1,<3.0",
+                "zendframework/zend-stdlib": ">=2.1,<3.0"
             },
             "type": "library",
             "autoload": {
@@ -2551,12 +2550,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "ff224b7c0188013ae0c654a4e212585b3602c3ef"
+                "reference": "acd690379117b042d1c8af1fafd61bde001bf6bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/ff224b7c0188013ae0c654a4e212585b3602c3ef",
-                "reference": "ff224b7c0188013ae0c654a4e212585b3602c3ef",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/acd690379117b042d1c8af1fafd61bde001bf6bb",
+                "reference": "acd690379117b042d1c8af1fafd61bde001bf6bb",
                 "shasum": ""
             },
             "require": {
@@ -2588,7 +2587,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2013-10-10 15:32:05"
+            "time": "2013-10-10 15:34:57"
         },
         {
             "name": "phpunit/php-text-template",
@@ -2734,12 +2733,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0ce13a8c9ff41d9c0d69ebd216bcc66b5f047246"
+                "reference": "1ded00759dd084320d9637ea0bf8a1cc73a84608"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0ce13a8c9ff41d9c0d69ebd216bcc66b5f047246",
-                "reference": "0ce13a8c9ff41d9c0d69ebd216bcc66b5f047246",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1ded00759dd084320d9637ea0bf8a1cc73a84608",
+                "reference": "1ded00759dd084320d9637ea0bf8a1cc73a84608",
                 "shasum": ""
             },
             "require": {
@@ -2800,7 +2799,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-09-19 13:51:44"
+            "time": "2013-10-13 23:37:04"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2865,13 +2864,13 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+                "url": "https://github.com/php-fig/log",
+                "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "url": "https://github.com/php-fig/log/archive/1.0.0.zip",
+                "reference": "1.0.0",
                 "shasum": ""
             },
             "type": "library",
@@ -3659,7 +3658,6 @@
     "stability-flags": {
         "zendframework/zendservice-recaptcha": 20,
         "phly/phly-contact": 20,
-        "mtudor/zfc-user-impersonate": 20,
         "goalio/goalio-forgotpassword-doctrine-orm": 20
     },
     "platform": {

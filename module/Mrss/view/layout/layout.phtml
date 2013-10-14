@@ -88,7 +88,20 @@
 <? endif ?>
 <?= $this->test ?>
 
+<? var_dump($this->zfcUserIdentity()) ?>
+
 <?php if (empty($this->noWrapper)): ?>
+    <?php if ($this->zfcUserImpersonatorDisplayName()): ?>
+        <div class="impersonation">
+            <span><a title="Unimpersonate" href="<?= $this->url('zfcuserimpersonate/unimpersonate') ?>">
+                    <?= $this->zfcUserImpersonatorDisplayName() ?></a> is impersonating
+            </span>
+
+            <?= $this->zfcUserDisplayName() ?>
+            (<?= $this->zfcUserIdentity()->getFullName()//->getCollege()->getName() ?>)
+        </div>
+    <?php endif ?>
+
     <?php if ($this->isAllowed('adminMenu', 'view')): ?>
         <div class="adminNavigation">
             <h3>Admin</h3>

@@ -63,7 +63,9 @@ class UserController extends AbstractActionController
      */
     public function accounteditAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
+        $userModel = $this->getServiceLocator()->get('model.user');
+        $userId = $this->zfcUserAuthentication()->getIdentity()->getId();
+        $user = $userModel->find($userId);
         $form = $this->getUserForm($user);
 
         // Handle form submission
@@ -73,7 +75,7 @@ class UserController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $userModel = $this->getServiceLocator()->get('model.user');
+
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
 
@@ -96,50 +98,6 @@ class UserController extends AbstractActionController
         return array(
             'user' => $user
         );
-    }
-
-    public function impersonateAction()
-    {
-        // The id of the user to impersonate
-        $id = $this->params()->fromRoute('id');
-
-        // Get the user, just to make sure and to have the name
-        $userModel = $this->getServiceLocator()->get('model.user');
-        $user = $userModel->find($id);
-
-        if (empty($user)) {
-            $this->flashMessenger()->addErrorMessage('That user does not exist.');
-            return $this->redirect()->toUrl('/admin');
-        }
-
-        $name = $user->getFullName();
-
-        // Get the impersonation service
-        $impersonationService = $this->getServiceLocator()
-            ->get('zfcuserimpersonate_user_service');
-
-        // Impersonate
-        $impersonationService->impersonate($id);
-
-        // And redirect
-        $this->flashMessenger()
-            ->addSuccessMessage("You are now impersonating $name.");
-        return $this->redirect()->toUrl('/members');
-    }
-
-    public function unimpersonateAction()
-    {
-        // Get the impersonation service
-        $impersonationService = $this->getServiceLocator()
-            ->get('zfcuserimpersonate_user_service');
-
-        // Impersonate
-        $impersonationService->unimpersonate();
-
-        // And redirect
-        $this->flashMessenger()
-            ->addSuccessMessage("You are no longer impersonating.");
-        return $this->redirect()->toUrl('/members');
     }
 
     protected function getUserForm($user)

@@ -185,6 +185,8 @@ class ObservationController extends AbstractActionController
     public function getActiveCollege()
     {
         $user = $this->zfcUserAuthentication()->getIdentity();
+        $userModel = $this->getServiceLocator()->get('model.user');
+        $user = $userModel->find($user->getId());
 
         if ($user->getRole() == 'system_admin'
             && !empty($this->getSystemAdminSessionContainer()->college)) {
