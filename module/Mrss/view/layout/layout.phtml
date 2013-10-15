@@ -86,9 +86,7 @@
     <?= $this->ztbFlashMessenger()->render(); ?>
 
 <? endif ?>
-<?= $this->test ?>
 
-<? var_dump($this->zfcUserIdentity()) ?>
 
 <?php if (empty($this->noWrapper)): ?>
     <?php if ($this->zfcUserImpersonatorDisplayName()): ?>
@@ -98,7 +96,7 @@
             </span>
 
             <?= $this->zfcUserDisplayName() ?>
-            (<?= $this->zfcUserIdentity()->getFullName()//->getCollege()->getName() ?>)
+            (<?= $this->zfcUserIdentity()->getCollege()->getName() ?>)
         </div>
     <?php endif ?>
 
