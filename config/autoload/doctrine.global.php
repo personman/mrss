@@ -172,7 +172,7 @@ return array(
                 'directory' => 'data/migrations',
                 'name'      => 'Doctrine Database Migrations',
                 'namespace' => 'DoctrineORMModule\Migrations',
-                'table'     => 'migrations',
+                'table'     => 'doctrine_migration_versions',
             ),
         ),
 
