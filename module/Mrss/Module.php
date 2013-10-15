@@ -14,12 +14,6 @@ class Module
         // Set the timezone
         date_default_timezone_set('America/Chicago');
 
-        // Doctrine proxy autoloader
-        $proxyDir = dirname(dirname(__DIR__)) . '/data/DoctrineORMModule/Proxy';
-        $proxyNamespace = 'DoctrineORMModule\Proxy\__CG__\Mrss\Entity';
-        $proxyNamespace = '__CG__MrssEntity';
-        //Autoloader::register($proxyDir, $proxyNamespace);
-
         //$e->getApplication()->getServiceManager()->get('translator');
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
@@ -44,7 +38,7 @@ class Module
 
                 $userModel = $sm->get('model.user');
                 $userModel->save($user);
-                //$sm->get('em')->flush();
+                $sm->get('em')->flush();
             }
         });
     }
