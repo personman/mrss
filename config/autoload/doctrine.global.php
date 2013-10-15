@@ -18,11 +18,13 @@ return array(
                 )
             )
         ),
+        // migrations configuration
         'migrations_configuration' => array(
             'orm_default' => array(
                 'directory' => 'data/migrations',
+                'name'      => 'Doctrine Database Migrations',
                 'namespace' => 'DoctrineMigrations',
-                'table'     => 'migrations',
+                'table'     => 'doctrine_migration_versions',
             ),
         ),
     )
