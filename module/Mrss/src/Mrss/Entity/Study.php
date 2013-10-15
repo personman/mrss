@@ -93,6 +93,10 @@ class Study
      */
     protected $logo;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $googleAnalyticsKey;
 
 
     public function __construct()
@@ -318,6 +322,18 @@ class Study
     public function getLogo()
     {
         return $this->logo;
+    }
+
+    public function setGoogleAnalyticsKey($key)
+    {
+        $this->googleAnalyticsKey = $key;
+
+        return $this;
+    }
+
+    public function getGoogleAnalyticsKey()
+    {
+        return $this->googleAnalyticsKey;
     }
 
     public function getCompletionPercentage(Observation $observation)

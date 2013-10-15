@@ -154,6 +154,16 @@ class Study extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'googleAnalyticsKey',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Google Analytics Key'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 

@@ -21,7 +21,7 @@ Install from GitHub with this command:
 
 Then install dependencies using Composer:
     
-     php composer.phar update
+     php composer.phar install
 
 That places the dependency binaries in the __bin__ directory. For convenience, add that directory to your path:
 
