@@ -239,6 +239,10 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
     public function setExcludeFromCompletion($excludeFromCompletion)
     {
+        if (empty($excludeFromCompletion)) {
+            $excludeFromCompletion = false;
+        }
+
         $this->excludeFromCompletion = $excludeFromCompletion;
 
         return $this;

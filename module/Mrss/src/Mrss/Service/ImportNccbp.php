@@ -392,6 +392,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 $benchmark->setYearsAvailable(
                     $this->getYearsAvailable($result['field_name'])
                 );
+                $benchmark->setExcludeFromCompletion(false);
 
                 // Set the benchmark group
                 if (!empty($benchmarkGroup)) {

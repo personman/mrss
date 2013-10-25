@@ -92,7 +92,7 @@ class Benchmark extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Equation',
-                    'help-block' => '<a href="/benchmarks/equation"
+                    'help-block' => '<a href="/benchmark/equation"
                     data-toggle="modal" data-target="#myModal">
                         Add a benchmark to the equation
                     </a>.

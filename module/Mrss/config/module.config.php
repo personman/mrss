@@ -345,11 +345,11 @@ return array(
                     ),
                 )
             ),
-            'benchmarks' => array(
+            'benchmark' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/benchmarks[/study/:study]',
+                    'route' => '/benchmark[/study/:study]',
                     'defaults' => array(
                         'controller' => 'benchmarks',
                         'study' => 1,
@@ -384,6 +384,15 @@ return array(
                             'defaults' => array(
                                 'action' => 'add',
                                 'benchmarkGroup' => 0
+                            )
+                        )
+                    ),
+                    'equation' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/equation',
+                            'defaults' => array(
+                                'action' => 'equation'
                             )
                         )
                     )

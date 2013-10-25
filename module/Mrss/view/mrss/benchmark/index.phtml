@@ -24,7 +24,7 @@
 
         <li>
             <a href="<?= $this->url(
-                'benchmarks/add',
+                'benchmark/add',
                 array('benchmarkGroup' => $benchmarkGroup->getId())
             ) ?>">Add benchmark</a>
         </li>
@@ -45,7 +45,7 @@
             <tr>
                 <td>
                     <a href="<?= $this->url(
-                        'benchmarks/view',
+                        'benchmark/view',
                         array(
                             'id' => $benchmark->getId()
                         )
@@ -56,7 +56,7 @@
 
                 <td>
                     <a href="<?= $this->url(
-                        'benchmarks/edit',
+                        'benchmark/edit',
                         array(
                             'id' => $benchmark->getId()
                         )
