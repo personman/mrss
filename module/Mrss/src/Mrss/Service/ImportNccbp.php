@@ -234,7 +234,7 @@ inner join node g on a.group_nid = g.nid";
 
         // This may take some time (and RAM)
         set_time_limit(4800);
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
 
         $query = "select n.title, y.field_data_entry_year_value as year, form.*
 from $table form
@@ -808,7 +808,7 @@ ORDER BY field_years_value";
         );
 
         // Write to the console
-        echo $percentage . "%\n";
+        echo round($percentage, 1) . "%\n";
     }
 
     /**
