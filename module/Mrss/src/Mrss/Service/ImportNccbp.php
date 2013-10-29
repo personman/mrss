@@ -574,11 +574,13 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $this->getSubscriptionModel()->save($subscription);
 
 
-            $this->saveProgress($i);
+
 
             // Flush every so often
             if ($i % 100 == 0) {
-                $this->entityManager->flush();
+                $this->saveProgress($i);
+                // saveProgress flushes
+                //$this->entityManager->flush();
             }
         }
 
