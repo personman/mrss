@@ -53,7 +53,7 @@ $(function() {
     })
 
     // Managerial grid page
-    if ($('.data-entry-grid').length) {
+    if ($('.data-entry-grid.managerial').length) {
 
         // Totals for managerial grid
         updateGridTotals()
