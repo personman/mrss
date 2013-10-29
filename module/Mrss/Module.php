@@ -109,6 +109,10 @@ class Module
                     $studyModel = $sm->get('model.study');
                     $importer->setStudyModel($studyModel);
 
+                    // Inject the subscription model
+                    $subscriptionModel = $sm->get('model.subscription');
+                    $importer->setSubscriptionModel($subscriptionModel);
+
                     // Inject settings
                     $settingModel = $sm->get('model.setting');
                     $importer->setSettingModel($settingModel);
@@ -133,6 +137,17 @@ class Module
                     $importer->setEntityManager($sm->get('em'));
 
                     return $importer;
+                },
+                'export' => function ($sm) {
+                    $exportService = new \Mrss\Service\DataExport();
+
+                    $studyModel = $sm->get('model.study');
+                    $exportService->setStudyModel($studyModel);
+
+                    $subscriptionModel = $sm->get('model.subscription');
+                    $exportService->setSubscriptionModel($subscriptionModel);
+
+                    return $exportService;
                 },
                 'computedFields' => function ($sm) {
                     $computedFields = new \Mrss\Service\ComputedFields();

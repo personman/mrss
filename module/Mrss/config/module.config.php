@@ -580,6 +580,17 @@ return array(
                     )
                 )
             ),
+            'export' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/export[/:action]',
+                    'defaults' => array(
+                        'controller' => 'export',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'admin' => array(
                 'type' => 'Segment',
                 'options' => array(
@@ -697,6 +708,7 @@ return array(
             'index' => 'Mrss\Controller\IndexController',
             'admin' => 'Mrss\Controller\AdminController',
             'import' => 'Mrss\Controller\ImportController',
+            'export' => 'Mrss\Controller\ExportController',
             'colleges' => 'Mrss\Controller\CollegeController',
             'ipedsInstitutions' => 'Mrss\Controller\IpedsInstitutionController',
             'systems' => 'Mrss\Controller\SystemController',

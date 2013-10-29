@@ -136,6 +136,10 @@ return array(
                     'roles' => array('admin')
                 ),
                 array(
+                    'controller' => 'export',
+                    'roles' => array('admin')
+                ),
+                array(
                     'controller' => 'systems',
                     'roles' => array('admin')
                 ),

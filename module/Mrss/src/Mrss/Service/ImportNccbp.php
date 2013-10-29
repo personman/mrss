@@ -10,6 +10,7 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\BenchmarkGroup;
 use Mrss\Entity\Study;
+use Mrss\Entity\Subscription;
 use Mrss\Model;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
@@ -58,6 +59,11 @@ class ImportNccbp
      * @var \Mrss\Model\Study
      */
     protected $studyModel;
+
+    /**
+     * @var \Mrss\Model\Subscription
+     */
+    protected $subscriptionModel;
 
     /**
      * @var \Mrss\Model\Setting
@@ -136,7 +142,7 @@ inner join node g on a.group_nid = g.nid";
             // Doctrine ORM. We do still have the flush() call below.
 
             if (!empty($existingCollege)) {
-                // Skip this college as we've already imp   orted it
+                // Skip this college as we've already imported it
                 $this->stats['skipped']++;
 
                 continue;
@@ -227,7 +233,7 @@ inner join node g on a.group_nid = g.nid";
         $this->setType($table);
 
         // This may take some time (and RAM)
-        set_time_limit(1200);
+        set_time_limit(4800);
         ini_set('memory_limit', '256M');
 
         $query = "select n.title, y.field_data_entry_year_value as year, form.*
@@ -353,6 +359,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                     false
                 );
             } catch (\Exception $e) {
+                echo $e->getMessage();
                 continue;
             }
 
@@ -478,6 +485,73 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $this->entityManager->flush();
 
         $this->saveProgress($i);
+    }
+
+    public function importSubscriptions()
+    {
+        $this->setType('subscriptions');
+
+        $query = "SELECT field_institution_name_value, field_ipeds_id_value, field_years_value
+FROM content_type_group_subs_info
+LEFT JOIN content_field_years
+ON content_type_group_subs_info.nid = content_field_years.nid
+WHERE field_years_value IS NOT NULL
+ORDER BY field_years_value";
+
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $total = count($result);
+        $this->saveProgress(0, $total);
+
+        $studyId = 1;
+        $i = 0;
+        foreach ($result as $row) {
+            $i++;
+
+            $ipeds = $row['field_ipeds_id_value'];
+            $year = $row['field_years_value'];
+
+            // Find the college
+            $college = $this->getCollegeModel()->findOneByIpeds($ipeds);
+            if (empty($college)) {
+                continue;
+            }
+
+            // Look for a subscription
+            $subscription = $this->getSubscriptionModel()
+                ->findOne($year, $college->getId(), $studyId);
+
+            if (empty($subscription)) {
+                // Create a new subscription
+                $subscription = new Subscription;
+            }
+
+            // Look up the observation
+            $observation = $this->getObservationModel()
+                ->findOne($college->getId(), $year);
+
+            $subscription->setCollege($college);
+            $subscription->setStudy($this->getStudy());
+            $subscription->setYear($year);
+            $subscription->setStatus('imported');
+
+            if (!empty($observation)) {
+                $subscription->setObservation($observation);
+            }
+
+            $this->getSubscriptionModel()->save($subscription);
+
+
+            $this->saveProgress($i);
+
+            // Flush every so often
+            if ($i % 10 == 0) {
+                $this->entityManager->flush();
+            }
+        }
+
+        $this->entityManager->flush();
     }
 
     /**
@@ -775,6 +849,12 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             );
         }
 
+        // Add subscription importer at the end
+        $imports['subscriptions'] = array(
+            'label' => 'Subscriptions',
+            'method' => 'importSubscriptions'
+        );
+
         return $imports;
     }
 
@@ -856,6 +936,18 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getStudyModel()
     {
         return $this->studyModel;
+    }
+
+    public function setSubscriptionModel($model)
+    {
+        $this->subscriptionModel = $model;
+
+        return $this;
+    }
+
+    public function getSubscriptionModel()
+    {
+        return $this->subscriptionModel;
     }
 
     public function setSettingModel($model)

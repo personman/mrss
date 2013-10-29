@@ -150,8 +150,12 @@ return array(
                 'route' => 'studies'
             ),
             array(
-                'label' => 'Imports',
+                'label' => 'Import',
                 'route' => 'import'
+            ),
+            array(
+                'label' => 'Export',
+                'route' => 'export'
             ),
             array(
                 'label' => 'Colleges',

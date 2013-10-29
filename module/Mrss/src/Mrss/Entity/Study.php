@@ -360,6 +360,17 @@ class Study
         return $percentage;
     }
 
+    public function getBenchmarksForYear($year)
+    {
+        $allBenchmarks = array();
+        foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+            $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
+            $allBenchmarks = array_merge($allBenchmarks, $benchmarks);
+        }
+
+        return $allBenchmarks;
+    }
+
     /**
      * Get the benchmarks for the current year and return all of their input filters
      */
