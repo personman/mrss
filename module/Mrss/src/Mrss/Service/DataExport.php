@@ -32,6 +32,13 @@ class DataExport
 
     public function getFullDataDump($studyIds)
     {
+        // This may take some time (and RAM)
+        set_time_limit(5800);
+        ini_set('memory_limit', '512M');
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', true);
+
         $this->studyIds = $studyIds;
 
         // Start building the Excel file
@@ -101,6 +108,8 @@ class DataExport
 
         $this->writeHeaders($year);
         $this->writeData($year);
+
+        $sheet->getColumnDimensionByColumn(1)->setAutoSize(true);
     }
 
     protected function writeHeaders($year)
@@ -139,7 +148,7 @@ class DataExport
         $sheet = $this->excel->getActiveSheet();
 
         $row = 3;
-        $column = 2;
+        $dataStartingColumn = 2;
 
         // Get institutions that subscribed to any of the active studies for the year
         foreach ($this->getCollegesWithDataForYear($year) as $collegeInfo) {
@@ -148,6 +157,25 @@ class DataExport
             // Add the ipeds and name
             $sheet->setCellValueByColumnAndRow(0, $row, $college->getIpeds());
             $sheet->setCellValueByColumnAndRow(1, $row, $college->getName());
+
+            // Add the data
+            $observation = $collegeInfo['observation'];
+
+            $column = $dataStartingColumn;
+            foreach ($collegeInfo['studies'] as $study) {
+                $benchmarks = $study->getBenchmarksForYear($year);
+
+                foreach ($benchmarks as $benchmark) {
+                    if ($observation->has($benchmark->getDbColumn())) {
+                        $value = $observation->get($benchmark->getDbColumn());
+
+                        $sheet->setCellValueByColumnAndRow($column, $row, $value);
+                    }
+
+                    $column++;
+                }
+            }
+
 
             $row++;
         }
@@ -183,10 +211,16 @@ class DataExport
                 $study = $subscription->getStudy();
                 $studyId = $study->getId();
 
+                $observation = $subscription->getObservation();
+
+                if (empty($observation)) {
+                    continue;
+                }
+
                 if (empty($colleges[$collegeId])) {
                     $colleges[$collegeId] = array(
                         'college' => $college,
-                        'observation' => $subscription->getObservation,
+                        'observation' => $observation,
                         'studies' => array()
                     );
                 }

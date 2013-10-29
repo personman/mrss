@@ -235,7 +235,7 @@ inner join node g on a.group_nid = g.nid";
         $this->setType($table);
 
         // This may take some time (and RAM)
-        set_time_limit(4800);
+        set_time_limit(5800);
         ini_set('memory_limit', '512M');
 
         $query = "select n.title, y.field_data_entry_year_value as year, form.*
@@ -307,7 +307,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $this->stats['imported']++;
 
             // Write to the db every 20 rows
-            if ($i % 30 == 0) {
+            if ($i % 200 == 0) {
                 $this->saveProgress($i);
                 // SaveProgress triggers a flush.
                 //$this->entityManager->flush();
@@ -523,11 +523,11 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $this->setType('subscriptions');
 
         $query = "SELECT field_institution_name_value, field_ipeds_id_value, field_years_value
-FROM content_type_group_subs_info
-LEFT JOIN content_field_years
-ON content_type_group_subs_info.nid = content_field_years.nid
-WHERE field_years_value IS NOT NULL
-ORDER BY field_years_value";
+        FROM content_type_group_subs_info
+        LEFT JOIN content_field_years
+        ON content_type_group_subs_info.nid = content_field_years.nid
+        WHERE field_years_value IS NOT NULL
+        ORDER BY field_years_value";
 
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
@@ -577,7 +577,7 @@ ORDER BY field_years_value";
             $this->saveProgress($i);
 
             // Flush every so often
-            if ($i % 10 == 0) {
+            if ($i % 100 == 0) {
                 $this->entityManager->flush();
             }
         }
