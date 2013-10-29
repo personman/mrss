@@ -74,6 +74,8 @@ class ImportNccbp
 
     protected $type;
 
+    protected $colleges = array();
+
     /**
      * @var array
      */
@@ -256,7 +258,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $year = $row['year'];
 
             // First we've got to look up the college
-            $college = $this->getCollegeModel()->findOneByIpeds($ipeds);
+            $college = $this->getCollegeByIpeds($ipeds);
 
             if (empty($college)) {
                 $this->stats['skipped']++;
@@ -315,6 +317,31 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         // Save the data to the db
         $this->entityManager->flush();
         $this->saveProgress($i, $total);
+    }
+
+    /**
+     * If we need all the colleges anyway, let's look them up at once
+     *
+     * @param $ipeds
+     * @return null
+     */
+    protected function getCollegeByIpeds($ipeds)
+    {
+        if (empty($this->colleges)) {
+            $colleges = $this->getCollegeModel()->findAll();
+
+            foreach ($colleges as $college) {
+                $this->colleges[$college->getIpeds()] = $college;
+            }
+        }
+
+        if (!empty($this->colleges[$ipeds])) {
+            $college = $this->colleges[$ipeds];
+        } else {
+            $college = null;
+        }
+
+        return $college;
     }
 
     /**
@@ -489,6 +516,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
     public function importSubscriptions()
     {
+        // This may take some time (and RAM)
+        set_time_limit(4800);
+        ini_set('memory_limit', '512M');
+
         $this->setType('subscriptions');
 
         $query = "SELECT field_institution_name_value, field_ipeds_id_value, field_years_value
@@ -513,7 +544,7 @@ ORDER BY field_years_value";
             $year = $row['field_years_value'];
 
             // Find the college
-            $college = $this->getCollegeModel()->findOneByIpeds($ipeds);
+            $college = $this->getCollegeByIpeds($ipeds);
             if (empty($college)) {
                 continue;
             }
