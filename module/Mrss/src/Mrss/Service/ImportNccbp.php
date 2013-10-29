@@ -359,7 +359,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                     false
                 );
             } catch (\Exception $e) {
-                echo $e->getMessage();
+                //echo $e->getMessage() . "\n";
                 continue;
             }
 
@@ -806,6 +806,9 @@ ORDER BY field_years_value";
             $this->importProgressPrefix . $this->getType(),
             Json::encode($this->stats)
         );
+
+        // Write to the console
+        echo $percentage . "%\n";
     }
 
     /**
