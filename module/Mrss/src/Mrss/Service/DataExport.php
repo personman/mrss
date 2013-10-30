@@ -158,14 +158,18 @@ class DataExport
         if ($year == '2013') {
             $dupes = array();
             foreach ($names as $name => $dbColumns) {
-                if (count($dbColumns) == 1) continue;
+                if (count($dbColumns) == 1) {
+                    continue;
+                }
 
                 foreach ($dbColumns as $d) {
                     $dupes[$d] = $name;
                 }
             }
 
-            echo '<pre>'; print_r($dupes); die;
+            echo '<pre>';
+            print_r($dupes);
+            die;
         }
     }
 
