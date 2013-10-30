@@ -172,7 +172,7 @@
 
     </target>
 
-    <target name="test" depends="codesniffer,behat-with-test-db,phpunit"/>
+    <target name="test" depends="codesniffer,phpunit"/>
 
     <target name="behat-with-test-db"
             depends="test-db,migrate,behat,test-db-teardown" />
