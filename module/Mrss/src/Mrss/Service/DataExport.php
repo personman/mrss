@@ -121,12 +121,25 @@ class DataExport
 
         $row = 1;
         $column = 2;
+        $names = array();
 
         // Add the benchmarks from each study
         foreach ($this->getStudies() as $study) {
             $benchmarks = $study->getBenchmarksForYear($year);
 
             foreach ($benchmarks as $benchmark) {
+                if ($year == '2013') {
+                    // find duplicate names
+                    $name = $benchmark->getName();
+                    if (empty($names[$name])) {
+                        $names[$name] = array();
+                    }
+
+                    $names[$name][] = $benchmark->getDbColumn();
+                }
+
+
+
                 $sheet->setCellValueByColumnAndRow(
                     $column,
                     $row,
@@ -140,6 +153,19 @@ class DataExport
                 $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
                 $column++;
             }
+        }
+
+        if ($year == '2013') {
+            $dupes = array();
+            foreach ($names as $name => $dbColumns) {
+                if (count($dbColumns) == 1) continue;
+
+                foreach ($dbColumns as $d) {
+                    $dupes[$d] = $name;
+                }
+            }
+
+            echo '<pre>'; print_r($dupes); die;
         }
     }
 
