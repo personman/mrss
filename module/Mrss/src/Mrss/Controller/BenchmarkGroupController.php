@@ -46,7 +46,7 @@ class BenchmarkGroupController extends AbstractActionController
                     ->addSuccessMessage('Benchmark group saved.');
 
                 return $this->redirect()->toRoute(
-                    'benchmarks',
+                    'benchmark',
                     array('study' => $benchmarkGroup->getStudy()->getId())
                 );
             }
@@ -89,7 +89,7 @@ class BenchmarkGroupController extends AbstractActionController
                     ->addSuccessMessage('Benchmark group saved.');
 
                 return $this->redirect()->toRoute(
-                    'benchmarks',
+                    'benchmark',
                     array('study' => $study->getId())
                 );
             }

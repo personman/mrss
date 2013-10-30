@@ -334,6 +334,28 @@ class Observation
     /** @ORM\Column(type="string", nullable=true) */
     protected $Instructional_support;
 
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $op_exp_inst;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $op_exp_student_services;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $op_exp_acad_supp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $op_exp_inst_support;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $op_exp_research;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $op_exp_pub_serv;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $op_exp_oper_n_maint;
+
+
 
     // NCCBP form 1:
     /**
