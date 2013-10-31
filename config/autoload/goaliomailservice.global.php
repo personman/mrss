@@ -56,7 +56,7 @@ $settings = array(
 // Study-specific email config
 if ($_SERVER['HTTP_HOST'] == 'workforceproject.org') {
     $settings['options'] = $settings['options_workforce'];
-} elseif ($_SERVER['HTTP_HOST'] == 'maximizingresources.org') {
+} elseif (strpos($_SERVER['HTTP_HOST'], 'maximizingresources.org') !== false) {
     $settings['options'] = $settings['options_max'];
 }
 
