@@ -19,17 +19,6 @@ class AdminController extends AbstractActionController
             $currentYear
         );
 
-        if (!empty($_GET['email'])) {
-            // Email test
-            $viewTemplate = 'mrss/email/test';
-            $from = 'dfergu15@jccc.edu';
-            $to = 'dfergu15@jccc.edu';
-            $subject = 'Email test smtp';
-            $mailService = $this->getServiceLocator()->get('goaliomailservice_message');
-            $message = $mailService->createTextMessage($from, $to, $subject, $viewTemplate);
-            $mailService->send($message);
-        }
-
         return array(
             'subscriptions' => $subscriptions
         );

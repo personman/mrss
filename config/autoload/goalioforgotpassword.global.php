@@ -57,6 +57,13 @@ $settings = array(
      */
 );
 
+// Study-specific email config
+if ($_SERVER['HTTP_HOST'] == 'workforceproject.org') {
+    $settings['email_from_address']['email'] = 'no-reply@workforceproject.org';
+} elseif ($_SERVER['HTTP_HOST'] == 'maximizingresources.org') {
+    $settings['email_from_address']['email'] = 'no-reply@maximizingresources.org';
+}
+
 
 /**
  * You do not need to edit below this line
