@@ -19,7 +19,7 @@ class AdminController extends AbstractActionController
             $currentYear
         );
 
-        if (!emtpy($_GET['email'])) {
+        if (!empty($_GET['email'])) {
             // Email test
             $viewTemplate = 'mrss/email/test';
             $from = 'dfergu15@jccc.edu';
