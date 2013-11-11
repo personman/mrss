@@ -180,6 +180,8 @@ function updateRaceTotal()
         total = total + percent
     })
 
+    total = Math.round(total);
+
     // Validation
     if (total > 100) {
         $('#race-ethnicity-total').addClass('error')
