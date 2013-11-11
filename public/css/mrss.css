@@ -51,3 +51,20 @@
     border-color: #1798c4 #1798c4 hsl(195, 79%, 38%);
     color: #333 !important;
 }
+
+/* cms page title */
+#content h3 {
+    font-size: 140%;
+    color: #00697E;
+}
+
+.ruled-bottom {
+    border-bottom: 3px solid #636766;
+    padding-top: 60px;
+}
+
+.ruled-bottom img {
+    height: 250px;
+    margin: 40px 20px 0px 20px;
+    box-shadow: 0px -5px 40px 5px #888;
+}
