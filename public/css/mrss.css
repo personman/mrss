@@ -14,6 +14,7 @@
 
 #wrapper .navbar ul.nav.pull-right {
     margin-top: 100px;
+    font-size: 75%;
 }
 
 #wrapper .navbar-inverse .nav li a {
@@ -67,4 +68,16 @@
     height: 250px;
     margin: 40px 20px 0px 20px;
     box-shadow: 0px -5px 40px 5px #888;
+}
+
+#content .ruled-bottom h3 {
+    color: #787A6F;
+    font-weight: normal;
+    font-size: 180%;
+}
+
+.other-projects-title {
+    text-align: center;
+    color: #00697E;
+    font-weight: normal;
 }
