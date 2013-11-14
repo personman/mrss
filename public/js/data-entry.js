@@ -97,6 +97,7 @@ $(function() {
 
 function updateGridTotals()
 {
+    return false
     var columns = ['full', 'part', 'other']
     for (i in columns) {
         var column = columns[i]
