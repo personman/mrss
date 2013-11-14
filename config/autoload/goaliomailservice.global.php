@@ -17,6 +17,16 @@ $settings = array(
     'options_class' => 'Zend\Mail\Transport\SmtpOptions',
     
     'options' => array(
+        'host' => 'smtp.mandrillapp.com',
+        'connection_class' => 'login',
+        'connection_config' => array(
+            'ssl' => 'tls',
+            'username' => 'dfergu15@jccc.edu',
+            'password' => '3vheGQZghNh6NoReuj6d2w'
+        ),
+        'port' => 587
+    ),
+/*    'options' => array(
         'host' => 'smtp.gmail.com',
         'connection_class' => 'login',
         'connection_config' => array(
@@ -45,7 +55,7 @@ $settings = array(
             'password' => 'p0w3r#U$3r_'
         ),
         'port' => 587
-    ),
+    ),*/
 
 
     /**
@@ -53,12 +63,14 @@ $settings = array(
      */
 );
 
+/*
 // Study-specific email config
 if ($_SERVER['HTTP_HOST'] == 'workforceproject.org') {
     $settings['options'] = $settings['options_workforce'];
 } elseif (strpos($_SERVER['HTTP_HOST'], 'maximizingresources.org') !== false) {
     $settings['options'] = $settings['options_max'];
 }
+*/
 
 /**
  * You do not need to edit below this line
