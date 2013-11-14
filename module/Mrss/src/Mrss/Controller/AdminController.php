@@ -9,6 +9,8 @@ class AdminController extends AbstractActionController
 {
     public function dashboardAction()
     {
+        $this->emailTest();
+
         // Get a list of subscriptions to the current study
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $studyId = $this->currentStudy()->getId();
@@ -22,5 +24,28 @@ class AdminController extends AbstractActionController
         return array(
             'subscriptions' => $subscriptions
         );
+    }
+
+    protected function emailTest()
+    {
+        if (!empty($_GET['email'])) {
+            // The template used by the PhpRenderer to create the content of the mail
+            $viewTemplate = 'mrss/email/test';
+
+            $from = 'no-reply@maximizingresources.org';
+            $to = 'personman2@gmail.com';
+
+            if (!empty($_GET['to'])) {
+                $to = $_GET['to'];
+            }
+
+            $subject = 'Email test from ' . $_SERVER['HTTP_HOST'];
+
+            $mailService = $this->getServiceLocator()->get('goaliomailservice_message');
+            $message = $mailService->createTextMessage($from, $to, $subject, $viewTemplate);
+            $mailService->send($message);
+
+            $this->flashMessenger()->addSuccessMessage('Email sent to ' . $to);
+        }
     }
 }
