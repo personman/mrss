@@ -82,3 +82,42 @@
     font-weight: normal;
     margin-top: 30px;
 }
+
+.navbar {
+    margin-bottom: 0px !important;
+}
+
+#ideas h3 {
+    color: #90C019;
+    font-size: 250%;
+    width: 100px;
+    margin-left: 800px;
+    text-align: left;
+}
+
+#ideas p {
+    margin-left: 800px;
+    text-align: left;
+    width: 200px;
+}
+
+
+#responsive h3 {
+    color: #1EB2CE;
+    font-size: 230%;
+    text-align: left;
+}
+
+#responsive p {
+    width: 200px;
+    text-align: left;
+    color: black;
+}
+
+.slide#responsive .info {
+    position: absolute;
+    top: 170px;
+    left: 39%;
+    width: 25%;
+}
+
