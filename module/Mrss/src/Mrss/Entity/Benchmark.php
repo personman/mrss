@@ -291,8 +291,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $element['attributes']['pattern'] = '\d+(\.\d+)?';
             $element['attributes']['title'] = 'Use the format 12, 12.3 or 12.34';
         } elseif ($this->getInputType() == 'wholepercent') {
-            $element['attributes']['pattern'] = '\d+?';
-            $element['attributes']['title'] = 'Use the format 12';
+            $element['attributes']['pattern'] = '\d+';
+            $element['attributes']['title'] = 'Use a whole number (no decimals)';
         } elseif ($this->getInputType() == 'number' ||
             $this->getInputType() == 'wholedollars') {
             $element['attributes']['pattern'] = '\d+';
