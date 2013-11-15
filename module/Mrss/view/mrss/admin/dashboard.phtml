@@ -8,6 +8,7 @@
             <th>Institution</th>
             <th>Users</th>
             <th>Subscription Date</th>
+            <th>Payment Method</th>
         </tr>
     </thead>
     <tbody>
@@ -59,6 +60,9 @@
 
                 <td>
                     <?= $subscription->getCreated()->format('Y-m-d') ?>
+                </td>
+                <td>
+                    <?= $subscription->getPaymentMethodForDisplay() ?>
                 </td>
             </tr>
         <?php endforeach ?>

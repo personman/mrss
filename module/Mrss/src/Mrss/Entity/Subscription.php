@@ -211,6 +211,23 @@ class Subscription
         return $this->paymentMethod;
     }
 
+    public function getPaymentMethodForDisplay()
+    {
+        $method = $this->getPaymentMethod();
+
+        $map = array(
+            'creditCard' => 'Credit Card'
+        );
+
+        if (!empty($map[$method])) {
+            $method = $map[$method];
+        } else {
+            $method = ucwords($method);
+        }
+
+        return $method;
+    }
+
     public function setPaymentSystemName($systemName)
     {
         $this->paymentSystemName = $systemName;
