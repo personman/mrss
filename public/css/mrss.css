@@ -87,20 +87,39 @@
     margin-bottom: 0px !important;
 }
 
+#feature_slider {
+    background: transparent !important;
+    position: relative;
+}
+
+#feature_slider article {
+    height: 430px;
+}
+
+html #slide-left, #slide-right {
+    top: 200px;
+}
+
+#pagination {
+    position: absolute;
+    top: 450px;
+}
+
+.slide#ideas .info {
+    margin-left: 700px;
+}
+
 #ideas h3 {
     color: #90C019;
     font-size: 250%;
     width: 100px;
-    margin-left: 800px;
     text-align: left;
 }
 
 #ideas p {
-    margin-left: 800px;
     text-align: left;
     width: 200px;
 }
-
 
 #responsive h3 {
     color: #1EB2CE;
@@ -116,8 +135,19 @@
 
 .slide#responsive .info {
     position: absolute;
-    top: 170px;
-    left: 39%;
+    top: 80px;
+    left: 29%;
     width: 25%;
+}
+
+.slide#benchmarks .info {
+    width: 300px;
+    position: absolute;
+    top: 80px;
+    left: 35%;
+}
+
+.slide#benchmarks .info h3 {
+    color: #07677C;
 }
 
