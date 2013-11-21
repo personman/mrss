@@ -33,8 +33,8 @@ class DataExport
     public function getFullDataDump($studyIds)
     {
         // This may take some time (and RAM)
-        set_time_limit(5800);
-        ini_set('memory_limit', '512M');
+        set_time_limit(7800);
+        ini_set('memory_limit', '612M');
 
         error_reporting(E_ALL);
         ini_set('display_errors', true);
@@ -150,12 +150,19 @@ class DataExport
                     $row + 1,
                     $benchmark->getDbColumn()
                 );
+
+                // Form name
+                $sheet->setCellValueByColumnAndRow(
+                    $column,
+                    $row + 2,
+                    $benchmark->getBenchmarkGroup()->getName()
+                );
                 $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
                 $column++;
             }
         }
 
-        if ($year == '2013') {
+        if (false && $year == '2013') {
             $dupes = array();
             foreach ($names as $name => $dbColumns) {
                 if (count($dbColumns) == 1) {
@@ -177,7 +184,7 @@ class DataExport
     {
         $sheet = $this->excel->getActiveSheet();
 
-        $row = 3;
+        $row = 4;
         $dataStartingColumn = 2;
 
         // Get institutions that subscribed to any of the active studies for the year

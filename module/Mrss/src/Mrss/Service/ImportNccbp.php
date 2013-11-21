@@ -663,6 +663,11 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $years[] = $row['field_rf_years_available_value'];
         }
 
+        // If there are no years, make it all years
+        if (count($years) == 0) {
+            $years = array(2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016);
+        }
+
         return $years;
 
     }
