@@ -66,7 +66,7 @@ class DataExport
     {
         // Quick fix for NCCBP
         $years = array();
-        foreach (range(2007, 2009) as $year) {
+        foreach (range(2007, 2013) as $year) {
             $years[$year] = array(1);
         }
 
