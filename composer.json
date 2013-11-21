@@ -7,6 +7,12 @@
         "benchmarking"
     ],
     "homepage": "http://framework.zend.com/",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/personman/ZfcUserImpersonate"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.2.*",
