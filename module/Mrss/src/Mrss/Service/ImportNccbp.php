@@ -294,7 +294,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
                 // If the fieldname isn't converted, just skip it
                 try {
-                    $fieldName = $this->convertFieldName($key);
+                    $formName = null; // @todo: How can I get this
+                    $fieldName = $this->convertFieldName($key, $formName);
                     //echo "$fieldName: $value<br>\n";
                     $observation->set($fieldName, $value);
                 } catch (\Exception $e) {
@@ -383,6 +384,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             try {
                 $dbColumn = $this->convertFieldName(
                     $result['field_name'],
+                    $result['type_name'],
                     false
                 );
             } catch (\Exception $e) {
@@ -676,11 +678,12 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
      * Convert from nccbp field name to mrss field name
      *
      * @param $fieldName
+     * @param $formName
      * @param bool $includeValue
      * @throws \Exception
      * @return string
      */
-    public function convertFieldName($fieldName, $includeValue = true)
+    public function convertFieldName($fieldName, $formName, $includeValue = true)
     {
         // This takes the format 'field_18_tot_fte_fin_aid_staff_value'
         // and converts it to this: 'tot_fte_fin_aid_staff'
@@ -700,6 +703,13 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         // Since class properties can't begin with a number, prepend an 'n'
         if (preg_match('/^\d/', $converted)) {
             $converted = 'n' . $converted;
+        }
+
+        // Now see if we need to prepend the form name
+        $emptyObservation = new Observation();
+        $nameWithForm = $formName . '_' . $converted;
+        if ($emptyObservation->has($nameWithForm)) {
+            $converted = $nameWithForm;
         }
 
         return $converted;

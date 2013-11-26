@@ -149,6 +149,12 @@ class Module
 
                     return $exportService;
                 },
+                'export.nccbp' => function ($sm) {
+                    $nccbpDb = $sm->get('nccbp-db');
+                    $exporter = new \Mrss\Service\ExportNccbp($nccbpDb);
+
+                    return $exporter;
+                },
                 'computedFields' => function ($sm) {
                     $computedFields = new \Mrss\Service\ComputedFields();
 
