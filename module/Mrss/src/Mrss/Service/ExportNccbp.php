@@ -256,7 +256,9 @@ ORDER BY CAST(substring_index(substring(i.field_name, 7), '_', 1) AS UNSIGNED), 
 
         $benchmarks = array();
         foreach ($results as $row) {
-            if (empty($row['field_name'])) continue;
+            if (empty($row['field_name'])) {
+                continue;
+            }
 
             $row['column'] = $column;
             $benchmarks[$row['field_name']] = $row;
@@ -317,6 +319,4 @@ ORDER BY CAST(substring_index(substring(i.field_name, 7), '_', 1) AS UNSIGNED), 
 
         return $tables;
     }
-
-
 }
