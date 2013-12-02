@@ -116,10 +116,14 @@ return array(
                         'label' => 'Glossary',
                         'uri' => '/glossary'
                     ),
-                    /*'faq' => array(
+                    'faq' => array(
                         'label' => 'FAQ',
                         'uri' => '/faq'
-                    )*/
+                    ),
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
                 )
             ),
             'contact' => array(

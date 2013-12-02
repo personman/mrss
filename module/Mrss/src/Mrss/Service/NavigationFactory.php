@@ -115,6 +115,11 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['help']['pages']['glossary']);
         }
 
+        // Don't show the faq for workforce yet
+        if ($currentStudy->getId() == 3) {
+            unset($pages['help']['pages']['faq']);
+        }
+
         // If the help section is empty, drop it from the menu
         if (empty($pages['help']['pages'])) {
             unset($pages['help']);
