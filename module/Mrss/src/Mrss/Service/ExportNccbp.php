@@ -22,6 +22,7 @@ class ExportNccbp
     protected $filename = 'nccbp-data';
     protected $benchmarks = array();
     protected $colleges = array();
+    protected $individualTableValues = array();
 
     /**
      * The nccbp db using zend db
@@ -68,7 +69,7 @@ class ExportNccbp
     public function getYears()
     {
         $years = range(2007, 2013);
-        
+
         return $years;
     }
 
@@ -154,11 +155,83 @@ ORDER BY n.title";
             $statement = $this->dbAdapter->query($query);
             $result = $statement->execute();
 
+            $result = $this->addFieldsFromIndividualTables($result, $table);
+
             foreach ($result as $row) {
                 $this->placeRowInSheet($row);
             }
 
         }
+    }
+
+    /**
+     * A couple of NCCBP fields are stored in their own db tables.
+     * Look them up separately and add them to the results.
+     *
+     * @param $result
+     * @param $table
+     * @return array
+     */
+    protected function addFieldsFromIndividualTables($result, $table)
+    {
+        $tablesWithThisIssue = array(
+            'content_type_group_form10_career_comp' => array(
+                'field_10_empl_satis_prep'
+            ),
+            'content_type_group_form11_ret_succ_core' => array(
+                'field_11_al_abcp'
+            )
+        );
+
+        if (in_array($table, array_keys($tablesWithThisIssue))) {
+            $fields = $tablesWithThisIssue[$table];
+
+            foreach ($fields as $field) {
+                $keyedValues = $this->getKeyedIndividualTableValues(
+                    $field
+                );
+
+                // Now put it in the results
+                $newResults = array();
+                foreach ($result as $row) {
+                    if (!empty($keyedValues[$row['nid']])) {
+                        $value = $keyedValues[$row['nid']];
+                        $row[$field . '_value'] = $value;
+                    }
+
+                    $newResults[] = $row;
+                }
+
+            }
+
+            $result = $newResults;
+        }
+
+        return $result;
+    }
+
+    protected function getKeyedIndividualTableValues($field)
+    {
+        if (empty($this->individualTableValues[$field])) {
+            $individualTable = 'content_' . $field;
+            $individualTableField = $field . '_value';
+
+            $query = "select nid, $individualTableField value
+                from $individualTable
+                where $individualTableField IS NOT NULL";
+
+            $statement = $this->dbAdapter->query($query);
+            $individualResults = $statement->execute();
+
+            $keyedValues = array();
+            foreach ($individualResults as $row) {
+                $keyedValues[$row['nid']] = $row['value'];
+            }
+
+            $this->individualTableValues[$field] = $keyedValues;
+        }
+
+        return $this->individualTableValues[$field];
     }
 
     protected function placeRowInSheet($row)
@@ -190,6 +263,7 @@ ORDER BY n.title";
         // Now the actual data
         foreach ($row as $key => $value) {
             if ($column = $this->getColumnForField($key)) {
+
                 $sheet->setCellValueByColumnAndRow(
                     $column,
                     $rowNum,
