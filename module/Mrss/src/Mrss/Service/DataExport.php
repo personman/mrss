@@ -24,7 +24,7 @@ class DataExport
      * @var PHPExcel $excel
      */
     protected $excel;
-    protected $filename = 'nccbp-data';
+    protected $filename = 'full-data-export';
     protected $studyIds = array();
     protected $studies = array();
     protected $studyModel;
@@ -66,7 +66,7 @@ class DataExport
     {
         // Quick fix for NCCBP
         $years = array();
-        foreach (range(2007, 2013) as $year) {
+        foreach (array(2013) as $year) {
             $years[$year] = array(1);
         }
 
