@@ -155,6 +155,14 @@ class Module
 
                     return $exporter;
                 },
+                'export.users' => function ($sm) {
+                    $exporter = new \Mrss\Service\UserExport();
+
+                    $subscriptionModel = $sm->get('model.subscription');
+                    $exporter->setSubscriptionModel($subscriptionModel);
+
+                    return $exporter;
+                },
                 'computedFields' => function ($sm) {
                     $computedFields = new \Mrss\Service\ComputedFields();
 

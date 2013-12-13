@@ -9,7 +9,7 @@ class AdminController extends AbstractActionController
 {
     public function dashboardAction()
     {
-        $this->emailTest();
+        //$this->emailTest();
 
         // Get a list of subscriptions to the current study
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
