@@ -99,7 +99,7 @@ return array(
                         'uri' => 'timeline'
                     ),
                     'confidentiality' => array(
-                        'label' => 'Conidentiality',
+                        'label' => 'Confidentiality',
                         'uri' => 'confidentiality'
                     )
                 )
