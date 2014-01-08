@@ -16,6 +16,7 @@ return array(
             'options' => array(
                 'pubkey'  => '6Lf_pOISAAAAAE6_77NYlkBeU0sbZsudXiXIlF-0',
                 'privkey' => '6Lf_pOISAAAAAJ0fHOk8IzvseM5-rUTBDnCnxatY',
+                'theme' => 'clean'
             ),
         ),
 
