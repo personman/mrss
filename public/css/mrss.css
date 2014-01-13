@@ -92,10 +92,15 @@ body .section_header {
 
 .project-partners .row-fluid {
     border-bottom: 3px solid #636766;
+    margin-bottom: 30px;
 }
 
 .project-partners-heading {
     color: #1a697c;
+}
+
+.project-partners .span5 {
+    padding-right: 20px;
 }
 
 .other-projects-title {
