@@ -92,7 +92,8 @@ body .section_header {
 
 .project-partners .row-fluid {
     border-bottom: 3px solid #636766;
-    margin-bottom: 30px;
+    margin-bottom: 80px;
+    padding-bottom: 20px;
 }
 
 .project-partners-heading {
