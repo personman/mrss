@@ -164,6 +164,29 @@ class Study extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'offerCodes',
+                'type' => 'Textarea',
+                'options' => array(
+                    'label' => 'Offer Codes',
+                    'help-block' => 'Comma-separated'
+                )
+            )
+        );
+
+
+        $this->add(
+            array(
+                'name' => 'offerCodePrice',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Offer Code Price'
+                )
+            )
+        );
+
+
         $this->add($this->getButtonFieldset());
     }
 

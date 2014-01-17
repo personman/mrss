@@ -126,7 +126,7 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             $converted,
-            $this->import->convertFieldName($nccbpField)
+            $this->import->convertFieldName($nccbpField, 'test')
         );
     }
 
@@ -137,7 +137,7 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
      */
     public function testConvertInvalidFieldName($invalidField)
     {
-        $this->import->convertFieldName($invalidField);
+        $this->import->convertFieldName($invalidField, 'test');
     }
 
     /**
@@ -147,7 +147,7 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
      */
     public function testConvertFieldNameNoIncludeValue($nccbpField, $converted)
     {
-        $result = $this->import->convertFieldName($nccbpField, false);
+        $result = $this->import->convertFieldName($nccbpField, 'test', false);
 
         $this->assertEquals($converted, $result);
     }

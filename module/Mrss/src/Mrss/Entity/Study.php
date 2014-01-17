@@ -98,6 +98,16 @@ class Study
      */
     protected $googleAnalyticsKey;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $offerCodes;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    protected $offerCodePrice;
+
 
     public function __construct()
     {
@@ -334,6 +344,61 @@ class Study
     public function getGoogleAnalyticsKey()
     {
         return $this->googleAnalyticsKey;
+    }
+
+    public function setOfferCodes($codes)
+    {
+        $this->offerCodes = $codes;
+
+        return $this;
+    }
+
+    public function getOfferCodes()
+    {
+        return $this->offerCodes;
+    }
+
+    public function hasOfferCode()
+    {
+        return (!empty($this->offerCodes));
+    }
+
+    /**
+     * Check to see if the supplied offer code matches any current codes
+     * (case insensitive)
+     *
+     * @param $code
+     * @return bool
+     */
+    public function checkOfferCode($code)
+    {
+        $codes = $this->getOfferCodesArray();
+
+        // Make it case-insensitive
+        $code = strtolower($code);
+        $codes = array_map('strtolower', $codes);
+
+        return (in_array($code, $codes));
+    }
+
+    public function getOfferCodesArray()
+    {
+        $codes = explode(',', $this->offerCodes);
+        $codes = array_map('trim', $codes);
+
+        return $codes;
+    }
+
+    public function setOfferCodePrice($price)
+    {
+        $this->offerCodePrice = $price;
+
+        return $this;
+    }
+
+    public function getOfferCodePrice()
+    {
+        return $this->offerCodePrice;
     }
 
     public function getCompletionPercentage(Observation $observation)

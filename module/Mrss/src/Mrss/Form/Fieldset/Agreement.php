@@ -5,11 +5,16 @@ namespace Mrss\Form\Fieldset;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Validator\Digits;
+use Zend\Validator\InArray;
 
 class Agreement extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct($studyName = 'MRSS')
+    protected $offerCodes = array();
+
+    public function __construct($studyName = 'MRSS', $offerCodes = array())
     {
+        $this->offerCodes = $offerCodes;
+
         parent::__construct('agreement');
 
         $this->add(
@@ -79,6 +84,21 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
             )
         );
 
+        if (!empty($offerCodes)) {
+            $this->add(
+                array(
+                    'name' => 'offerCode',
+                    'type' => 'Text',
+                    'options' => array(
+                        'label' => 'Offer Code',
+                    ),
+                    'attributes' => array(
+                        'id' => 'offerCode'
+                    )
+                )
+            );
+        }
+
     }
 
     /**
@@ -88,7 +108,7 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
+        $filters = array(
             'agree' => array(
                 'required' => true,
                 'validators' => array(
@@ -124,7 +144,33 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                         )
                     )
                 )
-            )
+            ),
         );
+
+        // See if the offer code is valid
+        if (!empty($this->offerCodes)) {
+            $filters['offerCode'] = array(
+                'required' => false,
+                'filters' => array(
+                    array(
+                        'name' => 'StringToLower'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'InArray',
+                        'options' => array(
+                            'haystack' => $this->offerCodes,
+                            'messages' => array(
+                                'notInArray' => 'That offer code is not valid. ' .
+                                    'Please try again or leave it blank.'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        return $filters;
     }
 }

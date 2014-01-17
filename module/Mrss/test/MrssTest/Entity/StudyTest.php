@@ -186,4 +186,13 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->study->setEarlyPriceDate($earlyPriceFuture);
         $this->assertEquals(1100, $this->study->getCurrentPrice());
     }
+
+    public function testCheckOfferCode()
+    {
+        $this->study->setOfferCodes("wdi2014, abc2015");
+
+        $this->assertTrue($this->study->checkOfferCode("ABC2015"));
+        $this->assertTrue($this->study->checkOfferCode("wdi2014"));
+        $this->assertFalse($this->study->checkOfferCode("not real"));
+    }
 }

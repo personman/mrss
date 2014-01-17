@@ -73,8 +73,19 @@ class SubscriptionController extends AbstractActionController
     {
         $this->checkSubscriptionIsInProgress();
 
+        // Offer code
+        if ($this->currentStudy()->hasOfferCode()) {
+            $offerCodes = $this->currentStudy()->getOfferCodesArray();
+        } else {
+            $offerCodes = array();
+        }
+
         $form = new Form('agreement');
-        $fieldset = new Agreement($this->currentStudy()->getDescription());
+        $fieldset = new Agreement(
+            $this->currentStudy()->getDescription(),
+            $offerCodes
+        );
+
         $form->add($fieldset);
 
         // Add continue button
@@ -104,6 +115,13 @@ class SubscriptionController extends AbstractActionController
                 $formData = $form->getData();
                 $agreementData = $formData['agreement'];
                 $this->saveAgreementToSession($agreementData);
+
+                // Was there a valid offer code?
+                if (!empty($agreementData['offerCode'])) {
+                    $this->flashMessenger()->addSuccessMessage(
+                        "Your offer code will be applied to your price."
+                    );
+                }
 
                 // Once they've agreed to the terms, redirect to the payment page
                 return $this->redirect()->toRoute('subscribe/payment');
@@ -178,6 +196,14 @@ class SubscriptionController extends AbstractActionController
 
         // Get this dynamically based on study and date
         $amount = $this->currentStudy()->getCurrentPrice();
+
+        // Check for offer code
+        $agreement = $this->getAgreementFromSession();
+        if (!empty($agreement['offerCode'])) {
+            if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
+                $amount = $this->currentStudy()->getOfferCodePrice();
+            }
+        }
 
         // Calculate the validation key for uPay/TouchNet
         $transId = $this->getTransIdFromSession();
@@ -559,6 +585,13 @@ class SubscriptionController extends AbstractActionController
         // Get the agreement data from the session
         $agreement = $this->getAgreementFromSession();
         $amount = $this->currentStudy()->getCurrentPrice();
+
+        // Check for offer code
+        if (!empty($agreement['offerCode'])) {
+            if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
+                $amount = $this->currentStudy()->getOfferCodePrice();
+            }
+        }
 
         $subscription->setYear($this->getCurrentYear());
         $subscription->setStatus($status);
