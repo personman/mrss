@@ -201,7 +201,8 @@ class SubscriptionController extends AbstractActionController
         $agreement = $this->getAgreementFromSession();
         if (!empty($agreement['offerCode'])) {
             if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
-                $amount = $this->currentStudy()->getOfferCodePrice();
+                $amount = $this->currentStudy()
+                    ->getOfferCodePrice($agreement['offerCode']);
             }
         }
 
@@ -589,7 +590,8 @@ class SubscriptionController extends AbstractActionController
         // Check for offer code
         if (!empty($agreement['offerCode'])) {
             if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
-                $amount = $this->currentStudy()->getOfferCodePrice();
+                $amount = $this->currentStudy()
+                    ->getOfferCodePrice($agreement['offerCode']);
             }
         }
 

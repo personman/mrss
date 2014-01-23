@@ -781,3 +781,7 @@ form#system #control-group-paymentType {
 .roundedtable p {
     color: #333333;
 }
+
+.deleteLink {
+    color: red;
+}

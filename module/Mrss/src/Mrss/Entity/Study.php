@@ -99,15 +99,10 @@ class Study
     protected $googleAnalyticsKey;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\OneToMany(targetEntity="OfferCode", mappedBy="study")
+     * @ORM\OrderBy({"code" = "ASC"})
      */
     protected $offerCodes;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    protected $offerCodePrice;
-
 
     public function __construct()
     {
@@ -153,6 +148,18 @@ class Study
     public function getBenchmarkGroups()
     {
         return $this->benchmarkGroups;
+    }
+
+    public function setOfferCodes($offerCodes)
+    {
+        $this->offerCodes = $offerCodes;
+
+        return $this;
+    }
+
+    public function getOfferCodes()
+    {
+        return $this->offerCodes;
     }
 
     public function setCurrentYear($year)
@@ -346,20 +353,10 @@ class Study
         return $this->googleAnalyticsKey;
     }
 
-    public function setOfferCodes($codes)
-    {
-        $this->offerCodes = $codes;
-
-        return $this;
-    }
-
-    public function getOfferCodes()
-    {
-        return $this->offerCodes;
-    }
-
     public function hasOfferCode()
     {
+        $codes = $this->getOfferCodes();
+
         return (!empty($this->offerCodes));
     }
 
@@ -383,22 +380,26 @@ class Study
 
     public function getOfferCodesArray()
     {
-        $codes = explode(',', $this->offerCodes);
-        $codes = array_map('trim', $codes);
+        $codes = array();
+        foreach ($this->getOfferCodes() as $offerCode) {
+            $codes[] = trim($offerCode->getCode());
+        }
 
         return $codes;
     }
 
-    public function setOfferCodePrice($price)
+    public function getOfferCodePrice($code)
     {
-        $this->offerCodePrice = $price;
+        foreach ($this->getOfferCodes() as $offerCode) {
+            $code = strtolower(trim($code));
+            $validCode = strtolower(trim($offerCode->getCode()));
+            if ($code == $validCode) {
+                return $offerCode->getPrice();
+            }
+        }
 
-        return $this;
-    }
-
-    public function getOfferCodePrice()
-    {
-        return $this->offerCodePrice;
+        // If none match, return the normal price
+        return $this->getCurrentPrice();
     }
 
     public function getCompletionPercentage(Observation $observation)

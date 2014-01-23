@@ -1,15 +1,49 @@
 <h2>Studies</h2>
 
-<ul>
+<table class="table table-striped">
+    <tbody>
     <?php foreach ($this->studies as $study): ?>
-        <li>
-            <a href="<?= $this->url('studies/view', array('id' => $study->getId())) ?>">
+        <tr>
+            <td>
                 <?php echo $study->getName() ?>
-            </a>
-            (<a href="<?= $this->url(
-                'studies/edit',
-                array('id' => $study->getId())
-            ) ?>">Edit</a>)
-        </li>
+            </td>
+            <td>
+                <a href="<?= $this->url(
+                    'studies/completion',
+                    array('id' => $study->getId())
+                ) ?>">
+                    Completion
+                </a>
+            </td>
+            <td>
+                <a href="<?= $this->url('benchmark', array('study' => $study->getId())) ?>">
+                    Benchmark Setup
+                </a>
+            </td>
+            <td>
+                <a href="<?= $this->url(
+                    'offercodes',
+                    array('study' => $study->getId())
+                ) ?>">Offer Codes (<?= count($study->getOfferCodes()) ?>)</a>
+            </td>
+            <td>
+                <a href="<?= $this->url(
+                    'studies/edit',
+                    array('id' => $study->getId())
+                ) ?>">Settings</a>
+            </td>
+
+            <? /*<td>
+                <a href="<?= $this->url(
+                    'studies/import',
+                    array('id' => $study->getId())
+                ) ?>">
+                    Import Benchmark Setup from CSV
+                </a>
+            </td>*/ ?>
+
+        </tr>
     <?php endforeach ?>
-</ul>
+
+    </tbody>
+</table>

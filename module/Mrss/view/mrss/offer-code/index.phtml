@@ -1,0 +1,37 @@
+<h2>Offer Codes for <?= $study->getName() ?></h2>
+
+<a href="<?= $this->url('offercodes/edit', array('study' => $study->getId())) ?>" class="btn">
+    <i class="icon-plus-sign"></i> Add Offer Code
+</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <? foreach ($study->getOfferCodes() as $code): ?>
+            <tr>
+                <td><?= $code->getCode() ?></td>
+                <td>$<?= $code->getPrice() ?></td>
+                <td>
+                    <a href="<?= $this->url(
+                        'offercodes/edit',
+                        array('study' => $study->getId(), 'id' => $code->getId())
+                    ) ?>">Edit</a>
+                    &nbsp;&nbsp;
+                    <a href="<?= $this->url(
+                        'offercodes/delete',
+                        array('study' => $study->getId(), 'id' => $code->getId())
+                    ) ?>" class="deleteLink">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        <? endforeach ?>
+    </tbody>
+</table>
+

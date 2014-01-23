@@ -132,6 +132,10 @@ return array(
                     'roles' => array('admin')
                 ),
                 array(
+                    'controller' => 'offercodes',
+                    'roles' => array('admin')
+                ),
+                array(
                     'controller' => 'import',
                     'roles' => array('admin')
                 ),

@@ -248,6 +248,14 @@ class Module
 
                     return $studyModel;
                 },
+                'model.offerCode' => function ($sm) {
+                        $offerCodeModel = new \Mrss\Model\OfferCode();
+                        $em = $sm->get('em');
+
+                        $offerCodeModel->setEntityManager($em);
+
+                        return $offerCodeModel;
+                    },
                 'model.subscription' => function ($sm) {
                     $subscriptionModel = new \Mrss\Model\Subscription();
                     $em = $sm->get('em');

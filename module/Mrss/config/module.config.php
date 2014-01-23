@@ -161,6 +161,40 @@ return array(
                     )
                 )
             ),
+            'offercodes' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/offercodes/study/:study',
+                    'defaults' => array(
+                        'controller' => 'offercodes',
+                        'action' => 'index',
+                        'study' => 0
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit[/id/:id]',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'delete' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/delete[/id/:id]',
+                            'defaults' => array(
+                                'action' => 'delete',
+                                'id' => 0
+                            )
+                        )
+                    )
+                )
+            ),
             'subscribe' => array(
                 'type' => 'segment',
                 'priority' => 10,
@@ -717,6 +751,7 @@ return array(
             'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
             'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController',
+            'offercodes' => 'Mrss\Controller\OfferCodeController',
             'settings' => 'Mrss\Controller\SettingController',
             'pages' => 'Mrss\Controller\PageController',
             'users' => 'Mrss\Controller\UserController',
