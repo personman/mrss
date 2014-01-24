@@ -1,5 +1,7 @@
 #wrapper .navbar.navbar-inverse .navbar-inner {
     background: #13B2CD;
+    border-bottom: 4px solid #0097BB;
+    padding-bottom: 0px;
 }
 
 #wrapper .navbar-inverse .dropdown-menu {
@@ -9,7 +11,7 @@
 #wrapper .navbar .brand img {
     margin-left: 30%;
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 #wrapper .navbar ul.nav.pull-right {
