@@ -219,3 +219,6 @@ html table.roundedtable {
     width: 92%;
 }
 
+ul.symbol-links li.form {
+    padding: 20px;
+}
