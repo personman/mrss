@@ -11,6 +11,8 @@
  * file.
  */
 
+// Note: This navigation setup is modified by module/Mrss/src/Mrss/Service/
+// NavigationFactory.php
 return array(
     'navigation' => array(
         'default' => array(
@@ -19,38 +21,53 @@ return array(
                 'route' => 'home'
             ),
             'about' => array(
-                'label' => 'About Us',
+                'label' => 'The Project',
                 'uri' => '#',
                 'pages' => array(
                     array(
-                        'label' => 'The Project',
+                        'label' => 'Project Overview',
                         'uri' => '/about'
                     ),
-                    array(
-                        'label' => 'The Benchmarking Institute',
-                        'uri' => '/National-Higher-Education-Benchmarking-Institute'
-                    ),
-                    'nccet' => array(
-                        'label' => 'NCCET',
-                        'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
+                    'benchmarks' => array(
+                        'label' => 'Benchmarks',
+                        'uri' => '/Benchmarks',
                     ),
                     'partners' => array(
                         'label' => 'Project Partners',
                         'uri' => '/partners'
                     ),
-                    array(
-                        'label' => 'Our Staff',
-                        'uri' => '/staff'
+                    'nccet' => array(
+                        'label' => 'NCCET',
+                        'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
+                    ),
+                    'timeline' => array(
+                        'label' => 'Timeline',
+                        'uri' => 'timeline'
                     ),
                     /*array(
                         'label' => 'Testimonials',
                         'uri' => '/testimonials'
                     ),*/
+                )
+            ),
+            'about2' => array(
+                'uri' => '#',
+                'label' => 'About Us',
+                'pages' => array(
+                    array(
+                        'label' => 'The Benchmarking Institute',
+                        'uri' => '/National-Higher-Education-Benchmarking-Institute'
+                    ),
+                    array(
+                        'label' => 'Our Staff',
+                        'uri' => '/staff'
+                    ),
                     array(
                         'label' => 'Contact Us',
                         'uri' => '/contact'
                     )
-                )
+
+                ),
             ),
             'data-entry' => array(
                 'label' => 'Data Entry',
@@ -63,50 +80,24 @@ return array(
                 'label' => 'Reports',
                 'uri' => '/reports'
             ),
-            /*
-            // ToDo: before activating below code make sure that Membership Benefits don't show when logged in. PRA 130626
-            array(
-              'label' => 'Subscribe',
-              'uri' => '#',
-              'pages' => array(
-                array(
-                   'label' => 'Subscribe Now',
-                   'route' => 'subscribe',
-                   'controller' => 'subscription'
-                 ), 
-                array(
-                   'label' => 'Membership Benefits',
-                   'uri' => '/Membership-Benefits'
-                 ),
-               )
-            ),
-            */
             'subscribe' => array(
-                'label' => 'Subscribe',
+                'label' => 'Join',
                 'route' => 'subscribe',
                 'controller' => 'subscription',
                 'pages' => array(
                     'subscribe' => array(
-                        'label' => 'Subscribe Now',
+                        'label' => 'How to Join',
                         'uri' => '/subscription'
                     ),
                     'membership-benefits' => array(
                         'label' => 'Membership Benefits',
                         'uri' => '/Membership-Benefits'
                     ),
-                    'timeline' => array(
-                        'label' => 'Timeline',
-                        'uri' => 'timeline'
-                    ),
                     'confidentiality' => array(
                         'label' => 'Confidentiality',
                         'uri' => 'confidentiality'
                     )
                 )
-            ),
-            'benchmarks' => array(
-                'label' => 'Benchmarks',
-                'uri' => '/Benchmarks',
             ),
             'help' => array(
                 'label' => 'Help',
