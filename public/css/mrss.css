@@ -15,7 +15,7 @@
 }
 
 #wrapper .navbar ul.nav.pull-right {
-    margin-top: 100px;
+    margin-top: 70px;
     font-size: 75%;
 }
 
@@ -42,6 +42,14 @@
 
 #wrapper .nav-collapse {
     padding-right: 20px;
+}
+
+#wrapper .navbar-inverse li {
+    display: inline;
+}
+
+#wrapper .navbar-inverse ul {
+    text-align: center;
 }
 
 .btn-primary {
@@ -196,7 +204,7 @@ body #footer {
 }
 
 body #footer .navbar-inverse {
-    max-width: 700px;
+    max-width: 570px;
 }
 
 
