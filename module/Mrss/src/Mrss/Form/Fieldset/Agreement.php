@@ -13,7 +13,8 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
 
     public function __construct($studyName = 'MRSS', $offerCodes = array())
     {
-        $this->offerCodes = $offerCodes;
+        // Case insensitive search
+        $this->offerCodes = array_map('strtolower', $offerCodes);
 
         parent::__construct('agreement');
 

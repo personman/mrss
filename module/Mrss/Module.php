@@ -308,6 +308,27 @@ class Module
 
                     return $service;
                 },
+                'service.nhebisubscriptions' => function ($sm) {
+                    $config = $sm->get('Config');
+                    $service = new \Mrss\Service\NhebiSubscriptions();
+
+                    if (!empty($config['nhebisubscriptions'])) {
+                        $service->setConfiguration($config['nhebisubscriptions']);
+                    }
+
+                    return $service;
+                },
+                'service.nhebisubscriptions.mrss' => function ($sm) {
+                    // Use require to avoid namespaces so this class can run in old PHP
+                    //$file = dirname(__FILE__) . '/src/Mrss/Service/NhebiSubscriptions/Mrss.php';
+                    //require $file;
+
+                    $service = new \Mrss\Service\NhebiSubscriptions\Mrss();
+                    $service->setCollegeModel($sm->get('model.college'));
+                    $service->setSubscriptionModel($sm->get('model.subscription'));
+
+                    return $service;
+                },
                 'mail.transport' => function ($sm) {
                     //return new \Zend\Mail\Transport\Sendmail();
                     // @todo: Consider merging this with the GoalioMailService

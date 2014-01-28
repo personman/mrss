@@ -10,6 +10,7 @@ use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 use Zend\Form\Form;
 use Zend\Form\Fieldset;
 use Zend\Session\Container;
@@ -346,6 +347,36 @@ class SubscriptionController extends AbstractActionController
         $paymentModel->save($payment);
 
         die('ok');
+    }
+
+    /**
+     * For allowing other NHEBI apps to see if the college has a subscription
+     * (for discounts)
+     */
+    public function checkAction()
+    {
+        // Debug
+        $test = $this->params()->fromQuery('test');
+        if ($test) {
+            $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
+            $service->setCurrentStudyCode('test');
+
+            $result = $service->checkForDiscount('2013', '155210');
+            var_dump($result); die;
+        }
+
+
+
+        $checker = $this->getServiceLocator()->get('service.nhebisubscriptions.mrss');
+        $checker->setStudyId($this->currentStudy()->getId());
+
+        // Params
+        $year = $this->params()->fromQuery('year');
+        $ipeds = $this->params()->fromQuery('ipeds');
+
+        $result = $checker->checkSubscription($year, $ipeds);
+
+        return new JsonModel(array('subscribed' => $result));
     }
 
     public function checkSubscriptionIsInProgress()
