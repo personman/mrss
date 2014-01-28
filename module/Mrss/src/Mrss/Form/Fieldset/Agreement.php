@@ -13,7 +13,8 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
 
     public function __construct($studyName = 'MRSS', $offerCodes = array())
     {
-        $this->offerCodes = $offerCodes;
+        // Case insensitive search
+        $this->offerCodes = array_map('strtolower', $offerCodes);
 
         parent::__construct('agreement');
 
@@ -42,7 +43,7 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 'options' => array(
                     'label' => 'Electronic Signature',
                     'help-block' => 'The name of the person at your institution ' .
-                    'who is authorizing participation'
+                        'who is authorizing participation'
                 ),
                 'attributes' => array(
                     //'required' => true,
