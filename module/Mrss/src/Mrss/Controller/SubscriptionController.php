@@ -355,24 +355,23 @@ class SubscriptionController extends AbstractActionController
      */
     public function checkAction()
     {
+        // Params
+        $year = $this->params()->fromQuery('year');
+        $ipeds = $this->params()->fromQuery('ipeds');
+
         // Debug
         $test = $this->params()->fromQuery('test');
         if ($test) {
             $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
             $service->setCurrentStudyCode('test');
 
-            $result = $service->checkForDiscount('2013', '155210');
-            var_dump($result); die;
+            $discount = $service->checkForDiscount($year, $ipeds);
+            var_dump($discount); die;
         }
-
-
 
         $checker = $this->getServiceLocator()->get('service.nhebisubscriptions.mrss');
         $checker->setStudyId($this->currentStudy()->getId());
 
-        // Params
-        $year = $this->params()->fromQuery('year');
-        $ipeds = $this->params()->fromQuery('ipeds');
 
         $result = $checker->checkSubscription($year, $ipeds);
 

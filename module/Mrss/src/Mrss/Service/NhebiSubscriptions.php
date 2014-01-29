@@ -89,6 +89,8 @@ class NhebiSubscriptions
             $results[$code] = $this->getRemoteResults($url);
         }
 
+        //var_dump($results);
+
         return $results;
     }
 
