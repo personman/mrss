@@ -207,6 +207,24 @@ class SubscriptionController extends AbstractActionController
             }
         }
 
+        // Check other studies for subscriptions and give a discount
+        $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
+        $year = $this->getCurrentYear();
+        $subscription = $this->getSubscriptionFromSession();
+        $ipeds = $subscription['institution']['ipeds'];
+
+        $studyId = $this->currentStudy()->getId();
+        if ($studyId == 2) {
+            $currentStudyCode = 'mrss';
+        } elseif ($studyId == 3) {
+            $currentStudyCode = 'workforce';
+        }
+        $service->setCurrentStudyCode($currentStudyCode);
+
+        $discount = $service->checkForDiscount($year, $ipeds);
+        $amount = $amount - $discount;
+
+
         // Calculate the validation key for uPay/TouchNet
         $transId = $this->getTransIdFromSession();
         // @todo: put this in the db, too:
