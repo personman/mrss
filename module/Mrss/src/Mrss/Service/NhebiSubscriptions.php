@@ -86,10 +86,16 @@ class NhebiSubscriptions
             // Append ipeds and year
             $url .= "?year=$year&ipeds=$ipeds";
 
+            if ($this->getDebug()) {
+                var_dump($url);
+            }
+
             $results[$code] = $this->getRemoteResults($url);
         }
 
-        //var_dump($results);
+        if ($this->getDebug()) {
+            var_dump($results);
+        }
 
         return $results;
     }
@@ -104,6 +110,7 @@ class NhebiSubscriptions
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         $json = curl_exec($ch);
 
@@ -129,5 +136,12 @@ class NhebiSubscriptions
         }
 
         return $discount;
+    }
+
+    public function getDebug()
+    {
+        $config = $this->getConfiguration();
+
+        return (!empty($config['debug']));
     }
 }
