@@ -200,30 +200,34 @@ class SubscriptionController extends AbstractActionController
 
         // Check for offer code
         $agreement = $this->getAgreementFromSession();
+        $skipOtherDiscounts = false;
         if (!empty($agreement['offerCode'])) {
             if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
                 $amount = $this->currentStudy()
                     ->getOfferCodePrice($agreement['offerCode']);
+                $skipOtherDiscounts = $this->currentStudy()
+                    ->getOfferCode($agreement['offerCode'])->getSkipOtherDiscounts();
             }
         }
 
         // Check other studies for subscriptions and give a discount
-        $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
-        $year = $this->getCurrentYear();
-        $subscription = $this->getSubscriptionFromSession();
-        $ipeds = $subscription['institution']['ipeds'];
+        if (!$skipOtherDiscounts) {
+            $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
+            $year = $this->getCurrentYear();
+            $subscription = $this->getSubscriptionFromSession();
+            $ipeds = $subscription['institution']['ipeds'];
 
-        $studyId = $this->currentStudy()->getId();
-        if ($studyId == 2) {
-            $currentStudyCode = 'mrss';
-        } elseif ($studyId == 3) {
-            $currentStudyCode = 'workforce';
+            $studyId = $this->currentStudy()->getId();
+            if ($studyId == 2) {
+                $currentStudyCode = 'mrss';
+            } elseif ($studyId == 3) {
+                $currentStudyCode = 'workforce';
+            }
+            $service->setCurrentStudyCode($currentStudyCode);
+
+            $discount = $service->checkForDiscount($year, $ipeds);
+            $amount = $amount - $discount;
         }
-        $service->setCurrentStudyCode($currentStudyCode);
-
-        $discount = $service->checkForDiscount($year, $ipeds);
-        $amount = $amount - $discount;
-
 
         // Calculate the validation key for uPay/TouchNet
         $transId = $this->getTransIdFromSession();
