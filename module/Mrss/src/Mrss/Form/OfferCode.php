@@ -48,6 +48,16 @@ class OfferCode extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'skipOtherDiscounts',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Skip Other Discounts'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
 
         $this->setInputFilter($this->getInputFilterSetup());

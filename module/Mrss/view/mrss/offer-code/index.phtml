@@ -9,6 +9,7 @@
         <tr>
             <th>Code</th>
             <th>Price</th>
+            <th>Skip Other Discounts</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -17,6 +18,7 @@
             <tr>
                 <td><?= $code->getCode() ?></td>
                 <td>$<?= $code->getPrice() ?></td>
+                <td><?= ($code->getSkipOtherDiscounts()) ? 'Yes' : 'No' ?></td>
                 <td>
                     <a href="<?= $this->url(
                         'offercodes/edit',

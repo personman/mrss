@@ -1,5 +1,7 @@
 <?php
 
+namespace Mrss\Service\NhebiSubscriptions;
+
 /**
  * Class Ncccpp
  *

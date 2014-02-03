@@ -384,7 +384,8 @@ class SubscriptionController extends AbstractActionController
             $service->setCurrentStudyCode('test');
 
             $discount = $service->checkForDiscount($year, $ipeds);
-            var_dump($discount); die;
+            var_dump($discount);
+            die;
         }
 
         $checker = $this->getServiceLocator()->get('service.nhebisubscriptions.mrss');
