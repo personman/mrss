@@ -392,7 +392,7 @@ class Study
     {
         $offers = $this->getOfferCodes();
         foreach ($offers as $offer) {
-            if ($offer->getCode() == $code) {
+            if (strtolower($offer->getCode()) == strtolower($code)) {
                 return $offer;
             }
         }
