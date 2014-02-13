@@ -44,16 +44,23 @@ class NhebiSubscriptions
 
     public function checkForDiscount($year, $ipeds)
     {
-        $results = $this->check($year, $ipeds);
+        if ($this->isEnabled()) {
+            $results = $this->check($year, $ipeds);
 
-        $count = 0;
-        foreach ($results as $code => $result) {
-            if ($result->subscribed) {
-                $count++;
+            $count = 0;
+            foreach ($results as $code => $result) {
+                if ($result->subscribed) {
+                    $count++;
+                }
             }
+
+            $discount = $this->getDiscountByCount($count);
+        } else {
+            $discount = 0;
         }
 
-        return $this->getDiscountByCount($count);
+
+        return $discount;
     }
 
     /**
@@ -143,5 +150,14 @@ class NhebiSubscriptions
         $config = $this->getConfiguration();
 
         return (!empty($config['debug']));
+    }
+
+    public function isEnabled()
+    {
+        $config = $this->getConfiguration();
+
+        $enabled = !empty($config['enabled']);
+
+        return $enabled;
     }
 }
