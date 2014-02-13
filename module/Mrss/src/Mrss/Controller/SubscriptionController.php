@@ -10,6 +10,7 @@ use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 use Zend\Form\Form;
 use Zend\Form\Fieldset;
 use Zend\Session\Container;
@@ -199,11 +200,33 @@ class SubscriptionController extends AbstractActionController
 
         // Check for offer code
         $agreement = $this->getAgreementFromSession();
+        $skipOtherDiscounts = false;
         if (!empty($agreement['offerCode'])) {
             if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
                 $amount = $this->currentStudy()
                     ->getOfferCodePrice($agreement['offerCode']);
+                $skipOtherDiscounts = $this->currentStudy()
+                    ->getOfferCode($agreement['offerCode'])->getSkipOtherDiscounts();
             }
+        }
+
+        // Check other studies for subscriptions and give a discount
+        if (!$skipOtherDiscounts) {
+            $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
+            $year = $this->getCurrentYear();
+            $subscription = $this->getSubscriptionFromSession();
+            $ipeds = $subscription['institution']['ipeds'];
+
+            $studyId = $this->currentStudy()->getId();
+            if ($studyId == 2) {
+                $currentStudyCode = 'mrss';
+            } elseif ($studyId == 3) {
+                $currentStudyCode = 'workforce';
+            }
+            $service->setCurrentStudyCode($currentStudyCode);
+
+            $discount = $service->checkForDiscount($year, $ipeds);
+            $amount = $amount - $discount;
         }
 
         // Calculate the validation key for uPay/TouchNet
@@ -346,6 +369,36 @@ class SubscriptionController extends AbstractActionController
         $paymentModel->save($payment);
 
         die('ok');
+    }
+
+    /**
+     * For allowing other NHEBI apps to see if the college has a subscription
+     * (for discounts)
+     */
+    public function checkAction()
+    {
+        // Params
+        $year = $this->params()->fromQuery('year');
+        $ipeds = $this->params()->fromQuery('ipeds');
+
+        // Debug
+        $test = $this->params()->fromQuery('test');
+        if ($test) {
+            $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
+            $service->setCurrentStudyCode('test');
+
+            $discount = $service->checkForDiscount($year, $ipeds);
+            var_dump($discount);
+            die;
+        }
+
+        $checker = $this->getServiceLocator()->get('service.nhebisubscriptions.mrss');
+        $checker->setStudyId($this->currentStudy()->getId());
+
+
+        $result = $checker->checkSubscription($year, $ipeds);
+
+        return new JsonModel(array('subscribed' => $result));
     }
 
     public function checkSubscriptionIsInProgress()

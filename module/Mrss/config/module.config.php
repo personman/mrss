@@ -261,6 +261,15 @@ return array(
                             )
                         )
                     ),
+                    'check' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/check',
+                            'defaults' => array(
+                                'action' => 'check'
+                            )
+                        )
+                    ),
                 )
             ),
             'college' => array(

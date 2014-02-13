@@ -388,6 +388,18 @@ class Study
         return $codes;
     }
 
+    public function getOfferCode($code)
+    {
+        $offers = $this->getOfferCodes();
+        foreach ($offers as $offer) {
+            if (strtolower($offer->getCode()) == strtolower($code)) {
+                return $offer;
+            }
+        }
+
+        return null;
+    }
+
     public function getOfferCodePrice($code)
     {
         foreach ($this->getOfferCodes() as $offerCode) {

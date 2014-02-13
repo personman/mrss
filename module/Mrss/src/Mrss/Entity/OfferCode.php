@@ -28,6 +28,11 @@ class OfferCode
     protected $price;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $skipOtherDiscounts;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Study")
      */
     protected $study;
@@ -66,6 +71,18 @@ class OfferCode
     public function getPrice()
     {
         return $this->price;
+    }
+
+    public function setSkipOtherDiscounts($skip)
+    {
+        $this->skipOtherDiscounts = $skip;
+
+        return $this;
+    }
+
+    public function getSkipOtherDiscounts()
+    {
+        return $this->skipOtherDiscounts;
     }
 
     public function setStudy(Study $study)
