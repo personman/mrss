@@ -96,7 +96,7 @@ class Benchmark extends AbstractForm
                     data-toggle="modal" data-target="#myModal">
                         Add a benchmark to the equation
                     </a>.
-                    <div class="modal hide fade" id="myModal" tabindex="-1"
+                    <div class="modal fade" id="myModal" tabindex="-1"
                     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

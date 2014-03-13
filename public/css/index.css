@@ -164,7 +164,7 @@
     opacity: .8;
 }
 .asset,
-.fade {
+#feature_slider .fade {
     position: absolute;
     display: none;
 }
