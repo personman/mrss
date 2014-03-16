@@ -32,6 +32,11 @@ class Percentile
     protected $benchmark;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Study")
+     */
+    protected $study;
+
+    /**
      * @ORM\Column(type="integer")
      */
     protected $percentile;
@@ -89,6 +94,18 @@ class Percentile
         return $this->benchmark;
     }
 
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
+    }
+
     public function setPercentile($percentile)
     {
         $this->percentile = $percentile;
@@ -112,5 +129,4 @@ class Percentile
     {
         return $this->value;
     }
-
 }

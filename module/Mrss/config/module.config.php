@@ -515,6 +515,28 @@ return array(
                     )
                 )
             ),
+            'reports' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/reports',
+                    'defaults' => array(
+                        'controller' => 'reports',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'calculate' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate[/year/:year]',
+                            'defaults' => array(
+                                'action' => 'calculate',
+                                'year' => null
+                            )
+                        )
+                    )
+                )
+            ),
             'users' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -763,6 +785,7 @@ return array(
             'offercodes' => 'Mrss\Controller\OfferCodeController',
             'settings' => 'Mrss\Controller\SettingController',
             'pages' => 'Mrss\Controller\PageController',
+            'reports' => 'Mrss\Controller\ReportController',
             'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),

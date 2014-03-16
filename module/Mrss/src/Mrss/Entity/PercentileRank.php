@@ -37,6 +37,11 @@ class PercentileRank
     protected $benchmark;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Study")
+     */
+    protected $study;
+
+    /**
      * @ORM\Column(type="float")
      */
     protected $rank;
@@ -78,7 +83,7 @@ class PercentileRank
         return $this->cipCode;
     }
 
-    public function setCollege(College $college)
+    public function setCollege($college)
     {
         $this->college = $college;
 
@@ -100,6 +105,18 @@ class PercentileRank
     public function getBenchmark()
     {
         return $this->benchmark;
+    }
+
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
     }
 
     public function setRank($rank)

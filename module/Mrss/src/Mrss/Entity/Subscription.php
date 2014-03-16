@@ -31,6 +31,7 @@ class Subscription
 
     /**
      * @ORM\ManyToOne(targetEntity="College", inversedBy="subscriptions")
+     * @var College
      */
     protected $college;
 
@@ -247,6 +248,9 @@ class Subscription
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\Observation
+     */
     public function getObservation()
     {
         return $this->observation;

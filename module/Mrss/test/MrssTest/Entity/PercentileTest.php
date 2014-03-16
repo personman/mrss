@@ -41,7 +41,11 @@ class PercentileTest extends PHPUnit_Framework_TestCase
 
         $benchmarkMock = $this->getMock('Mrss\Entity\Benchmark');
         $this->percentile->setBenchmark($benchmarkMock);
-        $this->assertEquals($benchmarkMock, $this->percentile->getBenchmark());
+        $this->assertSame($benchmarkMock, $this->percentile->getBenchmark());
+
+        $studyMock = $this->getMock('Mrss\Entity\Study');
+        $this->percentile->setStudy($studyMock);
+        $this->assertSame($studyMock, $this->percentile->getStudy());
 
         $this->percentile->setPercentile(90);
         $this->assertEquals(90, $this->percentile->getPercentile());

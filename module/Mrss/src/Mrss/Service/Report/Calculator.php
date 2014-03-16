@@ -28,12 +28,12 @@ class Calculator
     {
         $data = $this->getData();
 
-        if(empty($data)){
+        if (empty($data)) {
             return null;
         }
 
         // makes sure that correct percentile is returned if n = 1
-        if(count($data) == 1){
+        if (count($data) == 1) {
             return $data[0];
         }
 
@@ -49,17 +49,18 @@ class Calculator
         $g_fraction = $nonep - $j_integer;
 
 
-        if($j_integer == $n){
+        if ($j_integer == $n) {
             $value = ((1 - $g_fraction) * $data[$j_integer - 1]) + ($g_fraction * ($data[$j_integer - 1]));
             return $value;
         }
 
-        if($j_integer == 0){
+        if ($j_integer == 0) {
             $value = ((1 - $g_fraction) * $data[$j_integer]) + ($g_fraction * $data[$j_integer]);
             return $value;
         }
 
         $value = ((1 - $g_fraction) * $data[$j_integer - 1]) + ($g_fraction * $data[$j_integer]);
+
         return $value;
 
     }
@@ -79,8 +80,8 @@ class Calculator
         $n = count($data);
 
         $counter = 0;
-        foreach($data as $val){
-            if($val > $value){
+        foreach ($data as $val) {
+            if ($val > $value) {
                 $counter++;
             }
         }

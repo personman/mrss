@@ -1,0 +1,17 @@
+<h2>Calculate Reports</h2>
+
+<?php foreach ($years as $year => $calculationDate): ?>
+    <p>
+        <h4><?= $year ?></h4>
+
+        <?php if (!empty($calculationDate)): ?>
+            Prepared on <?= $calculationDate ?>
+        <?php else: ?>
+            Not yet prepared.
+        <?php endif ?>
+        <br />
+        <br />
+
+        <a href="/reports/calculate/year/<?= $year ?>">Prepare report</a>
+    </p>
+<?php endforeach ?>

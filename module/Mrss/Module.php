@@ -280,6 +280,22 @@ class Module
 
                     return $pageModel;
                 },
+                'model.percentile' => function ($sm) {
+                    $model = new \Mrss\Model\Percentile;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
+                'model.percentileRank' => function ($sm) {
+                    $model = new \Mrss\Model\PercentileRank;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.payment' => function ($sm) {
                     $paymentModel = new \Mrss\Model\Payment;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
@@ -326,6 +342,28 @@ class Module
                     $service = new \Mrss\Service\NhebiSubscriptions\Mrss();
                     $service->setCollegeModel($sm->get('model.college'));
                     $service->setSubscriptionModel($sm->get('model.subscription'));
+
+                    return $service;
+                },
+                'service.report.calculator' => function ($sm) {
+                    $service = new \Mrss\Service\Report\Calculator();
+
+                    return $service;
+                },
+                'service.report' => function ($sm) {
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+
+                    $service = new \Mrss\Service\Report();
+
+                    $service->setSubscriptionModel($sm->get('model.subscription'));
+                    $service->setStudy($currentStudy);
+                    $service->setCalculator($sm->get('service.report.calculator'));
+                    $service->setPercentileModel($sm->get('model.percentile'));
+                    $service->setPercentileRankModel(
+                        $sm->get('model.percentileRank')
+                    );
+                    $service->setSettingModel($sm->get('model.setting'));
 
                     return $service;
                 },

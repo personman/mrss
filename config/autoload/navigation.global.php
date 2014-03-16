@@ -153,6 +153,10 @@ return array(
                 'controller' => 'studies',
                 'route' => 'studies'
             ),
+            'reports' => array(
+                'label' => 'Reports',
+                'route' => 'reports/calculate'
+            ),
             array(
                 'label' => 'Import',
                 'route' => 'import'

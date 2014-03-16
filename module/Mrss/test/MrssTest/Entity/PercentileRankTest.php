@@ -47,6 +47,10 @@ class PercentileRankTest extends PHPUnit_Framework_TestCase
         $this->percentileRank->setCollege($collegeMock);
         $this->assertEquals($collegeMock, $this->percentileRank->getCollege());
 
+        $studyMock = $this->getMock('Mrss\Entity\Study');
+        $this->percentileRank->setStudy($studyMock);
+        $this->assertSame($studyMock, $this->percentileRank->getStudy());
+
         $this->percentileRank->setRank(90);
         $this->assertEquals(90, $this->percentileRank->getRank());
     }
