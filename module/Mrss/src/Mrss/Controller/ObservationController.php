@@ -4,7 +4,6 @@
 namespace Mrss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 

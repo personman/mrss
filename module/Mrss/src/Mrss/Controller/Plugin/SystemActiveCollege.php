@@ -26,7 +26,7 @@ class SystemActiveCollege extends AbstractPlugin
     protected $collegeModel;
 
     /**
-     * @return Study
+     * @return \Mrss\Entity\College
      */
     public function __invoke()
     {

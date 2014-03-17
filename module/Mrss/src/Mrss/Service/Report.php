@@ -6,6 +6,7 @@ use Mrss\Entity\Study;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\Percentile;
 use Mrss\Entity\PercentileRank;
+use Mrss\Entity\Observation;
 use Mrss\Service\Report\Calculator;
 
 class Report
@@ -80,11 +81,16 @@ class Report
             // Can't just pull from observations. have to consider subscriptions, too
             $data = $this->collectDataForBenchmark($benchmark, $year);
 
+            if (empty($data)) {
+                continue;
+            }
+
             $calculator->setData($data);
 
             // Percentiles
             foreach ($breakpoints as $breakpoint) {
                 $value = $calculator->getValueForPercentile($breakpoint);
+
                 $percentileEntity = new Percentile;
                 $percentileEntity->setStudy($study);
                 $percentileEntity->setYear($year);
@@ -164,6 +170,53 @@ class Report
         }
 
         return $data;
+    }
+
+    /**
+     * Get the basic national percentile report in the form of nested
+     * arrays, suitable for building an html, csv, or excel report.
+     *
+     * @param Observation $observation
+     */
+    public function getNationalReportData(Observation $observation) {
+        $year = $observation->getYear();
+        $reportData = array();
+
+        $study = $this->getStudy();
+
+        $benchmarkGroups = $study->getBenchmarkGroups();
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            $groupData = array(
+                'benchmarkGroup' => $benchmarkGroup->getName(),
+                'benchmarks' => array()
+            );
+
+            $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
+            foreach ($benchmarks as $benchmark) {
+                $bencmarkData = array(
+                    'benchmark' => $benchmark->getName(),
+                );
+
+                $percentiles = $this->getPercentileModel()
+                    ->findByBenchmarkAndYear($benchmark, $year);
+
+                $percentileData = array();
+                foreach ($percentiles as $percentile) {
+                    $percentileData[$percentile->getPercentile()] =
+                        $percentile->getValue();
+                }
+
+                $bencmarkData['percentiles'] = $percentileData;
+
+                $groupData['benchmarks'][] = $bencmarkData;
+
+                // @todo: how to pull the pre-calc'd percentiles
+            }
+
+            $reportData[] = $groupData;
+        }
+
+        echo '<pre>' . print_r($reportData, 1) . '</pre>';
     }
 
     public function getPercentileBreakpoints()

@@ -534,6 +534,16 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+                    'national' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/national[/:year]',
+                            'defaults' => array(
+                                'action' => 'national',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),

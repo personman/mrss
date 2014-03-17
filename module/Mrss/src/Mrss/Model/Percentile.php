@@ -18,6 +18,24 @@ class Percentile extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    /**
+     * @param $benchmark
+     * @param $year
+     * @return PercentileEntity[]
+     */
+    public function findByBenchmarkAndYear($benchmark, $year)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'benchmark' => $benchmark,
+                'year' => $year
+            ),
+            array(
+                'percentile' => 'ASC'
+            )
+        );
+    }
+
     public function save(PercentileEntity $percentile)
     {
         $this->getEntityManager()->persist($percentile);

@@ -36,6 +36,22 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function nationalAction()
+    {
+        $year = $this->params()->fromRoute('year');
+
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        $observation = $this->
+        $reportData = $this->getReportService()->getNationalReportData($year);
+
+        return array(
+            'reportData' => $reportData
+        );
+    }
+
     public function setReportService(Report $service)
     {
         $this->reportService = $service;

@@ -34,7 +34,7 @@ class Calculator
 
         // makes sure that correct percentile is returned if n = 1
         if (count($data) == 1) {
-            return $data[0];
+            return current($data);
         }
 
         $percentile = $percentile / 100;
