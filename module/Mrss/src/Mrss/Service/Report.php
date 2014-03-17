@@ -178,7 +178,8 @@ class Report
      *
      * @param Observation $observation
      */
-    public function getNationalReportData(Observation $observation) {
+    public function getNationalReportData(Observation $observation)
+    {
         $year = $observation->getYear();
         $reportData = array();
 

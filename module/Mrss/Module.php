@@ -423,6 +423,23 @@ class Module
 
                     return $plugin;
                 },
+                'currentObservation' => function ($sm) {
+                    $plugin = new \Mrss\Controller\Plugin\CurrentObservation();
+                    $model = $sm->getServiceLocator()->get('model.observation');
+                    $plugin->setObservationModel($model);
+                    $plugin->setCurrentStudyPlugin($sm->get('currentStudy'));
+                    $plugin->setCurrentCollegePlugin($sm->get('currentCollege'));
+
+                    return $plugin;
+                },
+                'currentCollege' => function ($sm) {
+                    $plugin = new \Mrss\Controller\Plugin\CurrentCollege();
+                    $model = $sm->getServiceLocator()->get('model.college');
+                    $plugin->setCollegeModel($model);
+                    $plugin->setuserPlugin($sm->get('zfcUserAuthentication'));
+
+                    return $plugin;
+                },
                 'systemActiveCollege' => function ($sm) {
                     $plugin = new \Mrss\Controller\Plugin\SystemActiveCollege;
 

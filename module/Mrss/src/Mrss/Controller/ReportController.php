@@ -44,8 +44,8 @@ class ReportController extends AbstractActionController
             $year = $this->currentStudy()->getCurrentYear();
         }
 
-        $observation = $this->
-        $reportData = $this->getReportService()->getNationalReportData($year);
+        $observation = $this->currentObservation($year);
+        $reportData = $this->getReportService()->getNationalReportData($observation);
 
         return array(
             'reportData' => $reportData

@@ -183,17 +183,7 @@ class ObservationController extends AbstractActionController
      */
     public function getActiveCollege()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
-
-        if ($user->getRole() == 'system_admin'
-            && !empty($this->getSystemAdminSessionContainer()->college)) {
-            $collegeModel = $this->getServiceLocator()->get('model.college');
-            $college = $collegeModel->find(
-                $this->getSystemAdminSessionContainer()->college
-            );
-        } else {
-            $college = $user->getCollege();
-        }
+        $college = $this->currentCollege();
 
         return $college;
     }
@@ -205,18 +195,7 @@ class ObservationController extends AbstractActionController
      */
     public function getCurrentObservation()
     {
-        // Find the observation by the year and the user's college
-        $collegeId = $this->getActiveCollege()->getId();
-
-        $year = $this->currentStudy()->getCurrentYear();
-
-        $ObservationModel = $this->getServiceLocator()->get('model.observation');
-        /** @var \Mrss\Entity\Observation $observation */
-        $observation = $ObservationModel->findOne($collegeId, $year);
-
-        if (empty($observation)) {
-            throw new \Exception('Unable to get current observation.');
-        }
+        $observation = $this->currentObservation();
 
         return $observation;
     }
