@@ -67,6 +67,7 @@ class Report
 
         // Clear the stored values
         $percentileModel->deleteByStudyAndYear($study->getId(), $year);
+        $percentileRankModel->deleteByStudyAndYear($study->getId(), $year);
 
         // Take note of some stats
         $stats = array(
@@ -102,9 +103,27 @@ class Report
                 $stats['percentiles']++;
             }
 
+            // Save the N (count) as a percentile
+            $n = count($data);
+            $percentileEntity = new Percentile;
+            $percentileEntity->setStudy($study);
+            $percentileEntity->setYear($year);
+            $percentileEntity->setBenchmark($benchmark);
+            $percentileEntity->setPercentile('N');
+            $percentileEntity->setValue($n);
+
+            $percentileModel->save($percentileEntity);
+
             // Percentile ranks
             foreach ($data as $collegeId => $datum) {
                 $percentile = $calculator->getPercentileForValue($datum);
+
+                if (false && $collegeId == 101 && $benchmark->getId() == 1) {
+                    var_dump($data);
+                    var_dump($datum);
+                    var_dump($percentile);
+                    die;
+                }
 
                 $percentileRank = new PercentileRank;
                 $percentileRank->setStudy($study);
@@ -177,6 +196,7 @@ class Report
      * arrays, suitable for building an html, csv, or excel report.
      *
      * @param Observation $observation
+     * @return array
      */
     public function getNationalReportData(Observation $observation)
     {
@@ -194,7 +214,11 @@ class Report
 
             $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
             foreach ($benchmarks as $benchmark) {
-                $bencmarkData = array(
+                if ($this->isBenchmarkExcludeFromReport($benchmark)) {
+                    continue;
+                }
+
+                $benchmarkData = array(
                     'benchmark' => $benchmark->getName(),
                 );
 
@@ -207,22 +231,105 @@ class Report
                         $percentile->getValue();
                 }
 
-                $bencmarkData['percentiles'] = $percentileData;
+                if (!empty($percentileData['N'])) {
+                    $benchmarkData['N'] = $percentileData['N'];
+                    unset($percentileData['N']);
+                } else {
+                    $benchmarkData['N'] = '';
+                }
 
-                $groupData['benchmarks'][] = $bencmarkData;
 
-                // @todo: how to pull the pre-calc'd percentiles
+                $benchmarkData['percentiles'] = $percentileData;
+
+                $benchmarkData['reported'] = $observation->get(
+                    $benchmark->getDbColumn()
+                );
+
+                $percentileRank = $this->getPercentileRankModel()
+                    ->findOneByCollegeBenchmarkAndYear(
+                        $observation->getCollege(),
+                        $benchmark,
+                        $year
+                    );
+
+                if (!empty($percentileRank)) {
+                    $benchmarkData['percentile_rank_id'] = $percentileRank->getId();
+                    $benchmarkData['percentile_rank'] = $percentileRank->getRank();
+                } else {
+                    $benchmarkData['percentile_rank_id'] = '';
+                    $benchmarkData['percentile_rank'] = '';
+                }
+
+                $groupData['benchmarks'][] = $benchmarkData;
+
             }
 
             $reportData[] = $groupData;
         }
 
-        echo '<pre>' . print_r($reportData, 1) . '</pre>';
+        //echo '<pre>' . print_r($reportData, 1) . '</pre>';
+        return $reportData;
     }
 
     public function getPercentileBreakpoints()
     {
         return array(10, 25, 50, 75, 90);
+    }
+
+    public function getPercentileBreakPointLabels()
+    {
+        $breakpoints = $this->getPercentileBreakpoints();
+        $labels = array();
+        foreach ($breakpoints as $breakpoint) {
+            if ($breakpoint == 50) {
+                $label = 'Mdn';
+            } else {
+                $label = $this->getOrdinal($breakpoint);
+            }
+
+            $labels[] = $label;
+        }
+
+        return $labels;
+    }
+
+    public function getBenchmarksToExcludeFromReport()
+    {
+        return array(
+            'institutional_demographics_campus_environment',
+            'institutional_demographics_staff_unionized',
+            'institutional_demographics_faculty_unionized',
+        );
+    }
+
+    public function isBenchmarkExcludeFromReport(Benchmark $benchmark)
+    {
+        $toExclude = $this->getBenchmarksToExcludeFromReport();
+
+        return in_array($benchmark->getDbColumn(), $toExclude);
+    }
+
+    public function getOrdinal($number)
+    {
+        // We don't want to show 0 or 99, so use > or < for those
+        if ($number < 1) {
+            $html = '<1<sup>st</sup>';
+        } elseif ($number > 99) {
+            $html = '>99<sup>th</sup>';
+        } else {
+            $rounded = round($number);
+
+            $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+            if (($rounded % 100) >= 11 && ($rounded % 100) <= 13) {
+                $abbreviation = 'th';
+            } else {
+                $abbreviation = $ends[$rounded % 10];
+            }
+
+            $html = "$rounded<sup>$abbreviation</sup>";
+        }
+
+        return $html;
     }
 
     public function setStudy(Study $study)
@@ -268,6 +375,9 @@ class Report
         return $this;
     }
 
+    /**
+     * @return \Mrss\Model\PercentileRank
+     */
     public function getPercentileRankModel()
     {
         return $this->percentileRankModel;

@@ -1,0 +1,32 @@
+.report thead {
+    margin-top: 30px;
+}
+
+tr.topHeading th {
+    background: #608CC0;
+    color: #FFF;
+    text-align: center;
+}
+
+tr.topHeading th.benchmarkGroupTitle {
+    background: transparent;
+    color: #000;
+}
+
+tr.secondHeading th {
+    background: #DCE6F1;
+    text-align: center;
+}
+
+.report tbody td {
+    text-align: right;
+}
+
+.report tbody td.benchmarkLabel {
+    text-align: left;
+    font-weight: bold;
+}
+
+.table thead th {
+    border-top: none;
+}

@@ -18,6 +18,17 @@ class PercentileRank extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function findOneByCollegeBenchmarkAndYear($college, $benchmark, $year)
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+                'college' => $college,
+                'benchmark' => $benchmark,
+                'year' => $year
+            )
+        );
+    }
+
     public function save(PercentileRankEntity $PercentileRank)
     {
         $this->getEntityManager()->persist($PercentileRank);

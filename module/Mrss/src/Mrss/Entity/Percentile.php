@@ -37,7 +37,7 @@ class Percentile
     protected $study;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     protected $percentile;
 

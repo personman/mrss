@@ -1,1 +1,52 @@
-national report
+<?= $this->headLink()->appendStylesheet('/css/report.css') ?>
+
+<h2>Report of National Aggregate Data</h2>
+
+<p>
+    Prepared for <?= $college->getName() ?>
+</p>
+
+<div class="report">
+    <table class="table table-hover">
+    <?php foreach ($reportData as $benchmarkGroup): ?>
+
+                <thead>
+                    <tr class="topHeading">
+                        <th class="benchmarkGroupTitle" rowspan="2"><h3><?= $benchmarkGroup['benchmarkGroup'] ?></h3></th>
+                        <th colspan="2">Institution</th>
+                        <th></th>
+                        <th colspan="5">Percentiles</th>
+                    </tr>
+                    <tr class="secondHeading">
+                        <th>Reported Value</th>
+                        <th>% Rank</th>
+                        <th>N</th>
+                        <?php foreach ($breakpoints as $breakpoint): ?>
+                        <th><?= $breakpoint ?></th>
+                        <?php endforeach ?>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
+                        <tr>
+                            <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
+                            <td><?= number_format($benchmark['reported'], 0) ?></td>
+                            <td><?= round($benchmark['percentile_rank']) ?></td>
+                            <td><?= $benchmark['N'] ?></td>
+                            <?php foreach ($benchmark['percentiles'] as $percentile): ?>
+                            <td><?= number_format($percentile, 0) ?></td>
+                            <?php endforeach ?>
+                        </tr>
+
+                    <?php endforeach ?>
+                    <tr class="spacerRow">
+                        <td colspan="9"></td>
+                    </tr>
+                </tbody>
+
+
+
+    <?php endforeach ?>
+    </table>
+</div>

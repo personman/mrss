@@ -48,7 +48,10 @@ class ReportController extends AbstractActionController
         $reportData = $this->getReportService()->getNationalReportData($observation);
 
         return array(
-            'reportData' => $reportData
+            'reportData' => $reportData,
+            'college' => $observation->getCollege(),
+            'breakpoints' => $this->getReportService()
+                    ->getPercentileBreakPointLabels()
         );
     }
 
