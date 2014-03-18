@@ -65,7 +65,7 @@ class Benchmark extends AbstractModel
 
     public function findComputed()
     {
-        return $this->getRepository()->findBy(array('inputType' => 'computed'));
+        return $this->getRepository()->findBy(array('computed' => true));
     }
 
     public function save(BenchmarkEntity $benchmark)

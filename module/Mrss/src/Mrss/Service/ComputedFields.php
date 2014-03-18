@@ -33,6 +33,9 @@ class ComputedFields
         $equation = $this->prepareEquation($equation, $observation);
 
         if (empty($equation)) {
+            /*throw new \Exception(
+                'Invalid equation for benchmark: .' . $benchmark->getDbColumn())
+            ;*/
             return false;
         }
 
@@ -42,6 +45,7 @@ class ComputedFields
         // Save the computed value
         $observation->set($benchmarkColumn, $result);
         $this->getObservationModel()->save($observation);
+        $this->getObservationModel()->getEntityManager()->flush();
 
         return true;
     }

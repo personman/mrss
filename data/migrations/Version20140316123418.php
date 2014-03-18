@@ -34,5 +34,6 @@ class Version20140316123418 extends AbstractMigration
         $this->addSql("ALTER TABLE percentiles DROP FOREIGN KEY FK_131D1EEEE7B003E9");
         $this->addSql("DROP INDEX IDX_131D1EEEE7B003E9 ON percentiles");
         $this->addSql("ALTER TABLE percentiles DROP study_id");
+        $this->addSql("DROP INDEX idx_4778a011409dd88 ON subscriptions");
     }
 }

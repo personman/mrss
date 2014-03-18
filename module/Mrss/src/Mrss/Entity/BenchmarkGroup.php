@@ -185,7 +185,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         $nonComputedBenchmarks = array();
 
         foreach ($benchmarks as $benchmark) {
-            if ($benchmark->getInputType() != 'computed') {
+            if (!$benchmark->getComputed()) {
                 $nonComputedBenchmarks[] = $benchmark;
             }
         }
@@ -205,7 +205,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         $benchmarksForCompletion = array();
 
         foreach ($benchmarks as $benchmark) {
-            if ($benchmark->getInputType() != 'computed'
+            if (!$benchmark->getComputed()
                 && !$benchmark->getExcludeFromCompletion()) {
                 $benchmarksForCompletion[] = $benchmark;
             }
