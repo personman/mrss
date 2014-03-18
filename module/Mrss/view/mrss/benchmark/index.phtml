@@ -1,3 +1,33 @@
+<script type="text/javascript">
+    $(function() {
+        // Make benchmrks sortable
+        $('tbody.sortable').sortable({
+            update: function(event, ui) {
+                parent = ui.item.parent()
+
+                var benchmarkGroupId = parent.attr('id').split('_').pop()
+
+                var benchmarkIds = [];
+                parent.find('tr').each(function() {
+                    benchmarkIds.push(parseInt($(this).attr('id').split('_').pop()))
+                })
+
+                data = {
+                    benchmarkGroupId: benchmarkGroupId,
+                    benchmarks: benchmarkIds
+                }
+
+                $.post('/benchmark/reorder', data, function(result) {
+                    //console.log(result)
+                    if (result != 'ok') {
+                        alert('There was a problem saving your sequence.');
+                    }
+                })
+            }
+        })
+    })
+</script>
+
 <h2>Benchmarks</h2>
 
 <ul>
@@ -40,9 +70,9 @@
                 <?php endforeach ?>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
         <?php foreach ($benchmarkGroup->getBenchmarks() as $benchmark): ?>
-            <tr>
+            <tr id="benchmark_<?= $benchmark->getId() ?>">
                 <td>
                     <a href="<?= $this->url(
                         'benchmark/view',

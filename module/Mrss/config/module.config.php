@@ -438,6 +438,15 @@ return array(
                                 'action' => 'equation'
                             )
                         )
+                    ),
+                    'reorder' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/reorder',
+                            'defaults' => array(
+                                'action' => 'reorder'
+                            )
+                        )
                     )
                 )
             ),
@@ -471,7 +480,7 @@ return array(
                                 'study' => 0
                             )
                         )
-                    )
+                    ),
                 )
             ),
             'observation' => array(
