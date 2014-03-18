@@ -61,7 +61,13 @@ return array(
             ),
             'reports' => array(
                 'label' => 'Reports',
-                'uri' => '/reports'
+                'uri' => '/reports',
+                'pages' => array(
+                    array(
+                        'label' => 'National Report',
+                        'uri' => '/reports/national'
+                    )
+                )
             ),
             /*
             // ToDo: before activating below code make sure that Membership Benefits don't show when logged in. PRA 130626
