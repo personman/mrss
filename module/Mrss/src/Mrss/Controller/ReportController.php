@@ -2,8 +2,10 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Form\PeerComparisonDemographics;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Service\Report;
+use Mrss\Form\PeerComparison;
 
 class ReportController extends AbstractActionController
 {
@@ -52,6 +54,45 @@ class ReportController extends AbstractActionController
             'college' => $observation->getCollege(),
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels()
+        );
+    }
+
+    public function peerAction()
+    {
+        $form = new PeerComparison;
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                //var_dump($data); die;
+
+                // Save to session? we may want this in the db eventually to save
+                // peer groups and/or peer criteria
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
+    public function peerdemographicAction()
+    {
+        $form = new PeerComparisonDemographics;
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                var_dump($form->getData());
+            }
+        }
+
+        return array(
+            'form' => $form
         );
     }
 

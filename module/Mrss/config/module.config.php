@@ -553,6 +553,24 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+                    'peer' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer',
+                            'defaults' => array(
+                                'action' => 'peer'
+                            )
+                        )
+                    ),
+                    'peer-demographic' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-demographic',
+                            'defaults' => array(
+                                'action' => 'peerdemographic'
+                            )
+                        )
                     )
                 )
             ),
