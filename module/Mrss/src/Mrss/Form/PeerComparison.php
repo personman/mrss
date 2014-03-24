@@ -30,7 +30,7 @@ class PeerComparison extends AbstractForm
                 'name' => 'benchmarks',
                 'type' => 'Select',
                 'options' => array(
-                    'label' => 'Benchmarks'
+                    'label' => 'Benchmark(s)'
                 ),
                 'attributes' => array(
                     'id' => 'benchmarks',
@@ -45,12 +45,14 @@ class PeerComparison extends AbstractForm
                 'name' => 'peers',
                 'type' => 'Select',
                 'options' => array(
-                    'label' => 'Peer Institution(s)'
+                    'label' => 'Peer Institutions'
                 ),
                 'attributes' => array(
                     'id' => 'peers',
                     'options' => $this->getPeers(),
-                    'multiple' => 'multiple'
+                    'multiple' => 'multiple',
+                    'rows' => 20,
+                    'cols' => 80
                 )
             )
         );
@@ -70,6 +72,6 @@ class PeerComparison extends AbstractForm
 
     public function getPeers()
     {
-        return array('test peer', 'test peer 2');
+        return array();
     }
 }

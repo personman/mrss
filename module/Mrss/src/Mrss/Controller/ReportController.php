@@ -6,6 +6,10 @@ use Mrss\Form\PeerComparisonDemographics;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Service\Report;
 use Mrss\Form\PeerComparison;
+use Mrss\Entity\PeerGroup;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\Session\Container;
+use Zend\View\Model\JsonModel;
 
 class ReportController extends AbstractActionController
 {
@@ -13,6 +17,8 @@ class ReportController extends AbstractActionController
      * @var Report
      */
     protected $reportService;
+
+    protected $sessionContainer;
 
     public function calculateAction()
     {
@@ -61,6 +67,8 @@ class ReportController extends AbstractActionController
     {
         $form = new PeerComparison;
 
+        $peerGroup = $this->getPeerGroupFromSession();
+
         if ($this->getRequest()->isPost()) {
             $form->setData($this->params()->fromPost());
 
@@ -75,27 +83,132 @@ class ReportController extends AbstractActionController
         }
 
         return array(
-            'form' => $form
+            'form' => $form,
+            'peerGroup' => $peerGroup
         );
     }
 
     public function peerdemographicAction()
     {
         $form = new PeerComparisonDemographics;
+        $peerGroup = $this->getPeerGroupFromSession();
 
+        // @todo: use form value for year
+        $em = $this->getServiceLocator()->get('em');
+
+        $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\PeerGroup'));
+        $form->bind($peerGroup);
         if ($this->getRequest()->isPost()) {
-            $form->setData($this->params()->fromPost());
+            $postData = $this->params()->fromPost();
+
+            // Handle empty multiselects
+            if (empty($postData['states'])) {
+                $postData['states'] = array();
+            }
+            if (empty($postData['environments'])) {
+                $postData['environments'] = array();
+            }
+            $form->setData($postData);
 
             if ($form->isValid()) {
-                var_dump($form->getData());
+                $this->savePeerGroupToSession($peerGroup);
 
-                // Save to session and direct them to the peerAction()
+                return $this->redirect()->toRoute('reports/peer');
             }
         }
 
         return array(
             'form' => $form
         );
+    }
+
+    /**
+     * AJAX action for returning a list of possible peer colleges based on the
+     * peerGroup stored in the session and the year in the url.
+     *
+     * @return JsonModel
+     */
+    public function peerCollegesAction()
+    {
+        $year = $this->params()->fromRoute('year');
+
+        if (!empty($year)) {
+            $peerGroup = $this->getPeerGroupFromSession();
+            $peerGroup->setYear($year);
+
+            /** @var \Mrss\Model\College $collegeModel */
+            $collegeModel = $this->getServiceLocator()->get('model.college');
+
+            $colleges = $collegeModel->findByPeerGroup($peerGroup);
+
+            $collegeData = array();
+            foreach ($colleges as $college) {
+                $collegeData[] = array(
+                    'name' => $college->getName(),
+                    'id' => $college->getId()
+                );
+            }
+
+            return new JsonModel(
+                array(
+                    'colleges' => $collegeData
+                )
+            );
+
+        } else {
+            die('Missing year.');
+        }
+    }
+
+    public function peerBenchmarksAction()
+    {
+        $year = $this->params()->fromRoute('year');
+
+        if (!empty($year)) {
+            /** @var \Mrss\Entity\Study $study */
+            $study = $this->currentStudy();
+
+            $benchmarks = $study->getBenchmarksForYear($year);
+
+            $benchmarkData = array();
+            foreach ($benchmarks as $benchmark) {
+                $benchmarkData[] = array(
+                    'name' => $benchmark->getName(),
+                    'id' => $benchmark->getId()
+                );
+            }
+
+            return new JsonModel(
+                array(
+                    'benchmarks' => $benchmarkData
+                )
+            );
+        }
+    }
+
+    public function savePeerGroupToSession(PeerGroup $peerGroup)
+    {
+        $this->getSessionContainer()->peerGroup = $peerGroup;
+    }
+
+    public function getPeerGroupFromSession()
+    {
+        $peerGroup = $this->getSessionContainer()->peerGroup;
+
+        if (empty($peerGroup)) {
+            $peerGroup = new PeerGroup();
+        }
+
+        return $peerGroup;
+    }
+
+    public function getSessionContainer()
+    {
+        if (empty($this->sessionContainer)) {
+            $this->sessionContainer = new Container('report');
+        }
+
+        return $this->sessionContainer;
     }
 
     public function setReportService(Report $service)

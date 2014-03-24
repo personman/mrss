@@ -571,7 +571,27 @@ return array(
                                 'action' => 'peerdemographic'
                             )
                         )
-                    )
+                    ),
+                    'peer-colleges' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-colleges/:year',
+                            'defaults' => array(
+                                'action' => 'peerColleges',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'peer-benchmarks' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-benchmarks/:year',
+                            'defaults' => array(
+                                'action' => 'peerBenchmarks',
+                                'year' => null
+                            )
+                        )
+                    ),
                 )
             ),
             'users' => array(

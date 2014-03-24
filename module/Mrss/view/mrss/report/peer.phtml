@@ -1,3 +1,10 @@
+<?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/peer-comparison.js?v=1',
+    'text/javascript'
+); ?>
 
 <h2>Peer Comparison</h2>
 
@@ -6,5 +13,69 @@
 $form->setAttribute('action', $this->url('reports/peer'));
 
 ?>
+
+<?php if (!empty($peerGroup)): ?>
+    <div class="well">
+        <h4>Demographic Criteria</h4>
+        <p>
+            <a href="<?= $this->url('reports/peer-demographic') ?>">Change</a>
+        </p>
+
+        <?php if ($peerGroup->hasCriteria()): ?>
+
+            <?php if ($peerGroup->getStates()): ?>
+                <p>
+                    <strong>State(s):</strong>
+                    <?= implode(', ', $peerGroup->getStates()) ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getEnvironments()): ?>
+                <p>
+                    <strong>Campus Environment(s):</strong>
+                    <?= implode(', ', $peerGroup->getEnvironments()) ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getWorkforceEnrollment()): ?>
+                <p>
+                    <strong>Workforce Enrollment:</strong>
+                    <?= $peerGroup->getWorkforceEnrollment() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getWorkforceRevenue()): ?>
+                <p>
+                    <strong>Workforce Revenue:</strong>
+                    <?= $peerGroup->getWorkforceRevenue() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getServiceAreaPopulation()): ?>
+                <p>
+                    <strong>Service Area Population:</strong>
+                    <?= $peerGroup->getServiceAreaPopulation() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getServiceAreaUnemployment()): ?>
+                <p>
+                    <strong>Service Area Unemployment:</strong>
+                    <?= $peerGroup->getServiceAreaUnemployment() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getServiceAreaMedianIncome()): ?>
+                <p>
+                    <strong>Service Area Median Income:</strong>
+                    <?= $peerGroup->getServiceAreaMedianIncome() ?>
+                </p>
+            <?php endif ?>
+        <?php else: ?>
+            <p>None selected</p>
+        <?php endif ?>
+    </div>
+
+<?php endif ?>
 
 <?= $this->ztbForm($this->form->prepare()) ?>

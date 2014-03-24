@@ -16,14 +16,14 @@ class PeerComparisonDemographics extends AbstractForm
 
         $this->add(
             array(
-                'name' => 'state',
+                'name' => 'states',
                 'type' => 'Select',
                 'required' => false,
                 'options' => array(
                     'label' => 'State'
                 ),
                 'attributes' => array(
-                    'id' => 'state',
+                    'id' => 'states',
                     'options' => $this->getStates(false),
                     'multiple' => 'multiple'
                 )
@@ -32,14 +32,14 @@ class PeerComparisonDemographics extends AbstractForm
 
         $this->add(
             array(
-                'name' => 'institutional_demographics_campus_environment',
+                'name' => 'environments',
                 'type' => 'Select',
                 'required' => false,
                 'options' => array(
                     'label' => 'Campus Environment'
                 ),
                 'attributes' => array(
-                    'id' => 'institutional_demographics_campus_environment',
+                    'id' => 'environments',
                     'options' => array(
                         'Urban' => 'Urban',
                         'Suburban' => 'Suburban',
@@ -54,7 +54,7 @@ class PeerComparisonDemographics extends AbstractForm
 
         $this->add(
             array(
-                'name' => 'enrollment_information_unduplicated_enrollment',
+                'name' => 'workforceEnrollment',
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Unduplicated Workforce Enrollment',
@@ -62,14 +62,14 @@ class PeerComparisonDemographics extends AbstractForm
                         quotes).'
                 ),
                 'attributes' => array(
-                    'id' => 'enrollment_information_unduplicated_enrollment',
+                    'id' => 'workforceEnrollment',
                 )
             )
         );
 
         $this->add(
             array(
-                'name' => 'revenue_total',
+                'name' => 'workforceRevenue',
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Total Workforce Gross Revenue',
@@ -77,14 +77,14 @@ class PeerComparisonDemographics extends AbstractForm
                         without quotes).'
                 ),
                 'attributes' => array(
-                    'id' => 'revenue_total',
+                    'id' => 'workforceRevenue',
                 )
             )
         );
 
         $this->add(
             array(
-                'name' => 'institutional_demographics_total_population',
+                'name' => 'serviceAreaPopulation',
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Service Area Population',
@@ -92,28 +92,28 @@ class PeerComparisonDemographics extends AbstractForm
                         without quotes).'
                 ),
                 'attributes' => array(
-                    'id' => 'institutional_demographics_total_population',
+                    'id' => 'serviceAreaPopulation',
                 )
             )
         );
 
         $this->add(
             array(
-                'name' => 'institutional_demographics_unemployment_rate',
+                'name' => 'serviceAreaUnemployment',
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Service Area Unemployment Rate',
                     'help-block' => 'Specify a range (e.g., "3 - 6", without quotes).'
                 ),
                 'attributes' => array(
-                    'id' => 'institutional_demographics_unemployment_rate',
+                    'id' => 'serviceAreaUnemployment',
                 )
             )
         );
 
         $this->add(
             array(
-                'name' => 'institutional_demographics_median_household_income',
+                'name' => 'serviceAreaMedianIncome',
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Service Area Median Household Income',
@@ -121,7 +121,7 @@ class PeerComparisonDemographics extends AbstractForm
                         without quotes).'
                 ),
                 'attributes' => array(
-                    'id' => 'institutional_demographics_median_household_income',
+                    'id' => 'serviceAreaMedianIncome',
                 )
             )
         );
@@ -136,11 +136,11 @@ class PeerComparisonDemographics extends AbstractForm
         $filter = new InputFilter();
 
         // State is not required
-        $state = new Input('state');
+        $state = new Input('states');
         $state->setRequired(false);
         $filter->add($state);
 
-        $environment = new Input('institutional_demographics_campus_environment');
+        $environment = new Input('environments');
         $environment->setRequired(false);
         $filter->add($environment);
 
@@ -149,23 +149,23 @@ class PeerComparisonDemographics extends AbstractForm
         $enrollment->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($enrollment);
 
-        $revenue = new Input('revenue_total');
+        $revenue = new Input('workforceRevenue');
         $revenue->setRequired(false);
         $revenue->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($revenue);
 
-        $pop = new Input('institutional_demographics_total_population');
+        $pop = new Input('serviceAreaPopulation');
         $pop->setRequired(false);
         $pop->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($pop);
 
-        $unemployment = new Input('institutional_demographics_unemployment_rate');
+        $unemployment = new Input('serviceAreaUnemployment');
         $unemployment->setRequired(false);
         $unemployment->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($unemployment);
 
 
-        $income = new Input('institutional_demographics_median_household_income');
+        $income = new Input('serviceAreaMedianIncome');
         $income->setRequired(false);
         $income->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($income);

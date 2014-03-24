@@ -5,7 +5,6 @@ namespace MrssTest\Service;
 use Mrss\Service\ComputedFields;
 use MrssTest\TestCase;
 
-
 class ComputedFieldsTest extends TestCase
 {
     /** @var ComputedFields  */
