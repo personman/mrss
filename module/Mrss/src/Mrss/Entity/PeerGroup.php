@@ -20,6 +20,12 @@ class PeerGroup
     /** @ORM\Column(type="integer") */
     protected $year;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="College")
+     * @var College
+     */
+    protected $college;
+
     /** @ORM\Column(type="string") */
     protected $name;
 
@@ -43,6 +49,12 @@ class PeerGroup
 
     /** @ORM\Column(type="string") */
     protected $serviceAreaMedianIncome;
+
+    /** @ORM\Column(type="text") */
+    protected $benchmarks;
+
+    /** @ORM\Column(type="text") */
+    protected $peers;
 
     /**
      * @param mixed $environments
@@ -78,6 +90,18 @@ class PeerGroup
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setCollege($college)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
+    public function getCollege()
+    {
+        return $this->college;
     }
 
     /**
@@ -272,6 +296,42 @@ class PeerGroup
         }
 
         return $revenue;
+    }
+
+    public function setBenchmarks($benchmarks)
+    {
+        $this->benchmarks = implode('|', $benchmarks);
+
+        return $this;
+    }
+
+    public function getBenchmarks()
+    {
+        if ($this->benchmarks) {
+            $benchmarks = explode('|', $this->benchmarks);
+        } else {
+            $benchmarks = array();
+        }
+
+        return $benchmarks;
+    }
+
+    public function setPeers($peers)
+    {
+        $this->peers = implode('|', $peers);
+
+        return $this;
+    }
+
+    public function getPeers()
+    {
+        if ($this->peers) {
+            $peers = explode('|', $this->peers);
+        } else {
+            $peers = array();
+        }
+
+        return $peers;
     }
 
     public function parseRange($range)

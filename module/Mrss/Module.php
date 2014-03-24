@@ -363,6 +363,8 @@ class Module
                     $service->setPercentileRankModel(
                         $sm->get('model.percentileRank')
                     );
+                    $service->setBenchmarkModel($sm->get('model.benchmark'));
+                    $service->setCollegeModel($sm->get('model.college'));
                     $service->setSettingModel($sm->get('model.setting'));
 
                     return $service;

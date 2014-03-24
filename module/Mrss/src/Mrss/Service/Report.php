@@ -7,6 +7,7 @@ use Mrss\Entity\Benchmark;
 use Mrss\Entity\Percentile;
 use Mrss\Entity\PercentileRank;
 use Mrss\Entity\Observation;
+use Mrss\Entity\PeerGroup;
 use Mrss\Service\Report\Calculator;
 
 class Report
@@ -25,6 +26,16 @@ class Report
      * @var \Mrss\Model\Subscription
      */
     protected $subscriptionModel;
+
+    /**
+     * @var \Mrss\Model\Benchmark
+     */
+    protected $benchmarkModel;
+
+    /**
+     * @var \Mrss\Model\College
+     */
+    protected $collegeModel;
 
     /**
      * @var \Mrss\Model\Percentile
@@ -332,6 +343,100 @@ class Report
         return $html;
     }
 
+    public function getPeerReport(PeerGroup $peerGroup)
+    {
+        $minPeers = 2;
+
+        $report = array();
+        
+        $year = $peerGroup->getYear();
+        $benchmarks = $peerGroup->getBenchmarks();
+        $colleges = $peerGroup->getPeers();
+        $colleges[] = $peerGroup->getCollege()->getId();
+
+        $observations = array();
+        $collegeEntities = array();
+
+        // Fetch the colleges and their observation data for the year
+        foreach ($colleges as $collegeId) {
+            $college = $this->getCollegeModel()
+                ->find($collegeId);
+
+            $collegeEntities[$collegeId] = $college;
+            $observations[$collegeId] = $college->getObservationForYear($year);
+        }
+
+
+        foreach ($benchmarks as $benchmarkId) {
+            $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+
+            // Build the report data
+            $data = array();
+            foreach ($collegeEntities as $college) {
+                $observation = $observations[$college->getId()];
+                $value = $observation->get($benchmark->getDbColumn());
+
+                if ($value !== null) {
+                    $data[$college->getId()] = $value;
+                }
+            }
+
+            if (count($data) <= $minPeers) {
+                continue;
+            }
+
+            $data = $this->sortAndLabelPeerData($data, $peerGroup->getCollege());
+
+            $reportSection = array(
+                'benchmark' => $benchmark->getName(),
+                'data' => $data
+            );
+
+            $report[] = $reportSection;
+        }
+
+
+        return $report;
+    }
+
+    public function sortAndLabelPeerData($data, $currentCollege)
+    {
+        arsort($data);
+        $dataWithLabels = array();
+
+        $i = 1;
+        foreach ($data as $collegeId => $value) {
+            if ($collegeId == $currentCollege->getId()) {
+                $label = $currentCollege->getName();
+            } else {
+                $label = $this->numberToLetter($i);
+                $i++;
+            }
+
+            $dataWithLabels[$label] = $value;
+        }
+
+        return $dataWithLabels;
+    }
+
+    /**
+     * Takes a number and converts it to a-z,aa-zz,aaa-zzz, etc with uppercase option
+     *
+     * @access	public
+     * @param	int	number to convert
+     * @param	bool	upper case the letter on return?
+     * @return	string	letters from number input
+     */
+
+    function numberToLetter($num, $uppercase = true)
+    {
+        $num -= 1;
+
+        $letter = 	chr(($num % 26) + 97);
+        $letter .= 	(floor($num/26) > 0) ? str_repeat($letter, floor($num/26)) : '';
+        return 		($uppercase ? strtoupper($letter) : $letter);
+    }
+
     public function setStudy(Study $study)
     {
         $this->study = $study;
@@ -354,6 +459,30 @@ class Report
     public function getSubscriptionModel()
     {
         return $this->subscriptionModel;
+    }
+
+    public function setBenchmarkModel($model)
+    {
+        $this->benchmarkModel = $model;
+
+        return $this;
+    }
+
+    public function getBenchmarkModel()
+    {
+        return $this->benchmarkModel;
+    }
+
+    public function setCollegeModel($model)
+    {
+        $this->collegeModel = $model;
+
+        return $this;
+    }
+
+    public function getCollegeModel()
+    {
+        return $this->collegeModel;
     }
 
     public function setPercentileModel($model)

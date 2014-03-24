@@ -58,6 +58,11 @@ class PeerComparison extends AbstractForm
         );
 
         $this->add($this->getButtonFieldset('Continue'));
+
+        // Disable the inArray validator since those options get
+        // populated dynamically
+        $this->get('peers')->setDisableInArrayValidator(true);
+        $this->get('benchmarks')->setDisableInArrayValidator(true);
     }
 
     public function getYearsWithData()
@@ -67,7 +72,7 @@ class PeerComparison extends AbstractForm
 
     public function getBenchmarks()
     {
-        return array('test benchmark', 'test benchmark 2', 'test benchmark 3');
+        return array();
     }
 
     public function getPeers()

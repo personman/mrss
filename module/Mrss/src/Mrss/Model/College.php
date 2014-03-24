@@ -38,6 +38,11 @@ class College extends AbstractModel
         return $c;
     }
 
+    /**
+     * @todo: Exclude the active college. Can't be yr own peer
+     * @param PeerGroup $peerGroup
+     * @return array
+     */
     public function findByPeerGroup(PeerGroup $peerGroup)
     {
         $em = $this->getEntityManager();
@@ -163,6 +168,10 @@ class College extends AbstractModel
                 $peerGroup->getServiceAreaMedianIncome('max')
             );
         }
+
+        // Exclude the current college (they can't be their own peer)
+        $qb->andWhere('c.id != :current_college_id');
+        $qb->setParameter('current_college_id', $peerGroup->getCollege()->getId());
 
         // Order
         $qb->orderBy('c.name', 'ASC');

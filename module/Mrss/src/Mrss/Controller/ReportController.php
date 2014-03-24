@@ -75,16 +75,33 @@ class ReportController extends AbstractActionController
             if ($form->isValid()) {
                 $data = $form->getData();
 
-                //var_dump($data); die;
+                $peerGroup->setYear($data['reportingPeriod']);
+                $peerGroup->setBenchmarks($data['benchmarks']);
+                $peerGroup->setPeers($data['peers']);
 
-                // Save to session? we may want this in the db eventually to save
-                // peer groups and/or peer criteria
+                $this->savePeerGroupToSession($peerGroup);
+
+                return $this->redirect()->toRoute('reports/peer-results');
+
+                //var_dump($data); die;
             }
         }
 
         return array(
             'form' => $form,
             'peerGroup' => $peerGroup
+        );
+    }
+
+    public function peerResultsAction()
+    {
+        $peerGroup = $this->getPeerGroupFromSession();
+
+        $report = $this->getReportService()->getPeerReport($peerGroup);
+
+        return array(
+            'peerGroup' => $peerGroup,
+            'report' => $report
         );
     }
 
@@ -198,6 +215,9 @@ class ReportController extends AbstractActionController
         if (empty($peerGroup)) {
             $peerGroup = new PeerGroup();
         }
+
+        // Always set the college to the current college
+        $peerGroup->setCollege($this->currentCollege());
 
         return $peerGroup;
     }

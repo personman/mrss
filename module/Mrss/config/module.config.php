@@ -592,6 +592,15 @@ return array(
                             )
                         )
                     ),
+                    'peer-results' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-results',
+                            'defaults' => array(
+                                'action' => 'peerResults',
+                            )
+                        )
+                    ),
                 )
             ),
             'users' => array(
