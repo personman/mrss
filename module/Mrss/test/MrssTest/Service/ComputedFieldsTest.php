@@ -3,9 +3,10 @@
 namespace MrssTest\Service;
 
 use Mrss\Service\ComputedFields;
-use PHPUnit_Framework_TestCase;
+use MrssTest\TestCase;
 
-class ComputedFieldsTest extends PHPUnit_Framework_TestCase
+
+class ComputedFieldsTest extends TestCase
 {
     /** @var ComputedFields  */
     protected $computedFields;
@@ -30,8 +31,13 @@ class ComputedFieldsTest extends PHPUnit_Framework_TestCase
 
         $this->observationModelMock = $this->getMock(
             'Mrss\Model\Observation',
-            array('save')
+            array('save', 'flush', 'getEntityManager')
         );
+
+        $this->observationModelMock->expects($this->any())
+            ->method('getEntityManager')
+            ->will($this->returnValue($this->getEmMock()));
+
         $this->computedFields->setObservationModel($this->observationModelMock);
     }
 
@@ -85,7 +91,6 @@ class ComputedFieldsTest extends PHPUnit_Framework_TestCase
 
         $this->observationModelMock->expects($this->once())
             ->method('save');
-
 
         $result = $this->computedFields->calculate(
             $this->benchmarkMock,
