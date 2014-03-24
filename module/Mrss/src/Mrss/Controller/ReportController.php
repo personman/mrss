@@ -88,6 +88,8 @@ class ReportController extends AbstractActionController
 
             if ($form->isValid()) {
                 var_dump($form->getData());
+
+                // Save to session and direct them to the peerAction()
             }
         }
 

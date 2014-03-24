@@ -5,6 +5,7 @@ namespace Mrss\Form;
 use Mrss\Form\AbstractForm;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
+use Zend\Validator\Regex;
 
 class PeerComparisonDemographics extends AbstractForm
 {
@@ -71,7 +72,9 @@ class PeerComparisonDemographics extends AbstractForm
                 'name' => 'revenue_total',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Total Workforce Gross Revenue'
+                    'label' => 'Total Workforce Gross Revenue',
+                    'help-block' => 'Specify a range (e.g., "19000000 - 30000000",
+                        without quotes).'
                 ),
                 'attributes' => array(
                     'id' => 'revenue_total',
@@ -84,7 +87,9 @@ class PeerComparisonDemographics extends AbstractForm
                 'name' => 'institutional_demographics_total_population',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Service Area Population'
+                    'label' => 'Service Area Population',
+                    'help-block' => 'Specify a range (e.g., "200000 - 800000",
+                        without quotes).'
                 ),
                 'attributes' => array(
                     'id' => 'institutional_demographics_total_population',
@@ -97,7 +102,8 @@ class PeerComparisonDemographics extends AbstractForm
                 'name' => 'institutional_demographics_unemployment_rate',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Service Area Unemployment Rate'
+                    'label' => 'Service Area Unemployment Rate',
+                    'help-block' => 'Specify a range (e.g., "3 - 6", without quotes).'
                 ),
                 'attributes' => array(
                     'id' => 'institutional_demographics_unemployment_rate',
@@ -110,7 +116,9 @@ class PeerComparisonDemographics extends AbstractForm
                 'name' => 'institutional_demographics_median_household_income',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Service Area Median Household Income'
+                    'label' => 'Service Area Median Household Income',
+                    'help-block' => 'Specify a range (e.g., "30000 - 50000",
+                        without quotes).'
                 ),
                 'attributes' => array(
                     'id' => 'institutional_demographics_median_household_income',
@@ -138,10 +146,42 @@ class PeerComparisonDemographics extends AbstractForm
 
         $enrollment = new Input('enrollment_information_unduplicated_enrollment');
         $enrollment->setRequired(false);
+        $enrollment->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($enrollment);
 
-        // @todo: validate ranges
+        $revenue = new Input('revenue_total');
+        $revenue->setRequired(false);
+        $revenue->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($revenue);
+
+        $pop = new Input('institutional_demographics_total_population');
+        $pop->setRequired(false);
+        $pop->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($pop);
+
+        $unemployment = new Input('institutional_demographics_unemployment_rate');
+        $unemployment->setRequired(false);
+        $unemployment->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($unemployment);
+
+
+        $income = new Input('institutional_demographics_median_household_income');
+        $income->setRequired(false);
+        $income->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($income);
 
         return $filter;
+    }
+
+    public function getRangeValidator()
+    {
+        // Should match "123 - 23434" and "123-23434
+        $validator = new Regex('/^\d+\s?-\s?\d+$/');
+        $validator->setMessage(
+            'Use the format "100 - 200". Do not include commas.',
+            Regex::NOT_MATCH
+        );
+
+        return $validator;
     }
 }

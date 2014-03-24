@@ -66,6 +66,10 @@ return array(
                     array(
                         'label' => 'National Report',
                         'uri' => '/reports/national'
+                    ),
+                    array(
+                        'label' => 'Peer Comparison',
+                        'uri' => '/reports/peer'
                     )
                 )
             ),
