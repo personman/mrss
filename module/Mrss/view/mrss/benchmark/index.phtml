@@ -39,6 +39,14 @@
             Add a benchmark group
         </a>
     </li>
+    <li>
+        <a href="<?= $this->url(
+            'studies/export',
+            array('id' => $study->getId())
+        ) ?>">
+            Export benchmark setup to csv
+        </a>
+    </li>
 </ul>
 
 <?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>

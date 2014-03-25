@@ -158,6 +158,16 @@ return array(
                                 'id' => 0
                             )
                         )
+                    ),
+                    'export' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/export/:id',
+                            'defaults' => array(
+                                'action' => 'export',
+                                'id' => 0
+                            )
+                        )
                     )
                 )
             ),

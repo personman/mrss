@@ -166,6 +166,53 @@ class ImportBenchmarks
         return array($year0, $year, $year2, $year3);
     }
 
+    public function export($study, $filename)
+    {
+        // Place header
+        $headers = $this->getHeaders();
+
+        $rows = $this->getBenchmarkInfo($study);
+
+        // Save to file
+        if (!file_exists($filename)) {
+            throw new \Exception("Export file $filename does not exist.");
+        }
+
+        $fh = fopen($filename, 'w');
+
+        fputcsv($fh, $headers);
+        foreach ($rows as $row) {
+            fputcsv($fh, $row);
+        }
+        fclose($fh);
+
+        return true;
+    }
+
+    public function getBenchmarkInfo(Study $study)
+    {
+        // Loop over benchmark Groups
+        $studyBenchmarks = array();
+        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+            $formName = $benchmarkGroup->getName();
+
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                $studyBenchmarks[] = array(
+                    $formName,
+                    $benchmark->getName(),
+                    $benchmark->getDbColumn(),
+                    $benchmark->getInputType(),
+                    $benchmark->getDescription(),
+                    $benchmark->getOptions(),
+                    $benchmark->getComputed(),
+                    $benchmark->getEquation(),
+                );
+            }
+        }
+
+        return $studyBenchmarks;
+    }
+
     public function setStudy(Study $study)
     {
         $this->study = $study;
@@ -214,15 +261,7 @@ class ImportBenchmarks
 
     protected function checkHeaders($headers)
     {
-        $expected = array(
-            'benchmarkGroup',
-            'name',
-            'dbColumn',
-            'inputType',
-            'description',
-            'options',
-            'equation'
-        );
+        $expected = $this->getHeaders();
 
         $diff = array_diff($expected, $headers);
 
@@ -230,5 +269,19 @@ class ImportBenchmarks
             $missing = implode(', ', $diff);
             throw new \Exception("CSV invalid. Headers are missing: $missing");
         }
+    }
+
+    protected function getHeaders()
+    {
+        return array(
+            'benchmarkGroup',
+            'name',
+            'dbColumn',
+            'inputType',
+            'description',
+            'options',
+            'computed',
+            'equation'
+        );
     }
 }
