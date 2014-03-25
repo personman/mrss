@@ -4,13 +4,14 @@
 }
 
 .table th {
-    background: #999999;
+    background: #608CC0;
     color: #fff;
+    font-weight: bold;
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td,
 .table-striped>tbody>tr:nth-child(odd)>th {
-    background-color: #E8EBEF;
+    background-color: #DDDDDD;
 }
 
 .well h4 {
