@@ -27,6 +27,12 @@ class ImportBenchmarks
 
     protected $observationPropertiesToAdd = array();
 
+    /**
+     * Doesn't currently modify benchmark sequence
+     *
+     * @param $filename
+     * @throws \Exception
+     */
     public function import($filename)
     {
         if (!file_exists($filename)) {
@@ -109,8 +115,12 @@ class ImportBenchmarks
         $benchmark->setInputType($row['inputType']);
         $benchmark->setDescription($row['description']);
         $benchmark->setOptions($row['options']);
+        $benchmark->setComputed($row['computed']);
         $benchmark->setEquation(($row['equation']));
         $benchmark->setYearsAvailable($this->getYears());
+
+        $exclude = $benchmark->getExcludeFromCompletion();
+        $benchmark->setExcludeFromCompletion($exclude);
 
         // Save it
         $this->getBenchmarkModel()->save($benchmark);
@@ -142,6 +152,8 @@ class ImportBenchmarks
             'number' => 'integer',
             'dollars' => 'float',
             'percentage' => 'float',
+            'percent' => 'float',
+            'wholePercent' => 'integer',
             'computed' => 'float',
             'text' => 'string'
         );

@@ -47,6 +47,16 @@
             Export benchmark setup to csv
         </a>
     </li>
+    <li>
+        <a href="<?= $this->url(
+            'studies/import',
+            array('id' => $study->getId())
+        ) ?>" onclick="return confirm(
+        'This will make permanent changes to the data. Are you sure you want to do this?')
+        ">
+            Import benchmark setup from csv
+        </a>
+    </li>
 </ul>
 
 <?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
