@@ -4,6 +4,7 @@ namespace Mrss\Model;
 
 use \Mrss\Entity\College as CollegeEntity;
 use \Mrss\Entity\PeerGroup;
+use \Mrss\Entity\Study;
 use Zend\Debug\Debug;
 
 /**
@@ -39,11 +40,11 @@ class College extends AbstractModel
     }
 
     /**
-     * @todo: Exclude the active college. Can't be yr own peer
      * @param PeerGroup $peerGroup
+     * @param Study $currentStudy
      * @return array
      */
-    public function findByPeerGroup(PeerGroup $peerGroup)
+    public function findByPeerGroup(PeerGroup $peerGroup, Study $currentStudy)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
@@ -60,6 +61,8 @@ class College extends AbstractModel
         );
         $qb->where('s.year = :year');
         $qb->setParameter('year', $peerGroup->getYear());
+        $qb->andWhere('s.study = :study_id');
+        $qb->setParameter('study_id', $currentStudy->getId());
 
         // Filter by state
         $states = $peerGroup->getStates();

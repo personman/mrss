@@ -95,6 +95,7 @@ class ReportController extends AbstractActionController
 
     public function peerResultsAction()
     {
+        ini_set('memory_limit', '512M');
         $peerGroup = $this->getPeerGroupFromSession();
 
         $report = $this->getReportService()->getPeerReport($peerGroup);
@@ -156,7 +157,10 @@ class ReportController extends AbstractActionController
             /** @var \Mrss\Model\College $collegeModel */
             $collegeModel = $this->getServiceLocator()->get('model.college');
 
-            $colleges = $collegeModel->findByPeerGroup($peerGroup);
+            $colleges = $collegeModel->findByPeerGroup(
+                $peerGroup,
+                $this->currentStudy()
+            );
 
             $collegeData = array();
             foreach ($colleges as $college) {
@@ -189,6 +193,11 @@ class ReportController extends AbstractActionController
 
             $benchmarkData = array();
             foreach ($benchmarks as $benchmark) {
+                // Skip some demographic data
+                if (in_array($benchmark->getDbColumn(), $this->getBenchmarksToExclude())) {
+                    continue;
+                }
+
                 $benchmarkData[] = array(
                     'name' => $benchmark->getName(),
                     'id' => $benchmark->getId()
@@ -201,6 +210,15 @@ class ReportController extends AbstractActionController
                 )
             );
         }
+    }
+
+    public function getBenchmarksToExclude()
+    {
+        return array(
+            'institutional_demographics_campus_environment',
+            'institutional_demographics_faculty_unionized',
+            'institutional_demographics_staff_unionized'
+        );
     }
 
     public function savePeerGroupToSession(PeerGroup $peerGroup)

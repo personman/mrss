@@ -18,6 +18,13 @@ function updateColleges()
         return false;
     }
 
+    // Show the loading message
+    $('#peers').empty();
+    var loadingOption = $('<option></option>');
+    loadingOption.attr('value', '').text('Loading...');
+    $('#peers').append(loadingOption);
+
+
     // Fetch the available peer colleges
     url = '/reports/peer-colleges/' + year;
     $.get(url, function(result) {
@@ -56,6 +63,12 @@ function updateBenchmarks()
         return false;
     }
 
+    // Show the loading message
+    $('#benchmarks').empty();
+    var loadingOption = $('<option></option>');
+    loadingOption.attr('value', '').text('Loading...');
+    $('#benchmarks').append(loadingOption);
+
     // Fetch the available benchmarks
     url = '/reports/peer-benchmarks/' + year;
     $.get(url, function(result) {
@@ -64,7 +77,7 @@ function updateBenchmarks()
             return false;
         }
 
-        console.log(benchmarks);
+        //console.log(benchmarks);
 
         // Find the college select box (multi)
         var select = $('#benchmarks');

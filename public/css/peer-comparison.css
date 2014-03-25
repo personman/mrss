@@ -2,3 +2,17 @@
     width: 50%;
     height: 150px;
 }
+
+.table th {
+    background: #999999;
+    color: #fff;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #E8EBEF;
+}
+
+.well h4 {
+    margin-top: 0px;
+}

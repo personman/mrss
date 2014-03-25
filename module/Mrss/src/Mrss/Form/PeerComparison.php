@@ -3,6 +3,8 @@
 namespace Mrss\Form;
 
 use Mrss\Form\AbstractForm;
+use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
 
 class PeerComparison extends AbstractForm
 {
@@ -45,7 +47,8 @@ class PeerComparison extends AbstractForm
                 'name' => 'peers',
                 'type' => 'Select',
                 'options' => array(
-                    'label' => 'Peer Institutions'
+                    'label' => 'Peer Institutions',
+                    'help-block' => 'Select at least 5 peer institutions.'
                 ),
                 'attributes' => array(
                     'id' => 'peers',
@@ -63,6 +66,20 @@ class PeerComparison extends AbstractForm
         // populated dynamically
         $this->get('peers')->setDisableInArrayValidator(true);
         $this->get('benchmarks')->setDisableInArrayValidator(true);
+
+        $this->setInputFilter($this->getInputFilterSetup());
+    }
+
+    public function getInputFilterSetup()
+    {
+        $filter = new InputFilter();
+
+        // State is not required
+        $peers = new Input('peers');
+        $peers->getValidatorChain()->attach(new \Mrss\Validator\MinimumSelected(5));
+        $filter->add($peers);
+
+        return $filter;
     }
 
     public function getYearsWithData()

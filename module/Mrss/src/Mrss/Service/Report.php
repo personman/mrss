@@ -345,9 +345,15 @@ class Report
 
     public function getPeerReport(PeerGroup $peerGroup)
     {
-        $minPeers = 2;
+        $minPeers = 5;
 
-        $report = array();
+        $report = array(
+            'skipped' => array(),
+            'sections' => array(),
+            'colleges' => array(),
+            'currentCollege' => $peerGroup->getCollege()->getName(),
+            'year' => $peerGroup->getYear()
+        );
         
         $year = $peerGroup->getYear();
         $benchmarks = $peerGroup->getBenchmarks();
@@ -364,6 +370,10 @@ class Report
 
             $collegeEntities[$collegeId] = $college;
             $observations[$collegeId] = $college->getObservationForYear($year);
+
+            if ($college->getId() != $peerGroup->getCollege()->getId()) {
+                $report['colleges'][] = $college->getName();
+            }
         }
 
 
@@ -381,7 +391,14 @@ class Report
                 }
             }
 
+            // Skip benchmarks with not enough peers
             if (count($data) <= $minPeers) {
+                $report['skipped'][] = $benchmark->getName();
+                continue;
+            }
+
+            // Also skip benchmarks where the current college didn't report
+            if (!isset($data[$peerGroup->getCollege()->getId()])) {
                 continue;
             }
 
@@ -392,7 +409,7 @@ class Report
                 'data' => $data
             );
 
-            $report[] = $reportSection;
+            $report['sections'][] = $reportSection;
         }
 
 
