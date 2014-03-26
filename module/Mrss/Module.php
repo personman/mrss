@@ -2,6 +2,7 @@
 
 namespace Mrss;
 
+use Doctrine\Common\Proxy\Autoloader;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Mrss\View\Helper\FlashMessages;

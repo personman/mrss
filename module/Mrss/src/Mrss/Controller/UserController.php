@@ -63,7 +63,9 @@ class UserController extends AbstractActionController
      */
     public function accounteditAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
+        $userModel = $this->getServiceLocator()->get('model.user');
+        $userId = $this->zfcUserAuthentication()->getIdentity()->getId();
+        $user = $userModel->find($userId);
         $form = $this->getUserForm($user);
 
         // Handle form submission
@@ -73,7 +75,7 @@ class UserController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $userModel = $this->getServiceLocator()->get('model.user');
+
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
 

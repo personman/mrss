@@ -1,4 +1,5 @@
 <?php
+
 return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
@@ -7,7 +8,8 @@ return array(
         'ZfcBase',
         'ZfcUser',
         'ZfcUserDoctrineORM',
-        'ZendDeveloperTools',
+        'ZfcUserImpersonate',
+        //'ZendDeveloperTools',
         'BjyAuthorize',
         'ZfcTwitterBootstrap',
         'GoalioMailService',
