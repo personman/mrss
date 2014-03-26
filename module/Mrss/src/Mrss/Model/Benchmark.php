@@ -71,7 +71,7 @@ class Benchmark extends AbstractModel
     public function save(BenchmarkEntity $benchmark)
     {
         // Confirm that the sequence is set
-        if (!$benchmark->getSequence()) {
+        if ($benchmark->getSequence() === null) {
             $max = $this->getMaxSequence();
             $newMax = $max + 1;
             $benchmark->setSequence($newMax);
