@@ -2076,6 +2076,64 @@ class Observation
     /** @ORM\Column(type="integer", nullable=true) */
     protected $institutional_demographics_credentials_awarded;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $enrollment_information_workforce_enrollment_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $enrollment_information_market_penetration;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $enrollment_information_contact_hours_per_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $retention_percent_returning_organizations_served;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $retention_percent_returning_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $staffing_full_time_instructors_percent;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $staffing_part_time_instructors_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $staffing_independent_contractors_percent;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $staffing_instructor_staff_ratio;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_contract_training_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_continuing_education_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_salaries_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_benefits_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_supplies_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_marketing_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_capital_equipment_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_travel_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_contract_training_percent;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_continuing_education_percent;
+
+
 
     // Test fields
     /**

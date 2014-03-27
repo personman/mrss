@@ -117,6 +117,7 @@ class ImportBenchmarks
         $benchmark->setOptions($row['options']);
         $benchmark->setComputed($row['computed']);
         $benchmark->setEquation(($row['equation']));
+        $benchmark->setExcludeFromCompletion(($row['excludeFromCompletion']));
         $benchmark->setYearsAvailable($this->getYears());
 
         $exclude = $benchmark->getExcludeFromCompletion();
@@ -218,6 +219,7 @@ class ImportBenchmarks
                     $benchmark->getOptions(),
                     $benchmark->getComputed(),
                     $benchmark->getEquation(),
+                    $benchmark->getExcludeFromCompletion()
                 );
             }
         }
@@ -293,7 +295,8 @@ class ImportBenchmarks
             'description',
             'options',
             'computed',
-            'equation'
+            'equation',
+            'excludeFromCompletion'
         );
     }
 }
