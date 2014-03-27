@@ -56,6 +56,15 @@ class Observation extends AbstractModel
         return $this->getRepository()->findOneBy($criteria);
     }
 
+    public function findByYear($year)
+    {
+        return $this->getRepository()->findAll(
+            array(
+                'year' => $year
+            )
+        );
+    }
+
     /**
      * Get all the observations
      *

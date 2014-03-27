@@ -26,6 +26,16 @@ class ReportController extends AbstractActionController
         $yearToPrepare = $this->params()->fromRoute('year');
 
         if (!empty($yearToPrepare)) {
+            // First recalc all computed fields
+            $computedFieldsService = $this->getServiceLocator()->get('computedFields');
+            $subs = $this->getServiceLocator()->get('model.subscription')
+                ->findByStudyAndYear($this->currentStudy(), $yearToPrepare);
+            foreach ($subs as $sub) {
+                $observation = $sub->getObservation();
+                $computedFieldsService->calculateAllForObservation($observation);
+            }
+
+            // Now calculate percentiles
             $stats = $this->getReportService()->calculateForYear($yearToPrepare);
             $benchmarks = $stats['benchmarks'];
             $percentiles = $stats['percentiles'];

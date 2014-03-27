@@ -12,11 +12,11 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 2 | Retention","Number of Returning Students",retention_returning_students,number,"An individual who receives workforce training in the current fiscal year and also did so previously.",,,,
 "Form 2 | Retention","% of Returning Students of Total Students",retention_percent_returning_students,percent,,,1,"{{retention_returning_students}} / {{enrollment_information_unduplicated_enrollment}}",1
 "Form 3 | Staffing","Number of Full-time Instructors",staffing_full_time_instructors,number,,,,,
-"Form 3 | Staffing","% of Full-time Instructor of Total Instructors",staffing_full_time_instructors_percent,percent,,,1,"{{staffing_full_time_instructors}} \ ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
+"Form 3 | Staffing","% of Full-time Instructor of Total Instructors",staffing_full_time_instructors_percent,percent,,,1,"{{staffing_full_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Part-time Instructors",staffing_part_time_instructors,number,,,,,
-"Form 3 | Staffing","% of Part-time Instructor of Total Instructors",staffing_part_time_instructors_percent,number,,,1,"{{staffing_part_time_instructors}} \ ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
+"Form 3 | Staffing","% of Part-time Instructor of Total Instructors",staffing_part_time_instructors_percent,number,,,1,"{{staffing_part_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Independent Contractors",staffing_independent_contractors,number,,,,,
-"Form 3 | Staffing","% of Independent Contractors to Total Instructors",staffing_independent_contractors_percent,percent,,,1,"{{staffing_independent_contractors}} \ ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
+"Form 3 | Staffing","% of Independent Contractors to Total Instructors",staffing_independent_contractors_percent,percent,,,1,"{{staffing_independent_contractors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Full-time Support Staff",staffing_full_time_support_staff,number,,,,,
 "Form 3 | Staffing","Number of Part-time Support Staff",staffing_part_time_support_staff,number,,,,,
 "Form 3 | Staffing","Instructor/Staff Ratio",staffing_instructor_staff_ratio,float,,,1,"( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} ) / ( {{staffing_full_time_support_staff}} + {{staffing_part_time_support_staff}} )",1
