@@ -38,7 +38,9 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
             ->setWorkforceRevenue('1900000 - 5000000')
             ->setServiceAreaPopulation('10000 - 100000')
             ->setServiceAreaUnemployment('3 - 6')
-            ->setServiceAreaMedianIncome('20000 - 80000');
+            ->setServiceAreaMedianIncome('20000 - 80000')
+            ->setBenchmarks(array('test', 'test2'))
+            ->setPeers(array(1, 2, 3));
 
         $this->assertEquals(5, $this->peerGroup->getId());
         $this->assertEquals(2014, $this->peerGroup->getYear());
@@ -64,6 +66,41 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             '20000 - 80000',
             $this->peerGroup->getServiceAreaMedianIncome()
+        );
+        $this->assertEquals(
+            array('test', 'test2'),
+            $this->peerGroup->getBenchmarks()
+        );
+        $this->assertEquals(
+            array(1, 2, 3),
+            $this->peerGroup->getPeers()
+        );
+    }
+
+    public function testEmptyBenchmarksAndPeers()
+    {
+        $this->peerGroup->setBenchmarks(array())
+            ->setPeers(array());
+
+        $this->assertEquals(
+            array(),
+            $this->peerGroup->getBenchmarks()
+        );
+
+        $this->assertEquals(
+            array(),
+            $this->peerGroup->getPeers()
+        );
+    }
+
+    public function testCollegeAssociation()
+    {
+        $collegeMock = $this->getMock('\Mrss\Entity\College');
+
+        $this->peerGroup->setCollege($collegeMock);
+        $this->assertInstanceOf(
+            '\Mrss\Entity\College',
+            $this->peerGroup->getCollege()
         );
     }
 
