@@ -31,8 +31,13 @@
                     <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
                         <tr>
                             <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
+                            <?php if ($benchmark['reported'] !== null): ?>
                             <td><?= number_format($benchmark['reported'], 0) ?></td>
                             <td><?= round($benchmark['percentile_rank']) ?></td>
+                            <?php else: ?>
+                                <td></td>
+                                <td></td>
+                            <?php endif ?>
                             <td><?= $benchmark['N'] ?></td>
                             <?php foreach ($benchmark['percentiles'] as $percentile): ?>
                             <td><?= number_format($percentile, 0) ?></td>
