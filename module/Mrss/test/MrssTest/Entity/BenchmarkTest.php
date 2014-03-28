@@ -269,6 +269,38 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Select', $element['type']);
     }
 
+    public function testIsPercent()
+    {
+        $benchmark = new Benchmark();
+
+        $this->assertFalse($benchmark->isPercent());
+
+        $benchmark->setInputType('percent');
+        $this->assertTrue($benchmark->isPercent());
+
+        $benchmark->setInputType('dollars');
+        $this->assertFalse($benchmark->isPercent());
+
+        $benchmark->setInputType('wholepercent');
+        $this->assertTrue($benchmark->isPercent());
+    }
+
+    public function testIsDollars()
+    {
+        $benchmark = new Benchmark();
+
+        $this->assertFalse($benchmark->isDollars());
+
+        $benchmark->setInputType('dollars');
+        $this->assertTrue($benchmark->isDollars());
+
+        $benchmark->setInputType('percent');
+        $this->assertFalse($benchmark->isDollars());
+
+        $benchmark->setInputType('wholedollars');
+        $this->assertTrue($benchmark->isDollars());
+    }
+
     protected function getEmMock($additionalMethodsToMock = array())
     {
         $repositoryMock = $this->getMock(

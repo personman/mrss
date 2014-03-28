@@ -282,9 +282,293 @@ class Report
         return $reportData;
     }
 
+    /**
+     * Executive summary report showing charts for key benchmarks
+     *
+     * @param Observation $observation
+     * @return bool
+     */
+    public function getSummaryReportData(Observation $observation)
+    {
+        $config = $this->getSummaryReportConfig();
+        $year = $observation->getYear();
+        $reportData = array();
+
+        foreach ($config as $section) {
+            $sectionData = array(
+                'name' => $section['name'],
+                'charts' => array()
+            );
+
+            foreach ($section['charts'] as $chartConfig) {
+                $dbColumn = $chartConfig['dbColumn'];
+                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+
+                $percentiles = $this->getPercentileModel()
+                    ->findByBenchmarkAndYear($benchmark, $year);
+                $percentileData = array();
+                foreach ($percentiles as /** var Percentile */ $percentile) {
+                    $percentileData[$percentile->getPercentile()] = $percentile
+                        ->getValue();
+                }
+
+                $chart = $this->getPercentileChartConfig(
+                    $benchmark,
+                    $percentileData,
+                    $observation->get($dbColumn),
+                    $chartConfig
+                );
+
+                $sectionData['charts'][] = array(
+                    'benchmark' => $benchmark,
+                    'chart' => $chart
+                );
+            }
+
+            $reportData[] = $sectionData;
+        }
+
+        return $reportData;
+    }
+
+    public function getSummaryReportConfig()
+    {
+        $studyId = $this->getStudy()->getId();
+
+        $configs = array(
+            // Workforce:
+            3 => array(
+                array(
+                    'name' => 'Enrollment Data',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'enrollment_information_duplicated_enrollment'
+                        ),
+                        array(
+                            'dbColumn' => 'enrollment_information_organizations_served'
+                        ),
+                        array(
+                            'dbColumn' => 'enrollment_information_training_contracts'
+                        ),
+                        array(
+                            'dbColumn' => 'enrollment_information_market_penetration',
+                        ),
+                    )
+                ),
+                array(
+                    'name' => 'Retention',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'retention_percent_returning_organizations_served',
+                        ),
+                        array(
+                            'dbColumn' => 'retention_percent_returning_students',
+                        ),
+                    )
+                ),
+                array(
+                    'name' => 'Revenue',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'revenue_contract_training_percent',
+                        ),
+                        array(
+                            'dbColumn' => 'revenue_continuing_education_percent',
+                        ),
+                        array(
+                            'dbColumn' => 'revenue_total',
+                        ),
+                    )
+                ),
+                array(
+                    'name' => 'Expenditures',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'expenditures_contract_training_percent',
+                        ),
+                        array(
+                            'dbColumn' => 'expenditures_continuing_education_percent',
+                        ),
+                    )
+                ),
+                array(
+                    'name' => 'Retained Revenue',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'retained_revenue_contract_training',
+                        ),
+                        array(
+                            'dbColumn' => 'retained_revenue_total',
+                        ),
+                        array(
+                            'dbColumn' => 'retained_revenue_roi',
+                        ),
+                    )
+                ),
+                array(
+                    'name' => 'Credentials Awarded',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'institutional_demographics_credentials_awarded'
+                        )
+                    )
+                ),
+                array(
+                    'name' => 'Satisfaction',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'satisfaction_client',
+                        ),
+                        array(
+                            'dbColumn' => 'satisfaction_student',
+                        )
+                    )
+                ),
+                array(
+                    'name' => 'Transition from Workforce Training to Credit Coursework',
+                    'charts' => array(
+                        array(
+                            'dbColumn' => 'transition_students',
+                        ),
+                    )
+                )
+            )
+        );
+
+        return $configs[$studyId];
+    }
+
+    /**
+     * Return an array suitable for passing right into highcharts
+     *
+     * @param Benchmark $benchmark
+     * @param $percentileData
+     * @param $reportedValue
+     * @param $chartConfig
+     * @return array
+     */
+    public function getPercentileChartConfig(
+        Benchmark $benchmark,
+        $percentileData,
+        $reportedValue,
+        $chartConfig
+    ) {
+        if (empty($chartConfig['title'])) {
+            $chartConfig['title'] = $benchmark->getName();
+        }
+
+        unset($percentileData['N']);
+
+        $chartXCategories = array_merge(
+            array($this->getYourCollegeLabel()),
+            $this->getPercentileBreakPointLabels()
+        );
+
+        $chartValues = array_merge(
+            array($this->getYourCollegeLabel() => floatval($reportedValue)),
+            $percentileData
+        );
+
+        $chartData = array();
+        foreach ($chartValues as $i => $value) {
+            $value = round($value);
+
+            if (!empty($chartXCategories[$i])) {
+                $label = $chartXCategories[$i];
+            } else {
+                $label = $i;
+            }
+
+            $chartData[] = array(
+                'name' => $label,
+                'y' => $value,
+                'dataLabels' => array(
+                    'enabled' => true
+                )
+            );
+        }
+
+        $series = array(
+            array(
+                'name' => 'Value',
+                'data' => $chartData
+            )
+        );
+
+
+        $chart = array(
+            'id' => 'chart_' . $benchmark->getDbColumn(),
+            'chart' => array(
+                'type' => 'column'
+            ),
+            'title' => array(
+                'text' => $chartConfig['title'],
+            ),
+            'xAxis' => array(
+                'categories' => $chartXCategories,
+                'tickLength' => 0,
+                'title' => array(
+                    'text' => 'Percentiles'
+                )
+            ),
+            'yAxis' => array(
+                'title' => false,
+                'gridLineWidth' => 0
+            ),
+            'series' => $series,
+            'credits' => array(
+                'enabled' => false
+            ),
+            'legend' => false,
+            'plotOptions' => array(
+                'series' => array(
+                    'animation' => false
+                )
+            )
+        );
+
+        if ($benchmark->isPercent()) {
+            $chart['yAxis']['max'] = 100;
+            $chart['yAxis']['tickInterval'] = 25;
+            $chart['yAxis']['labels'] = array(
+                'format' => '{value}%'
+            );
+        }
+
+        if ($benchmark->isDollars()) {
+            $chart['yAxis']['labels'] = array(
+                'format' => '${value}'
+            );
+        }
+
+        //var_dump($chartConfig);
+        //var_dump($chart);
+        return $chart;
+    }
+
     public function getPercentileBreakpoints()
     {
         return array(10, 25, 50, 75, 90);
+    }
+
+    public function getPercentileLabel($label)
+    {
+        if ($label != $this->getYourCollegeLabel()) {
+            // Rename 50th percentile to 'median'
+            if ($label == '50') {
+                $label = 'Median';
+            } else {
+
+                $label = $label . 'th';
+            }
+        }
+
+        return $label;
+    }
+
+    public function getYourCollegeLabel()
+    {
+        return 'Your College';
     }
 
     public function getPercentileBreakPointLabels()
@@ -445,7 +729,7 @@ class Report
      * @return	string	letters from number input
      */
 
-    function numberToLetter($num, $uppercase = true)
+    public function numberToLetter($num, $uppercase = true)
     {
         $num -= 1;
 

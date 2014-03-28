@@ -68,6 +68,10 @@ return array(
                         'uri' => '/reports/national'
                     ),
                     array(
+                        'label' => 'Summary Report',
+                        'uri' => '/reports/summary'
+                    ),
+                    array(
                         'label' => 'Peer Comparison',
                         'uri' => '/reports/peer'
                     )

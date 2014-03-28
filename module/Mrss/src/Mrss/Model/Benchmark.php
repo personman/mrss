@@ -18,6 +18,10 @@ class Benchmark extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Benchmark';
 
+    /**
+     * @param $dbColumn
+     * @return null|BenchmarkEntity
+     */
     public function findOneByDbColumn($dbColumn)
     {
         return $this->getRepository()->findOneBy(array('dbColumn' => $dbColumn));

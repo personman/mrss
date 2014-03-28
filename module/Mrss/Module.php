@@ -507,6 +507,11 @@ class Module
 
                     return $helper;
                 },
+                'chart' => function($sm) {
+                    $helper = new \Mrss\View\Helper\Chart;
+
+                    return $helper;
+                 },
                 'simpleFormElement' => function($sm) {
                     $helper = new \Mrss\View\Helper\SimpleFormElement;
 

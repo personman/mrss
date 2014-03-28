@@ -564,6 +564,16 @@ return array(
                             )
                         )
                     ),
+                    'summary' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/summary[/:year]',
+                            'defaults' => array(
+                                'action' => 'summary',
+                                'year' => null
+                            )
+                        )
+                    ),
                     'peer' => array(
                         'type' => 'segment',
                         'options' => array(

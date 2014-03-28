@@ -56,11 +56,7 @@ class ReportController extends AbstractActionController
 
     public function nationalAction()
     {
-        $year = $this->params()->fromRoute('year');
-
-        if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
-        }
+        $year = $this->getYearFromRouteOrStudy();
 
         $observation = $this->currentObservation($year);
         $reportData = $this->getReportService()->getNationalReportData($observation);
@@ -71,6 +67,32 @@ class ReportController extends AbstractActionController
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels()
         );
+    }
+
+    public function summaryAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        $observation = $this->currentObservation($year);
+        $reportData = $this->getReportService()->getSummaryReportData($observation);
+
+        return array(
+            'reportData' => $reportData,
+            'college' => $observation->getCollege(),
+            'breakpoints' => $this->getReportService()
+                    ->getPercentileBreakPointLabels()
+        );
+    }
+
+    public function getYearFromRouteOrStudy()
+    {
+        $year = $this->params()->fromRoute('year');
+
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        return $year;
     }
 
     public function peerAction()
