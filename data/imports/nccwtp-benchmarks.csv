@@ -14,7 +14,7 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 3 | Staffing","Number of Full-time Instructors",staffing_full_time_instructors,number,,,,,
 "Form 3 | Staffing","% of Full-time Instructor of Total Instructors",staffing_full_time_instructors_percent,percent,,,1,"{{staffing_full_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Part-time Instructors",staffing_part_time_instructors,number,,,,,
-"Form 3 | Staffing","% of Part-time Instructor of Total Instructors",staffing_part_time_instructors_percent,number,,,1,"{{staffing_part_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
+"Form 3 | Staffing","% of Part-time Instructor of Total Instructors",staffing_part_time_instructors_percent,percent,,,1,"{{staffing_part_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Independent Contractors",staffing_independent_contractors,number,,,,,
 "Form 3 | Staffing","% of Independent Contractors to Total Instructors",staffing_independent_contractors_percent,percent,,,1,"{{staffing_independent_contractors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Full-time Support Staff",staffing_full_time_support_staff,number,,,,,

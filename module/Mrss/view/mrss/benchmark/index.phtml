@@ -82,6 +82,7 @@
         <thead>
             <tr>
                 <th>Benchmark</th>
+                <th>Input Type</th>
                 <th>Action</th>
                 <?php foreach ($this->yearsToShow as $year): ?>
                     <th><?= $year ?></th>
@@ -100,6 +101,13 @@
                     ) ?>">
                         <?= $benchmark->getName() ?>
                     </a>
+                </td>
+
+                <td>
+                    <?= $benchmark->getInputType() ?>
+                    <?php if ($benchmark->getComputed()): ?>
+                        (computed)
+                    <?php endif ?>
                 </td>
 
                 <td>

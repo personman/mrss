@@ -22,14 +22,15 @@ class BenchmarkController extends AbstractActionController
         $study = $studyModel->find($studyId);
         $benchmarkGroups = $study->getBenchmarkGroups();
 
-        //$benchmarkGroupModel = $this->getServiceLocator()
-        //    ->get('model.benchmarkGroup');
+        $years = $this->getServiceLocator()->get('model.subscription')
+            ->getYearsWithSubscriptions($study);
+        sort($years);
 
         return array(
             //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
             'benchmarkGroups' => $benchmarkGroups,
             'study' => $study,
-            'yearsToShow' => range(2007, date('Y'))
+            'yearsToShow' => $years
         );
     }
 

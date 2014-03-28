@@ -27,6 +27,8 @@ class ImportBenchmarks
 
     protected $observationPropertiesToAdd = array();
 
+    protected $sequences = array();
+
     /**
      * Doesn't currently modify benchmark sequence
      *
@@ -119,6 +121,7 @@ class ImportBenchmarks
         $benchmark->setEquation(($row['equation']));
         $benchmark->setExcludeFromCompletion(($row['excludeFromCompletion']));
         $benchmark->setYearsAvailable($this->getYears());
+        $benchmark->setSequence($this->getSequence($benchmark));
 
         $exclude = $benchmark->getExcludeFromCompletion();
         $benchmark->setExcludeFromCompletion($exclude);
@@ -127,6 +130,24 @@ class ImportBenchmarks
         $this->getBenchmarkModel()->save($benchmark);
 
         return $benchmark;
+    }
+
+    /**
+     * Get the sequence by keeping track of the number of benchmarks per group
+     *
+     * @param Benchmark $benchmark
+     */
+    public function getSequence(Benchmark $benchmark)
+    {
+        $benchmarkGroupName = $benchmark->getBenchmarkGroup()->getName();
+        if (!isset($this->sequences[$benchmarkGroupName])) {
+            $this->sequences[$benchmarkGroupName] = 0;
+        }
+
+        $sequence = $this->sequences[$benchmarkGroupName];
+        $this->sequences[$benchmarkGroupName]++;
+
+        return $sequence;
     }
 
     /**
