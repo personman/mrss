@@ -286,6 +286,7 @@ class Report
      * Executive summary report showing charts for key benchmarks
      *
      * @param Observation $observation
+     * @throws \Exception
      * @return bool
      */
     public function getSummaryReportData(Observation $observation)
@@ -301,26 +302,20 @@ class Report
             );
 
             foreach ($section['charts'] as $chartConfig) {
-                $dbColumn = $chartConfig['dbColumn'];
-                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
-
-                $percentiles = $this->getPercentileModel()
-                    ->findByBenchmarkAndYear($benchmark, $year);
-                $percentileData = array();
-                foreach ($percentiles as /** var Percentile */ $percentile) {
-                    $percentileData[$percentile->getPercentile()] = $percentile
-                        ->getValue();
+                $type = 'percentileBarChart';
+                if (!empty($chartConfig['type'])) {
+                    $type = $chartConfig['type'];
                 }
 
-                $chart = $this->getPercentileChartConfig(
-                    $benchmark,
-                    $percentileData,
-                    $observation->get($dbColumn),
-                    $chartConfig
-                );
+                if ($type == 'percentileBarChart') {
+                    $chart = $this->getPercentileBarChart($chartConfig, $observation);
+                } elseif ($type == 'pieChart') {
+                    $chart = $this->getPieChart($chartConfig, $observation);
+                } else {
+                    throw new \Exception('Unknown chart type');
+                }
 
                 $sectionData['charts'][] = array(
-                    'benchmark' => $benchmark,
                     'chart' => $chart
                 );
             }
@@ -329,6 +324,93 @@ class Report
         }
 
         return $reportData;
+    }
+
+    public function getPercentileBarChart($config, Observation $observation)
+    {
+        $dbColumn = $config['dbColumn'];
+        $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+
+        $percentiles = $this->getPercentileModel()
+            ->findByBenchmarkAndYear($benchmark, $observation->getYear());
+        $percentileData = array();
+        foreach ($percentiles as /** var Percentile */ $percentile) {
+            $percentileData[$percentile->getPercentile()] = $percentile
+                ->getValue();
+        }
+
+        $chart = $this->getPercentileChartConfig(
+            $benchmark,
+            $percentileData,
+            $observation->get($dbColumn),
+            $config
+        );
+
+        return $chart;
+    }
+
+    public function getPieChart($chartConfig, Observation $observation)
+    {
+        $colors = $this->getPieChartColors();
+        $data = array();
+        foreach ($chartConfig['benchmarks'] as $i => $benchmark) {
+            // Nationl median or college's reported value?
+            if (!empty($benchmark['median'])) {
+                $benchmarkEntity = $this->getBenchmarkModel()->findOneByDbColumn(
+                    $benchmark['dbColumn']
+                );
+
+                $value = $this->getPercentileModel()
+                    ->findByBenchmarkYearAndPercentile(
+                        $benchmarkEntity->getId(),
+                        $observation->getYear(),
+                        50
+                    )->getValue();
+            } else {
+                $value = $observation->get($benchmark['dbColumn']);
+            }
+
+            $title = $benchmark['title'];
+
+            $data[] = array(
+                'name' => $title,
+                'y' => $value,
+                'color' => $colors[$i]
+            );
+        }
+
+        $series = array(
+            array(
+                'name' => 'Value',
+                'data' => $data
+            )
+        );
+
+
+        $chart = array(
+            'id' => 'chart_' . uniqid(),
+            'chart' => array(
+                'type' => 'pie'
+            ),
+            'title' => array(
+                'text' => $chartConfig['title'],
+            ),
+            'series' => $series
+        );
+
+        return $chart;
+    }
+
+    public function getPieChartColors()
+    {
+        return array(
+            '#002C57',
+            '#0065A1',
+            '#92B1CB',
+            '#DDDDDD',
+            '#AAAAAA',
+            '#888'
+        );
     }
 
     public function getSummaryReportConfig()
@@ -356,6 +438,50 @@ class Report
                     )
                 ),
                 array(
+                    'name' => 'Staffing',
+                    'charts' => array(
+                        array(
+                            'type' => 'pieChart',
+                            'title' => 'Types of Instructors at Your College',
+                            'benchmarks' => array(
+                                array(
+                                    'dbColumn' => 'staffing_full_time_instructors',
+                                    'title' => 'Full-time'
+                                ),
+                                array(
+                                    'dbColumn' => 'staffing_part_time_instructors',
+                                    'title' => 'Part-time'
+                                ),
+                                array(
+                                    'dbColumn' => 'staffing_independent_contractors',
+                                    'title' => 'Contractors'
+                                )
+                            )
+                        ),
+                        array(
+                            'type' => 'pieChart',
+                            'title' => 'Types of Instructors National Median',
+                            'benchmarks' => array(
+                                array(
+                                    'dbColumn' => 'staffing_full_time_instructors',
+                                    'title' => 'Full-time',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'staffing_part_time_instructors',
+                                    'title' => 'Part-time',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'staffing_independent_contractors',
+                                    'title' => 'Contractors',
+                                    'median' => true
+                                )
+                            )
+                        )
+                    )
+                ),
+                array(
                     'name' => 'Retention',
                     'charts' => array(
                         array(
@@ -378,6 +504,63 @@ class Report
                         array(
                             'dbColumn' => 'revenue_total',
                         ),
+                        array(
+                            'title' => 'Funding Sources at Your College',
+                            'type' => 'pieChart',
+                            'benchmarks' => array(
+                                array(
+                                    'dbColumn' => 'revenue_earned_revenue',
+                                    'title' => 'Earned Revenue'
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_grants',
+                                    'title' => 'Grants'
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_local',
+                                    'title' => 'Local'
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_state',
+                                    'title' => 'State'
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_federal',
+                                    'title' => 'Federal'
+                                ),
+                            )
+                        ),
+                        array(
+                            'title' => 'Funding Sources National Median',
+                            'type' => 'pieChart',
+                            'benchmarks' => array(
+                                array(
+                                    'dbColumn' => 'revenue_earned_revenue',
+                                    'title' => 'Earned Revenue',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_grants',
+                                    'title' => 'Grants',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_local',
+                                    'title' => 'Local',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_state',
+                                    'title' => 'State',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'revenue_federal',
+                                    'title' => 'Federal',
+                                    'median' => true
+                                ),
+                            )
+                        )
                     )
                 ),
                 array(
@@ -389,6 +572,72 @@ class Report
                         array(
                             'dbColumn' => 'expenditures_continuing_education_percent',
                         ),
+                        array(
+                            'title' => 'Expenditures at Your College',
+                            'type' => 'pieChart',
+                            'benchmarks' => array(
+                                array(
+                                    'dbColumn' => 'expenditures_salaries',
+                                    'title' => 'Salaries',
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_benefits',
+                                    'title' => 'Benefits',
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_supplies',
+                                    'title' => 'Supplies',
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_marketing',
+                                    'title' => 'Marketing',
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_capital_equipment',
+                                    'title' => 'Capital Equipment',
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_travel',
+                                    'title' => 'Travel',
+                                ),
+                            )
+                        ),
+                        array(
+                            'title' => 'Expenditures National Median',
+                            'type' => 'pieChart',
+                            'benchmarks' => array(
+                                array(
+                                    'dbColumn' => 'expenditures_salaries',
+                                    'title' => 'Salaries',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_benefits',
+                                    'title' => 'Benefits',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_supplies',
+                                    'title' => 'Supplies',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_marketing',
+                                    'title' => 'Marketing',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_capital_equipment',
+                                    'title' => 'Capital Equipment',
+                                    'median' => true
+                                ),
+                                array(
+                                    'dbColumn' => 'expenditures_travel',
+                                    'title' => 'Travel',
+                                    'median' => true
+                                ),
+                            )
+                        )
                     )
                 ),
                 array(
@@ -479,11 +728,21 @@ class Report
                 $label = $i;
             }
 
+            // Your college
+            if ($i === $this->getYourCollegeLabel()) {
+                $dataLabelEnabled = true;
+                $color = '#002C57';
+            } else {
+                $dataLabelEnabled = false;
+                $color = '#0065A1';
+            }
+
             $chartData[] = array(
                 'name' => $label,
                 'y' => $value,
+                'color' => $color,
                 'dataLabels' => array(
-                    'enabled' => true
+                    'enabled' => $dataLabelEnabled
                 )
             );
         }

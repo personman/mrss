@@ -1,9 +1,20 @@
 .chart {
-    width: 290px;
-    margin: 8px;
+    width: 46%;
+    margin: 15px;
     float: left;
 }
 
 .summarySection {
-    padding-bottom: 30px;
+    padding: 0px 20px 30px 20px;
 }
+
+.summarySection:nth-child(2n) {
+    background: #EEE;
+}
+
+@media (max-width: 979px) {
+    .chart {
+        width: 95%;
+    }
+}
+
