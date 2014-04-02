@@ -4,7 +4,7 @@ namespace Mrss\Model;
 
 use \Mrss\Entity\College as CollegeEntity;
 use \Mrss\Entity\PeerGroup;
-use \Mrss\Entity\Study;
+use \Mrss\Entity\Study as StudyEntity;
 use Zend\Debug\Debug;
 
 /**
@@ -41,10 +41,10 @@ class College extends AbstractModel
 
     /**
      * @param PeerGroup $peerGroup
-     * @param Study $currentStudy
+     * @param StudyEntity $currentStudy
      * @return array
      */
-    public function findByPeerGroup(PeerGroup $peerGroup, Study $currentStudy)
+    public function findByPeerGroup(PeerGroup $peerGroup, StudyEntity $currentStudy)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
