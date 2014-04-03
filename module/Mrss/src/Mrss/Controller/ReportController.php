@@ -56,6 +56,10 @@ class ReportController extends AbstractActionController
 
     public function nationalAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
         $year = $this->getYearFromRouteOrStudy();
 
         $observation = $this->currentObservation($year);
@@ -71,6 +75,10 @@ class ReportController extends AbstractActionController
 
     public function summaryAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
         $year = $this->getYearFromRouteOrStudy();
 
         $observation = $this->currentObservation($year);
@@ -97,6 +105,10 @@ class ReportController extends AbstractActionController
 
     public function peerAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
         $form = new PeerComparison;
 
         $peerGroup = $this->getPeerGroupFromSession();
@@ -127,6 +139,10 @@ class ReportController extends AbstractActionController
 
     public function peerResultsAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
         ini_set('memory_limit', '512M');
         $peerGroup = $this->getPeerGroupFromSession();
 
@@ -140,6 +156,10 @@ class ReportController extends AbstractActionController
 
     public function peerdemographicAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
         $form = new PeerComparisonDemographics;
         $peerGroup = $this->getPeerGroupFromSession();
 
@@ -170,6 +190,22 @@ class ReportController extends AbstractActionController
         return array(
             'form' => $form
         );
+    }
+
+    /**
+     * If reports are not open for the current study, show an error and redirect
+     *
+     * @return \Zend\Http\Response
+     */
+    public function checkReportsAreOpen()
+    {
+        if (!$this->currentStudy()->getReportsOpen()) {
+            $this->flashMessenger()->addErrorMessage(
+                'Reports are not currently open. Check back later.'
+            );
+
+            return $this->redirect()->toUrl('/members');
+        }
     }
 
     /**
