@@ -145,6 +145,22 @@ body #showcase .features_op1_row .feature .img_box span.circle {
     background: #0F98BB;
 }
 
+.slide {
+    background-repeat: no-repeat !important;
+}
+
+.slide#ideas {
+    background-color: #EFEFEF !important;
+}
+
+.slide#responsive {
+    background-color: #EBDDC7 !important;
+}
+
+.slide#benchmarks {
+    background-color: #C7E8FF !important;
+}
+
 .slide#ideas .info {
     margin-left: 60%;
 }
