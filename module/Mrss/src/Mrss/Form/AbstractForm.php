@@ -20,9 +20,10 @@ class AbstractForm extends Form
      * Standard save button
      *
      * @param string $buttonText
+     * @param bool $includeReset
      * @return Fieldset
      */
-    public function getButtonFieldset($buttonText = 'Save')
+    public function getButtonFieldset($buttonText = 'Save', $includeReset = false)
     {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
@@ -32,7 +33,17 @@ class AbstractForm extends Form
         $save = new Element\Submit('submit');
         $save->setValue($buttonText);
         $save->setAttribute('class', 'btn btn-primary');
+        $save->setAttribute('id', 'submitButton');
         $buttons->add($save);
+
+        if ($includeReset) {
+            // Add the reset button
+            $reset = new Element\Submit('reset');
+            $reset->setValue('Reset');
+            $reset->setAttribute('class', 'btn btn-danger');
+            $reset->setAttribute('type', 'reset');
+            $buttons->add($reset);
+        }
 
         return $buttons;
     }

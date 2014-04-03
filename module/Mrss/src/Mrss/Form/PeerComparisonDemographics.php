@@ -126,7 +126,7 @@ class PeerComparisonDemographics extends AbstractForm
             )
         );
 
-        $this->add($this->getButtonFieldset('Continue'));
+        $this->add($this->getButtonFieldset('Continue', true));
 
         $this->setInputFilter($this->getInputFilterSetup());
     }

@@ -33,6 +33,13 @@ textarea {
 	font-family: 'Lato', Helvetica;
 }
 
+/* Submit button in forms */
+#control-group-submitButton {
+    width: 140px;
+    float: left;
+    margin-left: 130px;
+}
+
 /* Navbar
 -------------------------------------------------- */
 body.pull_top {
