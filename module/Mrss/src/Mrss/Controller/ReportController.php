@@ -163,7 +163,6 @@ class ReportController extends AbstractActionController
         $form = new PeerComparisonDemographics;
         $peerGroup = $this->getPeerGroupFromSession();
 
-        // @todo: use form value for year
         $em = $this->getServiceLocator()->get('em');
 
         $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\PeerGroup'));
@@ -217,6 +216,7 @@ class ReportController extends AbstractActionController
     public function peerCollegesAction()
     {
         $year = $this->params()->fromRoute('year');
+        $benchmarks = $this->params()->fromQuery('benchmarks');
 
         if (!empty($year)) {
             $peerGroup = $this->getPeerGroupFromSession();
@@ -229,6 +229,15 @@ class ReportController extends AbstractActionController
                 $peerGroup,
                 $this->currentStudy()
             );
+
+            if (!empty($benchmarks)) {
+                $benchmarkIds = explode(',', $benchmarks);
+                $colleges = $this->getReportService()->filterCollegesByBenchmarks(
+                    $colleges,
+                    $benchmarkIds,
+                    $year
+                );
+            }
 
             $collegeData = array();
             foreach ($colleges as $college) {

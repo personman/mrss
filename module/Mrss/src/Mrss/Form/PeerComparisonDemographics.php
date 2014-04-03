@@ -144,7 +144,7 @@ class PeerComparisonDemographics extends AbstractForm
         $environment->setRequired(false);
         $filter->add($environment);
 
-        $enrollment = new Input('enrollment_information_unduplicated_enrollment');
+        $enrollment = new Input('workforceEnrollment');
         $enrollment->setRequired(false);
         $enrollment->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($enrollment);

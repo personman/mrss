@@ -4,6 +4,7 @@ namespace Mrss\Service;
 
 use Mrss\Entity\Study;
 use Mrss\Entity\Benchmark;
+use Mrss\Entity\College;
 use Mrss\Entity\Percentile;
 use Mrss\Entity\PercentileRank;
 use Mrss\Entity\Observation;
@@ -977,6 +978,44 @@ class Report
         }
 
         return $dataWithLabels;
+    }
+
+    /**
+     * Returns colleges that reported at least one of the benchmarks
+     *
+     * @param College[] $colleges
+     * @param array $benchmarkIds
+     * @param $year
+     * @return College[]
+     */
+    public function filterCollegesByBenchmarks($colleges, $benchmarkIds, $year)
+    {
+        $benchmarkCols = array();
+        foreach ($benchmarkIds as $benchmarkId) {
+            $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+
+            if (empty($benchmark)) {
+                continue;
+            }
+
+            $benchmarkCols[] = $benchmark->getDbColumn();
+        }
+
+        $filteredColleges = array();
+        foreach ($colleges as $college) {
+            $observation = $college->getObservationForYear($year);
+
+            foreach ($benchmarkCols as $benchmarkCol)
+            {
+                $value = $observation->get($benchmarkCol);
+                if ($value !== null) {
+                    $filteredColleges[] = $college;
+                    continue 2;
+                }
+            }
+
+        }
+        return $filteredColleges;
     }
 
     /**

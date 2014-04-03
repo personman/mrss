@@ -8,32 +8,42 @@ $(function() {
         updateColleges();
         updateBenchmarks();
     })
+
+    $('select#benchmarks').change(function() {
+        updateColleges();
+    })
 })
 
 function updateColleges()
 {
+    $('#peers').empty();
+
     var year = $('#reportingPeriod').val();
 
     if (!year) {
         return false;
     }
 
+    var benchmarkIds = $('select#benchmarks').val();
+    if (!benchmarkIds) {
+        return false;
+    }
+
+    benchmarkIds = benchmarkIds.join(',');
+
     // Show the loading message
-    $('#peers').empty();
     var loadingOption = $('<option></option>');
     loadingOption.attr('value', '').text('Loading...');
     $('#peers').append(loadingOption);
 
 
     // Fetch the available peer colleges
-    url = '/reports/peer-colleges/' + year;
+    url = '/reports/peer-colleges/' + year + '?benchmarks=' + benchmarkIds;
     $.get(url, function(result) {
         var colleges = result.colleges
         if (typeof colleges == 'undefined') {
             return false;
         }
-
-        //console.log(colleges);
 
         // Find the college select box (multi)
         var select = $('#peers');
