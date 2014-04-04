@@ -1005,8 +1005,7 @@ class Report
         foreach ($colleges as $college) {
             $observation = $college->getObservationForYear($year);
 
-            foreach ($benchmarkCols as $benchmarkCol)
-            {
+            foreach ($benchmarkCols as $benchmarkCol) {
                 $value = $observation->get($benchmarkCol);
                 if ($value !== null) {
                     $filteredColleges[] = $college;
