@@ -62,7 +62,7 @@ class Observation
     protected $ss_advising;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_counceling;
+    protected $ss_counseling;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_career;
@@ -227,7 +227,7 @@ class Observation
     protected $ss_advising_total;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_counceling_total;
+    protected $ss_counseling_total;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_career_total;
@@ -257,7 +257,7 @@ class Observation
     protected $ss_advising_contract;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_counceling_contract;
+    protected $ss_counseling_contract;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_career_contract;
