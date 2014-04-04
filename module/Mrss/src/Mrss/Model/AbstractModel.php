@@ -30,7 +30,7 @@ abstract class AbstractModel
      *
      * @return EntityManager
      */
-    protected function getEntityManager()
+    public function getEntityManager()
     {
         return $this->entityManager;
     }

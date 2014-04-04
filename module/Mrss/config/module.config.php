@@ -158,6 +158,16 @@ return array(
                                 'id' => 0
                             )
                         )
+                    ),
+                    'export' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/export/:id',
+                            'defaults' => array(
+                                'action' => 'export',
+                                'id' => 0
+                            )
+                        )
                     )
                 )
             ),
@@ -438,6 +448,15 @@ return array(
                                 'action' => 'equation'
                             )
                         )
+                    ),
+                    'reorder' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/reorder',
+                            'defaults' => array(
+                                'action' => 'reorder'
+                            )
+                        )
                     )
                 )
             ),
@@ -471,7 +490,7 @@ return array(
                                 'study' => 0
                             )
                         )
-                    )
+                    ),
                 )
             ),
             'observation' => array(
@@ -513,6 +532,95 @@ return array(
                             )
                         )
                     )
+                )
+            ),
+            'reports' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/reports',
+                    'defaults' => array(
+                        'controller' => 'reports',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'calculate' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate[/year/:year]',
+                            'defaults' => array(
+                                'action' => 'calculate',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'national' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/national[/:year]',
+                            'defaults' => array(
+                                'action' => 'national',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'summary' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/summary[/:year]',
+                            'defaults' => array(
+                                'action' => 'summary',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'peer' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer',
+                            'defaults' => array(
+                                'action' => 'peer'
+                            )
+                        )
+                    ),
+                    'peer-demographic' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-demographic',
+                            'defaults' => array(
+                                'action' => 'peerdemographic'
+                            )
+                        )
+                    ),
+                    'peer-colleges' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-colleges/:year',
+                            'defaults' => array(
+                                'action' => 'peerColleges',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'peer-benchmarks' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-benchmarks/:year',
+                            'defaults' => array(
+                                'action' => 'peerBenchmarks',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'peer-results' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/peer-results',
+                            'defaults' => array(
+                                'action' => 'peerResults',
+                            )
+                        )
+                    ),
                 )
             ),
             'users' => array(
@@ -763,6 +871,7 @@ return array(
             'offercodes' => 'Mrss\Controller\OfferCodeController',
             'settings' => 'Mrss\Controller\SettingController',
             'pages' => 'Mrss\Controller\PageController',
+            'reports' => 'Mrss\Controller\ReportController',
             'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),

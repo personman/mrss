@@ -1,0 +1,51 @@
+<?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
+
+<h2>Peer Comparison Report</h2>
+
+<p>
+    <strong>Report year:</strong> <?= $report['year'] ?>
+</p>
+
+<p>
+    <strong>Home institution:</strong> <?= $report['currentCollege'] ?>
+</p>
+
+<p>
+    <strong>Peer institutions:</strong> <?= implode(', ', $report['colleges']) ?>
+</p>
+
+<?php foreach ($report['sections'] as $section): ?>
+    <h3><?= $section['benchmark'] ?></h3>
+
+    <table class="table table-hover table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Institution</th>
+                <th>Benchmark</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($section['data'] as $institution => $value): ?>
+                <tr>
+                    <td>
+                        <?= $institution ?>
+                    </td>
+                    <td>
+                        <?= round($value) ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endforeach ?>
+
+<?php if (!empty($report['skipped'])): ?>
+    <p>The following benchmarks are not included in the report because fewer than 5 or your selected peers reported data for them:</p>
+
+    <ul>
+        <?php foreach ($report['skipped'] as $benchmark): ?>
+            <li><?= $benchmark ?></li>
+        <?php endforeach ?>
+    </ul>
+
+<?php endif ?>

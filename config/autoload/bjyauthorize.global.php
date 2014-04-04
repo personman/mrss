@@ -89,6 +89,10 @@ return array(
                     'roles' => array('user')
                 ),
                 array(
+                    'controller' => 'reports',
+                    'roles' => array('user')
+                ),
+                array(
                     'controller' => 'users',
                     'action' => array('account', 'accountedit'),
                     'roles' => array('user')

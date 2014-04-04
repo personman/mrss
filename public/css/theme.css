@@ -33,6 +33,13 @@ textarea {
 	font-family: 'Lato', Helvetica;
 }
 
+/* Submit button in forms */
+#control-group-submitButton {
+    width: 140px;
+    float: left;
+    margin-left: 130px;
+}
+
 /* Navbar
 -------------------------------------------------- */
 body.pull_top {
@@ -123,6 +130,7 @@ header {
 /* Admin navigation */
 .adminNavigation {
     border: 1px solid #ccc;
+    border-bottom: 2px solid #bbb;
     background: #ddd;
     padding: 10px;
 }
@@ -134,7 +142,14 @@ header {
 .adminNavigation h3 {
     width: 200px;
     float: left;
+    line-height: 20px;
+    margin: 0px;
 }
+
+.adminNavigation .nav {
+    margin: 0px;
+}
+
 .navbar .brand img {
     margin-left: 20px;
 }
@@ -784,4 +799,8 @@ form#system #control-group-paymentType {
 
 .deleteLink {
     color: red;
+}
+
+table.table tbody {
+    background: #fff;
 }

@@ -19,9 +19,11 @@ class AbstractForm extends Form
     /**
      * Standard save button
      *
+     * @param string $buttonText
+     * @param bool $includeReset
      * @return Fieldset
      */
-    public function getButtonFieldset()
+    public function getButtonFieldset($buttonText = 'Save', $includeReset = false)
     {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
@@ -29,17 +31,26 @@ class AbstractForm extends Form
 
         // Add the save button
         $save = new Element\Submit('submit');
-        $save->setValue('Save');
+        $save->setValue($buttonText);
         $save->setAttribute('class', 'btn btn-primary');
+        $save->setAttribute('id', 'submitButton');
         $buttons->add($save);
+
+        if ($includeReset) {
+            // Add the reset button
+            $reset = new Element\Submit('reset');
+            $reset->setValue('Reset');
+            $reset->setAttribute('class', 'btn btn-danger');
+            $reset->setAttribute('type', 'reset');
+            $buttons->add($reset);
+        }
 
         return $buttons;
     }
 
-    public function getStates()
+    public function getStates($includeBlankOption = true)
     {
-        return array(
-            '' => 'Select State',
+        $states = array(
             'AL' => 'Alabama',
             'AK' => 'Alaska',
             'AZ' => 'Arizona',
@@ -92,5 +103,15 @@ class AbstractForm extends Form
             'WI' => 'Wisconsin',
             'WY' => 'Wyoming'
         );
+
+        if ($includeBlankOption) {
+            $blankOption = array(
+                '' => 'Select State'
+            );
+
+            $states = array_merge($blankOption, $states);
+        }
+
+        return $states;
     }
 }

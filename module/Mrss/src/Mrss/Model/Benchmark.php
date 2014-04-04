@@ -18,6 +18,10 @@ class Benchmark extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Benchmark';
 
+    /**
+     * @param $dbColumn
+     * @return null|BenchmarkEntity
+     */
     public function findOneByDbColumn($dbColumn)
     {
         return $this->getRepository()->findOneBy(array('dbColumn' => $dbColumn));
@@ -65,13 +69,13 @@ class Benchmark extends AbstractModel
 
     public function findComputed()
     {
-        return $this->getRepository()->findBy(array('inputType' => 'computed'));
+        return $this->getRepository()->findBy(array('computed' => true));
     }
 
     public function save(BenchmarkEntity $benchmark)
     {
         // Confirm that the sequence is set
-        if (!$benchmark->getSequence()) {
+        if ($benchmark->getSequence() === null) {
             $max = $this->getMaxSequence();
             $newMax = $max + 1;
             $benchmark->setSequence($newMax);

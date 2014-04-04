@@ -88,6 +88,16 @@ class Benchmark extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'computed',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Computed'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'equation',
                 'type' => 'Text',
                 'options' => array(

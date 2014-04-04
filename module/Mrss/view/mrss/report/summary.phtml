@@ -1,0 +1,25 @@
+<?= $this->headLink()->appendStylesheet('/css/report-summary.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    $this->chart()->getChartJsUri(),
+    'text/javascript'
+); ?>
+
+
+<h2>Key Benchmark Report</h2>
+
+
+<p>
+    Prepared for <?= $college->getName() ?>
+</p>
+
+<?php foreach ($reportData as $section): ?>
+    <div class="summarySection clearfix">
+        <h3><?= $section['name'] ?></h3>
+
+        <?php foreach ($section['charts'] as $chart): ?>
+            <?= $this->chart($chart['chart']) ?>
+        <?php endforeach ?>
+    </div>
+<?php endforeach ?>

@@ -22,14 +22,15 @@ class BenchmarkController extends AbstractActionController
         $study = $studyModel->find($studyId);
         $benchmarkGroups = $study->getBenchmarkGroups();
 
-        //$benchmarkGroupModel = $this->getServiceLocator()
-        //    ->get('model.benchmarkGroup');
+        $years = $this->getServiceLocator()->get('model.subscription')
+            ->getYearsWithSubscriptions($study);
+        sort($years);
 
         return array(
             //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
             'benchmarkGroups' => $benchmarkGroups,
             'study' => $study,
-            'yearsToShow' => range(2007, date('Y'))
+            'yearsToShow' => $years
         );
     }
 
@@ -159,6 +160,40 @@ class BenchmarkController extends AbstractActionController
 
         return $viewModel;
     }
+
+    public function reorderAction()
+    {
+        $benchmarkGroupId = $this->params()->fromPost('benchmarkGroupId');
+        $newBenchmarkSequences = $this->params()->fromPost('benchmarks');
+        $newBenchmarkSequences = array_flip($newBenchmarkSequences);
+
+        /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
+        $benchmarkGroupModel = $this->getServiceLocator()
+            ->get('model.benchmarkGroup');
+
+        $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
+
+        if (!empty($benchmarkGroup)) {
+            $benchmarks = $benchmarkGroup->getBenchmarks();
+
+            foreach ($benchmarks as $benchmark) {
+                if (isset($newBenchmarkSequences[$benchmark->getId()])) {
+                    $benchmark->setSequence(
+                        $newBenchmarkSequences[$benchmark->getId()]
+                    );
+                }
+            }
+
+            $em = $this->getServiceLocator()->get('em');
+            $em->flush();
+        }
+
+        //print_r($benchmarkGroupId); print_r($benchmarks); die;
+
+        echo 'ok';
+        die;
+    }
+
 
     /**
      * Get the form and bind the entity

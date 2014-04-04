@@ -2,17 +2,18 @@ $(function() {
 
     // Show the equation field only when Computed is the chosen inputType
     toggleEquationDisplay()
-    $('#inputType').change(function() {
+    $('#control-group-computed input').change(function() {
         toggleEquationDisplay()
     })
 })
 
 function toggleEquationDisplay()
 {
-    inputType = $('#inputType').val()
-    equationControl = $('#control-group-equation')
+    var computedLength = $('#control-group-computed input').length;
+    var computed = $('#control-group-computed input').get(computedLength- 1).checked;
+    var equationControl = $('#control-group-equation')
 
-    if (inputType == 'computed') {
+    if (computed) {
         equationControl.show()
     } else {
         equationControl.hide()

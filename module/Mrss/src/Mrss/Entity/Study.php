@@ -40,6 +40,7 @@ class Study
     /**
      * @ORM\OneToMany(targetEntity="BenchmarkGroup", mappedBy="study")
      * @ORM\OrderBy({"sequence" = "ASC"})
+     * @var Mrss\Entity\BenchmarkGroup[]
      */
     protected $benchmarkGroups;
 
@@ -145,6 +146,9 @@ class Study
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\BenchmarkGroup[]
+     */
     public function getBenchmarkGroups()
     {
         return $this->benchmarkGroups;

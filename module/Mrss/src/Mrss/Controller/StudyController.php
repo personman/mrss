@@ -125,6 +125,25 @@ class StudyController extends AbstractActionController
         );
     }
 
+    public function exportAction()
+    {
+        $studyId = $this->params()->fromRoute('id');
+        $study = $this->getStudy($studyId);
+
+        $filename = $this->getCsvImportFileForStudy($studyId);
+
+        /** @var \Mrss\Service\ImportBenchmarks $importer */
+        $importer = $this->getServiceLocator()->get('import.csv');
+
+        $importer->export($study, $filename);
+
+        $this->flashMessenger()->addSuccessMessage('Study exported to ' . $filename);
+        return $this->redirect()->toRoute(
+            'benchmark',
+            array('study' => $study->getId())
+        );
+    }
+
     public function getCsvImportFileForStudy($studyId)
     {
         $csvFiles = array(

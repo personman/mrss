@@ -1,4 +1,34 @@
-<h2>Benchmarks</h2>
+<script type="text/javascript">
+    $(function() {
+        // Make benchmrks sortable
+        $('tbody.sortable').sortable({
+            update: function(event, ui) {
+                parent = ui.item.parent()
+
+                var benchmarkGroupId = parent.attr('id').split('_').pop()
+
+                var benchmarkIds = [];
+                parent.find('tr').each(function() {
+                    benchmarkIds.push(parseInt($(this).attr('id').split('_').pop()))
+                })
+
+                data = {
+                    benchmarkGroupId: benchmarkGroupId,
+                    benchmarks: benchmarkIds
+                }
+
+                $.post('/benchmark/reorder', data, function(result) {
+                    //console.log(result)
+                    if (result != 'ok') {
+                        alert('There was a problem saving your sequence.');
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+<h2><?= $study->getName() ?> Benchmarks</h2>
 
 <ul>
     <li>
@@ -7,6 +37,24 @@
             array('study' => $study->getId())
         )?>">
             Add a benchmark group
+        </a>
+    </li>
+    <li>
+        <a href="<?= $this->url(
+            'studies/export',
+            array('id' => $study->getId())
+        ) ?>">
+            Export benchmark setup to csv
+        </a>
+    </li>
+    <li>
+        <a href="<?= $this->url(
+            'studies/import',
+            array('id' => $study->getId())
+        ) ?>" onclick="return confirm(
+        'This will make permanent changes to the data. Are you sure you want to do this?')
+        ">
+            Import benchmark setup from csv
         </a>
     </li>
 </ul>
@@ -30,19 +78,20 @@
         </li>
     </ul>
 
-    <table class="table table-striped heatmap">
+    <table class="table table-striped table-hover heatmap">
         <thead>
             <tr>
                 <th>Benchmark</th>
+                <th>Input Type</th>
                 <th>Action</th>
                 <?php foreach ($this->yearsToShow as $year): ?>
                     <th><?= $year ?></th>
                 <?php endforeach ?>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
         <?php foreach ($benchmarkGroup->getBenchmarks() as $benchmark): ?>
-            <tr>
+            <tr id="benchmark_<?= $benchmark->getId() ?>">
                 <td>
                     <a href="<?= $this->url(
                         'benchmark/view',
@@ -52,6 +101,13 @@
                     ) ?>">
                         <?= $benchmark->getName() ?>
                     </a>
+                </td>
+
+                <td>
+                    <?= $benchmark->getInputType() ?>
+                    <?php if ($benchmark->getComputed()): ?>
+                        (computed)
+                    <?php endif ?>
                 </td>
 
                 <td>

@@ -108,12 +108,8 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         $benchmarkMock->expects($this->once())
             ->method('isAvailableForYear')
             ->will($this->returnValue(true));
-        $benchmarkMock->expects($this->once())
-            ->method('getInputType')
-            ->will($this->returnValue('number'));
 
         $benchmarkGroup->setBenchmarks(array($benchmarkMock));
-
 
         $this->assertTrue(is_array($benchmarkGroup->getElements(2013)));
     }

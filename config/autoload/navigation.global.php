@@ -61,7 +61,21 @@ return array(
             ),
             'reports' => array(
                 'label' => 'Reports',
-                'uri' => '/reports'
+                'uri' => '/reports',
+                'pages' => array(
+                    array(
+                        'label' => 'National Report',
+                        'uri' => '/reports/national'
+                    ),
+                    array(
+                        'label' => 'Summary Report',
+                        'uri' => '/reports/summary'
+                    ),
+                    array(
+                        'label' => 'Peer Comparison',
+                        'uri' => '/reports/peer'
+                    )
+                )
             ),
             /*
             // ToDo: before activating below code make sure that Membership Benefits don't show when logged in. PRA 130626
@@ -152,6 +166,10 @@ return array(
                 'label' => 'Studies',
                 'controller' => 'studies',
                 'route' => 'studies'
+            ),
+            'reports' => array(
+                'label' => 'Reports',
+                'route' => 'reports/calculate'
             ),
             array(
                 'label' => 'Import',

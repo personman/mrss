@@ -280,6 +280,22 @@ class Module
 
                     return $pageModel;
                 },
+                'model.percentile' => function ($sm) {
+                    $model = new \Mrss\Model\Percentile;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
+                'model.percentileRank' => function ($sm) {
+                    $model = new \Mrss\Model\PercentileRank;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.payment' => function ($sm) {
                     $paymentModel = new \Mrss\Model\Payment;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
@@ -326,6 +342,30 @@ class Module
                     $service = new \Mrss\Service\NhebiSubscriptions\Mrss();
                     $service->setCollegeModel($sm->get('model.college'));
                     $service->setSubscriptionModel($sm->get('model.subscription'));
+
+                    return $service;
+                },
+                'service.report.calculator' => function ($sm) {
+                    $service = new \Mrss\Service\Report\Calculator();
+
+                    return $service;
+                },
+                'service.report' => function ($sm) {
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+
+                    $service = new \Mrss\Service\Report();
+
+                    $service->setSubscriptionModel($sm->get('model.subscription'));
+                    $service->setStudy($currentStudy);
+                    $service->setCalculator($sm->get('service.report.calculator'));
+                    $service->setPercentileModel($sm->get('model.percentile'));
+                    $service->setPercentileRankModel(
+                        $sm->get('model.percentileRank')
+                    );
+                    $service->setBenchmarkModel($sm->get('model.benchmark'));
+                    $service->setCollegeModel($sm->get('model.college'));
+                    $service->setSettingModel($sm->get('model.setting'));
 
                     return $service;
                 },
@@ -382,6 +422,23 @@ class Module
                     $studyConfig = $config['studies'];
 
                     $plugin->setConfig($studyConfig);
+
+                    return $plugin;
+                },
+                'currentObservation' => function ($sm) {
+                    $plugin = new \Mrss\Controller\Plugin\CurrentObservation();
+                    $model = $sm->getServiceLocator()->get('model.observation');
+                    $plugin->setObservationModel($model);
+                    $plugin->setCurrentStudyPlugin($sm->get('currentStudy'));
+                    $plugin->setCurrentCollegePlugin($sm->get('currentCollege'));
+
+                    return $plugin;
+                },
+                'currentCollege' => function ($sm) {
+                    $plugin = new \Mrss\Controller\Plugin\CurrentCollege();
+                    $model = $sm->getServiceLocator()->get('model.college');
+                    $plugin->setCollegeModel($model);
+                    $plugin->setuserPlugin($sm->get('zfcUserAuthentication'));
 
                     return $plugin;
                 },
@@ -450,6 +507,11 @@ class Module
 
                     return $helper;
                 },
+                'chart' => function($sm) {
+                    $helper = new \Mrss\View\Helper\Chart;
+
+                    return $helper;
+                 },
                 'simpleFormElement' => function($sm) {
                     $helper = new \Mrss\View\Helper\SimpleFormElement;
 

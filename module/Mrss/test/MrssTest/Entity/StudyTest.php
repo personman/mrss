@@ -45,6 +45,8 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->study->getUPayUrl());
         $this->assertNull($this->study->getUPaySiteId());
         $this->assertNull($this->study->getLogo());
+        $this->assertNull($this->study->getGoogleAnalyticsKey());
+        $this->assertNull($this->study->getOfferCodes());
 
         $this->assertInstanceOf(
             '\Doctrine\Common\Collections\ArrayCollection',
@@ -96,6 +98,13 @@ class StudyTest extends PHPUnit_Framework_TestCase
 
         $this->study->setLogo('/test.png');
         $this->assertEquals('/test.png', $this->study->getLogo());
+
+        $this->study->setGoogleAnalyticsKey('123');
+        $this->assertEquals('123', $this->study->getGoogleAnalyticsKey());
+
+        $this->study->setOfferCodes(array('test'));
+        $this->assertEquals(array('test'), $this->study->getOfferCodes());
+        $this->assertTrue($this->study->hasOfferCode());
     }
 
     public function testCompletionPercentage()

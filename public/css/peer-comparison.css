@@ -1,0 +1,19 @@
+#peers, #benchmarks {
+    width: 50%;
+    height: 150px;
+}
+
+.table th {
+    background: #608CC0;
+    color: #fff;
+    font-weight: bold;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #DDDDDD;
+}
+
+.well h4 {
+    margin-top: 0px;
+}

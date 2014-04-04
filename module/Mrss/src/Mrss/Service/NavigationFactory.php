@@ -55,6 +55,9 @@ class NavigationFactory extends DefaultNavigationFactory
             // If they're logged out, hide the logout button
             unset($pages['logout']);
 
+            // Don't show reports if they're not logged in
+            unset($pages['reports']);
+
             // Don't show the subscribe link if enrollment/pilot isn't open
             if (!$currentStudy->getEnrollmentOpen() &&
                 !$currentStudy->getPilotOpen()) {
@@ -123,6 +126,11 @@ class NavigationFactory extends DefaultNavigationFactory
         // If the help section is empty, drop it from the menu
         if (empty($pages['help']['pages'])) {
             unset($pages['help']);
+        }
+
+        // Hide reports link if reporting isn't enabled yet
+        if (!$currentStudy->getReportsOpen()) {
+            unset($pages['reports']);
         }
 
         return $pages;

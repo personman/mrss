@@ -59,6 +59,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $inputType;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $computed;
+
+    /**
      * @ORM\Column(type="integer", length=3, nullable=true)
      */
     protected $status;
@@ -170,6 +175,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getInputType()
     {
         return $this->inputType;
+    }
+
+    public function setComputed($computed)
+    {
+        $this->computed = $computed;
+
+        return $this;
+    }
+
+    public function getComputed()
+    {
+        return $this->computed;
     }
 
     public function setStatus($status)
@@ -493,6 +510,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         }
 
         return $percentage;
+    }
+
+    public function isPercent()
+    {
+        return ($this->getInputType() == 'percent'
+            || $this->getInputType() == 'wholepercent');
+    }
+
+    public function isDollars()
+    {
+        return ($this->getInputType() == 'dollars'
+            || $this->getInputType() == 'wholedollars');
     }
 
     public function setEquationValidator($equationValidator)

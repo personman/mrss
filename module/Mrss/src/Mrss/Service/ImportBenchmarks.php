@@ -27,6 +27,14 @@ class ImportBenchmarks
 
     protected $observationPropertiesToAdd = array();
 
+    protected $sequences = array();
+
+    /**
+     * Doesn't currently modify benchmark sequence
+     *
+     * @param $filename
+     * @throws \Exception
+     */
     public function import($filename)
     {
         if (!file_exists($filename)) {
@@ -109,13 +117,37 @@ class ImportBenchmarks
         $benchmark->setInputType($row['inputType']);
         $benchmark->setDescription($row['description']);
         $benchmark->setOptions($row['options']);
+        $benchmark->setComputed($row['computed']);
         $benchmark->setEquation(($row['equation']));
+        $benchmark->setExcludeFromCompletion(($row['excludeFromCompletion']));
         $benchmark->setYearsAvailable($this->getYears());
+        $benchmark->setSequence($this->getSequence($benchmark));
+
+        $exclude = $benchmark->getExcludeFromCompletion();
+        $benchmark->setExcludeFromCompletion($exclude);
 
         // Save it
         $this->getBenchmarkModel()->save($benchmark);
 
         return $benchmark;
+    }
+
+    /**
+     * Get the sequence by keeping track of the number of benchmarks per group
+     *
+     * @param Benchmark $benchmark
+     */
+    public function getSequence(Benchmark $benchmark)
+    {
+        $benchmarkGroupName = $benchmark->getBenchmarkGroup()->getName();
+        if (!isset($this->sequences[$benchmarkGroupName])) {
+            $this->sequences[$benchmarkGroupName] = 0;
+        }
+
+        $sequence = $this->sequences[$benchmarkGroupName];
+        $this->sequences[$benchmarkGroupName]++;
+
+        return $sequence;
     }
 
     /**
@@ -142,6 +174,8 @@ class ImportBenchmarks
             'number' => 'integer',
             'dollars' => 'float',
             'percentage' => 'float',
+            'percent' => 'float',
+            'wholePercent' => 'integer',
             'computed' => 'float',
             'text' => 'string'
         );
@@ -164,6 +198,54 @@ class ImportBenchmarks
         $year0 = $year - 1;
 
         return array($year0, $year, $year2, $year3);
+    }
+
+    public function export($study, $filename)
+    {
+        // Place header
+        $headers = $this->getHeaders();
+
+        $rows = $this->getBenchmarkInfo($study);
+
+        // Save to file
+        if (!file_exists($filename)) {
+            throw new \Exception("Export file $filename does not exist.");
+        }
+
+        $fh = fopen($filename, 'w');
+
+        fputcsv($fh, $headers);
+        foreach ($rows as $row) {
+            fputcsv($fh, $row);
+        }
+        fclose($fh);
+
+        return true;
+    }
+
+    public function getBenchmarkInfo(Study $study)
+    {
+        // Loop over benchmark Groups
+        $studyBenchmarks = array();
+        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+            $formName = $benchmarkGroup->getName();
+
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                $studyBenchmarks[] = array(
+                    $formName,
+                    $benchmark->getName(),
+                    $benchmark->getDbColumn(),
+                    $benchmark->getInputType(),
+                    $benchmark->getDescription(),
+                    $benchmark->getOptions(),
+                    $benchmark->getComputed(),
+                    $benchmark->getEquation(),
+                    $benchmark->getExcludeFromCompletion()
+                );
+            }
+        }
+
+        return $studyBenchmarks;
     }
 
     public function setStudy(Study $study)
@@ -214,15 +296,7 @@ class ImportBenchmarks
 
     protected function checkHeaders($headers)
     {
-        $expected = array(
-            'benchmarkGroup',
-            'name',
-            'dbColumn',
-            'inputType',
-            'description',
-            'options',
-            'equation'
-        );
+        $expected = $this->getHeaders();
 
         $diff = array_diff($expected, $headers);
 
@@ -230,5 +304,20 @@ class ImportBenchmarks
             $missing = implode(', ', $diff);
             throw new \Exception("CSV invalid. Headers are missing: $missing");
         }
+    }
+
+    protected function getHeaders()
+    {
+        return array(
+            'benchmarkGroup',
+            'name',
+            'dbColumn',
+            'inputType',
+            'description',
+            'options',
+            'computed',
+            'equation',
+            'excludeFromCompletion'
+        );
     }
 }
