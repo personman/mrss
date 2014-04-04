@@ -132,4 +132,21 @@ class SubscriptionTest extends PHPUnit_Framework_TestCase
         $subscription->setCreated('2013-07-09');
         $this->assertEquals('2013-07-09', $subscription->getCreated());
     }
+
+    public function testGetPaymentMethodForDisplay()
+    {
+        $subscription = new Subscription();
+
+        $subscription->setPaymentMethod('creditCard');
+        $this->assertEquals(
+            'Credit Card',
+            $subscription->getPaymentMethodForDisplay()
+        );
+
+        $subscription->setPaymentMethod('invoice');
+        $this->assertEquals(
+            'Invoice',
+            $subscription->getPaymentMethodForDisplay()
+        );
+    }
 }

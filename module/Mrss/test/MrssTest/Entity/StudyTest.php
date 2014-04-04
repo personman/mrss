@@ -174,6 +174,18 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($dateThisYear->format('Y'), date('Y'));
     }
 
+    public function testGetEarlyPriceDate()
+    {
+        $date = new \DateTime('2013-08-04');
+        $this->study->setEarlyPriceDate($date);
+        $this->study->setCurrentYear(2014);
+
+        $this->assertEquals(
+            2014,
+            $this->study->getEarlyPriceDateForStudyYear()->format('Y')
+        );
+    }
+
     public function testGetCurrentPrice()
     {
         $this->study->setPrice(1200);
@@ -194,6 +206,12 @@ class StudyTest extends PHPUnit_Framework_TestCase
         // Test while early bird is still open
         $this->study->setEarlyPriceDate($earlyPriceFuture);
         $this->assertEquals(1100, $this->study->getCurrentPrice());
+    }
+
+    public function testGetCurrentYearMinus()
+    {
+        $this->study->setCurrentYear(2014);
+        $this->assertEquals(2013, $this->study->getCurrentYearMinus(1));
     }
 
     /*public function testCheckOfferCode()

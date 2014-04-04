@@ -91,6 +91,10 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $benchmark->setStatus(1);
         $this->assertEquals(1, $benchmark->getStatus());
 
+        // Set computed
+        $benchmark->setComputed(true);
+        $this->assertTrue($benchmark->getComputed());
+
         // Set equation
         $benchmark->setEquation("5 + 3");
         $this->assertEquals("5 + 3", $benchmark->getEquation());
@@ -98,6 +102,12 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         // Set options
         $benchmark->setOptions(array('one', 'two'));
         $this->assertEquals(array('one', 'two'), $benchmark->getOptions());
+
+        // Set exclude
+        $benchmark->setExcludeFromCompletion(true);
+        $this->assertTrue($benchmark->getExcludeFromCompletion());
+        $benchmark->setExcludeFromCompletion(false);
+        $this->assertFalse($benchmark->getExcludeFromCompletion());
     }
 
     public function testAssociationMethods()
@@ -144,6 +154,36 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetFormElementPercent()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('percent');
+
+        $formElement = $benchmark->getFormElement();
+
+        $this->assertTrue(is_array($formElement));
+        $this->assertEquals('\d+(\.\d+)?', $formElement['attributes']['pattern']);
+        $this->assertEquals(
+            'Use the format 12, 12.3 or 12.34',
+            $formElement['attributes']['title']
+        );
+    }
+
+    public function testGetFormElementWholePercent()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('wholepercent');
+
+        $formElement = $benchmark->getFormElement();
+
+        $this->assertTrue(is_array($formElement));
+        $this->assertEquals('\d+', $formElement['attributes']['pattern']);
+        $this->assertEquals(
+            'Use a whole number (no decimals)',
+            $formElement['attributes']['title']
+        );
+    }
+
     public function testGetFormElementNumber()
     {
         $benchmark = new Benchmark;
@@ -172,6 +212,33 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
     {
         $benchmark = new Benchmark;
         $benchmark->setInputType('dollars');
+
+        $filter = $benchmark->getFormElementInputFilter();
+        $this->assertEquals('Regex', $filter['validators'][0]['name']);
+    }
+
+    public function testGetFormElementInputFilterWholeDollars()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('wholedollars');
+
+        $filter = $benchmark->getFormElementInputFilter();
+        $this->assertEquals('Regex', $filter['validators'][0]['name']);
+    }
+
+    public function testGetFormElementInputFilterPercent()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('percent');
+
+        $filter = $benchmark->getFormElementInputFilter();
+        $this->assertEquals('Regex', $filter['validators'][0]['name']);
+    }
+
+    public function testGetFormElementInputFilterWholePercent()
+    {
+        $benchmark = new Benchmark;
+        $benchmark->setInputType('wholepercent');
 
         $filter = $benchmark->getFormElementInputFilter();
         $this->assertEquals('Regex', $filter['validators'][0]['name']);

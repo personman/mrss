@@ -75,6 +75,10 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         $benchmarkGroup->setSequence(2);
         $this->assertEquals(2, $benchmarkGroup->getSequence());
 
+        // Set format
+        $benchmarkGroup->setFormat('one-col');
+        $this->assertEquals('one-col', $benchmarkGroup->getFormat());
+
         $studyMock = $this->getMock('Mrss\Entity\Study');
         $benchmarkGroup->setStudy($studyMock);
         $this->assertSame($studyMock, $benchmarkGroup->getStudy());
