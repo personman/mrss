@@ -30,3 +30,9 @@ tr.secondHeading th {
 .table thead th {
     border-top: none;
 }
+
+
+/* Table striping */
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #F6FFFF;
+}
