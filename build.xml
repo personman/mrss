@@ -41,6 +41,7 @@
 
 
     <target name="phpunit">
+        
         <touch file="config/autoload/db.php" />
         <echo message="Starting PHPUnit..." />
         <exec command="bin/phpunit" passthru="false"
