@@ -32,7 +32,7 @@
                         <tr>
                             <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
                             <?php if ($benchmark['reported'] !== null): ?>
-                            <td><?= number_format($benchmark['reported'], 0) ?></td>
+                            <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], 0) . $benchmark['suffix'] ?></td>
                             <td><?= round($benchmark['percentile_rank']) ?></td>
                             <?php else: ?>
                                 <td></td>
@@ -40,7 +40,7 @@
                             <?php endif ?>
                             <td><?= $benchmark['N'] ?></td>
                             <?php foreach ($benchmark['percentiles'] as $percentile): ?>
-                            <td><?= number_format($percentile, 0) ?></td>
+                            <td><?= $benchmark['prefix'] . number_format($percentile, 0) . $benchmark['suffix'] ?></td>
                             <?php endforeach ?>
                         </tr>
 

@@ -272,6 +272,17 @@ class Report
                     $benchmarkData['percentile_rank'] = '';
                 }
 
+                // Data labels
+                $prefix = $suffix = '';
+                if ($benchmark->isPercent()) {
+                    $suffix = '%';
+                } elseif ($benchmark->isDollars()) {
+                    $prefix = '$';
+                }
+
+                $benchmarkData['prefix'] = $prefix;
+                $benchmarkData['suffix'] = $suffix;
+
                 $groupData['benchmarks'][] = $benchmarkData;
 
             }
@@ -836,11 +847,7 @@ class Report
         $breakpoints = $this->getPercentileBreakpoints();
         $labels = array();
         foreach ($breakpoints as $breakpoint) {
-            if ($breakpoint == 50) {
-                $label = 'Mdn';
-            } else {
-                $label = $this->getOrdinal($breakpoint);
-            }
+            $label = $this->getOrdinal($breakpoint);
 
             $labels[] = $label;
         }
