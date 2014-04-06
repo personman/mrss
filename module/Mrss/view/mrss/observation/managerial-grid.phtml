@@ -7,46 +7,38 @@ $tableConfig = array(
     'Program Development' => array(
         'inst_full_program_dev',
         'inst_part_program_dev',
-        'inst_othr_program_dev'
     ),
     'Course Development' => array(
         'inst_full_course_dev',
         'inst_part_course_dev',
-        'inst_othr_course_dev'
     ),
     'Teaching' => array(
         'inst_full_teaching',
         'inst_part_teaching',
-        'inst_othr_teaching'
     ),
     'Tutoring' => array(
         'inst_full_tutoring',
         'inst_part_tutoring',
-        'inst_othr_tutoring'
     ),
     'Advising' => array(
         'inst_full_advising',
         'inst_part_advising',
-        'inst_othr_advising'
     ),
     'Academic Service' => array(
         'inst_full_ac_service',
         'inst_part_ac_service',
-        'inst_othr_ac_service'
     ),
     'Assessment and Grading' => array(
         'inst_full_assessment',
         'inst_part_assessment',
-        'inst_othr_assessment'
     ),
-    /*'Other' => array(
+    'Professional Development' => array(
         'inst_full_other',
         'inst_part_other',
-        'inst_othr_other'
-    )*/
+    )
 );
 
-$colClassConfig = array('full', 'part', 'other');
+$colClassConfig = array('full', 'part');
 
 /*$class = $form->get('inst_full_other')->getAttribute('class');
 $form->get('inst_full_other')->setAttribute('class', $class . ' full-value other-field');
@@ -87,13 +79,12 @@ $this->headScript()->appendFile(
     <thead>
     <tr>
         <th></th>
-        <th colspan="3" class="top-table-heading">Percent of Time Spent on Activities</th>
+        <th colspan="2" class="top-table-heading">Percent of Time Spent on Activities</th>
     </tr>
         <tr>
             <th></th>
             <th>Full Time</th>
             <th>Part Time</th>
-            <th>Other Full<br> Time Employees</th>
         </tr>
     </thead>
 
@@ -127,56 +118,11 @@ $this->headScript()->appendFile(
         </tr>
     <?php endforeach ?>
 
-        <tr>
-            <td class="grid-category">
-                Other
-            </td>
-            <td class="grid-value full-value other-field" id="full-inst_full_other">
-                <?= $this->simpleFormElement($form->get('inst_full_other')) ?>
-            </td>
-            <td class="grid-value part-value other-field" id="part-inst_part_other">
-                <?= $this->simpleFormElement($form->get('inst_part_other')) ?>
-            </td>
-            <td class="grid-value other-value other-field" id="other-inst_othr_other">
-                <?= $this->simpleFormElement($form->get('inst_othr_other')) ?>
-            </td>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="3">
-                <div class="full-help">
-                    <?= $form->get('inst_full_other')->getOption('help-block') ?>
-                </div>
-                <div class="part-help">
-                    <?= $form->get('inst_part_other')->getOption('help-block') ?>
-                </div>
-                <div class="other-help">
-                    <?= $form->get('inst_othr_other')->getOption('help-block') ?>
-                </div>
-            </td>
-        </tr>
-
-        <tr id="specify-other">
-            <td class="grid-category">
-                Specify Other
-            </td>
-            <td>
-                <?= $this->simpleFormElement($form->get('inst_full_other_specify')) ?>
-            </td>
-            <td>
-                <?= $this->simpleFormElement($form->get('inst_part_other_specify')) ?>
-            </td>
-            <td>
-                <?= $this->simpleFormElement($form->get('inst_othr_other_specify')) ?>
-            </td>
-        </tr>
 
         <tr>
             <td class="grid-category">Total</td>
             <td id="full-time-total"></td>
             <td id="part-time-total"></td>
-            <td id="other-time-total"></td>
         </tr>
 
     </tbody>
