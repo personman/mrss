@@ -480,6 +480,10 @@ header {
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
+    .navbar {
+        margin-left: -20px;
+        margin-right: -20px;
+    }
 	footer {
 		margin-right: -20px;
 		margin-left: -20px;
