@@ -101,7 +101,7 @@ $this->headScript()->appendFile(
                 <td class="grid-category" colspan="4"><?= $section['title'] ?></td>
             </tr>
         <?php endif ?>
-        
+
         <?php foreach ($section['rows'] as $label => $row): ?>
             <tr>
                 <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
@@ -109,11 +109,14 @@ $this->headScript()->appendFile(
                 </td>
 
                 <?php foreach ($row as $i => $field): ?>
-                    <?php if (empty($field)) continue ?>
+                    <?php if (!empty($field)):  ?>
                     <td class="grid-value <?= $colClassConfig[$i] ?>-value"
                         id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
                         <?= $this->simpleFormElement($form->get($field)) ?>
                     </td>
+                    <?php else: ?>
+                        <td class="emptyCell"></td>
+                    <?php endif ?>
                 <?php endforeach ?>
             </tr>
 
