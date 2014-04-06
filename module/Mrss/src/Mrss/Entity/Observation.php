@@ -34,6 +34,61 @@ class Observation
     protected $college;
 
     // MRSS
+
+    // Form 1A
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_full_expend_ct;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_full_num_ct;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_full_cred_hrs_ct;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_part_expend_ct;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_part_num_ct;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_part_cred_hrs_ct;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_pt_perc_credit_hr_ct;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_full_expend_at;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_full_num_at;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_full_cred_hrs_at;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_ft_perc_credit_hr_at;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_part_expend_at;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_part_num_at;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_part_cred_hrs_at;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_admin_expend;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $inst_admin_num;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_o_cost;
+
+
+    // Form 1A (retired)
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_program_dev;
 
@@ -105,6 +160,8 @@ class Observation
 
     /** @ORM\Column(type="integer", nullable=true) */
     protected $inst_full_total_num;
+
+
 
     /** @ORM\Column(type="integer", nullable=true) */
     protected $inst_part_total_num;

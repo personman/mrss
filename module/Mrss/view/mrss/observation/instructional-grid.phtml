@@ -4,21 +4,57 @@
  */
 
 $tableConfig = array(
-    'Full-time' => array(
-        'inst_full_total_expend',
-        'inst_full_total_num',
+    // Full-Time
+    array(
+        'title' => 'Full-Time',
+        'rowClass' => 'grid-subcategory',
+        'rows' => array(
+            'Career / Technical' => array(
+                'inst_full_expend_ct',
+                'inst_full_num_ct',
+                'inst_full_cred_hrs_ct'
+            ),
+            'Academic / Transfer' => array(
+                'inst_full_expend_at',
+                'inst_full_num_at',
+                'inst_full_cred_hrs_at'
+            ),
+        ),
     ),
-    'Part-time' => array(
-        'inst_part_total_expend',
-        'inst_part_total_num',
+    // Part-Time / Adjunct
+    array(
+        'title' => 'Part-Time / Adjunct',
+        'rowClass' => 'grid-subcategory',
+        'rows' => array(
+            'Career / Technical' => array(
+                'inst_part_expend_ct',
+                'inst_part_num_ct',
+                'inst_part_cred_hrs_ct'
+            ),
+            'Academic / Transfer' => array(
+                'inst_part_expend_at',
+                'inst_part_num_at',
+                'inst_part_cred_hrs_at'
+            ),
+        ),
     ),
-    'Other Full-time' => array(
-        'inst_other_total_expend',
-        'inst_other_total_num',
-    ),
+    array(
+        'rows' => array(
+            'Administrative and Support Staff' => array(
+                'inst_admin_expend',
+                'inst_admin_num',
+                ''
+            ),
+            'Non-Labor and Other Indirect Costs' => array(
+                'inst_o_cost',
+                '',
+                ''
+            )
+        )
+    )
 );
 
-$colClassConfig = array('expenditures', 'count');
+$colClassConfig = array('expenditures', 'count', 'credit_hours');
 
 ?>
 
@@ -44,45 +80,57 @@ $this->headScript()->appendFile(
 
 
 <?php $form->prepare() ?>
+
+
 <?= $this->form()->openTag($form) ?>
 
-<table class="table table-condensed table-bordered data-entry-grid">
+<table class="table table-condensed table-bordered data-entry-grid" id="instructionalGrid">
     <thead>
     <tr>
         <th></th>
-        <th>Total Expenditures</th>
+        <th>Salaries and Benefits</th>
         <th>Number of Faculty / Staff</th>
+        <th>Number of Student Credit Hours</th>
     </tr>
     </thead>
 
     <tbody>
-
-    <?php foreach ($tableConfig as $label => $row): ?>
-        <tr>
-            <td class="grid-category">
-                <?= $label ?>
-            </td>
-
-            <?php foreach ($row as $i => $field): ?>
-                <td class="grid-value <?= $colClassConfig[$i] ?>-value"
-                    id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
-                    <?= $this->simpleFormElement($form->get($field)) ?>
+    <?php foreach ($tableConfig as $section): ?>
+        <? if (!empty($section['title'])): ?>
+            <tr>
+                <td class="grid-category" colspan="4"><?= $section['title'] ?></td>
+            </tr>
+        <?php endif ?>
+        
+        <?php foreach ($section['rows'] as $label => $row): ?>
+            <tr>
+                <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
+                    <?= $label ?>
                 </td>
-            <?php endforeach ?>
-        </tr>
-
-        <tr class="help-text">
-            <td class="grid-category"></td>
-            <td colspan="<?= count($row) ?>">
 
                 <?php foreach ($row as $i => $field): ?>
-                    <div class="<?= $colClassConfig[$i] ?>-help">
-                        <?= $form->get($field)->getOption('help-block') ?>
-                    </div>
+                    <?php if (empty($field)) continue ?>
+                    <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                        id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                        <?= $this->simpleFormElement($form->get($field)) ?>
+                    </td>
                 <?php endforeach ?>
+            </tr>
 
-            </td>
-        </tr>
+            <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <?php if (empty($field)) continue ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help">
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
+
+                </td>
+            </tr>
+        <?php endforeach ?>
     <?php endforeach ?>
 
     </tbody>

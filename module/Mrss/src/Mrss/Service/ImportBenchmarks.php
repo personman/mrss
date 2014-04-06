@@ -173,6 +173,7 @@ class ImportBenchmarks
         $map = array(
             'number' => 'integer',
             'dollars' => 'float',
+            'wholedollars' => 'float',
             'percentage' => 'float',
             'percent' => 'float',
             'wholePercent' => 'integer',
