@@ -1,4 +1,10 @@
 <?= $this->headLink()->appendStylesheet('/css/report.css') ?>
+<?php
+$this->headScript()->appendFile(
+    '/js/report.js',
+    'text/javascript'
+); ?>
+
 
 <h2>Report of National Aggregate Data</h2>
 
@@ -33,7 +39,7 @@
                             <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
                             <?php if ($benchmark['reported'] !== null): ?>
                             <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], 0) . $benchmark['suffix'] ?></td>
-                            <td><?= round($benchmark['percentile_rank']) ?></td>
+                            <td class="percentileColor"><?= round($benchmark['percentile_rank']) ?></td>
                             <?php else: ?>
                                 <td></td>
                                 <td></td>
