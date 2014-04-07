@@ -1,6 +1,6 @@
 $(function() {
     // Colorize percentiles
-    $('.percentileColor').each(function() {
+    /*$('.percentileColor').each(function() {
         var td = $(this);
         var value = parseFloat(td.html());
 
@@ -18,5 +18,5 @@ $(function() {
                 break;
             }
         }
-    })
+    })*/
 })
