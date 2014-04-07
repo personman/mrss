@@ -5,36 +5,36 @@
 
 $tableConfig = array(
     'Program Development' => array(
-        'inst_full_program_dev',
-        'inst_part_program_dev',
+        'inst_at_full_program_dev',
+        'inst_at_part_program_dev',
     ),
     'Course Development' => array(
-        'inst_full_course_dev',
-        'inst_part_course_dev',
+        'inst_at_full_course_dev',
+        'inst_at_part_course_dev',
     ),
     'Teaching' => array(
-        'inst_full_teaching',
-        'inst_part_teaching',
+        'inst_at_full_teaching',
+        'inst_at_part_teaching',
     ),
     'Tutoring' => array(
-        'inst_full_tutoring',
-        'inst_part_tutoring',
+        'inst_at_full_tutoring',
+        'inst_at_part_tutoring',
     ),
     'Advising' => array(
-        'inst_full_advising',
-        'inst_part_advising',
+        'inst_at_full_advising',
+        'inst_at_part_advising',
     ),
     'Academic Service' => array(
-        'inst_full_ac_service',
-        'inst_part_ac_service',
+        'inst_at_full_ac_service',
+        'inst_at_part_ac_service',
     ),
     'Assessment and Grading' => array(
-        'inst_full_assessment',
-        'inst_part_assessment',
+        'inst_at_full_assessment',
+        'inst_at_part_assessment',
     ),
     'Professional Development' => array(
-        'inst_full_other',
-        'inst_part_other',
+        'inst_at_full_pd',
+        'inst_at_part_pd',
     )
 );
 
@@ -72,11 +72,11 @@ $this->headScript()->appendFile(
         <th></th>
         <th colspan="2" class="top-table-heading">Percent of Time Spent on Activities</th>
     </tr>
-        <tr>
-            <th></th>
-            <th>Full Time</th>
-            <th>Part Time</th>
-        </tr>
+    <tr>
+        <th></th>
+        <th>Full Time</th>
+        <th>Part Time</th>
+    </tr>
     </thead>
 
     <tbody>
@@ -88,10 +88,10 @@ $this->headScript()->appendFile(
             </td>
 
             <?php foreach ($row as $i => $field): ?>
-            <td class="grid-value <?= $colClassConfig[$i] ?>-value"
-                id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
-                <?= $this->simpleFormElement($form->get($field)) ?>
-            </td>
+                <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                    id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                    <?= $this->simpleFormElement($form->get($field)) ?>
+                </td>
             <?php endforeach ?>
         </tr>
 
@@ -100,9 +100,9 @@ $this->headScript()->appendFile(
             <td colspan="<?= count($row) ?>">
 
                 <?php foreach ($row as $i => $field): ?>
-                <div class="<?= $colClassConfig[$i] ?>-help">
-                    <?= $form->get($field)->getOption('help-block') ?>
-                </div>
+                    <div class="<?= $colClassConfig[$i] ?>-help">
+                        <?= $form->get($field)->getOption('help-block') ?>
+                    </div>
                 <?php endforeach ?>
 
             </td>
@@ -110,11 +110,11 @@ $this->headScript()->appendFile(
     <?php endforeach ?>
 
 
-        <tr>
-            <td class="grid-category">Total</td>
-            <td id="full-time-total"></td>
-            <td id="part-time-total"></td>
-        </tr>
+    <tr>
+        <td class="grid-category">Total</td>
+        <td id="full-time-total"></td>
+        <td id="part-time-total"></td>
+    </tr>
 
     </tbody>
 </table>

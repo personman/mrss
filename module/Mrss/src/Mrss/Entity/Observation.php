@@ -250,6 +250,58 @@ class Observation
     /** @ORM\Column(type="string", length=200, nullable=true) */
     protected $inst_othr_other_specify;
 
+
+    // MRSS form 1C:
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_program_dev;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_course_dev;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_teaching;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_tutoring;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_advising;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_ac_service;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_assessment;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_full_pd;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_program_dev;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_course_dev;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_teaching;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_tutoring;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_advising;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_ac_service;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_assessment;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_at_part_pd;
+
+
+
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_total_program_dev;
 
