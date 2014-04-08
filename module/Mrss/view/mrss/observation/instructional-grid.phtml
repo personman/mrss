@@ -4,45 +4,33 @@
  */
 
 $tableConfig = array(
-    // Full-Time
+    // Faculty
     array(
-        'title' => 'Full-Time',
+        'title' => 'Faculty Profiles',
         'rowClass' => 'grid-subcategory',
         'rows' => array(
-            'Career / Technical' => array(
-                'inst_full_expend_ct',
-                'inst_full_num_ct',
-                'inst_full_cred_hrs_ct'
+            'Full-Time' => array(
+                'inst_full_expend',
+                'inst_full_num',
+                'inst_full_cred_hrs'
             ),
-            'Academic / Transfer' => array(
-                'inst_full_expend_at',
-                'inst_full_num_at',
-                'inst_full_cred_hrs_at'
-            ),
-        ),
-    ),
-    // Part-Time / Adjunct
-    array(
-        'title' => 'Part-Time / Adjunct',
-        'rowClass' => 'grid-subcategory',
-        'rows' => array(
-            'Career / Technical' => array(
-                'inst_part_expend_ct',
-                'inst_part_num_ct',
-                'inst_part_cred_hrs_ct'
-            ),
-            'Academic / Transfer' => array(
-                'inst_part_expend_at',
-                'inst_part_num_at',
-                'inst_part_cred_hrs_at'
+            'Part-Time or Adjunct' => array(
+                'inst_part_expend',
+                'inst_part_num',
+                'inst_part_cred_hrs'
             ),
         ),
     ),
     array(
         'rows' => array(
-            'Administrative and Support Staff' => array(
-                'inst_admin_expend',
-                'inst_admin_num',
+            'Executive Staff' => array(
+                'inst_exec_expend',
+                'inst_exec_num',
+                ''
+            ),
+            'Clerical and Other Professional Staff' => array(
+                'inst_exec_expend',
+                'inst_exec_num',
                 ''
             ),
             'Non-Labor and Other Indirect Costs' => array(
@@ -89,7 +77,7 @@ $this->headScript()->appendFile(
     <tr>
         <th></th>
         <th>Salaries and Benefits</th>
-        <th>Number of Faculty / Staff</th>
+        <th>Number of FTE Faculty / Staff</th>
         <th>Number of Student Credit Hours</th>
     </tr>
     </thead>
