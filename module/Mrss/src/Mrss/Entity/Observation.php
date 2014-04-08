@@ -33,6 +33,13 @@ class Observation
      */
     protected $college;
 
+    /**
+     * @ORM\OneToMany(targetEntity="SubObservation", mappedBy="observation")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $subObservations;
+
+
     // MRSS
 
     // Form 1A
@@ -154,139 +161,79 @@ class Observation
     /** @ORM\Column(type="integer", nullable=true) */
     protected $inst_other_total_num;
 
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_program_dev;
 
+    // MRSS Form 2
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_course_dev;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_teaching;
+    protected $inst_cost_full_expend;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_tutoring;
+    protected $inst_cost_full_num;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_advising;
+    protected $inst_cost_full_cred_hr;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_ac_service;
+    protected $inst_cost_part_expend;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_assessment;
+    protected $inst_cost_part_num;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_other;
+    protected $inst_cost_part_cred_hr;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_program_dev;
+    protected $inst_cost_non_labor_oper_cost;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_course_dev;
+    protected $inst_cost_full_program_dev;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_teaching;
+    protected $inst_cost_full_course_dev;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_tutoring;
+    protected $inst_cost_full_teaching;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_advising;
+    protected $inst_cost_full_tutoring;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_ac_service;
+    protected $inst_cost_full_advising;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_assessment;
+    protected $inst_cost_full_ac_service;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_other;
+    protected $inst_cost_full_assessment;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_program_dev;
+    protected $inst_cost_full_prof_dev;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_course_dev;
+    protected $inst_cost_part_program_dev;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_teaching;
+    protected $inst_cost_part_course_dev;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_tutoring;
+    protected $inst_cost_part_teaching;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_advising;
+    protected $inst_cost_part_tutoring;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_ac_service;
+    protected $inst_cost_part_advising;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_assessment;
+    protected $inst_cost_part_ac_service;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_othr_other;
+    protected $inst_cost_part_assessment;
 
-    /** @ORM\Column(type="string", length=200, nullable=true) */
-    protected $inst_full_other_specify;
-
-    /** @ORM\Column(type="string", length=200, nullable=true) */
-    protected $inst_part_other_specify;
-
-    /** @ORM\Column(type="string", length=200, nullable=true) */
-    protected $inst_othr_other_specify;
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_prof_dev;
 
 
-    // MRSS form 1C:
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_program_dev;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_course_dev;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_teaching;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_tutoring;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_advising;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_ac_service;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_assessment;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_full_pd;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_program_dev;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_course_dev;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_teaching;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_tutoring;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_advising;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_ac_service;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_assessment;
-
-    /** @ORM\Column(type="string", nullable=true) */
-    protected $inst_at_part_pd;
-
-
-
+    // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_total_program_dev;
 
@@ -2304,6 +2251,18 @@ class Observation
     public function getCipCode()
     {
         return $this->cipCode;
+    }
+
+    public function setSubObservations($subObservations)
+    {
+        $this->subObservations = $subObservations;
+
+        return $this;
+    }
+
+    public function getSubObservations()
+    {
+        return $this->subObservations;
     }
 
     public function has($benchmark)
