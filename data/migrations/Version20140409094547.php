@@ -26,7 +26,7 @@ class Version20140409094547 extends AbstractMigration
         // Now delete some benchmarks (the importer doesn't trigger deletes
         $this->addSql("delete from percentile_ranks");
         $this->addSql("delete from percentiles");
-        $this->addSql("DELETE FROM benchmarks WHERE dbColumn LIKE '%\_ct' OR dbColumn LIKE '%\_at'");
+        $this->addSql("DELETE FROM benchmarks WHERE dbColumn LIKE '%\_ct' OR dbColumn LIKE '%\_at' OR dbColumn LIKE '%\_othr\_%'");
         $this->addSql("delete from benchmarks where benchmarkGroup_id = 41");
 
         $this->addSql("DELETE FROM benchmarks WHERE dbColumn LIKE '%other_specify'");
