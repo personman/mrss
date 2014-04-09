@@ -3,8 +3,8 @@
 namespace Mrss\Model;
 
 use \Mrss\Entity\Observation as ObservationEntity;
-use Mrss\Entity\Benchmark;
-use Mrss\Entity\College;
+use Mrss\Entity\Benchmark as BenchmarkEntity;
+use Mrss\Entity\College as CollegeEntity;
 use Zend\Debug\Debug;
 
 /**
@@ -116,11 +116,11 @@ class Observation extends AbstractModel
     /**
      * Sparklines, return an array of values over years for a benchmark and college
      *
-     * @param Benchmark $benchmark
-     * @param College $college
+     * @param \Mrss\Entity\Benchmark|\Mrss\Model\Benchmark $benchmark
+     * @param \Mrss\Entity\College|\Mrss\Model\College $college
      * @return array
      */
-    public function getSparkline(Benchmark $benchmark, College $college)
+    public function getSparkline(BenchmarkEntity $benchmark, CollegeEntity $college)
     {
         // Headers based on colleges
         $selects = array('year', $benchmark->getDbColumn());
