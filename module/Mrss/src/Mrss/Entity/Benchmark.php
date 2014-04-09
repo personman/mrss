@@ -524,6 +524,21 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             || $this->getInputType() == 'wholedollars');
     }
 
+    public function getInputTypeAbbr()
+    {
+        $abbr = $this->getInputType();
+
+        if ($this->isPercent()) {
+            $abbr = '%';
+        } elseif ($this->isDollars()) {
+            $abbr = '$';
+        } elseif ($abbr == 'number') {
+            $abbr = '#';
+        }
+
+        return $abbr;
+    }
+
     public function setEquationValidator($equationValidator)
     {
         $this->equationValidator = $equationValidator;

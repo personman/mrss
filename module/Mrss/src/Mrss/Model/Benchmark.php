@@ -110,7 +110,10 @@ class Benchmark extends AbstractModel
         }
 
         $years = implode(', ', $years);
-        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $connection = $this->getEntityManager()->getConnection();
+        $connection->setFetchMode(\PDO::FETCH_ASSOC);
+        $qb = $connection->createQueryBuilder();
+
         $qb->select(
             array(
                 'year',

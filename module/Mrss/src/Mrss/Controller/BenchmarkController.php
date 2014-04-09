@@ -4,6 +4,8 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\Benchmark as BenchmarkEntity;
 use Mrss\Entity\Benchmark;
+use Mrss\Model\Observation as ObservationModel;
+use Mrss\Model\College as CollegeModel;
 use Mrss\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -26,11 +28,27 @@ class BenchmarkController extends AbstractActionController
             ->getYearsWithSubscriptions($study);
         sort($years);
 
+        // Sparklines
+        $observationModel = $this->getServiceLocator()->get('model.observation');
+        $sparklines = array();
+        foreach ($benchmarkGroups as $benchmarkGroup)
+        {
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                $data = $observationModel
+                    ->getSparkline($benchmark, $this->currentCollege());
+                $asString = implode(',', $data);
+                $sparklines[$benchmark->getId()] = $asString;
+            }
+        }
+
+
         return array(
             //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
             'benchmarkGroups' => $benchmarkGroups,
             'study' => $study,
-            'yearsToShow' => $years
+            'yearsToShow' => $years,
+            'sparklines' => $sparklines,
+            'activeCollege' => $this->currentCollege()
         );
     }
 
@@ -40,6 +58,7 @@ class BenchmarkController extends AbstractActionController
 
         $benchmark = $this->getBenchmarkModel()->find($this->params('id'));
 
+        /** @var ObservationModel $observationModel */
         $observationModel = $this->getServiceLocator()
             ->get('model.observation');
 
@@ -49,10 +68,18 @@ class BenchmarkController extends AbstractActionController
         );
         $observations = json_encode($observations, JSON_NUMERIC_CHECK);
 
+        // Get the college names
+        /** @var CollegeModel $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $colleges = array();
+        foreach ($collegeIds as $collegeId) {
+            $colleges[] = $collegeModel->find($collegeId);
+        }
+
         return array(
             'benchmark' => $benchmark,
             'observations' => $observations,
-            'collegeIds' => $collegeIds
+            'colleges' => $colleges
         );
     }
 

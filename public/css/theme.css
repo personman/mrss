@@ -808,3 +808,21 @@ form#system #control-group-paymentType {
 table.table tbody {
     background: #fff;
 }
+
+
+/** benchmark management backend **/
+.benchmarkGroupControls li, .studyControls li {
+    display: inline;
+    padding-right: 20px;
+}
+
+.benchmarkGroupSection {
+    margin-top: 70px;
+}
+
+td.trends {
+    text-align: center;
+}
+td.inputTypeAbbr {
+    text-align: center;
+}
