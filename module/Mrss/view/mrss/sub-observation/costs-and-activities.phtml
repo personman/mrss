@@ -1,0 +1,178 @@
+<?php
+/**
+ * This is a special data-entry template that displays this form as a table
+ */
+
+$firstTableConfig = array(
+    'Full-Time' => array(
+        'inst_cost_full_cred_hr'
+    ),
+    'Part-Time' => array(
+        'inst_cost_part_cred_hr'
+    )
+);
+
+$tableConfig = array(
+    'Program Development' => array(
+        'inst_cost_full_program_dev',
+        'inst_cost_part_program_dev',
+    ),
+    'Course Development' => array(
+        'inst_cost_full_course_dev',
+        'inst_cost_part_course_dev',
+    ),
+    'Teaching' => array(
+        'inst_cost_full_teaching',
+        'inst_cost_part_teaching',
+    ),
+    'Faculty Tutoring' => array(
+        'inst_cost_full_tutoring',
+        'inst_cost_part_tutoring',
+    ),
+    'Faculty Advising' => array(
+        'inst_cost_full_advising',
+        'inst_cost_part_advising',
+    ),
+    'Academic Service' => array(
+        'inst_cost_full_ac_service',
+        'inst_cost_part_ac_service',
+    ),
+    'Assessment and Grading' => array(
+        'inst_cost_full_assessment',
+        'inst_cost_part_assessment',
+    ),
+    'Professional Development' => array(
+        'inst_cost_full_prof_dev',
+        'inst_cost_part_prof_dev',
+    )
+);
+
+$colClassConfig = array('full', 'part');
+
+?>
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+<?= $this->systemAdmin() ?>
+
+<h2>
+    <?= $benchmarkGroup->getName() ?>
+</h2>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+<?= $this->ztbformelement($form->get('name')) ?>
+
+<table class="table table-condensed table-bordered data-entry-grid">
+    <thead>
+        <th></th>
+        <th>Number of Student Credit Hours</th>
+    </thead>
+    <tbody>
+    <?php foreach ($firstTableConfig as $label => $row): ?>
+        <tr>
+            <td class="grid-category">
+                <?= $label ?>
+            </td>
+
+            <?php foreach ($row as $i => $field): ?>
+                <td id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                    <?= $this->simpleFormElement($form->get($field)) ?>
+                </td>
+            <?php endforeach ?>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="<?= count($row) ?>">
+
+                <?php foreach ($row as $i => $field): ?>
+                    <div class="<?= $colClassConfig[$i] ?>-help">
+                        <?= $form->get($field)->getOption('help-block') ?>
+                    </div>
+                <?php endforeach ?>
+
+            </td>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
+
+<table class="table table-condensed table-bordered data-entry-grid managerial">
+    <thead>
+    <tr>
+        <th></th>
+        <th colspan="2" class="top-table-heading">Percent of Time Spent on Activities</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th>Full Time</th>
+        <th>Part Time</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <?php foreach ($tableConfig as $label => $row): ?>
+        <tr>
+            <td class="grid-category">
+                <?= $label ?>
+            </td>
+
+            <?php foreach ($row as $i => $field): ?>
+                <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                    id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                    <?= $this->simpleFormElement($form->get($field)) ?>
+                </td>
+            <?php endforeach ?>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="<?= count($row) ?>">
+
+                <?php foreach ($row as $i => $field): ?>
+                    <div class="<?= $colClassConfig[$i] ?>-help">
+                        <?= $form->get($field)->getOption('help-block') ?>
+                    </div>
+                <?php endforeach ?>
+
+            </td>
+        </tr>
+    <?php endforeach ?>
+
+
+    <tr>
+        <td class="grid-category">Total</td>
+        <td id="full-time-total"></td>
+        <td id="part-time-total"></td>
+    </tr>
+
+    </tbody>
+</table>
+
+<fieldset id="fieldset-buttons" class="well well-small">
+    <div class="control-group" id="control-group-buttons[submit]">
+        <div class="controls" id="controls-buttons[submit]">
+            <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<?= $this->simpleFormElement($form->get('id')) ?>
+
+<?= $this->form()->closeTag() ?>

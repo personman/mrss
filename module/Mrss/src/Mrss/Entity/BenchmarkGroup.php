@@ -52,6 +52,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     protected $description;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $useSubObservation;
+
+    /**
      * @ORM\Column(type="integer")
      */
     protected $sequence;
@@ -127,6 +132,18 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function setUseSubObservation($use)
+    {
+        $this->useSubObservation = $use;
+
+        return $this;
+    }
+
+    public function getUseSubObservation()
+    {
+        return $this->useSubObservation;
     }
 
     public function setSequence($sequence)

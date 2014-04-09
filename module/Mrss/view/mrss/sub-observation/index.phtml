@@ -1,0 +1,37 @@
+<?= $this->systemAdmin() ?>
+
+<h3>
+    <?= $benchmarkGroup->getName() ?>
+</h3>
+
+<div class="well">
+    This form is collected at the academic unit level. Select a unit from the list
+    to enter data or create a new unit using the button below.
+</div>
+
+<a href="<?= $this->url(
+    'data-entry/edit/subob',
+    array('benchmarkGroup' => $benchmarkGroup->getId())
+) ?>" class="btn">
+    <span class="icon-plus-sign"></span>
+    Add an Academic Unit
+</a>
+
+<h5>Academic Units</h5>
+
+<ul class="academicUnits">
+    <?php foreach ($observation->getSubObservations() as $subob): ?>
+        <li>
+            <a href="<?= $this->url(
+                'data-entry/edit/subob',
+                array(
+                    'benchmarkGroup' => $benchmarkGroup->getId(),
+                    'subId' => $subob->getId()
+                )
+            ) ?>">
+                <?= $subob->getName() ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+</ul>
+

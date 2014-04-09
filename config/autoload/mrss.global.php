@@ -15,5 +15,18 @@ return array(
         'nhebi-build.jccc.edu' => 2,
         'www.nccwtbp.org' => 3,
         'www.workforceproject.org' => 3,
+    ),
+    // These templates override the default data entry view
+    'data_entry_templates' => array(
+        37 => 'instructional-grid.phtml',
+        38 => 'student-services-grid.phtml',
+        39 => 'academic-support-grid.phtml',
+        40 => 'demographics.phtml',
+        //41 => 'managerial-grid.phtml',
+        44 => 'managerial-grid-at.phtml'
+    ),
+    'subobservation_templates' => array(
+        41 => 'costs-and-activities.phtml'
     )
+
 );

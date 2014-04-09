@@ -224,6 +224,14 @@ class Module
 
                     return $observationModel;
                 },
+                'model.subobservation' => function ($sm) {
+                    $model = new \Mrss\Model\SubObservation();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.benchmark' => function ($sm) {
                     $benchmarkModel = new \Mrss\Model\Benchmark();
                     $em = $sm->get('em');

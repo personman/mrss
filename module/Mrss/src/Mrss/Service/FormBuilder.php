@@ -25,6 +25,8 @@ class FormBuilder
         $form = new Form;
         $inputFilter = new InputFilter();
 
+        $this->addSubObservationFields($provider, $form);
+
         // Add the elements from the provider
         foreach ($provider->getElements($year) as $elementProvider) {
             $element = $this->getElement($elementProvider);
@@ -53,5 +55,18 @@ class FormBuilder
     public function getElement(FormElementProvider $elementProvider)
     {
         return $elementProvider->getFormElement();
+    }
+
+    public function addSubObservationFields($provider, $form)
+    {
+        if ($provider->getUseSubObservation()) {
+            $name = new Element\Text('name');
+            $name->setLabel('Academic Unit Name');
+            $form->add($name);
+
+            // Add the id, too
+            $id = new Element\Hidden('id');
+            $form->add($id);
+        }
     }
 }

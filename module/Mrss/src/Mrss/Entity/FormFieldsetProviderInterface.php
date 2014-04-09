@@ -7,4 +7,6 @@ interface FormFieldsetProviderInterface
     public function getElements($year);
 
     public function getLabel();
+
+    public function getUseSubObservation();
 }
