@@ -343,6 +343,10 @@ class Report
         $dbColumn = $config['dbColumn'];
         $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
 
+        if (empty($benchmark)) {
+            return false;
+        }
+
         $percentiles = $this->getPercentileModel()
             ->findByBenchmarkAndYear($benchmark, $observation->getYear());
         $percentileData = array();
