@@ -31,6 +31,8 @@ class Version20140409094547 extends AbstractMigration
 
         $this->addSql("DELETE FROM benchmarks WHERE dbColumn LIKE '%other_specify'");
         $this->addSql("delete from benchmarks where dbColumn like 'inst_total%';");
+
+        $this->addSql("DELETE FROM benchmarks WHERE dbColumn LIKE 'inst\_othr\_%'");
     }
 
     public function down(Schema $schema)

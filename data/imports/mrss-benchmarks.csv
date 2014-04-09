@@ -17,12 +17,40 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 1: Institutional Instructional Costs","Salaries and Benefits for Clerical and Other Professional Staff",inst_admin_expend,wholedollars,"Salary and benefits for employees who directly support the instructional function such as administrators, professionals and any other personnel whose salaries and wages are paid from a discipline's instructional budget.",,,,
 "Form 1: Institutional Instructional Costs","Number of Clerical and Other Professional Staff",inst_admin_num,number,"Number of administrative and support staff including full-time staff and adding one-third of the number of part-time staff  at the end of the fall term.",,,,
 "Form 1: Institutional Instructional Costs","Non-Labor Operating Costs",inst_o_cost,wholedollars,"Includes materials, supplies, software, computers, equipment, professional development, conferences and travel that directly support instructional activities.  Excludes facilities costs.",,,,
+"Form 2: Instructional Costs and Activities","Program Development Full Time Faculty",inst_cost_full_program_dev,wholepercent,"Creating and planning curriculum at the program level for full time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Course Development Full Time Faculty",inst_cost_full_course_dev,wholepercent,"Creating and planning content and learning activities at the course level for full time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Teaching Full Time Faculty",inst_cost_full_teaching,wholepercent,"Delivering course content, managing and monitoring student assignments and classroom (physical or virtual) activities for full time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Tutoring Full Time Faculty",inst_cost_full_tutoring,wholepercent,"Formally providing supplemental academic assistance in support of regular coursework for full time faculty.<br>
+
+This is also included under Student Services.",,,,
+"Form 2: Instructional Costs and Activities","Advising Full Time Faculty",inst_cost_full_advising,wholepercent,"Assisting students with activities related to their educational experience including scheduling, academic support, planning and selecting curricular pathways and career development for full time faculty.
+
+<br>This is also included under Student Services.",,,,
+"Form 2: Instructional Costs and Activities","Academic Service Full Time Faculty",inst_cost_full_ac_service,wholepercent,"Serving on committees or task forces to support teaching and learning for full time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Assessment and Grading Full Time Faculty",inst_cost_full_assessment,wholepercent,"Assessing prior and current learning; developing and selecting assessment methodologies; evaluating student assignments and performance to award course credit, and contributing to broader assessment of student learning outcomes for full time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Professional Development Full Time Faculty",inst_cost_full_prof_dev,wholepercent,"Includes institution activities and events, continuing education, community service, professional development activities, reading subject matter literature, writing scholarly papers, travel, professional association participation and other similar activities.",,,,
+"Form 2: Instructional Costs and Activities","Program Development Part Time Faculty",inst_cost_part_program_dev,wholepercent,"Creating and planning curriculum at the program level for part time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Course Development Part Time Faculty",inst_cost_part_course_dev,wholepercent,"Creating and planning content and learning activities at the course level for part time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Teaching Part Time Faculty",inst_cost_part_teaching,wholepercent,"Delivering course content, managing and monitoring student assignments and classroom (physical or virtual) activities for part time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Tutoring Part Time Faculty",inst_cost_part_tutoring,wholepercent,"Formally providing supplemental academic assistance in support of regular coursework for part time faculty.
+
+<br>This is also included under Student Services.",,,,
+"Form 2: Instructional Costs and Activities","Advising Part Time Faculty",inst_cost_part_advising,wholepercent,"Assisting students with activities related to their educational experience including scheduling, academic support, planning and selecting curricular pathways and career development for part time faculty.
+
+<br>This is also included under Student Services.",,,,
+"Form 2: Instructional Costs and Activities","Academic Service Part Time Faculty",inst_cost_part_ac_service,wholepercent,"Serving on committees or task forces to support teaching and learning for part time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Assessment and Grading Part Time Faculty",inst_cost_part_assessment,wholepercent,"Assessing prior and current learning; developing and selecting assessment methodologies; evaluating student assignments and performance to award course credit, and contributing to broader assessment of student learning outcomes for part time faculty.",,,,
+"Form 2: Instructional Costs and Activities","Professional Development Part Time Faculty",inst_cost_part_prof_dev,wholepercent,"Includes institution activities and events, continuing education, community service, professional development activities, reading subject matter literature, writing scholarly papers, travel, professional association participation and other similar activities.",,,,
 "Form 3: Student Services Activities","Admissions Total Expenditures Salary and Benefits",ss_admissions_total,wholedollars,"Guiding potential students through the collection, verification, and evaluation of credentials in the application process.",,,,
 "Form 3: Student Services Activities","Admissions Contract",ss_admissions_contract,wholedollars,"Guiding potential students through the collection, verification, and evaluation of credentials in the application process.",,,,
 "Form 3: Student Services Activities","Recruitment Total Expenditures Salary and Benefits",ss_recruitment_total,wholedollars,"Building awareness among current and potential students through direct interaction about activities leading up to admission to the institution or to a particular program.",,,,
 "Form 3: Student Services Activities","Recruitment Contract",ss_recruitment_contract,wholedollars,"Building awareness among current and potential students through direct interaction about activities leading up to admission to the institution or to a particular program.",,,,
-"Form 3: Student Services Activities","Advising Total Expenditures Salary and Benefits",ss_advising_total,wholedollars,"Assisting students with activities related to their educational experience including scheduling, academic support, planning and selecting curricular pathways and career development.<br>This is also included under Instructional Activities.",,,,
-"Form 3: Student Services Activities","Advising Contract",ss_advising_contract,wholedollars,"Assisting students with activities related to their educational experience including scheduling, academic support, planning and selecting curricular pathways and career development. <br>This is also included under Instructional Activities.",,,,
+"Form 3: Student Services Activities","Advising Total Expenditures Salary and Benefits",ss_advising_total,wholedollars,"Assisting students with activities related to their educational experience including scheduling, academic support, planning and selecting curricular pathways and career development.
+
+<br>This is also included under Instructional Activities.",,,,
+"Form 3: Student Services Activities","Advising Contract",ss_advising_contract,wholedollars,"Assisting students with activities related to their educational experience including scheduling, academic support, planning and selecting curricular pathways and career development. 
+
+<br>This is also included under Instructional Activities.",,,,
 "Form 3: Student Services Activities","Counseling Total Expenditures Salary and Benefits",ss_counseling_total,wholedollars,"Assisting students through personal support including coaching, mentoring and counseling focused on non-academic issues.",,,,
 "Form 3: Student Services Activities","Counseling  Contract",ss_counseling_contract,wholedollars,"Assisting students through personal support including coaching, mentoring and counseling focused on non-academic issues.",,,,
 "Form 3: Student Services Activities","Career Services Total Expenditures Salary and Benefits",ss_career_total,wholedollars,"Assisting students with career planning, resume development, interviewing skills, job searches and partnering with potential employers.",,,,
@@ -31,8 +59,12 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 3: Student Services Activities","Financial Aid Contract",ss_financial_aid_contract,wholedollars,"Assisting students with loan counseling, financial literacy, and obtaining monetary support for the cost of attending college from sources other than the students and their families including scholarships, grants, loans and work-study programs.",,,,
 "Form 3: Student Services Activities","Registrar / Student Records  Total Expenditures Salary and Benefits",ss_registrar_total,wholedollars,"Assisting students with requests related to their academic records including transcripts, grades, appeals and verification of enrollment and progress toward receipt of degrees or certificates.",,,,
 "Form 3: Student Services Activities","Registrar / Student Records Contract",ss_registrar_contract,wholedollars,"Assisting students with requests related to their academic records including transcripts, grades, appeals and verification of enrollment and progress toward receipt of degrees or certificates.",,,,
-"Form 3: Student Services Activities","Tutoring Total Expenditures Salary and Benefits",ss_tutoring_total,wholedollars,"Formally providing supplemental academic assistance to support student academic achievement. <br>This is also included under Instructional Activities.",,,,
-"Form 3: Student Services Activities","Tutoring Contract",ss_tutoring_contract,wholedollars,"Formally providing supplemental academic assistance to support student academic achievement. <br>This is also included under Instructional Activities.",,,,
+"Form 3: Student Services Activities","Tutoring Total Expenditures Salary and Benefits",ss_tutoring_total,wholedollars,"Formally providing supplemental academic assistance to support student academic achievement. 
+
+<br>This is also included under Instructional Activities.",,,,
+"Form 3: Student Services Activities","Tutoring Contract",ss_tutoring_contract,wholedollars,"Formally providing supplemental academic assistance to support student academic achievement. 
+
+<br>This is also included under Instructional Activities.",,,,
 "Form 3: Student Services Activities","Testing Services Total Expenditures Salary and Benefits",ss_testing_total,wholedollars,"Administering or proctoring placement, proficiency, out of classroom, make-up, certification and standardized tests.",,,,
 "Form 3: Student Services Activities","Testing Services Contract",ss_testing_contract,wholedollars,"Administering or proctoring placement, proficiency, out of classroom, make-up, certification and standardized tests.",,,,
 "Form 3: Student Services Activities","Co-curricular Activities  Total Expenditures Salary and Benefits",ss_cocurricular_total,wholedollars,"Supporting activities that engage students and promote social interaction, leadership, healthy recreation, self-discipline and self-confidence. Examples include student government, clubs, and intramural sports..",,,,
@@ -57,7 +89,9 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 5: Demographics","Male Credit Students",male_cred_stud,wholepercent,,,,,
 "Form 5: Demographics","Female Credit Students",fem_cred_stud,wholepercent,,,,,
 "Form 5: Demographics","First-generation Students",first_gen_students,wholepercent,"First-generation Students should be the percent of fall credit students that represent the first generation of their families to attend a higher education institution.",,,,
-"Form 5: Demographics","Transfer Credit Hours",trans_cred,wholepercent,"Transfer Credit Hours should be the percent of IPEDS Fall Enrollment credit hours that includes full- and part-time students enrolled in courses that do not award career or technical certification, but do award credit that is transferable to other postsecondary institutions.(For example, English, History, and Math would be considered transfer credit hours.)",,,,
+"Form 5: Demographics","Transfer Credit Hours",trans_cred,wholepercent,"Transfer Credit Hours should be the percent of IPEDS Fall Enrollment credit hours that includes full- and part-time students enrolled in courses that do not award career or technical certification, but do award credit that is transferable to other postsecondary institutions.
+
+(For example, English, History, and Math would be considered transfer credit hours.)",,,,
 "Form 5: Demographics","Technical/Career Credit Hours",t_c_crh,wholepercent,"Technical/Career Credit Hours should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in programs that award career or technical certification that is not transferable. (For example, automotive technology credit hours, interior design credit hours, and practical nursing credit hours would be considered technical/career credit hours.)",,,,
 "Form 5: Demographics","Developmental Credit Hours",dev_crh,wholepercent,"Developmental Credit Hours should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in developmental/remedial courses as defined by the institution.",,,,
 "Form 5: Demographics","Credit Student Median Age",crd_stud_minc,number,"Use number from most recent IPEDS enrollment data.",,,,
@@ -71,7 +105,9 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 5: Demographics","Two or More Races",two_or_more,wholepercent,,,,,
 "Form 5: Demographics","Race and Ethnicity Unknown",race_eth_unk_2012,wholepercent,,,,,
 "Form 5: Demographics","Tuition and Fees per Credit Hour",tuition_fees,wholedollars,"Tuition and Fees per Credit Hour are the tuition and fees that full-time, in-district students are charged per credit hour. Use the figure reported to IPEDS. Enter per credit hour figure, not total tuition and fees. Credit Courses are courses that are eligible for Title IV federal financial aid.",,,,
-"Form 5: Demographics","Unrestricted Operating Revenue",unre_o_rev,wholedollars,"<i> Use fiscal year 2012-2013 data. </i> <br><br>Unrestricted Operating Revenue is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""",,,,
+"Form 5: Demographics","Unrestricted Operating Revenue",unre_o_rev,wholedollars,"<i> Use fiscal year 2012-2013 data. </i> <br><br>
+
+Unrestricted Operating Revenue is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""",,,,
 "Form 5: Demographics",Local,loc_sour,wholepercent,"Local tax revenue sources.",,,,
 "Form 5: Demographics",State,state_sour,wholepercent,,,,,
 "Form 5: Demographics","Tuition & Fees",tuition_fees_sour,wholepercent,,,,,
