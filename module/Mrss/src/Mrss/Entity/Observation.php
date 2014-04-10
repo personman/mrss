@@ -65,6 +65,9 @@ class Observation
     protected $inst_pt_perc_credit_hr;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_ft_perc_credit_hr;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_exec_expend;
 
     /** @ORM\Column(type="integer", nullable=true) */

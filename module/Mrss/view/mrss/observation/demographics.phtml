@@ -31,91 +31,6 @@ $this->headScript()->appendFile(
 <?php $form->prepare() ?>
 <?= $this->form()->openTag($form) ?>
 
-<?php
-$tableConfig = array(
-    '% Credit Hours Taught by' => array(
-        'full_time_credit_hours_percent',
-        'part_time_credit_hours_percent',
-    ),
-    'Number of Credit Hours Taught by' => array(
-        'full_time_credit_hours',
-        'part_time_credit_hours'
-    )
-);
-
-$colClassConfig = array('full', 'part');
-
-?>
-<div class="demo-group">
-    <h3 class="heading">Instructional Environment</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
-
-
-    <?= $this->ztbFormElement($form->get('trans_cred')) ?>
-    <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
-    <?= $this->ztbFormElement($form->get('dev_crh')) ?>
-
-
-    <table class="table table-condensed table-bordered data-entry-grid">
-        <thead>
-        <tr>
-            <th></th>
-            <th colspan="2" class="top-table-heading">Teaching Load</th>
-        </tr>
-        <tr>
-            <th></th>
-            <th>Full Time</th>
-            <th>Part Time</th>
-        </tr>
-        </thead>
-
-        <tbody>
-
-        <?php foreach ($tableConfig as $label => $row): ?>
-            <tr>
-                <td class="grid-category">
-                    <?= $label ?>
-                </td>
-
-                <?php foreach ($row as $i => $field): ?>
-                    <td class="grid-value <?= $colClassConfig[$i] ?>-value"
-                        id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
-                        <?= $this->simpleFormElement($form->get($field)) ?>
-                    </td>
-                <?php endforeach ?>
-            </tr>
-
-            <tr class="help-text">
-                <td class="grid-category"></td>
-                <td colspan="<?= count($row) ?>">
-
-                    <?php foreach ($row as $i => $field): ?>
-                        <div class="<?= $colClassConfig[$i] ?>-help">
-                            <?= $form->get($field)->getOption('help-block') ?>
-                        </div>
-                    <?php endforeach ?>
-
-                </td>
-            </tr>
-        <?php endforeach ?>
-
-        <?php /*<tr>
-            <td class="grid-category">Total</td>
-            <td id="full-time-total"></td>
-            <td id="part-time-total"></td>
-        </tr>*/ ?>
-
-        </tbody>
-    </table>
-
-
-    <?//= $this->ztbFormElement($form->get('full_time_credit_hours_percent')) ?>
-    <?//= $this->ztbFormElement($form->get('full_time_credit_hours')) ?>
-    <?//= $this->ztbFormElement($form->get('part_time_credit_hours_percent')) ?>
-    <?//= $this->ztbFormElement($form->get('part_time_credit_hours')) ?>
-
-</div>
-
 <div class="demo-group">
     <h3 class="heading">Instructional Modality</h3>
     <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
@@ -130,15 +45,17 @@ $colClassConfig = array('full', 'part');
     <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Please contact the Institutional Research, Institutional Effectiveness or Registrar's office for these data.</p>
 
     <?= $this->ztbFormElement($form->get('ipeds_enr')) ?>
-    <?= $this->ztbFormElement($form->get('enrollment_information_duplicated_enrollment')) ?>
     <?= $this->ztbFormElement($form->get('ft_cr_head')) ?>
     <?= $this->ztbFormElement($form->get('pt_cr_head')) ?>
+    <?= $this->ztbFormElement($form->get('enrollment_information_duplicated_enrollment')) ?>
     <?= $this->ztbFormElement($form->get('hs_stud_hdct')) ?>
     <?= $this->ztbFormElement($form->get('hs_stud_crh')) ?>
     <?= $this->ztbFormElement($form->get('pell_grant_rec')) ?>
-    <?= $this->ztbFormElement($form->get('male_cred_stud')) ?>
     <?= $this->ztbFormElement($form->get('fem_cred_stud')) ?>
     <?= $this->ztbFormElement($form->get('first_gen_students')) ?>
+    <?= $this->ztbFormElement($form->get('trans_cred')) ?>
+    <?= $this->ztbFormElement($form->get('t_c_crh')) ?>
+    <?= $this->ztbFormElement($form->get('dev_crh')) ?>
     <?= $this->ztbFormElement($form->get('crd_stud_minc')) ?>
 
 </div>
