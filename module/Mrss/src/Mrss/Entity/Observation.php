@@ -427,6 +427,29 @@ class Observation
     protected $ss_vetserv_contract;
 
     // MRSS Form 4
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $as_tech_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $as_tech_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_library_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $as_library_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $as_experiential_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $as_experiential_student;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_tech_total;
@@ -446,6 +469,7 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_experiential_contract;
 
+    // MRSS Form 5 Demographics
     /** @ORM\Column(type="string", nullable=true) */
     protected $male_cred_stud;
 
