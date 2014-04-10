@@ -127,5 +127,4 @@ class SubObservationTest extends PHPUnit_Framework_TestCase
             array('inst_cost_part_expend', '')
         );
     }
-
 }

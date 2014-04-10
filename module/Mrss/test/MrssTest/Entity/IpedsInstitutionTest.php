@@ -49,5 +49,5 @@ class IpedsInstitutionTest extends PHPUnit_Framework_TestCase
 
         $this->institution->setZip('12345');
         $this->assertEquals('12345', $this->institution->getZip());
-     }
+    }
 }

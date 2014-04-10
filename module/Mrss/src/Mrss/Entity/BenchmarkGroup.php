@@ -269,6 +269,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      */
     public function getCompletionPercentageForObservation(Observation $observation)
     {
+        if ($this->getUseSubObservation()) {
+            return $this->getSubObservationCompletionPercentageForObservation(
+                $observation
+            );
+        }
+
+
         $total = count($this->getBenchmarksForCompletionCalculationForYear($observation->getYear()));
         $completed = $this->countCompleteFieldsInObservation($observation);
 
@@ -277,6 +284,37 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         } else {
             $percentage = 0.0;
         }
+
+        return $percentage;
+    }
+
+    public function getSubObservationCompletionPercentageForObservation(
+        Observation $observation
+    ) {
+        // The benchmarks
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        // The subobservations
+        $subobservations = $observation->getSubObservations();
+
+        // Number of fields
+        $count = count($benchmarks) * count($subobservations);
+
+        // Completed fields
+        $completed = 0;
+        foreach ($benchmarks as $benchmark) {
+            foreach ($subobservations as $subobservation) {
+                $value = $subobservation->get($benchmark->getDbColumn());
+
+                if ($value !== null) {
+                    $completed++;
+                }
+            }
+        }
+
+        $percentage = round($completed / $count * 100, 3);
 
         return $percentage;
     }
@@ -303,6 +341,24 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         }
 
         return $complete;
+    }
+
+    public function getIncompleteBenchmarksForObservation(Observation $observation)
+    {
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        $incompletes = array();
+        foreach ($benchmarks as $benchmark) {
+            $value = $observation->get($benchmark->getDbColumn());
+
+            if ($value === null) {
+                $incompletes[] = $benchmark;
+            }
+        }
+
+        return $incompletes;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)

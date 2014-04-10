@@ -319,6 +319,116 @@ class Observation
     protected $ss_cocurricular_contract;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admis_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_admiss_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_recruitment_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_advising_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_advising_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_counseling_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_counseling_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_career_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_career_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_financial_aid_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_financial_aid_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_registrar_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_tutoring_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_tutoring_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_testing_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_testing_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_cocurricular_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_total;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_disabserv_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_disabserv_o_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_contract;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_total;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_o_cost;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_vetserv_emp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $ss_vetserv_o_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_contract;
+
+    // MRSS Form 4
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $as_tech_total;
 
     /** @ORM\Column(type="float", nullable=true) */

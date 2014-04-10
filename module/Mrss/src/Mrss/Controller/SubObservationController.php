@@ -101,6 +101,4 @@ class SubObservationController extends AbstractActionController
             $view->setTemplate('mrss/sub-observation/' . $template);
         }
     }
-
-
 }

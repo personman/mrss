@@ -31,8 +31,7 @@ class BenchmarkController extends AbstractActionController
         // Sparklines
         $observationModel = $this->getServiceLocator()->get('model.observation');
         $sparklines = array();
-        foreach ($benchmarkGroups as $benchmarkGroup)
-        {
+        foreach ($benchmarkGroups as $benchmarkGroup) {
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
                 $data = $observationModel
                     ->getSparkline($benchmark, $this->currentCollege());

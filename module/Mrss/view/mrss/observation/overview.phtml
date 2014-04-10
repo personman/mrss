@@ -66,6 +66,17 @@
             ) ?>">
                 <?= $benchmarkGroup->getName() ?>
             </a>
+
+            <?php // List incomplete fields (for debugging ?>
+            <?php $incompletes = $benchmarkGroup->getIncompleteBenchmarksForObservation($observation) ?>
+            <?php if (false && count($incompletes)): ?>
+                <div style="margin-left: 20px">
+                Incomplete fields:<br>
+                <?php foreach ($incompletes as $benchmark): ?>
+                    <?= $benchmark->getName() ?> (<?= $benchmark->getDbColumn() ?>)<br>
+                <?php endforeach ?>
+                </div>
+            <?php endif ?>
         </div>
 
         <div class="span7">
