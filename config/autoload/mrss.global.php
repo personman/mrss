@@ -23,7 +23,8 @@ return array(
         39 => 'academic-support-grid.phtml',
         40 => 'demographics.phtml',
         //41 => 'managerial-grid.phtml',
-        44 => 'managerial-grid-at.phtml'
+        44 => 'managerial-grid-at.phtml',
+        42 => 'student-success-metrics.phtml'
     ),
     'subobservation_templates' => array(
         41 => 'costs-and-activities.phtml'
