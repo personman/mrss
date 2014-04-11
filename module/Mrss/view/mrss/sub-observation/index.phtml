@@ -26,8 +26,10 @@
 
 <h5>Academic Units</h5>
 
+<?php $subobs = $observation->getSubObservations() ?>
+<?php if (count($subobs)): ?>
 <ul class="academicUnits">
-    <?php foreach ($observation->getSubObservations() as $subob): ?>
+    <?php foreach ($subobs as $subob): ?>
         <li>
             <a href="<?= $this->url(
                 'data-entry/edit/subob',
@@ -41,4 +43,7 @@
         </li>
     <?php endforeach ?>
 </ul>
+<?php else: ?>
+    <p>You do not have any academic units yet. Create one using the button above.</p>
+<?php endif ?>
 
