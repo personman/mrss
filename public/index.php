@@ -14,6 +14,7 @@ error_reporting(E_ALL);
 
 // Setup autoloading
 require 'init_autoloader.php';
+require 'debug.php';
 
 // Run the application!
 Zend\Mvc\Application::init(require 'config/application.config.php')->run();

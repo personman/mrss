@@ -214,12 +214,51 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2013, $this->study->getCurrentYearMinus(1));
     }
 
-    /*public function testCheckOfferCode()
+    public function testCheckOfferCode()
     {
-        $this->study->setOfferCodes("wdi2014, abc2015");
+        $offerCodeMock = $this->getOfferCodeMock('airforum');
+        $offerCodeMock2 = $this->getOfferCodeMock('wdi2014');
+        $this->study->setOfferCodes(array($offerCodeMock, $offerCodeMock2));
 
-        $this->assertTrue($this->study->checkOfferCode("ABC2015"));
+        $this->assertTrue($this->study->checkOfferCode("airforum"));
         $this->assertTrue($this->study->checkOfferCode("wdi2014"));
         $this->assertFalse($this->study->checkOfferCode("not real"));
-    }*/
+    }
+
+    public function testGetOfferCodesArrayWithEmpty()
+    {
+        $codes = $this->study->getOfferCodesArray();
+
+        $this->assertEquals(0, count($codes));
+    }
+
+    public function testGetOfferCodePrice()
+    {
+        $code = $this->getOfferCodeMock('1234', 200);
+        $this->study->setOfferCodes(array($code));
+
+        $price = $this->study->getOfferCodePrice('1234');
+        $this->assertEquals(200, $price);
+
+    }
+
+    protected function getOfferCodeMock($code, $price = null)
+    {
+        $offerCodeMock = $this->getMock(
+            '\Mrss\Entity\OfferCode',
+            array('getCode', 'getPrice')
+        );
+
+        $offerCodeMock->expects($this->any())
+            ->method('getCode')
+            ->will($this->returnValue($code));
+
+        if ($price) {
+            $offerCodeMock->expects($this->any())
+                ->method('getPrice')
+                ->will($this->returnValue($price));
+        }
+
+        return $offerCodeMock;
+    }
 }

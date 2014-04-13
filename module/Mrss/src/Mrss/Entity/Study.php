@@ -161,6 +161,7 @@ class Study
         return $this;
     }
 
+    /** @return \Mrss\Entity\OfferCode[] */
     public function getOfferCodes()
     {
         return $this->offerCodes;
@@ -385,7 +386,12 @@ class Study
     public function getOfferCodesArray()
     {
         $codes = array();
-        foreach ($this->getOfferCodes() as $offerCode) {
+        $offerCodes = $this->getOfferCodes();
+        if (empty($offerCodes)) {
+            $offerCodes = array();
+        }
+
+        foreach ($offerCodes as $offerCode) {
             $codes[] = trim($offerCode->getCode());
         }
 
