@@ -52,6 +52,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     protected $description;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $useSubObservation;
+
+    /**
      * @ORM\Column(type="integer")
      */
     protected $sequence;
@@ -129,6 +134,18 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->description;
     }
 
+    public function setUseSubObservation($use)
+    {
+        $this->useSubObservation = $use;
+
+        return $this;
+    }
+
+    public function getUseSubObservation()
+    {
+        return $this->useSubObservation;
+    }
+
     public function setSequence($sequence)
     {
         $this->sequence = $sequence;
@@ -140,6 +157,19 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     {
         return $this->sequence;
     }
+
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
+    }
+
 
     public function setBenchmarks($benchmarks)
     {
@@ -214,16 +244,40 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $benchmarksForCompletion;
     }
 
-    public function setStudy(Study $study)
+    /**
+     * Number of benchmarks, for calculation completion.
+     * Handles subobservations, too.
+     *
+     * @param Observation $observation
+     */
+    public function getBenchmarkCount(Observation $observation)
     {
-        $this->study = $study;
+        if ($this->getUseSubObservation()) {
+            return $this->getSubObservationBenchmarkCount(
+                $observation
+            );
+        }
 
-        return $this;
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        return count($benchmarks);
     }
 
-    public function getStudy()
+    public function getSubObservationBenchmarkCount(Observation $observation)
     {
-        return $this->study;
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        // The subobservations
+        $subobservations = $observation->getSubObservations();
+
+        // Number of fields
+        $count = count($benchmarks) * count($subobservations);
+
+        return $count;
     }
 
     /**
@@ -252,7 +306,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      */
     public function getCompletionPercentageForObservation(Observation $observation)
     {
-        $total = count($this->getBenchmarksForCompletionCalculationForYear($observation->getYear()));
+        $total = $this->getBenchmarkCount($observation);
         $completed = $this->countCompleteFieldsInObservation($observation);
 
         if ($total > 0) {
@@ -260,6 +314,37 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         } else {
             $percentage = 0.0;
         }
+
+        return $percentage;
+    }
+
+    public function getSubObservationCompletionPercentageForObservation(
+        Observation $observation
+    ) {
+        // The benchmarks
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        // The subobservations
+        $subobservations = $observation->getSubObservations();
+
+        // Number of fields
+        $count = count($benchmarks) * count($subobservations);
+
+        // Completed fields
+        $completed = 0;
+        foreach ($benchmarks as $benchmark) {
+            foreach ($subobservations as $subobservation) {
+                $value = $subobservation->get($benchmark->getDbColumn());
+
+                if ($value !== null) {
+                    $completed++;
+                }
+            }
+        }
+
+        $percentage = round($completed / $count * 100, 3);
 
         return $percentage;
     }
@@ -272,6 +357,12 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      */
     public function countCompleteFieldsInObservation(Observation $observation)
     {
+        if ($this->getUseSubObservation()) {
+            return $this->countCompleteFieldsInSubobservations(
+                $observation
+            );
+        }
+
         $complete = 0;
         $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
             $observation->getYear()
@@ -286,6 +377,49 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         }
 
         return $complete;
+    }
+
+    public function countCompleteFieldsInSubobservations(Observation $observation)
+    {
+        // The benchmarks
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        // The subobservations
+        $subobservations = $observation->getSubObservations();
+
+        // Completed fields
+        $completed = 0;
+        foreach ($benchmarks as $benchmark) {
+            foreach ($subobservations as $subobservation) {
+                $value = $subobservation->get($benchmark->getDbColumn());
+
+                if ($value !== null) {
+                    $completed++;
+                }
+            }
+        }
+
+        return $completed;
+    }
+
+    public function getIncompleteBenchmarksForObservation(Observation $observation)
+    {
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        $incompletes = array();
+        foreach ($benchmarks as $benchmark) {
+            $value = $observation->get($benchmark->getDbColumn());
+
+            if ($value === null) {
+                $incompletes[] = $benchmark;
+            }
+        }
+
+        return $incompletes;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)

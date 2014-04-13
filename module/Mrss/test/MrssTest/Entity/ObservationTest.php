@@ -57,6 +57,12 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         $college = $this->getMock('Mrss\Entity\College');
         $observation->setCollege($college);
         $this->assertSame($college, $observation->getCollege());
+
+        $subObservationMock = $this->getMock('Mrss\Entity\SubObservation');
+        $observation->setSubObservations(array($subObservationMock));
+        $subObs = $observation->getSubObservations();
+
+        $this->assertSame($subObservationMock, $subObs[0]);
     }
 
     /**

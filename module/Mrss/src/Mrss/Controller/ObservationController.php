@@ -228,12 +228,19 @@ class ObservationController extends AbstractActionController
     {
         // Fetch the form
         $benchmarkGroupId = $this->params('benchmarkGroup');
+
+        /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
         $benchmarkGroup = $this->getServiceLocator()
             ->get('model.benchmarkGroup')
             ->find($benchmarkGroupId);
 
         if (empty($benchmarkGroup)) {
             throw new \Exception('Benchmark group not found');
+        }
+
+        // SubObs?
+        if ($benchmarkGroup->getUseSubObservation()) {
+            return $this->listSubObservations($benchmarkGroup);
         }
 
         $observation = $this->getCurrentObservation();
@@ -283,6 +290,22 @@ class ObservationController extends AbstractActionController
         );
 
         $this->checkForCustomTemplate($benchmarkGroup, $view);
+
+        return $view;
+    }
+
+    public function listSubObservations($benchmarkGroup)
+    {
+        $observation = $this->getCurrentObservation();
+
+        $view = new ViewModel(
+            array(
+                'benchmarkGroup' => $benchmarkGroup,
+                'observation' => $observation
+            )
+        );
+
+        $view->setTemplate('mrss/sub-observation/index.phtml');
 
         return $view;
     }

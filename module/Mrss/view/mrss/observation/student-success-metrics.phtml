@@ -1,0 +1,123 @@
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=2') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css?v=2') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js?v=2',
+    'text/javascript'
+); ?>
+
+<?= $this->systemAdmin() ?>
+
+<h2>
+    <?= $benchmarkGroup->getName() ?>
+</h2>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+
+<div class="demo-group">
+    <h3 class="heading">Student Completion and Transfer, Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</h3>
+
+    <?= $this->ztbFormElement($form->get('ft_f_yminus4_headc')->setLabel('Unduplicated Headcount')) ?>
+    <?= $this->ztbFormElement($form->get('ft_f_yminus4_degr_cert')->setLabel('Number Completed Degree or Certificate')) ?>
+    <?= $this->ztbFormElement($form->get('ft_f_yminus4_transf')->setLabel('Number Transferred')) ?>
+</div>
+
+
+
+<div class="demo-group">
+    <h3 class="heading">Student Completion and Transfer, Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</h3>
+
+    <?= $this->ztbFormElement($form->get('pt_f_yminus4_headc')->setLabel('Unduplicated Headcount')) ?>
+    <?= $this->ztbFormElement($form->get('pt_f_yminus4_degr_cert')->setLabel('Number Completed Degree or Certificate')) ?>
+    <?= $this->ztbFormElement($form->get('pt_f_yminus4_transf')->setLabel('Number Transferred')) ?>
+</div>
+
+
+<div class="demo-group">
+    <h3 class="heading">Student Completion and Transfer, Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</h3>
+
+    <?= $this->ztbFormElement($form->get('f_yminus7_headc')->setLabel('Unduplicated Headcount')) ?>
+    <?= $this->ztbFormElement($form->get('ft_yminus7_degr')->setLabel('Number Completed Degree or Certificate')) ?>
+    <?= $this->ztbFormElement($form->get('ft_yminus7_transf')->setLabel('Number Transferred')) ?>
+</div>
+
+
+
+
+<div class="demo-group">
+    <h3 class="heading">Student Completion and Transfer, Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</h3>
+
+    <?= $this->ztbFormElement($form->get('pt_fminus7_headc')->setLabel('Unduplicated Headcount')) ?>
+    <?= $this->ztbFormElement($form->get('pt_yminus7_degr')->setLabel('Number Completed Degree or Certificate')) ?>
+    <?= $this->ztbFormElement($form->get('pt_yminus7_transf')->setLabel('Number Transferred')) ?>
+</div>
+
+
+
+<div class="demo-group">
+    <h3 class="heading">Credit College-level Retention, Success</h3>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> grades.</p>
+
+    <?= $this->ztbFormElement($form->get('tot_grad_abcpdfw')) ?>
+    <?= $this->ztbFormElement($form->get('tot_grad_abcpdf')) ?>
+    <?= $this->ztbFormElement($form->get('tot_grad_abcp')) ?>
+</div>
+
+
+
+<div class="demo-group">
+    <h3 class="heading">Credit Student Enrollment</h3>
+
+    <?= $this->ztbFormElement($form->get('tot_cr_st')) ?>
+</div>
+
+
+
+<div class="demo-group">
+    <h3 class="heading">Next Term</h3>
+
+    <?= $this->ztbFormElement($form->get('grad_bef_spr')) ?>
+    <?= $this->ztbFormElement($form->get('enr_bef_spr')) ?>
+</div>
+
+
+
+
+<div class="demo-group">
+    <h3 class="heading">Next Fall</h3>
+
+    <?= $this->ztbFormElement($form->get('grad_bef_fall')) ?>
+    <?= $this->ztbFormElement($form->get('enr_fall')) ?>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<fieldset id="fieldset-buttons" class="well well-small">
+    <div class="control-group" id="control-group-buttons[submit]">
+        <div class="controls" id="controls-buttons[submit]">
+            <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<?= $this->form()->closeTag() ?>

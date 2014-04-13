@@ -6,47 +6,97 @@
 $tableConfig = array(
     'Admissions' => array(
         'ss_admissions_total',
+        'ss_admis_o_cost',
+        'ss_admiss_emp',
+        '',
         'ss_admissions_contract',
     ),
     'Recruitment' => array(
         'ss_recruitment_total',
+        'ss_recruitment_o_cost',
+        'ss_recruitment_emp',
+        '',
         'ss_recruitment_contract',
     ),
     'Advising' => array(
         'ss_advising_total',
+        'ss_advising_o_cost',
+        'ss_advising_emp',
+        'ss_advising_student',
         'ss_advising_contract',
     ),
     'Counseling' => array(
         'ss_counseling_total',
+        'ss_counseling_o_cost',
+        'ss_counseling_emp',
+        'ss_counseling_student',
         'ss_counseling_contract',
     ),
     'Career Services' => array(
         'ss_career_total',
+        'ss_career_o_cost',
+        'ss_career_emp',
+        'ss_career_student',
         'ss_career_contract',
     ),
     'Financial Aid' => array(
         'ss_financial_aid_total',
+        'ss_financial_aid_o_cost',
+        'ss_financial_aid_emp',
+        'ss_financial_aid_student',
         'ss_financial_aid_contract',
     ),
     'Registrar / Student Records' => array(
         'ss_registrar_total',
+        'ss_registrar_o_cost',
+        'ss_registrar_emp',
+        '',
         'ss_registrar_contract',
     ),
     'Tutoring' => array(
         'ss_tutoring_total',
+        'ss_tutoring_o_cost',
+        'ss_tutoring_emp',
+        'ss_tutoring_students',
         'ss_tutoring_contract',
     ),
     'Testing Services' => array(
         'ss_testing_total',
+        'ss_testing_o_cost',
+        'ss_testing_emp',
+        'ss_testing_student',
         'ss_testing_contract',
     ),
     'Co-curricular Activities' => array(
         'ss_cocurricular_total',
+        'ss_cocurricular_o_cost',
+        'ss_cocurricular_emp',
+        '',
         'ss_cocurricular_contract',
     ),
+    'Disability Services' => array(
+        'ss_disabserv_total',
+        'ss_disabserv_o_cost',
+        'ss_disabserv_emp',
+        'ss_disabserv_o_students',
+        'ss_disabserv_contract'
+    ),
+    "Veterans' Services" => array(
+        'ss_vetserv_total',
+        'ss_vetserv_o_cost',
+        'ss_vetserv_emp',
+        'ss_vetserv_o_students',
+        'ss_vetserv_contract'
+    )
 );
 
-$colClassConfig = array('expenditures', 'contract');
+$colClassConfig = array(
+    'expenditures',
+    'cost',
+    'fte_num',
+    'students_served',
+    'contract'
+);
 
 ?>
 
@@ -79,7 +129,10 @@ $this->headScript()->appendFile(
     <tr>
         <th></th>
         <th>Salaries<br>and Benefits</th>
-        <th>Contracted<br>Services</th>
+        <th>Non-labor<br>Operating Costs</th>
+        <th>Number of<br>FTE Employees</th>
+        <th>Number of<br>Students Served</th>
+        <th>Contract</th>
     </tr>
     </thead>
 
@@ -92,10 +145,14 @@ $this->headScript()->appendFile(
             </td>
 
             <?php foreach ($row as $i => $field): ?>
+                <?php if (!empty($field)): ?>
                 <td class="grid-value <?= $colClassConfig[$i] ?>-value"
                     id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
                     <?= $this->simpleFormElement($form->get($field)) ?>
                 </td>
+                <?php else: ?>
+                <td></td>
+                <?php endif ?>
             <?php endforeach ?>
         </tr>
 
@@ -104,6 +161,7 @@ $this->headScript()->appendFile(
             <td colspan="<?= count($row) ?>">
 
                 <?php foreach ($row as $i => $field): ?>
+                    <?php if (empty($field)) continue; ?>
                     <div class="<?= $colClassConfig[$i] ?>-help">
                         <?= $form->get($field)->getOption('help-block') ?>
                     </div>

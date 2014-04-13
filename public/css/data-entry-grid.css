@@ -59,3 +59,8 @@ td.error {
 .top-table-heading {
     text-align: center;
 }
+
+
+#instructionalGrid .grid-subcategory {
+    padding-left: 40px;
+}

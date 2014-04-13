@@ -3,6 +3,15 @@
  * This is a special data-entry template that displays this form as a table
  */
 
+$firstTableConfig = array(
+    'Full-Time' => array(
+        'inst_cost_full_cred_hr'
+    ),
+    'Part-Time or Adjunct' => array(
+        'inst_cost_part_cred_hr'
+    )
+);
+
 $tableConfig = array(
     'Program Development' => array(
         'inst_cost_full_program_dev',
@@ -66,17 +75,61 @@ $this->headScript()->appendFile(
 <?php $form->prepare() ?>
 <?= $this->form()->openTag($form) ?>
 
+<?= $this->ztbformelement($form->get('name')) ?>
+
+<table class="table table-condensed table-bordered data-entry-grid">
+    <thead>
+        <th></th>
+        <th>Number of Student Credit Hours</th>
+    </thead>
+    <tbody>
+    <?php foreach ($firstTableConfig as $label => $row): ?>
+        <tr>
+            <td class="grid-category">
+                <?= $label ?>
+            </td>
+
+            <?php foreach ($row as $i => $field): ?>
+                <td id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                    <?= $this->simpleFormElement($form->get($field)) ?>
+                </td>
+            <?php endforeach ?>
+        </tr>
+
+        <tr class="help-text">
+            <td class="grid-category"></td>
+            <td colspan="<?= count($row) ?>">
+
+                <?php foreach ($row as $i => $field): ?>
+                    <div class="<?= $colClassConfig[$i] ?>-help">
+                        <?= $form->get($field)->getOption('help-block') ?>
+                    </div>
+                <?php endforeach ?>
+
+            </td>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
+
+<div class="well">
+    <p>Provide estimates for the amount of time a typical faculty member in your academic unit spends on the following instructional activities.</p>
+
+    <p><em>Enter whole numbers without commas or decimals.</em></p>
+
+</div>
+
 <table class="table table-condensed table-bordered data-entry-grid managerial">
     <thead>
     <tr>
         <th></th>
         <th colspan="2" class="top-table-heading">Percent of Time Spent on Activities</th>
     </tr>
-        <tr>
-            <th></th>
-            <th>Full Time</th>
-            <th>Part Time</th>
-        </tr>
+    <tr>
+        <th></th>
+        <th>Full Time Faculty</th>
+        <th>Part Time Faculty or Adjuncts</th>
+    </tr>
     </thead>
 
     <tbody>
@@ -88,10 +141,10 @@ $this->headScript()->appendFile(
             </td>
 
             <?php foreach ($row as $i => $field): ?>
-            <td class="grid-value <?= $colClassConfig[$i] ?>-value"
-                id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
-                <?= $this->simpleFormElement($form->get($field)) ?>
-            </td>
+                <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                    id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                    <?= $this->simpleFormElement($form->get($field)) ?>
+                </td>
             <?php endforeach ?>
         </tr>
 
@@ -100,9 +153,9 @@ $this->headScript()->appendFile(
             <td colspan="<?= count($row) ?>">
 
                 <?php foreach ($row as $i => $field): ?>
-                <div class="<?= $colClassConfig[$i] ?>-help">
-                    <?= $form->get($field)->getOption('help-block') ?>
-                </div>
+                    <div class="<?= $colClassConfig[$i] ?>-help">
+                        <?= $form->get($field)->getOption('help-block') ?>
+                    </div>
                 <?php endforeach ?>
 
             </td>
@@ -110,11 +163,11 @@ $this->headScript()->appendFile(
     <?php endforeach ?>
 
 
-        <tr>
-            <td class="grid-category">Total</td>
-            <td id="full-time-total"></td>
-            <td id="part-time-total"></td>
-        </tr>
+    <tr>
+        <td class="grid-category">Total</td>
+        <td id="full-time-total"></td>
+        <td id="part-time-total"></td>
+    </tr>
 
     </tbody>
 </table>
@@ -126,5 +179,7 @@ $this->headScript()->appendFile(
         </div>
     </div>
 </fieldset>
+
+<?= $this->simpleFormElement($form->get('id')) ?>
 
 <?= $this->form()->closeTag() ?>

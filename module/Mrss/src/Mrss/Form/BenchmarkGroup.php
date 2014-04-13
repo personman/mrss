@@ -67,6 +67,18 @@ class BenchmarkGroup extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'useSubObservation',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Use SubObservation',
+                    'help-block' => 'Replaces institution-wide data entry form with
+                    a division/unit level form.'
+                ),
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 }

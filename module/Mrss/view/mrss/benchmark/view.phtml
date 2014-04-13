@@ -18,8 +18,8 @@
         ?>)
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'Year');
-        <?php foreach ($this->collegeIds as $collegeId): ?>
-            data.addColumn('number', 'c' + '<?= $collegeId ?>')
+        <?php foreach ($colleges as $college): ?>
+            data.addColumn('number', '<?= $college->getName() ?>')
         <?php endforeach ?>
         data.addRows(<?= $this->observations ?>)
 

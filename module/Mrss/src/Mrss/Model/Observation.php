@@ -3,6 +3,8 @@
 namespace Mrss\Model;
 
 use \Mrss\Entity\Observation as ObservationEntity;
+use Mrss\Entity\Benchmark as BenchmarkEntity;
+use Mrss\Entity\College as CollegeEntity;
 use Zend\Debug\Debug;
 
 /**
@@ -109,6 +111,44 @@ class Observation extends AbstractModel
 
         //return array_merge(array($headers), $data);
         return $data;
+    }
+
+    /**
+     * Sparklines, return an array of values over years for a benchmark and college
+     *
+     * @param \Mrss\Entity\Benchmark|\Mrss\Model\Benchmark $benchmark
+     * @param \Mrss\Entity\College|\Mrss\Model\College $college
+     * @return array
+     */
+    public function getSparkline(BenchmarkEntity $benchmark, CollegeEntity $college)
+    {
+        // Headers based on colleges
+        $selects = array('year', $benchmark->getDbColumn());
+
+        // Prepare a queryBuilder
+        $connection = $this->getEntityManager()->getConnection();
+        $connection->setFetchMode(\PDO::FETCH_NUM);
+        $qb = $connection->createQueryBuilder();
+
+        // The query
+        $qb->select($selects);
+        $qb->from('observations', 'o');
+        $qb->where('college_id = :college');
+        $qb->setParameter('college', $college->getId());
+        $qb->orderBy('year');
+
+        try {
+            $data = $qb->execute()->fetchAll();
+        } catch (\Exception $e) {
+            return array();
+        }
+
+        $sparkline = array();
+        foreach ($data as $row) {
+            $sparkline[] = $row[1];
+        }
+
+        return $sparkline;
     }
 
     /**

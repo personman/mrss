@@ -49,6 +49,7 @@ return array(
                 'child_routes' => array(
                     'edit' => array(
                         'type' => 'segment',
+                        'may_terminate' => true,
                         'options' => array(
                             'route' => '/:benchmarkGroup',
                             'constraints' => array(
@@ -57,6 +58,22 @@ return array(
                             'defaults' => array(
                                 'action' => 'dataEntry',
                                 'benchmarkGroup' => 0
+                            )
+                        ),
+                        'child_routes' => array(
+                            'subob' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/:subId',
+                                    'constraints' => array(
+                                        'benchmarkGroup' => '[0-9]+'
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'edit',
+                                        'controller' => 'subobservations',
+                                        'subId' => 0,
+                                    )
+                                ),
                             )
                         )
                     ),
@@ -864,6 +881,7 @@ return array(
             'ipedsInstitutions' => 'Mrss\Controller\IpedsInstitutionController',
             'systems' => 'Mrss\Controller\SystemController',
             'observations' => 'Mrss\Controller\ObservationController',
+            'subobservations' => 'Mrss\Controller\SubObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',
             'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
             'subscription' => 'Mrss\Controller\SubscriptionController',

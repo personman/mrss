@@ -89,6 +89,10 @@ return array(
                     'roles' => array('user')
                 ),
                 array(
+                    'controller' => 'subobservations',
+                    'roles' => array('user')
+                ),
+                array(
                     'controller' => 'reports',
                     'roles' => array('user')
                 ),
