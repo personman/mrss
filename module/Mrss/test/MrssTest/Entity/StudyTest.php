@@ -46,7 +46,7 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->study->getUPaySiteId());
         $this->assertNull($this->study->getLogo());
         $this->assertNull($this->study->getGoogleAnalyticsKey());
-        $this->assertNull($this->study->getOfferCodes());
+        $this->assertEquals(0, count($this->study->getOfferCodes()));
 
         $this->assertInstanceOf(
             '\Doctrine\Common\Collections\ArrayCollection',
@@ -260,5 +260,28 @@ class StudyTest extends PHPUnit_Framework_TestCase
         }
 
         return $offerCodeMock;
+    }
+
+    public function testGetOfferCode()
+    {
+        $offerCodeMock = $this->getOfferCodeMock('airforum');
+        $offerCodeMock2 = $this->getOfferCodeMock('wdi2014');
+        $this->study->setOfferCodes(array($offerCodeMock, $offerCodeMock2));
+
+        $offerCode = $this->study->getOfferCode('airforum');
+        $this->assertSame($offerCodeMock, $offerCode);
+    }
+
+    public function testGetOfferCodeEmpty()
+    {
+        $this->assertNull($this->study->getOfferCode('not_real'));
+    }
+
+    public function testGetOfferCodePriceEmpty()
+    {
+        $this->study->setEarlyPriceDate(new \Datetime('2014-01-01'));
+        $this->study->setPrice(1000);
+
+        $this->assertEquals(1000, $this->study->getOfferCodePrice('not_real'));
     }
 }

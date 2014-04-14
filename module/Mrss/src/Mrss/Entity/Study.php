@@ -108,6 +108,7 @@ class Study
     public function __construct()
     {
         $this->benchmarkGroups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->offerCodes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -387,9 +388,6 @@ class Study
     {
         $codes = array();
         $offerCodes = $this->getOfferCodes();
-        if (empty($offerCodes)) {
-            $offerCodes = array();
-        }
 
         foreach ($offerCodes as $offerCode) {
             $codes[] = trim($offerCode->getCode());
