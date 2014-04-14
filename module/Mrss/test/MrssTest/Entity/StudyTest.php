@@ -284,4 +284,27 @@ class StudyTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1000, $this->study->getOfferCodePrice('not_real'));
     }
+
+    public function testGetBenchmarksForYear()
+    {
+        $benchmarkMock = $this->getMock(
+            '\Mrss\Entity\Benchmark'
+        );
+
+        $benchmarkGroupMock = $this->getMock(
+            '\Mrss\Entity\BenchmarkGroup',
+            array('getBenchmarksForYear')
+        );
+
+        $benchmarkGroupMock->expects($this->once())
+            ->method('getBenchmarksForYear')
+            ->with(2013)
+            ->will($this->returnValue(array($benchmarkMock)));
+
+        $this->study->setBenchmarkGroups(array($benchmarkGroupMock));
+
+        $benchmarks = $this->study->getBenchmarksForYear(2013);
+        $this->assertEquals(1, count($benchmarks));
+        $this->assertSame($benchmarkMock, $benchmarks[0]);
+    }
 }
