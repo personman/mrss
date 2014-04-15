@@ -344,7 +344,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
             }
         }
 
-        $percentage = round($completed / $count * 100, 3);
+        if (empty($count)) {
+            $percentage = 0;
+        } else {
+            $percentage = round($completed / $count * 100, 3);
+        }
 
         return $percentage;
     }

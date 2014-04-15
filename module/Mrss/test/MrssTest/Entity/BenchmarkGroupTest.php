@@ -79,6 +79,10 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
         $benchmarkGroup->setFormat('one-col');
         $this->assertEquals('one-col', $benchmarkGroup->getFormat());
 
+        // Set use sub ob
+        $benchmarkGroup->setUseSubObservation(true);
+        $this->assertTrue($benchmarkGroup->getUseSubObservation());
+
         $studyMock = $this->getMock('Mrss\Entity\Study');
         $benchmarkGroup->setStudy($studyMock);
         $this->assertSame($studyMock, $benchmarkGroup->getStudy());
@@ -165,5 +169,137 @@ class BenchmarkGroupTest extends PHPUnit_Framework_TestCase
             ->getCompletionPercentageForObservation($observationMock);
 
         $this->assertEquals(100.0, $percentage);
+    }
+
+    public function testCountCompleteFieldsInSubobservations()
+    {
+        $benchmarkGroup = new BenchmarkGroup;
+
+        $benchmarkMock = $this->getMock(
+            '\Mrss\Entity\Benchmark',
+            array('isAvailableForYear')
+        );
+        $benchmarkMock->expects($this->any())
+            ->method('isAvailableForYear')
+            ->will($this->returnValue(true));
+
+        $benchmarkGroup->setBenchmarks(array($benchmarkMock));
+
+
+        $observationMock = $this->getMock(
+            '\Mrss\Entity\Observation',
+            array('getSubObservations')
+        );
+
+        $subobMock = $this->getMock(
+            '\Mrss\Entity\SubObservation'
+        );
+        $subobMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue(5));
+
+        $observationMock->expects($this->any())
+            ->method('getSubObservations')
+            ->will($this->returnValue(array($subobMock)));
+
+        $benchmarkGroup->countCompleteFieldsInSubobservations($observationMock);
+
+        $benchmarkGroup->getSubObservationBenchmarkCount($observationMock);
+
+        $benchmarkGroup->getSubObservationCompletionPercentageForObservation(
+            $observationMock
+        );
+    }
+
+    public function testCountCompleteFieldsInSubobservationsEmpty()
+    {
+        $benchmarkGroup = new BenchmarkGroup;
+
+        $observationMock = $this->getMock(
+            '\Mrss\Entity\Observation',
+            array('getSubObservations')
+        );
+
+        $percentage = $benchmarkGroup->getSubObservationCompletionPercentageForObservation(
+            $observationMock
+        );
+
+        $this->assertEquals(0, $percentage);
+    }
+
+    public function testGetBenchmarkCountSubOb()
+    {
+        $benchmarkGroup = new BenchmarkGroup;
+        $benchmarkGroup->setUseSubObservation(true);
+
+        $benchmarkMock = $this->getMock(
+            '\Mrss\Entity\Benchmark',
+            array('isAvailableForYear')
+        );
+        $benchmarkMock->expects($this->any())
+            ->method('isAvailableForYear')
+            ->will($this->returnValue(true));
+
+        $benchmarkGroup->setBenchmarks(array($benchmarkMock));
+
+
+        $observationMock = $this->getMock(
+            '\Mrss\Entity\Observation',
+            array('getSubObservations')
+        );
+
+        $subobMock = $this->getMock(
+            '\Mrss\Entity\SubObservation'
+        );
+        $subobMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue(5));
+
+        $observationMock->expects($this->any())
+            ->method('getSubObservations')
+            ->will($this->returnValue(array($subobMock)));
+
+        $count = $benchmarkGroup->getBenchmarkCount($observationMock);
+        $this->assertEquals(1, $count);
+
+        $count = $benchmarkGroup->countCompleteFieldsInObservation($observationMock);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testGetIncompleteBenchmarksForObservation()
+    {
+        $benchmarkGroup = new BenchmarkGroup;
+
+        $observationMock = $this->getMock(
+            '\Mrss\Entity\Observation',
+            array('getYear', 'get')
+        );
+        $observationMock->expects($this->any())
+            ->method('getYear')
+            ->will($this->returnValue(2014));
+
+        $observationMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $benchmarkMock = $this->getMock(
+            '\Mrss\Entity\Benchmark',
+            array('getDbColumn', 'isAvailableForYear')
+        );
+        $benchmarkMock->expects($this->any())
+            ->method('getDbColumn')
+            ->will($this->returnValue('blah'));
+
+        $benchmarkMock->expects($this->any())
+            ->method('isAvailableForYear')
+            ->will($this->returnValue(true));
+
+        $benchmarkGroup->setBenchmarks(array($benchmarkMock));
+
+        $benchmarks = $benchmarkGroup
+            ->getIncompleteBenchmarksForObservation($observationMock);
+
+        $this->assertEquals(1, count($benchmarks));
+
     }
 }

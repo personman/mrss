@@ -368,6 +368,32 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($benchmark->isDollars());
     }
 
+    /**
+     * @param $type
+     * @param $abbr
+     * @dataProvider getTypesAndAbbr
+     */
+    public function testGetInputTypeAbbr($type, $abbr)
+    {
+        $benchmark = new Benchmark();
+
+        $benchmark->setInputType($type);
+
+        $this->assertEquals($abbr, $benchmark->getInputTypeAbbr());
+    }
+
+    public function getTypesAndAbbr()
+    {
+        return array(
+            array('percent', '%'),
+            array('wholepercent', '%'),
+            array('wholedollars', '$'),
+            array('dollars', '$'),
+            array('number', '#'),
+            array('radio', 'radio'),
+        );
+    }
+
     protected function getEmMock($additionalMethodsToMock = array())
     {
         $repositoryMock = $this->getMock(
