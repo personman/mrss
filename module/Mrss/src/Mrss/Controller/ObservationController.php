@@ -6,6 +6,7 @@ namespace Mrss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
+use Mrss\Service\Excel;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 
@@ -517,7 +518,7 @@ class ObservationController extends AbstractActionController
             );
         }
 
-        $excelService = new \Mrss\Service\Excel();
+        $excelService = new Excel();
         $excelService->getExcelForSubscriptions(array($subscription));
 
     }
