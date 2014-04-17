@@ -12,6 +12,7 @@ use PHPUnit_Framework_TestCase;
  */
 class AgreementTest extends PHPUnit_Framework_TestCase
 {
+    /** @var Agreement */
     protected $form;
 
     public function setUp()
@@ -26,8 +27,23 @@ class AgreementTest extends PHPUnit_Framework_TestCase
 
     public function testGetInputFilterSpecification()
     {
-        $spec = $this->form->getInputFilterSpecification();
+        $offerCodes = array('test');
+        $form = new Agreement('MRSS', $offerCodes);
+        $spec = $form->getInputFilterSpecification();
 
         $this->assertTrue(is_array($spec));
+    }
+
+    public function testConstructionWithCodes()
+    {
+        $offerCodes = array('test');
+        $form = new Agreement('MRSS', $offerCodes);
+
+        $this->assertNotEmpty($form->get('offerCode'));
+    }
+
+    public function testConstructionWithoutCodes()
+    {
+        $this->assertFalse($this->form->has('offerCode'));
     }
 }
