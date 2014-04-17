@@ -32,7 +32,7 @@ class Excel
     protected $currentStudy;
 
     // Current college
-    /** @var  \Mrss\Entity\College */
+    /** @var \Mrss\Entity\College */
     protected $currentCollege;
 
     /**
