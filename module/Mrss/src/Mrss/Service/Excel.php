@@ -555,8 +555,8 @@ class Excel
     {
         $valueColumn = 'B';
         $dbColumnCol = 'D';
-        $firstHiddenRow = 233;
-        $lastHiddenRow = 450;
+        $firstHiddenRow = 241;
+        $lastHiddenRow = 480;
 
         $study = $subscription->getStudy();
         $observation = $subscription->getObservation();
@@ -597,7 +597,7 @@ class Excel
         Observation $observation//,
         //BenchmarkGroup $benchmarkGroup
     ) {
-        $subObSheets = range(2, 11);
+        $subObSheets = range(1, 10);
 
         $i = 0;
         foreach ($observation->getSubObservations() as $subOb) {

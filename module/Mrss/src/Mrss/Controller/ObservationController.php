@@ -415,8 +415,6 @@ class ObservationController extends AbstractActionController
                             unset($data['subobservations']);
                         }
 
-                        prd($data);
-
                         foreach ($data as $column => $value) {
                             try {
                                 $observation->set($column, $value);
@@ -499,11 +497,8 @@ class ObservationController extends AbstractActionController
 
             // Save subobservation
             $subObservationModel->save($subObservation);
-            pr($subObservation->getName());
             $i++;
         }
-
-        die('subobs saved');
     }
 
     public function exportAction()
