@@ -3,12 +3,15 @@
 namespace Mrss\Service;
 
 use Mrss\Entity\Observation;
+use Mrss\Entity\SubObservation;
 use Mrss\Entity\Subscription;
+use Mrss\Entity\BenchmarkGroup;
 
 use Mrss\Entity\Benchmark;
 use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
+use PHPExcel_Worksheet_Row;
 
 class Excel
 {
@@ -27,6 +30,9 @@ class Excel
     // Current study
     protected $currentStudy;
 
+    // Current college
+    protected $currentCollege;
+
     /**
      * @deprecated
      * @param Subscription $subscription
@@ -43,7 +49,7 @@ class Excel
     /**
      * Export for multiple colleges (a system)
      *
-     * @param array $subscriptions
+     * @param Subscription[] $subscriptions
      */
     public function getExcelForSubscriptions($subscriptions)
     {
@@ -158,6 +164,10 @@ class Excel
         }
     }
 
+    /**
+     * @param PHPExcel $spreadsheet
+     * @param Subscription[] $subscriptions
+     */
     public function writeBodySystem(PHPExcel $spreadsheet, $subscriptions)
     {
         $exampleSubscription = $subscriptions[0];
@@ -177,6 +187,12 @@ class Excel
         }
     }
 
+    /**
+     * @param PHPExcel_Worksheet $sheet
+     * @param $row
+     * @param Benchmark $benchmark
+     * @param Subscription $subscription
+     */
     public function writeRow(PHPExcel_Worksheet $sheet, $row, Benchmark $benchmark, $subscription)
     {
         // Write the label
@@ -251,11 +267,13 @@ class Excel
     public function getObservationDataFromExcel($filename)
     {
         $excel = $this->openFile($filename);
-        $excel->setActiveSheetIndexByName('Worksheet');
+        //$excel->setActiveSheetIndexByName('Worksheet');
+        $excel->setActiveSheetIndex(0);
         $sheet = $excel->getActiveSheet();
 
         // For testing whether a dbColumn is valid
         $emptyObservation = new Observation();
+        $emptySubObservation = new SubObservation();
 
         $this->applyImportCustomizations();
 
@@ -283,11 +301,37 @@ class Excel
                     )
                     ->getValue();
 
-                if (empty($dbColumn) || !$emptyObservation->has($dbColumn)) {
+                // Skip empty rows
+                if (empty($dbColumn)) {
                     continue;
                 }
 
-                $collegeData[$dbColumn] = $value;
+                // Observation data
+                if ($emptyObservation->has($dbColumn)) {
+                    $collegeData[$dbColumn] = $value;
+                } elseif (list($subObIndex, $dbColumn) = $this->getSubObIndex(
+                    $dbColumn,
+                    $emptySubObservation)
+                ) {
+                    if (empty($collegeData['subobservations'])) {
+                        $collegeData['subobservations'] = array();
+                    }
+                    if (empty($collegeData['subobservations'][$subObIndex])) {
+                        $collegeData['subobservations'][$subObIndex] = array();
+                    }
+
+                    $collegeData['subobservations'][$subObIndex][$dbColumn] = $value;
+                }
+            }
+
+            // Trim empty subobservations
+            if (!empty($collegeData['subobservations'])) {
+                foreach ($collegeData['subobservations'] as $key => $subOb) {
+                    // Name is the required field
+                    if (empty($subOb['name'])) {
+                        unset($collegeData['subobservations'][$key]);
+                    }
+                }
             }
 
             // If $data is empty, then we're dealing with an invalid file
@@ -300,6 +344,32 @@ class Excel
         }
 
         return $data;
+    }
+
+    protected function getSubObIndex($dbColumn, SubObservation $emptySubOb)
+    {
+        // @todo: This probably shouldn't be hardcoded as it applies only to MRSS
+        // form 2
+        $subObPrefix = 'inst_cost_';
+
+        // Extract the number from the field
+        $pattern = '/u(\d+)_(.*)/';
+        preg_match($pattern, $dbColumn, $matches);
+
+        if (!empty($matches[1])) {
+            $index = $matches[1];
+            if ($matches[2] == 'unit_name') {
+                $shortColumn = 'name';
+            } else {
+                $shortColumn = $subObPrefix . $matches[2];
+            }
+
+            if ($emptySubOb->has($shortColumn) || $shortColumn == 'unit_name') {
+                return array($index, $shortColumn);
+            }
+        }
+
+        return false;
     }
 
     protected function applyImportCustomizations()
@@ -343,6 +413,17 @@ class Excel
             }
             break;
         }
+
+        // If none are found in the file, just use the current college
+        if (empty($colleges)) {
+            $college = $this->getCurrentCollege();
+            $colleges[] = array(
+                'ipeds' => $college->getIpeds(),
+                'column' => 1
+            );
+            $this->dbColumnColumn = 3;
+        }
+
         return $colleges;
     }
 
@@ -458,6 +539,118 @@ class Excel
     protected function customizeForMrss(PHPExcel $spreadsheet, Subscription $subscription)
     {
         // Open the template Excel  file
+        $filename = 'data/imports/mrss-export.xlsx';
+        $spreadsheet = PHPExcel_IOFactory::load($filename);
+
+        $this->populateMrss($spreadsheet, $subscription);
+
+        // Activate the first sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $this->download($spreadsheet);
+
+    }
+
+    protected function populateMrss(PHPExcel $spreadsheet, Subscription $subscription)
+    {
+        $valueColumn = 'B';
+        $dbColumnCol = 'D';
+        $firstHiddenRow = 233;
+        $lastHiddenRow = 450;
+
+        $study = $subscription->getStudy();
+        $observation = $subscription->getObservation();
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        foreach ($sheet->getRowIterator() as /** @var \PHPExcel_Worksheet_Row $row */ $row) {
+            $rowIndex = $row->getRowIndex();
+            $dbColumn = $sheet->getCell($dbColumnCol . $rowIndex)->getValue();
+
+            if (!empty($dbColumn) && $observation->has($dbColumn)) {
+                $value = $observation->get($dbColumn);
+
+                $sheet->setCellValue($valueColumn . $rowIndex, $value);
+            }
+        }
+
+        // Now hide some stuff
+        $sheet->getColumnDimension($dbColumnCol)->setVisible(false);
+        $sheet->getColumnDimension('E')->setVisible(false);
+        $sheet->getColumnDimension('F')->setVisible(false);
+
+        foreach (range($firstHiddenRow, $lastHiddenRow) as $rowIndex) {
+            $sheet->getRowDimension($rowIndex)->setVisible(false);
+        }
+
+        // Handle subobservations
+
+        $this->populateMrssSubObservations(
+            $spreadsheet,
+            $observation
+        );
+
+    }
+
+    protected function populateMrssSubObservations(
+        PHPExcel $spreadsheet,
+        Observation $observation//,
+        //BenchmarkGroup $benchmarkGroup
+    ) {
+        $subObSheets = range(2, 11);
+
+        $i = 0;
+        foreach ($observation->getSubObservations() as $subOb) {
+            $sheetIndex = $subObSheets[$i];
+            $sheet = $spreadsheet->setActiveSheetIndex($sheetIndex);
+            $this->populateMrssSubObservation($sheet, $subOb);
+
+            $i++;
+        }
+    }
+
+    protected function populateMrssSubObservation(
+        PHPExcel_Worksheet $sheet,
+        SubObservation $subObservation//,
+        //BenchmarkGroup $benchmarkGroup
+    ) {
+        // Set the academic unit name
+        $sheet->setCellValue('B6', $subObservation->getName());
+
+        // Now the data
+        foreach ($this->getMrssSubObservationMap() as $cell => $dbColumn) {
+            $value = $subObservation->get($dbColumn);
+            $sheet->setCellValue($cell, $value);
+        }
+    }
+
+    protected function getMrssSubObservationMap()
+    {
+        return array(
+            'C10' => 'inst_cost_full_cred_hr',
+            'C14' => 'inst_cost_part_cred_hr',
+            'B21' => 'inst_cost_full_program_dev',
+            'C21' => 'inst_cost_part_program_dev',
+            'B22' => 'inst_cost_full_course_dev',
+            'C22' => 'inst_cost_part_course_dev',
+            'B23' => 'inst_cost_full_teaching',
+            'C23' => 'inst_cost_part_teaching',
+            'B24' => 'inst_cost_full_tutoring',
+            'C24' => 'inst_cost_part_tutoring',
+            'B25' => 'inst_cost_full_advising',
+            'C25' => 'inst_cost_part_advising',
+            'B26' => 'inst_cost_full_ac_service',
+            'C26' => 'inst_cost_part_ac_service',
+            'B27' => 'inst_cost_full_assessment',
+            'C27' => 'inst_cost_part_assessment',
+            'B28' => 'inst_cost_full_prof_dev',
+            'C28' => 'inst_cost_part_prof_dev'
+        );
+    }
+
+    protected function customizeForMrssOld(PHPExcel $spreadsheet, Subscription $subscription)
+    {
+        // Open the template Excel  file
         $filename = 'data/imports/mrss-grid.xlsx';
         $gridTemplate = PHPExcel_IOFactory::load($filename);
 
@@ -546,6 +739,8 @@ class Excel
                 return true;
             }
         }
+
+        return false;
     }
 
     protected function getMrssGridMap()
@@ -604,5 +799,17 @@ class Excel
     public function getCurrentStudy()
     {
         return $this->currentStudy;
+    }
+
+    public function setCurrentCollege($college)
+    {
+        $this->currentCollege = $college;
+
+        return $this;
+    }
+
+    public function getCurrentCollege()
+    {
+        return $this->currentCollege;
     }
 }

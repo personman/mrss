@@ -4,6 +4,8 @@
 namespace Mrss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Mrss\Entity\Observation;
+use Mrss\Entity\SubObservation;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 
@@ -359,13 +361,14 @@ class ObservationController extends AbstractActionController
                     $filename = $data['file']['tmp_name'];
                     $excelService = new \Mrss\Service\Excel();
                     $excelService->setCurrentStudy($this->currentStudy());
+                    $excelService->setCurrentCollege($this->currentCollege());
                     $allData = $excelService->getObservationDataFromExcel($filename);
                 } catch (\Exception $exception) {
                     //var_dump($exception->getMessage()); die;
                     $this->flashMessenger()->addErrorMessage(
                         'There was a problem processing your import file. Try ' .
                         'downloading the export file again. If you continue to ' .
-                        'have trouble, contact us.'
+                        'have trouble, contact us. ' . $exception->getMessage()
                     );
 
                     return $this->redirect()->toRoute('data-entry/import');
@@ -401,6 +404,18 @@ class ObservationController extends AbstractActionController
                     if ($inputFilter->isValid()) {
                         // Now we actually save the data to the observation
                         $observation = $this->getCurrentObservationByIpeds($ipeds);
+
+                        // Handle any subobservations
+                        if (!empty($data['subobservations'])) {
+                            $this->saveSubObservations(
+                                $data['subobservations'],
+                                $observation
+                            );
+
+                            unset($data['subobservations']);
+                        }
+
+                        prd($data);
 
                         foreach ($data as $column => $value) {
                             try {
@@ -460,6 +475,35 @@ class ObservationController extends AbstractActionController
             'form' => $form,
             'errorMessages' => $errorMessages
         );
+    }
+
+    public function saveSubObservations($data, Observation $observation)
+    {
+        $subObservations = $observation->getSubObservations();
+        $subObservationModel = $this->getServiceLocator()->get('model.subobservation');
+
+        $i = 0;
+        foreach ($data as $subObData) {
+            if (empty($subObservations[$i])) {
+                $subObservation = new SubObservation;
+                $subObservation->setObservation($observation);
+            } else {
+                $subObservation = $subObservations[$i];
+            }
+
+            foreach ($subObData as $dbColumn => $value) {
+                if ($subObservation->has($dbColumn)) {
+                    $subObservation->set($dbColumn, $value);
+                }
+            }
+
+            // Save subobservation
+            $subObservationModel->save($subObservation);
+            pr($subObservation->getName());
+            $i++;
+        }
+
+        die('subobs saved');
     }
 
     public function exportAction()
