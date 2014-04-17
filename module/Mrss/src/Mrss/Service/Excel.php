@@ -311,7 +311,8 @@ class Excel
                     $collegeData[$dbColumn] = $value;
                 } elseif (list($subObIndex, $dbColumn) = $this->getSubObIndex(
                     $dbColumn,
-                    $emptySubObservation)
+                    $emptySubObservation
+                )
                 ) {
                     if (empty($collegeData['subobservations'])) {
                         $collegeData['subobservations'] = array();
