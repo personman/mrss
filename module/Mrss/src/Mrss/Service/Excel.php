@@ -5,13 +5,13 @@ namespace Mrss\Service;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
 use Mrss\Entity\Subscription;
-use Mrss\Entity\BenchmarkGroup;
 
 use Mrss\Entity\Benchmark;
 use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
+use PHPExcel_Cell;
 
 class Excel
 {
@@ -28,9 +28,11 @@ class Excel
     protected $headerRowIndex = 1;
 
     // Current study
+    /** @var \Mrss\Entity\Study */
     protected $currentStudy;
 
     // Current college
+    /** @var  \Mrss\Entity\College */
     protected $currentCollege;
 
     /**
@@ -106,6 +108,10 @@ class Excel
 
     }
 
+    /**
+     * @param PHPExcel $spreadsheet
+     * @param Subscription[] $subscriptions
+     */
     public function writeHeadersSystem(PHPExcel $spreadsheet, $subscriptions)
     {
         $sheet = $spreadsheet->getActiveSheet();
@@ -209,6 +215,12 @@ class Excel
         $sheet->setCellValue('D' . $row, $benchmark->getDbColumn());
     }
 
+    /**
+     * @param PHPExcel_Worksheet $sheet
+     * @param $row
+     * @param Benchmark $benchmark
+     * @param Subscription[] $subscriptions
+     */
     public function writeRowSystem(
         PHPExcel_Worksheet $sheet,
         $row,
@@ -285,6 +297,8 @@ class Excel
             $collegeData = array();
             $headerRowSkipped = false;
             foreach ($sheet->getRowIterator() as $row) {
+                /** @var PHPExcel_Worksheet_Row $row */
+
                 if (!$headerRowSkipped) {
                     $headerRowSkipped = true;
                     continue;
@@ -393,9 +407,12 @@ class Excel
 
         $rowIterator = $sheet->getRowIterator($this->headerRowIndex);
         foreach ($rowIterator as $row) {
+            /** @var PHPExcel_Worksheet_Row $row */
 
             $column = 0;
             foreach ($row->getCellIterator() as $cell) {
+                /** @var PHPExcel_Cell $cell */
+
                 $value = $cell->getValue();
 
                 // Is it a college value column?
@@ -526,6 +543,8 @@ class Excel
         $observation = $subscription->getObservation();
 
         foreach ($sheet->getRowIterator() as $row) {
+            /** @var PHPExcel_Worksheet_Row $row */
+
             $rowIndex = $row->getRowIndex();
 
             $rowDbcolumn = $sheet->getCell($dbColumnCol . $rowIndex)->getValue();
@@ -539,6 +558,9 @@ class Excel
 
     protected function customizeForMrss(PHPExcel $spreadsheet, Subscription $subscription)
     {
+        // Discard the generic version
+        unset($spreadsheet);
+
         // Open the template Excel  file
         $filename = 'data/imports/mrss-export.xlsx';
         $spreadsheet = PHPExcel_IOFactory::load($filename);
@@ -559,12 +581,13 @@ class Excel
         $firstHiddenRow = 241;
         $lastHiddenRow = 480;
 
-        $study = $subscription->getStudy();
         $observation = $subscription->getObservation();
 
         $sheet = $spreadsheet->getActiveSheet();
 
-        foreach ($sheet->getRowIterator() as /** @var \PHPExcel_Worksheet_Row $row */ $row) {
+        foreach ($sheet->getRowIterator() as $row) {
+            /** @var PHPExcel_Worksheet_Row $row */
+
             $rowIndex = $row->getRowIndex();
             $dbColumn = $sheet->getCell($dbColumnCol . $rowIndex)->getValue();
 
@@ -595,8 +618,7 @@ class Excel
 
     protected function populateMrssSubObservations(
         PHPExcel $spreadsheet,
-        Observation $observation//,
-        //BenchmarkGroup $benchmarkGroup
+        Observation $observation
     ) {
         $subObSheets = range(1, 10);
 
@@ -612,8 +634,7 @@ class Excel
 
     protected function populateMrssSubObservation(
         PHPExcel_Worksheet $sheet,
-        SubObservation $subObservation//,
-        //BenchmarkGroup $benchmarkGroup
+        SubObservation $subObservation
     ) {
         // Set the academic unit name
         $sheet->setCellValue('B6', $subObservation->getName());
@@ -722,6 +743,8 @@ class Excel
 
         // Loop over the rows to find the one that needs this reference
         foreach ($sheet->getRowIterator() as $row) {
+            /** @var PHPExcel_Worksheet_Row $row */
+
             $dbColumnCol = 'D';
             $rowIndex = $row->getRowIndex();
 
