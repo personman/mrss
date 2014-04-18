@@ -30,6 +30,8 @@ class SubscriptionController extends AbstractActionController
 
     protected $passwordService;
 
+    protected $log;
+
     /**
      * @var \Mrss\Entity\Study
      */
@@ -146,14 +148,21 @@ class SubscriptionController extends AbstractActionController
 
         // Catch subscription completion via credit card
         if ($this->params()->fromQuery('UPAY_SITE_ID')) {
+            $this->getLog()->info(
+                'New uPay payment with site id: '
+                . $this->params()->fromQuery('UPAY_SITE_ID')
+            );
             // Find the postback from the payment queue
             $transId = $this->getTransIdFromSession();
             $paymentModel = $this->getServiceLocator()->get('model.payment');
+
+            /** @var \Mrss\Entity\Payment $payment */
             $payment = $paymentModel->findByTransId($transId);
+            $this->getLog()->info("Payment retrieved: " . print_r($payment, true));
 
             // The payment postback should be a success
             $postback = $payment->getPostback();
-            if (!empty($postback['pmt_status'])
+            if (empty($payment) ||  !empty($postback['pmt_status'])
                 && $postback['pmt_status'] == 'success') {
                 $payment->setProcessed(true);
                 $payment->setProcessedDate(new \DateTime('now'));
@@ -171,12 +180,17 @@ class SubscriptionController extends AbstractActionController
                 $body .= "\n" . print_r($_REQUEST, 1);
                 $body .= "\n" . print_r($payment, 1);
 
+                $this->getLog()->alert($body);
                 $message->setBody($body);
                 $this->getServiceLocator()->get('mail.transport')->send($message);
             }
 
 
             // Complete the subscription
+            $this->getLog()->info(
+                "Completing subscription: "
+                . print_r($this->getSubscriptionFromSession(), true)
+            );
             $this->completeSubscription(
                 $this->getSubscriptionFromSession(),
                 array('paymentType' => 'creditCard'),
@@ -786,5 +800,22 @@ class SubscriptionController extends AbstractActionController
                 ->get('goalioforgotpassword_password_service');
         }
         return $this->passwordService;
+    }
+
+    /**
+     * @return \Zend\Log\Logger
+     */
+    public function getLog()
+    {
+        if (empty($this->log)) {
+            $filename = 'postback.log';
+            $logger = new \Zend\Log\Logger;
+            $writer = new \Zend\Log\Writer\Stream($filename);
+            $logger->addWriter($writer);
+
+            $this->log = $logger;
+        }
+
+        return $this->log;
     }
 }

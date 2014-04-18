@@ -17,6 +17,10 @@ class Payment extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Payment';
 
+    /**
+     * @param $transId
+     * @return PaymentEntity
+     */
     public function findByTransId($transId)
     {
         return $this->getRepository()->findOneBy(array('transId' => $transId));
