@@ -26,7 +26,8 @@ $this->headScript()->appendFile(
 
 
 <div class="demo-group">
-    <h3 class="heading">Student Completion and Transfer, Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</h3>
+    <h3 class="heading">Student Completion and Transfer</h3>
+    <p class="heading-notes">Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</p>
 
     <?= $this->ztbFormElement($form->get('ft_f_yminus4_headc')->setLabel('Unduplicated Headcount')) ?>
     <?= $this->ztbFormElement($form->get('ft_f_yminus4_degr_cert')->setLabel('Number Completed Degree or Certificate')) ?>
@@ -36,7 +37,8 @@ $this->headScript()->appendFile(
 
 
 <div class="demo-group">
-    <h3 class="heading">Student Completion and Transfer, Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</h3>
+    <h3 class="heading">Student Completion and Transfer</h3>
+    <p class="heading-notes">Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</p>
 
     <?= $this->ztbFormElement($form->get('pt_f_yminus4_headc')->setLabel('Unduplicated Headcount')) ?>
     <?= $this->ztbFormElement($form->get('pt_f_yminus4_degr_cert')->setLabel('Number Completed Degree or Certificate')) ?>
@@ -45,7 +47,8 @@ $this->headScript()->appendFile(
 
 
 <div class="demo-group">
-    <h3 class="heading">Student Completion and Transfer, Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</h3>
+    <h3 class="heading">Student Completion and Transfer</h3>
+    <p class="heading-notes">Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</p>
 
     <?= $this->ztbFormElement($form->get('f_yminus7_headc')->setLabel('Unduplicated Headcount')) ?>
     <?= $this->ztbFormElement($form->get('ft_yminus7_degr')->setLabel('Number Completed Degree or Certificate')) ?>
@@ -56,7 +59,8 @@ $this->headScript()->appendFile(
 
 
 <div class="demo-group">
-    <h3 class="heading">Student Completion and Transfer, Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</h3>
+    <h3 class="heading">Student Completion and Transfer</h3>
+    <p class="heading-notes">Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</p>
 
     <?= $this->ztbFormElement($form->get('pt_fminus7_headc')->setLabel('Unduplicated Headcount')) ?>
     <?= $this->ztbFormElement($form->get('pt_yminus7_degr')->setLabel('Number Completed Degree or Certificate')) ?>
