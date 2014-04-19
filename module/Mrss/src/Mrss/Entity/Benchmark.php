@@ -273,7 +273,6 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     /**
      * Implement the FormElementProviderInterface
      *
-     * @todo: different number types (int, percentage, float, etc)
      */
     public function getFormElement()
     {

@@ -570,6 +570,7 @@ class Excel
         // Activate the first sheet
         $spreadsheet->setActiveSheetIndex(0);
 
+
         $this->download($spreadsheet);
 
     }
@@ -637,7 +638,7 @@ class Excel
         SubObservation $subObservation
     ) {
         // Set the academic unit name
-        $sheet->setCellValue('B6', $subObservation->getName());
+        $sheet->setCellValue('B8', $subObservation->getName());
 
         // Now the data
         foreach ($this->getMrssSubObservationMap() as $cell => $dbColumn) {

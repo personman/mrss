@@ -19,7 +19,7 @@
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "*",
         "gedmo/doctrine-extensions": "2.3.*",
-        "phpexcel/phpexcel": "1.7.*",
+        "phpoffice/phpexcel": "1.8.*",
         "mwillbanks/zfc-twitter-bootstrap": "*",
         "bjyoungblood/bjy-authorize": "1.2.*",
         "goalio/goalio-mailservice": "0.*",
