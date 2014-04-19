@@ -2,6 +2,8 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\Benchmark;
+
 class ModelInjector
 {
     protected $serviceLocator;
@@ -15,7 +17,7 @@ class ModelInjector
     {
         $entity = $event->getEntity();
 
-        if ($entity instanceof \Mrss\Entity\Benchmark) {
+        if ($entity instanceof Benchmark) {
             $entity->setBenchmarkModel(
                 $this->serviceLocator->get('model.benchmark')
             );
