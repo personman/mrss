@@ -18,8 +18,6 @@ class ObservationController extends AbstractActionController
     {
         $observationId = $this->params('id');
         $ObservationModel = $this->getServiceLocator()->get('model.observation');
-        $BenchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmarkGroup');
 
         $benchmarkGroupId = $this->params('benchmarkGroupId');
         if (!empty($benchmarkGroupId)) {
@@ -34,7 +32,7 @@ class ObservationController extends AbstractActionController
 
         return array(
             'observation' => $observation,
-            'benchmarkGroups' => $BenchmarkGroupModel->findAll(),
+            'benchmarkGroups' => $this->currentStudy()->getBenchmarkGroups(),
             'benchmarkGroup' => $benchmarkGroup,
             'fields' => $this->getFields($observation->getYear(), $benchmarkGroup)
         );
@@ -215,10 +213,10 @@ class ObservationController extends AbstractActionController
 
         $year = $this->currentStudy()->getCurrentYear();
 
-        $ObservationModel = $this->getServiceLocator()->get('model.observation');
+        $observationModel = $this->getServiceLocator()->get('model.observation');
 
         /** @var \Mrss\Entity\Observation $observation */
-        $observation = $ObservationModel->findOne($college->getId(), $year);
+        $observation = $observationModel->findOne($college->getId(), $year);
 
         if (empty($observation)) {
             throw new \Exception('Unable to get current observation.');

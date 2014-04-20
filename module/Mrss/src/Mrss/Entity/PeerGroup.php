@@ -106,6 +106,7 @@ class PeerGroup
 
     /**
      * @param integer $year
+     * @return $this
      */
     public function setYear($year)
     {
