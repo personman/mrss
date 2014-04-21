@@ -105,7 +105,7 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['about']['pages']['nccet']);
 
             // Only show reports for workforce (for now)
-            unset($pages['reports']);
+            //unset($pages['reports']);
         }
 
         // Hide the partners page for non-MRSS sites
