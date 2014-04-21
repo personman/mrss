@@ -40,15 +40,18 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
             ->method('getFormElement')
             ->will($this->returnValue($formElementMock));
 
-        // Mock the fieldset provider (benchmark group)
         $provider = $this->getMock(
             'Mrss\Entity\BenchmarkGroup',
-            array('getElements')
+            array('getElements', 'getUseSubObservation')
         );
 
         $provider->expects($this->once())
             ->method('getElements')
             ->will($this->returnValue(array($benchmarkMock)));
+
+        $provider->expects($this->once())
+            ->method('getUseSubObservation')
+            ->will($this->returnValue(true));
 
         $form = $formBuilder->buildForm($provider, 2012);
 

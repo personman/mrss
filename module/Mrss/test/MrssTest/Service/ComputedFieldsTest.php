@@ -20,7 +20,7 @@ class ComputedFieldsTest extends TestCase
 
         $this->benchmarkMock = $this->getMock(
             'Mrss\Entity\Benchmark',
-            array('getEquation', 'getDbColumn')
+            array('getEquation', 'getDbColumn', 'getInputType')
         );
 
         $this->observationMock = $this->getMock(
@@ -84,9 +84,13 @@ class ComputedFieldsTest extends TestCase
             ->method('getDbColumn')
             ->will($this->returnValue('my_test_column'));
 
+        $this->benchmarkMock->expects($this->once())
+            ->method('getInputType')
+            ->will($this->returnValue('percent'));
+
         $this->observationMock->expects($this->once())
             ->method('set')
-            ->with('my_test_column', 4);
+            ->with('my_test_column', 400);
 
         $this->observationModelMock->expects($this->once())
             ->method('save');

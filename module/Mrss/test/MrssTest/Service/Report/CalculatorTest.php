@@ -7,6 +7,9 @@ use PHPUnit_Framework_TestCase;
 
 class CalculatorTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Calculator
+     */
     protected $calculator;
 
     public function setUp()
@@ -40,6 +43,26 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
         $value = $this->calculator->getValueForPercentile($percentile);
 
         $this->assertEquals($expected, $value);
+    }
+
+    public function testGetValueForPercentileBreakPointNOne()
+    {
+        $data = array(5);
+        $this->calculator->setData($data);
+
+        $value = $this->calculator->getValueForPercentile(50);
+
+        $this->assertEquals(5, $value);
+    }
+
+    public function testGetValueForPercentileBreakPointJInteger()
+    {
+        $data = array(50, 35, 20, 40, 90, 12, 4);
+        $this->calculator->setData($data);
+
+        $value = $this->calculator->getValueForPercentile(88);
+
+        $this->assertEquals(90, $value);
     }
 
     public function getBreakpointDataAndResults()
