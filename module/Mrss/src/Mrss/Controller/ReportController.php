@@ -84,6 +84,7 @@ class ReportController extends AbstractActionController
 
         $year = $this->getYearFromRouteOrStudy();
 
+        /** @var \Mrss\Entity\Observation $observation */
         $observation = $this->currentObservation($year);
         $reportData = $this->getReportService()->getSummaryReportData($observation);
 
@@ -336,6 +337,9 @@ class ReportController extends AbstractActionController
         return $this;
     }
 
+    /**
+     * @return Report
+     */
     public function getReportService()
     {
         if (empty($this->reportService)) {

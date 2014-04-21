@@ -1,4 +1,10 @@
 <?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
+<?php
+$this->headScript()->appendFile(
+    $this->chart()->getChartJsUri(),
+    'text/javascript'
+); ?>
+
 
 <h2>Peer Comparison Report</h2>
 
@@ -14,30 +20,45 @@
     <strong>Peer institutions:</strong> <?= implode(', ', $report['colleges']) ?>
 </p>
 
-<?php foreach ($report['sections'] as $section): ?>
-    <h3><?= $section['benchmark'] ?></h3>
+<div class="container-fluid">
+    <?php foreach ($report['sections'] as $section): ?>
 
-    <table class="table table-hover table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Institution</th>
-                <th>Benchmark</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($section['data'] as $institution => $value): ?>
-                <tr>
-                    <td>
-                        <?= $institution ?>
-                    </td>
-                    <td>
-                        <?= round($value) ?>
-                    </td>
-                </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
-<?php endforeach ?>
+        <div class="row-fluid">
+            <div class="span12">
+                <h3><?= $section['benchmark'] ?></h3>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Institution</th>
+                            <th>Benchmark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($section['data'] as $institution => $value): ?>
+                            <tr>
+                                <td>
+                                    <?= $institution ?>
+                                </td>
+                                <td>
+                                    <?= round($value) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="span6">
+                <?= $this->chart($section['chart']) ?>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div>
 
 <?php if (!empty($report['skipped'])): ?>
     <p>The following benchmarks are not included in the report because fewer than 5 or your selected peers reported data for them:</p>

@@ -90,6 +90,8 @@ class Report
 
         // Loop over benchmarks
         foreach ($study->getBenchmarksForYear($year) as $benchmark) {
+            /** @var Benchmark $benchmark */
+
             // Get all data points for this benchmark
             // Can't just pull from observations. have to consider subscriptions, too
             $data = $this->collectDataForBenchmark($benchmark, $year);
@@ -304,7 +306,6 @@ class Report
     public function getSummaryReportData(Observation $observation)
     {
         $config = $this->getSummaryReportConfig();
-        $year = $observation->getYear();
         $reportData = array();
 
         foreach ($config as $section) {
@@ -821,6 +822,81 @@ class Report
         return $chart;
     }
 
+    public function getPeerBarChart(Benchmark $benchmark, $data)
+    {
+        $title = $benchmark->getName();
+        //prd($data);
+
+        $chartData = array();
+        $chartXCategories = array();
+        foreach ($data as $name => $value) {
+            $value = round($value);
+
+            $label = $name;
+
+            $chartXCategories[] = $label;
+
+            // Your college
+            if (strlen($name) > 2) {
+                $dataLabelEnabled = true;
+                $color = '#002C57';
+            } else {
+                $dataLabelEnabled = false;
+                $color = '#0065A1';
+            }
+
+            $chartData[] = array(
+                'name' => $label,
+                'y' => $value,
+                'color' => $color,
+                'dataLabels' => array(
+                    'enabled' => $dataLabelEnabled
+                )
+            );
+        }
+
+        $series = array(
+            array(
+                'name' => 'Value',
+                'data' => $chartData
+            )
+        );
+
+
+        $chart = array(
+            'id' => 'chart_' . $benchmark->getDbColumn(),
+            'chart' => array(
+                'type' => 'column'
+            ),
+            'title' => array(
+                //'text' => $title,
+            ),
+            'xAxis' => array(
+                'categories' => $chartXCategories,
+                'tickLength' => 0,
+                //'title' => array(
+                //    'text' => 'Percentiles'
+                //)
+            ),
+            'yAxis' => array(
+                'title' => false,
+                'gridLineWidth' => 0
+            ),
+            'series' => $series,
+            'credits' => array(
+                'enabled' => false
+            ),
+            'legend' => false,
+            'plotOptions' => array(
+                'series' => array(
+                    'animation' => false
+                )
+            )
+        );
+
+        return $chart;
+    }
+
     public function getPercentileBreakpoints()
     {
         return array(10, 25, 50, 75, 90);
@@ -938,6 +1014,9 @@ class Report
             // Build the report data
             $data = array();
             foreach ($collegeEntities as $college) {
+                /** @var \Mrss\Entity\College $college */
+                /** @var \Mrss\Entity\Observation $observation */
+
                 $observation = $observations[$college->getId()];
                 $value = $observation->get($benchmark->getDbColumn());
 
@@ -961,7 +1040,8 @@ class Report
 
             $reportSection = array(
                 'benchmark' => $benchmark->getName(),
-                'data' => $data
+                'data' => $data,
+                'chart' => $this->getPeerBarChart($benchmark, $data)
             );
 
             $report['sections'][] = $reportSection;
@@ -971,7 +1051,7 @@ class Report
         return $report;
     }
 
-    public function sortAndLabelPeerData($data, $currentCollege)
+    public function sortAndLabelPeerData($data, College $currentCollege)
     {
         arsort($data);
         $dataWithLabels = array();
@@ -1031,10 +1111,9 @@ class Report
     /**
      * Takes a number and converts it to a-z,aa-zz,aaa-zzz, etc with uppercase option
      *
-     * @access	public
-     * @param	int	number to convert
-     * @param	bool	upper case the letter on return?
-     * @return	string	letters from number input
+     * @param int number to convert
+     * @param bool $uppercase Uppercase?
+     * @return string letters from number input
      */
 
     public function numberToLetter($num, $uppercase = true)
