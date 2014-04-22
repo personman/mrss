@@ -610,6 +610,11 @@ header {
     /*display: none;*/
 }
 
+#controls-captcha {
+    width: 465px;
+    background-color: #FFF;
+}
+
 /* Subscription form */
 form#payment #control-group-UPAY_SITE_ID,
 form#payment #control-group-EXT_TRANS_ID,
