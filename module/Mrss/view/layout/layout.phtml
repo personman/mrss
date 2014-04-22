@@ -89,7 +89,7 @@
 
 
 <?php if (empty($this->noWrapper)): ?>
-    <?php if ($this->zfcUserImpersonatorDisplayName()): ?>
+    <?php if (method_exists($this, 'zfcUserImpersonatorDisplayName') && $this->zfcUserImpersonatorDisplayName()): ?>
         <div class="impersonation">
             <span><a title="Unimpersonate" href="<?= $this->url('zfcuserimpersonate/unimpersonate') ?>">
                     <?= $this->zfcUserImpersonatorDisplayName() ?></a> is impersonating
