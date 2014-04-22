@@ -16,7 +16,7 @@
         "phing/phing": "2.5.*",
         "zf-commons/zfc-user": "0.*",
         "zf-commons/zfc-user-doctrine-orm": "*",
-        "mtudor/zfc-user-impersonate": "0.*",
+        "mtudor/zfc-user-impersonate": "dev-master",
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "*",
         "gedmo/doctrine-extensions": "2.3.*",
