@@ -182,4 +182,13 @@ class ObservationTest extends PHPUnit_Framework_TestCase
             array('tot_fte_counc_adv_staff', '')
         );
     }
+
+    public function testGetAllBenchmarks()
+    {
+        $observation = new Observation();
+
+        $this->assertTrue(
+            10 < count($observation->getAllBenchmarks())
+        );
+    }
 }
