@@ -101,6 +101,11 @@ return array(
                     'action' => array('account', 'accountedit'),
                     'roles' => array('user')
                 ),
+                array(
+                    'controller' => 'zfcuserimpersonate_adminController',
+                    'action' => 'unimpersonateUser',
+                    'roles' => array('user')
+                ),
                 // System admin
                 array(
                     'controller' => 'observations',
@@ -178,6 +183,11 @@ return array(
                 array(
                     'controller' => 'ipedsInstitutions',
                     'action' => 'import',
+                    'roles' => array('admin')
+                ),
+                array(
+                    'controller' => 'zfcuserimpersonate_adminController',
+                    'action' => 'impersonateUser',
                     'roles' => array('admin')
                 ),
                 // Since the background action is fired by console, lift guard

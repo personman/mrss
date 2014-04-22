@@ -37,14 +37,17 @@
                     <?php
                         $userList = array();
                         foreach ($subscription->getCollege()->getUsers() as $user):
-                            $item = $user->getFullName();
+                            $name = $user->getFullName();
 
                             // Wrap in a link
                             $url = $this->url(
                                 'users/edit',
                                 array('id' => $user->getId())
                             );
-                            $item = "<a href='$url'>$item</a>";
+                            $item = '<a title="Impersonate this user"
+                                href="/admin/user/impersonate/' . $user->getId()
+                                . '"><i class="icon icon-fire"></i></a> ';
+                            $item .= "<a href='$url'>$name</a>";
 
                             if ($access = $user->getLastAccess()) {
                                 $date = $access->format('Y-m-d H:i');
