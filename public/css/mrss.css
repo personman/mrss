@@ -242,3 +242,20 @@ ul.symbol-links {
 ul.symbol-links li.form {
     padding: 20px;
 }
+
+body #subscription legend {
+    border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    border-top:1px solid #13B2CD;
+    border-bottom:1px solid #13B2CD;
+    border-left:1px solid #13B2CD;
+    border-right:1px solid #13B2CD;
+    display:inline-block;
+    width:100%;
+    background-color:#13B2CD;
+    color:#FFFFFF;
+    margin-bottom:0px;
+    padding-left:10px;
+}

@@ -42,7 +42,7 @@ return array(
                     ),
                     'timeline' => array(
                         'label' => 'Timeline',
-                        'uri' => 'timeline'
+                        'uri' => '/timeline'
                     ),
                     /*array(
                         'label' => 'Testimonials',
