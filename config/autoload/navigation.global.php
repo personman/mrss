@@ -20,40 +20,18 @@ return array(
                 'label' => 'Home',
                 'route' => 'home'
             ),
-            'about' => array(
-                'label' => 'The Project',
+            'about2' => array(
                 'uri' => '#',
+                'label' => 'About Us',
                 'pages' => array(
-                    array(
+                    'overview' => array(
                         'label' => 'Project Overview',
                         'uri' => '/about'
-                    ),
-                    'benchmarks' => array(
-                        'label' => 'Benchmarks',
-                        'uri' => '/Benchmarks',
                     ),
                     'partners' => array(
                         'label' => 'Project Partners',
                         'uri' => '/partners'
                     ),
-                    'nccet' => array(
-                        'label' => 'NCCET',
-                        'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
-                    ),
-                    'timeline' => array(
-                        'label' => 'Timeline',
-                        'uri' => '/timeline'
-                    ),
-                    /*array(
-                        'label' => 'Testimonials',
-                        'uri' => '/testimonials'
-                    ),*/
-                )
-            ),
-            'about2' => array(
-                'uri' => '#',
-                'label' => 'About Us',
-                'pages' => array(
                     array(
                         'label' => 'The Benchmarking Institute',
                         'uri' => '/National-Higher-Education-Benchmarking-Institute'
@@ -68,6 +46,24 @@ return array(
                     )
 
                 ),
+            ),
+            'about' => array(
+                'label' => 'Benchmarks',
+                'uri' => '/Benchmarks',
+                'pages' => array(
+                    'benchmarks' => array(
+                        'label' => 'Benchmarks',
+                        'uri' => '/Benchmarks',
+                    ),
+                    'nccet' => array(
+                        'label' => 'NCCET',
+                        'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
+                    ),
+                    /*array(
+                        'label' => 'Testimonials',
+                        'uri' => '/testimonials'
+                    ),*/
+                )
             ),
             'data-entry' => array(
                 'label' => 'Data Entry',
@@ -94,6 +90,10 @@ return array(
                     )
                 )
             ),
+            'reports_preview' => array(
+                'label' => 'Reports',
+                'uri' => '/Membership-Benefits'
+            ),
             'subscribe' => array(
                 'label' => 'Join',
                 'route' => 'subscribe',
@@ -110,7 +110,11 @@ return array(
                     'confidentiality' => array(
                         'label' => 'Confidentiality',
                         'uri' => 'confidentiality'
-                    )
+                    ),
+                    'timeline' => array(
+                        'label' => 'Timeline',
+                        'uri' => '/timeline'
+                    ),
                 )
             ),
             'help' => array(
@@ -139,10 +143,11 @@ return array(
                 'label' => 'Your Account',
                 'route' => 'account'
             ),
-            'login' => array(
+            // There's now a login form in the header. no need for the link.
+            /*'login' => array(
                 'label' => 'Log In',
                 'route' => 'zfcuser/login'
-            ),
+            ),*/
             'logout' => array(
                 'label' => 'Log Out',
                 'route' => 'zfcuser/logout',

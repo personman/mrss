@@ -45,8 +45,11 @@ class NavigationFactory extends DefaultNavigationFactory
         $auth = $serviceLocator->get('zfcuser_auth_service');
         if ($auth->hasIdentity()) {
             // If the user is logged in, hide the login and subscription links
-            unset($pages['login']);
+            //unset($pages['login']);
             unset($pages['subscribe']);
+
+            // And the reports preview
+            unset($pages['reports_preview']);
 
             // Since they're logged in, also change the home page
             unset($pages['home']['route']);
@@ -113,13 +116,23 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['about']['pages']['partners']);
         }
 
-        // Don't show the glossary for MRSS yet
+        // MRSS
         if ($currentStudy->getId() == 2) {
+            // Don't show the glossary for MRSS yet
             unset($pages['help']['pages']['glossary']);
+
+            // Set the project name
+            $pages['about2']['pages']['overview']['label'] = 'Maximizing Resources';
+
+            unset($pages['about']['pages']);
         }
 
-        // Don't show the faq for workforce yet
+        // Workforce
         if ($currentStudy->getId() == 3) {
+            // Remove partners page
+            unset($pages['about2']['pages']['partners']);
+
+            // Don't show the faq for workforce yet
             unset($pages['help']['pages']['faq']);
         }
 
