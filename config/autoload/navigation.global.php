@@ -109,7 +109,7 @@ return array(
                     ),
                     'confidentiality' => array(
                         'label' => 'Confidentiality',
-                        'uri' => 'confidentiality'
+                        'uri' => '/confidentiality'
                     ),
                     'timeline' => array(
                         'label' => 'Timeline',
