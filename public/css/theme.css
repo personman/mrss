@@ -852,7 +852,7 @@ td.inputTypeAbbr {
 }
 
 #headerLoginForm form {
-    margin: none;
+    margin: 0px;
 }
 #headerLoginForm dl {
 

@@ -61,6 +61,8 @@
 
             <?php if(!$this->zfcUserIdentity()): ?>
                 <div id="headerLoginForm">
+                <? $form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
+                $form->get('submit')->setAttribute('class', 'btn btn-primary'); ?>
                 <?= $this->zfcUserLoginWidget() ?>
                 </div>
             <?php endif ?>
