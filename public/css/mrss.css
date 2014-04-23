@@ -275,3 +275,8 @@ body #subscription legend {
     margin-bottom:0px;
     padding-left:10px;
 }
+
+#headerLoginForm {
+    top: -9px;
+    right: -66px;
+}

@@ -437,7 +437,7 @@ h4 {
     position: relative;
 }
 
-#headerLoginForm {
+body #headerLoginForm {
     position: absolute;
     bottom: 0px;
     right: -72px;

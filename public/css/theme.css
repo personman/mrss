@@ -842,21 +842,16 @@ td.inputTypeAbbr {
 }
 
 #headerLoginForm {
+    position: absolute;
     width: 651px;
     float: right;
 }
-
 
 
 .navbar .container {
     position: relative;
 }
 
-#headerLoginForm {
-    position: absolute;
-    top: -9px;
-    right: -66px;
-}
 
 
 /* Hide the heading, forgot password link and errors */
