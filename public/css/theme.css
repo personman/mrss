@@ -453,6 +453,10 @@ header {
     }
 }
 @media (min-width: 980px) {
+    /** Above 980px width the login form shows in the header, so hide login link */
+    .headerLoginLink {
+        display: none;
+    }
 
 }
 @media (max-width: 979px) {
@@ -468,6 +472,12 @@ header {
 		color: #fff;
 		opacity: 0.7;
 	}
+
+    /* Below 979px width the menu collapses */
+    /* Hide the login form */
+    #headerLoginForm {
+        display: none;
+    }
 }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) { 

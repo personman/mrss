@@ -157,11 +157,11 @@ return array(
                     )
                 )
             ),
-            // There's now a login form in the header. no need for the link.
-            /*'login' => array(
-                'label' => 'Log In',
-                'route' => 'zfcuser/login'
-            ),*/
+            'login' => array(
+                'label' => 'Sign In',
+                'route' => 'zfcuser/login',
+                'class' => 'headerLoginLink'
+            ),
         ),
         'admin' => array(
             'dashboard' => array(
