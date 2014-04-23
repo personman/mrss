@@ -1,17 +1,20 @@
 <h1>Sign In</h1>
 
 <?php
-$form = $this->loginForm;
-$form->prepare();
-$form->setAttribute('action', $this->url('zfcuser/login'));
-$form->setAttribute('method', 'post');
-
-$form->get('submit')->setAttribute('class', 'btn btn-primary');
 
 // Redirect to /members
 if (empty($this->redirect)) {
     $this->redirect = '/members';
 }
+
+$form = $this->loginForm;
+$form->prepare();
+$form->setAttribute('action', $this->url('zfcuser/login') . '?redirect=' . $this->redirect);
+$form->setAttribute('method', 'post');
+
+$form->get('submit')->setAttribute('class', 'btn btn-primary');
+
+
 ?>
 
 <?php echo $this->form()->openTag($form) ?>
