@@ -846,6 +846,19 @@ td.inputTypeAbbr {
     float: right;
 }
 
+
+
+.navbar .container {
+    position: relative;
+}
+
+#headerLoginForm {
+    position: absolute;
+    top: -9px;
+    right: -66px;
+}
+
+
 /* Hide the heading, forgot password link and errors */
 #headerLoginForm h1, #headerLoginForm a, #headerLoginForm .help-inline {
     display: none;

@@ -433,6 +433,16 @@ h4 {
 
 }
 
+.navbar .container {
+    position: relative;
+}
+
+#headerLoginForm {
+    position: absolute;
+    bottom: 0px;
+    right: -72px;
+}
+
 #headerLoginForm dt {
     color: #AAA;
 }
