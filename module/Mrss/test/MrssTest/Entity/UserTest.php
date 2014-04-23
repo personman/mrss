@@ -39,11 +39,6 @@ class UserTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertNull(
-            $user->getDisplayName(),
-            '"display name" should initially be null'
-        );
-
-        $this->assertNull(
             $user->getPassword(),
             '"password" should initially be null'
         );
@@ -145,8 +140,11 @@ class UserTest extends PHPUnit_Framework_TestCase
         $user->setEmail($userData['email']);
         $this->assertEquals($userData['email'], $user->getEmail());
 
-        $user->setDisplayName($userData['displayName']);
-        $this->assertEquals($userData['displayName'], $user->getDisplayName());
+        $user->setDisplayName('test');
+        $user->setPrefix('Mr.');
+        $user->setFirstName('John');
+        $user->setLastName('Doe');
+        $this->assertEquals('Mr. John Doe', $user->getDisplayName());
 
         $user->setPassword($userData['password']);
         $this->assertEquals($userData['password'], $user->getPassword());
