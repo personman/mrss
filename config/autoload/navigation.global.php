@@ -141,17 +141,27 @@ return array(
             ),
             'account' => array(
                 'label' => 'Your Account',
-                'route' => 'account'
+                'route' => 'account',
+                'pages' => array(
+                    'home' => array(
+                        'label' => 'Member Home',
+                        'uri' => '/members'
+                    ),
+                    'account' => array(
+                        'label' => 'Manage Your Account',
+                        'route' => 'account',
+                    ),
+                    'logout' => array(
+                        'label' => 'Log Out',
+                        'route' => 'zfcuser/logout',
+                    )
+                )
             ),
             // There's now a login form in the header. no need for the link.
             /*'login' => array(
                 'label' => 'Log In',
                 'route' => 'zfcuser/login'
             ),*/
-            'logout' => array(
-                'label' => 'Log Out',
-                'route' => 'zfcuser/logout',
-            )
         ),
         'admin' => array(
             'dashboard' => array(

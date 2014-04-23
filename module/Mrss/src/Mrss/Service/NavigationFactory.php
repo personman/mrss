@@ -70,6 +70,11 @@ class NavigationFactory extends DefaultNavigationFactory
 
         // Add the data entry links (if they're logged in
         if ($auth->hasIdentity()) {
+            $user = $auth->getIdentity();
+            $name = $user->getPrefix() . ' ' . $user->getLastName();
+            $pages['account']['label'] = $name;
+
+
             if (!empty($currentStudy)) {
                 $dataEntryPages = array();
 
