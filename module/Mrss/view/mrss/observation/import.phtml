@@ -19,20 +19,29 @@
 
 <?php endif ?>
 
-<h2>Import Data</h2>
-
-<p><strong>Warning: If you have entered data in the web data collection instrument that is not contained in the excel form uploading the form to the website will overwrite the data on the web data collection instrument with the contents of the excel document including missing data.</strong></p>
+<h2>Download Excel File</h2>
 
 <p>
     <strong>Step 1:</strong>
-    <a href="<?= $this->url('data-entry/export') ?>">Export your current data as an
-    Excel file</a>. Data definitions are included.<br />
+    If you prefer collecting your data in an Excel spreadsheet, download this file.<br>
 
-    <strong>Step 2:</strong> Save the Excel file to your computer. Stop making any changes to the web data collection instrument until you have uploaded the Excel file to the website. Add your data to the Excel file on your computer.<br />
+    <strong>Step 2:</strong> Save the Excel spreadsheet to your computer. You should work exclusively on the website OR the Excel file.<br />
 
-    <strong>Step 3:</strong> Upload the updated file using the form below. If there
-    are any errors, the import will not be saved and the errors will be shown on the
-    next screen.
+</p>
+<p>
+    <div class="form-horizontal">
+    <div class="controls">
+        <a class="btn btn-primary" href="<?= $this->url('data-entry/export') ?>">Download</a>
+    </div>
+    </div>
+</p>
+<br>
+
+<h2>Upload Excel File</h2>
+<p>
+    <strong>Step 1:</strong> Complete the Excel file <?php if ($this->currentStudy()->getId() == 2): ?>including all the Form 2 pages (tabs) for your divisions<?php endif ?>.<br>
+    <strong>Step 2:</strong> Warning – Uploading the Excel file will overwrite any information you have entered on the website. Copy any information you have entered on the website into your Excel file and save.<br>
+    <strong>Step 3:</strong>  Upload the updated file using the form below. If there are any errors, the import will not be saved and the errors will be shown on the next screen.
 </p>
 
 <?= $this->ztbForm($this->form->prepare()) ?>

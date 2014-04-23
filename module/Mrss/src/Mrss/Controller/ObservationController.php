@@ -317,7 +317,8 @@ class ObservationController extends AbstractActionController
         $view = new ViewModel(
             array(
                 'benchmarkGroup' => $benchmarkGroup,
-                'observation' => $observation
+                'observation' => $observation,
+                'maxAcademicUnits' => 10
             )
         );
 

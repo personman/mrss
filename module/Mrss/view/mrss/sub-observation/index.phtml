@@ -16,8 +16,7 @@
     This form is collected at the for-credit academic unit level. Select a unit from the list
     to enter data or create a new unit using the button below.
 </div>
-
-<?php if (count($observation->getSubObservations()) <= 10): ?>
+<?php if (count($observation->getSubObservations()) < $maxAcademicUnits): ?>
 <a href="<?= $this->url(
     'data-entry/edit/subob',
     array('benchmarkGroup' => $benchmarkGroup->getId())
@@ -27,7 +26,7 @@
 </a>
 <?php else: ?>
     <p>
-        You have reached your maximum of 10 academic units.
+        You have reached your maximum of <?= $maxAcademicUnits ?> academic units.
         <a href="/contact">Contact us</a> if you have any questions.
     </p>
 <?php endif ?>
