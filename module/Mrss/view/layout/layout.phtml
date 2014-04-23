@@ -59,24 +59,11 @@
                 <?php endif ?>
             </a>
 
-            <div id="headerLoginForm">
-                <form action="/user/login" method="post">
-                    <dl class="zend_form">
-
-                        <dt><label for="identity">Email</label></dt>
-                        <dd><input name="identity" type="text" value=""></dd>
-
-                        <dt><label for="credential">Password</label></dt>
-                        <dd><input name="credential" type="password" value=""></dd>
-
-                        <input type="hidden" name="redirect" value="/members" />
-
-                        <dd><button type="submit" name="submit" class="btn&#x20;btn-primary" value="">Sign In</button></dd>
-                    </dl>
-
-                </form>
-
-            </div>
+            <?php if(!$this->zfcUserIdentity()): ?>
+                <div id="headerLoginForm">
+                <?= $this->zfcUserLoginWidget() ?>
+                </div>
+            <?php endif ?>
 
 
             <div class="nav-collapse collapse">

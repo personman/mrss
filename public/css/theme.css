@@ -842,10 +842,18 @@ td.inputTypeAbbr {
 }
 
 #headerLoginForm {
-    width: 600px;
+    width: 651px;
     float: right;
 }
 
+/* Hide the heading, forgot password link and errors */
+#headerLoginForm h1, #headerLoginForm a, #headerLoginForm .help-inline {
+    display: none;
+}
+
+#headerLoginForm form {
+    margin: none;
+}
 #headerLoginForm dl {
 
 }
@@ -853,13 +861,20 @@ td.inputTypeAbbr {
 #headerLoginForm dt {
     float: left;
     width: 70px;
+    text-align: right;
+    padding-top: 10px;
 }
 
 #headerLoginForm dd {
     float: left;
     width: 160px;
+    padding-top: 5px;
 }
 
 #headerLoginForm dd input {
     width: 150px;
+}
+
+#headerLoginForm button {
+    margin-top: 0px;
 }
