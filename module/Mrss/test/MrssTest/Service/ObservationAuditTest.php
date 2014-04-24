@@ -3,6 +3,7 @@
 namespace MrssTest\Service;
 
 use Mrss\Entity\Observation;
+use Mrss\Entity\User;
 use Mrss\Service\ObservationAudit;
 
 class ObservationAuditTest extends \PHPUnit_Framework_TestCase
@@ -97,23 +98,61 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
                         'new' => 33
                     )
                 )
+            ),
+            // Three (no changes)
+            array(
+                // $old
+                array(
+                    'inst_exec_num' => 22,
+                    'inst_o_cost' => 500,
+                    'op_exp_inst' => null
+                ),
+                // $new
+                array(
+                    'inst_exec_num' => 22,
+                    'inst_o_cost' => 500,
+                    'op_exp_inst' => null
+                ),
+                // $expectedChanges
+                array()
             )
         );
     }
 
-    /*public function testLogChanges($old, $new, $user, $impersonator)
+    /**
+     * @param $old
+     * @param $new
+     * @param $expectedChanges
+     * @internal param $user
+     * @internal param $impersonator
+     * @dataProvider getComparisons
+     */
+    public function testLogChanges($old, $new, $expectedChanges)
     {
+        $user = new User;
+        $impersonator = new User;
+
         $oldObservation = new Observation();
         $oldObservation->populate($old);
 
         $newObservation = new Observation();
         $newObservation->populate($new);
 
-        $this->service->logChanges(
-            $old,
-            $new,
+        $changeSet = $this->service->logChanges(
+            $oldObservation,
+            $newObservation,
             $user,
             $impersonator
         );
-    }*/
+
+        if (!empty($expectedChanges)) {
+            $this->assertSame($user, $changeSet->getUser());
+
+            $changes = $changeSet->getChanges();
+            $this->assertEquals(count($expectedChanges), count($changes));
+        } else {
+            $this->assertNull($changeSet);
+        }
+
+    }
 }
