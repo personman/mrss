@@ -7,6 +7,7 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\User;
 use Mrss\Entity\ChangeSet;
 use Mrss\Model\ChangeSet as ChangeSetModel;
+use Mrss\Model\Benchmark as BenchmarkModel;
 
 class ObservationAudit
 {
@@ -14,6 +15,11 @@ class ObservationAudit
      * @var ChangeSetModel
      */
     protected $changeSetModel;
+
+    /**
+     * @var BenchmarkModel
+     */
+    protected $benchmarkModel;
 
     /**
      * Compare two observations and log any changes to the database
@@ -30,13 +36,16 @@ class ObservationAudit
         User $user,
         $impersonator = null
     ) {
+        // Were there any changes?
         $changes = $this->compare($old, $new);
 
         $changeSet = null;
         if (!empty($changes)) {
+            // Create the changeSet
             $changeSet = new ChangeSet;
             $changeSet->setUser($user);
             $changeSet->setDate(new \DateTime('now'));
+            $changeSet->setObservation($new);
 
             if (!empty($impersonator)) {
                 $changeSet->setImpersonatingUser($impersonator);
@@ -45,13 +54,16 @@ class ObservationAudit
             // Create the change entities
             $changeEntities = array();
             foreach ($changes as $dbColumn => $change) {
-                if ($changeEntity = $this->getChangeEntity($dbColumn, $change)) {
+                $changeEntity = $this->getChangeEntity($dbColumn, $change);
+                if ($changeEntity) {
                     $changeEntity->setChangeSet($changeSet);
                     $changeEntities[] = $changeEntity;
                 }
             }
 
             $changeSet->setChanges($changeEntities);
+
+            $this->getChangeSetModel()->save($changeSet);
         }
 
         return $changeSet;
@@ -59,7 +71,17 @@ class ObservationAudit
 
     public function getChangeEntity($dbColumn, $change)
     {
-        $changeEntity = new Change();
+        $changeEntity = null;
+
+        // Find the benchmark
+        $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+
+        if (!empty($benchmark)) {
+            $changeEntity = new Change();
+            $changeEntity->setBenchmark($benchmark);
+            $changeEntity->setOldValue($change['old']);
+            $changeEntity->setNewValue($change['new']);
+        }
 
         return $changeEntity;
     }
@@ -94,5 +116,17 @@ class ObservationAudit
     public function getChangeSetModel()
     {
         return $this->changeSetModel;
+    }
+
+    public function setBenchmarkModel(BenchmarkModel $model)
+    {
+        $this->benchmarkModel = $model;
+
+        return $this;
+    }
+
+    public function getBenchmarkModel()
+    {
+        return $this->benchmarkModel;
     }
 }

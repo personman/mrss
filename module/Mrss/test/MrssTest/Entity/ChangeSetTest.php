@@ -54,5 +54,9 @@ class ChangeSetTest extends PHPUnit_Framework_TestCase
         $this->changeSet->setChanges($changes);
         $changesBack = $this->changeSet->getChanges();
         $this->assertSame($changes[0], $changesBack[0]);
+
+        $observation = $this->getMock('\Mrss\Entity\Observation');
+        $this->changeSet->setObservation($observation);
+        $this->assertSame($observation, $this->changeSet->getObservation());
     }
 }

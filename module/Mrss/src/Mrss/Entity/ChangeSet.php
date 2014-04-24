@@ -5,6 +5,7 @@ namespace Mrss\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Mrss\Entity\User;
 use Mrss\Entity\Change;
+use Mrss\Entity\Observation;
 
 /**
  * Entity to track Observation changes
@@ -22,6 +23,12 @@ class ChangeSet {
      * @ORM\Column(type="integer")
      */
     protected $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Observation", inversedBy="changes")
+     * @var Observation
+     */
+    protected $observation;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="changes")
@@ -57,6 +64,18 @@ class ChangeSet {
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setObservation(Observation $observation)
+    {
+        $this->observation = $observation;
+
+        return $this;
+    }
+
+    public function getObservation()
+    {
+        return $this->observation;
     }
 
     public function setUser(User $user)

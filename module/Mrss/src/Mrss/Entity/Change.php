@@ -4,6 +4,7 @@ namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mrss\Entity\ChangeSet;
+use Mrss\Entity\Benchmark;
 
 /**
  * Entity to track Observation changes
@@ -35,10 +36,11 @@ class Change {
      */
     protected $newValue;
 
-
     /**
-     * benchmark - link to benchmark id or key?
+     * @ORM\ManyToOne(targetEntity="Benchmark",)
+     * @var Benchmark
      */
+    protected $benchmark;
 
     /**
      * @param $id
@@ -90,5 +92,17 @@ class Change {
     public function getNewValue()
     {
         return $this->newValue;
+    }
+
+    public function setBenchmark(Benchmark $benchmark)
+    {
+        $this->benchmark = $benchmark;
+
+        return $this;
+    }
+
+    public function getBenchmark()
+    {
+        return $this->benchmark;
     }
 }

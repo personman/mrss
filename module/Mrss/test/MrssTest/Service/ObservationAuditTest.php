@@ -13,14 +13,43 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
      */
     protected $service;
 
+    protected $changeSetModel;
+
+    protected $benchmarkModel;
+
     public function setUp()
     {
         $this->service = new ObservationAudit();
+
+        // Mock the changeSet model
+        $this->changeSetModel = $this->getMock(
+            '\Mrss\Model\ChangeSet',
+            array('save')
+        );
+        $this->service->setChangeSetModel($this->changeSetModel);
+
+        // Mock the benchmark model and the benchmark it returns
+        $benchmarkMock = $this->getMock(
+            '\Mrss\Entity\Benchmark'
+        );
+
+        $this->benchmarkModel = $this->getMock(
+            '\Mrss\Model\Benchmark',
+            array('findOneByDbColumn')
+        );
+
+        $this->benchmarkModel->expects($this->any())
+            ->method('findOneByDbColumn')
+            ->will($this->returnValue($benchmarkMock));
+
+        $this->service->setBenchmarkModel($this->benchmarkModel);
+
     }
 
     public function tearDown()
     {
         unset($this->service);
+        unset($this->changeSetModel);
     }
 
 
@@ -137,6 +166,12 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
 
         $newObservation = new Observation();
         $newObservation->populate($new);
+
+        // Expect the save
+        if (!empty($expectedChanges)) {
+            $this->changeSetModel->expects($this->once())
+                ->method('save');
+        }
 
         $changeSet = $this->service->logChanges(
             $oldObservation,

@@ -43,6 +43,10 @@ class ChangeTest extends PHPUnit_Framework_TestCase
 
         $this->change->setNewValue(10);
         $this->assertEquals(10, $this->change->getNewValue());
+
+        $benchmark = $this->getMock('\Mrss\Entity\Benchmark');
+        $this->change->setBenchmark($benchmark);
+        $this->assertSame($benchmark, $this->change->getBenchmark());
     }
 
     protected function getChangeSetMock()
