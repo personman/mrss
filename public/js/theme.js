@@ -1,4 +1,8 @@
 $(function () {
+    // Tooltips
+    $('.infotip').tooltipster()
+
+
     $(window).scroll(function() {
         if ($(".navbar").offset().top>30) {
             $(".navbar-inner").addClass("sticky");
