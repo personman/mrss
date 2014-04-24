@@ -249,6 +249,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      * Handles subobservations, too.
      *
      * @param Observation $observation
+     * @return int
      */
     public function getBenchmarkCount(Observation $observation)
     {

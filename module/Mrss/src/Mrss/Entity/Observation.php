@@ -36,6 +36,7 @@ class Observation
     /**
      * @ORM\OneToMany(targetEntity="SubObservation", mappedBy="observation")
      * @ORM\OrderBy({"id" = "ASC"})
+     * @var SubObservation[]
      */
     protected $subObservations;
 
