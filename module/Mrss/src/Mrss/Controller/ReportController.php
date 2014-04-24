@@ -23,7 +23,7 @@ class ReportController extends AbstractActionController
     public function calculateAction()
     {
         ini_set('memory_limit', '512M');
-        set_time_limit(600);
+        set_time_limit(3600);
 
         $years = $this->getReportService()->getYearsWithSubscriptions();
         $yearToPrepare = $this->params()->fromRoute('year');
