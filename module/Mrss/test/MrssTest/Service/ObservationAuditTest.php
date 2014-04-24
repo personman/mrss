@@ -100,4 +100,20 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    /*public function testLogChanges($old, $new, $user, $impersonator)
+    {
+        $oldObservation = new Observation();
+        $oldObservation->populate($old);
+
+        $newObservation = new Observation();
+        $newObservation->populate($new);
+
+        $this->service->logChanges(
+            $old,
+            $new,
+            $user,
+            $impersonator
+        );
+    }*/
 }

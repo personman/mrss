@@ -9,6 +9,9 @@ use Mrss\Entity\Change;
 /**
  * Entity to track Observation changes
  *
+ * @todo: Maybe this should also store which study was edited since some fields can
+ * exist in mulitple studies.
+ *
  * @ORM\Entity
  * @ORM\Table(name="change_sets")
  */
