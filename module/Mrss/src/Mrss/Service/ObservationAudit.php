@@ -16,6 +16,8 @@ class ObservationAudit
     protected $changeSetModel;
 
     /**
+     * Compare two observations and log any changes to the database
+     *
      * @param Observation $old
      * @param Observation $new
      * @param User $user
