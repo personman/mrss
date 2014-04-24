@@ -948,7 +948,15 @@ class Report
     {
         $toExclude = $this->getBenchmarksToExcludeFromReport();
 
-        return in_array($benchmark->getDbColumn(), $toExclude);
+        $manualExclude = in_array($benchmark->getDbColumn(), $toExclude);
+
+        $inputTypesToExclude = array('radio');
+        $inputTypeExclude = in_array(
+            $benchmark->getInputType(),
+            $inputTypesToExclude
+        );
+
+        return ($manualExclude || $inputTypeExclude);
     }
 
     public function getOrdinal($number)
