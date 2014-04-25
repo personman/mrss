@@ -4,6 +4,7 @@ namespace MrssTest\Service;
 
 use Mrss\Entity\Observation;
 use Mrss\Entity\User;
+use Mrss\Entity\Study;
 use Mrss\Service\ObservationAudit;
 
 class ObservationAuditTest extends \PHPUnit_Framework_TestCase
@@ -45,6 +46,8 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
         $this->service->setBenchmarkModel($this->benchmarkModel);
 
         $this->service->setUser(new User());
+        $this->service->setImepersonator(new User());
+        $this->service->setStudy(new Study());
 
     }
 
@@ -155,13 +158,10 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
      * @param $new
      * @param $expectedChanges
      * @internal param $user
-     * @internal param $impersonator
      * @dataProvider getComparisons
      */
     public function testLogChanges($old, $new, $expectedChanges)
     {
-        $impersonator = new User;
-
         $oldObservation = new Observation();
         $oldObservation->populate($old);
 
@@ -176,8 +176,7 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
 
         $changeSet = $this->service->logChanges(
             $oldObservation,
-            $newObservation,
-            $impersonator
+            $newObservation
         );
 
         if (!empty($expectedChanges)) {

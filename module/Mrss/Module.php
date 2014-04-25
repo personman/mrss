@@ -335,8 +335,17 @@ class Module
                 },
                 'service.observationAudit' => function ($sm) {
                     $service = new \Mrss\Service\ObservationAudit;
-                    $user = $sm->get('zfcUserAuthentication')->getIdentity();
-                    $service->setUser($user);
+                    $userService = $sm->get('zfcUserAuthentication');
+
+                        $user = $userService->getIdentity();
+                        $service->setUser($user);
+
+                        $impersonator = null;
+                        if ($userService->isImpersonated()) {
+                            $impersonator = $userService
+                                ->getStorageForImpersonator()->read();
+                        }
+                        $service->setImepersonator($impersonator);
 
                     return $service;
                 },

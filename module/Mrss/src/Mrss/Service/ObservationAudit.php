@@ -25,7 +25,7 @@ class ObservationAudit
     /**
      * @var Study
      */
-    protected $currentStudy;
+    protected $study;
 
     /**
      * @var User
@@ -33,17 +33,21 @@ class ObservationAudit
     protected $user;
 
     /**
+     * @var User
+     */
+    protected $impersonator;
+
+    /**
      * Compare two observations and log any changes to the database
      *
      * @param Observation $old
      * @param Observation $new
-     * @param User|null $impersonator
+     * @internal param \Mrss\Entity\User|null $impersonator
      * @return ChangeSet|null
      */
     public function logChanges(
         Observation $old,
-        Observation $new,
-        $impersonator = null
+        Observation $new
     ) {
         // Were there any changes?
         $changes = $this->compare($old, $new);
@@ -55,8 +59,9 @@ class ObservationAudit
             $changeSet->setUser($this->getUser());
             $changeSet->setDate(new \DateTime('now'));
             $changeSet->setObservation($new);
+            $changeSet->setStudy($this->getStudy());
 
-            if (!empty($impersonator)) {
+            if ($impersonator = $this->getImpersonator()) {
                 $changeSet->setImpersonatingUser($impersonator);
             }
 
@@ -150,4 +155,29 @@ class ObservationAudit
     {
         return $this->user;
     }
+
+    public function setImepersonator(User $user)
+    {
+        $this->impersonator = $user;
+
+        return $this;
+    }
+
+    public function getImpersonator()
+    {
+        return $this->impersonator;
+    }
+
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
+    }
+
 }
