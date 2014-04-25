@@ -2466,4 +2466,17 @@ class Observation
             }
         }
     }
+
+    public function getAllBenchmarks()
+    {
+        $benchmarks = array();
+        $exclude = array('id', 'year', 'cipCode', 'college', 'subObservations');
+        foreach ($this as $key => $value) {
+            if (!in_array($key, $exclude)) {
+                $benchmarks[] = $key;
+            }
+        }
+
+        return $benchmarks;
+    }
 }
