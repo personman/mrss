@@ -44,6 +44,8 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
 
         $this->service->setBenchmarkModel($this->benchmarkModel);
 
+        $this->service->setUser(new User());
+
     }
 
     public function tearDown()
@@ -158,7 +160,6 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
      */
     public function testLogChanges($old, $new, $expectedChanges)
     {
-        $user = new User;
         $impersonator = new User;
 
         $oldObservation = new Observation();
@@ -176,12 +177,11 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
         $changeSet = $this->service->logChanges(
             $oldObservation,
             $newObservation,
-            $user,
             $impersonator
         );
 
         if (!empty($expectedChanges)) {
-            $this->assertSame($user, $changeSet->getUser());
+            $this->assertSame($this->service->getUser(), $changeSet->getUser());
 
             $changes = $changeSet->getChanges();
             $this->assertEquals(count($expectedChanges), count($changes));

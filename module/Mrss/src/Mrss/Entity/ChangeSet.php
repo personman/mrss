@@ -6,12 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Mrss\Entity\User;
 use Mrss\Entity\Change;
 use Mrss\Entity\Observation;
+use Mrss\Entity\Study;
 
 /**
  * Entity to track Observation changes
- *
- * @todo: Maybe this should also store which study was edited since some fields can
- * exist in mulitple studies.
  *
  * @ORM\Entity
  * @ORM\Table(name="change_sets")
@@ -31,11 +29,16 @@ class ChangeSet {
     protected $observation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="changes")
+     * @ORM\ManyToOne(targetEntity="Study")
+     * @var Study
+     */
+    protected $study;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="changes", nullable=true)
      * @var User
      */
     protected $user;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="User", nullable=true)
@@ -78,6 +81,18 @@ class ChangeSet {
         return $this->observation;
     }
 
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
+    }
+
     public function setUser(User $user)
     {
         $this->user = $user;
@@ -112,7 +127,7 @@ class ChangeSet {
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getDate()
     {

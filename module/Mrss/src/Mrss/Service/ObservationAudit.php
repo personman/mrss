@@ -3,6 +3,7 @@
 namespace Mrss\Service;
 
 use Mrss\Entity\Change;
+use Mrss\Entity\Study;
 use Mrss\Entity\Observation;
 use Mrss\Entity\User;
 use Mrss\Entity\ChangeSet;
@@ -22,18 +23,26 @@ class ObservationAudit
     protected $benchmarkModel;
 
     /**
+     * @var Study
+     */
+    protected $currentStudy;
+
+    /**
+     * @var User
+     */
+    protected $user;
+
+    /**
      * Compare two observations and log any changes to the database
      *
      * @param Observation $old
      * @param Observation $new
-     * @param User $user
      * @param User|null $impersonator
      * @return ChangeSet|null
      */
     public function logChanges(
         Observation $old,
         Observation $new,
-        User $user,
         $impersonator = null
     ) {
         // Were there any changes?
@@ -43,7 +52,7 @@ class ObservationAudit
         if (!empty($changes)) {
             // Create the changeSet
             $changeSet = new ChangeSet;
-            $changeSet->setUser($user);
+            $changeSet->setUser($this->getUser());
             $changeSet->setDate(new \DateTime('now'));
             $changeSet->setObservation($new);
 
@@ -128,5 +137,17 @@ class ObservationAudit
     public function getBenchmarkModel()
     {
         return $this->benchmarkModel;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
     }
 }

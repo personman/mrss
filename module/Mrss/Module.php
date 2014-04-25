@@ -332,6 +332,13 @@ class Module
 
                     return $service;
                 },
+                'service.observationAudit' => function ($sm) {
+                    $service = new \Mrss\Service\ObservationAudit;
+                    $user = $sm->get('zfcUserAuthentication')->getIdentity();
+                    $service->setUser($user);
+
+                    return $service;
+                },
                 'service.nhebisubscriptions' => function ($sm) {
                     $config = $sm->get('Config');
                     $service = new \Mrss\Service\NhebiSubscriptions();
