@@ -42,7 +42,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Please contact the Institutional Research, Institutional Effectiveness or Registrar's office for these data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Please contact your research office for these data.</p>
 
     <?= $this->ztbFormElement($form->get('ipeds_enr')) ?>
     <?= $this->ztbFormElement($form->get('ft_cr_head')) ?>
