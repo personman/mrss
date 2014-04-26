@@ -354,6 +354,7 @@ class Module
                     if ($impersonationService->isImpersonated()) {
                         $impersonator = $impersonationService
                             ->getStorageForImpersonator()->read();
+                        //prd($impersonator);
 
                         $service->setImpersonator($impersonator);
                     }

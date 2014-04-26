@@ -780,11 +780,23 @@ return array(
             ),
             'admin' => array(
                 'type' => 'Segment',
+                'may_terminate' => true,
                 'options' => array(
                     'route' => '/admin',
                     'defaults' => array(
                         'controller' => 'Admin',
                         'action' => 'dashboard'
+                    )
+                ),
+                'child_routes' => array(
+                    'changes' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/changes',
+                            'defaults' => array(
+                                'action' => 'changes'
+                            )
+                        )
                     )
                 )
             ),

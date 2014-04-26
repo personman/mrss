@@ -44,7 +44,12 @@ class ChangeSet {
     protected $impersonatingUser;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="text")
+     */
+    protected $editType;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $date;
 
@@ -119,6 +124,18 @@ class ChangeSet {
     public function getImpersonatingUser()
     {
         return $this->impersonatingUser;
+    }
+
+    public function setEditType($type)
+    {
+        $this->editType = $type;
+
+        return $this;
+    }
+
+    public function getEditType()
+    {
+        return $this->editType;
     }
 
     public function setDate(\DateTime $date)

@@ -26,6 +26,18 @@ class AdminController extends AbstractActionController
         );
     }
 
+    public function changesAction()
+    {
+        $currentStudy = $this->currentStudy();
+
+        $changeSetModel = $this->getServiceLocator()->get('model.changeSet');
+        $changeSets = $changeSetModel->findByStudy($currentStudy->getId());
+
+        return array(
+            'changeSets' => $changeSets
+        );
+    }
+
     protected function emailTest()
     {
         if (!empty($_GET['email'])) {

@@ -23,12 +23,23 @@ class ChangeSet extends AbstractModel
     }
 
     /**
-     * Find all systems, ordered by name
+     * Find all
      */
     public function findAll()
     {
         $c = $this->getRepository()->findAll();
         return $c;
+    }
+
+    public function findByStudy($studyId, $limit = 100)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'study' => $studyId
+            ),
+            array('date' => 'DESC'),
+            $limit
+        );
     }
 
 

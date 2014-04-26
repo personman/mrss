@@ -288,7 +288,7 @@ class ObservationController extends AbstractActionController
                 $ObservationModel->save($observation);
 
                 $this->getServiceLocator()->get('service.observationAudit')
-                    ->logChanges($oldObservation, $observation);
+                    ->logChanges($oldObservation, $observation, 'dataEntry');
 
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);

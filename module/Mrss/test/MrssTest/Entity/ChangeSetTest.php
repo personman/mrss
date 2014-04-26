@@ -62,5 +62,8 @@ class ChangeSetTest extends PHPUnit_Framework_TestCase
         $study = $this->getMock('\Mrss\Entity\Study');
         $this->changeSet->setStudy($study);
         $this->assertSame($study, $this->changeSet->getStudy());
+
+        $this->changeSet->setEditType('dataEntry');
+        $this->assertEquals('dataEntry', $this->changeSet->getEditType());
     }
 }

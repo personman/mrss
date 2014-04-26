@@ -176,7 +176,8 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
 
         $changeSet = $this->service->logChanges(
             $oldObservation,
-            $newObservation
+            $newObservation,
+            'dataEntry'
         );
 
         if (!empty($expectedChanges)) {

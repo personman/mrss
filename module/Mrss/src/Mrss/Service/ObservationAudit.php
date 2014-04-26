@@ -42,12 +42,14 @@ class ObservationAudit
      *
      * @param Observation $old
      * @param Observation $new
+     * @param string $editType
      * @internal param \Mrss\Entity\User|null $impersonator
      * @return ChangeSet|null
      */
     public function logChanges(
         Observation $old,
-        Observation $new
+        Observation $new,
+        $editType
     ) {
         // Were there any changes?
         $changes = $this->compare($old, $new);
@@ -60,9 +62,13 @@ class ObservationAudit
             $changeSet->setDate(new \DateTime('now'));
             $changeSet->setObservation($new);
             $changeSet->setStudy($this->getStudy());
+            $changeSet->setEditType($editType);
 
             if ($impersonator = $this->getImpersonator()) {
-                $changeSet->setImpersonatingUser($impersonator);
+                $em = $this->getBenchmarkModel()->getEntityManager();
+                $impersonatorRef = $em
+                    ->getReference('\Mrss\Entity\User', $impersonator->getId());
+                $changeSet->setImpersonatingUser($impersonatorRef);
             }
 
             // Create the change entities

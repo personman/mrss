@@ -896,3 +896,10 @@ td.inputTypeAbbr {
 #headerLoginForm button {
     margin-top: 0px;
 }
+
+.observationChanges .changeSet {
+    margin-bottom: 20px;
+}
+.observationChanges .changes {
+    margin-left: 40px;
+}
