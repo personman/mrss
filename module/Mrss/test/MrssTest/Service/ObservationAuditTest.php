@@ -30,18 +30,31 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
         $this->service->setChangeSetModel($this->changeSetModel);
 
         // Mock the benchmark model and the benchmark it returns
-        $benchmarkMock = $this->getMock(
-            '\Mrss\Entity\Benchmark'
+        $benchmarkMock = $this->getMock('\Mrss\Entity\Benchmark');
+
+        $emMock = $this->getMock(
+            'Doctrine\ORM\EntityManager',
+            array('getReference'),
+            array(),
+            '',
+            false
         );
+        $emMock->expects($this->any())
+            ->method('getReference')
+            ->will($this->returnValue(new User));
 
         $this->benchmarkModel = $this->getMock(
             '\Mrss\Model\Benchmark',
-            array('findOneByDbColumn')
+            array('findOneByDbColumn', 'getEntityManager')
         );
 
         $this->benchmarkModel->expects($this->any())
             ->method('findOneByDbColumn')
             ->will($this->returnValue($benchmarkMock));
+
+        $this->benchmarkModel->expects($this->any())
+            ->method('getEntityManager')
+            ->will($this->returnValue($emMock));
 
         $this->service->setBenchmarkModel($this->benchmarkModel);
 
