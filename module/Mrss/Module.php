@@ -25,7 +25,7 @@ class Module
             ->getEventManager()
             ->addEventListener(
                 array(\Doctrine\ORM\Events::postLoad),
-                new \Mrss\Service\ModelInjector($sm)
+                new Service\ModelInjector($sm)
             );
 
         // Log access time
@@ -88,7 +88,7 @@ class Module
                     // Prepare the importer with the db to import from and the em
                     $nccbpDb = $sm->get('nccbp-db');
                     $em = $sm->get('em');
-                    $importer = new \Mrss\Service\ImportNccbp($nccbpDb, $em);
+                    $importer = new Service\ImportNccbp($nccbpDb, $em);
 
                     // Inject the college Model
                     $collegeModel = $sm->get('model.college');
@@ -121,12 +121,12 @@ class Module
                     return $importer;
                 },
                 'import.nccwtp' => function ($sm) {
-                    $nccwtp = new \Mrss\Service\ImportNccwtp();
+                    $nccwtp = new Service\ImportNccwtp();
 
                     return $nccwtp;
                 },
                 'import.csv' => function ($sm) {
-                    $importer = new \Mrss\Service\ImportBenchmarks();
+                    $importer = new Service\ImportBenchmarks();
 
                     // Models
                     $benchmarkModel = $sm->get('model.benchmark');
@@ -140,7 +140,7 @@ class Module
                     return $importer;
                 },
                 'export' => function ($sm) {
-                    $exportService = new \Mrss\Service\DataExport();
+                    $exportService = new Service\DataExport();
 
                     $studyModel = $sm->get('model.study');
                     $exportService->setStudyModel($studyModel);
@@ -152,12 +152,12 @@ class Module
                 },
                 'export.nccbp' => function ($sm) {
                     $nccbpDb = $sm->get('nccbp-db');
-                    $exporter = new \Mrss\Service\ExportNccbp($nccbpDb);
+                    $exporter = new Service\ExportNccbp($nccbpDb);
 
                     return $exporter;
                 },
                 'export.users' => function ($sm) {
-                    $exporter = new \Mrss\Service\UserExport();
+                    $exporter = new Service\UserExport();
 
                     $subscriptionModel = $sm->get('model.subscription');
                     $exporter->setSubscriptionModel($subscriptionModel);
@@ -165,7 +165,7 @@ class Module
                     return $exporter;
                 },
                 'computedFields' => function ($sm) {
-                    $computedFields = new \Mrss\Service\ComputedFields();
+                    $computedFields = new Service\ComputedFields();
 
                     $benchmarkModel = $sm->get('model.benchmark');
                     $computedFields->setBenchmarkModel($benchmarkModel);
@@ -176,7 +176,7 @@ class Module
                     return $computedFields;
                 },
                 'validator.equation' => function ($sm) {
-                    $validator = new \Mrss\Validator\Equation(
+                    $validator = new Validator\Equation(
                         $sm->get('computedFields'),
                         $sm->get('model.benchmark')
                     );
@@ -186,7 +186,7 @@ class Module
                 // Perhaps there should be a generic model factory
                 // That injects the em
                 'model.user' => function ($sm) {
-                    $userModel = new \Mrss\Model\User();
+                    $userModel = new Model\User();
                     $em = $sm->get('em');
 
                     $userModel->setEntityManager($em);
@@ -194,7 +194,7 @@ class Module
                     return $userModel;
                 },
                 'model.college' => function ($sm) {
-                    $collegeModel = new \Mrss\Model\College;
+                    $collegeModel = new Model\College;
                     $em = $sm->get('em');
 
                     $collegeModel->setEntityManager($em);
@@ -202,7 +202,7 @@ class Module
                     return $collegeModel;
                 },
                 'model.ipedsInstitution' => function ($sm) {
-                    $model = new \Mrss\Model\IpedsInstitution;
+                    $model = new Model\IpedsInstitution;
                     $em = $sm->get('em');
 
                     $model->setEntityManager($em);
@@ -210,7 +210,7 @@ class Module
                     return $model;
                 },
                 'model.system' => function ($sm) {
-                    $systemModel = new \Mrss\Model\System;
+                    $systemModel = new Model\System;
                     $em = $sm->get('em');
 
                     $systemModel->setEntityManager($em);
@@ -218,7 +218,7 @@ class Module
                     return $systemModel;
                 },
                 'model.observation' => function ($sm) {
-                    $observationModel = new \Mrss\Model\Observation();
+                    $observationModel = new Model\Observation();
                     $em = $sm->get('em');
 
                     $observationModel->setEntityManager($em);
@@ -226,7 +226,7 @@ class Module
                     return $observationModel;
                 },
                 'model.subobservation' => function ($sm) {
-                    $model = new \Mrss\Model\SubObservation();
+                    $model = new Model\SubObservation();
                     $em = $sm->get('em');
 
                     $model->setEntityManager($em);
@@ -234,7 +234,7 @@ class Module
                     return $model;
                 },
                 'model.benchmark' => function ($sm) {
-                    $benchmarkModel = new \Mrss\Model\Benchmark();
+                    $benchmarkModel = new Model\Benchmark();
                     $em = $sm->get('em');
 
                     $benchmarkModel->setEntityManager($em);
@@ -242,7 +242,7 @@ class Module
                     return $benchmarkModel;
                 },
                 'model.benchmarkGroup' => function ($sm) {
-                    $benchmarkGroupkModel = new \Mrss\Model\BenchmarkGroup();
+                    $benchmarkGroupkModel = new Model\BenchmarkGroup();
                     $em = $sm->get('em');
 
                     $benchmarkGroupkModel->setEntityManager($em);
@@ -250,7 +250,7 @@ class Module
                     return $benchmarkGroupkModel;
                 },
                 'model.study' => function ($sm) {
-                    $studyModel = new \Mrss\Model\Study();
+                    $studyModel = new Model\Study();
                     $em = $sm->get('em');
 
                     $studyModel->setEntityManager($em);
@@ -258,7 +258,7 @@ class Module
                     return $studyModel;
                 },
                 'model.offerCode' => function ($sm) {
-                        $offerCodeModel = new \Mrss\Model\OfferCode();
+                        $offerCodeModel = new Model\OfferCode();
                         $em = $sm->get('em');
 
                         $offerCodeModel->setEntityManager($em);
@@ -266,7 +266,7 @@ class Module
                         return $offerCodeModel;
                     },
                 'model.subscription' => function ($sm) {
-                    $subscriptionModel = new \Mrss\Model\Subscription();
+                    $subscriptionModel = new Model\Subscription();
                     $em = $sm->get('em');
 
                     $subscriptionModel->setEntityManager($em);
@@ -274,7 +274,7 @@ class Module
                     return $subscriptionModel;
                 },
                 'model.setting' => function ($sm) {
-                    $settingModel = new \Mrss\Model\Setting();
+                    $settingModel = new Model\Setting();
                     $em = $sm->get('em');
 
                     $settingModel->setEntityManager($em);
@@ -282,7 +282,7 @@ class Module
                     return $settingModel;
                 },
                 'model.page' => function ($sm) {
-                    $pageModel = new \Mrss\Model\Page;
+                    $pageModel = new Model\Page;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
 
                     $pageModel->setEntityManager($em);
@@ -290,7 +290,7 @@ class Module
                     return $pageModel;
                 },
                 'model.percentile' => function ($sm) {
-                    $model = new \Mrss\Model\Percentile;
+                    $model = new Model\Percentile;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
 
                     $model->setEntityManager($em);
@@ -298,7 +298,7 @@ class Module
                     return $model;
                 },
                 'model.percentileRank' => function ($sm) {
-                    $model = new \Mrss\Model\PercentileRank;
+                    $model = new Model\PercentileRank;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
 
                     $model->setEntityManager($em);
@@ -306,7 +306,7 @@ class Module
                     return $model;
                 },
                 'model.payment' => function ($sm) {
-                    $paymentModel = new \Mrss\Model\Payment;
+                    $paymentModel = new Model\Payment;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
 
                     $paymentModel->setEntityManager($em);
@@ -314,7 +314,7 @@ class Module
                     return $paymentModel;
                 },
                 'service.routeCache' => function ($sm) {
-                    $routeCacheService = new \Mrss\Service\RouteCache;
+                    $routeCacheService = new Service\RouteCache;
 
                     // Inject the page model
                     $pageModel = $sm->get('model.page');
@@ -329,29 +329,36 @@ class Module
                     return $routeCacheService;
                 },
                 'service.formBuilder' => function ($sm) {
-                    $service = new \Mrss\Service\FormBuilder;
+                    $service = new Service\FormBuilder;
 
                     return $service;
                 },
                 'service.observationAudit' => function ($sm) {
-                    $service = new \Mrss\Service\ObservationAudit;
+                    $service = new Service\ObservationAudit;
                     $userService = $sm->get('zfcUserAuthentication');
+                    
+                    // Set the current User
+                    $user = $userService->getIdentity();
+                    $service->setUser($user);
 
-                        $user = $userService->getIdentity();
-                        $service->setUser($user);
+                    // If there's an admin impersonating this user, pass that
+                    $impersonator = null;
+                    if ($userService->isImpersonated()) {
+                        $impersonator = $userService
+                            ->getStorageForImpersonator()->read();
+                    }
+                    $service->setImpersonator($impersonator);
 
-                        $impersonator = null;
-                        if ($userService->isImpersonated()) {
-                            $impersonator = $userService
-                                ->getStorageForImpersonator()->read();
-                        }
-                        $service->setImepersonator($impersonator);
+                    // The current study
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+                    $service->setStudy($currentStudy);
 
                     return $service;
                 },
                 'service.nhebisubscriptions' => function ($sm) {
                     $config = $sm->get('Config');
-                    $service = new \Mrss\Service\NhebiSubscriptions();
+                    $service = new Service\NhebiSubscriptions();
 
                     if (!empty($config['nhebisubscriptions'])) {
                         $service->setConfiguration($config['nhebisubscriptions']);
@@ -364,14 +371,14 @@ class Module
                     //$file = dirname(__FILE__) . '/src/Mrss/Service/NhebiSubscriptions/Mrss.php';
                     //require $file;
 
-                    $service = new \Mrss\Service\NhebiSubscriptions\Mrss();
+                    $service = new Service\NhebiSubscriptions\Mrss();
                     $service->setCollegeModel($sm->get('model.college'));
                     $service->setSubscriptionModel($sm->get('model.subscription'));
 
                     return $service;
                 },
                 'service.report.calculator' => function ($sm) {
-                    $service = new \Mrss\Service\Report\Calculator();
+                    $service = new Service\Report\Calculator();
 
                     return $service;
                 },
@@ -379,7 +386,7 @@ class Module
                     $currentStudy = $sm->get('ControllerPluginManager')
                         ->get('currentStudy')->getCurrentStudy();
 
-                    $service = new \Mrss\Service\Report();
+                    $service = new Service\Report();
 
                     $service->setSubscriptionModel($sm->get('model.subscription'));
                     $service->setStudy($currentStudy);
@@ -425,7 +432,7 @@ class Module
         return array(
             'factories' => array(
                 'currentStudy' => function ($sm) {
-                    $plugin = new \Mrss\Controller\Plugin\CurrentStudy;
+                    $plugin = new Controller\Plugin\CurrentStudy;
 
                     // Inject the study model so we can look up the study entity
                     $studyModel = $sm->getServiceLocator()->get('model.study');
@@ -451,7 +458,7 @@ class Module
                     return $plugin;
                 },
                 'currentObservation' => function ($sm) {
-                    $plugin = new \Mrss\Controller\Plugin\CurrentObservation();
+                    $plugin = new Controller\Plugin\CurrentObservation();
                     $model = $sm->getServiceLocator()->get('model.observation');
                     $plugin->setObservationModel($model);
                     $plugin->setCurrentStudyPlugin($sm->get('currentStudy'));
@@ -460,7 +467,7 @@ class Module
                     return $plugin;
                 },
                 'currentCollege' => function ($sm) {
-                    $plugin = new \Mrss\Controller\Plugin\CurrentCollege();
+                    $plugin = new Controller\Plugin\CurrentCollege();
                     $model = $sm->getServiceLocator()->get('model.college');
                     $plugin->setCollegeModel($model);
                     $plugin->setuserPlugin($sm->get('zfcUserAuthentication'));
@@ -468,7 +475,7 @@ class Module
                     return $plugin;
                 },
                 'systemActiveCollege' => function ($sm) {
-                    $plugin = new \Mrss\Controller\Plugin\SystemActiveCollege;
+                    $plugin = new Controller\Plugin\SystemActiveCollege;
 
                     // Inject the session container
                     $session = new \Zend\Session\Container('system_admin');
@@ -505,13 +512,13 @@ class Module
                         ->get('currentStudy');
 
                     // Now inject the plugin
-                    $helper = new \Mrss\View\Helper\CurrentStudy;
+                    $helper = new View\Helper\CurrentStudy;
                     $helper->setPlugin($plugin);
 
                     return $helper;
                 },
                 'systemAdmin' => function($sm) {
-                    $helper = new \Mrss\View\Helper\SystemAdmin;
+                    $helper = new View\Helper\SystemAdmin;
 
                     // Inject the user
                     $auth = $sm->getServiceLocator()->get('zfcuser_auth_service');
@@ -533,12 +540,12 @@ class Module
                     return $helper;
                 },
                 'chart' => function($sm) {
-                    $helper = new \Mrss\View\Helper\Chart;
+                    $helper = new View\Helper\Chart;
 
                     return $helper;
                  },
                 'simpleFormElement' => function($sm) {
-                    $helper = new \Mrss\View\Helper\SimpleFormElement;
+                    $helper = new View\Helper\SimpleFormElement;
 
                     return $helper;
                 }

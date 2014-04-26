@@ -46,7 +46,7 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
         $this->service->setBenchmarkModel($this->benchmarkModel);
 
         $this->service->setUser(new User());
-        $this->service->setImepersonator(new User());
+        $this->service->setImpersonator(new User());
         $this->service->setStudy(new Study());
 
     }

@@ -156,7 +156,7 @@ class ObservationAudit
         return $this->user;
     }
 
-    public function setImepersonator(User $user)
+    public function setImpersonator(User $user)
     {
         $this->impersonator = $user;
 

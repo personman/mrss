@@ -3,10 +3,7 @@
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mrss\Entity\User;
-use Mrss\Entity\Change;
-use Mrss\Entity\Observation;
-use Mrss\Entity\Study;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Entity to track Observation changes
@@ -53,9 +50,14 @@ class ChangeSet {
 
     /**
      * @ORM\OneToMany(targetEntity="Change", mappedBy="changeSet")
+     * @var ArrayCollection|Change[]
      */
     protected $changes;
 
+    public function __construct()
+    {
+        $this->changes = new ArrayCollection;
+    }
 
     public function setId($id)
     {
