@@ -233,6 +233,14 @@ class Module
 
                     return $model;
                 },
+                'model.changeSet' => function ($sm) {
+                    $model = new Model\ChangeSet();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.benchmark' => function ($sm) {
                     $benchmarkModel = new Model\Benchmark();
                     $em = $sm->get('em');
@@ -335,24 +343,31 @@ class Module
                 },
                 'service.observationAudit' => function ($sm) {
                     $service = new Service\ObservationAudit;
-                    $userService = $sm->get('zfcUserAuthentication');
+                    $userService = $sm->get('zfcuser_auth_service');
+                    $impersonationService = $sm->get('zfcuserimpersonate_user_service');
                     
                     // Set the current User
                     $user = $userService->getIdentity();
                     $service->setUser($user);
 
                     // If there's an admin impersonating this user, pass that
-                    $impersonator = null;
-                    if ($userService->isImpersonated()) {
-                        $impersonator = $userService
+                    if ($impersonationService->isImpersonated()) {
+                        $impersonator = $impersonationService
                             ->getStorageForImpersonator()->read();
+
+                        $service->setImpersonator($impersonator);
                     }
-                    $service->setImpersonator($impersonator);
 
                     // The current study
                     $currentStudy = $sm->get('ControllerPluginManager')
                         ->get('currentStudy')->getCurrentStudy();
                     $service->setStudy($currentStudy);
+
+                    // The benchmark model
+                    $service->setBenchmarkModel($sm->get('model.benchmark'));
+
+                    // Changeset model
+                    $service->setChangeSetModel($sm->get('model.changeSet'));
 
                     return $service;
                 },

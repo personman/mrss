@@ -260,6 +260,7 @@ class ObservationController extends AbstractActionController
         }
 
         $observation = $this->getCurrentObservation();
+        $oldObservation = clone $observation;
 
         $formService = $this->getServiceLocator()
             ->get('service.formBuilder');
@@ -285,6 +286,9 @@ class ObservationController extends AbstractActionController
             if ($form->isValid()) {
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
+
+                $this->getServiceLocator()->get('service.observationAudit')
+                    ->logChanges($oldObservation, $observation);
 
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);

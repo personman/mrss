@@ -49,7 +49,7 @@ class ChangeSet {
     protected $date;
 
     /**
-     * @ORM\OneToMany(targetEntity="Change", mappedBy="changeSet")
+     * @ORM\OneToMany(targetEntity="Change", mappedBy="changeSet",cascade={"persist"})
      * @var ArrayCollection|Change[]
      */
     protected $changes;
