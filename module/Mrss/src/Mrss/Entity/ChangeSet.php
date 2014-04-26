@@ -32,13 +32,13 @@ class ChangeSet {
     protected $study;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="changes", nullable=true)
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="changes")
      * @var User
      */
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", nullable=true)
+     * @ORM\ManyToOne(targetEntity="User")
      * @var User
      */
     protected $impersonatingUser;
