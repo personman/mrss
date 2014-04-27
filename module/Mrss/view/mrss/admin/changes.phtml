@@ -16,14 +16,24 @@
                 (<?= $changeSet->getUser()->getCollege()->getName() ?>)
             </strong> changed
             <strong><?= count($changeSet->getChanges()) ?></strong>
-            <?= $field ?> on
-            <strong><?= $changeSet->getDate()->format('c') ?></strong>
+            <?= $field ?>
 
+            <?php if ($subObservation = $changeSet->getSubObservation()): ?>
+                in academic unit
+                <?= $subObservation->getName() ?>
+            <?php endif ?>
+
+            on
+            <strong><?= $changeSet->getDate()->format('Y-m-d H:i') ?></strong>
+
+            via
+            <?= $changeSet->getEditTypeLabel() ?>
+            
             <div class="changes">
                 <?php foreach ($changes as $change): ?>
                     <div class="change">
-                        Old: <?= $change->getOldValue() ?>
-                        New: <?= $change->getNewValue() ?>
+                        <?= $change->getOldValue() ?>
+                        => <?= $change->getNewValue() ?>
                         <strong><?= $change->getBenchmark()->getName() ?></strong>
                     </div>
 

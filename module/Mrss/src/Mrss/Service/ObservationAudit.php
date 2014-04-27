@@ -5,6 +5,7 @@ namespace Mrss\Service;
 use Mrss\Entity\Change;
 use Mrss\Entity\Study;
 use Mrss\Entity\Observation;
+use Mrss\Entity\SubObservation;
 use Mrss\Entity\User;
 use Mrss\Entity\ChangeSet;
 use Mrss\Model\ChangeSet as ChangeSetModel;
@@ -56,35 +57,76 @@ class ObservationAudit
 
         $changeSet = null;
         if (!empty($changes)) {
-            // Create the changeSet
-            $changeSet = new ChangeSet;
-            $changeSet->setUser($this->getUser());
-            $changeSet->setDate(new \DateTime('now'));
+            $changeSet = $this->getChangeSetEntity($changes);
             $changeSet->setObservation($new);
-            $changeSet->setStudy($this->getStudy());
             $changeSet->setEditType($editType);
-
-            if ($impersonator = $this->getImpersonator()) {
-                $em = $this->getBenchmarkModel()->getEntityManager();
-                $impersonatorRef = $em
-                    ->getReference('\Mrss\Entity\User', $impersonator->getId());
-                $changeSet->setImpersonatingUser($impersonatorRef);
-            }
-
-            // Create the change entities
-            $changeEntities = array();
-            foreach ($changes as $dbColumn => $change) {
-                $changeEntity = $this->getChangeEntity($dbColumn, $change);
-                if ($changeEntity) {
-                    $changeEntity->setChangeSet($changeSet);
-                    $changeEntities[] = $changeEntity;
-                }
-            }
-
-            $changeSet->setChanges($changeEntities);
 
             $this->getChangeSetModel()->save($changeSet);
         }
+
+        return $changeSet;
+    }
+
+    /**
+     * Compare two subObservations and log any changes to the database
+     *
+     * @param SubObservation $old
+     * @param SubObservation $new
+     * @param string $editType
+     * @internal param \Mrss\Entity\User|null $impersonator
+     * @return ChangeSet|null
+     */
+    public function logSubObservationChanges(
+        SubObservation $old,
+        SubObservation $new,
+        $editType
+    ) {
+        // Were there any changes?
+        $changes = $this->compare($old, $new);
+
+        $changeSet = null;
+        if (!empty($changes)) {
+            $changeSet = $this->getChangeSetEntity($changes);
+            $changeSet->setObservation($new->getObservation());
+            $changeSet->setSubObservation($new);
+            $changeSet->setEditType($editType);
+
+            $this->getChangeSetModel()->save($changeSet);
+        }
+
+        return $changeSet;
+    }
+
+    /**
+     * @param array $changes
+     * @return ChangeSet
+     */
+    public function getChangeSetEntity($changes)
+    {
+        // Create the changeSet
+        $changeSet = new ChangeSet;
+        $changeSet->setUser($this->getUser());
+        $changeSet->setDate(new \DateTime('now'));
+        $changeSet->setStudy($this->getStudy());
+
+        if ($impersonator = $this->getImpersonator()) {
+            $em = $this->getBenchmarkModel()->getEntityManager();
+            $impersonatorRef = $em
+                ->getReference('\Mrss\Entity\User', $impersonator->getId());
+            $changeSet->setImpersonatingUser($impersonatorRef);
+        }
+
+        // Create the change entities
+        $changeEntities = array();
+        foreach ($changes as $dbColumn => $change) {
+            $changeEntity = $this->getChangeEntity($dbColumn, $change);
+            if ($changeEntity) {
+                $changeEntity->setChangeSet($changeSet);
+                $changeEntities[] = $changeEntity;
+            }
+        }
+
+        $changeSet->setChanges($changeEntities);
 
         return $changeSet;
     }
@@ -106,7 +148,7 @@ class ObservationAudit
         return $changeEntity;
     }
 
-    public function compare(Observation $old, Observation $new)
+    public function compare($old, $new)
     {
         $changes = array();
 

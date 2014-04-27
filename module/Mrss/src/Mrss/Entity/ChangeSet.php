@@ -26,6 +26,12 @@ class ChangeSet {
     protected $observation;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SubObservation")
+     * @var SubObservation
+     */
+    protected $subObservation;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Study")
      * @var Study
      */
@@ -88,6 +94,18 @@ class ChangeSet {
         return $this->observation;
     }
 
+    public function setSubObservation(SubObservation $subObservation)
+    {
+        $this->subObservation = $subObservation;
+
+        return $this;
+    }
+
+    public function getSubObservation()
+    {
+        return $this->subObservation;
+    }
+
     public function setStudy(Study $study)
     {
         $this->study = $study;
@@ -136,6 +154,23 @@ class ChangeSet {
     public function getEditType()
     {
         return $this->editType;
+    }
+
+    public function getEditTypeLabel()
+    {
+        $type = $this->getEditType();
+
+        $map = array(
+            'dataEntry' => 'data entry form',
+            'excel' => 'Excel upload',
+            'adminEdit' => 'admin edit form'
+        );
+
+        if (!empty($map[$type])) {
+            $type = $map[$type];
+        }
+
+        return $type;
     }
 
     public function setDate(\DateTime $date)

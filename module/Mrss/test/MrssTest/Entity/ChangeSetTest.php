@@ -65,5 +65,30 @@ class ChangeSetTest extends PHPUnit_Framework_TestCase
 
         $this->changeSet->setEditType('dataEntry');
         $this->assertEquals('dataEntry', $this->changeSet->getEditType());
+
+        $subobservation = $this->getMock('\Mrss\Entity\SubObservation');
+        $this->changeSet->setSubObservation($subobservation);
+        $this->assertSame($subobservation, $this->changeSet->getSubObservation());
+    }
+
+    /**
+     * @param $editType
+     * @param $label
+     * @dataProvider getEditLabels
+     */
+    public function testEditTypeLabel($editType, $label)
+    {
+        $this->changeSet->setEditType($editType);
+        $this->assertEquals($label, $this->changeSet->getEditTypeLabel());
+    }
+
+    public function getEditLabels()
+    {
+        return array(
+            array('dataEntry', 'data entry form'),
+            array('excel', 'Excel upload'),
+            array('adminEdit', 'admin edit form'),
+            array('fakeOne', 'fakeOne')
+        );
     }
 }

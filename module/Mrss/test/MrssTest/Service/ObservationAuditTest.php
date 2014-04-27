@@ -3,6 +3,7 @@
 namespace MrssTest\Service;
 
 use Mrss\Entity\Observation;
+use Mrss\Entity\SubObservation;
 use Mrss\Entity\User;
 use Mrss\Entity\Study;
 use Mrss\Service\ObservationAudit;
@@ -68,6 +69,7 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->service);
         unset($this->changeSetModel);
+        unset($this->benchmarkModel);
     }
 
 
@@ -202,5 +204,62 @@ class ObservationAuditTest extends \PHPUnit_Framework_TestCase
             $this->assertNull($changeSet);
         }
 
+    }
+
+    /**
+     * @param $old
+     * @param $new
+     * @param $expectedChanges
+     * @dataProvider getSubObComparisons
+     */
+    public function testLogSubObservationChanges($old, $new, $expectedChanges)
+    {
+        $oldSubOb = new SubObservation;
+        $oldSubOb->populate($old);
+
+        $newSubOb = new SubObservation;
+        $newSubOb->populate($new);
+
+        $observation = new Observation;
+        $newSubOb->setObservation($observation);
+
+        $changeSet = $this->service->logSubObservationChanges(
+            $oldSubOb,
+            $newSubOb,
+            'dataEntry'
+        );
+
+        if (!empty($expectedChanges)) {
+            $this->assertSame($this->service->getUser(), $changeSet->getUser());
+
+            $changes = $changeSet->getChanges();
+            $this->assertEquals(count($expectedChanges), count($changes));
+        } else {
+            $this->assertNull($changeSet);
+        }
+
+    }
+
+    public function getSubObComparisons()
+    {
+        return array(
+            array(
+                // Old
+                array(
+                    'inst_cost_full_teaching' => 20
+                ),
+                // New
+                array(
+                    'inst_cost_full_teaching' => 21
+                ),
+                // Expected changes
+                array(
+                    'inst_cost_full_teaching' => array(
+                        'old' => 20,
+                        'new' => 21
+                    )
+                )
+            )
+        );
     }
 }
