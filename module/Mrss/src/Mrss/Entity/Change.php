@@ -27,12 +27,12 @@ class Change {
     protected $changeSet;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $oldValue;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $newValue;
 
@@ -77,9 +77,15 @@ class Change {
         return $this;
     }
 
-    public function getOldValue()
+    public function getOldValue($nullAsString = false)
     {
-        return $this->oldValue;
+        $oldValue = $this->oldValue;
+
+        if ($nullAsString && $oldValue === null) {
+            $oldValue = 'null';
+        }
+
+        return $oldValue;
     }
 
     public function setNewValue($value)
@@ -89,9 +95,15 @@ class Change {
         return $this;
     }
 
-    public function getNewValue()
+    public function getNewValue($nullAsString = false)
     {
-        return $this->newValue;
+        $newValue = $this->newValue;
+
+        if ($nullAsString && $newValue === null) {
+            $newValue = 'null';
+        }
+
+        return $newValue;
     }
 
     public function setBenchmark(Benchmark $benchmark)

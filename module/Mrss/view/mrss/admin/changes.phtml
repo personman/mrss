@@ -32,8 +32,8 @@
             <div class="changes">
                 <?php foreach ($changes as $change): ?>
                     <div class="change">
-                        <?= $change->getOldValue() ?>
-                        => <?= $change->getNewValue() ?>
+                        <?= $change->getOldValue(true) ?>
+                        => <?= $change->getNewValue(true) ?>
                         <strong><?= $change->getBenchmark()->getName() ?></strong>
                     </div>
 

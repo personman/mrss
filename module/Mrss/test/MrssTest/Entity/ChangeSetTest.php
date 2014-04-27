@@ -69,6 +69,7 @@ class ChangeSetTest extends PHPUnit_Framework_TestCase
         $subobservation = $this->getMock('\Mrss\Entity\SubObservation');
         $this->changeSet->setSubObservation($subobservation);
         $this->assertSame($subobservation, $this->changeSet->getSubObservation());
+
     }
 
     /**

@@ -34,6 +34,9 @@ class ChangeTest extends PHPUnit_Framework_TestCase
         $this->change->setId(1);
         $this->assertEquals(1, $this->change->getId());
 
+        $this->assertEquals('null', $this->change->getOldValue(true));
+        $this->assertEquals('null', $this->change->getNewValue(true));
+
         $changeSet = $this->getChangeSetMock();
         $this->change->setChangeSet($changeSet);
         $this->assertSame($changeSet, $this->change->getChangeSet());
