@@ -304,10 +304,6 @@ class Excel
                     continue;
                 }
 
-                $value = $sheet
-                    ->getCellByColumnAndRow($college['column'], $row->getRowIndex())
-                    ->getCalculatedValue();
-
                 $dbColumn = $sheet
                     ->getCellByColumnAndRow(
                         $this->dbColumnColumn,
@@ -319,6 +315,10 @@ class Excel
                 if (empty($dbColumn)) {
                     continue;
                 }
+
+                $value = $sheet
+                    ->getCellByColumnAndRow($college['column'], $row->getRowIndex())
+                    ->getCalculatedValue();
 
                 // Observation data
                 if ($emptyObservation->has($dbColumn)) {
@@ -638,7 +638,7 @@ class Excel
         SubObservation $subObservation
     ) {
         // Set the academic unit name
-        $sheet->setCellValue('B8', $subObservation->getName());
+        $sheet->setCellValue('B6', $subObservation->getName());
 
         // Now the data
         foreach ($this->getMrssSubObservationMap() as $cell => $dbColumn) {
