@@ -7,12 +7,17 @@
 
 $firstTableConfig = array(
     'Full-Time' => array(
-        'inst_cost_full_cred_hr'
+        'inst_cost_full_expend',
+        'inst_cost_full_num',
+        'inst_cost_full_cred_hr',
     ),
     'Part-Time or Adjunct' => array(
+        'inst_cost_part_expend',
+        'inst_cost_part_num',
         'inst_cost_part_cred_hr'
     )
 );
+$firstTableColClassConfig = array('expend', 'numFaculty', 'creditHours');
 
 $tableConfig = array(
     'Program Development' => array(
@@ -83,6 +88,11 @@ $this->headScript()->appendFile(
     <thead>
         <tr>
             <th></th>
+            <th>Salaries and Benefits</th>
+            <th>
+                Number of Annual<br>FTE Faculty / Staff
+                <span class="icon-info-sign infotip" title="FTE: Full-time equivalent"></span>
+            </th>
             <th>Number of Student Credit Hours</th>
         </tr>
     </thead>
@@ -94,7 +104,7 @@ $this->headScript()->appendFile(
             </td>
 
             <?php foreach ($row as $i => $field): ?>
-                <td id="<?= $colClassConfig[$i] ?>-<?= $field ?>"
+                <td id="<?= $firstTableColClassConfig[$i] ?>-<?= $field ?>"
                     class="grid-value">
                     <?= $this->simpleFormElement($form->get($field)) ?>
                 </td>
@@ -106,7 +116,7 @@ $this->headScript()->appendFile(
             <td colspan="<?= count($row) ?>">
 
                 <?php foreach ($row as $i => $field): ?>
-                    <div class="<?= $colClassConfig[$i] ?>-help">
+                    <div class="<?= $firstTableColClassConfig[$i] ?>-help">
                         <?= $form->get($field)->getOption('help-block') ?>
                     </div>
                 <?php endforeach ?>
