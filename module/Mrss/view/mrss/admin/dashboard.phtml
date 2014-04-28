@@ -1,3 +1,7 @@
+<?php /** @var \Mrss\Entity\Subscription[] $subscriptions */ ?>
+
+<a href="/admin/changes">Recent data changes</a>
+
 <h2>Subscriptions</h2>
 
 <?php if (count($subscriptions)): ?>
@@ -9,10 +13,13 @@
             <th>Users</th>
             <th>Subscription Date</th>
             <th>Payment Method</th>
+            <th>Payment Amount</th>
         </tr>
     </thead>
     <tbody>
+        <?php $total = 0; ?>
         <?php foreach ($subscriptions as $subscription): ?>
+            <?php $total += $subscription->getPaymentAmount() ?>
             <tr>
                 <td>
                     <a href="<?= $this->url(
@@ -67,13 +74,16 @@
                 <td>
                     <?= $subscription->getPaymentMethodForDisplay() ?>
                 </td>
+                <td>
+                    $<?= number_format($subscription->getPaymentAmount(), 2) ?>
+                </td>
             </tr>
         <?php endforeach ?>
     </tbody>
 </table>
 
 <p>
-    <?= count($subscriptions) ?> subscriptions.
+    <?= count($subscriptions) ?> subscriptions, $<?= number_format($total, 2) ?>.
 </p>
 
 <?php else: ?>

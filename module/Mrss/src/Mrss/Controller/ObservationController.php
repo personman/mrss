@@ -260,6 +260,7 @@ class ObservationController extends AbstractActionController
         }
 
         $observation = $this->getCurrentObservation();
+        $oldObservation = clone $observation;
 
         $formService = $this->getServiceLocator()
             ->get('service.formBuilder');
@@ -285,6 +286,9 @@ class ObservationController extends AbstractActionController
             if ($form->isValid()) {
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
+
+                $this->getServiceLocator()->get('service.observationAudit')
+                    ->logChanges($oldObservation, $observation, 'dataEntry');
 
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
@@ -420,6 +424,9 @@ class ObservationController extends AbstractActionController
                         // Now we actually save the data to the observation
                         $observation = $this->getCurrentObservationByIpeds($ipeds);
 
+                        // Clone for logging
+                        $oldObservation = clone $observation;
+
                         // Handle any subobservations
                         if (!empty($data['subobservations'])) {
                             $this->saveSubObservations(
@@ -431,12 +438,17 @@ class ObservationController extends AbstractActionController
                         }
 
                         foreach ($data as $column => $value) {
+                            if ($column == 'subobservations') {
+                                continue;
+                            }
+
                             try {
                                 $observation->set($column, $value);
                             } catch (\Exception $exception) {
                                 $this->flashMessenger()->addErrorMessage(
                                     'There was a problem importing your file. ' .
-                                    'Please try again or contact us.'
+                                    'Please try again or contact us. ' .
+                                    $exception->getMessage()
                                 );
 
                                 return $this->redirect()->toRoute('data-entry/import');
@@ -471,6 +483,10 @@ class ObservationController extends AbstractActionController
 
             // How did that go?
             if (empty($errorMessages)) {
+                // Log any changes
+                $this->getServiceLocator()->get('service.observationAudit')
+                    ->logChanges($oldObservation, $observation, 'excel');
+
                 // No errors, time to save to the db
                 $this->getServiceLocator()->get('em')->flush();
                 $this->flashMessenger()->addSuccessMessage("Data imported.");
@@ -504,11 +520,19 @@ class ObservationController extends AbstractActionController
                 $subObservation = $subObservations[$i];
             }
 
+            // Clone for logging
+            $oldSubObservation = clone $subObservation;
+
+            // Set the data values
             foreach ($subObData as $dbColumn => $value) {
                 if ($subObservation->has($dbColumn)) {
                     $subObservation->set($dbColumn, $value);
                 }
             }
+
+            // Log any changes
+            $this->getServiceLocator()->get('service.observationAudit')
+                ->logSubObservationChanges($oldSubObservation, $subObservation, 'excel');
 
             // Save subobservation
             $subObservationModel->save($subObservation);

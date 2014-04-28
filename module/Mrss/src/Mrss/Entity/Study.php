@@ -4,7 +4,7 @@ namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilter;
-
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Study/project
  *
@@ -40,7 +40,7 @@ class Study
     /**
      * @ORM\OneToMany(targetEntity="BenchmarkGroup", mappedBy="study")
      * @ORM\OrderBy({"sequence" = "ASC"})
-     * @var Mrss\Entity\BenchmarkGroup[]
+     * @var \Mrss\Entity\BenchmarkGroup[]
      */
     protected $benchmarkGroups;
 
@@ -107,8 +107,8 @@ class Study
 
     public function __construct()
     {
-        $this->benchmarkGroups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->offerCodes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->benchmarkGroups = new ArrayCollection();
+        $this->offerCodes = new ArrayCollection();
     }
 
     public function getId()

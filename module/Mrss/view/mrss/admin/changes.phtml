@@ -1,0 +1,47 @@
+<h2>Recent Data Changes</h2>
+
+<div class="observationChanges">
+    <?php foreach ($changeSets as $changeSet): ?>
+        <?php /** \Mrss\Entity\ChangeSet $changeSet */
+            $changes = $changeSet->getChanges();
+            $field = (count($changeSet->getChanges()) == 1) ? 'field' : 'fields'; ?>
+        <div class="changeSet">
+            <?php if ($impersonator = $changeSet->getImpersonatingUser()): ?>
+                <strong>
+                    <?= $impersonator->getFullName() ?>, impersonating
+                </strong>
+            <?php endif ?>
+            <strong>
+                <?= $changeSet->getUser()->getFullName() ?>
+                (<?= $changeSet->getUser()->getCollege()->getName() ?>)
+            </strong> changed
+            <strong><?= count($changeSet->getChanges()) ?></strong>
+            <?= $field ?>
+
+            <?php if ($subObservation = $changeSet->getSubObservation()): ?>
+                in academic unit
+                <?= $subObservation->getName() ?>
+            <?php endif ?>
+
+            on
+            <strong><?= $changeSet->getDate()->format('Y-m-d H:i') ?></strong>
+
+            via
+            <?= $changeSet->getEditTypeLabel() ?>
+
+            <div class="changes">
+                <?php foreach ($changes as $change): ?>
+                    <div class="change">
+                        <?= $change->getOldValue(true) ?>
+                        => <?= $change->getNewValue(true) ?>
+                        <strong><?= $change->getBenchmark()->getName() ?></strong>
+                    </div>
+
+                <?php endforeach ?>
+
+            </div>
+        </div>
+
+    <?php endforeach ?>
+</div>
+

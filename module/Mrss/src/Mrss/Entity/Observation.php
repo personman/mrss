@@ -151,19 +151,11 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_part_total_expend;
 
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_other_total_expend;
-
     /** @ORM\Column(type="integer", nullable=true) */
     protected $inst_full_total_num;
 
-
-
     /** @ORM\Column(type="integer", nullable=true) */
     protected $inst_part_total_num;
-
-    /** @ORM\Column(type="integer", nullable=true) */
-    protected $inst_other_total_num;
 
 
     // MRSS Form 2
@@ -2465,5 +2457,18 @@ class Observation
                 $this->set($key, $value);
             }
         }
+    }
+
+    public function getAllBenchmarks()
+    {
+        $benchmarks = array();
+        $exclude = array('id', 'year', 'cipCode', 'college', 'subObservations');
+        foreach ($this as $key => $value) {
+            if (!in_array($key, $exclude)) {
+                $benchmarks[] = $key;
+            }
+        }
+
+        return $benchmarks;
     }
 }

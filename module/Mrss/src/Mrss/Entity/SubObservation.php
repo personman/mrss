@@ -201,4 +201,18 @@ class SubObservation
             }
         }
     }
+
+    public function getAllBenchmarks()
+    {
+        $benchmarks = array();
+        $exclude = array('id', 'observation');
+        foreach ($this as $key => $value) {
+            if (!in_array($key, $exclude)) {
+                $benchmarks[] = $key;
+            }
+        }
+
+        return $benchmarks;
+    }
+
 }

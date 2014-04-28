@@ -45,6 +45,9 @@ class SubObservationController extends AbstractActionController
             $subObservation = new SubObservation();
         }
 
+        // Clone for audit trail comparison
+        $oldSubObservation = clone $subObservation;
+
         // Bind it to the form
         $form->bind($subObservation);
 
@@ -61,6 +64,11 @@ class SubObservationController extends AbstractActionController
             if ($form->isValid()) {
                 $subObservation->setObservation($observation);
                 $subObModel->save($subObservation);
+
+                // Log changes
+                $this->getServiceLocator()->get('service.observationAudit')
+                    ->logSubObservationChanges($oldSubObservation, $subObservation, 'dataEntry');
+
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Data saved.');
