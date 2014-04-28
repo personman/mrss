@@ -90,7 +90,8 @@ $this->headScript()->appendFile(
             </td>
 
             <?php foreach ($row as $i => $field): ?>
-                <td id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                <td id="<?= $colClassConfig[$i] ?>-<?= $field ?>"
+                    class="grid-value">
                     <?= $this->simpleFormElement($form->get($field)) ?>
                 </td>
             <?php endforeach ?>
