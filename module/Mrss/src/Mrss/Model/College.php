@@ -93,6 +93,34 @@ class College extends AbstractModel
             );
         }
 
+        // Filter by faculty unionized
+        if ($peerGroup->getFacultyUnionized()) {
+            $qb->andWhere(
+                $qb->expr()->in(
+                    'o.institutional_demographics_faculty_unionized',
+                    ':facultyUnionized'
+                )
+            );
+            $qb->setParameter(
+                'facultyUnionized',
+                $peerGroup->getFacultyUnionized()
+            );
+        }
+
+        // Filter by staff unionized
+        if ($peerGroup->getStaffUnionized()) {
+            $qb->andWhere(
+                $qb->expr()->in(
+                    'o.institutional_demographics_staff_unionized',
+                    ':staffUnionized'
+                )
+            );
+            $qb->setParameter(
+                'staffUnionized',
+                $peerGroup->getStaffUnionized()
+            );
+        }
+
         // Filter by workforce enrollment
         if ($peerGroup->getWorkforceEnrollment()) {
             $qb->andWhere(

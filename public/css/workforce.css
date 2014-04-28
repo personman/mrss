@@ -446,3 +446,10 @@ body #headerLoginForm {
 #headerLoginForm dt {
     color: #AAA;
 }
+
+
+/** Peer comparison form **/
+#control-group-facultyUnionized,
+#control-group-staffUnionized {
+    display: none;
+}

@@ -36,6 +36,12 @@ class PeerGroup
     protected $environments;
 
     /** @ORM\Column(type="string") */
+    protected $facultyUnionized;
+
+    /** @ORM\Column(type="string") */
+    protected $staffUnionized;
+
+    /** @ORM\Column(type="string") */
     protected $workforceEnrollment;
 
     /** @ORM\Column(type="string") */
@@ -73,6 +79,30 @@ class PeerGroup
     public function getEnvironments()
     {
         return $this->environments;
+    }
+
+    public function setFacultyUnionized($facultyUnionized)
+    {
+        $this->facultyUnionized = $facultyUnionized;
+
+        return $this;
+    }
+
+    public function getFacultyUnionized()
+    {
+        return $this->facultyUnionized;
+    }
+
+    public function setStaffUnionized($staffUnionized)
+    {
+        $this->staffUnionized = $staffUnionized;
+
+        return $this;
+    }
+
+    public function getStaffUnionized()
+    {
+        return $this->staffUnionized;
     }
 
     /**
@@ -370,7 +400,9 @@ class PeerGroup
             $this->getWorkforceRevenue() ||
             $this->getServiceAreaPopulation() ||
             $this->getServiceAreaUnemployment() ||
-            $this->getServiceAreaMedianIncome()
+            $this->getServiceAreaMedianIncome() ||
+            $this->getFacultyUnionized() ||
+            $this->getStaffUnionized()
         );
     }
 }

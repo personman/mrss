@@ -171,16 +171,24 @@ class ReportController extends AbstractActionController
 
         $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\PeerGroup'));
         $form->bind($peerGroup);
+
         if ($this->getRequest()->isPost()) {
             $postData = $this->params()->fromPost();
 
             // Handle empty multiselects
-            if (empty($postData['states'])) {
-                $postData['states'] = array();
+            $multiselects = array(
+                'states',
+                'environments',
+                'facultyUnionized',
+                'staffUnionized'
+            );
+
+            foreach ($multiselects as $multiselect) {
+                if (empty($postData[$multiselect])) {
+                    $postData[$multiselect] = array();
+                }
             }
-            if (empty($postData['environments'])) {
-                $postData['environments'] = array();
-            }
+
             $form->setData($postData);
 
             if ($form->isValid()) {

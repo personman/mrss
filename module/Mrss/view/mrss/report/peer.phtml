@@ -1,3 +1,5 @@
+<?php /** @var \Mrss\Entity\PeerGroup $peerGroup */ ?>
+
 <?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
 
 <?php
@@ -34,6 +36,20 @@ $form->setAttribute('action', $this->url('reports/peer'));
                 <p>
                     <strong>Campus Environment(s):</strong>
                     <?= implode(', ', $peerGroup->getEnvironments()) ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getFacultyUnionized()): ?>
+                <p>
+                    <strong>Faculty Unionized:</strong>
+                    <?= implode(', ', $peerGroup->getFacultyUnionized()) ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getStaffUnionized()): ?>
+                <p>
+                    <strong>Staff Unionized:</strong>
+                    <?= implode(', ', $peerGroup->getStaffUnionized()) ?>
                 </p>
             <?php endif ?>
 

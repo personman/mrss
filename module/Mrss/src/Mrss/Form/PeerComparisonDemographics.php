@@ -49,6 +49,44 @@ class PeerComparisonDemographics extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'facultyUnionized',
+                'type' => 'Select',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Faculty Unionized'
+                ),
+                'attributes' => array(
+                    'id' => 'facultyUnionized',
+                    'options' => array(
+                        'Yes' => 'Yes',
+                        'No' => 'No'
+                    ),
+                    'multiple' => 'multiple'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'staffUnionized',
+                'type' => 'Select',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Staff Unionized'
+                ),
+                'attributes' => array(
+                    'id' => 'staffUnionized',
+                    'options' => array(
+                        'Yes' => 'Yes',
+                        'No' => 'No'
+                    ),
+                    'multiple' => 'multiple'
+                )
+            )
+        );
+
         // @todo: % of Workforce Training Enrollment of Total
 
         $this->add(
@@ -142,6 +180,14 @@ class PeerComparisonDemographics extends AbstractForm
         $environment = new Input('environments');
         $environment->setRequired(false);
         $filter->add($environment);
+
+        $facultyUnionized = new Input('facultyUnionized');
+        $facultyUnionized->setRequired(false);
+        $filter->add($facultyUnionized);
+
+        $staffUnionized = new Input('staffUnionized');
+        $staffUnionized->setRequired(false);
+        $filter->add($staffUnionized);
 
         $enrollment = new Input('workforceEnrollment');
         $enrollment->setRequired(false);

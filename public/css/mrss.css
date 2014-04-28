@@ -280,3 +280,9 @@ body #subscription legend {
     top: -9px;
     right: -66px;
 }
+
+/** Hide some peer comparison fields **/
+#control-group-workforceEnrollment,
+#control-group-workforceRevenue {
+    display: none;
+}
