@@ -1,6 +1,8 @@
 <?php
-/**
+/**z
  * This is a special data-entry template that displays this form as a table
+ * @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup
+ * @var \Zend\Form\Form $form
  */
 
 $firstTableConfig = array(
@@ -79,8 +81,10 @@ $this->headScript()->appendFile(
 
 <table class="table table-condensed table-bordered data-entry-grid">
     <thead>
-        <th></th>
-        <th>Number of Student Credit Hours</th>
+        <tr>
+            <th></th>
+            <th>Number of Student Credit Hours</th>
+        </tr>
     </thead>
     <tbody>
     <?php foreach ($firstTableConfig as $label => $row): ?>
