@@ -2,7 +2,6 @@
 
 namespace Mrss\Form;
 
-use Mrss\Form\AbstractForm;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
 use Zend\Validator\Regex;

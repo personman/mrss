@@ -58,6 +58,7 @@ class PeerGroup
 
     /**
      * @param mixed $environments
+     * @return $this
      */
     public function setEnvironments($environments)
     {
@@ -76,6 +77,7 @@ class PeerGroup
 
     /**
      * @param mixed $id
+     * @return $this
      */
     public function setId($id)
     {
@@ -125,6 +127,7 @@ class PeerGroup
 
     /**
      * @param mixed $name
+     * @return $this
      */
     public function setName($name)
     {
@@ -143,6 +146,7 @@ class PeerGroup
 
     /**
      * @param mixed $serviceAreaMedianIncome
+     * @return $this
      */
     public function setServiceAreaMedianIncome($serviceAreaMedianIncome)
     {
@@ -152,6 +156,7 @@ class PeerGroup
     }
 
     /**
+     * @param string $type
      * @return mixed
      */
     public function getServiceAreaMedianIncome($type = 'range')
@@ -170,6 +175,7 @@ class PeerGroup
 
     /**
      * @param mixed $serviceAreaPopulation
+     * @return $this
      */
     public function setServiceAreaPopulation($serviceAreaPopulation)
     {
@@ -179,6 +185,7 @@ class PeerGroup
     }
 
     /**
+     * @param string $type
      * @return mixed
      */
     public function getServiceAreaPopulation($type = 'range')
@@ -197,6 +204,7 @@ class PeerGroup
 
     /**
      * @param mixed $serviceAreaUnemployment
+     * @return $this
      */
     public function setServiceAreaUnemployment($serviceAreaUnemployment)
     {
@@ -206,6 +214,7 @@ class PeerGroup
     }
 
     /**
+     * @param string $type
      * @return mixed
      */
     public function getServiceAreaUnemployment($type = 'range')
@@ -223,6 +232,7 @@ class PeerGroup
 
     /**
      * @param array $states
+     * @return $this
      */
     public function setStates($states)
     {
@@ -249,6 +259,7 @@ class PeerGroup
 
     /**
      * @param mixed $workforceEnrollment
+     * @return $this
      */
     public function setWorkforceEnrollment($workforceEnrollment)
     {
@@ -258,6 +269,7 @@ class PeerGroup
     }
 
     /**
+     * @param string $type
      * @return mixed
      */
     public function getWorkforceEnrollment($type = 'range')
@@ -275,6 +287,7 @@ class PeerGroup
 
     /**
      * @param mixed $workforceRevenue
+     * @return $this
      */
     public function setWorkforceRevenue($workforceRevenue)
     {
@@ -284,6 +297,7 @@ class PeerGroup
     }
 
     /**
+     * @param string $type
      * @return mixed
      */
     public function getWorkforceRevenue($type = 'range')
