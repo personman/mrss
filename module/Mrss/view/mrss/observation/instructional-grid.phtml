@@ -117,7 +117,8 @@ $this->headScript()->appendFile(
 
                     <?php foreach ($row as $i => $field): ?>
                         <?php if (empty($field)) continue ?>
-                        <div class="<?= $colClassConfig[$i] ?>-help">
+                        <div class="<?= $colClassConfig[$i] ?>-help grid-help">
+                            <h5><?= $form->get($field)->getLabel() ?></h5>
                             <?= $form->get($field)->getOption('help-block') ?>
                         </div>
                     <?php endforeach ?>

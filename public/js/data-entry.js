@@ -36,6 +36,9 @@ $(function() {
 
             var helpDiv = helpRow.find('.' + helpType + '-help')
 
+            // Hide help label
+            helpDiv.find('h5').hide()
+
             if (helpDiv && helpDiv.html() && helpDiv.html().trim().length) {
                 helpDiv.show()
                 helpRow.show()

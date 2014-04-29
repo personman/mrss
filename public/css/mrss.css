@@ -1,3 +1,7 @@
+html body {
+    background: #FFFFFF;
+}
+
 #wrapper .navbar.navbar-inverse .navbar-inner {
     background: #13B2CD;
     border-bottom: 8px solid #0097BB;
@@ -286,3 +290,4 @@ body #subscription legend {
 #control-group-workforceRevenue {
     display: none;
 }
+

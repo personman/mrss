@@ -117,6 +117,7 @@ $this->headScript()->appendFile(
 
                 <?php foreach ($row as $i => $field): ?>
                     <div class="<?= $firstTableColClassConfig[$i] ?>-help">
+                        <h5><?= $form->get($field)->getLabel() ?></h5>
                         <?= $form->get($field)->getOption('help-block') ?>
                     </div>
                 <?php endforeach ?>
@@ -171,6 +172,7 @@ $this->headScript()->appendFile(
 
                 <?php foreach ($row as $i => $field): ?>
                     <div class="<?= $colClassConfig[$i] ?>-help">
+                        <h5><?= $form->get($field)->getLabel() ?></h5>
                         <?= $form->get($field)->getOption('help-block') ?>
                     </div>
                 <?php endforeach ?>
