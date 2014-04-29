@@ -40,6 +40,7 @@ $this->headScript()->appendFile(
     <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
 </div>
 
+<?php if (empty($nccbpSubscription)): ?>
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
     <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Please contact your research office for these data.</p>
@@ -207,8 +208,7 @@ $this->headScript()->appendFile(
     <?= $this->ztbFormElement($form->get('institutional_demographics_median_household_income')) ?>
 
 </div>
-
-
+<?php endif ?>
 
 
 <fieldset id="fieldset-buttons" class="well well-small">

@@ -301,11 +301,20 @@ class ObservationController extends AbstractActionController
 
         }
 
+        // Is the college subscribed to NCCBP for this year
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $nccbpPSubscription = $subscriptionModel->findOne(
+            $observation->getYear(),
+            $observation->getCollege()->getId(),
+            1 // NCCBP
+        );
+
         $view = new ViewModel(
             array(
                 'form' => $form,
                 'observation' => $observation,
-                'benchmarkGroup' => $benchmarkGroup
+                'benchmarkGroup' => $benchmarkGroup,
+                'nccbpSubscription' => $nccbpPSubscription
             )
         );
 

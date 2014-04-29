@@ -2,7 +2,8 @@
 
 namespace Mrss\Service;
 
-class NhebiSubscriptions
+class
+NhebiSubscriptions
 {
     /**
      * Configuration array pointing to each project
