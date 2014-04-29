@@ -57,6 +57,9 @@ class PeerGroup
     protected $ipedsFallEnrollment;
 
     /** @ORM\Column(type="string") */
+    protected $fiscalCreditHours;
+
+    /** @ORM\Column(type="string") */
     protected $pellGrantRecipients;
 
     /** @ORM\Column(type="string") */
@@ -458,6 +461,26 @@ class PeerGroup
         }
 
         return $enrollment;
+    }
+
+    public function setFiscalCreditHours($hours)
+    {
+        $this->fiscalCreditHours = $hours;
+
+        return $this;
+    }
+
+    public function getFiscalCreditHours($type = 'range')
+    {
+        $hours = $this->fiscalCreditHours;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($hours);
+
+            $hours = $range[$type];
+        }
+
+        return $hours;
     }
 
     public function setBenchmarks($benchmarks)

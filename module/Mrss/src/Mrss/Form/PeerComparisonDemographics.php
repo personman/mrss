@@ -145,6 +145,22 @@ class PeerComparisonDemographics extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'fiscalCreditHours',
+                'type' => 'Text',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Fiscal Year Student Credit Hours',
+                    'help-block' => 'Specify a range (e.g., "9000 - 34000", without
+                        quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'fiscalCreditHours',
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'pellGrantRecipients',
                 'type' => 'Text',
                 'required' => false,
@@ -291,6 +307,11 @@ class PeerComparisonDemographics extends AbstractForm
         $ipedsEnrollement->setRequired(false);
         $ipedsEnrollement->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($ipedsEnrollement);
+
+        $fiscalCreditHours = new Input('fiscalCreditHours');
+        $fiscalCreditHours->setRequired(false);
+        $fiscalCreditHours->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($fiscalCreditHours);
 
         $pellGrantRecipients = new Input('pellGrantRecipients');
         $pellGrantRecipients->setRequired(false);

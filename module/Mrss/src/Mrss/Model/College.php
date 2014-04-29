@@ -195,8 +195,23 @@ class College extends AbstractModel
             );
         }
 
+        // Filter by fiscal year student credit hours
+        if ($peerGroup->getFiscalCreditHours()) {
+            $qb->andWhere(
+                'o.tot_fy_stud_crh BETWEEN :fysch_min AND :fysch_max'
+            );
+            $qb->setParameter(
+                'fysch_min',
+                $peerGroup->getFiscalCreditHours('min')
+            );
+            $qb->setParameter(
+                'fysch_max',
+                $peerGroup->getFiscalCreditHours('max')
+            );
+        }
+
         // Filter by pell grant recipients
-        if ($peerGroup->getIpedsFallEnrollment()) {
+        if ($peerGroup->getPellGrantRecipients()) {
             $qb->andWhere(
                 'o.pell_grant_rec BETWEEN :pell_grant_min AND :pell_grant_max'
             );

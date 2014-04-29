@@ -95,6 +95,13 @@ $form->setAttribute('action', $this->url('reports/peer'));
                 </p>
             <?php endif ?>
 
+            <?php if ($peerGroup->getFiscalCreditHours()): ?>
+                <p>
+                    <strong>Fiscal Year Student Credit Hours:</strong>
+                    <?= $peerGroup->getFiscalCreditHours() ?>
+                </p>
+            <?php endif ?>
+
             <?php if ($peerGroup->getPellGrantRecipients()): ?>
                 <p>
                     <strong>Pell Grant Recipients:</strong>
