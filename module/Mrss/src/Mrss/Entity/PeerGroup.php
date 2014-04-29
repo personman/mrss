@@ -36,6 +36,12 @@ class PeerGroup
     protected $environments;
 
     /** @ORM\Column(type="string") */
+    protected $institutionalType;
+
+    /** @ORM\Column(type="string") */
+    protected $institutionalControl;
+
+    /** @ORM\Column(type="string") */
     protected $facultyUnionized;
 
     /** @ORM\Column(type="string") */
@@ -46,6 +52,15 @@ class PeerGroup
 
     /** @ORM\Column(type="string") */
     protected $workforceRevenue;
+
+    /** @ORM\Column(type="string") */
+    protected $ipedsFallEnrollment;
+
+    /** @ORM\Column(type="string") */
+    protected $pellGrantRecipients;
+
+    /** @ORM\Column(type="string") */
+    protected $operatingRevenue;
 
     /** @ORM\Column(type="string") */
     protected $serviceAreaPopulation;
@@ -79,6 +94,30 @@ class PeerGroup
     public function getEnvironments()
     {
         return $this->environments;
+    }
+    
+    public function setInstitutionalControl($control)
+    {
+        $this->institutionalControl = $control;
+        
+        return $this;
+    }
+    
+    public function getInstitutionalControl()
+    {
+        return $this->institutionalControl;
+    }
+    
+    public function setInstitutionalType($type)
+    {
+        $this->institutionalType = $type;
+        
+        return $this;
+    }
+    
+    public function getInstitutionalType()
+    {
+        return $this->institutionalType;
     }
 
     public function setFacultyUnionized($facultyUnionized)
@@ -315,6 +354,64 @@ class PeerGroup
         return $enrollment;
     }
 
+
+    /**
+     * @param $pell
+     * @return $this
+     */
+    public function setPellGrantRecipients($pell)
+    {
+        $this->pellGrantRecipients = $pell;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    public function getPellGrantRecipients($type = 'range')
+    {
+        $pell = $this->pellGrantRecipients;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($pell);
+
+            $pell = $range[$type];
+        }
+
+        return $pell;
+    }
+
+    /**
+     * @param $revenue
+     * @return $this
+     */
+    public function setOperatingRevenue($revenue)
+    {
+        $this->operatingRevenue = $revenue;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    public function getOperatingRevenue($type = 'range')
+    {
+        $revenue = $this->operatingRevenue;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($revenue);
+
+            $revenue = $range[$type];
+        }
+
+        return $revenue;
+    }
+
+
     /**
      * @param mixed $workforceRevenue
      * @return $this
@@ -341,6 +438,26 @@ class PeerGroup
         }
 
         return $revenue;
+    }
+
+    public function setIpedsFallEnrollment($enrollment)
+    {
+        $this->ipedsFallEnrollment = $enrollment;
+
+        return $this;
+    }
+
+    public function getIpedsFallEnrollment($type = 'range')
+    {
+        $enrollment = $this->ipedsFallEnrollment;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($enrollment);
+
+            $enrollment = $range[$type];
+        }
+
+        return $enrollment;
     }
 
     public function setBenchmarks($benchmarks)
@@ -402,7 +519,9 @@ class PeerGroup
             $this->getServiceAreaUnemployment() ||
             $this->getServiceAreaMedianIncome() ||
             $this->getFacultyUnionized() ||
-            $this->getStaffUnionized()
+            $this->getStaffUnionized() ||
+            $this->getInstitutionalControl() ||
+            $this->getInstitutionalType()
         );
     }
 }

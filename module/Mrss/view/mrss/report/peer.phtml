@@ -39,6 +39,27 @@ $form->setAttribute('action', $this->url('reports/peer'));
                 </p>
             <?php endif ?>
 
+            <?php if ($peerGroup->getInstitutionalControl()): ?>
+                <p>
+                    <strong>Institutional Control:</strong>
+                    <?= implode(', ', $peerGroup->getInstitutionalControl()) ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getInstitutionalType()): ?>
+                <p>
+                    <strong>Institutional Type:</strong>
+                    <?= implode(', ', $peerGroup->getInstitutionalType()) ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getEnvironments()): ?>
+                <p>
+                    <strong>Campus Environment(s):</strong>
+                    <?= implode(', ', $peerGroup->getEnvironments()) ?>
+                </p>
+            <?php endif ?>
+
             <?php if ($peerGroup->getFacultyUnionized()): ?>
                 <p>
                     <strong>Faculty Unionized:</strong>
@@ -64,6 +85,27 @@ $form->setAttribute('action', $this->url('reports/peer'));
                 <p>
                     <strong>Workforce Revenue:</strong>
                     <?= $peerGroup->getWorkforceRevenue() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getIpedsFallEnrollment()): ?>
+                <p>
+                    <strong>IPEDS Fall Enrollment:</strong>
+                    <?= $peerGroup->getIpedsFallEnrollment() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getPellGrantRecipients()): ?>
+                <p>
+                    <strong>Pell Grant Recipients:</strong>
+                    <?= $peerGroup->getPellGrantRecipients() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getOperatingRevenue()): ?>
+                <p>
+                    <strong>Unrestricted Operating Revenue:</strong>
+                    <?= $peerGroup->getOperatingRevenue() ?>
                 </p>
             <?php endif ?>
 

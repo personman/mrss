@@ -51,6 +51,46 @@ class PeerComparisonDemographics extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'institutionalType',
+                'type' => 'Select',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Institutional Type'
+                ),
+                'attributes' => array(
+                    'id' => 'institutionalType',
+                    'options' => array(
+                        'Single-campus' => 'Single-campus',
+                        'Multi-campus' => 'Multi-campus',
+                        'Multi-college district' => 'Multi-college district'
+                    ),
+                    'multiple' => 'multiple'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'institutionalControl',
+                'type' => 'Select',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Institutional Control'
+                ),
+                'attributes' => array(
+                    'id' => 'institutionalControl',
+                    'options' => array(
+                        'Public' => 'Public',
+                        'Private' => 'Private',
+                        'Proprietary' => 'Proprietary'
+                    ),
+                    'multiple' => 'multiple'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'facultyUnionized',
                 'type' => 'Select',
                 'required' => false,
@@ -86,6 +126,56 @@ class PeerComparisonDemographics extends AbstractForm
                 )
             )
         );
+
+        $this->add(
+            array(
+                'name' => 'ipedsFallEnrollment',
+                'type' => 'Text',
+                'required' => false,
+                'options' => array(
+                    'label' => 'IPEDS Fall Enrollment',
+                    'help-block' => 'Specify a range (e.g., "2000 - 14000", without
+                        quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'ipedsFallEnrollment',
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'pellGrantRecipients',
+                'type' => 'Text',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Pell Grant Recipients',
+                    'help-block' => 'Specify a range (e.g., "10 - 33", without
+                        quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'pellGrantRecipients',
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'operatingRevenue',
+                'type' => 'Text',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Unrestricted Operating Revenue',
+                    'help-block' => 'Specify a range (e.g., "1000000 - 8000000", without
+                        quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'operatingRevenue',
+                )
+            )
+        );
+
+
 
         // @todo: % of Workforce Training Enrollment of Total
 
@@ -181,6 +271,14 @@ class PeerComparisonDemographics extends AbstractForm
         $environment->setRequired(false);
         $filter->add($environment);
 
+        $type = new Input('institutionalType');
+        $type->setRequired(false);
+        $filter->add($type);
+
+        $control = new Input('institutionControl');
+        $control->setRequired(false);
+        $filter->add($control);
+
         $facultyUnionized = new Input('facultyUnionized');
         $facultyUnionized->setRequired(false);
         $filter->add($facultyUnionized);
@@ -188,6 +286,21 @@ class PeerComparisonDemographics extends AbstractForm
         $staffUnionized = new Input('staffUnionized');
         $staffUnionized->setRequired(false);
         $filter->add($staffUnionized);
+
+        $ipedsEnrollement = new Input('ipedsFallEnrollment');
+        $ipedsEnrollement->setRequired(false);
+        $ipedsEnrollement->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($ipedsEnrollement);
+
+        $pellGrantRecipients = new Input('pellGrantRecipients');
+        $pellGrantRecipients->setRequired(false);
+        $pellGrantRecipients->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($pellGrantRecipients);
+
+        $operatingRevenue = new Input('operatingRevenue');
+        $operatingRevenue->setRequired(false);
+        $operatingRevenue->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($operatingRevenue);
 
         $enrollment = new Input('workforceEnrollment');
         $enrollment->setRequired(false);

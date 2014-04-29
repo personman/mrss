@@ -107,6 +107,34 @@ class College extends AbstractModel
             );
         }
 
+        // Filter by institutional control
+        if ($peerGroup->getInstitutionalControl()) {
+            $qb->andWhere(
+                $qb->expr()->in(
+                    'o.institutional_control',
+                    ':control'
+                )
+            );
+            $qb->setParameter(
+                'control',
+                $peerGroup->getInstitutionalControl()
+            );
+        }
+
+        // Filter by institutional type
+        if ($peerGroup->getInstitutionalType()) {
+            $qb->andWhere(
+                $qb->expr()->in(
+                    'o.institutional_type',
+                    ':type'
+                )
+            );
+            $qb->setParameter(
+                'type',
+                $peerGroup->getInstitutionalType()
+            );
+        }
+
         // Filter by staff unionized
         if ($peerGroup->getStaffUnionized()) {
             $qb->andWhere(
@@ -149,6 +177,51 @@ class College extends AbstractModel
             $qb->setParameter(
                 'revenue_max',
                 $peerGroup->getWorkforceRevenue('max')
+            );
+        }
+
+        // Filter by IPEDS fall enrollment
+        if ($peerGroup->getIpedsFallEnrollment()) {
+            $qb->andWhere(
+                'o.ipeds_enr BETWEEN :ipeds_enrollment_min AND :ipeds_enrollment_max'
+            );
+            $qb->setParameter(
+                'ipeds_enrollment_min',
+                $peerGroup->getIpedsFallEnrollment('min')
+            );
+            $qb->setParameter(
+                'ipeds_enrollment_max',
+                $peerGroup->getIpedsFallEnrollment('max')
+            );
+        }
+
+        // Filter by pell grant recipients
+        if ($peerGroup->getIpedsFallEnrollment()) {
+            $qb->andWhere(
+                'o.pell_grant_rec BETWEEN :pell_grant_min AND :pell_grant_max'
+            );
+            $qb->setParameter(
+                'pell_grant_min',
+                $peerGroup->getPellGrantRecipients('min')
+            );
+            $qb->setParameter(
+                'pell_grant_max',
+                $peerGroup->getPellGrantRecipients('max')
+            );
+        }
+
+        // Filter by revenue
+        if ($peerGroup->getOperatingRevenue()) {
+            $qb->andWhere(
+                'o.unre_o_rev BETWEEN :revenue_min AND :revenue_max'
+            );
+            $qb->setParameter(
+                'revenue_min',
+                $peerGroup->getOperatingRevenue('min')
+            );
+            $qb->setParameter(
+                'revenue_max',
+                $peerGroup->getOperatingRevenue('max')
             );
         }
 
