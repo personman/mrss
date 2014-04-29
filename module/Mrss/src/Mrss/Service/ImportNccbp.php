@@ -70,6 +70,11 @@ class ImportNccbp
      */
     protected $settingModel;
 
+    /**
+     * @var \Mrss\Service\ObservationAudit
+     */
+    protected $observationAudit;
+
     protected $importProgressPrefix = 'nccbp-import-';
 
     protected $type;
@@ -285,6 +290,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $observation->setCollege($college);
             $observation->setCipCode(0);
 
+            $oldObservation = clone $observation;
+
 
             // Loop over the row's columns, convert the field name and set the value
             foreach ($row as $key => $value) {
@@ -304,6 +311,12 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             }
 
             $this->getObservationModel()->save($observation);
+
+            $this->getObservationAudit()->logChanges(
+                $oldObservation,
+                $observation,
+                'importNCCBP'
+            );
 
             $this->stats['imported']++;
 
@@ -1011,5 +1024,17 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getSettingModel()
     {
         return $this->settingModel;
+    }
+
+    public function setObservationAudit($audit)
+    {
+        $this->observationAudit = $audit;
+
+        return $this;
+    }
+
+    public function getObservationAudit()
+    {
+        return $this->observationAudit;
     }
 }

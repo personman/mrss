@@ -118,6 +118,10 @@ class Module
                     $settingModel = $sm->get('model.setting');
                     $importer->setSettingModel($settingModel);
 
+                    // Inject the observation logger
+                    $logger = $sm->get('service.observationAudit');
+                    $importer->setObservationAudit($logger);
+
                     return $importer;
                 },
                 'import.nccwtp' => function ($sm) {
