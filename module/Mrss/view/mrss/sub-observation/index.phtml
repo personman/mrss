@@ -1,3 +1,13 @@
+<?php
+    /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+    /** @var \Mrss\Entity\Observation $observation */
+?>
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
 <?= $this->systemAdmin() ?>
 
 <h3>
@@ -5,7 +15,7 @@
 </h3>
 
 <div class="well">
-    <b><h4>2012-2013 Fiscal Year</h4></b>
+    <h4>2012-2013 Fiscal Year</h4>
     <br>
     Report this information at the for-credit instructional academic unit level (such as division) that fits your organization.<br>
     <br>
@@ -21,6 +31,11 @@
     <span class="icon-plus-sign"></span>
     Add an Academic Unit
 </a>
+
+<span style="padding-left: 20px">
+    <a href="/data-entry">Back to data entry overview</a>
+</span>
+
 <?php else: ?>
     <p>
         You have reached your maximum of <?= $maxAcademicUnits ?> academic units.
@@ -43,6 +58,16 @@
                 )
             ) ?>">
                 <?= $subob->getName() ?>
+            </a>
+            -
+            <a href="<?= $this->url(
+                'data-entry/edit/subob/delete',
+                array(
+                    'benchmarkGroup' => $benchmarkGroup->getId(),
+                    'subId' => $subob->getId()
+                )
+            ) ?>" class="deleteLink">
+                delete
             </a>
         </li>
     <?php endforeach ?>

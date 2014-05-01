@@ -133,6 +133,9 @@ class SubObservation
         return $this;
     }
 
+    /**
+     * @return Observation
+     */
     public function getObservation()
     {
         return $this->observation;

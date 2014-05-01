@@ -63,6 +63,7 @@ return array(
                         'child_routes' => array(
                             'subob' => array(
                                 'type' => 'segment',
+                                'may_terminate' => true,
                                 'options' => array(
                                     'route' => '/:subId',
                                     'constraints' => array(
@@ -74,6 +75,17 @@ return array(
                                         'subId' => 0,
                                     )
                                 ),
+                                'child_routes' => array(
+                                    'delete' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/delete',
+                                            'defaults' => array(
+                                                'action' => 'delete'
+                                            )
+                                        )
+                                    )
+                                )
                             )
                         )
                     ),
@@ -122,7 +134,7 @@ return array(
                                 'college_id' => 0
                             )
                         )
-                    )
+                    ),
                 )
             ),
             'studies' => array(

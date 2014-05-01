@@ -10,6 +10,21 @@ use Zend\Session\Container;
 
 class SubObservationController extends AbstractActionController
 {
+    protected $subObservationModel;
+
+    /**
+     * @return \Mrss\Model\SubObservation
+     */
+    public function getSubObservationModel()
+    {
+        if (empty($this->subObservationModel)) {
+            $this->subObservationModel = $this->getServiceLocator()
+                ->get('model.subobservation');
+        }
+
+        return $this->subObservationModel;
+    }
+
     public function editAction()
     {
         // Fetch the benchmarkGroup
@@ -37,9 +52,7 @@ class SubObservationController extends AbstractActionController
         );
 
         // Fetch or create the subobservation
-        $subObModel = $this->getServiceLocator()
-            ->get('model.subobservation');
-        $subObservation = $subObModel->find($subObId);
+        $subObservation = $this->getSubObservationModel()->find($subObId);
 
         if (empty($subObservation)) {
             $subObservation = new SubObservation();
@@ -63,7 +76,7 @@ class SubObservationController extends AbstractActionController
             //var_dump($form->getElements()); die;
             if ($form->isValid()) {
                 $subObservation->setObservation($observation);
-                $subObModel->save($subObservation);
+                $this->getSubObservationModel()->save($subObservation);
 
                 // Log changes
                 $this->getServiceLocator()->get('service.observationAudit')
@@ -92,6 +105,35 @@ class SubObservationController extends AbstractActionController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    public function deleteAction()
+    {
+        // Load the subob
+        $subObId = $this->params('subId');
+        $benchmarkGroupId = $this->params('benchmarkGroup');
+        /** @var SubObservation $subObservation */
+        $subObservation = $this->getSubObservationModel()->find($subObId);
+
+        // Let's make sure they have permission to delete this
+        $college = $subObservation->getObservation()->getCollege()->getId();
+        $currentCollege = $this->currentCollege()->getId();
+
+        if ($college != $currentCollege) {
+            throw new \Exception('You do not have permission to delete that.');
+        }
+
+        // Actually delete it
+        $this->getSubObservationModel()->delete($subObservation);
+
+        // Redirect and show a message
+        $this->flashMessenger()->addSuccessMessage('Academic unit deleted.');
+        return $this->redirect()->toRoute(
+            'data-entry/edit',
+            array(
+                'benchmarkGroup' => $benchmarkGroupId
+            )
+        );
     }
 
     /**

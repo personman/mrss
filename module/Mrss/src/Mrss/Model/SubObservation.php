@@ -45,4 +45,14 @@ class SubObservation extends AbstractModel
 
         // Flush here or leave it to some other code?
     }
+
+    /**
+     * @param SubObservationEntity $subObservation
+     */
+    public function delete(SubObservationEntity $subObservation)
+    {
+        $this->getEntityManager()->remove($subObservation);
+        $this->getEntityManager()->flush();
+    }
+
 }
