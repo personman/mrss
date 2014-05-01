@@ -145,18 +145,6 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_experiential;
 
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_full_total_expend;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $inst_part_total_expend;
-
-    /** @ORM\Column(type="integer", nullable=true) */
-    protected $inst_full_total_num;
-
-    /** @ORM\Column(type="integer", nullable=true) */
-    protected $inst_part_total_num;
-
 
     // MRSS Form 2
     /** @ORM\Column(type="float", nullable=true) */
