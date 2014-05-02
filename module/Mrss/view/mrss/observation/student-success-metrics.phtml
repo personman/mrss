@@ -24,15 +24,29 @@ $this->headScript()->appendFile(
 <?php $form->prepare() ?>
 <?= $this->form()->openTag($form) ?>
 
-<?php if (empty($nccbpSubscription)): ?>
+<?php $disabled = (!empty($nccbpSubscription)); ?>
+
+
 
 <div class="demo-group">
     <h3 class="heading">Student Completion and Transfer</h3>
     <p class="heading-notes">Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</p>
 
-    <?= $this->ztbFormElement($form->get('ft_f_yminus4_headc')->setLabel('Unduplicated Headcount')) ?>
-    <?= $this->ztbFormElement($form->get('ft_f_yminus4_degr_cert')->setLabel('Number Completed Degree or Certificate')) ?>
-    <?= $this->ztbFormElement($form->get('ft_f_yminus4_transf')->setLabel('Number Transferred')) ?>
+    <?= $this->ztbFormElement(
+        $form->get('ft_f_yminus4_headc')
+            ->setLabel('Unduplicated Headcount')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('ft_f_yminus4_degr_cert')
+            ->setLabel('Number Completed Degree or Certificate')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('ft_f_yminus4_transf')
+            ->setLabel('Number Transferred')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
 </div>
 
 
@@ -41,9 +55,21 @@ $this->headScript()->appendFile(
     <h3 class="heading">Student Completion and Transfer</h3>
     <p class="heading-notes">Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data</p>
 
-    <?= $this->ztbFormElement($form->get('pt_f_yminus4_headc')->setLabel('Unduplicated Headcount')) ?>
-    <?= $this->ztbFormElement($form->get('pt_f_yminus4_degr_cert')->setLabel('Number Completed Degree or Certificate')) ?>
-    <?= $this->ztbFormElement($form->get('pt_f_yminus4_transf')->setLabel('Number Transferred')) ?>
+    <?= $this->ztbFormElement(
+        $form->get('pt_f_yminus4_headc')
+            ->setLabel('Unduplicated Headcount')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('pt_f_yminus4_degr_cert')
+            ->setLabel('Number Completed Degree or Certificate')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('pt_f_yminus4_transf')
+            ->setLabel('Number Transferred')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
 </div>
 
 
@@ -51,9 +77,21 @@ $this->headScript()->appendFile(
     <h3 class="heading">Student Completion and Transfer</h3>
     <p class="heading-notes">Full-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</p>
 
-    <?= $this->ztbFormElement($form->get('f_yminus7_headc')->setLabel('Unduplicated Headcount')) ?>
-    <?= $this->ztbFormElement($form->get('ft_yminus7_degr')->setLabel('Number Completed Degree or Certificate')) ?>
-    <?= $this->ztbFormElement($form->get('ft_yminus7_transf')->setLabel('Number Transferred')) ?>
+    <?= $this->ztbFormElement(
+        $form->get('f_yminus7_headc')
+            ->setLabel('Unduplicated Headcount')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('ft_yminus7_degr')
+            ->setLabel('Number Completed Degree or Certificate')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('ft_yminus7_transf')
+            ->setLabel('Number Transferred')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
 </div>
 
 
@@ -63,9 +101,21 @@ $this->headScript()->appendFile(
     <h3 class="heading">Student Completion and Transfer</h3>
     <p class="heading-notes">Part-Time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?> data</p>
 
-    <?= $this->ztbFormElement($form->get('pt_fminus7_headc')->setLabel('Unduplicated Headcount')) ?>
-    <?= $this->ztbFormElement($form->get('pt_yminus7_degr')->setLabel('Number Completed Degree or Certificate')) ?>
-    <?= $this->ztbFormElement($form->get('pt_yminus7_transf')->setLabel('Number Transferred')) ?>
+    <?= $this->ztbFormElement(
+        $form->get('pt_fminus7_headc')
+            ->setLabel('Unduplicated Headcount')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('pt_yminus7_degr')
+            ->setLabel('Number Completed Degree or Certificate')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
+    <?= $this->ztbFormElement(
+        $form->get('pt_yminus7_transf')
+            ->setLabel('Number Transferred')
+            ->setAttribute('disabled', $disabled)
+    ) ?>
 </div>
 
 
@@ -74,9 +124,9 @@ $this->headScript()->appendFile(
     <h3 class="heading">Credit College-level Retention, Success</h3>
     <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> grades.</p>
 
-    <?= $this->ztbFormElement($form->get('tot_grad_abcpdfw')) ?>
-    <?= $this->ztbFormElement($form->get('tot_grad_abcpdf')) ?>
-    <?= $this->ztbFormElement($form->get('tot_grad_abcp')) ?>
+    <?= $this->ztbFormElement($form->get('tot_grad_abcpdfw')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('tot_grad_abcpdf')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('tot_grad_abcp')->setAttribute('disabled', $disabled)) ?>
 </div>
 
 
@@ -84,7 +134,7 @@ $this->headScript()->appendFile(
 <div class="demo-group">
     <h3 class="heading">Credit Student Enrollment</h3>
 
-    <?= $this->ztbFormElement($form->get('tot_cr_st')) ?>
+    <?= $this->ztbFormElement($form->get('tot_cr_st')->setAttribute('disabled', $disabled)) ?>
 </div>
 
 
@@ -92,8 +142,8 @@ $this->headScript()->appendFile(
 <div class="demo-group">
     <h3 class="heading">Next Term</h3>
 
-    <?= $this->ztbFormElement($form->get('grad_bef_spr')) ?>
-    <?= $this->ztbFormElement($form->get('enr_bef_spr')) ?>
+    <?= $this->ztbFormElement($form->get('grad_bef_spr')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('enr_bef_spr')->setAttribute('disabled', $disabled)) ?>
 </div>
 
 
@@ -102,8 +152,8 @@ $this->headScript()->appendFile(
 <div class="demo-group">
     <h3 class="heading">Next Fall</h3>
 
-    <?= $this->ztbFormElement($form->get('grad_bef_fall')) ?>
-    <?= $this->ztbFormElement($form->get('enr_fall')) ?>
+    <?= $this->ztbFormElement($form->get('grad_bef_fall')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('enr_fall')->setAttribute('disabled', $disabled)) ?>
 </div>
 
 
@@ -111,10 +161,6 @@ $this->headScript()->appendFile(
 
 
 
-
-
-
-<?php endif ?>
 
 
 <fieldset id="fieldset-buttons" class="well well-small">
