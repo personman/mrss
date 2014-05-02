@@ -40,7 +40,9 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
             ->setServiceAreaUnemployment('3 - 6')
             ->setServiceAreaMedianIncome('20000 - 80000')
             ->setBenchmarks(array('test', 'test2'))
-            ->setPeers(array(1, 2, 3));
+            ->setPeers(array(1, 2, 3))
+            ->setInstitutionalControl(array('local'))
+            ->setInstitutionalType(array('private'));
 
         $this->assertEquals(5, $this->peerGroup->getId());
         $this->assertEquals(2014, $this->peerGroup->getYear());
@@ -74,6 +76,15 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(1, 2, 3),
             $this->peerGroup->getPeers()
+        );
+
+        $this->assertEquals(
+            array('local'),
+            $this->peerGroup->getInstitutionalControl()
+        );
+        $this->assertEquals(
+            array('private'),
+            $this->peerGroup->getInstitutionalType()
         );
     }
 
