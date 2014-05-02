@@ -136,6 +136,46 @@ class SubObservationController extends AbstractActionController
         );
     }
 
+    public function checkAction()
+    {
+        $benchmarkGroupId = $this->params()->fromRoute('benchmarkGroup');
+
+        /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+        $benchmarkGroup = $this->getServiceLocator()
+            ->get('model.benchmarkGroup')
+            ->find($benchmarkGroupId);
+
+        // We'll need the observation
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation();
+
+        $subObservations = $observation->getSubObservations();
+
+        $totals = array(
+            'inst_cost_full_expend' => 0,
+            'inst_cost_full_num' => 0,
+            'inst_cost_full_cred_hr' => 0,
+            'inst_cost_part_expend' => 0,
+            'inst_cost_part_num' => 0,
+            'inst_cost_part_cred_hr' => 0,
+        );
+
+        // Calculate totals
+        foreach ($subObservations as $subOb) {
+            foreach ($totals as $key => $total) {
+                $value = $subOb->get($key);
+                $totals[$key] += $value;
+            }
+        }
+
+        return array(
+            'subObservations' => $subObservations,
+            'totals' => $totals,
+            'observation' => $observation,
+            'benchmarkGroup' => $benchmarkGroup
+        );
+    }
+
     /**
      * If a custom template is set up for this benchmarkGroup, switch to it.
      * Get the id and file name from config (differs in production)

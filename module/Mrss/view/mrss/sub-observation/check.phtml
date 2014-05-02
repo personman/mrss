@@ -1,0 +1,61 @@
+<?php /** @var \Mrss\Entity\SubObservation[] $subObservations */ ?>
+<?php /** @var \Mrss\Entity\Observation $observation */ ?>
+<?php /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */ ?>
+<?php /** @var array $totals */ ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=2') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css?v=2') ?>
+
+<a href="<?= $this->url(
+    'data-entry/edit',
+    array('benchmarkGroup' => $benchmarkGroup->getId())
+) ?>">
+    Back to Form 2
+</a>
+
+<h3>Check Academic Unit Data</h3>
+
+
+
+<table class="table table-bordered data-entry-grid">
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan="3">Full-Time</th>
+            <th colspan="3">Part-Time</th>
+        </tr>
+        <tr>
+            <th>Academic Unit</th>
+            <th>Salaries and Benefits</th>
+            <th>Number of FTE Faculty</th>
+            <th>Student Credit Hours</th>
+            <th>Salaries and Benefits</th>
+            <th>Number of FTE Faculty</th>
+            <th>Student Credit Hours</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($subObservations as $subOb): ?>
+            <tr>
+                <td><?= $subOb->getName() ?></td>
+                <?php foreach ($totals as $key => $total): ?>
+                    <td><?= $subOb->get($key) ?></td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+        <tr>
+            <td>Total from Form 2</td>
+            <?php foreach ($totals as $key => $total): ?>
+                <td><?= $total ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td>Data Entered in From 1</td>
+            <td><?= $observation->get('inst_full_expend') ?></td>
+            <td><?= $observation->get('inst_full_num') ?></td>
+            <td><?= $observation->get('inst_full_cred_hrs') ?></td>
+            <td><?= $observation->get('inst_part_expend') ?></td>
+            <td><?= $observation->get('inst_part_num') ?></td>
+            <td><?= $observation->get('inst_part_cred_hrs') ?></td>
+        </tr>
+    </tbody>
+</table>

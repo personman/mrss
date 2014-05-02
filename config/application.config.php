@@ -9,7 +9,7 @@ return array(
         'ZfcUser',
         'ZfcUserDoctrineORM',
         'ZfcUserImpersonate',
-        //'ZendDeveloperTools',
+        'ZendDeveloperTools',
         'BjyAuthorize',
         'ZfcTwitterBootstrap',
         'GoalioMailService',

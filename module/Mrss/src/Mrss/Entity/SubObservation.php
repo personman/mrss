@@ -2,7 +2,6 @@
 
 namespace Mrss\Entity;
 
-use Mrss\Entity\Observation;
 use Doctrine\ORM\Mapping as ORM;
 use Mrss\Entity\Exception;
 use Zend\Debug\Debug;

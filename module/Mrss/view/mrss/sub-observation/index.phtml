@@ -43,6 +43,16 @@ $this->headScript()->appendFile(
     </p>
 <?php endif ?>
 
+<span style="padding-left: 20px">
+    <a href="<?= $this->url(
+        'data-entry/edit/check',
+        array('benchmarkGroup' => $benchmarkGroup->getId())
+    ) ?>">
+        Check data
+    </a>
+</span>
+
+
 <h5>Academic Units</h5>
 
 <?php $subobs = $observation->getSubObservations() ?>
