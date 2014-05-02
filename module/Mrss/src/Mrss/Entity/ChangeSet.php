@@ -11,7 +11,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table(name="change_sets")
  */
-class ChangeSet {
+class ChangeSet
+{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")

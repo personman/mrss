@@ -227,5 +227,4 @@ class ObservationAudit
     {
         return $this->study;
     }
-
 }

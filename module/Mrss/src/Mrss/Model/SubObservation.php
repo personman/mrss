@@ -54,5 +54,4 @@ class SubObservation extends AbstractModel
         $this->getEntityManager()->remove($subObservation);
         $this->getEntityManager()->flush();
     }
-
 }

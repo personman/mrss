@@ -12,7 +12,8 @@ use Mrss\Entity\Benchmark;
  * @ORM\Entity
  * @ORM\Table(name="changes")
  */
-class Change {
+class Change
+{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")

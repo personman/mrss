@@ -217,5 +217,4 @@ class SubObservation
 
         return $benchmarks;
     }
-
 }
