@@ -180,7 +180,9 @@ class ReportController extends AbstractActionController
                 'states',
                 'environments',
                 'facultyUnionized',
-                'staffUnionized'
+                'staffUnionized',
+                'institutionalType',
+                'institutionalControl'
             );
 
             foreach ($multiselects as $multiselect) {

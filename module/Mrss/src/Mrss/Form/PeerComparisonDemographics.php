@@ -291,7 +291,7 @@ class PeerComparisonDemographics extends AbstractForm
         $type->setRequired(false);
         $filter->add($type);
 
-        $control = new Input('institutionControl');
+        $control = new Input('institutionalControl');
         $control->setRequired(false);
         $filter->add($control);
 
