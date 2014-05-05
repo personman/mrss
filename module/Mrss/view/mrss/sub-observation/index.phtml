@@ -23,7 +23,9 @@ $this->headScript()->appendFile(
     <br>
     You may report up to ten academic units. Use the Add an Academic Unit button to generate a page to report for another academic unit. If you are unable to report by academic unit, you should report for your entire institution.
 </div>
-<?php if (count($observation->getSubObservations()) < $maxAcademicUnits): ?>
+
+<p>
+<?php $maxAcademicUnits = 2; if (count($observation->getSubObservations()) < $maxAcademicUnits): ?>
 <a href="<?= $this->url(
     'data-entry/edit/subob',
     array('benchmarkGroup' => $benchmarkGroup->getId())
@@ -32,16 +34,14 @@ $this->headScript()->appendFile(
     Add an Academic Unit
 </a>
 
+<?php else: ?>
+        You have reached your maximum of <?= $maxAcademicUnits ?> academic units.
+        <a href="/contact">Contact us</a> if you have any questions.
+<?php endif ?>
+
 <span style="padding-left: 20px">
     <a href="/data-entry">Back to data entry overview</a>
 </span>
-
-<?php else: ?>
-    <p>
-        You have reached your maximum of <?= $maxAcademicUnits ?> academic units.
-        <a href="/contact">Contact us</a> if you have any questions.
-    </p>
-<?php endif ?>
 
 <span style="padding-left: 20px">
     <a href="<?= $this->url(
@@ -52,6 +52,7 @@ $this->headScript()->appendFile(
     </a>
 </span>
 
+</p>
 
 <h5>Academic Units</h5>
 
