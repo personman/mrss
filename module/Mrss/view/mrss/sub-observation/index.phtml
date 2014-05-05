@@ -25,7 +25,7 @@ $this->headScript()->appendFile(
 </div>
 
 <p>
-<?php $maxAcademicUnits = 2; if (count($observation->getSubObservations()) < $maxAcademicUnits): ?>
+<?php if (count($observation->getSubObservations()) < $maxAcademicUnits): ?>
 <a href="<?= $this->url(
     'data-entry/edit/subob',
     array('benchmarkGroup' => $benchmarkGroup->getId())
