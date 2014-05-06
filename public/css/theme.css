@@ -853,7 +853,7 @@ td.inputTypeAbbr {
 
 #headerLoginForm {
     position: absolute;
-    width: 651px;
+    width: 511px;
     float: right;
 }
 
@@ -877,10 +877,8 @@ td.inputTypeAbbr {
 }
 
 #headerLoginForm dt {
-    float: left;
-    width: 70px;
-    text-align: right;
-    padding-top: 10px;
+
+    display: none;
 }
 
 #headerLoginForm dd {

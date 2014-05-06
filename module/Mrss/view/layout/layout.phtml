@@ -63,9 +63,10 @@
 
             <?php if(!$this->zfcUserIdentity()): ?>
                 <div id="headerLoginForm">
-                <? //$form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
-                //var_dump($form);
-                //$form->get('submit')->setAttribute('class', 'btn btn-primary'); ?>
+                <? $form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
+                $form->get('identity')->setAttribute('placeHolder', 'Email');
+                $form->get('credential')->setAttribute('placeHolder', 'Password');
+                ?>
                 <?= $this->zfcUserLoginWidget() ?>
                 </div>
             <?php endif ?>
