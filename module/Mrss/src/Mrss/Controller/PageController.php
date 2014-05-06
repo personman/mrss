@@ -76,7 +76,10 @@ class PageController extends AbstractActionController
                     ->get('service.routeCache');
                 $routeCacheService->rebuild();
 
-                $this->flashMessenger()->addSuccessMessage('Page saved.');
+                $url = '/' . $page->getRoute();
+                $this->flashMessenger()->addSuccessMessage(
+                    "Page saved. <a href='$url'>View it</a>."
+                );
                 return $this->redirect()->toRoute('pages');
             }
 

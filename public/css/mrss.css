@@ -1,7 +1,3 @@
-html body {
-    background: #FFFFFF;
-}
-
 #wrapper .navbar.navbar-inverse .navbar-inner {
     background: #13B2CD;
     border-bottom: 8px solid #0097BB;
@@ -10,12 +6,13 @@ html body {
 
 #wrapper .navbar-inverse .dropdown-menu {
     background: #13B2CD;
+    padding: 0;
 }
 
 #wrapper .navbar .brand img {
-    margin-left: 30%;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    margin-left: 10%;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 #wrapper .navbar ul.nav.pull-right {
@@ -23,11 +20,15 @@ html body {
     font-size: 75%;
 }
 
+#wrapper .navbar-inverse .nav > li { margin-left: 10px; }
+
+#wrapper  ul.dropdown-menu > li { margin-left: 0; }
+
 #wrapper .navbar-inverse .nav li a {
     color: #222;
     text-shadow: none;
     text-transform: uppercase;
-    font-size: 103%;
+    font-size: 110%;
 }
 
 #wrapper .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
@@ -60,7 +61,8 @@ html body {
     background-image: -o-linear-gradient(top, #56c5eb, #1798c4);
     background-image: linear-gradient(#56c5eb, #1798c4);
     border-color: #1798c4 #1798c4 hsl(195, 79%, 38%);
-    color: #333 !important;
+    color: #FFF !important;
+    padding: 10px 15px;
 }
 
 #headerLoginForm .btn-primary {
@@ -81,10 +83,10 @@ html body {
 
 /* cms page title */
 #content h3 {
-    font-size: 180%;
+    font-size: 300%;
     /*color: #00697E;*/
-    color: black;
-    font-weight: bold;
+    color: #00687f;
+    font-weight: 300;
 }
 
 body .section_header h3 {
@@ -182,45 +184,48 @@ body #showcase .features_op1_row .feature .img_box span.circle {
 }
 
 .slide#ideas .info {
-    margin-left: 60%;
+    margin-left: 55%;
 }
 
 #ideas h3 {
-    color: #90C019;
+    /* color: #90C019; */
+    color: #07677C;
     font-size: 250%;
-    width: 200px;
+    width: 300px;
     text-align: left;
+    line-height: 36px;
 }
 
 #ideas p {
     text-align: left;
-    width: 200px;
+    width: 320px;
 }
 
 #responsive h3 {
     color: #1EB2CE;
     font-size: 230%;
     text-align: left;
+    line-height: 36px;
 }
 
 #responsive p {
-    width: 200px;
+    width: 400px;
     text-align: left;
     color: black;
 }
 
 .slide#responsive .info {
     position: absolute;
-    top: 15px;
-    left: 67%;
-    width: 25%;
+    top: 2%;
+    left: 50%;
+    width: 40%;
 }
 
 .slide#benchmarks .info {
-    width: 300px;
+    width: 400px;
     position: absolute;
-    top: 80px;
-    left: 35%;
+    top: 5%;
+    left: 30%;
 }
 
 .slide#benchmarks .info h3 {
@@ -232,11 +237,16 @@ body #footer {
 }
 
 body #footer .navbar-inverse {
-    max-width: 570px;
+    max-width: 940px;
 }
 
 
-/* About page */
+/* About Page */
+
+.page-header h2 { color: #00677e; }
+
+p.page-intro { color: #809c00; font-weight: 300;  font-size:  200%; margin-bottom: 5%; line-height: 115%; }
+
 html .sidebar {
     background-color: #13B2CD;
     border-top: 3px solid #13B2CD;
@@ -263,6 +273,16 @@ ul.symbol-links li.form {
     padding: 20px;
 }
 
+/* Partners Page */
+
+h4 { color: #0097bd; margin:20px 0 5px 0; }
+
+h5 { color: #666; font-size:  175%; }
+
+ul.benchmarks { margin: -5px 50px 0 0; }
+ul.benchmarks > li { list-style: none; border-bottom: 1px solid #CCC; line-height: 24px; padding: 0 0 5px 0;
+    margin: 0 0 5px 0; }
+
 body #subscription legend {
     border-bottom-left-radius:0px;
     border-bottom-right-radius:0px;
@@ -281,7 +301,7 @@ body #subscription legend {
 }
 
 #headerLoginForm {
-    top: -9px;
+    top: 0px;
     right: -66px;
 }
 
@@ -290,4 +310,3 @@ body #subscription legend {
 #control-group-workforceRevenue {
     display: none;
 }
-
