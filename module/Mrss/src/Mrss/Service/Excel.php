@@ -580,7 +580,7 @@ class Excel
         $valueColumn = 'B';
         $dbColumnCol = 'D';
         $firstHiddenRow = 241;
-        $lastHiddenRow = 480;
+        $lastHiddenRow = 490;
 
         $observation = $subscription->getObservation();
 
@@ -650,24 +650,28 @@ class Excel
     protected function getMrssSubObservationMap()
     {
         return array(
-            'C10' => 'inst_cost_full_cred_hr',
-            'C14' => 'inst_cost_part_cred_hr',
-            'B21' => 'inst_cost_full_program_dev',
-            'C21' => 'inst_cost_part_program_dev',
-            'B22' => 'inst_cost_full_course_dev',
-            'C22' => 'inst_cost_part_course_dev',
-            'B23' => 'inst_cost_full_teaching',
-            'C23' => 'inst_cost_part_teaching',
-            'B24' => 'inst_cost_full_tutoring',
-            'C24' => 'inst_cost_part_tutoring',
-            'B25' => 'inst_cost_full_advising',
-            'C25' => 'inst_cost_part_advising',
-            'B26' => 'inst_cost_full_ac_service',
-            'C26' => 'inst_cost_part_ac_service',
-            'B27' => 'inst_cost_full_assessment',
-            'C27' => 'inst_cost_part_assessment',
-            'B28' => 'inst_cost_full_prof_dev',
-            'C28' => 'inst_cost_part_prof_dev'
+            'C10' => 'inst_cost_full_expend',
+            'C11' => 'inst_cost_full_num',
+            'C12' => 'inst_cost_full_cred_hr',
+            'C16' => 'inst_cost_part_num',
+            'C17' => 'inst_cost_part_cred_hr',
+            'C18' => 'inst_cost_part_cred_hr',
+            'B26' => 'inst_cost_full_program_dev',
+            'C26' => 'inst_cost_part_program_dev',
+            'B27' => 'inst_cost_full_course_dev',
+            'C27' => 'inst_cost_part_course_dev',
+            'B28' => 'inst_cost_full_teaching',
+            'C28' => 'inst_cost_part_teaching',
+            'B29' => 'inst_cost_full_tutoring',
+            'C29' => 'inst_cost_part_tutoring',
+            'B30' => 'inst_cost_full_advising',
+            'C30' => 'inst_cost_part_advising',
+            'B31' => 'inst_cost_full_ac_service',
+            'C31' => 'inst_cost_part_ac_service',
+            'B32' => 'inst_cost_full_assessment',
+            'C32' => 'inst_cost_part_assessment',
+            'B33' => 'inst_cost_full_prof_dev',
+            'C33' => 'inst_cost_part_prof_dev'
         );
     }
 
