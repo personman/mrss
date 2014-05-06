@@ -9,6 +9,8 @@ use Mrss\Form\Payment;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Form\Form;
@@ -360,8 +362,8 @@ class SubscriptionController extends AbstractActionController
     {
         // For dev, log what the post includes
         $filename = 'postback.log';
-        $logger = new \Zend\Log\Logger;
-        $writer = new \Zend\Log\Writer\Stream($filename);
+        $logger = new Logger;
+        $writer = new Stream($filename);
         $logger->addWriter($writer);
 
         $message = "Postback received: \n";
@@ -803,14 +805,14 @@ class SubscriptionController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Log\Logger
+     * @return Logger
      */
     public function getLog()
     {
         if (empty($this->log)) {
             $filename = 'postback.log';
-            $logger = new \Zend\Log\Logger;
-            $writer = new \Zend\Log\Writer\Stream($filename);
+            $logger = new Logger;
+            $writer = new Stream($filename);
             $logger->addWriter($writer);
 
             $this->log = $logger;
