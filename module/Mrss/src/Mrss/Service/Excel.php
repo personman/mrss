@@ -5,8 +5,8 @@ namespace Mrss\Service;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
 use Mrss\Entity\Subscription;
-
 use Mrss\Entity\Benchmark;
+use Mrss\Model\Benchmark as BenchmarkModel;
 use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
@@ -34,6 +34,9 @@ class Excel
     // Current college
     /** @var \Mrss\Entity\College */
     protected $currentCollege;
+
+    /** @var  \Mrss\Model\Benchmark */
+    protected $benchmarkModel;
 
     /**
      * @deprecated
@@ -579,6 +582,7 @@ class Excel
     {
         $valueColumn = 'B';
         $dbColumnCol = 'D';
+        $definitionCol = 'C';
         $firstHiddenRow = 241;
         $lastHiddenRow = 490;
 
@@ -593,9 +597,14 @@ class Excel
             $dbColumn = $sheet->getCell($dbColumnCol . $rowIndex)->getValue();
 
             if (!empty($dbColumn) && $observation->has($dbColumn)) {
+                // Populate the value
                 $value = $observation->get($dbColumn);
-
                 $sheet->setCellValue($valueColumn . $rowIndex, $value);
+
+                // Populate the description
+                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+                $definition = strip_tags($benchmark->getDescription());
+                $sheet->setCellValue($definitionCol . $rowIndex, $definition);
             }
         }
 
@@ -630,6 +639,21 @@ class Excel
             $this->populateMrssSubObservation($sheet, $subOb);
 
             $i++;
+        }
+
+        // Set data definitions
+        foreach ($subObSheets as $index) {
+            $sheet = $spreadsheet->setActiveSheetIndex($index);
+            // Some descriptions
+            foreach ($this->getMrssSubObservationDefinitionMap() as $cell => $dbColumn) {
+                // Description
+                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+                if ($benchmark) {
+                    $definition = $benchmark->getDescription();
+                    $sheet->setCellValue($cell, $definition);
+                }
+            }
+
         }
     }
 
@@ -672,6 +696,18 @@ class Excel
             'C32' => 'inst_cost_part_assessment',
             'B33' => 'inst_cost_full_prof_dev',
             'C33' => 'inst_cost_part_prof_dev'
+        );
+    }
+
+    protected function getMrssSubObservationDefinitionMap()
+    {
+        return array(
+            'D10' => 'inst_cost_full_expend',
+            'D11' => 'inst_cost_full_num',
+            'D12' => 'inst_cost_full_cred_hr',
+            'D16' => 'inst_cost_part_num',
+            'D17' => 'inst_cost_part_cred_hr',
+            'D18' => 'inst_cost_part_cred_hr',
         );
     }
 
@@ -840,5 +876,17 @@ class Excel
     public function getCurrentCollege()
     {
         return $this->currentCollege;
+    }
+
+    public function setBenchmarkModel(BenchmarkModel $model)
+    {
+        $this->benchmarkModel = $model;
+
+        return $this;
+    }
+
+    public function getBenchmarkModel()
+    {
+        return $this->benchmarkModel;
     }
 }

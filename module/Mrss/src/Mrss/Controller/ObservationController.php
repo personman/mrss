@@ -390,6 +390,7 @@ class ObservationController extends AbstractActionController
                     $excelService = new \Mrss\Service\Excel();
                     $excelService->setCurrentStudy($this->currentStudy());
                     $excelService->setCurrentCollege($this->currentCollege());
+
                     $allData = $excelService->getObservationDataFromExcel($filename);
                 } catch (\Exception $exception) {
                     //var_dump($exception->getMessage()); die;
@@ -566,6 +567,9 @@ class ObservationController extends AbstractActionController
         }
 
         $excelService = new Excel();
+        $excelService->setBenchmarkModel(
+            $this->getServiceLocator()->get('model.benchmark')
+        );
         $excelService->getExcelForSubscriptions(array($subscription));
 
     }

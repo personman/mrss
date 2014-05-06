@@ -1,3 +1,6 @@
+body {
+    background: #FFFFFF !important;
+}
 body a {
     color: #809c00;
     text-decoration: none;
@@ -318,4 +321,9 @@ body #subscription legend {
 #control-group-workforceEnrollment,
 #control-group-workforceRevenue {
     display: none;
+}
+
+/* NHEBI page */
+#orgbox .span4{
+    border-color: #13B2CD;
 }
