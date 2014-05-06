@@ -1,3 +1,12 @@
+body a {
+    color: #809c00;
+    text-decoration: none;
+}
+body a:hover {
+    color: #005580;
+    text-decoration: underline;
+}
+
 #wrapper .navbar.navbar-inverse .navbar-inner {
     background: #13B2CD;
     border-bottom: 8px solid #0097BB;

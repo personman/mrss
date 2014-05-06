@@ -166,6 +166,9 @@ class Page implements InputFilterAwareInterface
         return $this;
     }
 
+    /**
+     * @return ArrayCollection|\Mrss\Entity\Study[]
+     */
     public function getStudies()
     {
         return $this->studies;

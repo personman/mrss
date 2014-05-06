@@ -1,3 +1,5 @@
+<?php /** @var \Mrss\Entity\Page[] $pages */ ?>
+
 <h2>Pages</h2>
 
 <p>
@@ -19,7 +21,7 @@
     </thead>
 
     <tbody>
-    <?php foreach ($this->pages as $page): ?>
+    <?php foreach ($pages as $page): ?>
         <tr>
             <td>
                 <?php echo $this->escapeHtml($page->getTitle()) ?>
