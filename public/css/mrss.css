@@ -350,3 +350,7 @@ body #subscription legend {
     text-align: center;
     margin-bottom: 15px;
 }
+
+#footer .navbar-inverse {
+    margin-left: 175px;
+}
