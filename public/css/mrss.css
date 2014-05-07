@@ -344,3 +344,9 @@ body #subscription legend {
         text-align: left;
     }
 }
+
+.video-caption {
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 15px;
+}
