@@ -152,7 +152,7 @@ return array(
                         'route' => 'account',
                     ),
                     'logout' => array(
-                        'label' => 'Log Out',
+                        'label' => 'Sign Out',
                         'route' => 'zfcuser/logout',
                     )
                 )

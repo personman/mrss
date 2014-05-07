@@ -90,6 +90,8 @@ body a:hover {
     background-image: linear-gradient(#C7D241, #9BBE3C);
     border-color: #9BBE3C;
     color: #333 !important;
+    height: 30px;
+    padding-top: 5px;
 }
 
 
@@ -326,4 +328,19 @@ body #subscription legend {
 /* NHEBI page */
 #orgbox .span4{
     border-color: #13B2CD;
+}
+
+
+#timeline .span4 {
+    text-align: right;
+}
+#timeline .span8 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+@media (max-width: 759px) {
+    #timeline .span4 {
+        text-align: left;
+    }
 }
