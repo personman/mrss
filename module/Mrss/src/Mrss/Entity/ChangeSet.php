@@ -61,7 +61,7 @@ class ChangeSet
     protected $date;
 
     /**
-     * @ORM\OneToMany(targetEntity="Change", mappedBy="changeSet",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Change", mappedBy="changeSet",cascade={"persist", "remove"})
      * @var ArrayCollection|Change[]
      */
     protected $changes;

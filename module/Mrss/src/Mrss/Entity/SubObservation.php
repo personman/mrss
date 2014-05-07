@@ -28,6 +28,11 @@ class SubObservation
      */
     protected $observation;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ChangeSet", mappedBy="subObservation", cascade="remove")
+     */
+    protected $changeSets;
+
     // MRSS Form 2
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_full_expend;
