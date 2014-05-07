@@ -301,7 +301,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
         // Some HTML 5 validation
         if ($this->getInputType() == 'dollars' || $this->getInputType() == 'float') {
-            $element['attributes']['pattern'] = '\d+(\.\d+)?';
+            $element['attributes']['pattern'] = '(\-)?\d+(\.\d+)?';
             $element['attributes']['title'] = 'Use the format 1234 or 1234.56';
         } elseif ($this->getInputType() == 'percent') {
             $element['attributes']['pattern'] = '\d+(\.\d+)?';
@@ -334,7 +334,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+\.?(\d\d)?$/',
+                    'pattern' => '/^(\-)?\d+\.?(\d\d)?$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234 or 1234.56'
                     )
