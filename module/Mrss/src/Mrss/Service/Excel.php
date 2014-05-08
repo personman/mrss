@@ -674,37 +674,37 @@ class Excel
     protected function getMrssSubObservationMap()
     {
         return array(
-            'C10' => 'inst_cost_full_expend',
-            'C11' => 'inst_cost_full_num',
-            'C12' => 'inst_cost_full_cred_hr',
-            'C16' => 'inst_cost_part_num',
-            'C17' => 'inst_cost_part_cred_hr',
-            'C18' => 'inst_cost_part_cred_hr',
-            'B26' => 'inst_cost_full_program_dev',
-            'C26' => 'inst_cost_part_program_dev',
-            'B27' => 'inst_cost_full_course_dev',
-            'C27' => 'inst_cost_part_course_dev',
-            'B28' => 'inst_cost_full_teaching',
-            'C28' => 'inst_cost_part_teaching',
-            'B29' => 'inst_cost_full_tutoring',
-            'C29' => 'inst_cost_part_tutoring',
-            'B30' => 'inst_cost_full_advising',
-            'C30' => 'inst_cost_part_advising',
-            'B31' => 'inst_cost_full_ac_service',
-            'C31' => 'inst_cost_part_ac_service',
-            'B32' => 'inst_cost_full_assessment',
-            'C32' => 'inst_cost_part_assessment',
-            'B33' => 'inst_cost_full_prof_dev',
-            'C33' => 'inst_cost_part_prof_dev'
+            'C9' => 'inst_cost_full_expend',
+            'C10' => 'inst_cost_full_num',
+            'C11' => 'inst_cost_full_cred_hr',
+            'C14' => 'inst_cost_part_num',
+            'C15' => 'inst_cost_part_cred_hr',
+            'C16' => 'inst_cost_part_cred_hr',
+            'B23' => 'inst_cost_full_program_dev',
+            'C23' => 'inst_cost_part_program_dev',
+            'B24' => 'inst_cost_full_course_dev',
+            'C24' => 'inst_cost_part_course_dev',
+            'B25' => 'inst_cost_full_teaching',
+            'C25' => 'inst_cost_part_teaching',
+            'B26' => 'inst_cost_full_tutoring',
+            'C26' => 'inst_cost_part_tutoring',
+            'B27' => 'inst_cost_full_advising',
+            'C27' => 'inst_cost_part_advising',
+            'B28' => 'inst_cost_full_ac_service',
+            'C28' => 'inst_cost_part_ac_service',
+            'B29' => 'inst_cost_full_assessment',
+            'C29' => 'inst_cost_part_assessment',
+            'B30' => 'inst_cost_full_prof_dev',
+            'C30' => 'inst_cost_part_prof_dev'
         );
     }
 
     protected function getMrssSubObservationDefinitionMap()
     {
         return array(
-            'D10' => 'inst_cost_full_expend',
-            'D11' => 'inst_cost_full_num',
-            'D12' => 'inst_cost_full_cred_hr',
+            'D9' => 'inst_cost_full_expend',
+            'D10' => 'inst_cost_full_num',
+            'D11' => 'inst_cost_full_cred_hr',
             'D16' => 'inst_cost_part_num',
             'D17' => 'inst_cost_part_cred_hr',
             'D18' => 'inst_cost_part_cred_hr',
