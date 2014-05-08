@@ -570,8 +570,8 @@ class ObservationController extends AbstractActionController
         $excelService->setBenchmarkModel(
             $this->getServiceLocator()->get('model.benchmark')
         );
+        $excelService->setCurrentStudy($this->currentStudy());
         $excelService->getExcelForSubscriptions(array($subscription));
-
     }
 
     public function importsystemAction()

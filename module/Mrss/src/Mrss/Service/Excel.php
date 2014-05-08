@@ -602,7 +602,11 @@ class Excel
                 $sheet->setCellValue($valueColumn . $rowIndex, $value);
 
                 // Populate the description
-                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+                $benchmark = $this->getBenchmarkModel()
+                    ->findOneByDbColumnAndStudy(
+                        $dbColumn,
+                        $this->getCurrentStudy()->getId()
+                    );
                 $definition = strip_tags($benchmark->getDescription());
                 $sheet->setCellValue($definitionCol . $rowIndex, $definition);
             }

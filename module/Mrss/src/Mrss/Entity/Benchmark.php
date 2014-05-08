@@ -201,6 +201,9 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $this->status;
     }
 
+    /**
+     * @return \Mrss\Entity\BenchmarkGroup
+     */
     public function getBenchmarkGroup()
     {
         return $this->benchmarkGroup;

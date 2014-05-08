@@ -53,6 +53,18 @@ class Benchmark extends AbstractModel
         return $benchmark;
     }
 
+    public function findOneByDbColumnAndStudy($dbColumn, $studyId)
+    {
+        /** @var \Mrss\Entity\Benchmark[] $benchmarks */
+        $benchmarks = $this->getRepository()->findBy(array('dbColumn' => $dbColumn));
+
+        foreach ($benchmarks as $benchmark) {
+            if ($benchmark->getBenchmarkGroup()->getStudy()->getId() == $studyId) {
+                return $benchmark;
+            }
+        }
+    }
+
     public function find($id)
     {
         return $this->getRepository()->find($id);
