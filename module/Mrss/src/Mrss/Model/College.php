@@ -322,4 +322,10 @@ class College extends AbstractModel
 
         // Flush here or leave it to some other code?
     }
+
+    public function delete(CollegeEntity $college)
+    {
+        $this->getEntityManager()->remove($college);
+    }
+
 }

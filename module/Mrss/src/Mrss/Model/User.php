@@ -38,4 +38,10 @@ class User extends AbstractModel
 
         // Flush here or leave it to some other code?
     }
+
+    public function delete(UserEntity $user)
+    {
+        $this->getEntityManager()->remove($user);
+    }
+
 }

@@ -190,6 +190,11 @@ return array(
                     'action' => 'impersonateUser',
                     'roles' => array('admin')
                 ),
+                array(
+                    'controller' => 'subscription',
+                    'action' => 'delete',
+                    'roles' => array('admin')
+                ),
                 // Since the background action is fired by console, lift guard
                 array(
                     'controller' => 'import',

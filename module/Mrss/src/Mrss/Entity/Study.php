@@ -456,6 +456,18 @@ class Study
         return $allBenchmarks;
     }
 
+    public function getAllBenchmarkKeys()
+    {
+        $allKeys = array();
+        foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                $allKeys[] = $benchmark->getDbColumn();
+            }
+        }
+
+        return $allKeys;
+    }
+
     /**
      * Get the benchmarks for the current year and return all of their input filters
      */

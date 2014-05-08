@@ -240,6 +240,20 @@ class College
         return $address;
     }
 
+    public function getSubscriptionsForYear($year)
+    {
+        $subscriptions = $this->getSubscriptions();
+        $subscriptionsForYear = array();
+
+        foreach ($subscriptions as $subscription) {
+            if ($year == $subscription->getYear()) {
+                $subscriptionsForYear[] = $subscription;
+            }
+        }
+
+        return $subscriptionsForYear;
+    }
+
     public function getObservationForYear($year)
     {
         $observations = $this->getObservations();

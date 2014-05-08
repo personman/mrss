@@ -14,6 +14,7 @@
             <th>Subscription Date</th>
             <th>Payment Method</th>
             <th>Payment Amount</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -76,6 +77,14 @@
                 </td>
                 <td>
                     $<?= number_format($subscription->getPaymentAmount(), 2) ?>
+                </td>
+                <td>
+                    <a href="<?= $this->url(
+                        'subscription-delete',
+                        array('id' => $subscription->getId())
+                    ) ?>" class="deleteLink">
+                        delete
+                    </a>
                 </td>
             </tr>
         <?php endforeach ?>

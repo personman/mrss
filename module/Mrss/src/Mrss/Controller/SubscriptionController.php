@@ -795,6 +795,107 @@ class SubscriptionController extends AbstractActionController
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
     }
 
+    public function deleteAction()
+    {
+        // Load the subscription
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        /** @var \Mrss\Model\Observation $observationModel */
+        $observationModel = $this->getServiceLocator()->get('model.observation');
+
+        $subscriptionId = $this->params()->fromRoute('id');
+        $subscription = $subscriptionModel->find($subscriptionId);
+
+        // If the subscription's not found, redirect them
+        if (empty($subscription)) {
+            $this->flashMessenger()->addErrorMessage(
+                'Unable to find subscription with id: ' . $subscriptionId
+            );
+
+            return $this->redirect()->toUrl('/admin');
+        }
+
+        $message = '';
+
+        // See if this is the college's last subscription
+        $college = $subscription->getCollege();
+        if (count($college->getSubscriptions()) == 1) {
+            // This college only has one subscription: the one we're deleting.
+            // Delete the college and its users and observations
+            /** @var \Mrss\Model\College $collegeModel */
+            $collegeModel = $this->getServiceLocator()->get('model.college');
+
+            /** @var \Mrss\Model\User $userModel */
+            $userModel = $this->getServiceLocator()->get('model.user');
+
+            // Delete users
+            foreach ($college->getUsers() as $user) {
+                $userModel->delete($user);
+            }
+
+            // Delete observations
+            foreach ($college->getObservations() as $observation) {
+                $observationModel->delete($observation);
+            }
+
+            // Delete college
+            $collegeModel->delete($college);
+
+            $message .= "Since {$college->getName()} only has this one subscription,
+            the college and its users have been deleted. ";
+        } else {
+            // This college has other subscriptions. Don't delete the users or obs
+            // But do clear out their data for fields not in other studies
+            $benchmarkKeysToNull = $this->getBenchmarkKeysInThisStudyOnly();
+
+            $observation = $subscription->getObservation();
+            foreach ($benchmarkKeysToNull as $dbColumn) {
+                $observation->set($dbColumn, null);
+            }
+
+            $observationModel->save($observation);
+
+            $count = count($benchmarkKeysToNull);
+            $message .= "$count fields cleared out from this year's observation. ";
+        }
+
+        // Delete the subscription row
+        $subscriptionModel->delete($subscription);
+        $subscriptionModel->getEntityManager()->flush();
+
+        $message .= "Subscription deleted. ";
+
+        $this->flashMessenger()->addSuccessMessage($message);
+        return $this->redirect()->toUrl('/admin');
+    }
+
+    protected function getBenchmarkKeysInThisStudyOnly()
+    {
+        /** @var \Mrss\Model\Study $studyModel */
+        $studyModel = $this->getServiceLocator()->get('model.study');
+
+        /** @var \Mrss\Entity\Study $currentStudy */
+        $currentStudy = $this->currentStudy();
+        $allStudies = $studyModel->findAll();
+
+        $benchmarksInCurrentStudy = $currentStudy->getAllBenchmarkKeys();
+        $benchmarksInCurrentStudyOnly = $benchmarksInCurrentStudy;
+
+        foreach ($allStudies as $study) {
+            if ($study->getId() == $currentStudy->getId()) {
+                continue;
+            }
+
+            $benchmarksInCurrentStudyOnly = array_diff(
+                $benchmarksInCurrentStudyOnly,
+                $study->getAllBenchmarkKeys()
+            );
+        }
+
+        return $benchmarksInCurrentStudyOnly;
+    }
+
     public function getPasswordService()
     {
         if (!$this->passwordService) {

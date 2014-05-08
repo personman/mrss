@@ -162,4 +162,10 @@ class Observation extends AbstractModel
 
         // Flush here or leave it to some other code?
     }
+
+    public function delete(ObservationEntity $observation)
+    {
+        $this->getEntityManager()->remove($observation);
+    }
+
 }

@@ -245,6 +245,19 @@ return array(
                     )
                 )
             ),
+            'subscription-delete' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/subscription/delete/:id',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'delete',
+                        'id' => 0
+                    )
+                )
+
+            ),
             'subscribe' => array(
                 'type' => 'segment',
                 'priority' => 10,

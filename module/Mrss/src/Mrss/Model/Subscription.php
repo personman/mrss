@@ -25,6 +25,10 @@ class Subscription extends AbstractModel
         );
     }
 
+    /**
+     * @param $id
+     * @return null|\Mrss\Entity\Subscription
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);
@@ -93,5 +97,10 @@ class Subscription extends AbstractModel
         $this->getEntityManager()->persist($subscription);
 
         // Flush here or leave it to some other code?
+    }
+
+    public function delete(SubscriptionEntity $subscription)
+    {
+        $this->getEntityManager()->remove($subscription);
     }
 }
