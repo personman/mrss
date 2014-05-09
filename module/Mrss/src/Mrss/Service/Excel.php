@@ -602,13 +602,15 @@ class Excel
                 $sheet->setCellValue($valueColumn . $rowIndex, $value);
 
                 // Populate the description
-                $benchmark = $this->getBenchmarkModel()
-                    ->findOneByDbColumnAndStudy(
-                        $dbColumn,
-                        $this->getCurrentStudy()->getId()
-                    );
-                $definition = strip_tags($benchmark->getDescription());
-                $sheet->setCellValue($definitionCol . $rowIndex, $definition);
+                if (false) {
+                    $benchmark = $this->getBenchmarkModel()
+                        ->findOneByDbColumnAndStudy(
+                            $dbColumn,
+                            $this->getCurrentStudy()->getId()
+                        );
+                    $definition = strip_tags($benchmark->getDescription());
+                    $sheet->setCellValue($definitionCol . $rowIndex, $definition);
+                }
             }
         }
 
