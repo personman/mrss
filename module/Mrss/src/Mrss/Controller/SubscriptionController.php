@@ -896,6 +896,9 @@ class SubscriptionController extends AbstractActionController
         return $benchmarksInCurrentStudyOnly;
     }
 
+    /**
+     * @return array|\GoalioForgotPassword\Service\Password
+     */
     public function getPasswordService()
     {
         if (!$this->passwordService) {
