@@ -45,7 +45,7 @@ class NavigationFactory extends DefaultNavigationFactory
         $auth = $serviceLocator->get('zfcuser_auth_service');
         if ($auth->hasIdentity()) {
             // If the user is logged in, hide the login and subscription links
-            //unset($pages['login']);
+            unset($pages['login']);
             unset($pages['subscribe']);
 
             // And the reports preview

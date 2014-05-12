@@ -147,7 +147,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $formElement = $benchmark->getFormElement();
 
         $this->assertTrue(is_array($formElement));
-        $this->assertEquals('\d+(\.\d+)?', $formElement['attributes']['pattern']);
+        $this->assertEquals('(\-)?\d+(\.\d+)?', $formElement['attributes']['pattern']);
         $this->assertEquals(
             'Use the format 1234 or 1234.56',
             $formElement['attributes']['title']
