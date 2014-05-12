@@ -5,6 +5,7 @@ namespace Mrss\Controller;
 use Mrss\Entity\User;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
+use Mrss\Entity\SubscriptionDraft;
 use Mrss\Form\Payment;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
@@ -20,6 +21,7 @@ use Mrss\Form\Subscription as SubscriptionForm;
 use Mrss\Form\Fieldset\Agreement;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Mail\Message;
+use DateTime;
 
 /**
  * Class SubscriptionController
@@ -33,6 +35,8 @@ class SubscriptionController extends AbstractActionController
     protected $passwordService;
 
     protected $log;
+
+    protected $subscriptionDraftModel;
 
     /**
      * @var \Mrss\Entity\Study
@@ -52,8 +56,8 @@ class SubscriptionController extends AbstractActionController
             if ($form->isValid()) {
                 // If the form is valid, stash it in the session and go to
                 // the agreement page
-                $this->saveSubscriptionToSession($form->getData());
-                $this->saveTransIdToSession(uniqid());
+                //$this->saveSubscriptionToSession($form->getData());
+                $this->saveDraftSubscription($form->getData());
 
                 return $this->redirect()->toRoute('subscribe/user-agreement');
             } else {
@@ -119,7 +123,7 @@ class SubscriptionController extends AbstractActionController
                 // Save the digital signature and title
                 $formData = $form->getData();
                 $agreementData = $formData['agreement'];
-                $this->saveAgreementToSession($agreementData);
+                $this->saveAgreementToDraftSubscription($agreementData);
 
                 // Was there a valid offer code?
                 if (!empty($agreementData['offerCode'])) {
@@ -139,8 +143,43 @@ class SubscriptionController extends AbstractActionController
 
         return array(
             'form' => $form,
-            'subscription' => $this->getSubscriptionFromSession()
+            'subscription' => $this->getDraftSubscription()->getFormData()
         );
+    }
+
+    /**
+     * When TouchNet sends the payment postback, complete the subscription
+     */
+    public function postbackAction()
+    {
+        $message = "Postback received: \n";
+        $message .= date('r') . "\n";
+
+        $message .= print_r($_REQUEST, 1);
+
+        $this->getLog()->info($message);
+
+        // Save the postback to the db
+        $payment = new \Mrss\Entity\Payment;
+        $payment->setPostback($_REQUEST);
+
+        $transId = $this->params()->fromPost('EXT_TRANS_ID');
+        $payment->setTransId($transId);
+        $payment->setProcessed(false);
+
+        $paymentModel = $this->getServiceLocator()->get('model.payment');
+        $paymentModel->save($payment);
+
+        // Get the draft
+        $draftSubscription = $this->getDraftSubscription($transId);
+        if (empty($draftSubscription)) {
+            $this->getLog()
+                ->alert('Unable to look up draft subscription by id: ' . $transId);
+        } else {
+
+        }
+
+        die('ok');
     }
 
     public function paymentAction()
@@ -191,10 +230,10 @@ class SubscriptionController extends AbstractActionController
             // Complete the subscription
             $this->getLog()->info(
                 "Completing subscription: "
-                . print_r($this->getSubscriptionFromSession(), true)
+                . print_r($this->getDraftSubscription(), true)
             );
             $this->completeSubscription(
-                $this->getSubscriptionFromSession(),
+                $this->getDraftSubscription(),
                 array('paymentType' => 'creditCard'),
                 false
             );
@@ -285,7 +324,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($systemForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSubscriptionFromSession(),
+                    $this->getDraftSubscription(),
                     $systemForm->getData(),
                     true
                 );
@@ -317,7 +356,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($invoiceForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSubscriptionFromSession(),
+                    $this->getDraftSubscription(),
                     $invoiceForm->getData(),
                     true
                 );
@@ -344,7 +383,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($pilotForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSubscriptionFromSession(),
+                    $this->getDraftSubscription(),
                     $pilotForm->getData(),
                     true
                 );
@@ -356,35 +395,6 @@ class SubscriptionController extends AbstractActionController
                 return $this->redirect()->toRoute('subscribe/complete');
             }
         }
-    }
-
-    public function postbackAction()
-    {
-        // For dev, log what the post includes
-        $filename = 'postback.log';
-        $logger = new Logger;
-        $writer = new Stream($filename);
-        $logger->addWriter($writer);
-
-        $message = "Postback received: \n";
-        $message .= date('r') . "\n";
-
-        $message .= print_r($_REQUEST, 1);
-
-        $logger->info($message);
-
-        // Save the postback to the db
-        $payment = new \Mrss\Entity\Payment;
-        $payment->setPostback($_REQUEST);
-
-        $transId = $this->params()->fromPost('EXT_TRANS_ID');
-        $payment->setTransId($transId);
-        $payment->setProcessed(false);
-
-        $paymentModel = $this->getServiceLocator()->get('model.payment');
-        $paymentModel->save($payment);
-
-        die('ok');
     }
 
     /**
@@ -419,8 +429,11 @@ class SubscriptionController extends AbstractActionController
 
     public function checkSubscriptionIsInProgress()
     {
-        if (!$sub = $this->getSubscriptionFromSession()) {
-            throw new \Exception('Subscription not present in session.');
+        if (!$sub = $this->getDraftSubscription()) {
+            throw new \Exception(
+                'You do not appear to have a subscription in progress. Please start
+                over.'
+            );
         }
     }
 
@@ -490,15 +503,18 @@ class SubscriptionController extends AbstractActionController
     /**
      * Complete the subscription, creating college and users as needed
      *
-     * @param $subscriptionForm
+     * @param SubscriptionDraft $subscriptionDraft
      * @param $paymentForm
      * @param bool $sendInvoice
+     * @internal param $subscriptionForm
      */
     public function completeSubscription(
-        $subscriptionForm,
+        SubscriptionDraft $subscriptionDraft,
         $paymentForm,
         $sendInvoice = false
     ) {
+        $subscriptionForm = json_decode($subscriptionDraft->getFormData(), true);
+
         // Create or fetch the college
         $institutionForm = $subscriptionForm['institution'];
         $college = $this->createOrUpdateCollege($institutionForm);
@@ -531,6 +547,10 @@ class SubscriptionController extends AbstractActionController
         if ($sendInvoice) {
             $this->sendInvoice($subscription, $adminUser, $dataUser);
         }
+
+        // Now clear out the draft subscription
+        $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
+        $this->getServiceLocator()->get('em')->flush();
     }
 
     protected function getCurrentYear()
@@ -653,7 +673,8 @@ class SubscriptionController extends AbstractActionController
         }
 
         // Get the agreement data from the session
-        $agreement = $this->getAgreementFromSession();
+        $draftSubscription = $this->getDraftSubscription();
+        $agreement = json_decode($draftSubscription->getAgreementData(), true);
         $amount = $this->currentStudy()->getCurrentPrice();
 
         // Check for offer code
@@ -923,5 +944,60 @@ class SubscriptionController extends AbstractActionController
         }
 
         return $this->log;
+    }
+
+    public function saveDraftSubscription($data)
+    {
+        $draft = new SubscriptionDraft();
+        $draft->setFormData(json_encode($data));
+        $draft->setDate(new DateTime('now'));
+        $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+        $draft->setIp($ip);
+
+        $this->getSubscriptionDraftModel()->save($draft);
+        $this->getSubscriptionDraftModel()->getEntityManager()->flush();
+
+        $this->saveTransIdToSession($draft->getId());
+    }
+
+    /**
+     * @param null $id
+     * @return null|\Mrss\Entity\SubscriptionDraft
+     */
+    public function getDraftSubscription($id = null)
+    {
+        if (empty($id)) {
+            $id = $this->getTransIdFromSession();
+        }
+
+        $draft = $this->getSubscriptionDraftModel()->find($id);
+
+        return $draft;
+    }
+
+    public function saveAgreementToDraftSubscription($agreement)
+    {
+        $draft = $this->getDraftSubscription();
+        $draft->setAgreementData(json_encode($agreement));
+        $this->getSubscriptionDraftModel()->save($draft);
+        $this->getSubscriptionDraftModel()->getEntityManager()->flush();
+    }
+
+    public function setSubscriptionDraftModel($model)
+    {
+        $this->subscriptionDraftModel = $model;
+    }
+
+    /**
+     * @return \Mrss\Model\SubscriptionDraft
+     */
+    public function getSubscriptionDraftModel()
+    {
+        if (empty($this->subscriptionDraftModel)) {
+            $this->subscriptionDraftModel = $this->getServiceLocator()
+                ->get('model.subscriptionDraft');
+        }
+
+        return $this->subscriptionDraftModel;
     }
 }

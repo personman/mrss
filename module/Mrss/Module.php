@@ -285,6 +285,14 @@ class Module
 
                     return $subscriptionModel;
                 },
+                'model.subscriptionDraft' => function ($sm) {
+                    $model = new Model\SubscriptionDraft();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.setting' => function ($sm) {
                     $settingModel = new Model\Setting();
                     $em = $sm->get('em');

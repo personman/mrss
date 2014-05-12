@@ -77,3 +77,30 @@ function setUpAutocomplete()
         }
     })
 }
+
+/**
+ * Fill out subscription form for testing
+ */
+function testSub()
+{
+    ipeds = Math.floor((Math.random() * 100000) + 900000)
+
+    $('#institution-name').val('Test Community College');
+    $('#institution-ipdeds').val(ipeds);
+    $('#institution-address').val('123 Main');
+    $('#institution-city').val('Adrian');
+    $('#institution-state').val('MO');
+    $('#institution-zip').val('64720')
+
+    $('#adminContact-prefix').val('Mr.');
+    $('#adminContact-firstName').val('Testy');
+    $('#adminContact-lastName').val('Testerson');
+    $('#adminContact-title').val('Chief Tester');
+    $('#adminContact-phone').val('1231231234');
+    $('#adminContact-email').val('personman2@gmail.com');
+    $('#adminContact-emailConfirm').val('personman2@gmail.com');
+
+    $('#same-as-admin').click();
+
+    $('form#subscription').submit();
+}
