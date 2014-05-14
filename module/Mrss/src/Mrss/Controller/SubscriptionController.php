@@ -244,7 +244,10 @@ class SubscriptionController extends AbstractActionController
         $amount = $this->currentStudy()->getCurrentPrice();
 
         // Check for offer code
-        $agreement = $this->getAgreementFromSession();
+        $agreement = json_decode(
+            $this->getDraftSubscription()->getAgreementData(),
+            true
+        );
         $skipOtherDiscounts = false;
         if (!empty($agreement['offerCode'])) {
             if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
