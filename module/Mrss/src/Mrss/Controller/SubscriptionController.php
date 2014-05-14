@@ -39,6 +39,8 @@ class SubscriptionController extends AbstractActionController
 
     protected $subscriptionDraftModel;
 
+    protected $draftSubscription;
+
     /**
      * @var \Mrss\Entity\Study
      */
@@ -173,6 +175,8 @@ class SubscriptionController extends AbstractActionController
 
         // Get the draft
         $draftSubscription = $this->getDraftSubscription($transId);
+        $this->setDraftSubscription($draftSubscription);
+
         if (empty($draftSubscription)) {
             $this->getLog()
                 ->alert('Unable to look up draft subscription by id: ' . $transId);
@@ -937,19 +941,26 @@ class SubscriptionController extends AbstractActionController
         $this->saveTransIdToSession($draft->getId());
     }
 
+    public function setDraftSubscription(SubscriptionDraft $draft)
+    {
+        $this->draftSubscription = $draft;
+    }
+
     /**
      * @param null $id
      * @return null|\Mrss\Entity\SubscriptionDraft
      */
     public function getDraftSubscription($id = null)
     {
-        if (empty($id)) {
-            $id = $this->getTransIdFromSession();
+        if (empty($this->draftSubscription)) {
+            if (empty($id)) {
+                $id = $this->getTransIdFromSession();
+            }
+
+            $this->draftSubscription = $this->getSubscriptionDraftModel()->find($id);
         }
 
-        $draft = $this->getSubscriptionDraftModel()->find($id);
-
-        return $draft;
+        return $this->draftSubscription;
     }
 
     public function saveAgreementToDraftSubscription($agreement)
