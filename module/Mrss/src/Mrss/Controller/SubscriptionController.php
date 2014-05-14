@@ -228,7 +228,6 @@ class SubscriptionController extends AbstractActionController
 
         // Catch subscription completion via credit card
         if ($this->params()->fromQuery('UPAY_SITE_ID')) {
-            prd($_REQUEST);
             $this->flashMessenger()->addSuccessMessage(
                 "Payment processed."
             );
