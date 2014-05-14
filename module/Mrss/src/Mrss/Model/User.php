@@ -43,5 +43,4 @@ class User extends AbstractModel
     {
         $this->getEntityManager()->remove($user);
     }
-
 }

@@ -105,5 +105,4 @@ class SubscriptionDraft
     {
         return $this->ip;
     }
-
 }

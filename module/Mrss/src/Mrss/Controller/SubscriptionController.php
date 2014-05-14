@@ -6,7 +6,8 @@ use Mrss\Entity\User;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubscriptionDraft;
-use Mrss\Form\Payment;
+use Mrss\Entity\Payment;
+use Mrss\Form\Payment as PaymentForm;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
@@ -160,7 +161,7 @@ class SubscriptionController extends AbstractActionController
         $this->getLog()->info($message);
 
         // Save the postback to the db
-        $payment = new \Mrss\Entity\Payment;
+        $payment = new Payment;
         $payment->setPostback($_REQUEST);
 
         $transId = $this->params()->fromPost('EXT_TRANS_ID');
@@ -176,37 +177,16 @@ class SubscriptionController extends AbstractActionController
             $this->getLog()
                 ->alert('Unable to look up draft subscription by id: ' . $transId);
         } else {
-
-        }
-
-        die('ok');
-    }
-
-    public function paymentAction()
-    {
-        $this->checkSubscriptionIsInProgress();
-        $this->checkEnrollmentIsOpen();
-
-        // Catch subscription completion via credit card
-        if ($this->params()->fromQuery('UPAY_SITE_ID')) {
             $this->getLog()->info(
-                'New uPay payment with site id: '
-                . $this->params()->fromQuery('UPAY_SITE_ID')
+                'New uPay payment with transId: ' . $transId
             );
-            // Find the postback from the payment queue
-            $transId = $this->getTransIdFromSession();
-            $paymentModel = $this->getServiceLocator()->get('model.payment');
-
-            /** @var \Mrss\Entity\Payment $payment */
-            $payment = $paymentModel->findByTransId($transId);
-            $this->getLog()->info("Payment retrieved: " . print_r($payment, true));
 
             // The payment postback should be a success
             $postback = $payment->getPostback();
             if (empty($payment) ||  !empty($postback['pmt_status'])
                 && $postback['pmt_status'] == 'success') {
                 $payment->setProcessed(true);
-                $payment->setProcessedDate(new \DateTime('now'));
+                $payment->setProcessedDate(new DateTime('now'));
                 $paymentModel->save($payment);
             } else {
                 // Something went wrong
@@ -226,7 +206,6 @@ class SubscriptionController extends AbstractActionController
                 $this->getServiceLocator()->get('mail.transport')->send($message);
             }
 
-
             // Complete the subscription
             $this->getLog()->info(
                 "Completing subscription: "
@@ -237,7 +216,18 @@ class SubscriptionController extends AbstractActionController
                 array('paymentType' => 'creditCard'),
                 false
             );
+        }
 
+        die('ok');
+    }
+
+    public function paymentAction()
+    {
+        $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
+
+        // Catch subscription completion via credit card
+        if ($this->params()->fromQuery('UPAY_SITE_ID')) {
             $this->flashMessenger()->addSuccessMessage(
                 "Payment processed."
             );
@@ -292,7 +282,7 @@ class SubscriptionController extends AbstractActionController
         $validation_key = md5($validation_key);
         $val = base64_encode(pack('H*', $validation_key));
 
-        $ccForm = new Payment($uPaySiteId, $uPayUrl, $amount, $transId, $val);
+        $ccForm = new PaymentForm($uPaySiteId, $uPayUrl, $amount, $transId, $val);
 
         $invoiceForm = new SubscriptionInvoice();
         $invoiceForm->setAttribute('action', '/subscribe/invoice');
