@@ -6,16 +6,32 @@ use Doctrine\Common\Proxy\Autoloader;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Mrss\View\Helper\FlashMessages;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
+        $eventManager        = $e->getApplication()->getEventManager();
+
+        // Log exceptions and errors
+        $eventManager->attach(
+            MvcEvent::EVENT_DISPATCH_ERROR,
+            array($this, 'handleError')
+        );
+        $eventManager->attach(
+            MvcEvent::EVENT_RENDER_ERROR,
+            array($this, 'handleError')
+        );
+        Logger::registerErrorHandler($this->getErrorLog());
+
+
+
         // Set the timezone
         date_default_timezone_set('America/Chicago');
 
         //$e->getApplication()->getServiceManager()->get('translator');
-        $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
@@ -41,6 +57,24 @@ class Module
                 $sm->get('em')->flush();
             }
         });
+    }
+
+    public function handleError(MvcEvent $e) {
+        $logger = $this->getErrorLog();
+
+        $exception = $e->getParam('exception');
+        $logger->err($exception->getMessage());
+        $logger->info('IP: ' . $_SERVER['REMOTE_ADDR']);
+
+        // Log user identity, if present
+        $userService = $e->getApplication()
+            ->getServiceManager()->get('zfcuser_auth_service');
+
+        // Set the current User
+        $user = $userService->getIdentity();
+        if ($user) {
+            $logger->info("User: " . $user->getId());
+        }
     }
 
     public function getConfig()
@@ -579,5 +613,14 @@ class Module
                 }
             ),
         );
+    }
+
+    protected function getErrorLog()
+    {
+        $logger = new Logger;
+        $writer = new Stream('error.log');
+        $logger->addWriter($writer);
+
+        return $logger;
     }
 }

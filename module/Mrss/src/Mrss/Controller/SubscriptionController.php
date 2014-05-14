@@ -262,7 +262,11 @@ class SubscriptionController extends AbstractActionController
         if (!$skipOtherDiscounts) {
             $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
             $year = $this->getCurrentYear();
-            $subscription = $this->getSubscriptionFromSession();
+            $subscription = json_decode(
+                $this->getDraftSubscription()->getFormData(),
+                true
+            );
+
             $ipeds = $subscription['institution']['ipeds'];
 
             $studyId = $this->currentStudy()->getId();
@@ -454,16 +458,6 @@ class SubscriptionController extends AbstractActionController
         }
     }
 
-    public function saveSubscriptionToSession($subscriptionForm)
-    {
-        $this->getSessionContainer()->subscribeForm = $subscriptionForm;
-    }
-
-    public function getSubscriptionFromSession()
-    {
-        return $this->getSessionContainer()->subscribeForm;
-    }
-
     public function saveTransIdToSession($transId)
     {
         $this->getSessionContainer()->transId = $transId;
@@ -472,16 +466,6 @@ class SubscriptionController extends AbstractActionController
     public function getTransIdFromSession()
     {
         return $this->getSessionContainer()->transId;
-    }
-
-    public function saveAgreementToSession($agreementForm)
-    {
-        $this->getSessionContainer()->agreement = $agreementForm;
-    }
-
-    public function getAgreementFromSession()
-    {
-        return $this->getSessionContainer()->agreement;
     }
 
     public function getSessionContainer()
