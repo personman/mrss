@@ -86,15 +86,15 @@ class SubscriptionController extends AbstractActionController
         $this->checkSubscriptionIsInProgress();
 
         // Offer code
-        if ($this->currentStudy()->hasOfferCode()) {
-            $offerCodes = $this->currentStudy()->getOfferCodesArray();
+        if ($this->getStudy()->hasOfferCode()) {
+            $offerCodes = $this->getStudy()->getOfferCodesArray();
         } else {
             $offerCodes = array();
         }
 
         $form = new Form('agreement');
         $fieldset = new Agreement(
-            $this->currentStudy()->getDescription(),
+            $this->getStudy()->getDescription(),
             $offerCodes
         );
 
@@ -241,11 +241,11 @@ class SubscriptionController extends AbstractActionController
         // Show payment forms
 
         // Get the uPay info from the study config
-        $uPaySiteId = $this->currentStudy()->getUPaySiteId();
-        $uPayUrl = $this->currentStudy()->getUPayUrl();
+        $uPaySiteId = $this->getStudy()->getUPaySiteId();
+        $uPayUrl = $this->getStudy()->getUPayUrl();
 
         // Get this dynamically based on study and date
-        $amount = $this->currentStudy()->getCurrentPrice();
+        $amount = $this->getStudy()->getCurrentPrice();
 
         // Check for offer code
         $agreement = json_decode(
@@ -254,10 +254,10 @@ class SubscriptionController extends AbstractActionController
         );
         $skipOtherDiscounts = false;
         if (!empty($agreement['offerCode'])) {
-            if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
-                $amount = $this->currentStudy()
+            if ($this->getStudy()->checkOfferCode($agreement['offerCode'])) {
+                $amount = $this->getStudy()
                     ->getOfferCodePrice($agreement['offerCode']);
-                $skipOtherDiscounts = $this->currentStudy()
+                $skipOtherDiscounts = $this->getStudy()
                     ->getOfferCode($agreement['offerCode'])->getSkipOtherDiscounts();
             }
         }
@@ -273,7 +273,7 @@ class SubscriptionController extends AbstractActionController
 
             $ipeds = $subscription['institution']['ipeds'];
 
-            $studyId = $this->currentStudy()->getId();
+            $studyId = $this->getStudy()->getId();
             if ($studyId == 2) {
                 $currentStudyCode = 'mrss';
             } elseif ($studyId == 3) {
@@ -420,7 +420,7 @@ class SubscriptionController extends AbstractActionController
         }
 
         $checker = $this->getServiceLocator()->get('service.nhebisubscriptions.mrss');
-        $checker->setStudyId($this->currentStudy()->getId());
+        $checker->setStudyId($this->getStudy()->getId());
 
 
         $result = $checker->checkSubscription($year, $ipeds);
@@ -446,18 +446,18 @@ class SubscriptionController extends AbstractActionController
     public function checkEnrollmentIsOpen()
     {
         // If pilot is open, then allow enrollment, even if enrollement is closed
-        if ($this->currentStudy()->getPilotOpen()) {
+        if (this->getStudy()->getPilotOpen()) {
             return true;
         }
 
-        if (!$this->currentStudy()->getEnrollmentOpen()) {
+        if (!$this->getStudy()->getEnrollmentOpen()) {
             throw new \Exception('Enrollment is not open for this study');
         }
     }
 
     public function checkPilotIsOpen()
     {
-        if (!$this->currentStudy()->getPilotOpen()) {
+        if (!$this->getStudy()->getPilotOpen()) {
             throw new \Exception('Pilot is not open for this study');
         }
     }
@@ -610,7 +610,7 @@ class SubscriptionController extends AbstractActionController
             $pwService->getOptions()
                 ->setResetEmailTemplate('email/subscription/newuser');
             $pwService->getOptions()->setResetEmailSubjectLine(
-                'Welcome to ' . $this->currentStudy()->getDescription()
+                'Welcome to ' . $this->getStudy()->getDescription()
             );
 
             $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
@@ -656,12 +656,12 @@ class SubscriptionController extends AbstractActionController
         // Get the agreement data from the session
         $draftSubscription = $this->getDraftSubscription();
         $agreement = json_decode($draftSubscription->getAgreementData(), true);
-        $amount = $this->currentStudy()->getCurrentPrice();
+        $amount = $this->getStudy()->getCurrentPrice();
 
         // Check for offer code
         if (!empty($agreement['offerCode'])) {
-            if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
-                $amount = $this->currentStudy()
+            if ($this->getStudy()->checkOfferCode($agreement['offerCode'])) {
+                $amount = $this->getStudy()
                     ->getOfferCodePrice($agreement['offerCode']);
             }
         }
@@ -712,7 +712,7 @@ class SubscriptionController extends AbstractActionController
     protected function getStudy()
     {
         if (empty($this->study)) {
-            $studyId = $this->currentStudy()->getId();
+            $studyId = $this->getStudy()->getId();
 
             /** @var \Mrss\Model\Study $studyModel */
             $studyModel = $this->getServiceLocator()->get('model.study');
@@ -878,7 +878,7 @@ class SubscriptionController extends AbstractActionController
         $studyModel = $this->getServiceLocator()->get('model.study');
 
         /** @var \Mrss\Entity\Study $currentStudy */
-        $currentStudy = $this->currentStudy();
+        $currentStudy = $this->getStudy();
         $allStudies = $studyModel->findAll();
 
         $benchmarksInCurrentStudy = $currentStudy->getAllBenchmarkKeys();
