@@ -327,5 +327,4 @@ class College extends AbstractModel
     {
         $this->getEntityManager()->remove($college);
     }
-
 }

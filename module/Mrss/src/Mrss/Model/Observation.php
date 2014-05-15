@@ -167,5 +167,4 @@ class Observation extends AbstractModel
     {
         $this->getEntityManager()->remove($observation);
     }
-
 }

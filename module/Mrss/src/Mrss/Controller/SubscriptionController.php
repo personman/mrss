@@ -5,7 +5,9 @@ namespace Mrss\Controller;
 use Mrss\Entity\User;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
-use Mrss\Form\Payment;
+use Mrss\Entity\SubscriptionDraft;
+use Mrss\Entity\Payment;
+use Mrss\Form\Payment as PaymentForm;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
@@ -20,6 +22,7 @@ use Mrss\Form\Subscription as SubscriptionForm;
 use Mrss\Form\Fieldset\Agreement;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Mail\Message;
+use DateTime;
 
 /**
  * Class SubscriptionController
@@ -33,6 +36,10 @@ class SubscriptionController extends AbstractActionController
     protected $passwordService;
 
     protected $log;
+
+    protected $subscriptionDraftModel;
+
+    protected $draftSubscription;
 
     /**
      * @var \Mrss\Entity\Study
@@ -52,8 +59,8 @@ class SubscriptionController extends AbstractActionController
             if ($form->isValid()) {
                 // If the form is valid, stash it in the session and go to
                 // the agreement page
-                $this->saveSubscriptionToSession($form->getData());
-                $this->saveTransIdToSession(uniqid());
+                //$this->saveSubscriptionToSession($form->getData());
+                $this->saveDraftSubscription($form->getData());
 
                 return $this->redirect()->toRoute('subscribe/user-agreement');
             } else {
@@ -79,15 +86,15 @@ class SubscriptionController extends AbstractActionController
         $this->checkSubscriptionIsInProgress();
 
         // Offer code
-        if ($this->currentStudy()->hasOfferCode()) {
-            $offerCodes = $this->currentStudy()->getOfferCodesArray();
+        if ($this->getStudy()->hasOfferCode()) {
+            $offerCodes = $this->getStudy()->getOfferCodesArray();
         } else {
             $offerCodes = array();
         }
 
         $form = new Form('agreement');
         $fieldset = new Agreement(
-            $this->currentStudy()->getDescription(),
+            $this->getStudy()->getDescription(),
             $offerCodes
         );
 
@@ -119,7 +126,7 @@ class SubscriptionController extends AbstractActionController
                 // Save the digital signature and title
                 $formData = $form->getData();
                 $agreementData = $formData['agreement'];
-                $this->saveAgreementToSession($agreementData);
+                $this->saveAgreementToDraftSubscription($agreementData);
 
                 // Was there a valid offer code?
                 if (!empty($agreementData['offerCode'])) {
@@ -139,35 +146,51 @@ class SubscriptionController extends AbstractActionController
 
         return array(
             'form' => $form,
-            'subscription' => $this->getSubscriptionFromSession()
+            'subscription' => $this->getDraftSubscription()->getFormData()
         );
     }
 
-    public function paymentAction()
+    /**
+     * When TouchNet sends the payment postback, complete the subscription
+     */
+    public function postbackAction()
     {
-        $this->checkSubscriptionIsInProgress();
-        $this->checkEnrollmentIsOpen();
+        $message = "Postback received: \n";
+        $message .= date('r') . "\n";
 
-        // Catch subscription completion via credit card
-        if ($this->params()->fromQuery('UPAY_SITE_ID')) {
+        $message .= print_r($_REQUEST, 1);
+
+        $this->getLog()->info($message);
+
+        // Save the postback to the db
+        $payment = new Payment;
+        $payment->setPostback($_REQUEST);
+
+        $transId = $this->params()->fromPost('EXT_TRANS_ID');
+        $payment->setTransId($transId);
+        $payment->setProcessed(false);
+
+        $paymentModel = $this->getServiceLocator()->get('model.payment');
+        $paymentModel->save($payment);
+
+        // Get the draft
+        $draftSubscription = $this->getDraftSubscription($transId);
+        $this->setDraftSubscription($draftSubscription);
+
+        if (empty($draftSubscription)) {
+            $this->getLog()
+                ->alert('Unable to look up draft subscription by id: ' . $transId);
+        } else {
             $this->getLog()->info(
-                'New uPay payment with site id: '
-                . $this->params()->fromQuery('UPAY_SITE_ID')
+                'New uPay payment with transId: ' . $transId
             );
-            // Find the postback from the payment queue
-            $transId = $this->getTransIdFromSession();
-            $paymentModel = $this->getServiceLocator()->get('model.payment');
-
-            /** @var \Mrss\Entity\Payment $payment */
-            $payment = $paymentModel->findByTransId($transId);
-            $this->getLog()->info("Payment retrieved: " . print_r($payment, true));
 
             // The payment postback should be a success
             $postback = $payment->getPostback();
             if (empty($payment) ||  !empty($postback['pmt_status'])
                 && $postback['pmt_status'] == 'success') {
                 $payment->setProcessed(true);
-                $payment->setProcessedDate(new \DateTime('now'));
+                $payment->setProcessedDate(new DateTime('now'));
                 $paymentModel->save($payment);
             } else {
                 // Something went wrong
@@ -187,18 +210,28 @@ class SubscriptionController extends AbstractActionController
                 $this->getServiceLocator()->get('mail.transport')->send($message);
             }
 
-
             // Complete the subscription
             $this->getLog()->info(
                 "Completing subscription: "
-                . print_r($this->getSubscriptionFromSession(), true)
+                . print_r($this->getDraftSubscription(), true)
             );
             $this->completeSubscription(
-                $this->getSubscriptionFromSession(),
+                $this->getDraftSubscription(),
                 array('paymentType' => 'creditCard'),
                 false
             );
+        }
 
+        die('ok');
+    }
+
+    public function paymentAction()
+    {
+        $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
+
+        // Catch subscription completion via credit card
+        if ($this->params()->fromQuery('UPAY_SITE_ID')) {
             $this->flashMessenger()->addSuccessMessage(
                 "Payment processed."
             );
@@ -208,20 +241,23 @@ class SubscriptionController extends AbstractActionController
         // Show payment forms
 
         // Get the uPay info from the study config
-        $uPaySiteId = $this->currentStudy()->getUPaySiteId();
-        $uPayUrl = $this->currentStudy()->getUPayUrl();
+        $uPaySiteId = $this->getStudy()->getUPaySiteId();
+        $uPayUrl = $this->getStudy()->getUPayUrl();
 
         // Get this dynamically based on study and date
-        $amount = $this->currentStudy()->getCurrentPrice();
+        $amount = $this->getStudy()->getCurrentPrice();
 
         // Check for offer code
-        $agreement = $this->getAgreementFromSession();
+        $agreement = json_decode(
+            $this->getDraftSubscription()->getAgreementData(),
+            true
+        );
         $skipOtherDiscounts = false;
         if (!empty($agreement['offerCode'])) {
-            if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
-                $amount = $this->currentStudy()
+            if ($this->getStudy()->checkOfferCode($agreement['offerCode'])) {
+                $amount = $this->getStudy()
                     ->getOfferCodePrice($agreement['offerCode']);
-                $skipOtherDiscounts = $this->currentStudy()
+                $skipOtherDiscounts = $this->getStudy()
                     ->getOfferCode($agreement['offerCode'])->getSkipOtherDiscounts();
             }
         }
@@ -230,10 +266,14 @@ class SubscriptionController extends AbstractActionController
         if (!$skipOtherDiscounts) {
             $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
             $year = $this->getCurrentYear();
-            $subscription = $this->getSubscriptionFromSession();
+            $subscription = json_decode(
+                $this->getDraftSubscription()->getFormData(),
+                true
+            );
+
             $ipeds = $subscription['institution']['ipeds'];
 
-            $studyId = $this->currentStudy()->getId();
+            $studyId = $this->getStudy()->getId();
             if ($studyId == 2) {
                 $currentStudyCode = 'mrss';
             } elseif ($studyId == 3) {
@@ -253,7 +293,7 @@ class SubscriptionController extends AbstractActionController
         $validation_key = md5($validation_key);
         $val = base64_encode(pack('H*', $validation_key));
 
-        $ccForm = new Payment($uPaySiteId, $uPayUrl, $amount, $transId, $val);
+        $ccForm = new PaymentForm($uPaySiteId, $uPayUrl, $amount, $transId, $val);
 
         $invoiceForm = new SubscriptionInvoice();
         $invoiceForm->setAttribute('action', '/subscribe/invoice');
@@ -285,7 +325,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($systemForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSubscriptionFromSession(),
+                    $this->getDraftSubscription(),
                     $systemForm->getData(),
                     true
                 );
@@ -317,7 +357,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($invoiceForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSubscriptionFromSession(),
+                    $this->getDraftSubscription(),
                     $invoiceForm->getData(),
                     true
                 );
@@ -344,7 +384,7 @@ class SubscriptionController extends AbstractActionController
 
             if ($pilotForm->isValid()) {
                 $this->completeSubscription(
-                    $this->getSubscriptionFromSession(),
+                    $this->getDraftSubscription(),
                     $pilotForm->getData(),
                     true
                 );
@@ -356,35 +396,6 @@ class SubscriptionController extends AbstractActionController
                 return $this->redirect()->toRoute('subscribe/complete');
             }
         }
-    }
-
-    public function postbackAction()
-    {
-        // For dev, log what the post includes
-        $filename = 'postback.log';
-        $logger = new Logger;
-        $writer = new Stream($filename);
-        $logger->addWriter($writer);
-
-        $message = "Postback received: \n";
-        $message .= date('r') . "\n";
-
-        $message .= print_r($_REQUEST, 1);
-
-        $logger->info($message);
-
-        // Save the postback to the db
-        $payment = new \Mrss\Entity\Payment;
-        $payment->setPostback($_REQUEST);
-
-        $transId = $this->params()->fromPost('EXT_TRANS_ID');
-        $payment->setTransId($transId);
-        $payment->setProcessed(false);
-
-        $paymentModel = $this->getServiceLocator()->get('model.payment');
-        $paymentModel->save($payment);
-
-        die('ok');
     }
 
     /**
@@ -409,7 +420,7 @@ class SubscriptionController extends AbstractActionController
         }
 
         $checker = $this->getServiceLocator()->get('service.nhebisubscriptions.mrss');
-        $checker->setStudyId($this->currentStudy()->getId());
+        $checker->setStudyId($this->getStudy()->getId());
 
 
         $result = $checker->checkSubscription($year, $ipeds);
@@ -419,8 +430,11 @@ class SubscriptionController extends AbstractActionController
 
     public function checkSubscriptionIsInProgress()
     {
-        if (!$sub = $this->getSubscriptionFromSession()) {
-            throw new \Exception('Subscription not present in session.');
+        if (!$sub = $this->getDraftSubscription()) {
+            throw new \Exception(
+                'You do not appear to have a subscription in progress. Please start
+                over.'
+            );
         }
     }
 
@@ -432,30 +446,20 @@ class SubscriptionController extends AbstractActionController
     public function checkEnrollmentIsOpen()
     {
         // If pilot is open, then allow enrollment, even if enrollement is closed
-        if ($this->currentStudy()->getPilotOpen()) {
+        if ($this->getStudy()->getPilotOpen()) {
             return true;
         }
 
-        if (!$this->currentStudy()->getEnrollmentOpen()) {
+        if (!$this->getStudy()->getEnrollmentOpen()) {
             throw new \Exception('Enrollment is not open for this study');
         }
     }
 
     public function checkPilotIsOpen()
     {
-        if (!$this->currentStudy()->getPilotOpen()) {
+        if (!$this->getStudy()->getPilotOpen()) {
             throw new \Exception('Pilot is not open for this study');
         }
-    }
-
-    public function saveSubscriptionToSession($subscriptionForm)
-    {
-        $this->getSessionContainer()->subscribeForm = $subscriptionForm;
-    }
-
-    public function getSubscriptionFromSession()
-    {
-        return $this->getSessionContainer()->subscribeForm;
     }
 
     public function saveTransIdToSession($transId)
@@ -466,16 +470,6 @@ class SubscriptionController extends AbstractActionController
     public function getTransIdFromSession()
     {
         return $this->getSessionContainer()->transId;
-    }
-
-    public function saveAgreementToSession($agreementForm)
-    {
-        $this->getSessionContainer()->agreement = $agreementForm;
-    }
-
-    public function getAgreementFromSession()
-    {
-        return $this->getSessionContainer()->agreement;
     }
 
     public function getSessionContainer()
@@ -490,15 +484,18 @@ class SubscriptionController extends AbstractActionController
     /**
      * Complete the subscription, creating college and users as needed
      *
-     * @param $subscriptionForm
+     * @param SubscriptionDraft $subscriptionDraft
      * @param $paymentForm
      * @param bool $sendInvoice
+     * @internal param $subscriptionForm
      */
     public function completeSubscription(
-        $subscriptionForm,
+        SubscriptionDraft $subscriptionDraft,
         $paymentForm,
         $sendInvoice = false
     ) {
+        $subscriptionForm = json_decode($subscriptionDraft->getFormData(), true);
+
         // Create or fetch the college
         $institutionForm = $subscriptionForm['institution'];
         $college = $this->createOrUpdateCollege($institutionForm);
@@ -531,6 +528,10 @@ class SubscriptionController extends AbstractActionController
         if ($sendInvoice) {
             $this->sendInvoice($subscription, $adminUser, $dataUser);
         }
+
+        // Now clear out the draft subscription
+        $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
+        $this->getServiceLocator()->get('em')->flush();
     }
 
     protected function getCurrentYear()
@@ -609,7 +610,7 @@ class SubscriptionController extends AbstractActionController
             $pwService->getOptions()
                 ->setResetEmailTemplate('email/subscription/newuser');
             $pwService->getOptions()->setResetEmailSubjectLine(
-                'Welcome to ' . $this->currentStudy()->getDescription()
+                'Welcome to ' . $this->getStudy()->getDescription()
             );
 
             $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
@@ -653,13 +654,14 @@ class SubscriptionController extends AbstractActionController
         }
 
         // Get the agreement data from the session
-        $agreement = $this->getAgreementFromSession();
-        $amount = $this->currentStudy()->getCurrentPrice();
+        $draftSubscription = $this->getDraftSubscription();
+        $agreement = json_decode($draftSubscription->getAgreementData(), true);
+        $amount = $this->getStudy()->getCurrentPrice();
 
         // Check for offer code
         if (!empty($agreement['offerCode'])) {
-            if ($this->currentStudy()->checkOfferCode($agreement['offerCode'])) {
-                $amount = $this->currentStudy()
+            if ($this->getStudy()->checkOfferCode($agreement['offerCode'])) {
+                $amount = $this->getStudy()
                     ->getOfferCodePrice($agreement['offerCode']);
             }
         }
@@ -710,7 +712,7 @@ class SubscriptionController extends AbstractActionController
     protected function getStudy()
     {
         if (empty($this->study)) {
-            $studyId = $this->currentStudy()->getId();
+            $studyId = $this->getStudy()->getId();
 
             /** @var \Mrss\Model\Study $studyModel */
             $studyModel = $this->getServiceLocator()->get('model.study');
@@ -876,7 +878,7 @@ class SubscriptionController extends AbstractActionController
         $studyModel = $this->getServiceLocator()->get('model.study');
 
         /** @var \Mrss\Entity\Study $currentStudy */
-        $currentStudy = $this->currentStudy();
+        $currentStudy = $this->getStudy();
         $allStudies = $studyModel->findAll();
 
         $benchmarksInCurrentStudy = $currentStudy->getAllBenchmarkKeys();
@@ -923,5 +925,67 @@ class SubscriptionController extends AbstractActionController
         }
 
         return $this->log;
+    }
+
+    public function saveDraftSubscription($data)
+    {
+        $draft = new SubscriptionDraft();
+        $draft->setFormData(json_encode($data));
+        $draft->setDate(new DateTime('now'));
+        $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+        $draft->setIp($ip);
+
+        $this->getSubscriptionDraftModel()->save($draft);
+        $this->getSubscriptionDraftModel()->getEntityManager()->flush();
+
+        $this->saveTransIdToSession($draft->getId());
+    }
+
+    public function setDraftSubscription(SubscriptionDraft $draft)
+    {
+        $this->draftSubscription = $draft;
+    }
+
+    /**
+     * @param null $id
+     * @return null|\Mrss\Entity\SubscriptionDraft
+     */
+    public function getDraftSubscription($id = null)
+    {
+        if (empty($this->draftSubscription)) {
+            if (empty($id)) {
+                $id = $this->getTransIdFromSession();
+            }
+
+            $this->draftSubscription = $this->getSubscriptionDraftModel()->find($id);
+        }
+
+        return $this->draftSubscription;
+    }
+
+    public function saveAgreementToDraftSubscription($agreement)
+    {
+        $draft = $this->getDraftSubscription();
+        $draft->setAgreementData(json_encode($agreement));
+        $this->getSubscriptionDraftModel()->save($draft);
+        $this->getSubscriptionDraftModel()->getEntityManager()->flush();
+    }
+
+    public function setSubscriptionDraftModel($model)
+    {
+        $this->subscriptionDraftModel = $model;
+    }
+
+    /**
+     * @return \Mrss\Model\SubscriptionDraft
+     */
+    public function getSubscriptionDraftModel()
+    {
+        if (empty($this->subscriptionDraftModel)) {
+            $this->subscriptionDraftModel = $this->getServiceLocator()
+                ->get('model.subscriptionDraft');
+        }
+
+        return $this->subscriptionDraftModel;
     }
 }
