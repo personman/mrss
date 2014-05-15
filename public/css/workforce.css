@@ -450,6 +450,9 @@ body #headerLoginForm {
 
 /** Peer comparison form **/
 #control-group-facultyUnionized,
-#control-group-staffUnionized {
+#control-group-staffUnionized,
+#control-group-ipedsFallEnrollment,
+#control-group-fiscalCreditHours,
+#control-group-pellGrantRecipients {
     display: none;
 }
