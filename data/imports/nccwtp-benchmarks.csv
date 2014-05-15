@@ -1,25 +1,16 @@
 benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,excludeFromCompletion
 "Form 1 | Enrollment Information","Duplicated Enrollment (for the 2012/2013 fiscal year)",enrollment_information_duplicated_enrollment,number,"Duplicated non-credit workforce development participant headcount for the 2012/2013 fiscal year",,,,
 "Form 1 | Enrollment Information","Unduplicated Enrollment (for the 2012/2013 fiscal year)",enrollment_information_unduplicated_enrollment,number,"Unduplicated non-credit workforce development participant headcount for the 2012/2013 fiscal year",,,,
-"Form 1 | Enrollment Information","% of Unduplicated Enrollment of Total",enrollment_information_workforce_enrollment_percent,percent,,,1,"{{enrollment_information_unduplicated_enrollment}} / ({{enrollment_information_unduplicated_enrollment}} + {{institutional_demographics_credit_enrollment}})",1
 "Form 1 | Enrollment Information","Number of Organizations Served (for the 2012/2013 fiscal year)",enrollment_information_organizations_served,number,"Unduplicated number of organizations for which contract training was provided. (on- or off-campus, online, as distance learning or on the organization's site for the 2012/2013 fiscal year)",,,,
-"Form 1 | Enrollment Information","Market Penetration Rate",enrollment_information_market_penetration,percent,,,1,"{{enrollment_information_organizations_served}} / {{institutional_demographics_total_companies}}",1
 "Form 1 | Enrollment Information","Number of Training Contracts (for the 2012/2013 fiscal year)",enrollment_information_training_contracts,number,"Number of training contracts executed in the 2012/2013 fiscal year.",,,,
 "Form 1 | Enrollment Information","Total Workforce Faculty Contact Hours (for the 2012/2013 fiscal year)",enrollment_information_total_contact_hours,number,,,,,
-"Form 1 | Enrollment Information","Faculty Contact Hours per Total Students (Duplicated)",enrollment_information_contact_hours_per_student,float,,,1,"{{enrollment_information_total_contact_hours}} / {{enrollment_information_duplicated_enrollment}}",1
 "Form 2 | Retention","Number of Returning Organizations",retention_returning_organizations,number,"An organization that received contract training in the current fiscal year and at least once previously.",,,,
-"Form 2 | Retention","% Returning Organizations of Total Org Served",retention_percent_returning_organizations_served,percent,,,1,"{{retention_returning_organizations}} / {{enrollment_information_organizations_served}}",1
 "Form 2 | Retention","Number of Returning Students",retention_returning_students,number,"An individual who receives workforce training in the current fiscal year and also did so previously.",,,,
-"Form 2 | Retention","% of Returning Students of Total Students",retention_percent_returning_students,percent,,,1,"{{retention_returning_students}} / {{enrollment_information_unduplicated_enrollment}}",1
 "Form 3 | Staffing","Number of Full-time Instructors",staffing_full_time_instructors,number,,,,,
-"Form 3 | Staffing","% of Full-time Instructor of Total Instructors",staffing_full_time_instructors_percent,percent,,,1,"{{staffing_full_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Part-time Instructors",staffing_part_time_instructors,number,,,,,
-"Form 3 | Staffing","% of Part-time Instructor of Total Instructors",staffing_part_time_instructors_percent,percent,,,1,"{{staffing_part_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Independent Contractors",staffing_independent_contractors,number,,,,,
-"Form 3 | Staffing","% of Independent Contractors to Total Instructors",staffing_independent_contractors_percent,percent,,,1,"{{staffing_independent_contractors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Full-time Support Staff",staffing_full_time_support_staff,number,,,,,
 "Form 3 | Staffing","Number of Part-time Support Staff",staffing_part_time_support_staff,number,,,,,
-"Form 3 | Staffing","Instructor/Staff Ratio",staffing_instructor_staff_ratio,float,,,1,"( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} ) / ( {{staffing_full_time_support_staff}} + {{staffing_part_time_support_staff}} )",1
 "Form 4 | Transition from Workforce Training to Credit Coursework","Percentage of Workforce Training Students that Transitioned to Credit Coursework",transition_students,percent,"Percentage of non-credit workforce training students that transitioned to one or more credit courses within one year of completing a non-credit course",,,,
 "Form 5 | Revenue","Federal (non-grant)",revenue_federal,percent,"Percentage of revenue from non-grant federal sources",,,,
 "Form 5 | Revenue","State (non-grant)",revenue_state,percent,"Percentage of revenue from non-grant federal sources",,,,
@@ -27,41 +18,31 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 5 | Revenue",Grants,revenue_grants,percent,"Percentage of revenue from grants",,,,
 "Form 5 | Revenue","Earned Revenue (tuition, fees, company reimbursement, other)",revenue_earned_revenue,percent,"Percentage of revenue from earned revenue",,,,
 "Form 5 | Revenue","Gross Revenue from Contract Training",revenue_contract_training,dollars,,,,,
-"Form 5 | Revenue","% of Gross Revenue from Contract Training",revenue_contract_training_percent,percent,,,1,"{{revenue_contract_training}} / ( {{revenue_contract_training}} + {{revenue_continuing_education}} )",1
 "Form 5 | Revenue","Gross Revenue from Continuing Education",revenue_continuing_education,dollars,,,,,
-"Form 5 | Revenue","% of Gross Revenue from Continuing Education",revenue_continuing_education_percent,percent,,,1,"{{revenue_continuing_education}} / ( {{revenue_contract_training}} + {{revenue_continuing_education}} )",1
-"Form 5 | Revenue","Total Gross Revenue",revenue_total,dollars,"Revenue in support of all non-credit workforce training - include all public, grant and earned revenue for the 2012/2013 fiscal year.",,1,"{{revenue_contract_training}} + {{revenue_continuing_education}}",
+"Form 5 | Revenue","Total Gross Revenue",revenue_total,dollars,"Revenue in support of all non-credit workforce training - include all public, grant and earned revenue for the 2012/2013 fiscal year.",,,,
 "Form 6 | Expenditures",Salaries,expenditures_salaries,dollars,,,,,
-"Form 6 | Expenditures","Salaries as a % of Total Expenditures",expenditures_salaries_percent,percent,,,1,"{{expenditures_salaries}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Benefits,expenditures_benefits,dollars,"If you do not have actual benefit dollars, use the national percentage of 25.7% from the AAUP Salary Report.  (Salaries x .257)",,,,
-"Form 6 | Expenditures","Benefits as a % of Total Expenditures",expenditures_benefits_percent,percent,,,1,"{{expenditures_benefits}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Supplies,expenditures_supplies,dollars,,,,,
-"Form 6 | Expenditures","Supplies as a % of Total Expenditures",expenditures_supplies_percent,percent,,,1,"{{expenditures_supplies}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Marketing,expenditures_marketing,dollars,,,,,
-"Form 6 | Expenditures","Marketing as a % of Total Expenditures",expenditures_marketing_percent,percent,,,1,"{{expenditures_marketing}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Capital Equipment",expenditures_capital_equipment,dollars,,,,,
-"Form 6 | Expenditures","Capital Equipment as a % of Total Expenditures",expenditures_capital_equipment_percent,percent,,,1,"{{expenditures_capital_equipment}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Travel,expenditures_travel,dollars,,,,,
-"Form 6 | Expenditures","Travel as a % of Total Expenditures",expenditures_travel_percent,percent,,,1,"{{expenditures_travel}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Total Contract Training",expenditures_contract_training,dollars,,,,,
-"Form 6 | Expenditures","% of Contract Training Expenditures of Total",expenditures_contract_training_percent,percent,,,1,"{{expenditures_contract_training}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Total Continuing Education Workforce Training",expenditures_continuing_education,dollars,,,,,
-"Form 6 | Expenditures","% of Cont Ed Workforce Training Expenditures of Total",expenditures_continuing_education_percent,percent,,,1,"{{expenditures_continuing_education}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Total Expenditures",expenditures_total,dollars,,,,,
 "Form 6 | Expenditures","Overhead (rent & utilities) as percentage of total expenditures",expenditures_overhead,percent,,,,,
 "Form 7 | Retained Revenue","Contract Training",retained_revenue_contract_training,dollars,,,,,
 "Form 7 | Retained Revenue","Continuing Education Workforce Training",retained_revenue_continuing_education,dollars,,,,,
 "Form 7 | Retained Revenue","Total Retained Revenue",retained_revenue_total,dollars,,,,,
-"Form 7 | Retained Revenue","Return on Investment",retained_revenue_roi,wholepercent,,,1,"({{retained_revenue_total}} - {{expenditures_total}}) / {{expenditures_total}} * 100",
+"Form 7 | Retained Revenue","Return on Investment",retained_revenue_roi,computed,,,1,"({{revenue_total}} - {{expenditures_total}}) / {{expenditures_total}} * 100",
 "Form 8 | Satisfaction","Overall Client Satisfaction",satisfaction_client,percent,"Annual contract training client overall satisfaction rates with training courses/programs for the 2012/2013 fiscal year. Use the percentage of Very Satisfied & Satisfied on a 5-point scale ranging from Very Satisfied to Very Dissatisfied.",,,,
 "Form 8 | Satisfaction","Overall Student Satisfaction",satisfaction_student,percent,"Student overall satisfaction rates in non-credit workforce training course for the 2012/2013 fiscal year.  Use the percentage of Very Satisfied & Satisfied on a 5-point scale ranging from Very Satisfied to Very Dissatisfied.",,,,
-"Form 9 | Institutional Demographics","Credit Enrollment",institutional_demographics_credit_enrollment,number,"Fall 2012 unduplicated credit enrollment",,,,
+"Form 9 | Institutional Demographics","Credit Enrollment*",institutional_demographics_credit_enrollment,number,"Fall 2012 unduplicated credit enrollment. *This field is required.",,,,
 "Form 9 | Institutional Demographics","Unrestricted Institutional Operating Revenue",institutional_demographics_operating_revenue,dollars,"Is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""",,,,
-"Form 9 | Institutional Demographics","Campus Environment",institutional_demographics_campus_environment,radio,"Urban, Suburban, Rural","Urban,Suburban,Rural",,,
-"Form 9 | Institutional Demographics","Faculty Unionized",institutional_demographics_faculty_unionized,radio,"Yes or No","Yes,No",,,
-"Form 9 | Institutional Demographics","Staff Unionized",institutional_demographics_staff_unionized,radio,"Yes or No","Yes,No",,,
-"Form 9 | Institutional Demographics","Service Area Total Population",institutional_demographics_total_population,number,,,,,
-"Form 9 | Institutional Demographics","Unemployment Rate",institutional_demographics_unemployment_rate,percent,,,,,
+"Form 9 | Institutional Demographics","Campus Environment*",institutional_demographics_campus_environment,radio,"Urban, Suburban, Rural.  *This field is required.","Urban,Suburban,Rural",,,
+"Form 9 | Institutional Demographics","Faculty Unionized*",institutional_demographics_faculty_unionized,radio,"Yes or No.  *This field is required.","Yes,No",,,
+"Form 9 | Institutional Demographics","Staff Unionized*",institutional_demographics_staff_unionized,radio,"Yes or No.  *This field is required.","Yes,No",,,
+"Form 9 | Institutional Demographics","Service Area Total Population*",institutional_demographics_total_population,number," *This field is required.",,,,
+"Form 9 | Institutional Demographics","Unemployment Rate*",institutional_demographics_unemployment_rate,percent,"*This field is required.",,,,
 "Form 9 | Institutional Demographics","Median Household Income",institutional_demographics_median_household_income,dollars,,,,,
 "Form 9 | Institutional Demographics","Service Area Total Companies",institutional_demographics_total_companies,number,"Use the U.S. Economic Census, County Business Patterns to obtain these data",,,,
 "Form 9 | Institutional Demographics","Fewer than 50 employees",institutional_demographics_companies_less_than_50,number,,,,,
