@@ -227,9 +227,6 @@ class SubscriptionController extends AbstractActionController
 
     public function paymentAction()
     {
-        $this->checkSubscriptionIsInProgress();
-        $this->checkEnrollmentIsOpen();
-
         // Catch subscription completion via credit card
         if ($this->params()->fromQuery('UPAY_SITE_ID')) {
             $this->flashMessenger()->addSuccessMessage(
@@ -237,6 +234,10 @@ class SubscriptionController extends AbstractActionController
             );
             return $this->redirect()->toRoute('subscribe/complete');
         }
+
+        $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
+
 
         // Show payment forms
 
