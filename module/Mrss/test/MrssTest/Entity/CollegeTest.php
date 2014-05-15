@@ -328,6 +328,33 @@ class CollegeTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($college->getSubscriptionByStudyAndYear(10, 2013));
     }
 
+    public function testGetSubscriptionsForYear()
+    {
+        $college = new College;
+
+        $subscription = $this->getMock(
+            '\Mrss\Entity\Subscription',
+            array('getYear')
+        );
+        $subscription->expects($this->once())
+            ->method('getYear')
+            ->will($this->returnValue(2014));
+
+        $subscription2 = $this->getMock(
+            '\Mrss\Entity\Subscription',
+            array('getYear')
+        );
+        $subscription2->expects($this->once())
+            ->method('getYear')
+            ->will($this->returnValue(2013));
+
+        $college->setSubscriptions(array($subscription, $subscription2));
+
+        $results = $college->getSubscriptionsForYear(2014);
+        $this->assertEquals(1, count($results));
+        $this->assertSame($subscription, $results[0]);
+    }
+
     /**
      * Provides some valid college data
      *

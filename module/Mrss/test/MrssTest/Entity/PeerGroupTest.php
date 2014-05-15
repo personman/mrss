@@ -42,6 +42,12 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
             ->setBenchmarks(array('test', 'test2'))
             ->setPeers(array(1, 2, 3))
             ->setInstitutionalControl(array('local'))
+            ->setPellGrantRecipients('5 - 10')
+            ->setOperatingRevenue('10000 - 1000000')
+            ->setIpedsFallEnrollment('100 - 1000')
+            ->setFiscalCreditHours('1 - 3')
+            ->setFacultyUnionized(array('Yes'))
+            ->setStaffUnionized(array('Yes'))
             ->setInstitutionalType(array('private'));
 
         $this->assertEquals(5, $this->peerGroup->getId());
@@ -85,6 +91,30 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array('private'),
             $this->peerGroup->getInstitutionalType()
+        );
+        $this->assertEquals(
+            '5 - 10',
+            $this->peerGroup->getPellGrantRecipients()
+        );
+        $this->assertEquals(
+            '10000 - 1000000',
+            $this->peerGroup->getOperatingRevenue()
+        );
+        $this->assertEquals(
+            '100 - 1000',
+            $this->peerGroup->getIpedsFallEnrollment()
+        );
+        $this->assertEquals(
+            '1 - 3',
+            $this->peerGroup->getFiscalCreditHours()
+        );
+        $this->assertEquals(
+            array('Yes'),
+            $this->peerGroup->getFacultyUnionized()
+        );
+        $this->assertEquals(
+            array('Yes'),
+            $this->peerGroup->getStaffUnionized()
         );
     }
 
@@ -171,6 +201,18 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         $this->peerGroup->setServiceAreaMedianIncome('30000-50000');
         $this->assertEquals(30000, $this->peerGroup->getServiceAreaMedianIncome('min'));
         $this->assertEquals(50000, $this->peerGroup->getServiceAreaMedianIncome('max'));
+
+        $this->peerGroup->setPellGrantRecipients('5-10');
+        $this->assertEquals(5, $this->peerGroup->getPellGrantRecipients('min'));
+
+        $this->peerGroup->setOperatingRevenue('50-1000');
+        $this->assertEquals(50, $this->peerGroup->getOperatingRevenue('min'));
+
+        $this->peerGroup->setIpedsFallEnrollment('100-1000');
+        $this->assertEquals(1000, $this->peerGroup->getIpedsFallEnrollment('max'));
+
+        $this->peerGroup->setFiscalCreditHours('3333-4444');
+        $this->assertEquals(4444, $this->peerGroup->getFiscalCreditHours('max'));
     }
 
     public function getRanges()

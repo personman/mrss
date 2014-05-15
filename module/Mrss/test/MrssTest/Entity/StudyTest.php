@@ -6,6 +6,7 @@ namespace MrssTest\Entity;
 
 use Mrss\Entity\Study;
 use PHPUnit_Framework_TestCase;
+use DateTime;
 
 /**
  * Class StudyTest
@@ -167,9 +168,10 @@ class StudyTest extends PHPUnit_Framework_TestCase
 
     public function testGetEarlyPriceThisYear()
     {
-        $date = new \DateTime('2011-08-04');
+        $date = new DateTime('2011-08-04');
         $this->study->setEarlyPriceDate($date);
 
+        /** @var DateTime $dateThisYear */
         $dateThisYear = $this->study->getEarlyPriceDateThisYear();
         $this->assertEquals($dateThisYear->format('Y'), date('Y'));
     }
@@ -306,5 +308,30 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $benchmarks = $this->study->getBenchmarksForYear(2013);
         $this->assertEquals(1, count($benchmarks));
         $this->assertSame($benchmarkMock, $benchmarks[0]);
+    }
+
+
+    public function testGetAllBenchmarkKeys()
+    {
+        $benchmark = $this->getMock(
+            '\Mrss\Entity\Benchmark',
+            array('getDbColumn')
+        );
+        $benchmark->expects($this->once())
+            ->method('getDbColumn')
+            ->will($this->returnValue('fake_db_col'));
+
+        $benchmarkGroup = $this->getMock(
+            '\Mrss\Entity\BenchmarkGroup',
+            array('getBenchmarks')
+        );
+        $benchmarkGroup->expects($this->once())
+            ->method('getBenchmarks')
+            ->will($this->returnValue(array($benchmark)));
+
+        $this->study->setBenchmarkGroups(array($benchmarkGroup));
+        $keys = $this->study->getAllBenchmarkKeys();
+
+        $this->assertEquals('fake_db_col', $keys[0]);
     }
 }
