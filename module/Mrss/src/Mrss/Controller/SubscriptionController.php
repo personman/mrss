@@ -446,7 +446,7 @@ class SubscriptionController extends AbstractActionController
     public function checkEnrollmentIsOpen()
     {
         // If pilot is open, then allow enrollment, even if enrollement is closed
-        if (this->getStudy()->getPilotOpen()) {
+        if ($this->getStudy()->getPilotOpen()) {
             return true;
         }
 
