@@ -43,6 +43,7 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->study->getEnrollmentOpen());
         $this->assertNull($this->study->getDataEntryOpen());
         $this->assertNull($this->study->getReportsOpen());
+        $this->assertNull($this->study->getOutlierReportsOpen());
         $this->assertNull($this->study->getUPayUrl());
         $this->assertNull($this->study->getUPaySiteId());
         $this->assertNull($this->study->getLogo());

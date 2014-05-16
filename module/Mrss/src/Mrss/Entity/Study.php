@@ -78,6 +78,11 @@ class Study
     /**
      * @ORM\Column(type="boolean")
      */
+    protected $outlierReportsOpen;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
     protected $reportsOpen;
 
     /**
@@ -310,6 +315,16 @@ class Study
     public function getReportsOpen()
     {
         return $this->reportsOpen;
+    }
+
+    public function setOutlierReportsOpen($reportsOpen)
+    {
+        $this->outlierReportsOpen = $reportsOpen;
+    }
+
+    public function getOutlierReportsOpen()
+    {
+        return $this->outlierReportsOpen;
     }
 
     public function setUPayUrl($uPayUrl)
