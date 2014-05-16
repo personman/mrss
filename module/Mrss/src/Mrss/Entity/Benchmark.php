@@ -61,6 +61,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
+    protected $required;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
     protected $computed;
 
     /**
@@ -175,6 +180,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getInputType()
     {
         return $this->inputType;
+    }
+
+    public function setRequired($required)
+    {
+        $this->required = $required;
+
+        return $this;
+    }
+
+    public function getRequired()
+    {
+        return $this->required;
     }
 
     public function setComputed($computed)

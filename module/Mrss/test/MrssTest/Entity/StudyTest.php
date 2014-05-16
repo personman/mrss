@@ -92,6 +92,9 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->study->setReportsOpen(true);
         $this->assertTrue($this->study->getReportsOpen());
 
+        $this->study->setOutlierReportsOpen(true);
+        $this->assertTrue($this->study->getOutlierReportsOpen());
+
         $this->study->setUPayUrl('http://test.com');
         $this->assertEquals('http://test.com', $this->study->getUPayUrl());
 

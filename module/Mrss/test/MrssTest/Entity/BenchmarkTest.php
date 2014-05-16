@@ -61,6 +61,11 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             $benchmark->getEquation(),
             "'equation' should initially be null"
         );
+
+        $this->assertNull(
+            $benchmark->getRequired(),
+            'required should be initially null'
+        );
     }
 
     public function testSetters()
@@ -90,6 +95,10 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         // Set status
         $benchmark->setStatus(1);
         $this->assertEquals(1, $benchmark->getStatus());
+
+        // Set required
+        $benchmark->setRequired(true);
+        $this->assertTrue($benchmark->getRequired());
 
         // Set computed
         $benchmark->setComputed(true);
