@@ -22,8 +22,7 @@ class ReportController extends AbstractActionController
 
     public function calculateAction()
     {
-        ini_set('memory_limit', '512M');
-        set_time_limit(3600);
+        $this->longRunningScript();
 
         $years = $this->getReportService()->getYearsWithSubscriptions();
         $yearToPrepare = $this->params()->fromRoute('year');
@@ -55,6 +54,27 @@ class ReportController extends AbstractActionController
         return array(
             'years' => $years
         );
+    }
+
+    public function calculateOutliersAction()
+    {
+        $this->longRunningScript();
+
+        $yearToPrepare = $this->params()->fromRoute('year');
+
+        $stats = $this->getReportService()->calculateOutliersForYear($yearToPrepare);
+
+        $this->flashMessenger()->addSuccessMessage(
+            "Outliers calculated"
+        );
+
+        return $this->redirect()->toRoute('reports/calculate');
+    }
+
+    protected function longRunningScript()
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(3600);
     }
 
     public function nationalAction()

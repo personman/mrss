@@ -607,6 +607,16 @@ return array(
                             )
                         )
                     ),
+                    'calculateOutliers' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculateOutliers[/year/:year]',
+                            'defaults' => array(
+                                'action' => 'calculateOutliers',
+                                'year' => null
+                            )
+                        )
+                    ),
                     'national' => array(
                         'type' => 'segment',
                         'options' => array(

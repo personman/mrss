@@ -61,9 +61,16 @@ class Report
         // Also show the date the report was calculated
         $yearsWithCalculationDates = array();
         foreach ($years as $year) {
-            $key = $this->getSettingKey($year);
-            $yearsWithCalculationDates[$year] = $this->getSettingModel()
+            $yearsWithCalculationDates[$year] = array();
+
+            $key = $this->getReportCalculatedSettingKey($year);
+            $yearsWithCalculationDates[$year]['report'] = $this->getSettingModel()
                 ->getValueForIdentifier($key);
+
+            $key = $this->getOutliersCalculatedSettingKey($year);
+            $yearsWithCalculationDates[$year]['outliers'] = $this->getSettingModel()
+                ->getValueForIdentifier($key);
+
         }
 
         return $yearsWithCalculationDates;
@@ -157,7 +164,7 @@ class Report
         }
 
         // Update the settings table with the calculation date
-        $settingKey = $this->getSettingKey($year);
+        $settingKey = $this->getReportCalculatedSettingKey($year);
         $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
 
         // Flush
@@ -167,17 +174,37 @@ class Report
         return $stats;
     }
 
+    public function calculateOutliersForYear($year)
+    {
+
+    }
+
     /**
      * Build a unique key for the year and study
      *
      * @param $year
      * @return string
      */
-    public function getSettingKey($year)
+    public function getReportCalculatedSettingKey($year)
     {
         $studyId = $this->getStudy()->getId();
 
         $key = "report_calculated_{$studyId}_$year";
+
+        return $key;
+    }
+
+    /**
+     * Build a unique key for the year and study
+     *
+     * @param $year
+     * @return string
+     */
+    public function getOutliersCalculatedSettingKey($year)
+    {
+        $studyId = $this->getStudy()->getId();
+
+        $key = "outliers_calculated_{$studyId}_$year";
 
         return $key;
     }
