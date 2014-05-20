@@ -17,8 +17,8 @@
         <div class="span6">
             <a class="btn" href="/reports/calculateOutliers/year/<?= $year ?>">Prepare Outlier Report</a>
             <br>
-            <?php if (!empty($calculationDates['outlier'])): ?>
-                Prepared on <?= $calculationDates['outlier'] ?>
+            <?php if (!empty($calculationDates['outliers'])): ?>
+                Prepared on <?= $calculationDates['outliers'] ?>
             <?php else: ?>
                 Not yet prepared.
             <?php endif ?>

@@ -53,6 +53,11 @@ class Report
      */
     protected $settingModel;
 
+    /**
+     * @var \Mrss\Model\Outlier
+     */
+    protected $outlierModel;
+
     public function getYearsWithSubscriptions()
     {
         $years = $this->getSubscriptionModel()
@@ -70,7 +75,6 @@ class Report
             $key = $this->getOutliersCalculatedSettingKey($year);
             $yearsWithCalculationDates[$year]['outliers'] = $this->getSettingModel()
                 ->getValueForIdentifier($key);
-
         }
 
         return $yearsWithCalculationDates;
@@ -176,7 +180,20 @@ class Report
 
     public function calculateOutliersForYear($year)
     {
+        $stats = array(
+            'high' => 0,
+            'low' => 0,
+            'missing' => 0
+        );
 
+        // Clear any existing outliers for the year/study
+        $this->getOutlierModel()->deleteByStudyAndYear();
+
+
+        // Save the new report calculation date
+        $settingKey = $this->getOutliersCalculatedSettingKey($year);
+        $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
+        $this->getSettingModel()->getEntityManager()->flush();
     }
 
     /**
@@ -1245,6 +1262,18 @@ class Report
     public function getSettingModel()
     {
         return $this->settingModel;
+    }
+
+    public function setOutlierModel($model)
+    {
+        $this->outlierModel = $model;
+
+        return $this;
+    }
+
+    public function getOutlierModel()
+    {
+        return $this->outlierModel;
     }
 
     public function setCalculator(Calculator $calculator)

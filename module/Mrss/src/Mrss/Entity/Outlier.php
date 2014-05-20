@@ -31,7 +31,7 @@ class Outlier
     protected $observation;
 
     /**
-     * @ORM\Column(type="string", nullabe=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $value;
 

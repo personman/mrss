@@ -359,6 +359,14 @@ class Module
 
                     return $model;
                 },
+                'model.outlier' => function ($sm) {
+                    $model = new Model\Outlier;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.payment' => function ($sm) {
                     $paymentModel = new Model\Payment;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
@@ -460,6 +468,7 @@ class Module
                     $service->setBenchmarkModel($sm->get('model.benchmark'));
                     $service->setCollegeModel($sm->get('model.college'));
                     $service->setSettingModel($sm->get('model.setting'));
+                    $service->setOutlierModel($sm->get('model.outlier'));
 
                     return $service;
                 },
