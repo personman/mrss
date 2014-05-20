@@ -187,6 +187,8 @@ class Report
             'missing' => 0
         );
 
+        $start = microtime(1);
+
         $calculator = $this->getCalculator();
 
         // Clear any existing outliers for the year/study
@@ -204,7 +206,7 @@ class Report
                 continue;
             }
 
-            // Get the data for all subscribers
+            // Get the data for all subscribers (skip nulls)
             $data = $this->collectDataForBenchmark($benchmark, $year);
 
             // If there's no data, move on
@@ -224,12 +226,40 @@ class Report
                 $outlier->setBenchmark($benchmark);
                 $outlier->setStudy($this->getStudy());
                 $outlier->setYear($year);
-                $outlier->setProblem($outlierInfo['problem']);
+                $problem = $outlierInfo['problem'];
+                $outlier->setProblem($problem);
                 $college = $this->getOutlierModel()->getEntityManager()
                     ->getReference('Mrss\Entity\College', $outlierInfo['college']);
                 $outlier->setCollege($college);
 
                 $this->getOutlierModel()->save($outlier);
+
+                // Some stats
+                $stats[$problem]++;
+            }
+
+            // Handle missing outliers
+            if ($benchmark->getRequired()) {
+                $data = $this->collectDataForBenchmark($benchmark, $year, false);
+
+                foreach ($data as $collegeId => $datum) {
+                    if ($datum === null) {
+                        $outlier = new Outlier;
+                        $outlier->setBenchmark($benchmark);
+                        $outlier->setStudy($this->getStudy());
+                        $outlier->setYear($year);
+                        $problem = 'missing';
+                        $outlier->setProblem($problem);
+                        $college = $this->getOutlierModel()->getEntityManager()
+                            ->getReference('Mrss\Entity\College', $collegeId);
+                        $outlier->setCollege($college);
+
+                        $this->getOutlierModel()->save($outlier);
+
+                        // Some stats
+                        $stats[$problem]++;
+                    }
+                }
             }
         }
 
@@ -237,6 +267,12 @@ class Report
         $settingKey = $this->getOutliersCalculatedSettingKey($year);
         $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
         $this->getSettingModel()->getEntityManager()->flush();
+
+        // Timer
+        $end = microtime(1);
+        $stats['time'] = round($end - $start, 1) . ' seconds';
+
+        return $stats;
     }
 
     /**
@@ -269,8 +305,11 @@ class Report
         return $key;
     }
 
-    public function collectDataForBenchmark(Benchmark $benchmark, $year)
-    {
+    public function collectDataForBenchmark(
+        Benchmark $benchmark,
+        $year,
+        $skipNull = true
+    ) {
         $subscriptions = $this->getSubscriptionModel()
             ->findByStudyAndYear($this->getStudy()->getId(), $year);
 
@@ -284,9 +323,11 @@ class Report
             $collegeId = $subscription->getCollege()->getId();
 
             // Leave out null values
-            if ($value !== null) {
-                $data[$collegeId] = $value;
+            if ($skipNull && $value === null) {
+                continue;
             }
+
+            $data[$collegeId] = $value;
         }
 
         return $data;

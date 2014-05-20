@@ -63,9 +63,15 @@ class ReportController extends AbstractActionController
         $yearToPrepare = $this->params()->fromRoute('year');
 
         $stats = $this->getReportService()->calculateOutliersForYear($yearToPrepare);
+        $low = $stats['low'];
+        $high = $stats['high'];
+        $missing = $stats['missing'];
+        $time = $stats['time'];
+        $total = $low + $high + $missing;
 
         $this->flashMessenger()->addSuccessMessage(
-            "Outliers calculated"
+            "$total outliers calculated. Low: $low. High: $high. Missing: $missing.
+            Time to calculate: $time."
         );
 
         return $this->redirect()->toRoute('reports/calculate');
