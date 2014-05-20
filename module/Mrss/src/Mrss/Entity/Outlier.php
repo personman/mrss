@@ -2,8 +2,6 @@
 
 namespace Mrss\Entity;
 
-use Mrss\Entity\Benchmark;
-use Mrss\Entity\Observation;
 use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity
@@ -25,10 +23,22 @@ class Outlier
     protected $benchmark;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Observation",)
-     * @var Observation
+     * @ORM\ManyToOne(targetEntity="Study")
+     * @var Study
      */
-    protected $observation;
+    protected $study;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="College")
+     * @var College
+     */
+    protected $college;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @var integer $year
+     */
+    protected $year;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -64,16 +74,40 @@ class Outlier
         return $this->benchmark;
     }
 
-    public function setObservation(Observation $observation)
+    public function setStudy(Study $study)
     {
-        $this->observation = $observation;
+        $this->study = $study;
 
         return $this;
     }
 
-    public function getObservation()
+    public function getStudy()
     {
-        return $this->observation;
+        return $this->study;
+    }
+
+    public function setYear($year)
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    public function setCollege(College $college)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
+    public function getCollege()
+    {
+        return $this->college;
     }
 
     public function setValue($value)

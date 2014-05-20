@@ -91,4 +91,75 @@ class Calculator
 
         return  $percentile * (100);
     }
+
+    public function getOutliers()
+    {
+        // Find values greater than 2 standard deviations from the mean
+        $thresholdInStdDev = 2;
+
+        $mean = $this->getMean();
+        $stdDev = $this->getStandardDeviation();
+        $threshold = $stdDev * $thresholdInStdDev;
+        $outliers = array();
+
+        foreach ($this->getData() as $college => $datum) {
+            $difference = abs($datum - $mean);
+
+            if ($difference > $threshold) {
+                // We have an outlier, but what kind?
+                if ($datum > $mean) {
+                    $problem = 'high';
+                } else {
+                    $problem = 'low';
+                }
+
+                $outliers[] = array(
+                    'college' => $college,
+                    'value' => $datum,
+                    'problem' => $problem
+                );
+
+            }
+        }
+
+        return $outliers;
+    }
+
+    /**
+     * Convenience method
+     */
+    public function getMedian()
+    {
+        return $this->getValueForPercentile(50);
+    }
+
+    public function getCount()
+    {
+        return count($this->getData());
+    }
+
+    public function getMean()
+    {
+        $sum = array_sum($this->getData());
+        $count = $this->getCount();
+
+        $mean = $sum / $count;
+
+        return $mean;
+    }
+
+    public function getStandardDeviation()
+    {
+        $mean = $this->getMean();
+        $variances = 0.0;
+
+        foreach ($this->getData() as $datum) {
+            $variances += pow($datum - $mean, 2);
+        }
+
+        $variance = $variances / $this->getCount();
+        $standardDeviation = sqrt($variance);
+
+        return $standardDeviation;
+    }
 }

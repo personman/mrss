@@ -9,6 +9,7 @@ use Mrss\Entity\Percentile;
 use Mrss\Entity\PercentileRank;
 use Mrss\Entity\Observation;
 use Mrss\Entity\PeerGroup;
+use Mrss\Entity\Outlier;
 use Mrss\Service\Report\Calculator;
 
 class Report
@@ -186,9 +187,51 @@ class Report
             'missing' => 0
         );
 
-        // Clear any existing outliers for the year/study
-        $this->getOutlierModel()->deleteByStudyAndYear();
+        $calculator = $this->getCalculator();
 
+        // Clear any existing outliers for the year/study
+        $studyId = $this->getStudy()->getId();
+        $this->getOutlierModel()
+            ->deleteByStudyAndYear($studyId, $year);
+        $this->getOutlierModel()->getEntityManager()->flush();
+
+        // Loop over the benchmarks
+        foreach ($this->getStudy()->getBenchmarksForYear($year) as $benchmark) {
+            /** @var Benchmark $benchmark */
+
+            // Skip over computed benchmarks
+            if ($benchmark->getComputed()) {
+                continue;
+            }
+
+            // Get the data for all subscribers
+            $data = $this->collectDataForBenchmark($benchmark, $year);
+
+            // If there's no data, move on
+            if (empty($data)) {
+                continue;
+            }
+
+            $calculator->setData($data);
+
+            // Here's the key bit, where the outliers are actually calculated
+            $outliers = $calculator->getOutliers();
+
+            // Now save them
+            foreach ($outliers as $outlierInfo) {
+                $outlier = new Outlier;
+                $outlier->setValue($outlierInfo['value']);
+                $outlier->setBenchmark($benchmark);
+                $outlier->setStudy($this->getStudy());
+                $outlier->setYear($year);
+                $outlier->setProblem($outlierInfo['problem']);
+                $college = $this->getOutlierModel()->getEntityManager()
+                    ->getReference('Mrss\Entity\College', $outlierInfo['college']);
+                $outlier->setCollege($college);
+
+                $this->getOutlierModel()->save($outlier);
+            }
+        }
 
         // Save the new report calculation date
         $settingKey = $this->getOutliersCalculatedSettingKey($year);

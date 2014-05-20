@@ -45,6 +45,12 @@ class Outlier extends AbstractModel
 
     public function deleteByStudyAndYear($studyId, $year)
     {
-        die('deleteByStudyAndYear not implemented');
+        $query = $this->getEntityManager()->createQuery(
+            'DELETE Mrss\Entity\Outlier p WHERE p.year = ?1 AND p.study = ?2'
+        );
+        $query->setParameter(1, $year);
+        $query->setParameter(2, $studyId);
+
+        $query->execute();
     }
 }
