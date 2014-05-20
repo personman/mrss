@@ -202,6 +202,10 @@ return array(
                 'action' => 'index'
             ),
             array(
+                'label' => 'Tools',
+                'route' => 'tools',
+            ),
+            array(
                 'label' => 'User',
                 'route' => 'zfcuser',
                 'controller' => 'zfcuser',

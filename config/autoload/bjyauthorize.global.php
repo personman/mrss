@@ -137,6 +137,10 @@ return array(
                     'roles' => array('admin')
                 ),
                 array(
+                    'controller' => 'tool',
+                    'roles' => array('admin')
+                ),
+                array(
                     'controller' => 'benchmarks',
                     'roles' => array('admin')
                 ),

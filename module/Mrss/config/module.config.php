@@ -836,6 +836,28 @@ return array(
                     )
                 )
             ),
+            'tools' => array(
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/tools',
+                    'defaults' => array(
+                        'controller' => 'tool',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'exceldiff' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/exceldiff',
+                            'defaults' => array(
+                                'action' => 'exceldiff'
+                            )
+                        )
+                    )
+                )
+            ),
             // CMS:
             'cmsPage' => array(
                 'type' => 'segment',
@@ -942,6 +964,7 @@ return array(
         'invokables' => array(
             'index' => 'Mrss\Controller\IndexController',
             'admin' => 'Mrss\Controller\AdminController',
+            'tool' => 'Mrss\Controller\ToolController',
             'import' => 'Mrss\Controller\ImportController',
             'export' => 'Mrss\Controller\ExportController',
             'colleges' => 'Mrss\Controller\CollegeController',

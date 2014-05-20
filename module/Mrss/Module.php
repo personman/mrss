@@ -63,7 +63,13 @@ class Module
         $logger = $this->getErrorLog();
 
         $exception = $e->getParam('exception');
-        $logger->err($exception->getMessage());
+
+        if (!empty($exception)) {
+            $logger->err($exception->getMessage());
+        } else {
+            $logger->err('Error with no exception object.');
+        }
+
         $logger->info('IP: ' . $_SERVER['REMOTE_ADDR']);
 
         // Log user identity, if present
