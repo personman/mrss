@@ -77,6 +77,15 @@ class ReportController extends AbstractActionController
         return $this->redirect()->toRoute('reports/calculate');
     }
 
+    public function adminOutliersAction()
+    {
+        $outlierReport = $this->getReportService()->getAdminOutlierReport();
+
+        return array(
+            'report' => $outlierReport
+        );
+    }
+
     protected function longRunningScript()
     {
         ini_set('memory_limit', '512M');

@@ -276,6 +276,33 @@ class Report
     }
 
     /**
+     * Get the outliers for the study/year, grouped by college
+     */
+    public function getAdminOutlierReport()
+    {
+        $report = array();
+        $study = $this->getStudy();
+        $year = $study->getCurrentYear();
+
+        // Get colleges subscribed to the study for the year
+        $colleges = $this->getCollegeModel()->findByStudyAndYear(
+            $study,
+            $year
+        );
+
+        foreach ($colleges as $college) {
+            $outliers = $this->getOutlierModel()
+                ->findByCollegeStudyAndYear($college, $study, $year);
+            $report[] = array(
+                'college' => $college,
+                'outliers' => $outliers
+            );
+        }
+
+        return $report;
+    }
+
+    /**
      * Build a unique key for the year and study
      *
      * @param $year

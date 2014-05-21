@@ -45,7 +45,7 @@ class Calculator
 
         $nonep = ($n+1) * $percentile;
 
-        $j_integer = floor($nonep);
+        $j_integer = intval(floor($nonep));
         $g_fraction = $nonep - $j_integer;
 
 

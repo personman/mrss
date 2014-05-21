@@ -2,7 +2,9 @@
 
 namespace Mrss\Model;
 
-use \Mrss\Entity\Outlier as OutlierEntity;
+use Mrss\Entity\Outlier as OutlierEntity;
+use Mrss\Entity\Study as StudyEntity;
+use Mrss\Entity\College as CollegeEntity;
 use Zend\Debug\Debug;
 
 /**
@@ -31,6 +33,43 @@ class Outlier extends AbstractModel
         return $this->getRepository()->findAll();
     }
 
+    /**
+     * Order not working on this one
+     *
+     * @deprecated
+     * @param StudyEntity $study
+     * @return array
+     */
+    public function findByStudy(StudyEntity $study)
+    {
+        $year = $study->getCurrentYear();
+        $studyId = $study->getId();
+
+        $query = $this->getEntityManager()->createQuery(
+            "SELECT o
+            FROM Mrss\Entity\Outlier o
+            JOIN Mrss\Entity\College college
+            WHERE o.study = $studyId
+            AND o.year = $year
+            ORDER BY college.name ASC"
+        );
+
+        return $query->getResult();
+    }
+
+    public function findByCollegeStudyAndYear(
+        CollegeEntity $college,
+        StudyEntity $study,
+        $year
+    ) {
+        return $this->getRepository()->findBy(
+            array(
+                'college' => $college,
+                'study' => $study,
+                'year' => $year
+            )
+        );
+    }
 
     public function save(OutlierEntity $outlier)
     {

@@ -843,6 +843,16 @@ return array(
                                 'action' => 'changes'
                             )
                         )
+                    ),
+                    'outliers' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/outliers',
+                            'defaults' => array(
+                                'controller' => 'reports',
+                                'action' => 'adminOutliers'
+                            )
+                        )
                     )
                 )
             ),

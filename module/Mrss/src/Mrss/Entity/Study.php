@@ -111,6 +111,12 @@ class Study
      */
     protected $offerCodes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Subscription", mappedBy="study")
+     * @var Subscription[]
+     */
+    protected $subscriptions;
+
     public function __construct()
     {
         $this->benchmarkGroups = new ArrayCollection();
@@ -172,6 +178,18 @@ class Study
     public function getOfferCodes()
     {
         return $this->offerCodes;
+    }
+
+    public function setSubscriptions($subscriptions)
+    {
+        $this->subscriptions = $subscriptions;
+
+        return $this;
+    }
+
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 
     public function setCurrentYear($year)

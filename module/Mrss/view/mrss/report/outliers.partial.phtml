@@ -1,0 +1,34 @@
+<?php /** @var \Mrss\Entity\Outlier[] $outliers */ ?>
+
+<?php if (count($outliers)): ?>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Benchmark</th>
+                <th>Value</th>
+                <th>Problem</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        <?php foreach ($outliers as $outlier): ?>
+            <tr>
+                <td>
+                    <?= $outlier->getBenchmark()->getName() ?>
+                </td>
+                <td>
+                    <?= $outlier->getValue() ?>
+                </td>
+                <td>
+                    <?= $outlier->getProblem() ?>
+                </td>
+            </tr>
+
+        <?php endforeach ?>
+
+        </tbody>
+    </table>
+
+<?php else: ?>
+    No outliers.
+<?php endif ?>

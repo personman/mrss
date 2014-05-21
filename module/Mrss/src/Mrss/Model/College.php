@@ -39,6 +39,24 @@ class College extends AbstractModel
         return $c;
     }
 
+    public function findByStudyAndYear(StudyEntity $study, $year)
+    {
+        $studyId = $study->getId();
+
+        $query = $this->getEntityManager()->createQuery(
+            "SELECT c
+            FROM Mrss\Entity\College c
+            INNER JOIN Mrss\Entity\Subscription s
+            WHERE s.college = c.id
+            AND s.study = $studyId
+            AND s.year = $year
+            ORDER BY c.name ASC"
+        );
+
+        return $query->getResult();
+
+    }
+
     /**
      * @param PeerGroup $peerGroup
      * @param StudyEntity $currentStudy
