@@ -541,6 +541,28 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $abbr;
     }
 
+    public function getPrefix()
+    {
+        $prefix = null;
+
+        if ($this->isDollars()) {
+            $prefix = '$';
+        }
+
+        return $prefix;
+    }
+
+    public function getSuffix()
+    {
+        $suffix = null;
+
+        if ($this->isPercent()) {
+            $suffix = '%';
+        }
+
+        return $suffix;
+    }
+
     public function setEquationValidator($equationValidator)
     {
         $this->equationValidator = $equationValidator;

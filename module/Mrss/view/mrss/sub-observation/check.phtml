@@ -37,24 +37,34 @@
             <tr>
                 <td><?= $subOb->getName() ?></td>
                 <?php foreach ($totals as $key => $total): ?>
-                    <td><?= $subOb->get($key) ?></td>
+                    <?php $benchmark = $benchmarks[$key] ?>
+                    <td>
+                        <?= $benchmark->getPrefix() ?><?= number_format($subOb->get($key)) ?><?= $benchmark->getSuffix() ?>
+                    </td>
                 <?php endforeach ?>
             </tr>
         <?php endforeach ?>
         <tr>
             <td>Total from Form 2</td>
             <?php foreach ($totals as $key => $total): ?>
-                <td><?= $total ?></td>
+                <?php $benchmark = $benchmarks[$key] ?>
+                <td>
+                    <?= $benchmark->getPrefix() ?><?= number_format($total) ?><?= $benchmark->getSuffix() ?>
+                </td>
             <?php endforeach ?>
         </tr>
         <tr>
             <td>Data Entered in From 1</td>
-            <td><?= $observation->get('inst_full_expend') ?></td>
-            <td><?= $observation->get('inst_full_num') ?></td>
-            <td><?= $observation->get('inst_full_cred_hrs') ?></td>
-            <td><?= $observation->get('inst_part_expend') ?></td>
-            <td><?= $observation->get('inst_part_num') ?></td>
-            <td><?= $observation->get('inst_part_cred_hrs') ?></td>
+            <?php foreach ($totals as $key => $total): ?>
+                <?php $benchmark = $benchmarks[$key] ?>
+                <?php $key = $benchmarkMap[$key] ?>
+                <td>
+                    <?php $value = $observation->get($key) ?>
+                    <?php if ($value !== null): ?>
+                        <?= $benchmark->getPrefix() ?><?= number_format($value) ?><?= $benchmark->getSuffix() ?>
+                    <?php endif ?>
+                </td>
+            <?php endforeach ?>
         </tr>
     </tbody>
 </table>

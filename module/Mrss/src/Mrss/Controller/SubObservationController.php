@@ -160,6 +160,15 @@ class SubObservationController extends AbstractActionController
             'inst_cost_part_cred_hr' => 0,
         );
 
+        $form1to2map = array(
+            'inst_cost_full_expend' => 'inst_full_expend',
+            'inst_cost_full_num' => 'inst_full_num',
+            'inst_cost_full_cred_hr' => 'inst_full_cred_hrs',
+            'inst_cost_part_expend' => 'inst_part_expend',
+            'inst_cost_part_num' => 'inst_part_num',
+            'inst_cost_part_cred_hr' => 'inst_part_cred_hrs',
+        );
+
         // Calculate totals
         foreach ($subObservations as $subOb) {
             foreach ($totals as $key => $total) {
@@ -168,11 +177,19 @@ class SubObservationController extends AbstractActionController
             }
         }
 
+        // Load up the benchmarks
+        $benchmarks = array();
+        foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+            $benchmarks[$benchmark->getDbColumn()] = $benchmark;
+        }
+
         return array(
             'subObservations' => $subObservations,
             'totals' => $totals,
             'observation' => $observation,
-            'benchmarkGroup' => $benchmarkGroup
+            'benchmarkGroup' => $benchmarkGroup,
+            'benchmarks' => $benchmarks,
+            'benchmarkMap' => $form1to2map
         );
     }
 
