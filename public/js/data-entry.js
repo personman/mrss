@@ -105,6 +105,15 @@ $(function() {
                 ' the academic unit will be permanently deleted.'
         )
     })
+
+    // Highlight the input whose id is in the url, if any
+    if (hash = window.location.hash) {
+        if (input = $(hash)) {
+            input.focus();
+            input.css('border', '1px solid #0088cc')
+        }
+    }
+
 })
 
 function updateGridTotals()
