@@ -1,15 +1,15 @@
 
-<h2>Admin Outlier Report</h2>
+<h2>Outlier Report</h2>
 
 <? //pr($report) ?>
 
 <?php foreach ($report as $collegeInfo): ?>
     <?php
-        /** @var \Mrss\Entity\College $college */
-        $college = $collegeInfo['college'];
+    /** @var \Mrss\Entity\College $college */
+    $college = $collegeInfo['college'];
 
-        /** @var \Mrss\Entity\Outlier[] $outliers */
-        $outliers = $collegeInfo['outliers']
+    /** @var \Mrss\Entity\Outlier[] $outliers */
+    $outliers = $collegeInfo['outliers']
     ?>
 
     <h4><?= $college->getName() ?></h4>
@@ -18,7 +18,7 @@
         'mrss/report/outliers.partial.phtml',
         array(
             'outliers' => $outliers,
-            'admin' => true
+            'admin' => false
         )
     ) ?>
 

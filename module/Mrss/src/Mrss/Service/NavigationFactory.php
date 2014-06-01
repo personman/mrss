@@ -147,8 +147,14 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         // Hide reports link if reporting isn't enabled yet
-        if (!$currentStudy->getReportsOpen()) {
+        if (!$currentStudy->getReportsOpen() && !$currentStudy->getOutlierReportsOpen()) {
             unset($pages['reports']);
+        } elseif (!$currentStudy->getOutlierReportsOpen()) {
+            unset($pages['reports']['pages']['outlier']);
+        } elseif (!$currentStudy->getReportsOpen()) {
+            unset($pages['reports']['pages']['national']);
+            unset($pages['reports']['pages']['summary']);
+            unset($pages['reports']['pages']['peer']);
         }
 
         return $pages;

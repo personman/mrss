@@ -469,6 +469,7 @@ class Module
                     $service->setCollegeModel($sm->get('model.college'));
                     $service->setSettingModel($sm->get('model.setting'));
                     $service->setOutlierModel($sm->get('model.outlier'));
+                    $service->setComputedFieldsService($sm->get('computedFields'));
 
                     return $service;
                 },

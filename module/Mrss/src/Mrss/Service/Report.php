@@ -11,6 +11,7 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\PeerGroup;
 use Mrss\Entity\Outlier;
 use Mrss\Service\Report\Calculator;
+use Mrss\Service\ComputedFields;
 
 class Report
 {
@@ -23,6 +24,11 @@ class Report
      * @var Calculator
      */
     protected $calculator;
+
+    /**
+     * @var ComputedFields
+     */
+    protected $computedFieldsService;
 
     /**
      * @var \Mrss\Model\Subscription
@@ -83,6 +89,9 @@ class Report
 
     public function calculateForYear($year)
     {
+        // Update any computed fields
+        $this->calculateAllComputedFields($year);
+
         $study = $this->getStudy();
         $calculator = $this->getCalculator();
         $breakpoints = $this->getPercentileBreakpoints();
@@ -181,6 +190,8 @@ class Report
 
     public function calculateOutliersForYear($year)
     {
+        $this->calculateAllComputedFields($year);
+
         $stats = array(
             'high' => 0,
             'low' => 0,
@@ -202,9 +213,9 @@ class Report
             /** @var Benchmark $benchmark */
 
             // Skip over computed benchmarks
-            if ($benchmark->getComputed()) {
+            /*if ($benchmark->getComputed()) {
                 continue;
-            }
+            }*/
 
             // Get the data for all subscribers (skip nulls)
             $data = $this->collectDataForBenchmark($benchmark, $year);
@@ -298,6 +309,22 @@ class Report
                 'outliers' => $outliers
             );
         }
+
+        return $report;
+    }
+
+    public function getOutlierReport(College $college)
+    {
+        $report = array();
+        $study = $this->getStudy();
+        $year = $study->getCurrentYear();
+
+        $outliers = $this->getOutlierModel()
+            ->findByCollegeStudyAndYear($college, $study, $year);
+        $report[] = array(
+            'college' => $college,
+            'outliers' => $outliers
+        );
 
         return $report;
     }
@@ -1235,6 +1262,23 @@ class Report
     }
 
     /**
+     * Calculate all computed fields for the current study and the given year
+     *
+     * @param $year
+     */
+    public function calculateAllComputedFields($year)
+    {
+        $subs = $this->getSubscriptionModel()
+            ->findByStudyAndYear($this->getStudy(), $year);
+
+        foreach ($subs as $sub) {
+            $observation = $sub->getObservation();
+            $this->getComputedFieldsService()
+                ->calculateAllForObservation($observation);
+        }
+    }
+
+    /**
      * Returns colleges that reported at least one of the benchmarks
      *
      * @param College[] $colleges
@@ -1298,6 +1342,17 @@ class Report
     public function getStudy()
     {
         return $this->study;
+    }
+
+    public function setComputedFieldsService(ComputedFields $service) {
+        $this->computedFieldsService = $service;
+
+        return $this;
+    }
+
+    public function getComputedFieldsService()
+    {
+        return $this->computedFieldsService;
     }
 
     public function setSubscriptionModel($model)

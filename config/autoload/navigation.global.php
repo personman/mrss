@@ -76,15 +76,19 @@ return array(
                 'label' => 'Reports',
                 'uri' => '/reports',
                 'pages' => array(
-                    array(
+                    'outlier' => array(
+                        'label' => 'Outlier Report',
+                        'uri' => '/reports/outlier'
+                    ),
+                    'national' => array(
                         'label' => 'National Report',
                         'uri' => '/reports/national'
                     ),
-                    array(
+                    'summary' => array(
                         'label' => 'Summary Report',
                         'uri' => '/reports/summary'
                     ),
-                    array(
+                    'peer' => array(
                         'label' => 'Peer Comparison',
                         'uri' => '/reports/peer'
                     )

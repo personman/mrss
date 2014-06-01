@@ -617,6 +617,15 @@ return array(
                             )
                         )
                     ),
+                    'outlier' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/outlier',
+                            'defaults' => array(
+                                'action' => 'outlier'
+                            )
+                        )
+                    ),
                     'national' => array(
                         'type' => 'segment',
                         'options' => array(
