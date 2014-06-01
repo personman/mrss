@@ -3,7 +3,11 @@
 <?= $this->systemAdmin() ?>
 
 <div class="page-header">
-    <h2>Data Entry</h2>
+    <?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+        <h2>Data Entry</h2>
+    <?php else: ?>
+        <h2>Submitted Values</h2>
+    <?php endif ?>
 </div>
 
 <?php if ($this->currentStudy()->getId() == 3): ?>

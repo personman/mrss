@@ -18,9 +18,10 @@ class FormBuilder
      *
      * @param \Mrss\Entity\FormFieldsetProviderInterface $provider
      * @param $year
+     * @param bool $disabled
      * @return \Zend\Form\Form
      */
-    public function buildForm(FieldsetProvider $provider, $year)
+    public function buildForm(FieldsetProvider $provider, $year, $disabled = false)
     {
         $form = new Form;
         $inputFilter = new InputFilter();
@@ -30,6 +31,11 @@ class FormBuilder
         // Add the elements from the provider
         foreach ($provider->getElements($year) as $elementProvider) {
             $element = $this->getElement($elementProvider);
+
+            if ($disabled) {
+                $element['attributes']['disabled'] = 'disabled';
+            }
+
             $form->add($element);
             $inputFilter->add($elementProvider->getFormElementInputFilter());
         }
@@ -38,13 +44,16 @@ class FormBuilder
         $buttons->setAttribute('class', 'well well-small');
         $buttons->setLabel('');
 
-        // Add the save button
-        $save = new Element\Submit('submit');
-        $save->setValue('Save');
-        $save->setAttribute('class', 'btn btn-primary');
-        $buttons->add($save);
+        if (!$disabled) {
+            // Add the save button
+            $save = new Element\Submit('submit');
+            $save->setValue('Save');
+            $save->setAttribute('class', 'btn btn-primary');
+            $buttons->add($save);
 
-        $form->add($buttons);
+            $form->add($buttons);
+        }
+
         //echo '<pre>'; print_r($inputFilter);
         $form->setInputFilter($inputFilter);
 
@@ -52,6 +61,10 @@ class FormBuilder
         return $form;
     }
 
+    /**
+     * @param FormElementProvider $elementProvider
+     * @return \Zend\Form\Element
+     */
     public function getElement(FormElementProvider $elementProvider)
     {
         return $elementProvider->getFormElement();

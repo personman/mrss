@@ -211,7 +211,7 @@ $this->headScript()->appendFile(
 
 </div>
 
-
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
 <fieldset id="fieldset-buttons" class="well well-small">
     <div class="control-group" id="control-group-buttons[submit]">
         <div class="controls" id="controls-buttons[submit]">
@@ -219,5 +219,6 @@ $this->headScript()->appendFile(
         </div>
     </div>
 </fieldset>
+<?php endif ?>
 
 <?= $this->form()->closeTag() ?>

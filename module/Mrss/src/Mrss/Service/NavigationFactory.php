@@ -96,6 +96,11 @@ class NavigationFactory extends DefaultNavigationFactory
                 }
 
                 $pages['data-entry']['pages'] = $dataEntryPages;
+
+                // If data entry is disabled, rename the menu item
+                if (!$currentStudy->getDataEntryOpen()) {
+                    $pages['data-entry']['label'] = 'Submitted Values';
+                }
             } else {
                 // If there aren't any forms to show, drop the data entry menu item
                 unset($pages['data-entry']);
