@@ -479,6 +479,9 @@ class Report
                     'text' => $yLabel
                 )
             ),
+            'exporting' => array(
+                'enabled' => true
+            ),
             'series' => $series
         );
 
