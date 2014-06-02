@@ -418,7 +418,7 @@ class Report
         return $chart;
     }
 
-    public function getBubbleChart($x, $y, $size)
+    public function getBubbleChart($x, $y, $size, $title)
     {
         $study = $this->getStudy();
 
@@ -433,15 +433,17 @@ class Report
             $yVal = $observation->get($y);
             $sizeVal = $observation->get($size);
 
-            if ($xVal && $yVal) {
+            if ($xVal && $yVal && $sizeVal) {
                 $data[] = array(
-                    $xVal,
-                    $yVal,
-                    $sizeVal
+                    floatval($xVal),
+                    floatval($yVal),
+                    floatval($sizeVal)
                 );
             }
         }
 
+        $xLabel = $this->getBenchmarkModel()->findOneByDbColumn($x)->getName();
+        $yLabel = $this->getBenchmarkModel()->findOneByDbColumn($y)->getName();
 
 
         $series = array(
@@ -451,6 +453,10 @@ class Report
             )
         );
 
+        if (empty($title)) {
+            $title = 'Test Chart';
+        }
+
 
         $chart = array(
             'id' => 'chart_' . uniqid(),
@@ -459,7 +465,19 @@ class Report
                 'zoomType' => 'xy'
             ),
             'title' => array(
-                'text' => 'Test Chart',
+                'text' => $title,
+            ),
+            'xAxis' => array(
+                'title' => array(
+                    'enabled' => true,
+                    'text' => $xLabel
+                )
+            ),
+            'yAxis' => array(
+                'title' => array(
+                    'enabled' => true,
+                    'text' => $yLabel
+                )
             ),
             'series' => $series
         );

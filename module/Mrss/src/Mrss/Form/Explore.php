@@ -40,7 +40,7 @@ class Explore extends AbstractForm
                 'attributes' => array(
                     'id' => 'inputType',
                     'options' => array(
-                        'scatter' => 'Scatter Plot',
+                        'bubble' => 'Bubble Plot',
                     )
                 )
             )
@@ -52,7 +52,7 @@ class Explore extends AbstractForm
                 'name' => 'benchmark1',
                 'type' => 'Zend\Form\Element\Select',
                 'options' => array(
-                    'label' => 'Benchmark'
+                    'label' => 'X Axis'
                 ),
                 'attributes' => array(
                     'options' => $benchmarks
@@ -65,7 +65,7 @@ class Explore extends AbstractForm
                 'name' => 'benchmark2',
                 'type' => 'Zend\Form\Element\Select',
                 'options' => array(
-                    'label' => 'Benchmark'
+                    'label' => 'Y Axis'
                 ),
                 'attributes' => array(
                     'options' => $benchmarks
@@ -78,7 +78,7 @@ class Explore extends AbstractForm
                 'name' => 'benchmark3',
                 'type' => 'Zend\Form\Element\Select',
                 'options' => array(
-                    'label' => 'Benchmark'
+                    'label' => 'Bubble Size'
                 ),
                 'attributes' => array(
                     'options' => $benchmarks

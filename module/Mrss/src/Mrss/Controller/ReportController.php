@@ -240,9 +240,10 @@ class ReportController extends AbstractActionController
                 $benchmark1 = $data['benchmark1'];
                 $benchmark2 = $data['benchmark2'];
                 $size = $data['benchmark3'];
+                $title = $data['title'];
 
                 $chart = $this->getReportService()
-                    ->getBubbleChart($benchmark1, $benchmark2, $size);
+                    ->getBubbleChart($benchmark1, $benchmark2, $size, $title);
             }
         }
 
