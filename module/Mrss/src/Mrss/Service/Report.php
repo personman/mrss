@@ -482,6 +482,9 @@ class Report
             'exporting' => array(
                 'enabled' => true
             ),
+            'credits' => array(
+                'enabled' => false
+            ),
             'series' => $series
         );
 
