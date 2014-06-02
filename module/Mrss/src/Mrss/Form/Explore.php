@@ -62,19 +62,6 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
-                'name' => 'benchmark1',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'Benchmark'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks
-                )
-            )
-        );
-
-        $this->add(
-            array(
                 'name' => 'benchmark2',
                 'type' => 'Zend\Form\Element\Select',
                 'options' => array(
@@ -88,16 +75,29 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'benchmark3',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'Benchmark'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks
+                )
+            )
+        );
+
+        /*$this->add(
+            array(
                 'name' => 'highlightedCollege',
                 'type' => 'Select',
                 'options' => array(
-                    'label' => 'Show Title'
+                    'label' => 'College'
                 ),
                 'attributes' => array(
                     'options' => $colleges
                 )
             )
-        );
+        );*/
 
         $this->add(
             array(

@@ -418,17 +418,36 @@ class Report
         return $chart;
     }
 
-    public function getBubbleChart()
+    public function getBubbleChart($x, $y, $size)
     {
+        $study = $this->getStudy();
+
+        $subscriptions = $this->getSubscriptionModel()
+            ->findByStudyAndYear($study->getId(), $study->getCurrentYear());
+
+        $data = array();
+        foreach ($subscriptions as $subscription) {
+            $observation = $subscription->getObservation();
+
+            $xVal = $observation->get($x);
+            $yVal = $observation->get($y);
+            $sizeVal = $observation->get($size);
+
+            if ($xVal && $yVal) {
+                $data[] = array(
+                    $xVal,
+                    $yVal,
+                    $sizeVal
+                );
+            }
+        }
+
+
+
         $series = array(
             array(
                 'name' => 'Institutions',
-                'data' => array(
-                    array(12, 25, 50000),
-                    array(6, 8, 40000),
-                    array(3, 6, 20000),
-                    array(12, 15, 50000),
-                )
+                'data' => $data
             )
         );
 

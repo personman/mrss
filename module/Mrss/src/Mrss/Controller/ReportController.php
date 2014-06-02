@@ -231,11 +231,22 @@ class ReportController extends AbstractActionController
         $form = new Explore($benchmarks, $colleges);
 
         $chart = null;
-        /*if ($this->getRequest()->isPost()) {
-            $chart
-        }*/
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
 
-        $chart = $this->getReportService()->getBubbleChart();
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $benchmark1 = $data['benchmark1'];
+                $benchmark2 = $data['benchmark2'];
+                $size = $data['benchmark3'];
+
+                $chart = $this->getReportService()
+                    ->getBubbleChart($benchmark1, $benchmark2, $size);
+            }
+        }
+
+
 
         return array(
             'form' => $form,
