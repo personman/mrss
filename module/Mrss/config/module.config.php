@@ -146,6 +146,15 @@ return array(
                             )
                         )
                     ),
+                    'all' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/all',
+                            'defaults' => array(
+                                'action' => 'all',
+                            )
+                        )
+                    ),
                 )
             ),
             'studies' => array(

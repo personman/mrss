@@ -674,6 +674,18 @@ class ObservationController extends AbstractActionController
         }
     }
 
+    public function allAction()
+    {
+        $currentStudy = $this->currentStudy();
+        $benchmarkGroups = $currentStudy->getBenchmarkGroups();
+        $observation = $this->getCurrentObservation();
+
+        return array(
+            'study' => $currentStudy,
+            'observation' => $observation
+        );
+    }
+
     /**
      * Get field metadata from the benchmark entity
      *

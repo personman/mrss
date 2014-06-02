@@ -1,0 +1,27 @@
+<?php /** @var \Mrss\Entity\Study $study */ ?>
+
+<h2>All Submitted Values</h2>
+
+<?php foreach ($study->getBenchmarkGroups() as $benchmarkGroup): ?>
+    <h4><?= $benchmarkGroup->getName() ?></h4>
+
+    <?php foreach ($benchmarkGroup->getNonComputedBenchmarksForYear($study->getCurrentYear()) as $benchmark): ?>
+        <div class="row row-fluid">
+            <div class="span6">
+                <?= $benchmark->getName() ?>
+            </div>
+
+            <div class="span6">
+                <?php
+                $value = $observation->get($benchmark->getDbColumn());
+                if ($value) $value = number_format($value);
+
+                ?>
+                <?= $benchmark->getPrefix() ?><?= $value ?><?= $benchmark->getSuffix() ?>
+            </div>
+        </div>
+
+
+
+    <?php endforeach ?>
+<?php endforeach ?>

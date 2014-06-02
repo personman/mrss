@@ -103,6 +103,18 @@
 
 <br>
 
+<?php if (!$this->currentStudy()->getDataEntryOpen()): ?>
+<div class="row row-fluid">
+    <div class="span1">
+
+    </div>
+
+    <div class="span4">
+        <a href="<?= $this->url('data-entry/all') ?>">All Submitted Values</a>
+    </div>
+</div>
+<?php endif ?>
+
 <?php if ($this->currentStudy()->getId() == 2): ?>
     <a target="_blank" href="/files/How-to-Complete.pdf">Detailed Instructions (PDF)</a>
 
