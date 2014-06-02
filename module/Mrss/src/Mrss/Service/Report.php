@@ -418,6 +418,37 @@ class Report
         return $chart;
     }
 
+    public function getBubbleChart()
+    {
+        $series = array(
+            array(
+                'name' => 'Institutions',
+                'data' => array(
+                    array(12, 25, 50000),
+                    array(6, 8, 40000),
+                    array(3, 6, 20000),
+                    array(12, 15, 50000),
+                )
+            )
+        );
+
+
+        $chart = array(
+            'id' => 'chart_' . uniqid(),
+            'chart' => array(
+                'type' => 'bubble',
+                'zoomType' => 'xy'
+            ),
+            'title' => array(
+                'text' => 'Test Chart',
+            ),
+            'series' => $series
+        );
+
+        return $chart;
+
+    }
+
     public function getPieChartColors()
     {
         return array(
