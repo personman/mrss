@@ -512,15 +512,14 @@ class SubscriptionController extends AbstractActionController
         );
 
         // Create the users, if needed
-        // @todo: set different roles
-        
-        // Admin first
-        $adminContactForm = $subscriptionForm['adminContact'];
-        $adminUser = $this->createOrUpdateUser($adminContactForm, 'user', $college);
-
-        // Now data user
+        // Data user first
         $dataContactForm = $subscriptionForm['dataContact'];
-        $dataUser = $this->createOrUpdateUser($dataContactForm, 'user', $college);
+        $dataUser = $this->createOrUpdateUser($dataContactForm, 'data', $college);
+
+        // Admin second (overriding data role if it's the same user)
+        $adminContactForm = $subscriptionForm['adminContact'];
+        $adminUser = $this->createOrUpdateUser($adminContactForm, 'contact', $college);
+
 
         // Save it all to the db
         $this->getServiceLocator()->get('em')->flush();
@@ -580,7 +579,7 @@ class SubscriptionController extends AbstractActionController
         $user = $userModel->findOneByEmail($email);
 
         if (empty($user)) {
-            $user = new \Mrss\Entity\User;
+            $user = new User;
             $createUser = true;
         }
 
@@ -597,7 +596,7 @@ class SubscriptionController extends AbstractActionController
         $user->setPassword('$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');
         
         // set role
-        $user->setRole('user');
+        $user->setRole($role);
         
 
         $userModel->save($user);
