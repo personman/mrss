@@ -77,6 +77,12 @@ class ComputedFields
         return MathParser::build($equation);
     }
 
+    /**
+     * @param $equation
+     * @param Observation $observation
+     * @return MathParser
+     * @throws \Exception
+     */
     public function prepareEquation($equation, Observation $observation)
     {
         $variables = $this->getVariables($equation);
