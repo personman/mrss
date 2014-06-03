@@ -391,6 +391,26 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($abbr, $benchmark->getInputTypeAbbr());
     }
 
+    public function testPrefix()
+    {
+        $benchmark = new Benchmark();
+
+        $this->assertEquals('', $benchmark->getPrefix());
+
+        $benchmark->setInputType('dollars');
+        $this->assertEquals('$', $benchmark->getPrefix());
+    }
+
+    public function testSuffix()
+    {
+        $benchmark = new Benchmark();
+
+        $this->assertEquals('', $benchmark->getSuffix());
+
+        $benchmark->setInputType('percent');
+        $this->assertEquals('%', $benchmark->getSuffix());
+    }
+
     public function getTypesAndAbbr()
     {
         return array(

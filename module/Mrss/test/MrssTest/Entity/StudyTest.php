@@ -110,6 +110,11 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->study->setOfferCodes(array('test'));
         $this->assertEquals(array('test'), $this->study->getOfferCodes());
         $this->assertTrue($this->study->hasOfferCode());
+
+        $subscription = $this->getMock('\Mrss\Entity\Subscription', array());
+        $this->study->setSubscriptions(array($subscription));
+        $subs = $this->study->getSubscriptions();
+        $this->assertSame($subscription, $subs[0]);
     }
 
     public function testCompletionPercentage()

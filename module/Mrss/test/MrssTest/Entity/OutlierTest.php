@@ -36,14 +36,22 @@ class OutlierTest extends PHPUnit_Framework_TestCase
         $this->outlier->setBenchmark($benchmark);
         $this->assertSame($benchmark, $this->outlier->getBenchmark());
 
-        $observation = $this->getMock('\Mrss\Entity\Observation', array());
-        $this->outlier->setObservation($observation);
-        $this->assertSame($observation, $this->outlier->getObservation());
-
         $this->outlier->setValue(5);
         $this->assertEquals(5, $this->outlier->getValue());
 
         $this->outlier->setProblem('low');
         $this->assertEquals('low', $this->outlier->getProblem());
+
+        $study = $this->getMock('\Mrss\Entity\Study', array());
+        $this->outlier->setStudy($study);
+        $this->assertSame($study, $this->outlier->getStudy());
+
+        $college = $this->getMock('\Mrss\Entity\College', array());
+        $this->outlier->setCollege($college);
+        $this->assertSame($college, $this->outlier->getCollege());
+
+        $this->outlier->setYear(2014);
+        $this->assertEquals(2014, $this->outlier->getYear());
+
     }
 }

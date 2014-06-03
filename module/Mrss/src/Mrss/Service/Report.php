@@ -1344,7 +1344,8 @@ class Report
         return $this->study;
     }
 
-    public function setComputedFieldsService(ComputedFields $service) {
+    public function setComputedFieldsService(ComputedFields $service)
+    {
         $this->computedFieldsService = $service;
 
         return $this;

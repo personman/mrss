@@ -601,5 +601,4 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
         return $suffix;
     }
-
 }

@@ -105,7 +105,9 @@ class ComputedFields
 
 
         if ($this->debug) {
-            pr($errors); pr($vars); pr($observation->getId());
+            pr($errors);
+            pr($vars);
+            pr($observation->getId());
         }
 
         $preparedEquation = $parsedEquation->setVars($vars);
@@ -118,7 +120,6 @@ class ComputedFields
                     $equation . "<br>" .
                     "Variables: <br >" . print_r($vars, 1) .
                     print_r($errors, 1)
-
                 );
             }
 
@@ -131,8 +132,6 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation)
     {
-        if ($observation->getCollege()->getId() != 101) return false;
-
         $benchmarks = $this->getBenchmarkModel()->findComputed();
 
         foreach ($benchmarks as $benchmark) {
@@ -142,8 +141,6 @@ class ComputedFields
 
             $this->calculate($benchmark, $observation);
         }
-
-        if ($this->debug) die('laksjdf;lkjasdfl;');
     }
 
     public function setBenchmarkModel(BenchmarkModel $benchmarkModel)
