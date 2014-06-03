@@ -23,8 +23,9 @@
                 <td>
                     <?= $outlier->getBenchmark()->getName() ?>
                 </td>
-                <td>
-                    <?= $outlier->getValue() ?>
+                <td class="text-right">
+                    <?php $value = ($outlier->getValue() !== null) ? number_format($outlier->getValue()) : null ?>
+                    <?= $outlier->getBenchmark()->getPrefix() ?><?= $value ?><?= $outlier->getBenchmark()->getSuffix() ?>
                 </td>
                 <td>
                     <?= $outlier->getProblem() ?>
