@@ -96,6 +96,11 @@ class NavigationFactory extends DefaultNavigationFactory
                 }
 
                 $pages['data-entry']['pages'] = $dataEntryPages;
+
+                // If data entry is disabled, rename the menu item
+                if (!$currentStudy->getDataEntryOpen()) {
+                    $pages['data-entry']['label'] = 'Submitted Values';
+                }
             } else {
                 // If there aren't any forms to show, drop the data entry menu item
                 unset($pages['data-entry']);
@@ -147,8 +152,14 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         // Hide reports link if reporting isn't enabled yet
-        if (!$currentStudy->getReportsOpen()) {
+        if (!$currentStudy->getReportsOpen() && !$currentStudy->getOutlierReportsOpen()) {
             unset($pages['reports']);
+        } elseif (!$currentStudy->getOutlierReportsOpen()) {
+            unset($pages['reports']['pages']['outlier']);
+        } elseif (!$currentStudy->getReportsOpen()) {
+            unset($pages['reports']['pages']['national']);
+            unset($pages['reports']['pages']['summary']);
+            unset($pages['reports']['pages']['peer']);
         }
 
         return $pages;

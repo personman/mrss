@@ -1,17 +1,53 @@
 <h2>Calculate Reports</h2>
 
-<?php foreach ($years as $year => $calculationDate): ?>
-    <p>
-        <h4><?= $year ?></h4>
+<?php foreach ($years as $year => $calculationDates): ?>
+    <h3><?= $year ?></h3>
 
-        <?php if (!empty($calculationDate)): ?>
-            Prepared on <?= $calculationDate ?>
-        <?php else: ?>
-            Not yet prepared.
-        <?php endif ?>
-        <br />
-        <br />
+    <h4>Outlier Report</h4>
+    <div class="row-fluid">
+        <div class="span6">
+            <p>
+                Calculate outlier and missing data.
+            </p>
 
-        <a href="/reports/calculate/year/<?= $year ?>">Prepare report</a>
-    </p>
+            <p>
+                <a href="/admin/outliers">View Admin Outlier Report</a>
+            </p>
+        </div>
+        <div class="span6">
+            <a class="btn" href="/reports/calculateOutliers/year/<?= $year ?>">Prepare Outlier Report</a>
+            <br>
+            <?php if (!empty($calculationDates['outliers'])): ?>
+                Prepared on <?= $calculationDates['outliers'] ?>
+            <?php else: ?>
+                Not yet prepared.
+            <?php endif ?>
+
+        </div>
+    </div>
+
+    <h4>National Report</h4>
+    <div class="row-fluid">
+        <div class="span6">
+            <p>
+                Calculate percentiles for National Report.
+            </p>
+
+            <p>
+                <a href="/reports/national">View National Report</a>
+            </p>
+        </div>
+        <div class="span6">
+            <a class="btn" href="/reports/calculate/year/<?= $year ?>">Prepare National Report</a>
+            <br>
+            <?php if (!empty($calculationDates['report'])): ?>
+                Prepared on <?= $calculationDates['report'] ?>
+            <?php else: ?>
+                Not yet prepared.
+            <?php endif ?>
+
+        </div>
+    </div>
+
+
 <?php endforeach ?>

@@ -31,6 +31,8 @@ class SubObservationController extends AbstractActionController
         $benchmarkGroupId = $this->params('benchmarkGroup');
         $subObId = $this->params('subId');
 
+        $disabled = !$this->currentStudy()->getDataEntryOpen();
+
         /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
         $benchmarkGroup = $this->getServiceLocator()
             ->get('model.benchmarkGroup')
@@ -48,7 +50,8 @@ class SubObservationController extends AbstractActionController
             ->get('service.formBuilder');
         $form = $formService->buildForm(
             $benchmarkGroup,
-            $observation->getYear()
+            $observation->getYear(),
+            $disabled
         );
 
         // Fetch or create the subobservation
@@ -69,6 +72,10 @@ class SubObservationController extends AbstractActionController
         // Process the form
         // Handle form submission
         if ($this->getRequest()->isPost()) {
+            if ($disabled) {
+                $this->flashMessenger()->addErrorMessage('Data entry is closed.');
+                return $this->redirect()->toRoute('data-entry');
+            }
 
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());

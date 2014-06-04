@@ -1,0 +1,59 @@
+<?php /** @var \Mrss\Entity\Outlier[] $outliers */ ?>
+<?php /** @var boolean $admin */ ?>
+
+<?php if (count($outliers)): ?>
+    <table class="table table-bordered outliers">
+        <thead>
+            <tr>
+                <th>Benchmark</th>
+                <th>Value</th>
+                <th>Problem</th>
+                <?php if (empty($admin)): ?>
+                <th>Action</th>
+                <?php endif ?>
+            </tr>
+        </thead>
+        <tbody>
+
+        <?php foreach ($outliers as $outlier): ?>
+            <?php // Don't show computed benchmarks in college outlier report ?>
+            <?php if (empty($admin) && $outlier->getBenchmark()->getComputed()) continue ?>
+
+            <tr>
+                <td>
+                    <?= $outlier->getBenchmark()->getName() ?>
+                </td>
+                <td class="text-right">
+                    <?php $value = ($outlier->getValue() !== null) ? number_format($outlier->getValue()) : null ?>
+                    <?= $outlier->getBenchmark()->getPrefix() ?><?= $value ?><?= $outlier->getBenchmark()->getSuffix() ?>
+                </td>
+                <td>
+                    <?= $outlier->getProblem() ?>
+                </td>
+
+                <?php if (empty($admin)): ?>
+                    <td>
+                        <?php
+                            $url = $this->url(
+                                'data-entry/edit',
+                                array(
+                                    'benchmarkGroup' => $outlier->getBenchmark()
+                                            ->getBenchmarkGroup()->getId()
+                                )
+                            );
+
+                            $url .= '#' . $outlier->getBenchmark()->getDbColumn();
+                        ?>
+                        <a href="<?= $url ?>">Edit</a>
+                    </td>
+                <?php endif ?>
+            </tr>
+
+        <?php endforeach ?>
+
+        </tbody>
+    </table>
+
+<?php else: ?>
+    No outliers.
+<?php endif ?>

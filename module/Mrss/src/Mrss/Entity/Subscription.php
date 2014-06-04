@@ -36,7 +36,7 @@ class Subscription
     protected $college;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Study")
+     * @ORM\ManyToOne(targetEntity="Study", inversedBy="subscriptions")
      */
     protected $study;
 

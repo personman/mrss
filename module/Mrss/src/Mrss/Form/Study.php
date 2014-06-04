@@ -116,6 +116,16 @@ class Study extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'outlierReportsOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Outlier Reports Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'reportsOpen',
                 'type' => 'Checkbox',
                 'options' => array(

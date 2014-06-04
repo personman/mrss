@@ -22,22 +22,12 @@ class ReportController extends AbstractActionController
 
     public function calculateAction()
     {
-        ini_set('memory_limit', '512M');
-        set_time_limit(3600);
+        $this->longRunningScript();
 
         $years = $this->getReportService()->getYearsWithSubscriptions();
         $yearToPrepare = $this->params()->fromRoute('year');
 
         if (!empty($yearToPrepare)) {
-            // First recalc all computed fields
-            $computedFieldsService = $this->getServiceLocator()->get('computedFields');
-            $subs = $this->getServiceLocator()->get('model.subscription')
-                ->findByStudyAndYear($this->currentStudy(), $yearToPrepare);
-            foreach ($subs as $sub) {
-                $observation = $sub->getObservation();
-                $computedFieldsService->calculateAllForObservation($observation);
-            }
-
             // Now calculate percentiles
             $stats = $this->getReportService()->calculateForYear($yearToPrepare);
             $benchmarks = $stats['benchmarks'];
@@ -55,6 +45,53 @@ class ReportController extends AbstractActionController
         return array(
             'years' => $years
         );
+    }
+
+    public function calculateOutliersAction()
+    {
+        $this->longRunningScript();
+
+        $yearToPrepare = $this->params()->fromRoute('year');
+
+        $stats = $this->getReportService()->calculateOutliersForYear($yearToPrepare);
+        $low = $stats['low'];
+        $high = $stats['high'];
+        $missing = $stats['missing'];
+        $time = $stats['time'];
+        $total = $low + $high + $missing;
+
+        $this->flashMessenger()->addSuccessMessage(
+            "$total outliers calculated. Low: $low. High: $high. Missing: $missing.
+            Time to calculate: $time."
+        );
+
+        return $this->redirect()->toRoute('reports/calculate');
+    }
+
+    public function adminOutliersAction()
+    {
+        $outlierReport = $this->getReportService()->getAdminOutlierReport();
+
+        return array(
+            'report' => $outlierReport
+        );
+    }
+
+    public function outlierAction()
+    {
+        $college = $this->currentCollege();
+        $outlierReport = $this->getReportService()->getOutlierReport($college);
+
+        return array(
+            'report' => $outlierReport
+        );
+
+    }
+
+    protected function longRunningScript()
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(3600);
     }
 
     public function nationalAction()

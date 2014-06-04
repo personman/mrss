@@ -78,6 +78,11 @@ class Study
     /**
      * @ORM\Column(type="boolean")
      */
+    protected $outlierReportsOpen;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
     protected $reportsOpen;
 
     /**
@@ -105,6 +110,12 @@ class Study
      * @ORM\OrderBy({"code" = "ASC"})
      */
     protected $offerCodes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Subscription", mappedBy="study")
+     * @var Subscription[]
+     */
+    protected $subscriptions;
 
     public function __construct()
     {
@@ -167,6 +178,18 @@ class Study
     public function getOfferCodes()
     {
         return $this->offerCodes;
+    }
+
+    public function setSubscriptions($subscriptions)
+    {
+        $this->subscriptions = $subscriptions;
+
+        return $this;
+    }
+
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 
     public function setCurrentYear($year)
@@ -310,6 +333,16 @@ class Study
     public function getReportsOpen()
     {
         return $this->reportsOpen;
+    }
+
+    public function setOutlierReportsOpen($reportsOpen)
+    {
+        $this->outlierReportsOpen = $reportsOpen;
+    }
+
+    public function getOutlierReportsOpen()
+    {
+        return $this->outlierReportsOpen;
     }
 
     public function setUPayUrl($uPayUrl)

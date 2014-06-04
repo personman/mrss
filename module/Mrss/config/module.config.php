@@ -146,6 +146,15 @@ return array(
                             )
                         )
                     ),
+                    'all' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/all',
+                            'defaults' => array(
+                                'action' => 'all',
+                            )
+                        )
+                    ),
                 )
             ),
             'studies' => array(
@@ -607,6 +616,25 @@ return array(
                             )
                         )
                     ),
+                    'calculateOutliers' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculateOutliers[/year/:year]',
+                            'defaults' => array(
+                                'action' => 'calculateOutliers',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'outlier' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/outlier',
+                            'defaults' => array(
+                                'action' => 'outlier'
+                            )
+                        )
+                    ),
                     'national' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -831,6 +859,16 @@ return array(
                             'route' => '/changes',
                             'defaults' => array(
                                 'action' => 'changes'
+                            )
+                        )
+                    ),
+                    'outliers' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/outliers',
+                            'defaults' => array(
+                                'controller' => 'reports',
+                                'action' => 'adminOutliers'
                             )
                         )
                     )

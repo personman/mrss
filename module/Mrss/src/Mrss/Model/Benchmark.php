@@ -79,6 +79,9 @@ class Benchmark extends AbstractModel
         return $c;
     }
 
+    /**
+     * @return \Mrss\Entity\Benchmark[]
+     */
     public function findComputed()
     {
         return $this->getRepository()->findBy(array('computed' => true));

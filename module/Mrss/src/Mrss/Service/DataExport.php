@@ -104,7 +104,7 @@ class DataExport
         // Create a new worksheet
         $sheet = new PHPExcel_Worksheet($this->excel, "$year");
         $this->excel->addSheet($sheet);
-        $this->excel->setActiveSheetIndexByName($year);
+        $this->excel->setActiveSheetIndexByName("$year");
 
         $this->writeHeaders($year);
         $this->writeData($year);

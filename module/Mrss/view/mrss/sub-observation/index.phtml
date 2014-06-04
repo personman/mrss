@@ -26,18 +26,20 @@ $this->headScript()->appendFile(
 </div>
 
 <p>
-<?php if (count($observation->getSubObservations()) < $maxAcademicUnits): ?>
-<a href="<?= $this->url(
-    'data-entry/edit/subob',
-    array('benchmarkGroup' => $benchmarkGroup->getId())
-) ?>" class="btn">
-    <span class="icon-plus-sign"></span>
-    Add an Academic Unit
-</a>
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+    <?php if (count($observation->getSubObservations()) < $maxAcademicUnits): ?>
+    <a href="<?= $this->url(
+        'data-entry/edit/subob',
+        array('benchmarkGroup' => $benchmarkGroup->getId())
+    ) ?>" class="btn">
+        <span class="icon-plus-sign"></span>
+        Add an Academic Unit
+    </a>
 
-<?php else: ?>
-        You have reached your maximum of <?= $maxAcademicUnits ?> academic units.
-        <a href="/contact">Contact us</a> if you have any questions.
+    <?php else: ?>
+            You have reached your maximum of <?= $maxAcademicUnits ?> academic units.
+            <a href="/contact">Contact us</a> if you have any questions.
+    <?php endif ?>
 <?php endif ?>
 
 <span style="padding-left: 20px">

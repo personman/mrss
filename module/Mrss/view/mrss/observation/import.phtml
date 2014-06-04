@@ -37,6 +37,7 @@
 </p>
 <br>
 
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
 <h2>Upload Excel File</h2>
 <p>
     <strong>Step 1:</strong> Complete the Excel file <?php if ($this->currentStudy()->getId() == 2): ?>including all the Form 2 pages (tabs) for your divisions<?php endif ?>.<br>
@@ -45,3 +46,5 @@
 </p>
 
 <?= $this->ztbForm($this->form->prepare()) ?>
+
+<?php endif ?>

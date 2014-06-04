@@ -43,6 +43,7 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->study->getEnrollmentOpen());
         $this->assertNull($this->study->getDataEntryOpen());
         $this->assertNull($this->study->getReportsOpen());
+        $this->assertNull($this->study->getOutlierReportsOpen());
         $this->assertNull($this->study->getUPayUrl());
         $this->assertNull($this->study->getUPaySiteId());
         $this->assertNull($this->study->getLogo());
@@ -91,6 +92,9 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->study->setReportsOpen(true);
         $this->assertTrue($this->study->getReportsOpen());
 
+        $this->study->setOutlierReportsOpen(true);
+        $this->assertTrue($this->study->getOutlierReportsOpen());
+
         $this->study->setUPayUrl('http://test.com');
         $this->assertEquals('http://test.com', $this->study->getUPayUrl());
 
@@ -106,6 +110,11 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->study->setOfferCodes(array('test'));
         $this->assertEquals(array('test'), $this->study->getOfferCodes());
         $this->assertTrue($this->study->hasOfferCode());
+
+        $subscription = $this->getMock('\Mrss\Entity\Subscription', array());
+        $this->study->setSubscriptions(array($subscription));
+        $subs = $this->study->getSubscriptions();
+        $this->assertSame($subscription, $subs[0]);
     }
 
     public function testCompletionPercentage()

@@ -131,12 +131,14 @@ $this->headScript()->appendFile(
     </tbody>
 </table>
 
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
 <fieldset id="fieldset-buttons" class="well well-small">
     <div class="control-group" id="control-group-buttons[submit]">
         <div class="controls" id="controls-buttons[submit]">
-            <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+            <?= $this->formElement($buttons->get('submit')) ?>
         </div>
     </div>
 </fieldset>
+<?php endif ?>
 
 <?= $this->form()->closeTag() ?>

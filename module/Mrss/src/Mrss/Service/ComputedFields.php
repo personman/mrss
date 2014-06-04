@@ -20,24 +20,24 @@ class ComputedFields
      */
     protected $observationModel;
 
+    protected $debug = false;
+
     public function calculate(Benchmark $benchmark, Observation $observation)
     {
-        $equation = $benchmark->getEquation();
+        $equationWithVariables = $benchmark->getEquation();
         $benchmarkColumn = $benchmark->getDbColumn();
 
-        if (empty($equation)) {
+        if (empty($equationWithVariables)) {
             return false;
         }
 
         // Populate variables
-        $equation = $this->prepareEquation($equation, $observation);
+        $equation = $this->prepareEquation($equationWithVariables, $observation);
 
-        if (empty($equation)) {
-            /*throw new \Exception(
-                'Invalid equation for benchmark: .' . $benchmark->getDbColumn())
-            ;*/
+        if (empty($equation) && !$this->debug) {
             return false;
         }
+
 
         // the Calculation
         $result = $equation->evaluate();
@@ -77,11 +77,19 @@ class ComputedFields
         return MathParser::build($equation);
     }
 
+    /**
+     * @param $equation
+     * @param Observation $observation
+     * @return MathParser
+     * @throws \Exception
+     */
     public function prepareEquation($equation, Observation $observation)
     {
         $variables = $this->getVariables($equation);
 
-        $equation = $this->buildEquation($equation);
+        $parsedEquation = $this->buildEquation($equation);
+
+        $errors = array();
 
         $vars = array();
         foreach ($variables as $variable) {
@@ -89,13 +97,43 @@ class ComputedFields
 
             // If any of the variables are null or '', bail out
             if ($value === null || $value === '') {
-                return false;
+                $errors[] = "Missing variable: $variable. ";
+
+                continue;
             }
 
             $vars[$variable] = $value;
         }
 
-        return $equation->setVars($vars);
+        if (!empty($errors) && !$this->debug) {
+            return false;
+        }
+
+
+        if ($this->debug) {
+            pr($errors);
+            pr($vars);
+            pr($observation->getId());
+        }
+
+        $preparedEquation = $parsedEquation->setVars($vars);
+
+        if (empty($preparedEquation)) {
+            if ($this->debug) {
+                throw new \Exception(
+                    'Invalid equation: ' .
+                    "<br>" .
+                    $equation . "<br>" .
+                    "Variables: <br >" . print_r($vars, 1) .
+                    print_r($errors, 1)
+                );
+            }
+
+            return false;
+        }
+
+
+        return $preparedEquation;
     }
 
     public function calculateAllForObservation(Observation $observation)
@@ -103,6 +141,10 @@ class ComputedFields
         $benchmarks = $this->getBenchmarkModel()->findComputed();
 
         foreach ($benchmarks as $benchmark) {
+            if ($this->debug) {
+                pr($benchmark->getName());
+            }
+
             $this->calculate($benchmark, $observation);
         }
     }

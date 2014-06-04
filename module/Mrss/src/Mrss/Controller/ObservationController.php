@@ -3,6 +3,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Form\ImportData;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
@@ -254,6 +255,8 @@ class ObservationController extends AbstractActionController
             throw new \Exception('Benchmark group not found');
         }
 
+        $dataEntryOpen = $this->currentStudy()->getDataEntryOpen();
+
         // SubObs?
         if ($benchmarkGroup->getUseSubObservation()) {
             return $this->listSubObservations($benchmarkGroup);
@@ -264,7 +267,11 @@ class ObservationController extends AbstractActionController
 
         $formService = $this->getServiceLocator()
             ->get('service.formBuilder');
-        $form = $formService->buildForm($benchmarkGroup, $observation->getYear());
+        $form = $formService->buildForm(
+            $benchmarkGroup,
+            $observation->getYear(),
+            !$dataEntryOpen
+        );
 
 
         $class = 'form-horizontal ' . $benchmarkGroup->getFormat();
@@ -278,6 +285,12 @@ class ObservationController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
+            // Is data entry open?
+            if (!$dataEntryOpen) {
+                $this->flashMessenger()->addErrorMessage('Data entry is closed.');
+                return $this->redirect()->toRoute('data-entry');
+            }
+
 
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
@@ -359,14 +372,24 @@ class ObservationController extends AbstractActionController
     public function importAction()
     {
         // Get the import form
-        $form = new \Mrss\Form\ImportData('import');
+        $form = new ImportData('import');
 
         $errorMessages = array();
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
 
         // Handle the form
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
+            // Is data entry open?
+            if (!$study->getDataEntryOpen()) {
+                $this->flashMessenger()->addErrorMessage('Data entry is closed.');
+                return $this->redirect()->toRoute('data-entry/import');
+            }
+
+
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -387,8 +410,8 @@ class ObservationController extends AbstractActionController
 
                 try {
                     $filename = $data['file']['tmp_name'];
-                    $excelService = new \Mrss\Service\Excel();
-                    $excelService->setCurrentStudy($this->currentStudy());
+                    $excelService = new Excel();
+                    $excelService->setCurrentStudy($study);
                     $excelService->setCurrentCollege($this->currentCollege());
 
                     $allData = $excelService->getObservationDataFromExcel($filename);
@@ -580,7 +603,7 @@ class ObservationController extends AbstractActionController
 
 
         // Get the import form
-        $form = new \Mrss\Form\ImportData('import');
+        $form = new ImportData('import');
 
         $errorMessages = array();
 
@@ -649,6 +672,18 @@ class ObservationController extends AbstractActionController
                 $college->getName()
             );
         }
+    }
+
+    public function allAction()
+    {
+        $currentStudy = $this->currentStudy();
+        $benchmarkGroups = $currentStudy->getBenchmarkGroups();
+        $observation = $this->getCurrentObservation();
+
+        return array(
+            'study' => $currentStudy,
+            'observation' => $observation
+        );
     }
 
     /**

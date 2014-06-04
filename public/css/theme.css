@@ -902,4 +902,21 @@ td.inputTypeAbbr {
     margin-left: 40px;
 }
 
-.deleteLink
+.deleteLink {
+
+}
+
+/** Outliers table **/
+table.outliers th {
+    font-weight: bold;
+    /*font-size: 108%;*/
+    text-align: center;
+    background: #DDD;
+    color: #000;
+    vertical-align: middle !important;
+
+}
+
+.text-right {
+    text-align: right !important;
+}

@@ -3,7 +3,11 @@
 <?= $this->systemAdmin() ?>
 
 <div class="page-header">
-    <h2>Data Entry</h2>
+    <?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+        <h2>Data Entry</h2>
+    <?php else: ?>
+        <h2>Submitted Values</h2>
+    <?php endif ?>
 </div>
 
 <?php if ($this->currentStudy()->getId() == 3): ?>
@@ -98,6 +102,18 @@
 <?php endforeach ?>
 
 <br>
+
+<?php if (!$this->currentStudy()->getDataEntryOpen()): ?>
+<div class="row row-fluid">
+    <div class="span1">
+
+    </div>
+
+    <div class="span4">
+        <a href="<?= $this->url('data-entry/all') ?>">All Submitted Values</a>
+    </div>
+</div>
+<?php endif ?>
 
 <?php if ($this->currentStudy()->getId() == 2): ?>
     <a target="_blank" href="/files/How-to-Complete.pdf">Detailed Instructions (PDF)</a>

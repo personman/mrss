@@ -9,7 +9,9 @@ use Mrss\Entity\Percentile;
 use Mrss\Entity\PercentileRank;
 use Mrss\Entity\Observation;
 use Mrss\Entity\PeerGroup;
+use Mrss\Entity\Outlier;
 use Mrss\Service\Report\Calculator;
+use Mrss\Service\ComputedFields;
 
 class Report
 {
@@ -22,6 +24,11 @@ class Report
      * @var Calculator
      */
     protected $calculator;
+
+    /**
+     * @var ComputedFields
+     */
+    protected $computedFieldsService;
 
     /**
      * @var \Mrss\Model\Subscription
@@ -53,6 +60,11 @@ class Report
      */
     protected $settingModel;
 
+    /**
+     * @var \Mrss\Model\Outlier
+     */
+    protected $outlierModel;
+
     public function getYearsWithSubscriptions()
     {
         $years = $this->getSubscriptionModel()
@@ -61,8 +73,14 @@ class Report
         // Also show the date the report was calculated
         $yearsWithCalculationDates = array();
         foreach ($years as $year) {
-            $key = $this->getSettingKey($year);
-            $yearsWithCalculationDates[$year] = $this->getSettingModel()
+            $yearsWithCalculationDates[$year] = array();
+
+            $key = $this->getReportCalculatedSettingKey($year);
+            $yearsWithCalculationDates[$year]['report'] = $this->getSettingModel()
+                ->getValueForIdentifier($key);
+
+            $key = $this->getOutliersCalculatedSettingKey($year);
+            $yearsWithCalculationDates[$year]['outliers'] = $this->getSettingModel()
                 ->getValueForIdentifier($key);
         }
 
@@ -71,6 +89,9 @@ class Report
 
     public function calculateForYear($year)
     {
+        // Update any computed fields
+        $this->calculateAllComputedFields($year);
+
         $study = $this->getStudy();
         $calculator = $this->getCalculator();
         $breakpoints = $this->getPercentileBreakpoints();
@@ -157,7 +178,7 @@ class Report
         }
 
         // Update the settings table with the calculation date
-        $settingKey = $this->getSettingKey($year);
+        $settingKey = $this->getReportCalculatedSettingKey($year);
         $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
 
         // Flush
@@ -167,13 +188,154 @@ class Report
         return $stats;
     }
 
+    public function calculateOutliersForYear($year)
+    {
+        $this->calculateAllComputedFields($year);
+
+        $stats = array(
+            'high' => 0,
+            'low' => 0,
+            'missing' => 0
+        );
+
+        $start = microtime(1);
+
+        $calculator = $this->getCalculator();
+
+        // Clear any existing outliers for the year/study
+        $studyId = $this->getStudy()->getId();
+        $this->getOutlierModel()
+            ->deleteByStudyAndYear($studyId, $year);
+        $this->getOutlierModel()->getEntityManager()->flush();
+
+        // Loop over the benchmarks
+        foreach ($this->getStudy()->getBenchmarksForYear($year) as $benchmark) {
+            /** @var Benchmark $benchmark */
+
+            // Skip over computed benchmarks
+            /*if ($benchmark->getComputed()) {
+                continue;
+            }*/
+
+            // Get the data for all subscribers (skip nulls)
+            $data = $this->collectDataForBenchmark($benchmark, $year);
+
+            // If there's no data, move on
+            if (empty($data)) {
+                continue;
+            }
+
+            $calculator->setData($data);
+
+            // Here's the key bit, where the outliers are actually calculated
+            $outliers = $calculator->getOutliers();
+
+            // Now save them
+            foreach ($outliers as $outlierInfo) {
+                $outlier = new Outlier;
+                $outlier->setValue($outlierInfo['value']);
+                $outlier->setBenchmark($benchmark);
+                $outlier->setStudy($this->getStudy());
+                $outlier->setYear($year);
+                $problem = $outlierInfo['problem'];
+                $outlier->setProblem($problem);
+                $college = $this->getOutlierModel()->getEntityManager()
+                    ->getReference('Mrss\Entity\College', $outlierInfo['college']);
+                $outlier->setCollege($college);
+
+                $this->getOutlierModel()->save($outlier);
+
+                // Some stats
+                $stats[$problem]++;
+            }
+
+            // Handle missing outliers
+            if ($benchmark->getRequired()) {
+                $data = $this->collectDataForBenchmark($benchmark, $year, false);
+
+                foreach ($data as $collegeId => $datum) {
+                    if ($datum === null) {
+                        $outlier = new Outlier;
+                        $outlier->setBenchmark($benchmark);
+                        $outlier->setStudy($this->getStudy());
+                        $outlier->setYear($year);
+                        $problem = 'missing';
+                        $outlier->setProblem($problem);
+                        $college = $this->getOutlierModel()->getEntityManager()
+                            ->getReference('Mrss\Entity\College', $collegeId);
+                        $outlier->setCollege($college);
+
+                        $this->getOutlierModel()->save($outlier);
+
+                        // Some stats
+                        $stats[$problem]++;
+                    }
+                }
+            }
+        }
+
+        // Save the new report calculation date
+        $settingKey = $this->getOutliersCalculatedSettingKey($year);
+        $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
+        $this->getSettingModel()->getEntityManager()->flush();
+
+        // Timer
+        $end = microtime(1);
+        $stats['time'] = round($end - $start, 1) . ' seconds';
+
+        return $stats;
+    }
+
+    /**
+     * Get the outliers for the study/year, grouped by college
+     */
+    public function getAdminOutlierReport()
+    {
+        $report = array();
+        $study = $this->getStudy();
+        $year = $study->getCurrentYear();
+
+        // Get colleges subscribed to the study for the year
+        $colleges = $this->getCollegeModel()->findByStudyAndYear(
+            $study,
+            $year
+        );
+
+        foreach ($colleges as $college) {
+            $outliers = $this->getOutlierModel()
+                ->findByCollegeStudyAndYear($college, $study, $year);
+            $report[] = array(
+                'college' => $college,
+                'outliers' => $outliers
+            );
+        }
+
+        return $report;
+    }
+
+    public function getOutlierReport(College $college)
+    {
+        $report = array();
+        $study = $this->getStudy();
+        $year = $study->getCurrentYear();
+
+        $outliers = $this->getOutlierModel()
+            ->findByCollegeStudyAndYear($college, $study, $year);
+        $report[] = array(
+            'college' => $college,
+            'outliers' => $outliers
+        );
+
+        return $report;
+    }
+
     /**
      * Build a unique key for the year and study
      *
      * @param $year
      * @return string
      */
-    public function getSettingKey($year)
+    public function getReportCalculatedSettingKey($year)
     {
         $studyId = $this->getStudy()->getId();
 
@@ -182,8 +344,26 @@ class Report
         return $key;
     }
 
-    public function collectDataForBenchmark(Benchmark $benchmark, $year)
+    /**
+     * Build a unique key for the year and study
+     *
+     * @param $year
+     * @return string
+     */
+    public function getOutliersCalculatedSettingKey($year)
     {
+        $studyId = $this->getStudy()->getId();
+
+        $key = "outliers_calculated_{$studyId}_$year";
+
+        return $key;
+    }
+
+    public function collectDataForBenchmark(
+        Benchmark $benchmark,
+        $year,
+        $skipNull = true
+    ) {
         $subscriptions = $this->getSubscriptionModel()
             ->findByStudyAndYear($this->getStudy()->getId(), $year);
 
@@ -197,9 +377,11 @@ class Report
             $collegeId = $subscription->getCollege()->getId();
 
             // Leave out null values
-            if ($value !== null) {
-                $data[$collegeId] = $value;
+            if ($skipNull && $value === null) {
+                continue;
             }
+
+            $data[$collegeId] = $value;
         }
 
         return $data;
@@ -1080,6 +1262,23 @@ class Report
     }
 
     /**
+     * Calculate all computed fields for the current study and the given year
+     *
+     * @param $year
+     */
+    public function calculateAllComputedFields($year)
+    {
+        $subs = $this->getSubscriptionModel()
+            ->findByStudyAndYear($this->getStudy(), $year);
+
+        foreach ($subs as $sub) {
+            $observation = $sub->getObservation();
+            $this->getComputedFieldsService()
+                ->calculateAllForObservation($observation);
+        }
+    }
+
+    /**
      * Returns colleges that reported at least one of the benchmarks
      *
      * @param College[] $colleges
@@ -1143,6 +1342,18 @@ class Report
     public function getStudy()
     {
         return $this->study;
+    }
+
+    public function setComputedFieldsService(ComputedFields $service)
+    {
+        $this->computedFieldsService = $service;
+
+        return $this;
+    }
+
+    public function getComputedFieldsService()
+    {
+        return $this->computedFieldsService;
     }
 
     public function setSubscriptionModel($model)
@@ -1218,6 +1429,18 @@ class Report
     public function getSettingModel()
     {
         return $this->settingModel;
+    }
+
+    public function setOutlierModel($model)
+    {
+        $this->outlierModel = $model;
+
+        return $this;
+    }
+
+    public function getOutlierModel()
+    {
+        return $this->outlierModel;
     }
 
     public function setCalculator(Calculator $calculator)

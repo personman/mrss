@@ -88,6 +88,18 @@ class Benchmark extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'required',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Required',
+                    'help-block' => 'Required data elements can still be submitted
+                    empty, but will show up on the outlier report'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'computed',
                 'type' => 'Checkbox',
                 'options' => array(

@@ -30,7 +30,7 @@ class ReportTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(3));
         $this->report->setStudy($studyMock);
 
-        $key = $this->report->getSettingKey(2014);
+        $key = $this->report->getReportCalculatedSettingKey(2014);
 
         $this->assertEquals('report_calculated_3_2014', $key);
     }
