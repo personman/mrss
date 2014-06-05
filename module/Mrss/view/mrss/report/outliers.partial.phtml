@@ -39,7 +39,8 @@
                                 array(
                                     'benchmarkGroup' => $outlier->getBenchmark()
                                             ->getBenchmarkGroup()->getId()
-                                )
+                                ),
+                                array('force_canonical' => true)
                             );
 
                             $url .= '#' . $outlier->getBenchmark()->getDbColumn();

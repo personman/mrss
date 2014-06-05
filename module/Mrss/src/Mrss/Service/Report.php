@@ -12,6 +12,10 @@ use Mrss\Entity\PeerGroup;
 use Mrss\Entity\Outlier;
 use Mrss\Service\Report\Calculator;
 use Mrss\Service\ComputedFields;
+use Zend\Mail\Transport\Smtp;
+use Zend\Mail\Message;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
 
 class Report
 {
@@ -64,6 +68,11 @@ class Report
      * @var \Mrss\Model\Outlier
      */
     protected $outlierModel;
+
+    /**
+     * @var Smtp
+     */
+    protected $mailTransport;
 
     public function getYearsWithSubscriptions()
     {
@@ -327,6 +336,75 @@ class Report
         );
 
         return $report;
+    }
+
+    public function emailOutliers($renderer)
+    {
+        $reports = $this->getAdminOutlierReport();
+        $stats = array('emails' => 0);
+
+        // Loop over the admin report in order to send an email to each college
+        foreach ($reports as $report) {
+            /** @var \Mrss\Entity\College $college */
+            $college = $report['college'];
+
+            /** @var \Mrss\Entity\Outlier[] $outliers */
+            $outliers = $report['outliers'];
+
+            $studyName = $this->getStudy()->getDescription();
+            $collegeName = $college->getName();
+
+            $outliers = array();
+
+            // Compose the email body
+            if (!empty($outliers)) {
+                $body = "We have identified some potential problems with the data " .
+                "that $collegeName submitted to $studyName. Please check the " .
+                "benchmarks listed below and confirm that you have submitted " .
+                "correct values.\n<br>\n<br>";
+
+                $table = $renderer->partial(
+                    'mrss/report/outliers.partial.phtml',
+                    array(
+                        'outliers' => $outliers
+                    )
+                );
+
+                $body .= $table;
+            } else {
+                $body = "The data submitted for $collegeName does not include any outliers.";
+            }
+
+            // Email subject
+            $subject = "Outlier report for $studyName";
+
+            // Mime object for html body:
+            $html = new MimePart($body);
+            $html->type = 'text/html';
+
+            $body = new MimeMessage;
+            $body->setParts(array($html));
+
+            $message = new Message;
+
+            // Get recipients
+            if (false) {
+                foreach ($college->getUsers() as $user) {
+                    $message->addTo($user->getEmail(), $user->getFullName());
+                }
+            }
+
+            $message->setSubject($subject);
+            $message->setBody($body);
+            $message->addBcc('dfergu15@jccc.edu');
+            //$message->addBcc('mtaylo24@jccc.edu');
+            $message->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
+
+            //$this->getMailTransport()->send($message);
+            $stats['emails']++;
+        }
+
+        return $stats;
     }
 
     /**
@@ -1453,5 +1531,17 @@ class Report
     public function getCalculator()
     {
         return $this->calculator;
+    }
+
+    public function setMailTransport(Smtp $transport)
+    {
+        $this->mailTransport = $transport;
+
+        return $this;
+    }
+
+    public function getMailTransport()
+    {
+        return $this->mailTransport;
     }
 }

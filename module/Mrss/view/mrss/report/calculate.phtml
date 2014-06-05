@@ -19,6 +19,9 @@
             <br>
             <?php if (!empty($calculationDates['outliers'])): ?>
                 Prepared on <?= $calculationDates['outliers'] ?>
+                <br>
+                <br>
+                <a class="btn" href="/reports/emailOutliers" onclick="return confirm('Are you sure you want to send outlier report emails to all member institutions?')">Email Outler Reports</a>
             <?php else: ?>
                 Not yet prepared.
             <?php endif ?>

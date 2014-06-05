@@ -201,6 +201,9 @@ class College
         return $this;
     }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection|\Mrss\Entity\User[]
+     */
     public function getUsers()
     {
         return $this->users;

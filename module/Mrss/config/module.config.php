@@ -626,6 +626,15 @@ return array(
                             )
                         )
                     ),
+                    'emailOutliers' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/emailOutliers',
+                            'defaults' => array(
+                                'action' => 'emailOutliers',
+                            )
+                        )
+                    ),
                     'outlier' => array(
                         'type' => 'segment',
                         'options' => array(

@@ -476,6 +476,7 @@ class Module
                     $service->setSettingModel($sm->get('model.setting'));
                     $service->setOutlierModel($sm->get('model.outlier'));
                     $service->setComputedFieldsService($sm->get('computedFields'));
+                    $service->setMailTransport($sm->get('mail.transport'));
 
                     return $service;
                 },

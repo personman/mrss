@@ -199,6 +199,11 @@ return array(
                     'action' => 'delete',
                     'roles' => array('admin')
                 ),
+                array(
+                    'controller' => 'reports',
+                    'action' => 'emailOutliers',
+                    'roles' => array('admin')
+                ),
                 // Since the background action is fired by console, lift guard
                 array(
                     'controller' => 'import',
