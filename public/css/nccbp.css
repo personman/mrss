@@ -1,0 +1,22 @@
+.navbar.navbar-inverse .navbar-inner {
+    background: #FFF
+}
+
+body {
+    background: #FFF;
+
+}
+
+.nav-collapse {
+    clear: both;
+}
+
+.nav {
+    float: none;
+    width: 100%;
+    background: #00568F;
+}
+
+#headerLoginForm {
+    position: relative;
+}

@@ -1,0 +1,43 @@
+<style type="text/css">
+    .explore form input, .explore form textarea {
+        width: 90%
+    }
+
+    .explore .form-horizontal .control-label {
+        width: 90%;
+        text-align: center;
+    }
+
+    .explore .controls {
+        clear: both;
+    }
+</style>
+
+<?php
+$this->headScript()->appendFile(
+    $this->chart()->getChartJsUri(),
+    'text/javascript'
+); ?>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+<h2>Explore the Data</h2>
+
+<?php
+// Add an action and submit button to the form
+$form->setAttribute('action', $this->url('reports/explore'));
+
+?>
+
+<div class="explore row row-fluid">
+    <div class="span4">
+        <?= $this->ztbForm($this->form->prepare()) ?>
+    </div>
+
+    <div class="span8">
+        <div id="chart">
+            <?= $this->chart($chart) ?>
+        </div>
+    </div>
+</div>
+

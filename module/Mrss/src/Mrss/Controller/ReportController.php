@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Form\Explore;
 use Mrss\Form\PeerComparisonDemographics;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Service\Report;
@@ -249,6 +250,55 @@ class ReportController extends AbstractActionController
 
         return array(
             'form' => $form
+        );
+    }
+
+    public function exploreAction()
+    {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $benchmarks = array();
+        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+            $group = array(
+                'label' => $benchmarkGroup->getName(),
+                'options' => array()
+            );
+
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                $group['options'][$benchmark->getDbColumn()] = $benchmark->getName();
+            }
+
+            $benchmarks[$benchmarkGroup->getId()] = $group;
+        }
+
+
+        $colleges = array();
+
+        $form = new Explore($benchmarks, $colleges);
+
+        $chart = null;
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $benchmark1 = $data['benchmark1'];
+                $benchmark2 = $data['benchmark2'];
+                $size = $data['benchmark3'];
+                $title = $data['title'];
+
+                $chart = $this->getReportService()
+                    ->getBubbleChart($benchmark1, $benchmark2, $size, $title);
+            }
+        }
+
+
+
+        return array(
+            'form' => $form,
+            'chart' => $chart
         );
     }
 

@@ -711,6 +711,15 @@ return array(
                             )
                         )
                     ),
+                    'explore' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/explore',
+                            'defaults' => array(
+                                'action' => 'explore',
+                            )
+                        )
+                    ),
                 )
             ),
             'users' => array(

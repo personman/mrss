@@ -678,6 +678,80 @@ class Report
         return $chart;
     }
 
+    public function getBubbleChart($x, $y, $size, $title)
+    {
+        $study = $this->getStudy();
+
+        $subscriptions = $this->getSubscriptionModel()
+            ->findByStudyAndYear($study->getId(), $study->getCurrentYear());
+
+        $data = array();
+        foreach ($subscriptions as $subscription) {
+            $observation = $subscription->getObservation();
+
+            $xVal = $observation->get($x);
+            $yVal = $observation->get($y);
+            $sizeVal = $observation->get($size);
+
+            if ($xVal && $yVal && $sizeVal) {
+                $data[] = array(
+                    floatval($xVal),
+                    floatval($yVal),
+                    floatval($sizeVal)
+                );
+            }
+        }
+
+        $xLabel = $this->getBenchmarkModel()->findOneByDbColumn($x)->getName();
+        $yLabel = $this->getBenchmarkModel()->findOneByDbColumn($y)->getName();
+
+
+        $series = array(
+            array(
+                'name' => 'Institutions',
+                'data' => $data
+            )
+        );
+
+        if (empty($title)) {
+            $title = 'Test Chart';
+        }
+
+
+        $chart = array(
+            'id' => 'chart_' . uniqid(),
+            'chart' => array(
+                'type' => 'bubble',
+                'zoomType' => 'xy'
+            ),
+            'title' => array(
+                'text' => $title,
+            ),
+            'xAxis' => array(
+                'title' => array(
+                    'enabled' => true,
+                    'text' => $xLabel
+                )
+            ),
+            'yAxis' => array(
+                'title' => array(
+                    'enabled' => true,
+                    'text' => $yLabel
+                )
+            ),
+            'exporting' => array(
+                'enabled' => true
+            ),
+            'credits' => array(
+                'enabled' => false
+            ),
+            'series' => $series
+        );
+
+        return $chart;
+
+    }
+
     public function getPieChartColors()
     {
         return array(
