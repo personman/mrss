@@ -24,6 +24,10 @@
     <link rel="stylesheet" type="text/css" href="/css/mrss.css">
     <?php endif ?>
 
+    <?php if ($this->currentStudy()->getId() == 1): ?>
+        <link rel="stylesheet" type="text/css" href="/css/nccbp.css">
+    <?php endif ?>
+
     <!--[if lt IE 9]>
     <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
