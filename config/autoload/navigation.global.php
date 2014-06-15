@@ -177,6 +177,10 @@ return array(
                 'controller' => 'studies',
                 'route' => 'studies'
             ),
+            'reports/explore' => array(
+                'label' => 'Explore Data',
+                'route' => 'reports/explore'
+            ),
             'reports' => array(
                 'label' => 'Reports',
                 'route' => 'reports/calculate'
