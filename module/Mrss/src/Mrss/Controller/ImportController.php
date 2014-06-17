@@ -34,6 +34,7 @@ class ImportController extends AbstractActionController
     public function triggerAction()
     {
         $type = $this->params()->fromQuery('type');
+        $year = $this->params()->fromQuery('year');
 
         $imports = $this->getImports();
 
@@ -43,7 +44,17 @@ class ImportController extends AbstractActionController
 
         // Trigger the importer in the background
         if (true) {
-            exec("nohup nice -n 10 php public/index.php import $type > /dev/null &");
+            $config = $this->getServiceLocator()->get('config');
+            if (!empty($config['php_path'])) {
+                $php = $config['php_path'];
+            } else {
+                $php = "php";
+            }
+            $output = array();
+            $command = "nohup nice -n 10 $php public/index.php import $type $year > /dev/null &";
+            exec($command, $output);
+            pr($command);
+            pr($output);
         } else {
             $this->backgroundAction($type);
         }
@@ -56,7 +67,7 @@ class ImportController extends AbstractActionController
      *
      * @throws \Exception
      */
-    public function backgroundAction($type = null)
+    public function backgroundAction($type = null, $year = null)
     {
         $this->disableQueryLogging();
 
@@ -71,6 +82,10 @@ class ImportController extends AbstractActionController
 
         if (is_null($type)) {
             $type = $this->params()->fromQuery('type');
+        }
+
+        if (is_null($year)) {
+            $year = $this->params('year');
         }
 
         $imports = $this->getImports();
@@ -95,9 +110,17 @@ class ImportController extends AbstractActionController
         try {
             // This is the actual import
             if (!empty($import['argument'])) {
-                $importer->$method($import['argument']);
+                if (!empty($import['year'])) {
+                    $importer->$method($import['argument'], $year);
+                } else {
+                    $importer->$method($import['argument']);
+                }
             } else {
-                $importer->$method();
+                if (!empty($import['year'])) {
+                    $importer->$method($year);
+                } else {
+                    $importer->$method();
+                }
             }
         } catch (\Exception $e) {
             throw $e;

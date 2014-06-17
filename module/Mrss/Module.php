@@ -70,7 +70,9 @@ class Module
             $logger->err('Error with no exception object.');
         }
 
-        $logger->info('IP: ' . $_SERVER['REMOTE_ADDR']);
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $logger->info('IP: ' . $_SERVER['REMOTE_ADDR']);
+        }
 
         // Log user identity, if present
         $userService = $e->getApplication()
@@ -133,6 +135,10 @@ class Module
                     // Inject the college Model
                     $collegeModel = $sm->get('model.college');
                     $importer->setCollegeModel($collegeModel);
+
+                    // Inject the user Model
+                    $userModel = $sm->get('model.user');
+                    $importer->setUserModel($userModel);
 
                     // Inject the observation model
                     $observationModel = $sm->get('model.observation');
@@ -517,12 +523,17 @@ class Module
                     $studyModel = $sm->getServiceLocator()->get('model.study');
                     $plugin->setStudyModel($studyModel);
 
-                    // The current base url
-                    $url = $sm->getServiceLocator()
-                        ->get('request')
-                        ->getUri()
-                        ->getHost();
-                    $plugin->setUrl($url);
+                    $request = $sm->getServiceLocator()
+                        ->get('request');
+                    if (method_exists($request, 'getUri')) {
+                        // The current base url
+                        $url = $request
+                            ->getUri()
+                            ->getHost();
+                        $plugin->setUrl($url);
+                    } else {
+                        $plugin->setUrl('console');
+                    }
 
                     $config = $sm->getServiceLocator()->get('Config');
 

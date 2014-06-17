@@ -13,9 +13,14 @@
                     <?= $impersonator->getFullName() ?>, impersonating
                 </strong>
             <?php endif ?>
+
             <strong>
-                <?= $changeSet->getUser()->getFullName() ?>
-                (<?= $changeSet->getUser()->getCollege()->getName() ?>)
+                <?php if ($changeSet->getUser()): ?>
+                    <?= $changeSet->getUser()->getFullName() ?>
+                    (<?= $changeSet->getUser()->getCollege()->getName() ?>)
+                <?php else: ?>
+                    Importer
+                <?php endif ?>
             </strong> changed
             <strong><?= count($changeSet->getChanges()) ?></strong>
             <?= $field ?>

@@ -55,12 +55,13 @@ function nextImport()
 function triggerImport(type)
 {
     currentType = type
+    var year = $('#year').val()
 
     resetProgressBar(type)
 
     url = '/import/trigger'
 
-    $.get(url, {type: type}, function(data) {
+    $.get(url, {type: type, year: year}, function(data) {
         // Start polling for status
         intervalId = setInterval(function() {
             pollProgress(type)

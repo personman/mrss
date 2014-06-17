@@ -9,14 +9,17 @@ body {
 
 .nav-collapse {
     clear: both;
+    margin-left: 120px;
 }
 
-.nav {
+.navbar .nav {
     float: none;
     width: 100%;
     background: #00568F;
+    padding-left: 120px;
 }
 
 #headerLoginForm {
     position: relative;
 }
+

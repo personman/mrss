@@ -50,6 +50,10 @@ class Setting extends AbstractModel
         return $this->getRepository()->findAll();
     }
 
+    /**
+     * @param $identifier
+     * @return null|\Mrss\Entity\Setting
+     */
     public function findOneByIdentifier($identifier)
     {
         return $this->getRepository()->findOneBy(array('identifier' => $identifier));

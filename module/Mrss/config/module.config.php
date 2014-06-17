@@ -982,10 +982,11 @@ return array(
             'routes' => array(
                 'import' => array(
                     'options' => array(
-                        'route' => 'import <type>',
+                        'route' => 'import <type> <year>',
                         'defaults' => array(
                             'controller' => 'import',
-                            'action' => 'background'
+                            'action' => 'background',
+                            'year' => null
                         )
                     )
                 ),

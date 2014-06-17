@@ -10,7 +10,8 @@ return array(
             'orm_default' => array(
                 'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
                 'params' => array(
-                    'host'     => 'localhost',
+                    'host'     => $dbParams['hostname'],
+                    //'unix_socket' => '/Applications/MAMP/tmp/mysql/mysql.sock',
                     'port'     => '3306',
                     'dbname'   => $dbParams['database'],
                     'user'     => $dbParams['username'],

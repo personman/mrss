@@ -1,11 +1,17 @@
 <?php $this->headScript()->appendFile(
 '/js/import.js') ?>
 
-<h2>Imports</h2>
+<h2>Import NCCBP</h2>
 
-<p>Import data from previous studies.</p>
+<p>Import data from the National Community College Benchmark Project.</p>
 
-
+<form>
+    <select name="year" id="year">
+        <?php foreach (range(2007, date('Y')) as $year): ?>
+            <option value="<?= $year ?>" <?php if ($year == date('Y') - 1) echo ' selected="selected"' ?>><?= $year ?></option>
+        <?php endforeach ?>
+    </select>
+</form>
 
 <div class="row-fluid">
     <div class="span2 offset10">

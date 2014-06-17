@@ -2,6 +2,7 @@
 
 return array(
     'studies' => array(
+        'console' => 1,
         'nccwtbp.org' => 3,
         'workforceproject.org' => 3,
         'mrss.dan.com' => 2,

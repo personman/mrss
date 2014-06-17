@@ -6,6 +6,7 @@ use Mrss\Entity\Exception\InvalidBenchmarkException;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Debug\Debug;
 use Mrss\Entity\College;
+use Mrss\Entity\User;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\BenchmarkGroup;
@@ -39,6 +40,11 @@ class ImportNccbp
      * @var \Mrss\Model\College
      */
     protected $collegeModel;
+
+    /**
+     * @var \Mrss\Model\user
+     */
+    protected $userModel;
 
     /**
      * @var \Mrss\Model\Observation
@@ -180,6 +186,111 @@ inner join node g on a.group_nid = g.nid";
         $this->entityManager->flush();
     }
 
+    public function importUsers()
+    {
+        $this->setType('users');
+
+        // Exclude Michelle, Chad and Jeff
+        $query = "select n.title AS college, u.mail, u.uid, u.pass,
+            sal.value AS salutation, name.value as name, title.value as title,
+            phone.value as phone, ext.value as extension,
+            contact.value as contact_type
+            from users u
+            inner join og_uid ou ON u.uid = ou.uid
+            inner join node n ON ou.nid = n.nid
+            inner join profile_values sal on u.uid = sal.uid AND sal.fid = 7
+            inner join profile_values name on u.uid = name.uid AND name.fid = 8
+            inner join profile_values title on u.uid = title.uid AND title.fid = 9
+            inner join profile_values phone on u.uid = phone.uid AND phone.fid = 10
+            inner join profile_values ext on u.uid = ext.uid AND ext.fid = 11
+            inner join profile_values contact on u.uid = contact.uid AND contact.fid = 51
+            where u.uid not in (1, 1650, 2481)";
+
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $count = count($result);
+        $this->saveProgress(0, $count);
+
+        $i = 0;
+        foreach ($result as $row) {
+            if ($i % 20 == 0) {
+                $this->saveProgress($i);
+            }
+
+            list($firstName, $lastName) = $this->parseName($row['name']);
+
+            // If there's no college, skip them
+            $college = $this->findCollegeByAppendedIpeds($row['college']);
+            if (!empty($college)) {
+
+                // Does the user already exist?
+                $user = $this->getUserModel()->findOneByEmail($row['mail']);
+                if (empty($user)) {
+                    $user = new User;
+                }
+
+                if (empty($row['pass'])) {
+                    $row['pass'] = 'fake_pass';
+                }
+
+                $user->setPrefix($row['salutation']);
+                $user->setFirstName($firstName);
+                $user->setLastName($lastName);
+                $user->setTitle($row['title']);
+                $user->setPhone($row['phone']);
+                $user->setExtension($row['extension']);
+                $user->setEmail($row['mail']);
+                $user->setCollege($college);
+                $user->setRole($this->getRole($row['contact_type']));
+                $user->setPassword($row['pass']);
+
+                $this->getUserModel()->save($user);
+            }
+
+            $i++;
+        }
+
+        $this->saveProgress($i);
+
+    }
+
+    public function getRole($contact_type)
+    {
+        $map = array(
+            'Data' => 'data',
+            'Administrative' => 'contact',
+            'Administrative and Data' => 'contact',
+            'College System' => 'system_admin',
+            'State System' => 'system_admin'
+        );
+
+        if (!empty($map[$contact_type])) {
+            $role = $map[$contact_type];
+        } else {
+            $role = $contact_type;
+        }
+
+        return $role;
+    }
+
+    public function findCollegeByAppendedIpeds($name)
+    {
+        $parts = explode('_', $name);
+        $ipeds = array_pop($parts);
+
+        return $this->getCollegeByIpeds($ipeds);
+    }
+
+    public function parseName($name)
+    {
+        $parts = explode(' ', $name);
+        $first = array_shift($parts);
+        $last = implode(' ', $parts);
+
+        return array($first, $last);
+    }
+
     public function getTables()
     {
         $tables = array(
@@ -235,18 +346,22 @@ inner join node g on a.group_nid = g.nid";
     /**
      * Import Observations
      */
-    public function importObservations($table)
+    public function importObservations($table, $year = null)
     {
         $this->setType($table);
 
         // This may take some time (and RAM)
-        set_time_limit(5800);
-        ini_set('memory_limit', '512M');
+        set_time_limit(9600);
+        ini_set('memory_limit', '700M');
 
         $query = "select n.title, y.field_data_entry_year_value as year, form.*
 from $table form
 inner join node n on n.nid = form.nid
 inner join content_field_data_entry_year y on y.nid = n.nid";
+
+        if ($year) {
+            $query .= " WHERE y.field_data_entry_year_value = '$year'";
+        }
 
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
@@ -529,20 +644,28 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         $this->saveProgress($i);
     }
 
-    public function importSubscriptions()
+    public function importSubscriptions($year = null)
     {
         // This may take some time (and RAM)
-        set_time_limit(4800);
+        set_time_limit(9600);
         ini_set('memory_limit', '512M');
 
         $this->setType('subscriptions');
 
-        $query = "SELECT field_institution_name_value, field_ipeds_id_value, field_years_value
-        FROM content_type_group_subs_info
-        LEFT JOIN content_field_years
-        ON content_type_group_subs_info.nid = content_field_years.nid
-        WHERE field_years_value IS NOT NULL
-        ORDER BY field_years_value";
+        $yearWhere = '';
+        if ($year) {
+            $yearWhere = " AND field_years_value = '$year' ";
+        }
+
+        $query = "SELECT field_institution_name_value, field_ipeds_id_value, field_years_value, payment_amount
+            FROM content_type_group_subs_info
+            LEFT JOIN content_field_years
+            ON content_type_group_subs_info.nid = content_field_years.nid
+            INNER JOIN nccbp_payment_institution i ON i.ipeds_id = field_ipeds_id_value
+            INNER JOIN nccbp_payment_upay p ON i.session_hash = p.ext_trans_id
+            WHERE field_years_value IS NOT NULL
+            $yearWhere
+            ORDER BY field_years_value";
 
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
@@ -581,6 +704,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $subscription->setStudy($this->getStudy());
             $subscription->setYear($year);
             $subscription->setStatus('imported');
+            $subscription->setPaymentAmount($row['payment_amount']);
 
             if (!empty($observation)) {
                 $subscription->setObservation($observation);
@@ -599,7 +723,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             }
         }
 
-        $this->entityManager->flush();
+        $this->saveProgress($i);
     }
 
     /**
@@ -867,6 +991,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $this->importProgressPrefix . $this->getType(),
             Json::encode($this->stats)
         );
+        //prd($this->importProgressPrefix . $this->getType());
 
         // Write to the console
         echo round($percentage, 1) . "%\n";
@@ -883,6 +1008,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             'colleges' => array(
                 'label' => 'Colleges',
                 'method' => 'importColleges'
+            ),
+            'users' => array(
+                'label' => 'Users',
+                'method' => 'importUsers'
             ),
             'benchmarkGroups' => array(
                 'label' => 'Benchmark Groups',
@@ -909,14 +1038,16 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $imports[$table] = array(
                 'label' => 'Form ' . $formNumber,
                 'method' => 'importObservations',
-                'argument' => $table
+                'argument' => $table,
+                'year' => true
             );
         }
 
         // Add subscription importer at the end
         $imports['subscriptions'] = array(
             'label' => 'Subscriptions',
-            'method' => 'importSubscriptions'
+            'method' => 'importSubscriptions',
+            'year' => true
         );
 
         return $imports;
@@ -952,6 +1083,18 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     protected function getCollegeModel()
     {
         return $this->collegeModel;
+    }
+
+    public function setUserModel($model)
+    {
+        $this->userModel = $model;
+
+        return $this;
+    }
+
+    public function getUserModel()
+    {
+        return $this->userModel;
     }
 
     public function setObservationModel($model)

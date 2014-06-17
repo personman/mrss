@@ -105,9 +105,12 @@ class ObservationAudit
     {
         // Create the changeSet
         $changeSet = new ChangeSet;
-        $changeSet->setUser($this->getUser());
         $changeSet->setDate(new \DateTime('now'));
         $changeSet->setStudy($this->getStudy());
+
+        if ($user = $this->getUser()) {
+            $changeSet->setUser($user);
+        }
 
         if ($impersonator = $this->getImpersonator()) {
             $em = $this->getBenchmarkModel()->getEntityManager();

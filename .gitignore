@@ -19,3 +19,4 @@ error_log
 error.log
 postback.log
 public/.ftpquota
+nohup.out
