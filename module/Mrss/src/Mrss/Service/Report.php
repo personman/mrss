@@ -340,8 +340,13 @@ class Report
 
     public function emailOutliers($renderer)
     {
+        $reallySend = false;
+
+
         $reports = $this->getAdminOutlierReport();
         $stats = array('emails' => 0);
+
+        //pr($reports);
 
         // Loop over the admin report in order to send an email to each college
         foreach ($reports as $report) {
@@ -353,15 +358,30 @@ class Report
 
             $studyName = $this->getStudy()->getDescription();
             $collegeName = $college->getName();
+            $year = $this->getStudy()->getCurrentYear();
 
-            $outliers = array();
+            $url = "www.workforceproject.org";
+            $deadline = "July 15, " . date('Y');
+            $replyTo = "michelletaylor@jccc.edu";
+            $replyToName = "Michelle Taylor";
+            $signature = "Michelle Taylor
+michelletaylor@jccc.edu
+(913) 469-3831";
+
 
             // Compose the email body
             if (!empty($outliers)) {
-                $body = "We have identified some potential problems with the data " .
-                "that $collegeName submitted to $studyName. Please check the " .
-                "benchmarks listed below and confirm that you have submitted " .
-                "correct values.\n<br>\n<br>";
+                $body = "Dear $studyName Member:
+
+As a final check of $year $studyName data, we have identified values to the data elements listed below that are unusually large or small relative to mean values in the data set.  We have defined these outliers fairly conservatively and have included values that are more than two standard deviations above or below aggregate means.
+
+We understand that the reported values may be correct, but we would appreciate it if you would either confirm the values or provide corrected raw data.
+
+To make a correction, please enter the updated data online at the website, $url.  Please email $replyTo before $deadline, to let me know that your data is final even if you make no changes. Please note that you will not be able to correct values past this deadline.
+
+Please let me know if I can clarify this process or assist you in any way.  Thank you for helping us assure that Workforce Training Benchmark Project data are as accurate as possible.
+
+";
 
                 $table = $renderer->partial(
                     'mrss/report/outliers.partial.phtml',
@@ -371,8 +391,13 @@ class Report
                 );
 
                 $body .= $table;
+                $body .= "\n\n$signature";
             } else {
-                $body = "The data submitted for $collegeName does not include any outliers.";
+                $body = "Dear $studyName Member:
+
+As a final check of $year $studyName data, we have identified values to the data elements that are unusually large or small relative to mean values in the data set.  Your college had no data elements that were in this range, therefore no corrections to your data are required.
+
+$signature";
             }
 
             // Email subject
@@ -382,26 +407,37 @@ class Report
             $html = new MimePart($body);
             $html->type = 'text/html';
 
-            $body = new MimeMessage;
-            $body->setParts(array($html));
+            $bodyPart = new MimeMessage;
+            $bodyPart->setParts(array($html));
 
             $message = new Message;
 
-            // Get recipients
-            if (false) {
+            $message->setSubject($subject);
+            $message->setBody($bodyPart);
+            $message->addBcc('dfergu15@jccc.edu');
+            $message->addFrom($replyTo, $replyToName);
+            $message->setReplyTo($replyTo);
+
+
+            if ($reallySend) {
+                $message->addBcc($replyTo);
+
+                // Get recipients
                 foreach ($college->getUsers() as $user) {
                     $message->addTo($user->getEmail(), $user->getFullName());
                 }
+
+                // Send it:
+                $this->getMailTransport()->send($message);
+            } else {
+                echo count($outliers) . "\n".$body . "\n\n\n\n";
             }
 
-            $message->setSubject($subject);
-            $message->setBody($body);
-            $message->addBcc('dfergu15@jccc.edu');
-            //$message->addBcc('mtaylo24@jccc.edu');
-            $message->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
-
-            //$this->getMailTransport()->send($message);
             $stats['emails']++;
+        }
+
+        if (!$reallySend) {
+            prd($stats);
         }
 
         return $stats;
