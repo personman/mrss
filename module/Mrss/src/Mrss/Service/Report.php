@@ -16,6 +16,7 @@ use Zend\Mail\Transport\Smtp;
 use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
+use Zend\View\Renderer\RendererInterface;
 
 class Report
 {
@@ -338,15 +339,12 @@ class Report
         return $report;
     }
 
-    public function emailOutliers($renderer)
+    public function emailOutliers(RendererInterface $renderer)
     {
         $reallySend = false;
 
-
         $reports = $this->getAdminOutlierReport();
         $stats = array('emails' => 0);
-
-        //pr($reports);
 
         // Loop over the admin report in order to send an email to each college
         foreach ($reports as $report) {
@@ -364,41 +362,29 @@ class Report
             $deadline = "July 15, " . date('Y');
             $replyTo = "michelletaylor@jccc.edu";
             $replyToName = "Michelle Taylor";
-            $signature = "Michelle Taylor
-michelletaylor@jccc.edu
-(913) 469-3831";
+            $replyToPhone = "(913) 469-3831";
 
+            $viewParams = array(
+                'year' => $year,
+                'studyName' => $studyName,
+                'url' => $url,
+                'deadline' => $deadline,
+                'replyTo' => $replyTo,
+                'replyToName' => $replyToName,
+                'replyToPhone' => $replyToPhone,
+                'outliers' => $outliers
+            );
 
-            // Compose the email body
+            // Select a view for the email body
             if (!empty($outliers)) {
-                $body = "Dear $studyName Member:
+                $view = 'mrss/report/outliers.email.phtml';
 
-As a final check of $year $studyName data, we have identified values to the data elements listed below that are unusually large or small relative to mean values in the data set.  We have defined these outliers fairly conservatively and have included values that are more than two standard deviations above or below aggregate means.
-
-We understand that the reported values may be correct, but we would appreciate it if you would either confirm the values or provide corrected raw data.
-
-To make a correction, please enter the updated data online at the website, $url.  Please email $replyTo before $deadline, to let me know that your data is final even if you make no changes. Please note that you will not be able to correct values past this deadline.
-
-Please let me know if I can clarify this process or assist you in any way.  Thank you for helping us assure that Workforce Training Benchmark Project data are as accurate as possible.
-
-";
-
-                $table = $renderer->partial(
-                    'mrss/report/outliers.partial.phtml',
-                    array(
-                        'outliers' => $outliers
-                    )
-                );
-
-                $body .= $table;
-                $body .= "\n\n$signature";
             } else {
-                $body = "Dear $studyName Member:
-
-As a final check of $year $studyName data, we have identified values to the data elements that are unusually large or small relative to mean values in the data set.  Your college had no data elements that were in this range, therefore no corrections to your data are required.
-
-$signature";
+                $view = 'mrss/report/outliers.email.none.phtml';
             }
+
+            // Build the email body with the view
+            $body = $renderer->render($view, $viewParams);
 
             // Email subject
             $subject = "Outlier report for $studyName";
