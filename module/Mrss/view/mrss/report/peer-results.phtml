@@ -1,9 +1,4 @@
 <?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
-<?php
-$this->headScript()->appendFile(
-    $this->chart()->getChartJsUri(),
-    'text/javascript'
-); ?>
 
 
 <h2>Peer Comparison Report</h2>
@@ -45,7 +40,7 @@ $this->headScript()->appendFile(
                                     <?= $institution ?>
                                 </td>
                                 <td>
-                                    <?= round($value) ?>
+                                    <?= number_format(round($value)) ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>

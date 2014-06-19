@@ -19,4 +19,23 @@ $(function() {
             }
         }
     })*/
+
+    // Toggle charts on national report
+    $('.openChart').click(function() {
+        $(this).parent().parent().next().toggle()
+        return false
+    })
+
+    // Show all charts
+    $('.showAllCharts').click(function() {
+        if ($(this).html().search('Hide') == -1) {
+            $('.nationalReportChart').show()
+            $(this).html('Hide all charts')
+        } else {
+            $('.nationalReportChart').hide()
+            $(this).html('Show all charts')
+        }
+
+        return false
+    })
 })

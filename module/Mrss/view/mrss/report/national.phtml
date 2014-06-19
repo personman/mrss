@@ -5,15 +5,18 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
-
 <h2>Report of National Aggregate Data</h2>
 
 <p>
     Prepared for <?= $college->getName() ?>
 </p>
 
+<p>
+    <a href="#" class="showAllCharts">Show all charts</a>
+</p>
+
 <div class="report">
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped-manual">
     <?php foreach ($reportData as $benchmarkGroup): ?>
 
                 <thead>
@@ -22,6 +25,7 @@ $this->headScript()->appendFile(
                         <th colspan="2">Institution</th>
                         <th></th>
                         <th colspan="5">Percentiles</th>
+                        <th></th>
                     </tr>
                     <tr class="secondHeading">
                         <th>Reported Value</th>
@@ -30,12 +34,14 @@ $this->headScript()->appendFile(
                         <?php foreach ($breakpoints as $breakpoint): ?>
                         <th><?= $breakpoint ?></th>
                         <?php endforeach ?>
+                        <th></th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
-                        <tr>
+                        <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
+                        <tr class="<?= $rowClass ?>">
                             <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
                             <?php if ($benchmark['reported'] !== null): ?>
                             <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], 0) . $benchmark['suffix'] ?></td>
@@ -48,6 +54,11 @@ $this->headScript()->appendFile(
                             <?php foreach ($benchmark['percentiles'] as $percentile): ?>
                             <td><?= $benchmark['prefix'] . number_format($percentile, 0) . $benchmark['suffix'] ?></td>
                             <?php endforeach ?>
+                            <td><a href="#" class="openChart" title="Display chart"><i class="icon-signal"></i></a></td>
+                        </tr>
+                        <tr class="nationalReportChart <?= $rowClass ?>">
+                            <td></td>
+                            <td colspan="9"><?= $this->chart($benchmark['chart']) ?></td>
                         </tr>
 
                     <?php endforeach ?>

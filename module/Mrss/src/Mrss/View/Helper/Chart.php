@@ -18,6 +18,12 @@ class Chart extends AbstractHelper
      */
     protected $chartJsUri = 'http://code.highcharts.com/highcharts.js';
 
+    protected $exportingJsUri = 'http://code.highcharts.com/modules/exporting.js';
+
+    protected $moreJsUri = 'http://code.highcharts.com/highcharts-more.js';
+
+    protected $javascriptPlaced = false;
+
     public function __invoke($chartConfig = null)
     {
         if ($chartConfig === null) {
@@ -29,6 +35,7 @@ class Chart extends AbstractHelper
 
     public function showChart($chartConfig)
     {
+        $this->headScript();
         $chartConfigJson = json_encode($chartConfig);
 
         $html = '<div class="chartWrapper">';
@@ -49,6 +56,28 @@ class Chart extends AbstractHelper
         $html .= '</div>';
 
         return $html;
+    }
+
+    public function headScript()
+    {
+        if (!$this->javascriptPlaced) {
+            $this->getView()->headScript()->appendFile(
+                $this->getChartJsUri(),
+                'text/javascript'
+            );
+
+            $this->getView()->headScript()->appendFile(
+                $this->moreJsUri,
+                'text/javascript'
+            );
+
+            $this->getView()->headScript()->appendFile(
+                $this->exportingJsUri,
+                'text/javascript'
+            );
+
+            $this->javascriptPlaced = true;
+        }
     }
 
     public function getChartJsUri()

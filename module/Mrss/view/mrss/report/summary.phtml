@@ -1,14 +1,6 @@
 <?= $this->headLink()->appendStylesheet('/css/report-summary.css') ?>
 
-<?php
-$this->headScript()->appendFile(
-    $this->chart()->getChartJsUri(),
-    'text/javascript'
-); ?>
-
-
 <h2>Key Benchmark Report</h2>
-
 
 <p>
     Prepared for <?= $college->getName() ?>

@@ -36,3 +36,15 @@ tr.secondHeading th {
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
     background-color: #F6FFFF;
 }
+
+.nationalReportChart {
+    display: none;
+}
+
+.table-striped-manual .odd {
+    background: #F6FFFF;
+}
+
+.table-striped-manual .even {
+    background: #FFF;
+}

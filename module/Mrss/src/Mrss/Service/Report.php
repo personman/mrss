@@ -581,6 +581,13 @@ $signature";
                 $benchmarkData['prefix'] = $prefix;
                 $benchmarkData['suffix'] = $suffix;
 
+                // Chart
+                $chartConfig = array('dbColumn' => $benchmark->getDbColumn());
+                $benchmarkData['chart'] = $this->getPercentileBarChart(
+                    $chartConfig,
+                    $observation
+                );
+
                 $groupData['benchmarks'][] = $benchmarkData;
 
             }
@@ -1105,6 +1112,11 @@ $signature";
             $percentileData
         );
 
+        // Put the college's data in its place
+        $chartValues = array_combine($chartXCategories, $chartValues);
+        asort($chartValues);
+        $chartXCategories = array_keys($chartValues);
+
         $chartData = array();
         foreach ($chartValues as $i => $value) {
             $value = round($value);
@@ -1129,7 +1141,9 @@ $signature";
                 'y' => $value,
                 'color' => $color,
                 'dataLabels' => array(
-                    'enabled' => $dataLabelEnabled
+                    'enabled' => $dataLabelEnabled,
+                    'crop' => false,
+                    'overflow' => 'none'
                 )
             );
         }
@@ -1220,7 +1234,9 @@ $signature";
                 'y' => $value,
                 'color' => $color,
                 'dataLabels' => array(
-                    'enabled' => $dataLabelEnabled
+                    'enabled' => $dataLabelEnabled,
+                    'crop' => false,
+                    'overflow' => 'none'
                 )
             );
         }
