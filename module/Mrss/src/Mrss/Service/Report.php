@@ -80,6 +80,13 @@ class Report
         $years = $this->getSubscriptionModel()
             ->getYearsWithSubscriptions($this->getStudy());
 
+        return $years;
+    }
+
+    public function getCalculationInfo()
+    {
+        $years = $this->getYearsWithSubscriptions();
+
         // Also show the date the report was calculated
         $yearsWithCalculationDates = array();
         foreach ($years as $year) {

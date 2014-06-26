@@ -68,7 +68,7 @@ class College
 
     /**
      * @ORM\OneToMany(targetEntity="Subscription", mappedBy="college")
-     * @ORM\OrderBy({"year" = "ASC"})
+     * @ORM\OrderBy({"year" = "DESC"})
      */
     protected $subscriptions;
 
@@ -219,6 +219,18 @@ class College
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    public function getSubscriptionsForStudy(Study $study)
+    {
+        $subscriptions = array();
+        foreach ($this->getSubscriptions() as $sub) {
+            if ($sub->getStudy()->getId() == $study->getId()) {
+                $subscriptions[] = $sub;
+            }
+        }
+
+        return $subscriptions;
     }
 
     public function setSystem($system)

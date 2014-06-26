@@ -25,7 +25,7 @@ class ReportController extends AbstractActionController
     {
         $this->longRunningScript();
 
-        $years = $this->getReportService()->getYearsWithSubscriptions();
+        $years = $this->getReportService()->getCalculationInfo();
         $yearToPrepare = $this->params()->fromRoute('year');
 
         if (!empty($yearToPrepare)) {
@@ -112,11 +112,22 @@ class ReportController extends AbstractActionController
         }
 
         $year = $this->getYearFromRouteOrStudy();
+        $subscriptions = $this->currentCollege()
+            ->getSubscriptionsForStudy($this->currentStudy());
+
+        $subscription = $this->getSubscriptionModel()
+            ->findOne($year, $this->currentCollege(), $this->currentStudy());
+
+        if (empty($subscription)) {
+            throw new \Exception('Subscription not found for year ' . $year);
+        }
 
         $observation = $this->currentObservation($year);
         $reportData = $this->getReportService()->getNationalReportData($observation);
 
         return array(
+            'subscriptions' => $subscriptions,
+            'year' => $year,
             'reportData' => $reportData,
             'college' => $observation->getCollege(),
             'breakpoints' => $this->getReportService()
@@ -455,5 +466,13 @@ class ReportController extends AbstractActionController
         }
 
         return $this->reportService;
+    }
+
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    public function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
     }
 }
