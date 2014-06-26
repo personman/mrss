@@ -114,15 +114,37 @@ function addSavedPeerGroups()
         for (var i in peerGroups) {
             var group = peerGroups[i]
             var name = group.name
-            $('#savedPeerGroups ul').append('<li><a href="#" id="peerGroup-' + i + '">' + name + '</a></li>')
+            $('#savedPeerGroups ul').append(
+                '<li>' +
+                    '<a href="#" class="choosePeerGroup" id="peerGroup-' + i + '">' + name + '</a> ' +
+                    '<span class="deleteLink"><a href="#">[delete]</a></span>' +
+                '</li>'
+            )
         }
 
         // Bind clicks
-        $('#savedPeerGroups ul li a').click(function() {
+        $('#savedPeerGroups ul li a.choosePeerGroup').click(function() {
             var key = $(this).attr('id').split('-').pop()
             var group = peerGroups[key]
 
             selectPeerGroup(group)
+
+            return false
+        })
+
+        // Bind delete
+        $('#savedPeerGroups .deleteLink a').click(function() {
+            if (confirm('Are you sure you want to delete this peer group?')) {
+                var key = $(this).parent().parent().find('a.choosePeerGroup')
+                    .attr('id').split('-').pop()
+                var group = peerGroups[key]
+                var url = '/reports/delete-peer'
+                var data = {peerGroup: group.id}
+                $.post(url, data, function() {
+
+                })
+                $(this).parent().parent().remove()
+            }
 
             return false
         })

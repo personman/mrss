@@ -222,6 +222,7 @@ class ReportController extends AbstractActionController
         foreach ($this->currentCollege()->getPeerGroups() as $group) {
             $peerGroups[] = array(
                 'name' => $group->getName(),
+                'id' => $group->getId(),
                 'peers' => $group->getPeers()
             );
         }
@@ -249,6 +250,23 @@ class ReportController extends AbstractActionController
             'peerGroup' => $peerGroup,
             'report' => $report
         );
+    }
+
+    public function deletePeerGroupAction()
+    {
+        $id = $this->params()->fromPost('peerGroup');
+
+        $group = $this->getPeerGroupModel()->find($id);
+
+        // Make sure the group belongs to the current college
+        if (!empty($group) &&
+            $group->getCollege()->getId() == $this->currentCollege()->getId()) {
+            $this->getPeerGroupModel()->delete($group);
+        } else {
+            echo 'Cannot delete peer group ' . $id;
+        }
+
+        die('ok');
     }
 
     public function peerdemographicAction()

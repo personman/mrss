@@ -702,6 +702,15 @@ return array(
                             )
                         )
                     ),
+                    'delete-peer' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/delete-peer',
+                            'defaults' => array(
+                                'action' => 'deletePeerGroup'
+                            )
+                        )
+                    ),
                     'peer-results' => array(
                         'type' => 'segment',
                         'options' => array(
