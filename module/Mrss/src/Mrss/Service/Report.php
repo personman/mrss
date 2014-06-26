@@ -1162,6 +1162,9 @@ class Report
                 'tickLength' => 0,
                 'title' => array(
                     'text' => 'Percentiles'
+                ),
+                'labels' => array(
+                    'maxStaggerLines' => 1
                 )
             ),
             'yAxis' => array(
@@ -1253,6 +1256,10 @@ class Report
             'xAxis' => array(
                 'categories' => $chartXCategories,
                 'tickLength' => 0,
+                'labels' => array(
+                    'maxStaggerLines' => 1
+                )
+
                 //'title' => array(
                 //    'text' => 'Percentiles'
                 //)
@@ -1372,7 +1379,7 @@ class Report
             'currentCollege' => $peerGroup->getCollege()->getName(),
             'year' => $peerGroup->getYear()
         );
-        
+
         $year = $peerGroup->getYear();
         $benchmarks = $peerGroup->getBenchmarks();
         $colleges = $peerGroup->getPeers();
