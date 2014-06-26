@@ -73,6 +73,12 @@ class College
     protected $subscriptions;
 
     /**
+     * @ORM\OneToMany(targetEntity="PeerGroup", mappedBy="college")
+     * @ORM\OrderBy({"name" = "ASC"})
+     */
+    protected $peerGroups;
+
+    /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="college")
      */
     protected $users;
@@ -219,6 +225,18 @@ class College
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    public function setPeerGroups($peerGroups)
+    {
+        $this->peerGroups = $peerGroups;
+
+        return $this;
+    }
+
+    public function getPeerGroups()
+    {
+        return $this->peerGroups;
     }
 
     public function getSubscriptionsForStudy(Study $study)

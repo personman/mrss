@@ -186,17 +186,51 @@ class ReportController extends AbstractActionController
                 $peerGroup->setBenchmarks($data['benchmarks']);
                 $peerGroup->setPeers($data['peers']);
 
+                // Save to db?
+                if ($name = $data['name']) {
+                    $college = $this->currentCollege();
+                    $peerGroup->setName($name);
+                    $peerGroup->setCollege($college);
+
+                    // See if it exists
+                    $existingGroup = $this->getPeerGroupModel()
+                        ->findOneByCollegeAndName($college, $name);
+
+                    if ($existingGroup) {
+                        $peerGroup->setId($existingGroup->getId());
+                        $this->getPeerGroupModel()->getEntityManager()
+                            ->merge($peerGroup);
+                    } else {
+                        $this->getPeerGroupModel()->save($peerGroup);
+                    }
+
+                    $this->getPeerGroupModel()->getEntityManager()->flush();
+
+                    $this->flashMessenger()->addSuccessMessage(
+                        "The peer group $name has been saved."
+                    );
+                }
+
                 $this->savePeerGroupToSession($peerGroup);
 
                 return $this->redirect()->toRoute('reports/peer-results');
-
-                //var_dump($data); die;
             }
         }
 
+        // Prepare saved peer groups for javascript
+        $peerGroups = array();
+        foreach ($this->currentCollege()->getPeerGroups() as $group) {
+            $peerGroups[] = array(
+                'name' => $group->getName(),
+                'peers' => $group->getPeers()
+            );
+        }
+        $peerGroups = json_encode($peerGroups);
+
         return array(
             'form' => $form,
-            'peerGroup' => $peerGroup
+            'peerGroup' => $peerGroup,
+            'peerGroups' => $peerGroups
         );
     }
 
@@ -474,5 +508,13 @@ class ReportController extends AbstractActionController
     public function getSubscriptionModel()
     {
         return $this->getServiceLocator()->get('model.subscription');
+    }
+
+    /**
+     * @return \Mrss\Model\PeerGroup
+     */
+    public function getPeerGroupModel()
+    {
+        return $this->getServiceLocator()->get('model.peerGroup');
     }
 }

@@ -59,6 +59,7 @@ function updateColleges()
             select.append(option)
         })
 
+        addSavedPeerGroups()
     })
 }
 
@@ -87,8 +88,6 @@ function updateBenchmarks()
             return false;
         }
 
-        //console.log(benchmarks);
-
         // Find the college select box (multi)
         var select = $('#benchmarks');
 
@@ -106,4 +105,54 @@ function updateBenchmarks()
     })
 }
 
+function addSavedPeerGroups()
+{
+    if (peerGroups.length && !$('#savedPeerGroups').length) {
+        $('#controls-peers').prepend('<div id="savedPeerGroups"><strong>Saved Peer Groups</strong><ul></ul></div>')
+
+        // Populate the ul
+        for (var i in peerGroups) {
+            var group = peerGroups[i]
+            var name = group.name
+            $('#savedPeerGroups ul').append('<li><a href="#" id="peerGroup-' + i + '">' + name + '</a></li>')
+        }
+
+        // Bind clicks
+        $('#savedPeerGroups ul li a').click(function() {
+            var key = $(this).attr('id').split('-').pop()
+            var group = peerGroups[key]
+
+            selectPeerGroup(group)
+
+            return false
+        })
+
+    }
+}
+
+function selectPeerGroup(group)
+{
+    // Loop over the options, selecting any that belong to the group
+    var selectBox = $('#peers')
+    selectBox.val('')
+
+    for (var i in selectBox[0].options) {
+        // Make sure the index is an int
+        if (Math.floor(i) == i) {
+            var option = $(selectBox[0].options[i])
+
+            var value = option.attr('value')
+            if (value) {
+                // Check to see if the option's value is in the peer group
+                if ($.inArray(value, group.peers) > -1) {
+                    option.attr('selected', 'selected')
+                }
+            }
+
+        }
+    }
+
+    // Put the name in the name field
+    $('#controls-name input').val(group.name)
+}
 

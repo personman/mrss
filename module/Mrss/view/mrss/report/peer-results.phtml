@@ -15,6 +15,12 @@
     <strong>Peer institutions:</strong> <?= implode(', ', $report['colleges']) ?>
 </p>
 
+<?php if ($name = $peerGroup->getName()): ?>
+<p>
+    <strong>Peer Group:</strong> <?= $name ?>
+</p>
+<?php endif ?>
+
 <div class="container-fluid">
     <?php foreach ($report['sections'] as $section): ?>
 

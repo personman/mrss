@@ -17,3 +17,8 @@
 .well h4 {
     margin-top: 0px;
 }
+
+#savedPeerGroups {
+    float: right;
+    width: 300px;
+}

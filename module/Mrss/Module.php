@@ -316,13 +316,21 @@ class Module
                     return $studyModel;
                 },
                 'model.offerCode' => function ($sm) {
-                        $offerCodeModel = new Model\OfferCode();
-                        $em = $sm->get('em');
+                    $offerCodeModel = new Model\OfferCode();
+                    $em = $sm->get('em');
 
-                        $offerCodeModel->setEntityManager($em);
+                    $offerCodeModel->setEntityManager($em);
 
-                        return $offerCodeModel;
-                    },
+                    return $offerCodeModel;
+                },
+                'model.peerGroup' => function ($sm) {
+                    $model = new Model\PeerGroup();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.subscription' => function ($sm) {
                     $subscriptionModel = new Model\Subscription();
                     $em = $sm->get('em');

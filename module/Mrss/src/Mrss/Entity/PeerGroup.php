@@ -29,49 +29,49 @@ class PeerGroup
     /** @ORM\Column(type="string") */
     protected $name;
 
-    /** @ORM\Column(type="text") */
+    /** @ORM\Column(type="text", nullable=true) */
     protected $states;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $environments;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $institutionalType;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $institutionalControl;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $facultyUnionized;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $staffUnionized;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $workforceEnrollment;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $workforceRevenue;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $ipedsFallEnrollment;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $fiscalCreditHours;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $pellGrantRecipients;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $operatingRevenue;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $serviceAreaPopulation;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $serviceAreaUnemployment;
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $serviceAreaMedianIncome;
 
     /** @ORM\Column(type="text") */

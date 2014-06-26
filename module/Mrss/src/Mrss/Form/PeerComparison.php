@@ -60,6 +60,17 @@ class PeerComparison extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'name',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Peer Group Name',
+                    'help-block' => 'Optional. Enter a name to save this peer group.'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset('Continue'));
 
         // Disable the inArray validator since those options get
