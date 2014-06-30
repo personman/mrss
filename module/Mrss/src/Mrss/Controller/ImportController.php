@@ -43,7 +43,7 @@ class ImportController extends AbstractActionController
         }
 
         // Trigger the importer in the background
-        if (true) {
+        if (false) {
             $config = $this->getServiceLocator()->get('config');
             if (!empty($config['php_path'])) {
                 $php = $config['php_path'];
