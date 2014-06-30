@@ -56,7 +56,7 @@ class ImportController extends AbstractActionController
             pr($command);
             pr($output);
         } else {
-            $this->backgroundAction($type);
+            $this->backgroundAction($type, $year);
         }
 
         return new JsonModel(array('status' => 'ok'));
