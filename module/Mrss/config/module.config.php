@@ -648,10 +648,11 @@ return array(
                     'national' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/national[/:year]',
+                            'route' => '/national[/:year][/:format]',
                             'defaults' => array(
                                 'action' => 'national',
-                                'year' => null
+                                'year' => null,
+                                'format' => 'html'
                             )
                         )
                     ),
@@ -715,9 +716,10 @@ return array(
                     'peer-results' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/peer-results',
+                            'route' => '/peer-results[/:format]',
                             'defaults' => array(
                                 'action' => 'peerResults',
+                                'format' => 'html'
                             )
                         )
                     ),

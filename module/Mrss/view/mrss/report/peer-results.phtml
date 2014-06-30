@@ -21,6 +21,13 @@
 </p>
 <?php endif ?>
 
+<p>
+    <a href="<?= $this->url(
+        'reports/peer-results',
+        array('format' => 'excel')
+    ) ?>" class="btn">Download</a>
+</p>
+
 <div class="container-fluid">
     <?php foreach ($report['sections'] as $section): ?>
 

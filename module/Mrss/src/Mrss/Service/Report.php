@@ -17,6 +17,12 @@ use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
 use Zend\View\Renderer\RendererInterface;
+use PHPExcel;
+use PHPExcel_Worksheet;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Fill;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Shared_Font;
 
 class Report
 {
@@ -590,6 +596,106 @@ class Report
 
         //echo '<pre>' . print_r($reportData, 1) . '</pre>';
         return $reportData;
+    }
+
+    public function downloadNationalReport($reportData)
+    {
+        $filename = 'national-report';
+
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $row = 1;
+
+        // Format for header row
+        $blueBar = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'DCE6F1')
+            )
+        );
+
+        foreach ($reportData as $benchmarkGroup) {
+            // Header
+            $headerRow = array(
+                $benchmarkGroup['benchmarkGroup'],
+                'Reported Value',
+                '% Rank',
+                'N'
+            );
+
+            foreach ($this->getPercentileBreakPointLabels() as $breakpoint) {
+                $headerRow[] = strip_tags($breakpoint);
+            }
+
+            $sheet->fromArray($headerRow, null, 'A' . $row);
+            $sheet->getStyle("A$row:I$row")->applyFromArray($blueBar);
+            $row++;
+
+            // Data
+            foreach ($benchmarkGroup['benchmarks'] as $benchmark) {
+                if (null != $benchmark['reported']) {
+                    $reported = $benchmark['prefix'] .
+                        number_format($benchmark['reported'], 0) .
+                        $benchmark['suffix'];
+                } else {
+                    $reported = null;
+                };
+
+                if ($benchmark['percentile_rank']) {
+                    $rank = round($benchmark['percentile_rank']);
+                } else {
+                    $rank = null;
+                }
+
+                $dataRow = array(
+                    $benchmark['benchmark'],
+                    $reported,
+                    $rank,
+                    $benchmark['N']
+                );
+
+                foreach ($benchmark['percentiles'] as $percentile) {
+                    $dataRow[] = $benchmark['prefix'] .
+                        number_format($percentile, 0) . $benchmark['suffix'];
+                }
+
+                $sheet->fromArray($dataRow, null, 'A' . $row);
+                $row++;
+            }
+
+            // Add a blank row after each form
+            $row++;
+        }
+
+        // Align right
+        $sheet->getStyle('B1:I400')->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        // Set column widths
+        PHPExcel_Shared_Font::setAutoSizeMethod(
+            PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
+        );
+        foreach (range(0, 8) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        // redirect output to client browser
+        $this->downloadExcel($excel, $filename);
+    }
+
+    public function downloadExcel($excel, $filename)
+    {
+        header(
+            'Content-Type: '.
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+
+        die;
     }
 
     /**
@@ -1443,6 +1549,77 @@ class Report
 
 
         return $report;
+    }
+
+    public function downloadPeerReport($report, $peerGroup)
+    {
+        $filename = 'peer-comparison-report';
+
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $row = 1;
+
+        // Format for header row
+        $blueBar = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'DCE6F1')
+            )
+        );
+
+        // Peer comparison results
+        foreach ($report['sections'] as $section) {
+            $headerRow = array(
+                $section['benchmark'],
+                null
+            );
+
+            $sheet->fromArray($headerRow, null, 'A' . $row);
+            $sheet->getStyle("A$row:B$row")->applyFromArray($blueBar);
+            $row++;
+
+            foreach ($section['data'] as $institution => $value) {
+                $dataRow = array(
+                    $institution,
+                    round($value)
+                );
+
+                $sheet->fromArray($dataRow, null, 'A' . $row);
+                $row++;
+            }
+
+            // Blank line:
+            $row++;
+        }
+
+        // Align right
+        $sheet->getStyle('B1:B400')->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        // Set column widths
+        PHPExcel_Shared_Font::setAutoSizeMethod(
+            PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
+        );
+        foreach (range(0, 1) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+
+        // Peer institutions
+        $row++;
+        $sheet->setCellValue('A' . $row, 'Peer Institutions:');
+        $row++;
+
+        foreach ($report['colleges'] as $college) {
+            $sheet->setCellValue('A' . $row, $college);
+            $row++;
+        }
+
+
+
+        // redirect output to client browser
+        $this->downloadExcel($excel, $filename);
+
     }
 
     public function sortAndLabelPeerData($data, College $currentCollege)

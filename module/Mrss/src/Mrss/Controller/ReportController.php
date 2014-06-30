@@ -136,6 +136,14 @@ class ReportController extends AbstractActionController
         $observation = $this->currentObservation($year);
         $reportData = $this->getReportService()->getNationalReportData($observation);
 
+        // HTML or Excel?
+        $format = $this->params()->fromRoute('format');
+
+        if ($format == 'excel') {
+            $this->getReportService()->downloadNationalReport($reportData);
+            die;
+        }
+
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
@@ -252,10 +260,16 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
+        $format = $this->params()->fromRoute('format');
+
         ini_set('memory_limit', '512M');
         $peerGroup = $this->getPeerGroupFromSession();
 
         $report = $this->getReportService()->getPeerReport($peerGroup);
+
+        if ($format == 'excel') {
+            $this->getReportService()->downloadPeerReport($report, $peerGroup);
+        }
 
         return array(
             'peerGroup' => $peerGroup,
