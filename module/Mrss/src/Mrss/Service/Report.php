@@ -346,12 +346,10 @@ class Report
         return $report;
     }
 
-    public function emailOutliers(RendererInterface $renderer)
+    public function emailOutliers(RendererInterface $renderer, $reallySend = true)
     {
-        $reallySend = false;
-
         $reports = $this->getAdminOutlierReport();
-        $stats = array('emails' => 0);
+        $stats = array('emails' => 0, 'preview' => '');
 
         // Loop over the admin report in order to send an email to each college
         foreach ($reports as $report) {
@@ -423,14 +421,16 @@ class Report
                 // Send it:
                 $this->getMailTransport()->send($message);
             } else {
-                echo count($outliers) . "\n".$body . "\n\n\n\n";
+                $to = array();
+                foreach ($college->getUsers() as $user) {
+                    $to[] = $user->getEmail() . '<' . $user->getFullName() . '>';
+                }
+                $to = implode(', ', $to);
+
+                $stats['preview'] .= "Institution: $collegeName<br>\nTo: $to<br>\n<br>\n$body\n<hr><br>";
             }
 
             $stats['emails']++;
-        }
-
-        if (!$reallySend) {
-            prd($stats);
         }
 
         return $stats;

@@ -21,7 +21,8 @@
                 Prepared on <?= $calculationDates['outliers'] ?>
                 <br>
                 <br>
-                <a class="btn" href="/reports/emailOutliers" onclick="return confirm('Are you sure you want to send outlier report emails to all member institutions?')">Email Outler Reports</a>
+                <a class="btn" href="/reports/emailOutliers/preview" >Preview Outlier Emails</a>
+                <a class="btn" href="/reports/emailOutliers" onclick="return confirm('Are you sure you want to send outlier report emails to all member institutions?')">Send Outlier Emails</a>
             <?php else: ?>
                 Not yet prepared.
             <?php endif ?>

@@ -92,11 +92,22 @@ class ReportController extends AbstractActionController
     {
         $renderer = $this->getServiceLocator()
             ->get('Zend\View\Renderer\RendererInterface');
-        $stats = $this->getReportService()->emailOutliers($renderer);
-        $count = $stats['emails'];
 
-        $this->flashMessenger()->addSuccessMessage("$count outlier emails sent.");
-        return $this->redirect()->toRoute('reports/calculate');
+        $task = $this->params()->fromRoute('task');
+        if ($task == 'preview') {
+            $stats = $this->getReportService()->emailOutliers($renderer, false);
+        } elseif ($task == 'send') {
+            $stats = $this->getReportService()->emailOutliers($renderer);
+
+            $count = $stats['emails'];
+            $this->flashMessenger()->addSuccessMessage("$count outlier emails sent.");
+            return $this->redirect()->toRoute('reports/calculate');
+        }
+
+        return array(
+            'preview' => $stats['preview']
+        );
+
     }
 
     protected function longRunningScript()

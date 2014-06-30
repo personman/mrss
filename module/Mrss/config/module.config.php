@@ -629,9 +629,10 @@ return array(
                     'emailOutliers' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/emailOutliers',
+                            'route' => '/emailOutliers[/:task]',
                             'defaults' => array(
                                 'action' => 'emailOutliers',
+                                'task' => 'send'
                             )
                         )
                     ),

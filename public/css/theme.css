@@ -920,3 +920,7 @@ table.outliers th {
 .text-right {
     text-align: right !important;
 }
+
+.emailPreview hr {
+    border-top: 4px solid #999;
+}
