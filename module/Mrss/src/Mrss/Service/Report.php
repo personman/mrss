@@ -312,7 +312,7 @@ class Report
     /**
      * Get the outliers for the study/year, grouped by college
      */
-    public function getAdminOutlierReport()
+    public function getAdminOutlierReport($includeComputed = true)
     {
         $report = array();
         $study = $this->getStudy();
@@ -327,6 +327,11 @@ class Report
         foreach ($colleges as $college) {
             $outliers = $this->getOutlierModel()
                 ->findByCollegeStudyAndYear($college, $study, $year);
+
+            if (!$includeComputed) {
+                $outliers = $this->removeComputedOutliers($outliers);
+            }
+
             $report[] = array(
                 'college' => $college,
                 'outliers' => $outliers
@@ -334,6 +339,23 @@ class Report
         }
 
         return $report;
+    }
+
+    /**
+     * @param Outlier[] $outliers
+     * @return Outlier[]
+     */
+    public function removeComputedOutliers($outliers)
+    {
+        $newList = array();
+
+        foreach ($outliers as $outlier) {
+            if (!$outlier->getBenchmark()->getComputed()) {
+                $newList[] = $outlier;
+            }
+        }
+
+        return $outliers;
     }
 
     public function getOutlierReport(College $college)
@@ -421,6 +443,13 @@ class Report
 
                 // Get recipients
                 foreach ($college->getUsers() as $user) {
+                    // @todo: make this more dynamic
+                    if ($college->getIpeds() == '155210'
+                        && $user->getEmail() != 'jhoyer@jccc.edu') {
+                        continue;
+                    }
+
+
                     $message->addTo($user->getEmail(), $user->getFullName());
                 }
 
@@ -429,6 +458,12 @@ class Report
             } else {
                 $to = array();
                 foreach ($college->getUsers() as $user) {
+                    // @todo: make this more dynamic
+                    if ($college->getIpeds() == '155210'
+                        && $user->getEmail() != 'jhoyer@jccc.edu') {
+                        continue;
+                    }
+
                     $to[] = $user->getEmail() . '<' . $user->getFullName() . '>';
                 }
                 $to = implode(', ', $to);
