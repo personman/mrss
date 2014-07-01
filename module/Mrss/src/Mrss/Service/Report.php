@@ -376,7 +376,7 @@ class Report
 
     public function emailOutliers(RendererInterface $renderer, $reallySend = true)
     {
-        $reports = $this->getAdminOutlierReport();
+        $reports = $this->getAdminOutlierReport(false);
         $stats = array('emails' => 0, 'preview' => '');
 
         // Loop over the admin report in order to send an email to each college
