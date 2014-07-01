@@ -370,7 +370,7 @@ class Report
             $year = $this->getStudy()->getCurrentYear();
 
             $url = "www.workforceproject.org";
-            $deadline = "July 15, " . date('Y');
+            $deadline = "July 18, " . date('Y');
             $replyTo = "michelletaylor@jccc.edu";
             $replyToName = "Michelle Taylor";
             $replyToPhone = "(913) 469-3831";
