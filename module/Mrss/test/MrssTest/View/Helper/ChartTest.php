@@ -13,6 +13,21 @@ class ChartTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->helper = new Chart();
+
+        // Mock dependencies
+        $headScript = $this->getMock(
+            'Zend\View\Helper\HeadScript',
+            array('appendFile')
+        );
+
+        $view = $this->getMock(
+            'Zend\View\Renderer\PhpRenderer',
+            array('headScript')
+        );
+        $view->expects($this->any())
+            ->method('headScript')
+            ->will($this->returnValue($headScript));
+        $this->helper->setView($view);
     }
 
     public function testInvoke()
