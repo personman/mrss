@@ -355,7 +355,7 @@ class Report
             }
         }
 
-        return $outliers;
+        return $newList;
     }
 
     public function getOutlierReport(College $college)
