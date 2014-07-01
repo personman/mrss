@@ -325,6 +325,11 @@ class Report
         );
 
         foreach ($colleges as $college) {
+            // @todo: remove this hard-code for leaving Wake Tech and Grayson out
+            if (in_array($college->getId(), array(296, 441))) {
+                continue;
+            }
+
             $outliers = $this->getOutlierModel()
                 ->findByCollegeStudyAndYear($college, $study, $year);
 
