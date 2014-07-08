@@ -316,7 +316,7 @@ class ObservationController extends AbstractActionController
 
         // Is the college subscribed to NCCBP for this year
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-        $nccbpPSubscription = $subscriptionModel->findOne(
+        $nccbpSubscription = $subscriptionModel->findOne(
             $observation->getYear(),
             $observation->getCollege()->getId(),
             1 // NCCBP
@@ -327,7 +327,7 @@ class ObservationController extends AbstractActionController
                 'form' => $form,
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
-                'nccbpSubscription' => $nccbpPSubscription
+                'nccbpSubscription' => $nccbpSubscription
             )
         );
 
