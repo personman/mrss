@@ -770,8 +770,13 @@ class Report
                     throw new \Exception('Unknown chart type');
                 }
 
+                if (empty($chartConfig['description'])) {
+                    $chartConfig['description'] = '';
+                }
+
                 $sectionData['charts'][] = array(
-                    'chart' => $chart
+                    'chart' => $chart,
+                    'description' => $chartConfig['description']
                 );
             }
 
@@ -829,6 +834,11 @@ class Report
                 $value = $observation->get($benchmark['dbColumn']);
             }
 
+            // Skip zero values
+            if (empty($value)) {
+                continue;
+            }
+
             $title = $benchmark['title'];
 
             $data[] = array(
@@ -854,7 +864,10 @@ class Report
             'title' => array(
                 'text' => $chartConfig['title'],
             ),
-            'series' => $series
+            'series' => $series,
+            'credits' => array(
+                'enabled' => false
+            ),
         );
 
         return $chart;
@@ -950,6 +963,8 @@ class Report
     {
         $studyId = $this->getStudy()->getId();
 
+        $fiscalYear = '2012-2013';
+
         $configs = array(
             // Workforce:
             3 => array(
@@ -957,16 +972,20 @@ class Report
                     'name' => 'Enrollment Data',
                     'charts' => array(
                         array(
-                            'dbColumn' => 'enrollment_information_duplicated_enrollment'
+                            'dbColumn' => 'enrollment_information_duplicated_enrollment',
+                            'description' => "The headcount of duplicated non-credit workforce development participants for the $fiscalYear fiscal year."
                         ),
                         array(
-                            'dbColumn' => 'enrollment_information_organizations_served'
+                            'dbColumn' => 'enrollment_information_organizations_served',
+                            'description' => "The unduplicated number of organizations for which contract training was provided. (on- or off-campus, online, as distance learning or on the organization's site for $fiscalYear fiscal year)"
                         ),
                         array(
-                            'dbColumn' => 'enrollment_information_training_contracts'
+                            'dbColumn' => 'enrollment_information_training_contracts',
+                            'description' => "The total number of training contracts executed in the $fiscalYear fiscal year."
                         ),
                         array(
                             'dbColumn' => 'enrollment_information_market_penetration',
+                            'description' => "The percentage of organizations served by the workforce training department of the total number of organizations in the college's service area."
                         ),
                     )
                 ),
@@ -989,7 +1008,8 @@ class Report
                                     'dbColumn' => 'staffing_independent_contractors',
                                     'title' => 'Contractors'
                                 )
-                            )
+                            ),
+                            'description' => "The percentages of full-time, part-time and contract instructors that support your college's non-credit workforce training for the $fiscalYear fiscal year."
                         ),
                         array(
                             'type' => 'pieChart',
@@ -1010,7 +1030,8 @@ class Report
                                     'title' => 'Contractors',
                                     'median' => true
                                 )
-                            )
+                            ),
+                            'description' => "The national averages of full-time, part-time and contract instructors that support non-credit workforce training for the $fiscalYear fiscal year."
                         )
                     )
                 ),
@@ -1019,24 +1040,17 @@ class Report
                     'charts' => array(
                         array(
                             'dbColumn' => 'retention_percent_returning_organizations_served',
+                            'description' => "The percentage of organizations that received contract training in the $fiscalYear fiscal year and at least once in a previous time period."
                         ),
                         array(
                             'dbColumn' => 'retention_percent_returning_students',
+                            'description' => "The percentage of students who received workforce training in the $fiscalYear fiscal year and also did so in a previous year."
                         ),
                     )
                 ),
                 array(
                     'name' => 'Revenue',
                     'charts' => array(
-                        array(
-                            'dbColumn' => 'revenue_contract_training_percent',
-                        ),
-                        array(
-                            'dbColumn' => 'revenue_continuing_education_percent',
-                        ),
-                        array(
-                            'dbColumn' => 'revenue_total',
-                        ),
                         array(
                             'title' => 'Funding Sources at Your College',
                             'type' => 'pieChart',
@@ -1061,7 +1075,8 @@ class Report
                                     'dbColumn' => 'revenue_federal',
                                     'title' => 'Federal'
                                 ),
-                            )
+                            ),
+                            'description' => "The percentage of non-credit workforce training gross revenues from continuing education for the $fiscalYear fiscal year."
                         ),
                         array(
                             'title' => 'Funding Sources National Median',
@@ -1092,7 +1107,20 @@ class Report
                                     'title' => 'Federal',
                                     'median' => true
                                 ),
-                            )
+                            ),
+                            'description' => "The total gross revenue in support of all non-credit workforce training - include all public, grant and earned revenue for the $fiscalYear fiscal year."
+                        ),
+                        array(
+                            'dbColumn' => 'revenue_contract_training_percent',
+                            'description' => "The percentage of non-credit workforce training revenues by source for your college for the $fiscalYear fiscal year."
+                        ),
+                        array(
+                            'dbColumn' => 'revenue_continuing_education_percent',
+                            'description' => "The national averages of non-credit workforce training revenues by source for the $fiscalYear fiscal year."
+                        ),
+                        array(
+                            'dbColumn' => 'revenue_total',
+                            'description' => "The percentage of non-credit workforce training gross revenues from contract training for the $fiscalYear fiscal year."
                         )
                     )
                 ),
@@ -1101,9 +1129,11 @@ class Report
                     'charts' => array(
                         array(
                             'dbColumn' => 'expenditures_contract_training_percent',
+                            'description' => "The percentage of total non-credit workforce training instructional and administrative expenses from contract training for the $fiscalYear fiscal year."
                         ),
                         array(
                             'dbColumn' => 'expenditures_continuing_education_percent',
+                            'description' => "The percentage of total non-credit workforce training instructional and administrative expenses from continuing education for the $fiscalYear fiscal year."
                         ),
                         array(
                             'title' => 'Expenditures at Your College',
@@ -1133,7 +1163,8 @@ class Report
                                     'dbColumn' => 'expenditures_travel',
                                     'title' => 'Travel',
                                 ),
-                            )
+                            ),
+                            'description' => "The percentages of non-credit workforce training instructional and administrative itemized expenses for your college for the $fiscalYear fiscal year."
                         ),
                         array(
                             'title' => 'Expenditures National Median',
@@ -1169,7 +1200,8 @@ class Report
                                     'title' => 'Travel',
                                     'median' => true
                                 ),
-                            )
+                            ),
+                            'description' => "The national averages of non-credit workforce training instructional and administrative itemized expenses for the $fiscalYear fiscal year."
                         )
                     )
                 ),
@@ -1178,12 +1210,15 @@ class Report
                     'charts' => array(
                         array(
                             'dbColumn' => 'retained_revenue_contract_training',
+                            'description' => "Total non-credit workforce training retained revenues from contract training for the $fiscalYear fiscal year."
                         ),
                         array(
                             'dbColumn' => 'retained_revenue_total',
+                            'description' => "Total non-credit workforce training retained revenues for the $fiscalYear fiscal year."
                         ),
                         array(
                             'dbColumn' => 'retained_revenue_roi',
+                            'description' => "ROI: net revenues by total expenditures"
                         ),
                     )
                 ),
@@ -1191,7 +1226,8 @@ class Report
                     'name' => 'Credentials Awarded',
                     'charts' => array(
                         array(
-                            'dbColumn' => 'institutional_demographics_credentials_awarded'
+                            'dbColumn' => 'institutional_demographics_credentials_awarded',
+                            'description' => "The number of state, national or industry recognized credentials earned by non-credit workforce training students in the $fiscalYear fiscal year."
                         )
                     )
                 ),
@@ -1200,9 +1236,11 @@ class Report
                     'charts' => array(
                         array(
                             'dbColumn' => 'satisfaction_client',
+                            'description' => "The percentage of very satisfied & satisfied on a 5-point scale of annual contract training clients with training courses/programs for the $fiscalYear fiscal year. "
                         ),
                         array(
                             'dbColumn' => 'satisfaction_student',
+                            'description' => "The percentage of very satisfied & satisfied on a 5-point scale of students in non-credit workforce training courses for the $fiscalYear fiscal year."
                         )
                     )
                 ),
@@ -1211,6 +1249,7 @@ class Report
                     'charts' => array(
                         array(
                             'dbColumn' => 'transition_students',
+                            'description' => "Percentage of non-credit workforce training students that transitioned to one or more credit courses in the $fiscalYear fascal year of completing a non-credit course."
                         ),
                     )
                 )
@@ -1251,6 +1290,13 @@ class Report
             $percentileData
         );
 
+        $format = "{y}";
+        if ($benchmark->isPercent()) {
+            $format = "{y}%";
+        } elseif ($benchmark->isDollars()) {
+            $format = '${y}';
+        }
+
         // Put the college's data in its place
         $chartValues = array_combine($chartXCategories, $chartValues);
         asort($chartValues);
@@ -1282,7 +1328,8 @@ class Report
                 'dataLabels' => array(
                     'enabled' => $dataLabelEnabled,
                     'crop' => false,
-                    'overflow' => 'none'
+                    'overflow' => 'none',
+                    'format' => $format
                 )
             );
         }

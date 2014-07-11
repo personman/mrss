@@ -22,6 +22,8 @@ class Chart extends AbstractHelper
 
     protected $moreJsUri = 'http://code.highcharts.com/highcharts-more.js';
 
+    protected $chartSupportJsUri = '/js/chart-support.js';
+
     protected $javascriptPlaced = false;
 
     public function __invoke($chartConfig = null)
@@ -45,7 +47,9 @@ class Chart extends AbstractHelper
 
         $html .= "<script type='text/javascript'>
         $(function() {
-            $('#$chartId').highcharts($chartConfigJson)
+            var chartConfig = $chartConfigJson;
+            chartConfig = addFormatters(chartConfig)
+            $('#$chartId').highcharts(chartConfig)
         })
     </script>";
 
@@ -73,6 +77,11 @@ class Chart extends AbstractHelper
 
             $this->getView()->headScript()->appendFile(
                 $this->exportingJsUri,
+                'text/javascript'
+            );
+
+            $this->getView()->headScript()->appendFile(
+                $this->chartSupportJsUri,
                 'text/javascript'
             );
 

@@ -1,7 +1,15 @@
-.chart {
+.summaryChart {
     width: 46%;
     margin: 15px;
     float: left;
+}
+
+.summaryChart p {
+    margin-top: 16px;
+}
+
+.summaryChart svg {
+    font-family: 'Lato', sans-serif !important;
 }
 
 .summarySection {
