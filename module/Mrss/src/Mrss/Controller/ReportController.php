@@ -191,7 +191,9 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
-        $form = new PeerComparison;
+        $form = new PeerComparison(
+            $this->getReportService()->getYearsWithSubscriptions()
+        );
 
         $peerGroup = $this->getPeerGroupFromSession();
 
@@ -465,24 +467,26 @@ class ReportController extends AbstractActionController
             /** @var \Mrss\Entity\Study $study */
             $study = $this->currentStudy();
 
-            $benchmarks = $study->getBenchmarksForYear($year);
-
+            $benchmarkGroupData = array();
             $benchmarkData = array();
-            foreach ($benchmarks as $benchmark) {
-                // Skip some demographic data
-                if (in_array($benchmark->getDbColumn(), $this->getBenchmarksToExclude())) {
-                    continue;
+            foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+                $group = $benchmarkGroup->getName();
+
+                foreach ($benchmarkGroup->getBenchmarksForYear($year) as $benchmark) {
+                    $benchmarkData[] = array(
+                        'name' => $benchmark->getName(),
+                        'id' => $benchmark->getId()
+                    );
                 }
 
-                $benchmarkData[] = array(
-                    'name' => $benchmark->getName(),
-                    'id' => $benchmark->getId()
-                );
+                if (count($benchmarkData)) {
+                    $benchmarkGroupData[$group] = $benchmarkData;
+                }
             }
 
             return new JsonModel(
                 array(
-                    'benchmarks' => $benchmarkData
+                    'benchmarkGroups' => $benchmarkGroupData
                 )
             );
         }

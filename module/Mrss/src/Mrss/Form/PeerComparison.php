@@ -8,7 +8,7 @@ use Zend\InputFilter\InputFilter;
 
 class PeerComparison extends AbstractForm
 {
-    public function __construct()
+    public function __construct($yearsWithData)
     {
         // Call the parent constructor
         parent::__construct('peerComparison');
@@ -22,7 +22,7 @@ class PeerComparison extends AbstractForm
                 ),
                 'attributes' => array(
                     'id' => 'reportingPeriod',
-                    'options' => $this->getYearsWithData()
+                    'options' => array_combine($yearsWithData, $yearsWithData)
                 )
             )
         );
@@ -91,11 +91,6 @@ class PeerComparison extends AbstractForm
         $filter->add($peers);
 
         return $filter;
-    }
-
-    public function getYearsWithData()
-    {
-        return array('2013' => '2013');
     }
 
     public function getBenchmarks()

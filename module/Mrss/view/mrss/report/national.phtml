@@ -28,7 +28,6 @@ $this->headScript()->appendFile(
             'format' => 'excel'
         )
     ) ?>" class="btn">Download</a>
-    <a href="#" class="btn showAllCharts">Show all charts</a>
 </p>
 
 <div class="report">
@@ -50,7 +49,7 @@ $this->headScript()->appendFile(
                         <?php foreach ($breakpoints as $breakpoint): ?>
                         <th><?= $breakpoint ?></th>
                         <?php endforeach ?>
-                        <th></th>
+                        <th><a href="#" class="btn showAllCharts" title="Display all charts"><i class="icon-signal"></i></a></th>
                     </tr>
                 </thead>
 

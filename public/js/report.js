@@ -28,12 +28,12 @@ $(function() {
 
     // Show all charts
     $('.showAllCharts').click(function() {
-        if ($(this).html().search('Hide') == -1) {
+        if ($(this).attr('title').search('Hide') == -1) {
             $('.nationalReportChart').show()
-            $(this).html('Hide all charts')
+            $(this).attr('title', 'Hide all charts')
         } else {
             $('.nationalReportChart').hide()
-            $(this).html('Show all charts')
+            $(this).attr('title', 'Show all charts')
         }
 
         return false

@@ -83,7 +83,7 @@ function updateBenchmarks()
     // Fetch the available benchmarks
     url = '/reports/peer-benchmarks/' + year;
     $.get(url, function(result) {
-        var benchmarks = result.benchmarks
+        var benchmarkGroups = result.benchmarkGroups
         if (typeof benchmarks == 'undefined') {
             return false;
         }
@@ -95,11 +95,17 @@ function updateBenchmarks()
         select.empty();
 
         // Add the options
-        $.each(benchmarks, function(key, value) {
-            var option = $('<option></option>')
-            option.attr('value', value.id).text(value.name);
+        $.each(benchmarkGroups, function(benchmarkGroup, benchmarks) {
+            var optgroup = $('<optgroup></optgroup>')
+            optgroup.attr('label', benchmarkGroup)
 
-            select.append(option)
+            $.each(benchmarks, function(key, value) {
+                var option = $('<option></option>')
+                option.attr('value', value.id).text(value.name);
+                optgroup.append(option)
+            })
+
+            select.append(optgroup)
         })
 
     })
