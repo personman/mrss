@@ -20,17 +20,30 @@ class UserController extends AbstractActionController
     public function editAction()
     {
         $id = $this->params('id');
-
-        if (empty($id)) {
-            $id = $_POST['user']['id'];
-        }
-
-        if (empty($id)) {
-            throw new \Exception('User ID is required');
-        }
-
         $userModel = $this->getServiceLocator()->get('model.user');
-        $user = $userModel->find($id);
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        if ($id == 'add' || (empty($id) && empty($_POST['user']['id']))) {
+            $user = new UserEntity();
+            $user->setId('add');
+            $user->setPassword('nothing');
+            $user->setRole('data');
+
+            $collegeId = $this->params('college');
+            $college = $collegeModel->find($collegeId);
+            $user->setCollege($college);
+        } else {
+            if (empty($id)) {
+                $id = $_POST['user']['id'];
+            }
+
+            if (empty($id)) {
+                throw new \Exception('User ID is required');
+            }
+
+            $user = $userModel->find($id);
+        }
+
 
         $form = $this->getUserForm($user);
 

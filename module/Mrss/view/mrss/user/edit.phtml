@@ -1,8 +1,9 @@
-<h2>Edit User</h2>
+<?php $action = ($user->getId() == 'add') ? 'Add' : 'Edit' ?>
+<h2><?= $action ?> User</h2>
 <h4><?= $user->getCollege()->getName() ?></h4>
 
 <?php
-$form->setAttribute('action', $this->url('users/edit'));
+$form->setAttribute('action', $this->url('users/edit', array('college' => $user->getCollege()->getId())));
 ?>
 
 <?= $this->ztbForm($this->form->prepare()) ?>

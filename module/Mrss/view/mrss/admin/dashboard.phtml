@@ -67,6 +67,15 @@
                         echo implode('<br>', $userList);
 
                     ?>
+
+                    <br>
+                    <a href="<?= $this->url(
+                        'users/edit',
+                        array(
+                            'id' => 'add',
+                            'college' => $subscription->getCollege()->getId()
+                        )
+                    ) ?>"><i class="icon icon-plus"></i>Add User</a>
                 </td>
 
                 <td>

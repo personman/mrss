@@ -62,6 +62,10 @@
                     </li>
                 <?php endforeach ?>
             </ul>
+
+            <a href="<?= $this->url('users/edit', array('id' => 'add', 'college' => $college->getId())) ?>" class="btn">
+                Add User
+            </a>
         </td>
     </tr>
 </table>
