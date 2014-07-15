@@ -747,10 +747,11 @@ return array(
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/:id',
+                            'route' => '/:id[/college/:college]',
                             'defaults' => array(
                                 'action' => 'edit',
-                                'id' => 0
+                                'id' => 0,
+                                'college' => 0
                             )
                         )
                     ),
@@ -1062,11 +1063,11 @@ return array(
             //'CurrentStudy' => 'Mrss\Controller\Plugin\CurrentStudy',
         )
     ),
-    'view_manager' => array(
+    /*'view_manager' => array(
         'template_path_stack' => array(
-            'mrss' => __DIR__ . '/../view',
+            'mrss' => __DIR__ . '/../view'
         ),
-    ),
+    ),*/
     'view_manager' => array(
         // Hide error details by default. Use a local override in dev to show them
         'display_not_found_reason' => false,
@@ -1078,6 +1079,7 @@ return array(
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml',
+            'error/403' => __DIR__ . '/../view/error/403.phtml',
             'zfc-user/user/login' => __DIR__ . '/../view/mrss/user/login.phtml',
             'goalio-forgot-password/forgot/forgot' => __DIR__ .
             '/../view/mrss/user/forgot.phtml',

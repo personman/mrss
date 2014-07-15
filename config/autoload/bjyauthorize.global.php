@@ -259,8 +259,9 @@ return array(
 
     'view_manager' => array(
         'template_map' => array(
-            'error/403' => __DIR__ . '/../../'
-                . 'vendor/bjyoungblood/bjy-authorize/view/error/403.phtml',
+            // Set in module config
+            //'error/403' => __DIR__ . '/../../'
+            //    . 'vendor/bjyoungblood/bjy-authorize/view/error/403.phtml',
             'zend-developer-tools/toolbar/bjy-authorize-role'
                 => __DIR__ . '/../../vendor/bjyoungblood/bjy-authorize/view/'
                 . 'zend-developer-tools/toolbar/bjy-authorize-role.phtml',
