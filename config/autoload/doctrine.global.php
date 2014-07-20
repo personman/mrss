@@ -35,12 +35,12 @@ return array(
                 'table'     => 'doctrine_migration_versions',
             ),
         ),
-        'configuration' => array(
+        /*'configuration' => array(
             'orm_default' => array(
                 // Caching Doctrine annotations shaves ~400ms off load times
                 'metadata_cache' => 'filesystem',
                 'query_cache' => 'filesystem',
             )
-        ),
+        ),*/
     )
 );
