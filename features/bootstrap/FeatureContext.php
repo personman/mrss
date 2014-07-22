@@ -160,9 +160,9 @@ class FeatureContext extends MinkContext
 
     /**
      * If the step fails, show the full page
-     * @AfterStep
+     * @--AfterStep
      */
-    public function afterStep(StepEvent $event)
+    /*public function afterStep(StepEvent $event)
     {
         $result = $event->getResult();
         if ($result == 4) {
@@ -170,7 +170,7 @@ class FeatureContext extends MinkContext
 
             //$this->dumpDb('mrss-failed-' . microtime(1) . '.sql');
         }
-    }
+    }*/
 
     public function dumpDb($filename)
     {

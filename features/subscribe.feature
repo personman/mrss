@@ -6,8 +6,8 @@ Feature: Subscribe
   Scenario: Subscribe link on homepage
     Given I am logged out
     And I am on "/"
-    When I follow "Subscribe"
-    Then I should be on "/subscribe"
+    When I follow "How to Join"
+    Then I should be on "/subscription"
 
   Scenario: Subscribe page form
     When I am on "/subscribe"

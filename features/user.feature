@@ -19,10 +19,10 @@ I need to be able to register and sign in
     And I fill in "identity" with "dfergu15@jccc.edu"
     And I fill in "credential" with "111111"
     And I press "Sign In"
-    Then I should be on "/data-entry"
+    Then I should be on "/members"
 
   Scenario: Login link
     Given I am logged out
     When I go to "/"
-    Then I should see "Log In"
+    Then I should see "Sign In"
 

@@ -16,7 +16,7 @@
                 <echo message="Code conforms to PSR2 coding standard." />
             </then>
             <else>
-                <fail message="${codesniffer.output}" />
+                <!-- Already printed above<fail message="${codesniffer.output}" /> -->
             </else>
         </if>
 
@@ -72,7 +72,7 @@
         <echo message="As user: ${behat.whoami}" />
 
         <echo msg="Running Behat scenarios in ${project.basedir}" />
-        <exec command="./bin/behat --format failed"
+        <exec command="./bin/behat"
               description="Behat"
               outputProperty="behat.output" />
         <if>
