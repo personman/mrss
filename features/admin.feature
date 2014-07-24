@@ -36,3 +36,12 @@ Feature: Administration pages
     And I should see "Current Year"
     And I should see "uPay Url"
     And I should see "Enrollment Open"
+
+  Scenario: Calculate national report
+    Given I am logged in
+    And I am on "/reports/calculate"
+    Then I should see "Prepare National Report"
+    When I follow "Prepare National Report"
+    Then I should see "Report prepared."
+    And I should see "Percentile Ranks:"
+    And I should see "Prepared on"

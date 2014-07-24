@@ -14,6 +14,9 @@
 UPDATE studies SET enrollmentOpen = true WHERE id = 2;
 UPDATE studies SET enrollmentOpen = true WHERE id = 3;
 
+-- Open up reports
+UPDATE studies SET reportsOpen = true WHERE id = 2;
+
 -- Add the jccc college
 INSERT INTO `colleges` VALUES (1,'Johnson County Community College','155210','Overland P',NULL,NULL,'12345 College Blvd','KS','12345','OCB 204B',NULL) ON DUPLICATE KEY UPDATE id=id;
 
@@ -24,5 +27,5 @@ INSERT INTO `subscriptions` VALUES (1,1,1,2013,'pending','invoice',1000,NULL,NUL
 UPDATE users
 set role = 'admin',
   password = '$2y$10$abzhQMM078raedPPvvLYvO3vnbTwOhgRnbG4jBTDq8wfIxeXd93rO',
-  college_id = 1
+  college_id = 101
 WHERE email = 'dfergu15@jccc.edu';
