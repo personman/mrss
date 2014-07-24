@@ -2,39 +2,39 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 1: Subscriber Information","IPEDS Fall Enrollment",ipeds_enr,number,"<strong>Full-time Credit Headcount</strong> plus <strong>Part-time Credit Headcount</strong> should equal <strong>IPEDS Enrollment</strong>.",,,,
 "Form 1: Subscriber Information","Full-time Credit Headcount",ft_cr_head,number,,,,,
 "Form 1: Subscriber Information","Part-time Credit Headcount",pt_cr_head,number,,,,,
-"Form 1: Subscriber Information","High School Student Concurrent Enrollment - Headcount",hs_stud_hdct,number,"<strong>High School Student Concurrent Enrollment - Headcount</strong> should be the percent of IPEDS Fall Headcount Enrollment that includes high school students enrolled either on campus, at their high school, or online.",,,,
-"Form 1: Subscriber Information","Pell Grant Recipients",pell_grant_rec,number,"<strong>Pell Grant Recipients</strong> should be the percent of IPEDS Fall Headcount Enrollment who received Pell Grants.",,,,
+"Form 1: Subscriber Information","High School Student Concurrent Enrollment - Headcount",hs_stud_hdct,percent,"<strong>High School Student Concurrent Enrollment - Headcount</strong> should be the percent of IPEDS Fall Headcount Enrollment that includes high school students enrolled either on campus, at their high school, or online.",,,,
+"Form 1: Subscriber Information","Pell Grant Recipients",pell_grant_rec,percent,"<strong>Pell Grant Recipients</strong> should be the percent of IPEDS Fall Headcount Enrollment who received Pell Grants.",,,,
 "Form 1: Subscriber Information","Non-credit Headcount",non_cr_hdct,number,,,,,
-"Form 1: Subscriber Information","Nonresident Alien",non_res_alien_2012,number,,,,,
-"Form 1: Subscriber Information","Female Credit Students",fem_cred_stud,number,,,,,
-"Form 1: Subscriber Information","Hispanics of Any Race",hisp_anyrace_2012,number,,,,,
-"Form 1: Subscriber Information","Transfer Credit Hours",trans_cred,number,"<strong>Transfer Credit Hours</strong> should be the percent of IPEDS Fall Enrollment credit hours that includes full- and part-time students enrolled in courses that do not award career or technical certification, but do award credit that is transferable to other postsecondary institutions. (For example, English, History, and Math would be considered transfer credit hours.)",,,,
-"Form 1: Subscriber Information","American Indian or Alaskan Native",ind_alaska_2012,number,,,,,
-"Form 1: Subscriber Information","Nonresident Alien",non_res_alien,number,,,,,
-"Form 1: Subscriber Information","Technical/Career Credit Hours",t_c_crh,number,"<strong>Technical/Career Credit Hours</strong> should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in programs that award career or technical certification that is not transferable.  (For example, automotive technology credit hours, interior design credit hours, and practical nursing credit hours would be considered technical/career credit hours.) ",,,,
-"Form 1: Subscriber Information",Asian,asian_2012,number,,,,,
-"Form 1: Subscriber Information","Black, Non-Hispanic",blk_n_hisp,number,,,,,
-"Form 1: Subscriber Information","Developmental Credit Hours",dev_crh,number,"<strong>Developmental Credit Hours</strong> should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in developmental/remedial courses as defined by the institution.",,,,
-"Form 1: Subscriber Information","Black or African American",blk_2012,number,,,,,
-"Form 1: Subscriber Information","American Indian or Alaskan Native",ind_alaska,number,,,,,
-"Form 1: Subscriber Information","Native Hawaiian or other Pacific Islander",haw_pacific_2012,number,,,,,
-"Form 1: Subscriber Information","High School Student Concurrent Enrollment - Credit Hours",hs_stud_crh,number,"<strong>High School Student Concurrent Enrollment - Credit Hours</strong> should be the percent of IPEDS Fall Credit Hour Enrollment that includes high school students enrolled either on campus, at their high school, or online.",,,,
-"Form 1: Subscriber Information","Asian or Pacific Islander",asia_pacif,number,,,,,
+"Form 1: Subscriber Information","Nonresident Alien",non_res_alien_2012,percent,,,,,
+"Form 1: Subscriber Information","Female Credit Students",fem_cred_stud,percent,,,,,
+"Form 1: Subscriber Information","Hispanics of Any Race",hisp_anyrace_2012,percent,,,,,
+"Form 1: Subscriber Information","Transfer Credit Hours",trans_cred,percent,"<strong>Transfer Credit Hours</strong> should be the percent of IPEDS Fall Enrollment credit hours that includes full- and part-time students enrolled in courses that do not award career or technical certification, but do award credit that is transferable to other postsecondary institutions. (For example, English, History, and Math would be considered transfer credit hours.)",,,,
+"Form 1: Subscriber Information","American Indian or Alaskan Native",ind_alaska_2012,percent,,,,,
+"Form 1: Subscriber Information","Nonresident Alien",non_res_alien,percent,,,,,
+"Form 1: Subscriber Information","Technical/Career Credit Hours",t_c_crh,percent,"<strong>Technical/Career Credit Hours</strong> should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in programs that award career or technical certification that is not transferable.  (For example, automotive technology credit hours, interior design credit hours, and practical nursing credit hours would be considered technical/career credit hours.) ",,,,
+"Form 1: Subscriber Information",Asian,asian_2012,percent,,,,,
+"Form 1: Subscriber Information","Black, Non-Hispanic",blk_n_hisp,percent,,,,,
+"Form 1: Subscriber Information","Developmental Credit Hours",dev_crh,percent,"<strong>Developmental Credit Hours</strong> should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in developmental/remedial courses as defined by the institution.",,,,
+"Form 1: Subscriber Information","Black or African American",blk_2012,percent,,,,,
+"Form 1: Subscriber Information","American Indian or Alaskan Native",ind_alaska,percent,,,,,
+"Form 1: Subscriber Information","Native Hawaiian or other Pacific Islander",haw_pacific_2012,percent,,,,,
+"Form 1: Subscriber Information","High School Student Concurrent Enrollment - Credit Hours",hs_stud_crh,percent,"<strong>High School Student Concurrent Enrollment - Credit Hours</strong> should be the percent of IPEDS Fall Credit Hour Enrollment that includes high school students enrolled either on campus, at their high school, or online.",,,,
+"Form 1: Subscriber Information","Asian or Pacific Islander",asia_pacif,percent,,,,,
 "Form 1: Subscriber Information","Credit Student Median Age",crd_stud_minc,number,,,,,
-"Form 1: Subscriber Information",White,white_2012,number,,,,,
-"Form 1: Subscriber Information",Hispanic/Latino,hisp,number,,,,,
-"Form 1: Subscriber Information","Two or More Races",two_or_more,number,,,,,
-"Form 1: Subscriber Information","White, Non-Hispanic",wht_n_hisp,number,,,,,
-"Form 1: Subscriber Information","Race and Ethnicity Unknown",race_eth_unk_2012,number,,,,,
-"Form 1: Subscriber Information","Race/Ethnicity Unknown",race_eth_unk,number,,,,,
+"Form 1: Subscriber Information",White,white_2012,percent,,,,,
+"Form 1: Subscriber Information",Hispanic/Latino,hisp,percent,,,,,
+"Form 1: Subscriber Information","Two or More Races",two_or_more,percent,,,,,
+"Form 1: Subscriber Information","White, Non-Hispanic",wht_n_hisp,percent,,,,,
+"Form 1: Subscriber Information","Race and Ethnicity Unknown",race_eth_unk_2012,percent,,,,,
+"Form 1: Subscriber Information","Race/Ethnicity Unknown",race_eth_unk,percent,,,,,
 "Form 1: Subscriber Information","Total Population",total_pop,number,"<strong>Service Area Total Population</strong> should reflect state's definition of your institution's service area, most recent census estimates, and include all age groups.",,,,
-"Form 1: Subscriber Information","Unemployment Rate",unemp_rate,number,,,,,
+"Form 1: Subscriber Information","Unemployment Rate",unemp_rate,percent,,,,,
 "Form 1: Subscriber Information","Median Household Income",med_hhold_inc,number,,,,,
-"Form 1: Subscriber Information","From Local Sources",loc_sour,number,,,,,
-"Form 1: Subscriber Information","From State",state_sour,number,,,,,
-"Form 1: Subscriber Information","From Tuition & Fees",tuition_fees_sour,number,,,,,
+"Form 1: Subscriber Information","From Local Sources",loc_sour,percent,,,,,
+"Form 1: Subscriber Information","From State",state_sour,percent,,,,,
+"Form 1: Subscriber Information","From Tuition & Fees",tuition_fees_sour,percent,,,,,
 "Form 1: Subscriber Information","Tuition and Fees per Credit Hour",tuition_fees,number,"<p>
-Use fall 2012 data.
+Use fall 2011 data.
 </p>
 <p>
 <strong>Tuition and Fees per Credit Hour</strong> are the tuition and fees that full-time, in-district students are charged per credit hour.  Use the figure reported to IPEDS.  <em>Enter per credit hour figure, not total tuition and fees.</em>
@@ -43,58 +43,58 @@ Use fall 2012 data.
 Credit Courses are courses that are eligible for Title IV federal financial aid.
 </p>",,,,
 "Form 1: Subscriber Information","Unrestricted Operating Revenue",unre_o_rev,number,"<p>
-Use fiscal year 2013 data.
+Use fiscal year 2012 data.
 </p>
 <p>
 <strong>Unrestricted Operating Revenue</strong> is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""
 </p>",,,,
 "Form 2: Student Completion and Transfer","Unduplicated headcount",pt_fminus7_headc,number,"<p>
-Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2007 IPEDS GRS cohort.
+Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2006 IPEDS GRS cohort.
 </p>
 <p>
 <em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
 </p>",,,,
 "Form 2: Student Completion and Transfer","Number Completed Degree or Certificate",pt_yminus7_degr,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2013. 
+Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2012. 
 </p>
 <p>
-Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
+Students in the fall 2006 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
 </p>",,,,
-"Form 2: Student Completion and Transfer","Number Transferred",pt_yminus7_transf,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
+"Form 2: Student Completion and Transfer","Number Transfered",pt_yminus7_transf,number,"<p>
+Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2012.
 </p>
 <p>
 Please use National Student Clearinghouse data. 
 </p>
 <p>
-Degree or certificate completion ""trumps"" transfer.   Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
+Degree or certificate completion ""trumps"" transfer.   Students in the fall 2006 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completition.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,
 "Form 2: Student Completion and Transfer","Percent Completed in Six Years",pt_perminus7_comp,computed,,,1,,
 "Form 2: Student Completion and Transfer","Percent Transferred in Six Years",pt_percminus7_tran,computed,,,1,,
 "Form 2: Student Completion and Transfer","Percent Completed or Transferred in Six Years",pt_pminus7_comtran,computed,,,1,,
 "Form 2: Student Completion and Transfer","Unduplicated Headcount",ft_f_yminus4_headc,number,"<p>
-Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2010 IPEDS GRS cohort.
+Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2009 IPEDS GRS cohort.
 </p>
 <p>
 <em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
 </p>",,,,
 "Form 2: Student Completion and Transfer","Number Completed Degree or Certificate",ft_f_yminus4_degr_cert,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2013. 
+Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2012. 
 </p>
 <p>
-Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
+Students in the fall 2009 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
 </p>",,,,
 "Form 2: Student Completion and Transfer","Number Transferred",ft_f_yminus4_transf,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
+Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2012.
 </p>
 <p>
 Please use National Student Clearinghouse data. 
 </p>
 <p>
-Degree or certificate completion ""trumps"" transfer.   Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
+Degree or certificate completion ""trumps"" transfer.   Students in the fall 2009 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completition.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,
 "Form 2: Student Completion and Transfer","Unduplicated Headcount",pt_f_yminus4_headc,number,"<p>
-Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2010 IPEDS GRS cohort.
+Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2009 IPEDS GRS cohort.
 </p>
 <p>
 <em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
@@ -102,63 +102,63 @@ Enter unduplicated credit headcount of first-time, part-time degree- and certifi
 "Form 2: Student Completion and Transfer","Percent Completed in Three Years",ft_perc_comp,computed,,,1,,
 "Form 2: Student Completion and Transfer","Percent Transferred in Three Years",ft_perc_transf,computed,,,1,,
 "Form 2: Student Completion and Transfer","Number Completed Degree or Certificate",pt_f_yminus4_degr_cert,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2013. 
+Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2012. 
 </p>
 <p>
-Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
+Students in the fall 2009 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
 </p>",,,,
 "Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years",ft_perc_comp_transf,computed,,,1,,
 "Form 2: Student Completion and Transfer","Number Transferred",pt_f_yminus4_transf,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
+Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2012.
 </p>
 <p>
 Please use National Student Clearinghouse data.
 </p>
 <p>
-Degree or certificate completion ""trumps"" transfer.   Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
+Degree or certificate completion ""trumps"" transfer.   Students in the fall 2009 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completition.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,
 "Form 2: Student Completion and Transfer","Percent Completed in Three Years",pt_perc_comp,computed,,,1,,
 "Form 2: Student Completion and Transfer","Percent Transferred in Three Years",pt_perc_transf,computed,,,1,,
 "Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years",pt_perc_comp_transf,computed,,,1,,
 "Form 2: Student Completion and Transfer","Unduplicated headcount",f_yminus7_headc,number,"<p>
-Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2007 IPEDS GRS cohort.
+Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2006 IPEDS GRS cohort.
 </p>
 <p>
 <em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
 </p>",,,,
 "Form 2: Student Completion and Transfer","Number Completed Degree or Certificate",ft_yminus7_degr,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2013. 
+Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2012. 
 </p>
 <p>
-Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
+Students in the fall 2006 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
 </p>",,,,
-"Form 2: Student Completion and Transfer","Number Transferred",ft_yminus7_transf,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
+"Form 2: Student Completion and Transfer","Number Transfered",ft_yminus7_transf,number,"<p>
+Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2012.
 </p>
 <p>
 Please use National Student Clearinghouse data. 
 </p>
 <p>
-Degree or certificate completion ""trumps"" transfer.   Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
+Degree or certificate completion ""trumps"" transfer.   Students in the fall 2006 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completition.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,
 "Form 2: Student Completion and Transfer","Percent Completed in Six Years",ft_minus7perc_comp,computed,,,1,,
-"Form 2: Student Completion and Transfer","Percent Transferred in Six Years",percminus7_transf,computed,,,1,,
+"Form 2: Student Completion and Transfer","Percent Transfered in Six Years",percminus7_transf,computed,,,1,,
 "Form 2: Student Completion and Transfer","Percent Completed or Transferred in Six Years",percminus7_comtran,computed,,,1,,
 "Form 3: Student Performance at Transfer Institutions","Total Students Who Transferred",tot_stud_trans,number,"Enter the total number of students with <em>12 or more earned credit hours</em> from the reporting institution who transferred to public and private four-year institutions during the <em>most recent academic year</em> for which National Student Clearinghouse data are available (the data should be less than five years old).",,,,
 "Form 3: Student Performance at Transfer Institutions","Cumulative First-year GPA",fst_yr_gpa,number,"Enter the <em>cumulative</em> first-year grade-point average (GPA) at all public and private four-year transfer institutions for all students in Row 1 (Total Students Who Transferred).  GPA should be on a 4-point scale (A = 4, B= 3, C = 2, P = 2, D = 1, F = 0).",,,,
 "Form 3: Student Performance at Transfer Institutions","Total First-year Credit Hours",tot_fst_yr_crh,number,"Enter the total credit hours completed (grades A through F) during the first year at all public and private four-year transfer institutions by all students in Row 1 (Total Students Who Transferred).",,,,
-"Form 3: Student Performance at Transfer Institutions","Percent Enrolled Next Year",enro_next_yr,number,"Enter the percent of students in Row 1 (Total Students Who Transferred) that enrolled at the same public and private four-year transfer institutions for the next academic year.",,,,
+"Form 3: Student Performance at Transfer Institutions","Percent Enrolled Next Year",enro_next_yr,percent,"Enter the percent of students in Row 1 (Total Students Who Transferred) that enrolled at the same public and private four-year transfer institutions for the next academic year.",,,,
 "Form 3: Student Performance at Transfer Institutions","Average First-year Credit Hours",avrg_1y_crh,computed,,,1,,
-"Form 4: Credit Student Enrollment","Credit Students at End of Fall 2012 Term",tot_cr_st,number,"<p>
-Enter the unduplicated number of total full- and part-time credit students (including those who withdrew from all courses) at the end of the fall 2012 term.
+"Form 4: Credit Student Enrollment","Credit Students at End of Fall 2011 Term",tot_cr_st,number,"<p>
+Enter the unduplicated number of total full- and part-time credit students (including those who withdrew from all courses) at the end of the fall 2011 term.
 </p>
 <p>
 <em>Do not include high school students.</em>
 </p>",,,,
-"Form 4: Credit Student Enrollment","Fall 2012 Credit Students Who Graduated before Spring 2013",grad_bef_spr,number,"Enter the total number of credit students from fall 2012 who graduated or completed certificates before the spring 2013 term.",,,,
-"Form 4: Credit Student Enrollment","Fall 2012 Credit Students Who Graduated before Fall 2013",grad_bef_fall,number,"Enter the total number of credit students from fall 2012 who graduated or completed certificates before the fall 2013 term.  The number should include graduates and completers from Spring 2013.",,,,
-"Form 4: Credit Student Enrollment","Fall 2012 Credit Students Who Enrolled in Spring 2013",enr_bef_spr,number,"Enter the total number of credit students from fall 2012 who enrolled in the spring 2013 term. Do not include students who graduated before spring 2013.",,,,
-"Form 4: Credit Student Enrollment","Fall 2012 Credit Students Who Enrolled in Fall 2013",enr_fall,number,"Enter the total number of credit students from fall 2012 who enrolled in the fall 2013 term. Do not include students who graduated before fall 2013.",,,,
+"Form 4: Credit Student Enrollment","Fall 2011 Credit Students Who Graduated before Spring 2012",grad_bef_spr,number,"Enter the total number of credit students from fall 2011 who graduated or completed certificates before the spring 2012 term.",,,,
+"Form 4: Credit Student Enrollment","Fall 2011 Credit Students Who Graduated before Fall 2012",grad_bef_fall,number,"Enter the total number of credit students from fall 2011 who graduated or completed certificates before the fall 2012 term.  The number should include graduates and completers from Spring 2012.",,,,
+"Form 4: Credit Student Enrollment","Fall 2011 Credit Students Who Enrolled in Spring 2012",enr_bef_spr,number,"Enter the total number of credit students from fall 2011 who enrolled in the spring 2012 term. Do not include students who graduated before spring 2012.",,,,
+"Form 4: Credit Student Enrollment","Fall 2011 Credit Students Who Enrolled in Fall 2012",enr_fall,number,"Enter the total number of credit students from fall 2011 who enrolled in the fall 2012 term. Do not include students who graduated before fall 2012.",,,,
 "Form 4: Credit Student Enrollment","Next-Term Persistence Rate",next_term_pers,computed,,,1,,
 "Form 4: Credit Student Enrollment","Fall-Fall Persistence Rate",fall_fall_pers,computed,,,1,,
 "Form 5: Student Satisfaction and Engagement","Active and Collaborative Learning",act_coll_learn,number,,,,,
@@ -183,10 +183,10 @@ Enter the unduplicated number of total full- and part-time credit students (incl
 "Form 5: Student Satisfaction and Engagement","Safety and Security",safe_sec,number,,,,,
 "Form 5: Student Satisfaction and Engagement","Service Excellence",serv_exc,number,,,,,
 "Form 5: Student Satisfaction and Engagement","Student Centeredness",stud_centr,number,,,,,
-"Form 6: Student Goal Attainment","Graduates and Completers",grads_comp,number,"Percent that achieved objective.",,,,
-"Form 6: Student Goal Attainment","Leavers and Non-Completers",leave_noncomp,number,"Percent that achieved objective.",,,,
+"Form 6: Student Goal Attainment","Graduates and Completers",grads_comp,percent,"Percent that achieved objective.",,,,
+"Form 6: Student Goal Attainment","Leavers and Non-Completers",leave_noncomp,percent,"Percent that achieved objective.",,,,
 "Form 7: Credit College-level Retention, Success","Total A, B, C, P, D, F, and W Grades",tot_grad_abcpdfw,number,"<p>
-Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in all credit, college-level courses at the end of the fall 2012 term for all students (include high school students earning college credits).  Include laboratory grades if they are awarded independently of their associated lecture grade.  <em>Do not include</em> incompletes, audits, and grades in developmental courses.  Developmental courses should be reported on FORM 8.
+Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in all credit, college-level courses at the end of the fall 2011 term for all students (include high school students earning college credits).  Include laboratory grades if they are awarded independently of their associated lecture grade.  <em>Do not include</em> incompletes, audits, and grades in developmental courses.  Developmental courses should be reported on FORM 8.
 </p>
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).  Map all other grades to their closest equivalent.
@@ -197,13 +197,13 @@ College-level courses include courses that, if successfully completed, can be ap
 <p>
 P grades (or your institution's equivalent) are awarded when a student takes a class for a ""pass"" or ""fail"" grade.  Not all institutions may offer this option.
 </p>",,,,
-"Form 7: Credit College-level Retention, Success","Total A, B, C, P, D, and F Grades",tot_grad_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) in credit, college-level courses at the end of the fall 2012 term.",,,,
-"Form 7: Credit College-level Retention, Success","Total A, B, C, and P Grades",tot_grad_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in credit, college-level courses at the end of the fall 2012 term.",,,,
+"Form 7: Credit College-level Retention, Success","Total A, B, C, P, D, and F Grades",tot_grad_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) in credit, college-level courses at the end of the fall 2011 term.",,,,
+"Form 7: Credit College-level Retention, Success","Total A, B, C, and P Grades",tot_grad_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in credit, college-level courses at the end of the fall 2011 term.",,,,
 "Form 7: Credit College-level Retention, Success","Retention Rate",ret_rate,computed,,,1,,
 "Form 7: Credit College-level Retention, Success","Enrollee Success Rate",enr_succ,computed,,,1,,
 "Form 7: Credit College-level Retention, Success","Completer Success Rate",comp_succ,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",m_tot_grad_dev_rem,number,"<p>
-Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in Math credit developmental/remedial courses at the end of the fall 2012 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
+Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in Math credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
 <p>
 Developmental/remedial courses are those defined by the reporting institution.
@@ -211,13 +211,13 @@ Developmental/remedial courses are those defined by the reporting institution.
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).
 </p>",,,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",m_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2012 term.",,,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",m_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2012 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",m_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",m_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,
 "Form 8: Credit Developmental Retention, Success","Retention Rate",m_ret_rate,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",m_enr_succ,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Completer Success Rate",m_comp_succ,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",w_tot_grad_dev_rem,number,"<p>
-Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2012 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
+Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
 <p>
 Developmental/remedial courses are those defined by the reporting institution.
@@ -228,12 +228,12 @@ Reading and Writing includes courses in which both reading and writing instructi
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).
 </p>",,,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",w_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2012 term.",,,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",w_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2012 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",w_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",w_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,
 "Form 8: Credit Developmental Retention, Success","Retention Rate",w_ret_rate,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",w_enr_succ,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",rw_tot_grad_dev_rem,number,"<p>
-Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2012 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
+Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
 <p>
 Developmental/remedial courses are those defined by the reporting institution.
@@ -245,12 +245,12 @@ Reading and Writing includes courses in which both reading and writing instructi
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).
 </p>",,,,
 "Form 8: Credit Developmental Retention, Success","Completer Success Rate",w_comp_succ,computed,,,1,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",rw_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2012 term.",,,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",rw_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2012 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",rw_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",rw_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,
 "Form 8: Credit Developmental Retention, Success","Retention Rate",rw_ret_rate,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",rw_enr_succ,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",r_tot_grad_dev_rem,number,"<p>
-Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2012 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
+Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
 <p>
 Developmental/remedial courses are those defined by the reporting institution.
@@ -262,13 +262,13 @@ Reading and Writing includes courses in which both reading and writing instructi
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).
 </p>",,,,
 "Form 8: Credit Developmental Retention, Success","Completer Success Rate",rw_comp_succ,computed,,,1,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",r_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2012 term.",,,,
-"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",r_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2012 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",r_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,
+"Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",r_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,
 "Form 8: Credit Developmental Retention, Success","Retention Rate",r_ret_rate,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",r_enr_succ,computed,,,1,,
 "Form 8: Credit Developmental Retention, Success","Completer Success Rate",r_comp_succ,computed,,,1,,
-"Form 9: Credit Developmental Retention, Success, First College-level","Total A, B, C and P Grades in Fall 2011, Highest-level Developmental Courses",m_tot_abcp_hld,number,"<p>
-Enter the total number of students who received A, B, C, and P grades (or their institutional equivalents) in the highest-level, credit developmental/remedial math courses at the end of the fall 2011 term.
+"Form 9: Credit Developmental Retention, Success, First College-level","Total A, B, C and P Grades in Fall 2010, Highest-level Developmental Courses",m_tot_abcp_hld,number,"<p>
+Enter the total number of students who received A, B, C, and P grades (or their institutional equivalents) in the highest-level, credit developmental/remedial math courses at the end of the fall 2010 term.
 </p>
 <p>
 Developmental/remedial courses are those defined by the reporting institution.  Entries should include students who succeeded in developmental math courses.
@@ -279,8 +279,8 @@ Related math courses will most likely be college level math courses.
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).
 </p>",,,,
-"Form 9: Credit Developmental Retention, Success, First College-level","Total A, B, C and P Grades in Fall 2011, Highest-level Developmental Courses",w_tot_abcp_hld,number,"<p>
-Enter the total number of students who received A, B, C, and P grades (or their institutional equivalents) in the highest-level, credit developmental/remedial writing courses at the end of the fall 2011 term.
+"Form 9: Credit Developmental Retention, Success, First College-level","Total A, B, C and P Grades in Fall 2010, Highest-level Developmental Courses",w_tot_abcp_hld,number,"<p>
+Enter the total number of students who received A, B, C, and P grades (or their institutional equivalents) in the highest-level, credit developmental/remedial writing courses at the end of the fall 2010 term.
 </p>
 <p>
 Developmental/remedial courses are those defined by the reporting institution.  Entries should include students who succeeded in developmental writing courses.
@@ -304,10 +304,10 @@ Enter the total number of students from row 1 (Total A, B, C and P Grades) who e
 <p>
 Related writing courses will most likely be college level English composition courses.
 </p>",,,,
-"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 2 Who Completed College-level Courses with ABCPD and F Grades",m_compl_abcpdf,number,"Enter the total number of students from row 2 (Enrolled in Related College-level Courses) who completed related college-level courses with A, B, C, D, P, and F grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2012.",,,,
-"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 2 Who Completed College-level Courses with ABCPD and F Grades",w_compl_abcpdf,number,"Enter the total number of students from row 2 (Enrolled in Related College-level Courses) who completed related college-level courses with A, B, C, D, P, and F grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2012.",,,,
-"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 3 Who Completed College-level Courses with A, B,C and P Grades",m_compl_abcp,number,"Enter the total number of students from row 3 (Completed College-level Courses with A, B, C, P and D Grades) who completed related college-level courses with A, B, C, and P grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2012.",,,,
-"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 3 Who Completed College-level Courses with A, B,C and P Grades",w_compl_abcp,number,"Enter the total number of students from row 3 (Completed College-level Courses with A, B, C, P and D Grades) who completed related college-level courses with A, B, C, and P grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2012.",,,,
+"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 2 Who Completed College-level Courses with ABCPD and F Grades",m_compl_abcpdf,number,"Enter the total number of students from row 2 (Enrolled in Related College-level Courses) who completed related college-level courses with A, B, C, D, P, and F grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2011.",,,,
+"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 2 Who Completed College-level Courses with ABCPD and F Grades",w_compl_abcpdf,number,"Enter the total number of students from row 2 (Enrolled in Related College-level Courses) who completed related college-level courses with A, B, C, D, P, and F grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2011.",,,,
+"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 3 Who Completed College-level Courses with A, B,C and P Grades",m_compl_abcp,number,"Enter the total number of students from row 3 (Completed College-level Courses with A, B, C, P and D Grades) who completed related college-level courses with A, B, C, and P grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2011.",,,,
+"Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 3 Who Completed College-level Courses with A, B,C and P Grades",w_compl_abcp,number,"Enter the total number of students from row 3 (Completed College-level Courses with A, B, C, P and D Grades) who completed related college-level courses with A, B, C, and P grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2011.",,,,
 "Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Retention Rate",m_coll_lev_ret_rate,computed,,,1,,
 "Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Retention Rate",w_coll_lev_ret_rate,computed,,,1,,
 "Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Enrollee Success Rate",m_coll_lev_enr_rate,computed,,,1,,
@@ -334,44 +334,44 @@ Enter total from Row 1 (Total Completers for Whom Data Are Available) who are pu
 "Form 10: Career Program Completers","Total from Row 1 | Employed in Related Field in %",no_tot_emp_rel_perc,computed,,,1,,
 "Form 10: Career Program Completers","Total from Row 1 | Pursuing Education in %",no_tot_purs_edu_perc,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Total ABCPDF and W Grades",ec_i_abcpdfw,number,"<p>
-Enter the total number of A, B, C, P, D, F and W grades (and their institutional equivalents) in each course at the end of the fall 2012 term for all students.  Do not include incompletes and audits.
+Enter the total number of A, B, C, P, D, F and W grades (and their institutional equivalents) in each course at the end of the fall 2011 term for all students.  Do not include incompletes and audits.
 </p>
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades).
 </p>",,,,
-"Form 11: Retention and Success Core Academic Skills","Total ABCPD and F Grades",ec_i_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
-"Form 11: Retention and Success Core Academic Skills","Total ABC and P Grades",ec_i_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
+"Form 11: Retention and Success Core Academic Skills","Total ABCPD and F Grades",ec_i_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2011 term.",,,,
+"Form 11: Retention and Success Core Academic Skills","Total ABC and P Grades",ec_i_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) at the end of the fall 2011 term.",,,,
 "Form 11: Retention and Success Core Academic Skills","Retention Rate",ec_i_retention_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Enrollee Success Rate",ec_i_enr_suc_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Completer Success Rate",ec_i_comp_suc_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Total ABCPDF and W Grades",ec_ii_abcpdfw,number,"<p>
-Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2012 term for all students.  Do not include incompletes and audits.
+Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2011 term for all students.  Do not include incompletes and audits.
 </p>
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades).
 </p>",,,,
-"Form 11: Retention and Success Core Academic Skills","Total ABCPD and F Grades",ec_ii_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
-"Form 11: Retention and Success Core Academic Skills","Total ABC and P Grades",ec_ii_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
+"Form 11: Retention and Success Core Academic Skills","Total ABCPD and F Grades",ec_ii_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2011 term.",,,,
+"Form 11: Retention and Success Core Academic Skills","Total ABC and P Grades",ec_ii_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) at the end of the fall 2011 term.",,,,
 "Form 11: Retention and Success Core Academic Skills","ABCPDF and W Grades",al_abcpdfw,number,"<p>
-Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2012 term for all students.  Do not include incompletes and audits.
+Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2011 term for all students.  Do not include incompletes and audits.
 </p>
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades).
 </p>",,,,
 "Form 11: Retention and Success Core Academic Skills","Retention Rate",ec_ii_retention_rate,computed,,,1,,
-"Form 11: Retention and Success Core Academic Skills","ABCPD and F Grades",al_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
+"Form 11: Retention and Success Core Academic Skills","ABCPD and F Grades",al_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2011 term.",,,,
 "Form 11: Retention and Success Core Academic Skills","Enrollee Success Rate",ec_ii_enr_suc_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Completer Success Rate",ec_ii_comp_suc_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","ABCPDF and W Grades",sp_abcpdfw,number,"<p>
-Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2012 term for all students.  Do not include incompletes and audits.
+Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2011 term for all students.  Do not include incompletes and audits.
 </p>
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades).
 </p>",,,,
 "Form 11: Retention and Success Core Academic Skills","Retention Rate",al_retention_rate,computed,,,1,,
-"Form 11: Retention and Success Core Academic Skills","ABCPD and F Grades",sp_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
+"Form 11: Retention and Success Core Academic Skills","ABCPD and F Grades",sp_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) at the end of the fall 2011 term.",,,,
 "Form 11: Retention and Success Core Academic Skills","Enrollee Success Rate",al_enr_suc_rate,computed,,,1,,
-"Form 11: Retention and Success Core Academic Skills","ABC and P Grades",sp_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
+"Form 11: Retention and Success Core Academic Skills","ABC and P Grades",sp_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) at the end of the fall 2011 term.",,,,
 "Form 11: Retention and Success Core Academic Skills","Completer Success Rate",al_comp_suc_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Retention Rate",sp_retention_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Enrollee Success Rate",sp_enr_suc_rate,computed,,,1,,
@@ -379,17 +379,16 @@ If your institution records + or - grades, include them in the letter grades wit
 "Form 12: Institution-wide Credit Grades","% Withdrawal",withdrawal,computed,,,1,,
 "Form 12: Institution-wide Credit Grades","% Completed",completed,computed,,,1,,
 "Form 12: Institution-wide Credit Grades","% Completer Success",compl_succ,computed,,,1,,
-"Form 12: Institution-wide Credit Grades","% Enrollee Success",group_form12_instw_cred_grad_enr_succ,computed,,,,,
 "Form 12: Institution-wide Credit Grades","% Enrollee Success",enr_succ,computed,,,1,,
 "Form 12: Institution-wide Credit Grades","% A & B grades",anb,computed,,,1,,
-"Form 12: Institution-wide Credit Grades",A,a,number,,,,,
-"Form 12: Institution-wide Credit Grades",B,b,number,,,,,
-"Form 12: Institution-wide Credit Grades",C,c,number,,,,,
-"Form 12: Institution-wide Credit Grades",P,p,number,"Include all other passing grades here.",,,,
-"Form 12: Institution-wide Credit Grades",D,d,number,,,,,
-"Form 12: Institution-wide Credit Grades",F,f,number,"Include all other non-passing grades here.",,,,
-"Form 12: Institution-wide Credit Grades",W,w,number,,,,,
-"Form 12: Institution-wide Credit Grades",Total,total,computed,,,,,
+"Form 12: Institution-wide Credit Grades","Number of A Grades",a,number,,,,,
+"Form 12: Institution-wide Credit Grades","Number of B Grades",b,number,,,,,
+"Form 12: Institution-wide Credit Grades","Number of C Grades",c,number,,,,,
+"Form 12: Institution-wide Credit Grades","Number of Other Passing Grades",p,number,"Include all other passing grades here.",,,,
+"Form 12: Institution-wide Credit Grades","Number of D Grades",d,number,,,,,
+"Form 12: Institution-wide Credit Grades","Number of F Grades",f,number,"Include all other non-passing grades here.",,,,
+"Form 12: Institution-wide Credit Grades","Number of Withdrawals",w,number,,,,,
+"Form 12: Institution-wide Credit Grades","Total Number of Grades",total,number,,,,,
 "Form 12: Institution-wide Credit Grades",A%,a_perc,computed,,,1,,
 "Form 12: Institution-wide Credit Grades",B%,b_perc,computed,,,1,,
 "Form 12: Institution-wide Credit Grades",C%,c_perc,computed,,,1,,
@@ -398,28 +397,28 @@ If your institution records + or - grades, include them in the letter grades wit
 "Form 12: Institution-wide Credit Grades",F%,f_perc,computed,,,1,,
 "Form 12: Institution-wide Credit Grades",W%,w_perc,computed,,,1,,
 "Form 13A: Minority Participation Rates","Total Institution Population",stud_inst_pop,number,"This should equal the field ""IPEDS Enrollment"" on Form 1.",,,,
-"Form 13A: Minority Participation Rates","Minority Population in %",serv_ar_min,number,"Enter your service area <em>percent</em> minority population.  The number should reflect your state's definition of service area, most recent census estimates, and the percent of the service area population that is not ""white, non-Hispanic"".",,,,
-"Form 13A: Minority Participation Rates","Total Institution Minority Population",stud_tot_inst_min_pop,number,"Enter the total number of minority students reported to IPEDS for fall 2012. ",,,,
+"Form 13A: Minority Participation Rates","Minority Population in %",serv_ar_min,percent,"Enter your service area <em>percent</em> minority population.  The number should reflect your state's definition of service area, most recent census estimates, and the percent of the service area population that is not ""white, non-Hispanic"".",,,,
+"Form 13A: Minority Participation Rates","Total Institution Minority Population",stud_tot_inst_min_pop,number,"Enter the total number of minority students reported to IPEDS for fall 2011. ",,,,
 "Form 13A: Minority Participation Rates","Institution Percent Minority",perc_inst_min,computed,,,1,,
 "Form 13A: Minority Participation Rates","Ratio Institution : Service Area Minority Pop.",stud_inst_serv_ratio,computed,,,1,,
-"Form 13A: Minority Participation Rates","Total Institution Population",empl_inst_pop,number,"Enter the total number of full- and part-time employees reported to IPEDS for fall 2012.  Include those on soft money, but <em>do not include</em> work-study students.",,,,
-"Form 13A: Minority Participation Rates","Total Institution Minority Population",empl_tot_inst_min_pop,number,"Enter the total number of minority employees reported to IPEDS for fall 2012. ",,,,
+"Form 13A: Minority Participation Rates","Total Institution Population",empl_inst_pop,number,"Enter the total number of full- and part-time employees reported to IPEDS for fall 2011.  Include those on soft money, but <em>do not include</em> work-study students.",,,,
+"Form 13A: Minority Participation Rates","Total Institution Minority Population",empl_tot_inst_min_pop,number,"Enter the total number of minority employees reported to IPEDS for fall 2011. ",,,,
 "Form 13A: Minority Participation Rates","Institution Percent Minority",perc_inst_min_empl,computed,,,1,,
 "Form 13A: Minority Participation Rates","Ratio Institution : Service Area Minority Pop.",empl_inst_serv_ratio,computed,,,1,,
 "Form 13B: High School Graduates","Spring High School Grads",pub_hs_spr_hs_grad,number,"<p>
-Enter the total number of public spring 2012 high school (HS) graduates in your service area.  Include December 2011 graduates, but <em>do not include</em> home-schooled or GED students.
+Enter the total number of public spring 2011 high school (HS) graduates in your service area.  Include December 2010 graduates, but <em>do not include</em> home-schooled or GED students.
 </p>",,,,
-"Form 13B: High School Graduates","Total from Row 1 Who Enrolled for Next Fall Term",pub_hs_fall,number,"Enter the total high school graduates from row 1 who enrolled at your institution for the fall 2012 term.",,,,
-"Form 13B: High School Graduates","Spring High School Grads",priv_hs_spr_hs_grad,number,"Enter the total number of private spring 2012 high school (HS) graduates in your service area.  Include December 2011 graduates, but <em>do not include</em> home-schooled or GED students.",,,,
-"Form 13B: High School Graduates","Total from Row 1 Who Enrolled for Next Fall Term",priv_hs_fall,number,"Enter the total high school graduates from row 1 who enrolled at your institution for the fall 2012 term.",,,,
-"Form 13B: High School Graduates","Spring High School Grads",tot_hs_spr_hs_grad,number,"Enter the total number of public and private spring 2012 high school (HS) graduates in your service area. Include December 2011 graduates, but do not include home-schooled or GED students.",,,,
+"Form 13B: High School Graduates","Total from Row 1 Who Enrolled for Next Fall Term",pub_hs_fall,number,"Enter the total high school graduates from row 1 who enrolled at your institution for the fall 2011 term.",,,,
+"Form 13B: High School Graduates","Spring High School Grads",priv_hs_spr_hs_grad,number,"Enter the total number of private spring 2011 high school (HS) graduates in your service area.  Include December 2010 graduates, but <em>do not include</em> home-schooled or GED students.",,,,
+"Form 13B: High School Graduates","Total from Row 1 Who Enrolled for Next Fall Term",priv_hs_fall,number,"Enter the total high school graduates from row 1 who enrolled at your institution for the fall 2011 term.",,,,
+"Form 13B: High School Graduates","Spring High School Grads",tot_hs_spr_hs_grad,number,"Enter the total number of public and private spring 2011 high school (HS) graduates in your service area. Include December 2010 graduates, but do not include home-schooled or GED students9",,,,
 "Form 13B: High School Graduates","Percent Enrolling",pub_perc_enr,computed,,,1,,
-"Form 13B: High School Graduates","Total from Row 1 Who Enrolled for Next Fall Term",tot_tot_hs_fall,number,"Enter the total high school graduates from row 1 who enrolled at your institution for the fall 2012 term.",,,,
+"Form 13B: High School Graduates","Total from Row 1 Who Enrolled for Next Fall Term",tot_tot_hs_fall,number,"Enter the total high school graduates from row 1 who enrolled at your institution for the fall 2011 term.",,,,
 "Form 13B: High School Graduates","Percent Enrolling",priv_perc_enr,computed,,,1,,
 "Form 13B: High School Graduates","Percent Enrolling",tot_perc_enr,computed,,,1,,
 "Form 14A: Market Penetration: Students","Service Area Population",serv_pop,number,"Enter service area population from Form 1.",,,,
-"Form 14A: Market Penetration: Students","Unduplicated Headcount",undup_cre_head,number,"Enter unduplicated credit headcount in academic year (AY) 2012-2013.  Unduplicated credit headcount includes students enrolled in a course or activity having credit applicable toward a degree, diploma, certificate, or other formal award. This may be an estimate.",,,,
-"Form 14A: Market Penetration: Students","Unduplicated Headcount",undup_non_cre_head,number,"Enter unduplicated non-credit headcount in academic year (AY) 2012-2013.  Unduplicated non-credit headcount includes students enrolled in a course or activity having no credit applicable toward a degree, diploma, certificate, or other formal award. This may be an estimate.",,,,
+"Form 14A: Market Penetration: Students","Unduplicated Headcount",undup_cre_head,number,"Enter unduplicated credit headcount in academic year (AY) 2011-2012.  Unduplicated credit headcount includes students enrolled in a course or activity having credit applicable toward a degree, diploma, certificate, or other formal award. This may be an estimate.",,,,
+"Form 14A: Market Penetration: Students","Unduplicated Headcount",undup_non_cre_head,number,"Enter unduplicated non-credit headcount in academic year (AY) 2011-2012.  Unduplicated non-credit headcount includes students enrolled in a course or activity having no credit applicable toward a degree, diploma, certificate, or other formal award. This may be an estimate.",,,,
 "Form 14A: Market Penetration: Students","Student Market Penetration Rate",cre_stud_pen_rate,computed,,,1,,
 "Form 14A: Market Penetration: Students","Student Market Penetration Rate",ncre_stud_pen_rate,computed,,,1,,
 "Form 14B: Market Penetration: Community","Duplicated Headcount",cul_act_dupl_head,number,"<strong>Cultural Activities</strong> include exhibits (e.g. galleries) or attended performances (e.g. theater, dance, music).",,,,
@@ -429,36 +428,36 @@ Enter the total number of public spring 2012 high school (HS) graduates in your 
 "Form 14B: Market Penetration: Community","Duplicated Headcount",spo_dupl_head,number,"<strong>Sporting Events</strong> include intercollegiate sporting events held at the institution.",,,,
 "Form 14B: Market Penetration: Community","Community Participation Rate",pub_com_part,computed,,,1,,
 "Form 14B: Market Penetration: Community","Community Participation Rate",spo_com_part,computed,,,1,,
-"Form 15: FY Business and Industry Productivity","Total Instructional and Administrative Costs",tot_inst_adm_cst,number,"Enter the total B&I instructional and administrative costs for FY 2013.  Include salaries, benefits, supplies, travel, capital equipment, rents, and utilities.",,,,
-"Form 15: FY Business and Industry Productivity","Total Revenue",tot_rev,number,"Enter the total B&I FY 2013 revenue. Include grants.",,,,
+"Form 15: FY Business and Industry Productivity","Total Instructional and Administrative Costs",tot_inst_adm_cst,number,"Enter the total B&I instructional and administrative costs for FY 2012.  Include salaries, benefits, supplies, travel, capital equipment, rents, and utilities.",,,,
+"Form 15: FY Business and Industry Productivity","Total Revenue",tot_rev,number,"Enter the total B&I FY 2012 revenue. Include grants.",,,,
 "Form 15: FY Business and Industry Productivity","Net Revenue ($)",net_revenue_usd,computed,,,1,,
 "Form 15: FY Business and Industry Productivity","Net Revenue (%)",net_revenue_perc,computed,,,1,,
-"Form 15: FY Business and Industry Productivity","FY Duplicated Headcount",fy_dup_headc_bni,number,"Enter the duplicated B&I headcount for fiscal year (FY) 2013.",,,,
-"Form 15: FY Business and Industry Productivity","Total Companies Served",comp_serv,number,"Enter the total number of companies served in FY 2013.",,,,
-"Form 16A: Average Credit Section Size","Total Credit Course Sections",tot_cred_cou_sec,number,"Enter the total number of credit course sections with <em>six or more students</em> at the end of the fall 2012 term.  Combine concurrent sections that meet in the same time slot.  Credit courses are those eligible for Title IV federal financial aid.",,,,
+"Form 15: FY Business and Industry Productivity","FY Duplicated Headcount",fy_dup_headc_bni,number,"Enter the duplicated B&I headcount for fiscal year (FY) 2012.",,,,
+"Form 15: FY Business and Industry Productivity","Total Companies Served",comp_serv,number,"Enter the total number of companies served in FY 2012.",,,,
+"Form 16A: Average Credit Section Size","Total Credit Course Sections",tot_cred_cou_sec,number,"Enter the total number of credit course sections with <em>six or more students</em> at the end of the fall 2011 term.  Combine concurrent sections that meet in the same time slot.  Credit courses are those eligible for Title IV federal financial aid.",,,,
 "Form 16A: Average Credit Section Size","Total Credit Students",tot_cred_stud,number,"Enter the total number of students enrolled in <em>Total Credit Course Sections</em>.  (This will be a duplicated headcount.)",,,,
 "Form 16A: Average Credit Section Size","Average Credit Section Size",av_cred_sec_size,computed,,,1,,
 "Form 16B: Credit Course Stud/Fac Ratio",Total,tot_fte_stud,number,"<p>
-Enter the total FTE students at end of fall 2012 term.
+Enter the total FTE students at end of fall 2011 term.
 </p>
 <p>
 Total FTE Students should equal total student credit hours for which all students were enrolled  / 15. <em>Exclude high school students taking classes taught by high school faculty in their high schools for college credit</em>.
 </p>",,,,
 "Form 16C: Instructional Faculty Load","Total Faculty",ft_tot_fac,number,"<p>
-Enter the total number of full-time faculty at the end of the fall 2012 term.
+Enter the total number of full-time faculty at the end of the fall 2011 term.
 </p>
 <p>
 Include as Full-time Faculty all full-time employees who teach more than 50% of the time.
 </p>",,,,
-"Form 16C: Instructional Faculty Load","Total Student Credit Hours Taught",ft_tot_stud_crhrs_tght,number,"Enter the total number of student credit hours taught by full-time faculty at the end of the fall 2012 term.  <em>This should be the number of credit hours for a course times the number of students enrolled in the course (include students who received a grade of W).</em>  For example, a 3 credit hour course with 30 enrolled students would generate 90 student credit hours.
+"Form 16C: Instructional Faculty Load","Total Student Credit Hours Taught",ft_tot_stud_crhrs_tght,number,"Enter the total number of student credit hours taught by full-time faculty at the end of the fall 2011 term.  <em>This should be the number of credit hours for a course times the number of students enrolled in the course (include students who received a grade of W).</em>  For example, a 3 credit hour course with 30 enrolled students would generate 90 student credit hours.
 
 <em>Exclude high school students taking classes taught by high school faculty in their high schools for college credit.</em>",,,,
-"Form 16C: Instructional Faculty Load","Total Credit Sections Taught",ft_tot_cred_sec_tght,number,"Enter the total number of credit sections with six or more students taught by full-time faculty at the end of the fall 2012 term.",,,,
+"Form 16C: Instructional Faculty Load","Total Credit Sections Taught",ft_tot_cred_sec_tght,number,"Enter the total number of credit sections with six or more students taught by full-time faculty at the end of the fall 2011 term.",,,,
 "Form 16C: Instructional Faculty Load","Percent of Student Credit Hours Taught",ft_perc_crh,computed,,,1,,
 "Form 16C: Instructional Faculty Load","Percent of Sections Taught",ft_perc_sec,computed,,,1,,
-"Form 16C: Instructional Faculty Load","Total Faculty",pt_tot_fac,number,"Enter the total number of part-time faculty at the end of the fall 2012 term.",,,,
-"Form 16C: Instructional Faculty Load","Total Student Credit Hours Taught",pt_tot_stud_crhrs_tght,number,"Enter the total number of student credit hours taught by part-time faculty at the end of the fall 2012 term.  <em>This should be the number of credit hours for a course times the number of students enrolled in the course (include students who received a grade of W).</em>  For example, a 3 credit hour course with 30 enrolled students would generate 90 student credit hours. <em>Exclude high school students taking classes taught by high school faculty in their high schools for college credit</em>.",,,,
-"Form 16C: Instructional Faculty Load","Total Credit Sections Taught",pt_tot_cred_sec_tght,number,"Enter the total number of credit sections with six or more students taught by part-time faculty at the end of the fall 2012 term.",,,,
+"Form 16C: Instructional Faculty Load","Total Faculty",pt_tot_fac,number,"Enter the total number of part-time faculty at the end of the fall 2011 term.",,,,
+"Form 16C: Instructional Faculty Load","Total Student Credit Hours Taught",pt_tot_stud_crhrs_tght,number,"Enter the total number of student credit hours taught by part-time faculty at the end of the fall 2011 term.  <em>This should be the number of credit hours for a course times the number of students enrolled in the course (include students who received a grade of W).</em>  For example, a 3 credit hour course with 30 enrolled students would generate 90 student credit hours. <em>Exclude high school students taking classes taught by high school faculty in their high schools for college credit</em>.",,,,
+"Form 16C: Instructional Faculty Load","Total Credit Sections Taught",pt_tot_cred_sec_tght,number,"Enter the total number of credit sections with six or more students taught by part-time faculty at the end of the fall 2011 term.",,,,
 "Form 16C: Instructional Faculty Load","Percent of Student Credit Hours Taught",pt_perc_crh,computed,,,1,,
 "Form 16C: Instructional Faculty Load","Percent of Sections Taught",pt_perc_sec,computed,,,1,,
 "Form 16C: Instructional Faculty Load","Total Faculty",tot_fac,computed,,,1,,
@@ -466,7 +465,7 @@ Include as Full-time Faculty all full-time employees who teach more than 50% of 
 "Form 16C: Instructional Faculty Load","Total Credit Sections Taught",tot_cred_sec,computed,,,1,,
 "Form 17A: Dist Learning Sec and Cred Hrs","Total Taught",tot_crh_tght,number,"Enter the total number of <em>both non-distance and distance</em> student credit hours at your institution.",,,,
 "Form 17A: Dist Learning Sec and Cred Hrs","Total Distance Learning",tot_dis_lear_stud_hrs,number,"<p>
-Enter the total number of distance learning student credit hours at the end of the fall 2012 term (including credit hours from courses with a W grade).
+Enter the total number of distance learning student credit hours at the end of the fall 2011 term (including credit hours from courses with a W grade).
 </p>
 <p>
 Credit distance learning courses should include those that are web-based, computer mediated, and asynchronous in which the learner and learning resources are generally separated by time and/or space.  <em>Do not include</em> telecourse and self-paced courses and courses offered in other, non-computer modalities.
@@ -474,33 +473,33 @@ Credit distance learning courses should include those that are web-based, comput
 "Form 17A: Dist Learning Sec and Cred Hrs","Total Taught",tot_crs_tght,number,"Enter the total number of <em>both non-distance and distance</em> credit sections at your institution.",,,,
 "Form 17A: Dist Learning Sec and Cred Hrs","Distance Learning Proportion of Credit Hours",dist_prop_crh,computed,,,1,,
 "Form 17A: Dist Learning Sec and Cred Hrs","Total Distance Learning",tot_dis_lear_sec,number,"<p>
-Enter the total number of student distance learning sections with six or more students at the end of the fall 2012 term.
+Enter the total number of student distance learning sections with six or more students at the end of the fall 2011 term.
 </p>
 <p>
 Credit distance learning courses should include those that are Web-based, computer mediated, and asynchronous in which the learner and learning resources are generally separated by time and/or space.  <em>Do not include</em> telecourse and self-paced courses and courses offered in other, non-computer modalities.
 </p>",,,,
 "Form 17A: Dist Learning Sec and Cred Hrs","Distance Learning Proportion of Total Credit Sections",dist_prop_crs,computed,,,1,,
-"Form 17B: Distance Learning Grades",A,a,number,,,,,
-"Form 17B: Distance Learning Grades",B,b,number,,,,,
-"Form 17B: Distance Learning Grades",Total,total,computed,,,,,
-"Form 17B: Distance Learning Grades",C,c,number,,,,,
-"Form 17B: Distance Learning Grades",A%,a_perc,computed,,,,,
-"Form 17B: Distance Learning Grades",P,p,number,"Include all other passing grades here.",,,,
-"Form 17B: Distance Learning Grades",B%,b_perc,computed,,,,,
-"Form 17B: Distance Learning Grades",D,d,number,,,,,
-"Form 17B: Distance Learning Grades",C%,c_perc,computed,,,,,
-"Form 17B: Distance Learning Grades",F,f,number,"Include all other non-passing grades here.",,,,
-"Form 17B: Distance Learning Grades",P%,p_perc,computed,,,,,
-"Form 17B: Distance Learning Grades",W,w,number,,,,,
-"Form 17B: Distance Learning Grades",D%,d_perc,computed,,,,,
-"Form 17B: Distance Learning Grades",F%,f_perc,computed,,,,,
-"Form 17B: Distance Learning Grades",W%,w_perc,computed,,,,,
+"Form 17B: Distance Learning Grades","Number of Distance Learning A Grades",a,number,,,,,
+"Form 17B: Distance Learning Grades","Number of Distance Learning B Grades",b,number,,,,,
+"Form 17B: Distance Learning Grades","Total Number of Distance Learning Grades",total,number,,,,,
+"Form 17B: Distance Learning Grades","Number of Distance Learning C Grades",c,number,,,,,
+"Form 17B: Distance Learning Grades","Percentage of Distance Learning A Grades",a_perc,percent,,,,,
+"Form 17B: Distance Learning Grades","Number of Distance Learning Other Passing Grades",p,number,"Include all other passing grades here.",,,,
+"Form 17B: Distance Learning Grades","Percentage of Distance Learning B Grades",b_perc,percent,,,,,
+"Form 17B: Distance Learning Grades","Number of Distance Learning D Grades",d,number,,,,,
+"Form 17B: Distance Learning Grades","Percentage of Distance Learning C Grades",c_perc,percent,,,,,
+"Form 17B: Distance Learning Grades","Number of Distance Learning F Grades",f,number,"Include all other non-passing grades here.",,,,
+"Form 17B: Distance Learning Grades","Percentage of Distance Learning Other Passing Grades",p_perc,percent,,,,,
+"Form 17B: Distance Learning Grades","Number of Distance Learning Withdrawals",w,number,,,,,
+"Form 17B: Distance Learning Grades","Percentage of Distance Learning D Grades",d_perc,percent,,,,,
+"Form 17B: Distance Learning Grades","Percentage of Distance Learning F Grades",f_perc,percent,,,,,
+"Form 17B: Distance Learning Grades","Percentage of Distance Learning Withdrawals",w_perc,percent,,,,,
 "Form 17B: Distance Learning Grades","% Withdrawal",withdrawal,computed,,,1,,
 "Form 17B: Distance Learning Grades","% Completed",completed,computed,,,1,,
 "Form 17B: Distance Learning Grades","% Completer Success",completer_succ,computed,,,1,,
 "Form 17B: Distance Learning Grades","% Enrollee Success",enr_succ,computed,,,1,,
 "Form 17B: Distance Learning Grades","% A & B Grades",anb,computed,,,1,,
-"Form 18: Student Prof Student Serv Staff Ratio","Total Unduplicated",tot_undup_cr_hd,number,"Enter the total unduplicated credit headcount at the end of the fall 2012 term.
+"Form 18: Student Prof Student Serv Staff Ratio","Total Unduplicated",tot_undup_cr_hd,number,"Enter the total unduplicated credit headcount at the end of the fall 2011 term.
 <br><br>
 <em>Exclude high school students taking classes taught by high school faculty in their high schools for college credit.</em>",,,,
 "Form 18: Student Prof Student Serv Staff Ratio","Career Services",tot_fte_career_staff,number,,,,,
@@ -515,51 +514,51 @@ Credit distance learning courses should include those that are Web-based, comput
 "Form 18: Student Prof Student Serv Staff Ratio","Testing and Assessment Services",tot_fte_test_ass_staff,number,,,,,
 "Form 18: Student Prof Student Serv Staff Ratio","Student Activities",stud_act_staff_ratio,computed,,,1,,
 "Form 18: Student Prof Student Serv Staff Ratio","Testing and Assessment Services",test_ass_staff_ratio,computed,,,1,,
-"Form 19A: Retirements Departures","Total Occurrences",ret,number,"Enter the total number of retirements of full-time, regular (non-temporary) employees during AY 2012-2013.",,,,
-"Form 19A: Retirements Departures",Total,tot_ft_reg_empl,number,"Enter the total number of full-time, regular (non-temporary) employees on the final day of the academic year (AY) 2012-2013. <em>Do not include adjunct faculty and work-study students.</em>",,,,
-"Form 19A: Retirements Departures","Total Occurrences",dep,number,"Enter the total number of departures other than retirement of full-time, regular (non-temporary) employees during AY 2012-2013.",,,,
-"Form 19A: Retirements Departures","Occurrence Rate",dep_occ_rate,computed,,,1,,
-"Form 19A: Retirements Departures","Occurrence Rate",ret_occ_rate,computed,,,1,,
+"Form 19A: Retirements Departures","Total Occurences",ret,number,"Enter the total number of retirements of full-time, regular (non-temporary) employees during AY 2011-2012.",,,,
+"Form 19A: Retirements Departures",Total,tot_ft_reg_empl,number,"Enter the total number of full-time, regular (non-temporary) employees on the final day of the academic year (AY) 2011-2012. <em>Do not include adjunct faculty and work-study students.</em>",,,,
+"Form 19A: Retirements Departures","Total Occurences",dep,number,"Enter the total number of departures other than retirement of full-time, regular (non-temporary) employees during AY 2011-2012.",,,,
+"Form 19A: Retirements Departures","Occurence Rate",dep_occ_rate,computed,,,1,,
+"Form 19A: Retirements Departures","Occurence Rate",ret_occ_rate,computed,,,1,,
 "Form 20A: Cost/Credit Hour per FTE Student","Total Direct Credit Instructional Expenditures",tot_dir_exp,number,"<p>
-Enter the total direct credit instructional expenditures for fiscal year (FY) 2013.
+Enter the total direct credit instructional expenditures for fiscal year (FY) 2012.
 </p>
 <p>
 Direct credit instructional expenditures include salaries, benefits, supplies, travel, and equipment for all full- and part-time faculty and other instructional administration and support personnel, including but not limited to librarians, lab assistants, and tutors.
 </p>",,,,
-"Form 20A: Cost/Credit Hour per FTE Student","Total FY Credit Hours",tot_fy_stud_crh,number,"Enter the total semester student credit hours for FY 2013.  For schools on a quarter calendar, Column 2 should equal .667 * (quarter hours)  to convert to semester-hour equivalent.",,,,
+"Form 20A: Cost/Credit Hour per FTE Student","Total FY Credit Hours",tot_fy_stud_crh,number,"Enter the total semester student credit hours for FY 2012.  For schools on a quarter calendar, Column 2 should equal .667 * (quarter hours)  to convert to semester-hour equivalent.",,,,
 "Form 20A: Cost/Credit Hour per FTE Student","Cost Per Credit Hour",cst_crh,computed,,,1,,
 "Form 20A: Cost/Credit Hour per FTE Student","Total FY FTE Students",tot_fte_stud,computed,,,1,,
 "Form 20A: Cost/Credit Hour per FTE Student","Cost Per FTE Student",cst_fte_stud,computed,,,1,,
-"Form 19B: Grievances and Harassment Actions",Total,tot_empl,number,"Enter the total number of full-time and part-time faculty and full-time and part-time staff employed by the institution at the end of academic year (AY) 2012-2013.  <em>Do not include work-study students.</em>",,,,
+"Form 19B: Grievances and Harassment Actions",Total,tot_empl,number,"Enter the total number of full-time and part-time faculty and full-time and part-time staff employed by the institution at the end of academic year (AY) 2011-2012.  <em>Do not include work-study students.</em>",,,,
 "Form 19B: Grievances and Harassment Actions","Total Occurences",griev,number,"<p>
-Enter the total number of grievances actions in AY 2012-2013.
+Enter the total number of grievances actions in AY 2011-2012.
 </p>
 <p>
 Grievance actions are those that are filed in accordance with institutional policies and include employee-employee and student-employee actions.  These need not have resulted in a filing to the EEOC.
 </p>",,,,
 "Form 19B: Grievances and Harassment Actions","Occurence Rate",griev_occ_rate,computed,,,1,,
 "Form 19B: Grievances and Harassment Actions","Total Occurences",harass,number,"<p>
-Enter the total number of harassment actions in AY 2012-2013.
+Enter the total number of harassment actions in AY 2011-2012.
 </p>
 <p>
 Harassment actions are those that are filed in accordance with institutional policies and include employee-employee and student-employee actions.  These need not have resulted in a filing to the EEOC.
 </p>",,,,
 "Form 19B: Grievances and Harassment Actions","Occurence Rate",harass_occ_rate,computed,,,1,,
 "Form 20B: Development/Training Expenditures per FTE Employee","Total Development/Training Expenditures",tot_dev_train_exp,number,"<p>
-Enter the total centrally budgeted faculty/staff development/training expenditures for fiscal year (FY) 2013.
+Enter the total centrally budgeted faculty/staff development/training expenditures for fiscal year (FY) 2012.
 </p>
 <p>
 <em>Do not include</em> tuition reimbursement benefits in total expenditures.
 </p>",,,,
 "Form 20B: Development/Training Expenditures per FTE Employee","Total FTE Credit Faculty",tot_fte_cred_fac,number,"<p>
-Enter the total FTE faculty at end of FY 2013.
+Enter the total FTE faculty at end of FY 2012.
 </p>
 <p>
-Total FTE faculty should equal total instructor credit hours taught by all faculty during FY 2013 / 30 for institutions on a semester calendar.  Institutions on a quarter calendar should divide by 45.  For example, one faculty member teaching 4 classes that are each 3 credit hours would be 0.4 FTE (12 credit hours / 30).
+Total FTE faculty should equal total instructor credit hours taught by all faculty during FY 2012 / 30 for institutions on a semester calendar.  Institutions on a quarter calendar should divide by 45.  For example, one faculty member teaching 4 classes that are each 3 credit hours would be 0.4 FTE (12 credit hours / 30).
 </p>",,,,
 "Form 20B: Development/Training Expenditures per FTE Employee","Expenditures per FTE Employee",exp_fte_empl,computed,,,1,,
 "Form 20B: Development/Training Expenditures per FTE Employee","Total FTE Staff",tot_fte_staff,number,"<p>
-Enter the total FTE staff at end of FY 2013.
+Enter the total FTE staff at end of FY 2012.
 </p>
 <p>
 Total FTE staff (non-faculty) should = (total number of full-time staff) + (total part-time staff hours / 2080).  Schools with work weeks less than 40 hours should adjust yearly hour figure for part-time staff.
