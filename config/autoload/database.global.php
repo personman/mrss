@@ -4,25 +4,22 @@ require('db.php');
 
 return array(
     'service_manager' => array(
-        'factories' => array(
-            'Zend\Db\Adapter\Adapter' => function ($sm) use ($dbParams) {
-                return new Zend\Db\Adapter\Adapter(array(
-                    'driver'    => 'pdo',
-                    'dsn'       => 'mysql:dbname='.$dbParams['database'].';host='.$dbParams['hostname'],
-                    'database'  => $dbParams['database'],
-                    'username'  => $dbParams['username'],
-                    'password'  => $dbParams['password'],
-                    'hostname'  => $dbParams['hostname'],
-                ));
-            },
+        'abstract_factories' => array(
+            'Zend\Db\Adapter\AdapterAbstractServiceFactory',
         ),
     ),
-
-    // Used by Phinx:
-    'db' => array (
-        'dsn' => 'mysql:dbname='.$dbParams['database'].';host='.$dbParams['hostname'],
-        'username' => $dbParams['username'],
-        'password' => $dbParams['password'],
-        'port' => 3306,
-    ),
+    'db' => array(
+        'adapters' => array(
+            'db' => array (
+                'driver' => 'pdo',
+                'dsn' => 'mysql:dbname='.$dbParams['database'].';host='.$dbParams['hostname'],
+                'username' => $dbParams['username'],
+                'password' => $dbParams['password'],
+                'port' => 3306,
+            ),
+            'nccbp-db' => array(
+                'driver' => 'pdo',
+            ),
+        )
+    )
 );
