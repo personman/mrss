@@ -40,13 +40,9 @@ return array(
 
                array(
                    'title' => 'Race/Ethnicity ',
-                   'description' => '
-
-Use Fall 2012 data.
-
-Race/ethnicity percentages should be IPEDS Fall Enrollment figures and total 100%. Please refer to new IPEDS race/ethnicity definitions.
-
-',
+                   'description' => 'Use Fall 2012 data.<br>
+<br>
+Race/ethnicity percentages should be IPEDS Fall Enrollment figures and total 100%. Please refer to new IPEDS race/ethnicity definitions.',
                    'benchmarks' => array(
                        'non_res_alien_2012',
                        'hisp_anyrace_2012',
@@ -71,14 +67,9 @@ Race/ethnicity percentages should be IPEDS Fall Enrollment figures and total 100
 
                array(
                    'title' => 'Operating Revenue Sources',
-                   'description' => '
-
-Use fiscal year 2013 data.
-
-
-May not add up to 100%.
-
-',
+                   'description' => 'Use fiscal year 2013 data.<br>
+<br>
+May not add up to 100%.',
                    'benchmarks' => array(
                        'loc_sour',
                        'state_sour',
@@ -232,15 +223,9 @@ May not add up to 100%.
 
                 array(
                     'title' => 'Did you achieve your educational objective?',
-                    'description' => '
-
-Enter the percent of graduates/program completers and leavers/non-completers that indicated they had achieved their educational objective either partially or fully.
-
-
-
-Data source will most likely be an exit survey or a follow-up survey administered soon after students leave the institution.
-
-',
+                    'description' => 'Enter the percent of graduates/program completers and leavers/non-completers that indicated they had achieved their educational objective either partially or fully.<br>
+<br>
+Data source will most likely be an exit survey or a follow-up survey administered soon after students leave the institution.',
                     'benchmarks' => array(
                         'grads_comp',
                         'leave_noncomp',
@@ -392,16 +377,10 @@ Data source will most likely be an exit survey or a follow-up survey administere
 
                 array(
                     'title' => 'Fall Grades',
-                    'description' => '
-
-Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2012 term.
-
-
-
-Include all other passing grades with P. Include all other non-passing grades with F. Include +\'s and -\'s in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades). Do not include incompletes and audits.
-
-
-
+                    'description' => 'Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2012 term.<br>
+<br>
+Include all other passing grades with P. Include all other non-passing grades with F. Include +\'s and -\'s in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades). Do not include incompletes and audits.<br>
+<br>
 Include grades in credit distance learning classes and grades in credit developmental/remedial courses.
 
 ',
@@ -635,15 +614,9 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Fall Grades',
-                    'description' => '
-
-Enter the total number of A, B, C, P, D, F, and W grades in credit distance learning courses at end of the fall 2012 term. If there were no students awarded a grade, enter zero (0).
-
-
-
-Include all other passing grades with P. Include all other non-passing grades with F. Include +\'s and -\'s in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades). Do not include incompletes and audits.
-
-',
+                    'description' => 'Enter the total number of A, B, C, P, D, F, and W grades in credit distance learning courses at end of the fall 2012 term. If there were no students awarded a grade, enter zero (0).<br>
+<br>
+Include all other passing grades with P. Include all other non-passing grades with F. Include +\'s and -\'s in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades). Do not include incompletes and audits.',
                     'benchmarks' => array(
                         'a',
                         'b',
@@ -667,23 +640,13 @@ Include all other passing grades with P. Include all other non-passing grades wi
 
                 array(
                     'title' => 'Total FTE Professional Services Staff',
-                    'description' => '
-
-Enter the total FTE professional student services staff at the end of the FY 2012-2013.
-
-
-
-Professional Student Services Staff includes professional employees who provide non-instructional support services to students. Do not include clerical staff or athletic coaches, vice-presidents, deans, or their immediate staff, but do include directors in each area.
-
-
-
-Functional areas need not all be within a student services division.
-
-
-
-Figures should = (total number of full-time staff) + (total part-time, non-clerical staff hours / 2080) for each student services area. Schools with work weeks less than 40 hours should adjust yearly hour figure for part-time staff.
-
-',
+                    'description' => 'Enter the total FTE professional student services staff at the end of the FY 2012-2013.<br>
+<br>
+Professional Student Services Staff includes professional employees who provide non-instructional support services to students. Do not include clerical staff or athletic coaches, vice-presidents, deans, or their immediate staff, but do include directors in each area.<br>
+<br>
+Functional areas need not all be within a student services division.<br>
+<br>
+Figures should = (total number of full-time staff) + (total part-time, non-clerical staff hours / 2080) for each student services area. Schools with work weeks less than 40 hours should adjust yearly hour figure for part-time staff.',
                     'benchmarks' => array(
                         'tot_fte_career_staff',
                         'tot_fte_counc_adv_staff',
