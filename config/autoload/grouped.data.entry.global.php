@@ -29,7 +29,7 @@ return array(
                        'pell_grant_rec',
                        'non_cr_hdct',
                        'fem_cred_stud',
-                       '1st_gen_stud',
+                       'first_gen_stud',
                        'trans_cred',
                        't_c_crh',
                        'dev_crh',
