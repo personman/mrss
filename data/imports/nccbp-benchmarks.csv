@@ -48,17 +48,17 @@ Use fiscal year 2012 data.
 <p>
 <strong>Unrestricted Operating Revenue</strong> is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""
 </p>",,,,
-"Form 2: Student Completion and Transfer","Unduplicated headcount",pt_fminus7_headc,number,"<p>
-Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2006 IPEDS GRS cohort.
-</p>
-<p>
-<em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
-</p>",,,,
 "Form 2: Student Completion and Transfer","Number Completed Degree or Certificate",pt_yminus7_degr,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2012. 
 </p>
 <p>
 Students in the fall 2006 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
+</p>",,,,
+"Form 2: Student Completion and Transfer","Unduplicated headcount",pt_fminus7_headc,number,"<p>
+Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2006 IPEDS GRS cohort.
+</p>
+<p>
+<em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
 </p>",,,,
 "Form 2: Student Completion and Transfer","Number Transfered",pt_yminus7_transf,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2012.
@@ -376,6 +376,7 @@ If your institution records + or - grades, include them in the letter grades wit
 "Form 11: Retention and Success Core Academic Skills","Retention Rate",sp_retention_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Enrollee Success Rate",sp_enr_suc_rate,computed,,,1,,
 "Form 11: Retention and Success Core Academic Skills","Completer Success Rate",sp_comp_suc_rate,computed,,,1,,
+"Form 11: Retention and Success Core Academic Skills","Total ABC and P Grades",al_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) at the end of the fall 2012 term.",,,,
 "Form 12: Institution-wide Credit Grades","% Withdrawal",withdrawal,computed,,,1,,
 "Form 12: Institution-wide Credit Grades","% Completed",completed,computed,,,1,,
 "Form 12: Institution-wide Credit Grades","% Completer Success",compl_succ,computed,,,1,,
@@ -443,6 +444,9 @@ Enter the total FTE students at end of fall 2011 term.
 <p>
 Total FTE Students should equal total student credit hours for which all students were enrolled  / 15. <em>Exclude high school students taking classes taught by high school faculty in their high schools for college credit</em>.
 </p>",,,,
+"Form 16B: Credit Course Stud/Fac Ratio",Total,tot_fte_fac,number,"Enter the total FTE faculty at end of fall 2012 term.
+
+Total FTE Faculty will likely equal total instructor credit hours taught by all faculty divided by 15, for institutions who calculate faculty load on a credit hour basis. For institutions that calculate faculty load on some basis other than credit hours (e.g., contact hours), the total FTE Faculty should be based on institutional convention. For example, a faculty member teaching 5 courses that each award 3 credit hours would have 15 instructor credit hours or 1 FTE (15 instructor credit hours / 15).",,,,
 "Form 16C: Instructional Faculty Load","Total Faculty",ft_tot_fac,number,"<p>
 Enter the total number of full-time faculty at the end of the fall 2011 term.
 </p>

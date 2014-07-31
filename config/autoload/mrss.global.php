@@ -9,6 +9,7 @@ return array(
         'wtp.dan.com' => 3,
         'beta.maximizingresources.org' => 2,
         'beta.workforceproject.org' => 3,
+        'beta.nccbp.org' => 1,
         'maximizingresources.org' => 2,
         'www.maximizingresources.org' => 2,
         'localhost' => 2,

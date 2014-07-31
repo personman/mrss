@@ -1,0 +1,27 @@
+<h2>Paste in JSON, Get Back PHP</h2>
+<pre id="result"><?= $result ?></pre>
+<?= $this->ztbForm($this->form->prepare()) ?>
+
+<script>
+    function selectText(element) {
+        var doc = document
+            , text = doc.getElementById(element)
+            , range, selection
+            ;
+        if (doc.body.createTextRange) { //ms
+            range = doc.body.createTextRange();
+            range.moveToElementText(text);
+            range.select();
+        } else if (window.getSelection) { //all others
+            selection = window.getSelection();
+            range = doc.createRange();
+            range.selectNodeContents(text);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+    }
+
+    $(function() {
+        selectText('result')
+    })
+</script>

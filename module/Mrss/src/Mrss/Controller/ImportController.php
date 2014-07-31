@@ -212,4 +212,57 @@ class ImportController extends AbstractActionController
             ->getConfiguration()
             ->setSQLLogger(null);
     }
+
+    public function convertjsonAction()
+    {
+
+        $result = null;
+
+        $form = new \Zend\Form\Form();
+        $form->add(
+            array(
+                'type' => 'textarea',
+                'name' => 'json',
+                'attributes' => array(
+                    'rows' => 20
+                )
+            )
+        );
+
+        $form->add(
+            array(
+                'type' => 'submit',
+                'attributes' => array(
+                    'value' => 'Convert',
+                ),
+                'name' => 'convert'
+            )
+        );
+
+        $form->setAttribute('method', 'post');
+
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $data = $data['json'];
+                $result = json_decode($data, true);
+                $result = var_export($result, true);
+
+                $result = preg_replace('/(\d+) \=\> /', '', $result);
+                $result = preg_replace('/array \(/', 'array(', $result);
+                $result = preg_replace('/\>(\s+)array/s', '> array', $result);
+
+            }
+        }
+
+
+        return array(
+            'result' => $result,
+            'form' => $form
+        );
+    }
 }

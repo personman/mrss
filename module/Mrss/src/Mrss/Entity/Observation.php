@@ -1320,6 +1320,9 @@ class Observation
      */
     protected $ec_ii_abcp;
 
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $al_abcp;
+
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -2033,6 +2036,9 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $tot_fy_stud_crh;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $tot_fte_fac;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

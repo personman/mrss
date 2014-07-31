@@ -1,0 +1,50 @@
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=2') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js?v=2',
+    'text/javascript'
+); ?>
+
+<?= $this->systemAdmin() ?>
+
+<h3>
+    <?= $benchmarkGroup->getName() ?>
+</h3>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+<?php foreach ($groupedConfig as $subGroup): ?>
+<div class="demo-group">
+    <h3 class="heading"><?= $subGroup['title'] ?></h3>
+    <p class="heading-notes"><?= $subGroup['description'] ?></p>
+
+    <?php if (empty($subGroup['benchmarks'])): ?>
+        <? var_dump($subGroup) ?>
+    <?php endif ?>
+    <?php foreach ($subGroup['benchmarks'] as $dbColumn): ?>
+        <?= $this->ztbFormElement($form->get($dbColumn)) ?>
+    <?php endforeach ?>
+
+</div>
+<?php endforeach ?>
+
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+    <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-buttons[submit]">
+            <div class="controls" id="controls-buttons[submit]">
+                <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+            </div>
+        </div>
+    </fieldset>
+<?php endif ?>
+
+<?= $this->form()->closeTag() ?>
