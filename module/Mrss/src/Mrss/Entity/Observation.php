@@ -562,6 +562,9 @@ class Observation
      */
     protected $fem_cred_stud;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $first_gen_stud;
+
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
@@ -1252,6 +1255,9 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $tot_resp_empl;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $empl_satis_prep;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

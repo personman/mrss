@@ -11,7 +11,7 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 1: Subscriber Information","Transfer Credit Hours",trans_cred,percent,"<strong>Transfer Credit Hours</strong> should be the percent of IPEDS Fall Enrollment credit hours that includes full- and part-time students enrolled in courses that do not award career or technical certification, but do award credit that is transferable to other postsecondary institutions. (For example, English, History, and Math would be considered transfer credit hours.)",,,,
 "Form 1: Subscriber Information","American Indian or Alaskan Native",ind_alaska_2012,percent,,,,,
 "Form 1: Subscriber Information","Nonresident Alien",non_res_alien,percent,,,,,
-"Form 1: Subscriber Information","Technical/Career Credit Hours",t_c_crh,percent,"<strong>Technical/Career Credit Hours</strong> should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in programs that award career or technical certification that is not transferable.  (For example, automotive technology credit hours, interior design credit hours, and practical nursing credit hours would be considered technical/career credit hours.) ",,,,
+"Form 1: Subscriber Information","Technical/Career Credit Hours",t_c_crh,percent,"<strong>Technical/Career Credit Hours</strong> should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in programs that award career or technical certification that is not transferable.  (For example, automotive technology credit hours, interior design credit hours, and practical nursing credit hours would be considered technical/career credit hours.)",,,,
 "Form 1: Subscriber Information",Asian,asian_2012,percent,,,,,
 "Form 1: Subscriber Information","Black, Non-Hispanic",blk_n_hisp,percent,,,,,
 "Form 1: Subscriber Information","Developmental Credit Hours",dev_crh,percent,"<strong>Developmental Credit Hours</strong> should be the percent of IPEDS Fall Enrollment that includes credit hours by full- and part-time students enrolled in developmental/remedial courses as defined by the institution.",,,,
@@ -48,6 +48,7 @@ Use fiscal year 2012 data.
 <p>
 <strong>Unrestricted Operating Revenue</strong> is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""
 </p>",,,,
+"Form 1: Subscriber Information","First-generation Student",first_gen_stud,percent,"<strong>First-generation Student</strong> should be the percent of fall credit students that represent the first generation of their families to attend a higher education institution.",,,,
 "Form 2: Student Completion and Transfer","Number Completed Degree or Certificate",pt_yminus7_degr,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2012. 
 </p>
@@ -296,8 +297,7 @@ Enter the total number of students from row 1 (Total A, B, C and P Grades) who e
 </p>
 <p>
 Related math courses will most likely be college level math courses.
-</p>
-",,,,
+</p>",,,,
 "Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 1 Who Enrolled in Related College-level Courses",w_enr_coll_cour,number,"<p>
 Enter the total number of students from row 1 (Total A, B, C and P Grades) who enrolled subsequently in related college-level courses.
 </p>
@@ -333,6 +333,12 @@ Enter total from Row 1 (Total Completers for Whom Data Are Available) who are pu
 </p>",,,,
 "Form 10: Career Program Completers","Total from Row 1 | Employed in Related Field in %",no_tot_emp_rel_perc,computed,,,1,,
 "Form 10: Career Program Completers","Total from Row 1 | Pursuing Education in %",no_tot_purs_edu_perc,computed,,,1,,
+"Form 10: Career Program Completers","Number of Employers Satisfied with Completers' Overall Preparation",empl_satis_prep,number,"<p>
+Enter the total number of employers from row 1 (Total Responding Employers) who indicated satisfaction with completers' overall preparation.
+</p>
+<p>
+<em>Satisfied with Overall Preparation</em> reflects percentages of employers that indicated positive, as opposed to neutral or negative, responses.  For example, an institution using a ""Not At All Satisfied"", ""Not Very Satisfied"", ""Neutral"", ""Somewhat Satisfied"", or ""Very Satisfied"" scale should report the percent of employers that selected ""Somewhat Satisfied"" or ""Very Satisfied"".
+</p>",,,,
 "Form 11: Retention and Success Core Academic Skills","Total ABCPDF and W Grades",ec_i_abcpdfw,number,"<p>
 Enter the total number of A, B, C, P, D, F and W grades (and their institutional equivalents) in each course at the end of the fall 2011 term for all students.  Do not include incompletes and audits.
 </p>
@@ -399,13 +405,13 @@ If your institution records + or - grades, include them in the letter grades wit
 "Form 12: Institution-wide Credit Grades",W%,w_perc,computed,,,1,,
 "Form 13A: Minority Participation Rates","Total Institution Population",stud_inst_pop,number,"This should equal the field ""IPEDS Enrollment"" on Form 1.",,,,
 "Form 13A: Minority Participation Rates","Minority Population in %",serv_ar_min,percent,"Enter your service area <em>percent</em> minority population.  The number should reflect your state's definition of service area, most recent census estimates, and the percent of the service area population that is not ""white, non-Hispanic"".",,,,
-"Form 13A: Minority Participation Rates","Total Institution Minority Population",stud_tot_inst_min_pop,number,"Enter the total number of minority students reported to IPEDS for fall 2011. ",,,,
+"Form 13A: Minority Participation Rates","Total Institution Minority Population",stud_tot_inst_min_pop,number,"Enter the total number of minority students reported to IPEDS for fall 2011.",,,,
 "Form 13A: Minority Participation Rates","Institution Percent Minority",perc_inst_min,computed,,,1,,
-"Form 13A: Minority Participation Rates","Ratio Institution : Service Area Minority Pop.",stud_inst_serv_ratio,computed,,,1,,
+"Form 13A: Minority Participation Rates","Ratio Institution  Service Area Minority Pop.",stud_inst_serv_ratio,computed,,,1,,
 "Form 13A: Minority Participation Rates","Total Institution Population",empl_inst_pop,number,"Enter the total number of full- and part-time employees reported to IPEDS for fall 2011.  Include those on soft money, but <em>do not include</em> work-study students.",,,,
-"Form 13A: Minority Participation Rates","Total Institution Minority Population",empl_tot_inst_min_pop,number,"Enter the total number of minority employees reported to IPEDS for fall 2011. ",,,,
+"Form 13A: Minority Participation Rates","Total Institution Minority Population",empl_tot_inst_min_pop,number,"Enter the total number of minority employees reported to IPEDS for fall 2011.",,,,
 "Form 13A: Minority Participation Rates","Institution Percent Minority",perc_inst_min_empl,computed,,,1,,
-"Form 13A: Minority Participation Rates","Ratio Institution : Service Area Minority Pop.",empl_inst_serv_ratio,computed,,,1,,
+"Form 13A: Minority Participation Rates","Ratio Institution  Service Area Minority Pop.",empl_inst_serv_ratio,computed,,,1,,
 "Form 13B: High School Graduates","Spring High School Grads",pub_hs_spr_hs_grad,number,"<p>
 Enter the total number of public spring 2011 high school (HS) graduates in your service area.  Include December 2010 graduates, but <em>do not include</em> home-schooled or GED students.
 </p>",,,,

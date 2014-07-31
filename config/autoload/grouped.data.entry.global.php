@@ -29,7 +29,7 @@ return array(
                        'pell_grant_rec',
                        'non_cr_hdct',
                        'fem_cred_stud',
-                       // @todo '1st_gen_stud',
+                       '1st_gen_stud',
                        'trans_cred',
                        't_c_crh',
                        'dev_crh',
@@ -342,7 +342,7 @@ Data source will most likely be an exit survey or a follow-up survey administere
                     'description' => '',
                     'benchmarks' => array(
                         'tot_resp_empl',
-                        // @todo: 'empl_satis_prep',
+                        'empl_satis_prep',
                     ),
                 ),
             ),
