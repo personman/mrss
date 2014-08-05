@@ -399,6 +399,17 @@ class ReportController extends AbstractActionController
      */
     public function checkReportsAreOpen()
     {
+        // Reports are always open for JCCC
+        $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
+        if ($auth->hasIdentity()) {
+            $user = $auth->getIdentity();
+
+            if ($user->getCollege()->getId() == 101) {
+                return null;
+            }
+        }
+
+        // Check the current study's report setting
         if (!$this->currentStudy()->getReportsOpen()) {
             $this->flashMessenger()->addErrorMessage(
                 'Reports are not currently open. Check back later.'
