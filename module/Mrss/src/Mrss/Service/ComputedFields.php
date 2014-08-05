@@ -35,6 +35,10 @@ class ComputedFields
         $equation = $this->prepareEquation($equationWithVariables, $observation);
 
         if (empty($equation) && !$this->debug) {
+            $observation->set($benchmarkColumn, null);
+            $this->getObservationModel()->save($observation);
+            $this->getObservationModel()->getEntityManager()->flush();
+
             return false;
         }
 
@@ -43,8 +47,7 @@ class ComputedFields
         $result = $equation->evaluate();
 
         // If the result is meant to be a percentage, multiply by 100
-        if ($benchmark->getInputType() == 'percent' ||
-            $benchmark->getInputType() == 'wholepercent') {
+        if ($benchmark->isPercent()) {
             $result = $result * 100;
         }
 
