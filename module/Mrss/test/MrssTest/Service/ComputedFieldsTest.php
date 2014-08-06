@@ -49,7 +49,8 @@ class ComputedFieldsTest extends TestCase
             ->method('getEquation')
             ->will($this->returnValue(''));
 
-        $this->assertFalse(
+        $this->assertEquals(
+            null,
             $this->computedFields->calculate(
                 $this->benchmarkMock,
                 $this->observationMock
@@ -60,7 +61,6 @@ class ComputedFieldsTest extends TestCase
     /**
      * If the equation can't be parsed, throw an exception
      *
-     * @expectedException \exprlib\exceptions\UnknownTokenException
      */
     public function testCalculateInvalidEquation()
     {
@@ -68,10 +68,12 @@ class ComputedFieldsTest extends TestCase
             ->method('getEquation')
             ->will($this->returnValue('not an equation'));
 
-        $this->computedFields->calculate(
+        $result = $this->computedFields->calculate(
             $this->benchmarkMock,
             $this->observationMock
         );
+
+        $this->assertEquals(null, $result);
     }
 
     public function testCalculateValidEquation()
@@ -100,7 +102,7 @@ class ComputedFieldsTest extends TestCase
             $this->observationMock
         );
 
-        $this->assertTrue($result);
+        $this->assertEquals(400, $result);
     }
 
     public function testCalculateEquationWithVariables()
@@ -130,7 +132,7 @@ class ComputedFieldsTest extends TestCase
             $this->observationMock
         );
 
-        $this->assertTrue($result);
+        $this->assertEquals(10, $result);
     }
 
     public function testCalculateUnknownVariable()
@@ -152,7 +154,7 @@ class ComputedFieldsTest extends TestCase
             $this->observationMock
         );
 
-        $this->assertFalse($result);
+        $this->assertEquals(null, $result);
     }
 
     public function testCalculateAllForObservation()

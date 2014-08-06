@@ -28,27 +28,28 @@ class ComputedFields
         $benchmarkColumn = $benchmark->getDbColumn();
 
         if (empty($equationWithVariables)) {
-            return false;
-        }
-
-        // Populate variables
-        $equation = $this->prepareEquation($equationWithVariables, $observation);
-
-        if (empty($equation) && !$this->debug) {
             $result = null;
         } else {
-            // the Calculation
-            try {
-                $result = $equation->evaluate();
-            } catch (\Exception $exception) {
-                // An exception was thrown, possibly division by zero
-                // Save the value as null
+            // Populate variables
+            $equation = $this->prepareEquation($equationWithVariables, $observation);
+
+            if (empty($equation)) {
                 $result = null;
+            } else {
+                // the Calculation
+                try {
+                    $result = $equation->evaluate();
+                } catch (\Exception $exception) {
+                    // An exception was thrown, possibly division by zero
+                    // Save the value as null
+                    $result = null;
+                }
             }
         }
 
+
         // If the result is meant to be a percentage, multiply by 100
-        if ($benchmark->isPercent()) {
+        if (!is_null($result) && $benchmark->isPercent()) {
             $result = $result * 100;
         }
 
@@ -57,7 +58,7 @@ class ComputedFields
         $this->getObservationModel()->save($observation);
         $this->getObservationModel()->getEntityManager()->flush();
 
-        return true;
+        return $result;
     }
 
     public function getVariables($equation)
@@ -120,7 +121,12 @@ class ComputedFields
             pr($observation->getId());
         }
 
-        $preparedEquation = $parsedEquation->setVars($vars);
+        if (!empty($errors)) {
+            $preparedEquation = '';
+        } else {
+            $preparedEquation = $parsedEquation->setVars($vars);
+        }
+
 
         if (empty($preparedEquation)) {
             if ($this->debug) {
