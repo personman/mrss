@@ -594,6 +594,9 @@ class Report
                     $benchmark->getDbColumn()
                 );
 
+                $benchmarkData['reported_decimal_places'] = $this
+                    ->getDecimalPlaces($benchmark->getDbColumn());
+
                 $percentileRank = $this->getPercentileRankModel()
                     ->findOneByCollegeBenchmarkAndYear(
                         $observation->getCollege(),
@@ -680,7 +683,10 @@ class Report
             foreach ($benchmarkGroup['benchmarks'] as $benchmark) {
                 if (null !== $benchmark['reported']) {
                     $reported = $benchmark['prefix'] .
-                        number_format($benchmark['reported'], 0) .
+                        number_format(
+                            $benchmark['reported'],
+                            $benchmark['reported_decimal_places']
+                        ) .
                         $benchmark['suffix'];
                 } else {
                     $reported = null;
@@ -728,6 +734,29 @@ class Report
 
         // redirect output to client browser
         $this->downloadExcel($excel, $filename);
+    }
+
+    /**
+     * Most reported values should be rounded to 0 decimal places.
+     * These are the exceptions
+     *
+     * @param $dbColumn
+     * @return int
+     */
+    public function getDecimalPlaces($dbColumn)
+    {
+        $map = array(
+            'enrollment_information_contact_hours_per_student' => 1,
+            'enrollment_information_market_penetration' => 1
+        );
+
+        if (isset($map[$dbColumn])) {
+            $decimalPlaces = $map[$dbColumn];
+        } else {
+            $decimalPlaces = 0;
+        }
+
+        return $decimalPlaces;
     }
 
     public function downloadExcel($excel, $filename)

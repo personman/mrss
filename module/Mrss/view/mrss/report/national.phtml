@@ -59,7 +59,7 @@ $this->headScript()->appendFile(
                         <tr class="<?= $rowClass ?>">
                             <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
                             <?php if ($benchmark['reported'] !== null): ?>
-                            <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], 0) . $benchmark['suffix'] ?></td>
+                            <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
                             <td class="percentileColor">
                                 <?php if ($benchmark['percentile_rank'] == '-'): ?>
                                     <?= $benchmark['percentile_rank'] ?>
