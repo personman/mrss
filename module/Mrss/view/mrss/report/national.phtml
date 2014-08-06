@@ -60,7 +60,13 @@ $this->headScript()->appendFile(
                             <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
                             <?php if ($benchmark['reported'] !== null): ?>
                             <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], 0) . $benchmark['suffix'] ?></td>
-                            <td class="percentileColor"><?= round($benchmark['percentile_rank']) ?></td>
+                            <td class="percentileColor">
+                                <?php if ($benchmark['percentile_rank'] == '-'): ?>
+                                    <?= $benchmark['percentile_rank'] ?>
+                                <?php else: ?>
+                                    <?= round($benchmark['percentile_rank']) ?>
+                                <?php endif ?>
+                            </td>
                             <?php else: ?>
                                 <td></td>
                                 <td></td>
@@ -88,4 +94,8 @@ $this->headScript()->appendFile(
 
     <?php endforeach ?>
     </table>
+
+    <p class="footnote">
+        - = % Rank cannot be reported on a zero.
+    </p>
 </div>

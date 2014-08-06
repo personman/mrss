@@ -604,6 +604,11 @@ class Report
                 if (!empty($percentileRank)) {
                     $benchmarkData['percentile_rank_id'] = $percentileRank->getId();
                     $benchmarkData['percentile_rank'] = $percentileRank->getRank();
+
+                    // Show - rather than 0 percentile
+                    if ($benchmarkData['reported'] == 0) {
+                        $benchmarkData['percentile_rank'] = '-';
+                    }
                 } else {
                     $benchmarkData['percentile_rank_id'] = '';
                     $benchmarkData['percentile_rank'] = '';
@@ -673,7 +678,7 @@ class Report
 
             // Data
             foreach ($benchmarkGroup['benchmarks'] as $benchmark) {
-                if (null != $benchmark['reported']) {
+                if (null !== $benchmark['reported']) {
                     $reported = $benchmark['prefix'] .
                         number_format($benchmark['reported'], 0) .
                         $benchmark['suffix'];
@@ -681,7 +686,9 @@ class Report
                     $reported = null;
                 };
 
-                if ($benchmark['percentile_rank']) {
+                if ($benchmark['percentile_rank'] == '-') {
+                    $rank = '-';
+                } elseif ($benchmark['percentile_rank']) {
                     $rank = round($benchmark['percentile_rank']);
                 } else {
                     $rank = null;
