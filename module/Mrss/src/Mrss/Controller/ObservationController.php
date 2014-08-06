@@ -366,7 +366,7 @@ class ObservationController extends AbstractActionController
 
         // Do we have a config for the grouped template?
         if (!empty($config['data-entry']['grouped'][$shortName])) {
-            $groupedConfig = $config['data-entry']['grouped'][$shortName];
+            $groupedConfig = $this->getGroupedConfig($shortName);
             $template = 'grouped.phtml';
             $view->setTemplate('mrss/observation/' . $template);
             $view->setVariable('groupedConfig', $groupedConfig);
@@ -375,6 +375,23 @@ class ObservationController extends AbstractActionController
             $template = $config['data_entry_templates'][$id];
             $view->setTemplate('mrss/observation/' . $template);
         }
+    }
+
+    public function getGroupedConfig($shortName)
+    {
+        $config = $this->getServiceLocator()->get('Config');
+        $groupedConfig = $config['data-entry']['grouped'][$shortName];
+
+        foreach ($groupedConfig as $key => $groupConf)
+        {
+            $groupConf['title'] = $this->getVariableSubstitutionService()
+                ->substitute($groupConf['title']);
+            $groupConf['description'] = $this->getVariableSubstitutionService()
+                ->substitute($groupConf['description']);
+            $groupedConfig[$key] = $groupConf;
+        }
+
+        return $groupedConfig;
     }
 
     public function importAction()
@@ -729,5 +746,10 @@ class ObservationController extends AbstractActionController
         }
 
         return $this->systemAdminSessionContainer;
+    }
+
+    public function getVariableSubstitutionService()
+    {
+        return $this->getServiceLocator()->get('service.variableSubstitution');
     }
 }

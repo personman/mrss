@@ -35,16 +35,17 @@ class ComputedFields
         $equation = $this->prepareEquation($equationWithVariables, $observation);
 
         if (empty($equation) && !$this->debug) {
-            $observation->set($benchmarkColumn, null);
-            $this->getObservationModel()->save($observation);
-            $this->getObservationModel()->getEntityManager()->flush();
-
-            return false;
+            $result = null;
+        } else {
+            // the Calculation
+            try {
+                $result = $equation->evaluate();
+            } catch (\Exception $exception) {
+                // An exception was thrown, possibly division by zero
+                // Save the value as null
+                $result = null;
+            }
         }
-
-
-        // the Calculation
-        $result = $equation->evaluate();
 
         // If the result is meant to be a percentage, multiply by 100
         if ($benchmark->isPercent()) {

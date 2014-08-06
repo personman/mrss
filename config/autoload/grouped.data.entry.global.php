@@ -20,7 +20,7 @@ return array(
 
                array(
                    'title' => 'Enrollment Information',
-                   'description' => 'Use fall 2012 data.',
+                   'description' => 'Use fall [year_minus_2] data.',
                    'benchmarks' => array(
                        'ipeds_enr',
                        'ft_cr_head',
@@ -40,7 +40,7 @@ return array(
 
                array(
                    'title' => 'Race/Ethnicity ',
-                   'description' => 'Use Fall 2012 data.<br>
+                   'description' => 'Use Fall [year_minus_2] data.<br>
 <br>
 Race/ethnicity percentages should be IPEDS Fall Enrollment figures and total 100%. Please refer to new IPEDS race/ethnicity definitions.',
                    'benchmarks' => array(
@@ -80,7 +80,7 @@ May not add up to 100%.',
            'form2_student_compl_tsf' => array(
 
                array(
-                   'title' => 'Full-Time, first-time in fall 2010',
+                   'title' => 'Full-Time, first-time in fall [year_minus_4]',
                    'description' => '',
                    'benchmarks' => array(
                        'ft_f_yminus4_headc',
@@ -90,7 +90,7 @@ May not add up to 100%.',
                ),
 
                array(
-                   'title' => 'Part-Time, first-time in fall 2010',
+                   'title' => 'Part-Time, first-time in fall [year_minus_4]',
                    'description' => '',
                    'benchmarks' => array(
                        'pt_f_yminus4_headc',
@@ -100,7 +100,7 @@ May not add up to 100%.',
                ),
 
                array(
-                   'title' => 'Full-Time, first-time in fall 2007',
+                   'title' => 'Full-Time, first-time in fall [year_minus_7]',
                    'description' => '',
                    'benchmarks' => array(
                        'f_yminus7_headc',
@@ -110,7 +110,7 @@ May not add up to 100%.',
                ),
 
                array(
-                   'title' => 'Part-Time, first-time in fall 2007',
+                   'title' => 'Part-Time, first-time in fall [year_minus_7]',
                    'description' => '',
                    'benchmarks' => array(
                        'pt_fminus7_headc',
@@ -142,7 +142,7 @@ May not add up to 100%.',
             'form4_cred_stud_enr' => array(
 
                 array(
-                    'title' => 'Fall 2012 Term',
+                    'title' => 'Fall [year_minus_2] Term',
                     'description' => '',
                     'benchmarks' => array(
                         'tot_cr_st',
@@ -377,7 +377,7 @@ Data source will most likely be an exit survey or a follow-up survey administere
 
                 array(
                     'title' => 'Fall Grades',
-                    'description' => 'Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall 2012 term.<br>
+                    'description' => 'Enter the total number of A, B, C, P, D, F and W grades (or their institutional equivalents) at the end of the fall [year_minus_2] term.<br>
 <br>
 Include all other passing grades with P. Include all other non-passing grades with F. Include +\'s and -\'s in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades). Do not include incompletes and audits.<br>
 <br>
@@ -407,7 +407,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Credit Students',
-                    'description' => 'Use fall 2012 data.',
+                    'description' => 'Use fall [year_minus_2] data.',
                     'benchmarks' => array(
                         'stud_inst_pop',
                         'stud_tot_inst_min_pop',
@@ -416,7 +416,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Employees',
-                    'description' => 'Use fall 2012 data.',
+                    'description' => 'Use fall [year_minus_2] data.',
                     'benchmarks' => array(
                         'empl_inst_pop',
                         'empl_tot_inst_min_pop',
@@ -464,7 +464,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Credit Students',
-                    'description' => 'Use AY 2012-2013 data.',
+                    'description' => 'Use AY [year_minus_2]-[year_minus_1] data.',
                     'benchmarks' => array(
                         'undup_cre_head',
                     ),
@@ -472,7 +472,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Non-Credit Students',
-                    'description' => 'Use AY 2012-2013 data.',
+                    'description' => 'Use AY [year_minus_2]-[year_minus_1] data.',
                     'benchmarks' => array(
                         'undup_non_cre_head',
                     ),
@@ -490,7 +490,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Cultural Activities',
-                    'description' => 'Use AY 2012-2013 data.',
+                    'description' => 'Use AY [year_minus_2]-[year_minus_1] data.',
                     'benchmarks' => array(
                         'cul_act_dupl_head',
                     ),
@@ -498,7 +498,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Public Meetings',
-                    'description' => 'Use AY 2012-2013 data.',
+                    'description' => 'Use AY [year_minus_2]-[year_minus_1] data.',
                     'benchmarks' => array(
                         'pub_meet_dupl_head',
                     ),
@@ -506,7 +506,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Sporting Events',
-                    'description' => 'Use AY 2012-2013 data.',
+                    'description' => 'Use AY [year_minus_2]-[year_minus_1] data.',
                     'benchmarks' => array(
                         'spo_dupl_head',
                     ),
@@ -614,7 +614,7 @@ Include grades in credit distance learning classes and grades in credit developm
 
                 array(
                     'title' => 'Fall Grades',
-                    'description' => 'Enter the total number of A, B, C, P, D, F, and W grades in credit distance learning courses at end of the fall 2012 term. If there were no students awarded a grade, enter zero (0).<br>
+                    'description' => 'Enter the total number of A, B, C, P, D, F, and W grades in credit distance learning courses at end of the fall [year_minus_2] term. If there were no students awarded a grade, enter zero (0).<br>
 <br>
 Include all other passing grades with P. Include all other non-passing grades with F. Include +\'s and -\'s in the letter grades with which they are associated (e.g. a grade of C+ would be reported with C grades). Do not include incompletes and audits.',
                     'benchmarks' => array(
@@ -640,7 +640,7 @@ Include all other passing grades with P. Include all other non-passing grades wi
 
                 array(
                     'title' => 'Total FTE Professional Services Staff',
-                    'description' => 'Enter the total FTE professional student services staff at the end of the FY 2012-2013.<br>
+                    'description' => 'Enter the total FTE professional student services staff at the end of the FY [year_minus_2]-[year_minus_1].<br>
 <br>
 Professional Student Services Staff includes professional employees who provide non-instructional support services to students. Do not include clerical staff or athletic coaches, vice-presidents, deans, or their immediate staff, but do include directors in each area.<br>
 <br>

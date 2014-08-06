@@ -174,6 +174,14 @@ class Module
 
                     return $importer;
                 },
+                'service.variableSubstitution' => function ($sm) {
+                    $service = new Service\VariableSubstitution();
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+                    $service->setStudyYear($currentStudy->getCurrentYear());
+
+                    return $service;
+                },
                 'import.nccwtp' => function ($sm) {
                     $nccwtp = new Service\ImportNccwtp();
 
