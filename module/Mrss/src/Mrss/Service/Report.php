@@ -1029,15 +1029,22 @@ class Report
 
         unset($percentileData['N']);
 
-        $chartXCategories = array_merge(
-            array($this->getYourCollegeLabel()),
-            $this->getPercentileBreakPointLabels()
-        );
+        $chartXCategories =$this->getPercentileBreakPointLabels();
+        $chartValues = $percentileData;
 
-        $chartValues = array_merge(
-            array($this->getYourCollegeLabel() => floatval($reportedValue)),
-            $percentileData
-        );
+        // Only add Your College to the chart if the reported value is not null
+        if (!is_null($reportedValue)) {
+            $chartXCategories = array_merge(
+                array($this->getYourCollegeLabel()),
+                $chartXCategories
+            );
+
+            $chartValues = array_merge(
+                array($this->getYourCollegeLabel() => floatval($reportedValue)),
+                $chartValues
+            );
+        }
+
 
         $format = "{y}";
         if ($benchmark->isPercent()) {
