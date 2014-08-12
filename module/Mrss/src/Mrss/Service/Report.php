@@ -709,7 +709,10 @@ class Report
 
                 foreach ($benchmark['percentiles'] as $percentile) {
                     $dataRow[] = $benchmark['prefix'] .
-                        number_format($percentile, 0) . $benchmark['suffix'];
+                        number_format(
+                            $percentile,
+                            $benchmark['reported_decimal_places']
+                        ) . $benchmark['suffix'];
                 }
 
                 $sheet->fromArray($dataRow, null, 'A' . $row);
