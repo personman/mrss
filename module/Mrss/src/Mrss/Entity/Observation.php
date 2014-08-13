@@ -83,6 +83,9 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_o_cost;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_full_expend_per_fte;
+
 
     // Form 1A (retired)
     /** @ORM\Column(type="float", nullable=true) */
@@ -2470,5 +2473,10 @@ class Observation
         }
 
         return $benchmarks;
+    }
+
+    public function mergeSubobservations()
+    {
+
     }
 }

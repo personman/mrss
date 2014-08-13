@@ -5,6 +5,7 @@
 namespace MrssTest\Entity;
 
 use Mrss\Entity\Observation;
+use Mrss\Entity\SubObservation;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -190,5 +191,30 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(
             10 < count($observation->getAllBenchmarks())
         );
+    }
+
+    public function testMergeSubobservations()
+    {
+        $observation = new Observation();
+
+        $subOb1 = new SubObservation();
+        $subOb1->set('inst_cost_full_program_dev', 10000);
+        $subOb1->set('inst_cost_full_cred_hr', 50);
+
+        $subOb2 = new SubObservation();
+        $subOb2->set('inst_cost_full_program_dev', 20000);
+        $subOb2->set('inst_cost_full_cred_hr', 40);
+
+        $observation->setSubObservations(
+            array(
+                $subOb1,
+                $subOb2
+            )
+        );
+
+        $observation->mergeSubobservations();
+
+        $result = (10000 * 0.50) + (20000 * 0.40);
+        $this->assertEquals($result, $observation->get('what?'));
     }
 }
