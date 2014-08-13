@@ -7,9 +7,9 @@
 </p>
 
 <?php foreach ($reportData as $section): ?>
-    <div class="summarySection clearfix">
-        <h3><?= $section['name'] ?></h3>
+    <h3><?= $section['name'] ?></h3>
 
+    <div class="summarySection clearfix">
         <?php foreach ($section['charts'] as $chart): ?>
             <div class="summaryChart">
                 <?= $this->chart($chart['chart']) ?>
