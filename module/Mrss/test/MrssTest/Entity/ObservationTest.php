@@ -193,6 +193,9 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test the calculation of cost per credit hour
+     */
     public function testMergeSubobservations()
     {
         $observation = new Observation();
@@ -215,6 +218,39 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         $observation->mergeSubobservations();
 
         $result = (10000 * 0.50) + (20000 * 0.40);
-        $this->assertEquals($result, $observation->get('what?'));
+        $this->assertEquals(
+            $result,
+            $observation->get('inst_cost_full_cred_hr_program_dev')
+        );
+    }
+
+    /**
+     * Test the averaging of subobs
+     */
+    public function testMergeSubobservationsAverage()
+    {
+        $observation = new Observation();
+
+        $subOb1 = new SubObservation();
+        $subOb1->set('inst_cost_full_program_dev', 10000);
+
+        $subOb2 = new SubObservation();
+        $subOb2->set('inst_cost_full_program_dev', 20000);
+
+        $observation->setSubObservations(
+            array(
+                $subOb1,
+                $subOb2
+            )
+        );
+
+        $observation->mergeSubobservations();
+
+        $result = (10000 + 20000) / 2;
+        $this->assertEquals(
+            $result,
+            $observation->get('inst_cost_full_program_dev')
+        );
+
     }
 }

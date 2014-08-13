@@ -219,6 +219,10 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_part_prof_dev;
 
+    // Some calculated variables for form 2
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_program_dev;
+
 
     // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */
@@ -2475,8 +2479,55 @@ class Observation
         return $benchmarks;
     }
 
+    /**
+     * This is really only for MRSS
+     */
     public function mergeSubobservations()
     {
+        $prefix = 'inst_cost_';
+        $facultyTypes = array('full'/*, 'part'*/);
+        $activities = array(
+            'program_dev'
+        );
 
+        foreach ($activities as $activity) {
+            foreach ($facultyTypes as $facultyType) {
+                // Build some property names
+                $percentageField = $prefix . $facultyType . '_' . $activity;
+                $creditHourField = $prefix . $facultyType . '_cred_hr';
+                $perCreditHourField = $prefix . $facultyType .
+                    '_cred_hr_' . $activity;
+
+                $totalCostPerCreditHour = 0;
+                $percentagesOfTimeSpentOnActivity = array();
+
+                // Loop over the subobservations
+                foreach ($this->getSubObservations() as $subobservation) {
+                    $percentageSpentOn = $subobservation->get($percentageField);
+                    $creditHours = $subobservation->get($creditHourField);
+
+                    $percentagesOfTimeSpentOnActivity[] = $percentageSpentOn;
+
+                    // If we've got null values, skip it
+                    if (!is_null($percentageSpentOn) || !is_null($creditHours)) {
+                        $costPerCreditHour = ($percentageSpentOn / 100) * $creditHours;
+                        $totalCostPerCreditHour += $costPerCreditHour;
+                    }
+                }
+
+                // Now save the cost per credit hour
+                $this->set($perCreditHourField, $totalCostPerCreditHour);
+
+                // Average the percentages of time spent on the activity
+                if (count($percentagesOfTimeSpentOnActivity)) {
+                    $average = array_sum($percentagesOfTimeSpentOnActivity) /
+                        count($percentagesOfTimeSpentOnActivity);
+                } else {
+                    $average = 0;
+                }
+
+                $this->set($percentageField, $average);
+            }
+        }
     }
 }
