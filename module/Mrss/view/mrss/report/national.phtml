@@ -31,69 +31,73 @@ $this->headScript()->appendFile(
 </p>
 
 <div class="report">
-    <table class="table table-hover table-striped-manual">
+
     <?php foreach ($reportData as $benchmarkGroup): ?>
+        <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
+        <h3 class="benchmarkGroupTitle">
+            <span class="small-heading"><?= $formNumber ?></span><br>
+            <?= $formTitle ?>
+        </h3>
 
-                <thead>
-                    <tr class="topHeading">
-                        <th class="benchmarkGroupTitle" rowspan="2"><h3><?= $benchmarkGroup['benchmarkGroup'] ?></h3></th>
-                        <th colspan="2">Institution</th>
-                        <th></th>
-                        <th colspan="5">Percentiles</th>
-                        <th></th>
-                    </tr>
-                    <tr class="secondHeading">
-                        <th>Reported Value</th>
-                        <th>% Rank</th>
-                        <th>N</th>
-                        <?php foreach ($breakpoints as $breakpoint): ?>
-                        <th><?= $breakpoint ?></th>
-                        <?php endforeach ?>
-                        <th><a href="#" class="btn showAllCharts" title="Display all charts"><i class="icon-signal"></i></a></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
-                        <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
-                        <tr class="<?= $rowClass ?>">
-                            <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
-                            <?php if ($benchmark['reported'] !== null): ?>
-                            <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
-                            <td class="percentileColor">
-                                <?php if ($benchmark['percentile_rank'] == '-'): ?>
-                                    <?= $benchmark['percentile_rank'] ?>
-                                <?php else: ?>
-                                    <?= round($benchmark['percentile_rank']) ?>
-                                <?php endif ?>
-                            </td>
-                            <?php else: ?>
-                                <td></td>
-                                <td></td>
-                            <?php endif ?>
-                            <td><?= $benchmark['N'] ?></td>
-                            <?php foreach ($benchmark['percentiles'] as $percentile): ?>
-                            <td><?= $benchmark['prefix'] . number_format($percentile, $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
-                            <?php endforeach ?>
-                            <td><a href="#" class="btn openChart" title="Display chart"><i class="icon-signal"></i></a></td>
-                        </tr>
-                        <tr class="nationalReportChart <?= $rowClass ?>">
-                            <td></td>
-                            <td colspan="9"><?= $this->chart($benchmark['chart']) ?></td>
-                        </tr>
-
+        <table class="table table-hover table-striped-manual">
+            <thead>
+                <tr class="topHeading">
+                    <th></th>
+                    <th colspan="2">Your Institution</th>
+                    <th colspan="7" class="nationalPercentiles">National Percentiles</th>
+                </tr>
+                <tr class="secondHeading">
+                    <th></th>
+                    <th>Reported Value</th>
+                    <th>% Rank</th>
+                    <th>N</th>
+                    <?php foreach ($breakpoints as $breakpoint): ?>
+                    <th><?= $breakpoint ?></th>
                     <?php endforeach ?>
-                </tbody>
-                <thead>
-                    <tr class="spacerRow">
-                        <td colspan="9"></td>
+                    <th><a href="#" class="btn showAllCharts" title="Display all charts"><i class="icon-signal"></i></a></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
+                    <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
+                    <tr class="<?= $rowClass ?>">
+                        <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
+                        <?php if ($benchmark['reported'] !== null): ?>
+                        <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
+                        <td class="percentileColor">
+                            <?php if ($benchmark['percentile_rank'] == '-'): ?>
+                                <?= $benchmark['percentile_rank'] ?>
+                            <?php else: ?>
+                                <?= round($benchmark['percentile_rank']) ?>
+                            <?php endif ?>
+                        </td>
+                        <?php else: ?>
+                            <td></td>
+                            <td></td>
+                        <?php endif ?>
+                        <td><?= $benchmark['N'] ?></td>
+                        <?php foreach ($benchmark['percentiles'] as $percentile): ?>
+                        <td><?= $benchmark['prefix'] . number_format($percentile, $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
+                        <?php endforeach ?>
+                        <td><a href="#" class="btn openChart" title="Display chart"><i class="icon-signal"></i></a></td>
                     </tr>
-                </thead>
+                    <tr class="nationalReportChart <?= $rowClass ?>">
+                        <td></td>
+                        <td colspan="9"><?= $this->chart($benchmark['chart']) ?></td>
+                    </tr>
 
-
-
+                <?php endforeach ?>
+            </tbody>
+            <thead>
+                <tr class="spacerRow">
+                    <td colspan="9"></td>
+                </tr>
+            </thead>
+        </table>
+        <hr>
     <?php endforeach ?>
-    </table>
+
 
     <p class="footnote">
         - = % Rank cannot be reported on a zero.

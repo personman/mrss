@@ -48,3 +48,39 @@ tr.secondHeading th {
 .table-striped-manual .even {
     background: #FFF;
 }
+
+
+
+/* Indicia modifications */
+/* NATIONAL REPORTS */
+
+h3.benchmarkGroupTitle {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 32px;
+    line-height: 30px;
+    text-align: left;
+    text-transform: none;
+}
+
+.small-heading {
+    font-size: 24px;
+    color: #666;
+    font-weight: normal;
+}
+
+.table-striped-manual .odd {
+    background: #F5F5F5 !important;
+}
+
+.table-hover tbody tr:hover td {
+    background: #feffee !important;
+}
+
+.table th, .table td {
+    vertical-align: middle !important;
+}
+
+tr.topHeading th.nationalPercentiles {
+    background: #487ab6;
+}

@@ -27,3 +27,26 @@
     font-size: 80%;
     color: black;
 }
+
+/* Indicia: */
+h3 {
+    margin-top: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 0px;
+    font-size: 28px;
+    line-height: 30px;
+    text-align: left;
+    border-bottom: 1px solid #DDD;
+}
+
+.peer-titles {
+    text-transform: uppercase;
+    color: #777;
+    font-size: 14px;
+}
+
+.peerSummarySection {
+    padding: 50px 25px !important;
+    border-bottom: 2px solid #999;
+    background: #EEE;
+}
