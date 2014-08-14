@@ -80,7 +80,7 @@ May not add up to 100%.',
            'form2_student_compl_tsf' => array(
 
                array(
-                   'title' => 'Full-Time, first-time in fall [year_minus_4]',
+                   'title' => 'Full-time, first-time in fall [year_minus_4]',
                    'description' => '',
                    'benchmarks' => array(
                        'ft_f_yminus4_headc',
@@ -90,7 +90,7 @@ May not add up to 100%.',
                ),
 
                array(
-                   'title' => 'Part-Time, first-time in fall [year_minus_4]',
+                   'title' => 'Part-time, first-time in fall [year_minus_4]',
                    'description' => '',
                    'benchmarks' => array(
                        'pt_f_yminus4_headc',
@@ -100,7 +100,7 @@ May not add up to 100%.',
                ),
 
                array(
-                   'title' => 'Full-Time, first-time in fall [year_minus_7]',
+                   'title' => 'Full-time, first-time in fall [year_minus_7]',
                    'description' => '',
                    'benchmarks' => array(
                        'f_yminus7_headc',
@@ -110,7 +110,7 @@ May not add up to 100%.',
                ),
 
                array(
-                   'title' => 'Part-Time, first-time in fall [year_minus_7]',
+                   'title' => 'Part-time, first-time in fall [year_minus_7]',
                    'description' => '',
                    'benchmarks' => array(
                        'pt_fminus7_headc',
@@ -581,7 +581,7 @@ Include grades in credit distance learning classes and grades in credit developm
                 ),
 
                 array(
-                    'title' => 'Part-Time',
+                    'title' => 'Part-time',
                     'description' => '',
                     'benchmarks' => array(
                         'pt_tot_fac',
@@ -660,7 +660,7 @@ Figures should = (total number of full-time staff) + (total part-time, non-cleri
             'form19a_ret_dept' => array(
 
                 array(
-                    'title' => 'Full-Time, Regular Employees',
+                    'title' => 'Full-time, Regular Employees',
                     'description' => '',
                     'benchmarks' => array(
                         'tot_ft_reg_empl',
