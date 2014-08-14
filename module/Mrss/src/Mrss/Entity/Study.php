@@ -192,6 +192,24 @@ class Study
         return $this->subscriptions;
     }
 
+    /**
+     * @param $year
+     * @return \Mrss\Entity\Subscription[]
+     */
+    public function getSubscriptionsForYear($year)
+    {
+        $subscriptions = $this->getSubscriptions();
+        $subscriptionsForYear = array();
+
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->getYear() == $year) {
+                $subscriptionsForYear[] = $subscription;
+            }
+        }
+
+        return $subscriptionsForYear;
+    }
+
     public function setCurrentYear($year)
     {
         $this->currentYear = $year;

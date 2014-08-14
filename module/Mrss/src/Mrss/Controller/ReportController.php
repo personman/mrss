@@ -479,15 +479,24 @@ class ReportController extends AbstractActionController
             $study = $this->currentStudy();
 
             $benchmarkGroupData = array();
-            $benchmarkData = array();
             foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
                 $group = $benchmarkGroup->getName();
+                $benchmarkData = array();
 
-                foreach ($benchmarkGroup->getBenchmarksForYear($year) as $benchmark) {
-                    $benchmarkData[] = array(
-                        'name' => $benchmark->getName(),
-                        'id' => $benchmark->getId()
+                $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
+                foreach ($benchmarks as $benchmark) {
+                    // Only include benchmarks with at least 5 reported values
+                    $count = $this->getCountOfReportedData(
+                        $benchmark->getDbColumn(),
+                        $year
                     );
+
+                    if ($count >= 5) {
+                        $benchmarkData[] = array(
+                            'name' => $benchmark->getName(),
+                            'id' => $benchmark->getId()
+                        );
+                    }
                 }
 
                 if (count($benchmarkData)) {
@@ -501,6 +510,20 @@ class ReportController extends AbstractActionController
                 )
             );
         }
+    }
+
+    public function getCountOfReportedData($dbColumn, $year) {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+        $count = 0;
+        foreach ($study->getSubscriptionsForYear($year) as $subscription) {
+            $observation = $subscription->getObservation();
+            if (!is_null($observation->get($dbColumn))) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     public function getBenchmarksToExclude()
