@@ -31,7 +31,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Student Completion and Transfer</h3>
-    <p class="heading-notes">Full-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?></p>
+    <p class="heading-notes">Full-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(4) ?> cohort</p>
 
     <?= $this->ztbFormElement(
         $form->get('ft_f_yminus4_headc')
@@ -54,7 +54,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Student Completion and Transfer</h3>
-    <p class="heading-notes">Part-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(3) ?></p>
+    <p class="heading-notes">Part-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(4) ?> cohort</p>
 
     <?= $this->ztbFormElement(
         $form->get('pt_f_yminus4_headc')
@@ -76,7 +76,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Student Completion and Transfer</h3>
-    <p class="heading-notes">Full-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?></p>
+    <p class="heading-notes">Full-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(7) ?> cohort</p>
 
     <?= $this->ztbFormElement(
         $form->get('f_yminus7_headc')
@@ -100,7 +100,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Student Completion and Transfer</h3>
-    <p class="heading-notes">Part-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(6) ?></p>
+    <p class="heading-notes">Part-time, first-time in fall  <?= $this->currentStudy()->getCurrentYearMinus(7) ?> cohort</p>
 
     <?= $this->ztbFormElement(
         $form->get('pt_fminus7_headc')
@@ -154,7 +154,12 @@ $this->headScript()->appendFile(
     <h3 class="heading">Next Fall</h3>
 
     <?= $this->ztbFormElement($form->get('grad_bef_fall')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('enr_fall')->setAttribute('disabled', $disabled)) ?>
+    <?php
+        // Fix hanging label
+        $enr_fall = $this->ztbFormElement($form->get('enr_fall')->setAttribute('disabled', $disabled));
+        $enr_fall = str_replace('in Fall ', 'in Fall&nbsp;', $enr_fall);
+    ?>
+    <?= $enr_fall ?>
 </div>
 
 
