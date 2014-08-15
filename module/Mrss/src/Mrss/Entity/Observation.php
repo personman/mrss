@@ -223,6 +223,54 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     //protected $inst_cost_full_cred_hr_program_dev;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_prof_dev;
+
 
     // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */
@@ -2501,12 +2549,22 @@ class Observation
             foreach ($facultyTypes as $facultyType) {
                 // Build some property names
                 $percentageField = $prefix . $facultyType . '_' . $activity;
+                $activityCostField = $prefix . $facultyType . '_expend_' . $activity;
                 $costField = $prefix . $facultyType . '_expend';
                 //$perCreditHourField = $prefix . $facultyType .
                 //    '_cred_hr_' . $activity;
 
                 $totalCost = 0;
+                $activityCost = 0;
+                $activityPercentage = 0;
+
                 //$percentagesOfTimeSpentOnActivity = array();
+
+                // Get the total cost
+                foreach ($this->getSubObservations() as $subobservation) {
+                    $acCost = $subobservation->get($costField);
+                    $totalCost += $acCost;
+                }
 
                 // Loop over the subobservations
                 foreach ($this->getSubObservations() as $subobservation) {
@@ -2518,12 +2576,20 @@ class Observation
                     // If we've got null values, skip it
                     if (!is_null($percentageSpentOn) || !is_null($acCost)) {
                         $cost = ($percentageSpentOn / 100) * $acCost;
-                        $totalCost += $cost;
+                        $activityCost += $cost;
                     }
                 }
 
-                // Now save the cost per credit hour
-                $this->set($percentageField, $totalCost);
+                // Activity percentage
+                if ($totalCost) {
+                    $activityPercentage  = $activityCost / $totalCost * 100;
+                } else {
+                    $activityPercentage = 0;
+                }
+
+                // Now save the cost
+                $this->set($activityCostField, $activityCost);
+                $this->set($percentageField, $activityPercentage);
 
                 // Average the percentages of time spent on the activity
                 /*if (count($percentagesOfTimeSpentOnActivity)) {

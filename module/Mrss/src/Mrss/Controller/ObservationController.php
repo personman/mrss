@@ -306,7 +306,7 @@ class ObservationController extends AbstractActionController
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
 
-                //$this->mergeAllSubobservations();
+                $this->mergeAllSubobservations();
 
                 $this->getServiceLocator()->get('em')->flush();
 

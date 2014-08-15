@@ -33,7 +33,11 @@ $this->headScript()->appendFile(
 <div class="report">
 
     <?php foreach ($reportData as $benchmarkGroup): ?>
-        <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php if (stristr($benchmarkGroup['benchmarkGroup'], '|')): ?>
+            <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php elseif (stristr($benchmarkGroup['benchmarkGroup'], ':')): ?>
+            <?php list($formNumber, $formTitle) = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php endif ?>
         <h3 class="benchmarkGroupTitle">
             <span class="small-heading"><?= $formNumber ?></span><br>
             <?= $formTitle ?>

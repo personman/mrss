@@ -220,6 +220,12 @@ class ObservationTest extends PHPUnit_Framework_TestCase
         $result = (10000 * 0.50) + (20000 * 0.40);
         $this->assertEquals(
             $result,
+            $observation->get('inst_cost_full_expend_program_dev')
+        );
+
+        $activityPercentage = ((10000 * 0.50) + (20000 * 0.40)) / (10000 + 20000) * 100;
+        $this->assertEquals(
+            $activityPercentage,
             $observation->get('inst_cost_full_program_dev')
         );
     }
