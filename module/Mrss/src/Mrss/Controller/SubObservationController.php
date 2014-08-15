@@ -86,8 +86,24 @@ class SubObservationController extends AbstractActionController
                 $this->getSubObservationModel()->save($subObservation);
 
                 // Log changes
-                $this->getServiceLocator()->get('service.observationAudit')
-                    ->logSubObservationChanges($oldSubObservation, $subObservation, 'dataEntry');
+                /** @var \Mrss\Service\ObservationAudit $observationAudit */
+                $observationAudit = $this->getServiceLocator()
+                    ->get('service.observationAudit');
+                $observationAudit->logSubObservationChanges(
+                    $oldSubObservation,
+                    $subObservation,
+                    'dataEntry'
+                );
+
+                // Merge to the observation and log changes
+                $observation = $subObservation->getObservation();
+                $oldObservation = clone $observation;
+                $observation->mergeSubobservations();
+                $observationAudit->logChanges(
+                    $oldObservation,
+                    $observation,
+                    'dataEntry'
+                );
 
                 $this->getServiceLocator()->get('em')->flush();
 

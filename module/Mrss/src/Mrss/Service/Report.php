@@ -1060,10 +1060,11 @@ class Report
         $chartValues = array_combine($chartXCategories, $chartValues);
         asort($chartValues);
         $chartXCategories = array_keys($chartValues);
+        $roundTo = $this->getDecimalPlaces($benchmark->getDbColumn());
 
         $chartData = array();
         foreach ($chartValues as $i => $value) {
-            $value = round($value);
+            $value = round($value, $roundTo);
 
             if (!empty($chartXCategories[$i])) {
                 $label = $chartXCategories[$i];
