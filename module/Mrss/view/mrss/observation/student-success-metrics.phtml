@@ -123,7 +123,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Credit College-level Retention, Success</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> grades.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> grades.</p>
 
     <?= $this->ztbFormElement($form->get('tot_grad_abcpdfw')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('tot_grad_abcpdf')->setAttribute('disabled', $disabled)) ?>
