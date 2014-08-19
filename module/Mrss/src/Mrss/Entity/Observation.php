@@ -86,6 +86,67 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_full_expend_per_fte;
 
+    // MRSS form 1 computed fields
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_cred_hrs_per_full_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_full_expend_per_cred_hr;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_full_expend_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_part_expend_per_fte;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_cred_hrs_per_part_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_part_expend_per_cred_hr;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_part_expend_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_expend_per_cred_hr;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_expend_per_fte_student;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $inst_expend_per_fte;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_exec_expend_per_fte;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_exec_expend_per_cred_hr;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_exec_expend_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_total_expend_per_cred_hr;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_total_expend_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_total_expend_per_employee;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $tuition_fees_per_cred_hr;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_expend_o_rev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_expend_covered_by_tuition;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_net_rev_per_cred_hr;
+
 
     // Form 1A (retired)
     /** @ORM\Column(type="float", nullable=true) */
