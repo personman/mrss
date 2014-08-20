@@ -4,6 +4,7 @@ namespace Mrss\Service;
 
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\Observation;
+use Mrss\Entity\Study;
 use Mrss\Model\Benchmark as  BenchmarkModel;
 use Mrss\Model\Observation as ObservationkModel;
 use exprlib\Parser as MathParser;
@@ -118,6 +119,7 @@ class ComputedFields
         if ($this->debug) {
             pr($errors);
             pr($vars);
+            echo 'Observation id:';
             pr($observation->getId());
         }
 
@@ -146,9 +148,9 @@ class ComputedFields
         return $preparedEquation;
     }
 
-    public function calculateAllForObservation(Observation $observation)
+    public function calculateAllForObservation(Observation $observation, Study $study)
     {
-        $benchmarks = $this->getBenchmarkModel()->findComputed();
+        $benchmarks = $this->getBenchmarkModel()->findComputed($study);
 
         foreach ($benchmarks as $benchmark) {
             if ($this->debug) {

@@ -1502,7 +1502,7 @@ class Report
         foreach ($subs as $sub) {
             $observation = $sub->getObservation();
             $this->getComputedFieldsService()
-                ->calculateAllForObservation($observation);
+                ->calculateAllForObservation($observation, $this->getStudy());
         }
     }
 

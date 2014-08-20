@@ -67,14 +67,23 @@ class BenchmarkTest extends ModelTestAbstract
 
         $repoMock->expects($this->once())
             ->method('findBy')
-            ->will($this->returnValue('placeholder'));
+            ->will($this->returnValue(array()));
+
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(2));
+
 
         $this->model->setRepository($repoMock);
         $this->model->setEntityManager($this->getEmMock());
 
-        $result = $this->model->findComputed();
+        $result = $this->model->findComputed($studyMock);
 
-        $this->assertEquals('placeholder', $result);
+        $this->assertEquals(array(), $result);
     }
 
     public function testFindOneByDbColumn()

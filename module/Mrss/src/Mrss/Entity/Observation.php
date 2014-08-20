@@ -332,6 +332,68 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_part_expend_prof_dev;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_prof_dev;
 
     // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */

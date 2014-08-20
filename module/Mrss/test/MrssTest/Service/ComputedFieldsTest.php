@@ -173,8 +173,18 @@ class ComputedFieldsTest extends TestCase
 
         $this->computedFields->setBenchmarkModel($benchmarkModelMock);
 
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(2));
+
+
         $this->computedFields->calculateAllForObservation(
-            $this->observationMock
+            $this->observationMock,
+            $studyMock
         );
     }
 }
