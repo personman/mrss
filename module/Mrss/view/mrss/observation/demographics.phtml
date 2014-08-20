@@ -33,7 +33,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Instructional Modality</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
 
     <?= $this->ztbFormElement($form->get('instruction_online')) ?>
     <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
@@ -45,7 +45,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Please contact your research office for these data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Please contact your research office for these data.</p>
 
     <?= $this->ztbFormElement($form->get('ipeds_enr')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('ft_cr_head')->setAttribute('disabled', $disabled)) ?>
@@ -66,7 +66,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group" id="race-ethnicity">
     <h3 class="heading">Race/Ethnicity</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Percentages should be IPEDS Fall Enrollment figures and total 100%.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Percentages should be IPEDS Fall Enrollment figures and total 100%.</p>
 
     <?php /*
     $tableConfig = array(
