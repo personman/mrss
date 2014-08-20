@@ -68,7 +68,7 @@ class ExportNccbp
 
     public function getYears()
     {
-        $years = range(2007, 2013);
+        $years = range(2007, date('Y'));
 
         return $years;
     }
@@ -80,7 +80,7 @@ class ExportNccbp
         // Create the sheet
         $sheet = new PHPExcel_Worksheet($this->excel, "$year");
         $this->excel->addSheet($sheet);
-        $this->excel->setActiveSheetIndexByName($year);
+        $this->excel->setActiveSheetIndexByName("$year");
 
         // Add the headers
         $this->addHeaders();
