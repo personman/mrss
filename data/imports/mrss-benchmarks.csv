@@ -174,7 +174,7 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 5: Demographics","High School Student Concurrent Enrollment - Credit Hours",hs_stud_crh,number,"High School Student Concurrent Enrollment - Credit Hours should be the percent of IPEDS Fall Credit Hour Enrollment that includes high school students enrolled either on campus, at their high school, or online.",,,,
 "Form 5: Demographics","Pell Grant Recipients",pell_grant_rec,percent,"Pell Grant Recipients should be the percent of IPEDS Fall Headcount Enrollment who received Pell Grants.",,,,
 "Form 5: Demographics","Male Credit Students",male_cred_stud,wholepercent,,,,,1
-"Form 5: Demographics","Female Credit Students",fem_cred_stud,wholepercent,"Percentage of fall credit students that are female.",,,,
+"Form 5: Demographics","Female Credit Students",fem_cred_stud,percent,"Percentage of fall credit students that are female.",,,,
 "Form 5: Demographics","First-generation Students",first_gen_students,percent,"First-generation Students should be the percent of fall credit students that represent the first generation of their families to attend a higher education institution.",,,,
 "Form 5: Demographics","Transfer Credit Hours",trans_cred,percent,"Transfer Credit Hours should be the percent of IPEDS Fall Enrollment credit hours that includes full- and part-time students enrolled in courses that do not award career or technical certification, but do award credit that is transferable to other postsecondary institutions.
 
