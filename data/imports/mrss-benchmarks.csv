@@ -191,7 +191,7 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 5: Demographics",White,white_2012,percent,,,,,
 "Form 5: Demographics","Two or More Races",two_or_more,percent,,,,,
 "Form 5: Demographics","Race and Ethnicity Unknown",race_eth_unk_2012,percent,,,,,
-"Form 5: Demographics","Tuition and Fees per Credit Hour",tuition_fees,wholedollars,"Use Fall 2012 data. Tuition and Fees per Credit Hour are the tuition and fees that full-time, in-district students are charged per credit hour. Use the figure reported to IPEDS. Enter per credit hour figure, not total tuition and fees. Credit Courses are courses that are eligible for Title IV federal financial aid.",,,,
+"Form 5: Demographics","Tuition and Fees per Credit Hour",tuition_fees,dollars,"Use Fall 2012 data. Tuition and Fees per Credit Hour are the tuition and fees that full-time, in-district students are charged per credit hour. Use the figure reported to IPEDS. Enter per credit hour figure, not total tuition and fees. Credit Courses are courses that are eligible for Title IV federal financial aid.",,,,
 "Form 5: Demographics","Unrestricted Operating Revenue",unre_o_rev,wholedollars,"<i> Use fiscal year 2012-2013 data. </i> <br><br>
 
 Unrestricted Operating Revenue is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""",,,,
