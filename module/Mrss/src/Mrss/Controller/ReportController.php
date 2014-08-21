@@ -401,10 +401,18 @@ class ReportController extends AbstractActionController
     {
         // Reports are always open for JCCC
         $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
+        $impersonationService = $this->getServiceLocator()
+            ->get('zfcuserimpersonate_user_service');
+
         if ($auth->hasIdentity()) {
             $user = $auth->getIdentity();
 
             if ($user->getCollege()->getId() == 101) {
+                return null;
+            }
+
+            // If an admin is impersonating another user, let them through
+            if ($impersonationService->isImpersonated()) {
                 return null;
             }
         }
@@ -417,6 +425,11 @@ class ReportController extends AbstractActionController
 
             return $this->redirect()->toUrl('/members');
         }
+    }
+
+    protected function checkReportAccess()
+    {
+
     }
 
     /**

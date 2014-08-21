@@ -44,6 +44,10 @@ class NavigationFactory extends DefaultNavigationFactory
         // Alter the nav based on auth
         $auth = $serviceLocator->get('zfcuser_auth_service');
         $user = null;
+        $impersonationService = $serviceLocator
+            ->get('zfcuserimpersonate_user_service');
+
+
         if ($auth->hasIdentity()) {
             // If the user is logged in, hide the login and subscription links
             unset($pages['login']);
@@ -153,7 +157,8 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         // Show all reports for JCCC users
-        if (!empty($user) && $user->getCollege()->getId() != 101) {
+        if ((!empty($user) && $user->getCollege()->getId() != 101)
+            && !$impersonationService->isImpersonated()) {
             // Hide reports link if reporting isn't enabled yet
             if (!$currentStudy->getReportsOpen() && !$currentStudy->getOutlierReportsOpen()) {
                 unset($pages['reports']);
