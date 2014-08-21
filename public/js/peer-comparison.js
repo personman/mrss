@@ -84,7 +84,7 @@ function updateBenchmarks()
     url = '/reports/peer-benchmarks/' + year;
     $.get(url, function(result) {
         var benchmarkGroups = result.benchmarkGroups
-        if (typeof benchmarks == 'undefined') {
+        if (typeof benchmarkGroups == 'undefined') {
             return false;
         }
 
