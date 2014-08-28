@@ -2,7 +2,8 @@
 
 namespace Mrss\Model;
 
-use \Mrss\Entity\Benchmark  as BenchmarkEntity;
+use Mrss\Entity\Benchmark as BenchmarkEntity;
+use Mrss\Entity\Study as StudyEntity;
 use Zend\Debug\Debug;
 
 /**
@@ -80,11 +81,26 @@ class Benchmark extends AbstractModel
     }
 
     /**
+     * @param \Mrss\Entity\Study $study
      * @return \Mrss\Entity\Benchmark[]
      */
-    public function findComputed()
+    public function findComputed(StudyEntity $study)
     {
-        return $this->getRepository()->findBy(array('computed' => true));
+        $benchmarks = $this->getRepository()->findBy(
+            array(
+                'computed' => true,
+            )
+        );
+
+        $benchmarksFromStudy = array();
+        foreach ($benchmarks as $benchmark) {
+            $bStudy = $benchmark->getBenchmarkGroup()->getStudy();
+            if ($bStudy->getId() == $study->getId()) {
+                $benchmarksFromStudy[] = $benchmark;
+            }
+        }
+
+        return $benchmarksFromStudy;
     }
 
     public function save(BenchmarkEntity $benchmark)

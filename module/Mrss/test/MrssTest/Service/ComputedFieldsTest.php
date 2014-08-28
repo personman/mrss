@@ -3,6 +3,8 @@
 namespace MrssTest\Service;
 
 use Mrss\Service\ComputedFields;
+use Mrss\Entity\Observation;
+use Mrss\Entity\Benchmark;
 use MrssTest\TestCase;
 
 class ComputedFieldsTest extends TestCase
@@ -36,6 +38,27 @@ class ComputedFieldsTest extends TestCase
         $this->observationModelMock->expects($this->any())
             ->method('getEntityManager')
             ->will($this->returnValue($this->getEmMock()));
+
+        $benchmarkModelMock = $this->getMock(
+            'Mrss\Model\Benchmark',
+            array('findComputed')
+        );
+        $benchmarkModelMock->expects($this->any())
+            ->method('findComputed')
+            ->will($this->returnValue(array()));
+
+        $this->computedFields->setBenchmarkModel($benchmarkModelMock);
+
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(2));
+        $this->computedFields->setStudy($studyMock);
+
+
 
         $this->computedFields->setObservationModel($this->observationModelMock);
     }
@@ -173,8 +196,53 @@ class ComputedFieldsTest extends TestCase
 
         $this->computedFields->setBenchmarkModel($benchmarkModelMock);
 
-        $this->computedFields->calculateAllForObservation(
-            $this->observationMock
+        $studyMock = $this->getMock(
+            'Mrss\Entity\Study',
+            array('getId')
         );
+        $studyMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(2));
+
+
+        $this->computedFields->calculateAllForObservation(
+            $this->observationMock,
+            $studyMock
+        );
+    }
+
+    public function testNestedEquation()
+    {
+        $equation = "{{inst_full_expend}} / {{inst_full_num}}";
+
+        $computedBenchmark = new Benchmark;
+        $computedBenchmark->setEquation("{{inst_part_expend}} / {{inst_part_num}}");
+        $computedBenchmark->setDbColumn("inst_full_num");
+
+        $computedBenchmarkMocks = array(
+            $computedBenchmark
+        );
+
+        $benchmarkModelMock = $this->getMock(
+            'Mrss\Model\Benchmark',
+            array('findComputed')
+        );
+        $benchmarkModelMock->expects($this->once())
+            ->method('findComputed')
+            ->will($this->returnValue($computedBenchmarkMocks));
+
+        $this->computedFields->setBenchmarkModel($benchmarkModelMock);
+
+
+        $observation = new Observation;
+        $observation->set('inst_full_expend', 10);
+        $observation->set('inst_full_num', 20);
+
+
+        $result = $this->computedFields->nestComputedEquations($equation);
+
+        $expected = "{{inst_full_expend}} / ( {{inst_part_expend}} / {{inst_part_num}} )";
+
+        $this->assertEquals($expected, $result);
     }
 }

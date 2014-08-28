@@ -33,7 +33,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Instructional Modality</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
 
     <?= $this->ztbFormElement($form->get('instruction_online')) ?>
     <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
@@ -45,12 +45,13 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. Please contact your research office for these data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Please contact your research office for these data.</p>
 
     <?= $this->ztbFormElement($form->get('ipeds_enr')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('ft_cr_head')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('pt_cr_head')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('tot_fy_stud_crh')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('ft_tot_stud_crhrs_tght')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('pt_tot_stud_crhrs_tght')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('hs_stud_hdct')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('hs_stud_crh')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('pell_grant_rec')->setAttribute('disabled', $disabled)) ?>
@@ -65,7 +66,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group" id="race-ethnicity">
     <h3 class="heading">Race/Ethnicity</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(1) ?> data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Percentages should be IPEDS Fall Enrollment figures and total 100%.</p>
 
     <?php /*
     $tableConfig = array(
@@ -174,7 +175,6 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Fiscal Information</h3>
-    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(1) ?>-<?= $this->currentStudy()->getCurrentYear() ?> data.</p>
 
     <?= $this->ztbFormElement($form->get('tuition_fees')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('unre_o_rev')->setAttribute('disabled', $disabled)) ?>
@@ -183,7 +183,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Operating Revenue Sources</h3>
-    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(1) ?>-<?= $this->currentStudy()->getCurrentYear() ?> data. May not add up to 100%.</p>
+    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(2) ?>-<?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. May not add up to 100%.</p>
 
     <?= $this->ztbFormElement($form->get('loc_sour')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('state_sour')->setAttribute('disabled', $disabled)) ?>

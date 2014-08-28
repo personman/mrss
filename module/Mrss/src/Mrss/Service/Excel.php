@@ -583,8 +583,8 @@ class Excel
         $valueColumn = 'B';
         $dbColumnCol = 'D';
         $definitionCol = 'C';
-        $firstHiddenRow = 241;
-        $lastHiddenRow = 490;
+        $firstHiddenRow = 250;
+        $lastHiddenRow = 497;
 
         $observation = $subscription->getObservation();
 
@@ -647,6 +647,7 @@ class Excel
             $i++;
         }
 
+        /* Victoria has these up to date in the excel file
         // Set data definitions
         foreach ($subObSheets as $index) {
             $sheet = $spreadsheet->setActiveSheetIndex($index);
@@ -661,6 +662,7 @@ class Excel
             }
 
         }
+        */
     }
 
     protected function populateMrssSubObservation(
@@ -668,7 +670,7 @@ class Excel
         SubObservation $subObservation
     ) {
         // Set the academic unit name
-        $sheet->setCellValue('B6', $subObservation->getName());
+        $sheet->setCellValue('A10', $subObservation->getName());
 
         // Now the data
         foreach ($this->getMrssSubObservationMap() as $cell => $dbColumn) {
@@ -680,28 +682,28 @@ class Excel
     protected function getMrssSubObservationMap()
     {
         return array(
-            'C9' => 'inst_cost_full_expend',
-            'C10' => 'inst_cost_full_num',
-            'C11' => 'inst_cost_full_cred_hr',
-            'C14' => 'inst_cost_part_num',
-            'C15' => 'inst_cost_part_cred_hr',
-            'C16' => 'inst_cost_part_cred_hr',
-            'B23' => 'inst_cost_full_program_dev',
-            'C23' => 'inst_cost_part_program_dev',
-            'B24' => 'inst_cost_full_course_dev',
-            'C24' => 'inst_cost_part_course_dev',
-            'B25' => 'inst_cost_full_teaching',
-            'C25' => 'inst_cost_part_teaching',
-            'B26' => 'inst_cost_full_tutoring',
-            'C26' => 'inst_cost_part_tutoring',
-            'B27' => 'inst_cost_full_advising',
-            'C27' => 'inst_cost_part_advising',
-            'B28' => 'inst_cost_full_ac_service',
-            'C28' => 'inst_cost_part_ac_service',
-            'B29' => 'inst_cost_full_assessment',
-            'C29' => 'inst_cost_part_assessment',
-            'B30' => 'inst_cost_full_prof_dev',
-            'C30' => 'inst_cost_part_prof_dev'
+            'C13' => 'inst_cost_full_expend',
+            'C14' => 'inst_cost_full_num',
+            'C15' => 'inst_cost_full_cred_hr',
+            'C17' => 'inst_cost_part_expend',
+            'C18' => 'inst_cost_part_num',
+            'C19' => 'inst_cost_part_cred_hr',
+            'B27' => 'inst_cost_full_program_dev',
+            'C27' => 'inst_cost_part_program_dev',
+            'B28' => 'inst_cost_full_course_dev',
+            'C28' => 'inst_cost_part_course_dev',
+            'B29' => 'inst_cost_full_teaching',
+            'C29' => 'inst_cost_part_teaching',
+            'B30' => 'inst_cost_full_tutoring',
+            'C30' => 'inst_cost_part_tutoring',
+            'B31' => 'inst_cost_full_advising',
+            'C31' => 'inst_cost_part_advising',
+            'B32' => 'inst_cost_full_ac_service',
+            'C32' => 'inst_cost_part_ac_service',
+            'B33' => 'inst_cost_full_assessment',
+            'C33' => 'inst_cost_part_assessment',
+            'B34' => 'inst_cost_full_prof_dev',
+            'C34' => 'inst_cost_part_prof_dev'
         );
     }
 

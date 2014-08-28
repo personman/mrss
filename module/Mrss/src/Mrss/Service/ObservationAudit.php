@@ -86,6 +86,11 @@ class ObservationAudit
 
         $changeSet = null;
         if (!empty($changes)) {
+            // debug
+            //echo 'old (' . $old->getId() . '):' . $old->get('inst_cost_part_expend');
+            //echo '<br>new (' . $new->getId() . '):' . $new->get('inst_cost_part_expend') . '<br><br>';
+            //die;
+
             $changeSet = $this->getChangeSetEntity($changes);
             $changeSet->setObservation($new->getObservation());
             $changeSet->setSubObservation($new);
@@ -153,12 +158,20 @@ class ObservationAudit
 
     public function compare($old, $new)
     {
+        // Do some rounding
+        $precision = 5;
+
         $changes = array();
 
         $benchmarks = $old->getAllBenchmarks();
         foreach ($benchmarks as $benchmark) {
             $oldValue = $old->get($benchmark);
             $newValue = $new->get($benchmark);
+
+            if (is_numeric($newValue) && is_numeric($oldValue)) {
+                $newValue = round($newValue, $precision);
+                $oldValue = round($oldValue, $precision);
+            }
 
             if ($oldValue != $newValue) {
                 $changes[$benchmark] = array(

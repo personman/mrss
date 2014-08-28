@@ -33,7 +33,11 @@ $this->headScript()->appendFile(
 <div class="report">
 
     <?php foreach ($reportData as $benchmarkGroup): ?>
-        <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php if (stristr($benchmarkGroup['benchmarkGroup'], '|')): ?>
+            <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php elseif (stristr($benchmarkGroup['benchmarkGroup'], ':')): ?>
+            <?php list($formNumber, $formTitle) = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php endif ?>
         <h3 class="benchmarkGroupTitle">
             <span class="small-heading"><?= $formNumber ?></span><br>
             <?= $formTitle ?>
@@ -84,7 +88,15 @@ $this->headScript()->appendFile(
                     </tr>
                     <tr class="nationalReportChart <?= $rowClass ?>">
                         <td></td>
-                        <td colspan="9"><?= $this->chart($benchmark['chart']) ?></td>
+                        <td colspan="9">
+                            <?= $this->chart($benchmark['chart']) ?>
+
+                            <?php if (!empty($benchmark['description'])): ?>
+                            <p class="nationalDataDefinition">
+                                <?= $benchmark['description'] ?>
+                            </p>
+                            <?php endif ?>
+                        </td>
                     </tr>
 
                 <?php endforeach ?>

@@ -5,6 +5,7 @@
 namespace MrssTest\Entity;
 
 use Mrss\Entity\Observation;
+use Mrss\Entity\SubObservation;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -191,4 +192,71 @@ class ObservationTest extends PHPUnit_Framework_TestCase
             10 < count($observation->getAllBenchmarks())
         );
     }
+
+    /**
+     * Test the calculation of cost per credit hour
+     */
+    public function testMergeSubobservations()
+    {
+        $observation = new Observation();
+
+        $subOb1 = new SubObservation();
+        $subOb1->set('inst_cost_full_expend', 10000);
+        $subOb1->set('inst_cost_full_program_dev', 50);
+
+        $subOb2 = new SubObservation();
+        $subOb2->set('inst_cost_full_expend', 20000);
+        $subOb2->set('inst_cost_full_program_dev', 40);
+
+        $observation->setSubObservations(
+            array(
+                $subOb1,
+                $subOb2
+            )
+        );
+
+        $observation->mergeSubobservations();
+
+        $result = (10000 * 0.50) + (20000 * 0.40);
+        $this->assertEquals(
+            $result,
+            $observation->get('inst_cost_full_expend_program_dev')
+        );
+
+        $activityPercentage = ((10000 * 0.50) + (20000 * 0.40)) / (10000 + 20000) * 100;
+        $this->assertEquals(
+            $activityPercentage,
+            $observation->get('inst_cost_full_program_dev')
+        );
+    }
+
+    /**
+     * Test the averaging of subobs
+     */
+    /*public function testMergeSubobservationsAverage()
+    {
+        $observation = new Observation();
+
+        $subOb1 = new SubObservation();
+        $subOb1->set('inst_cost_full_program_dev', 10000);
+
+        $subOb2 = new SubObservation();
+        $subOb2->set('inst_cost_full_program_dev', 20000);
+
+        $observation->setSubObservations(
+            array(
+                $subOb1,
+                $subOb2
+            )
+        );
+
+        $observation->mergeSubobservations();
+
+        $result = (10000 + 20000) / 2;
+        $this->assertEquals(
+            $result,
+            $observation->get('inst_cost_full_program_dev')
+        );
+
+    }*/
 }

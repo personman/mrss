@@ -71,7 +71,7 @@ class ObservationController extends AbstractActionController
             if ($form->isValid()) {
                 $ObservationModel->save($observation);
                 $this->getServiceLocator()->get('computedFields')
-                    ->calculateAllForObservation($observation);
+                    ->calculateAllForObservation($observation, $this->currentStudy());
 
                 $this->getServiceLocator()->get('em')->flush();
 
@@ -304,7 +304,9 @@ class ObservationController extends AbstractActionController
                     ->logChanges($oldObservation, $observation, 'dataEntry');
 
                 $this->getServiceLocator()->get('computedFields')
-                    ->calculateAllForObservation($observation);
+                    ->calculateAllForObservation($observation, $this->currentStudy());
+
+                $this->mergeAllSubobservations();
 
                 $this->getServiceLocator()->get('em')->flush();
 
@@ -334,6 +336,17 @@ class ObservationController extends AbstractActionController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    public function mergeAllSubobservations()
+    {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $subscriptions = $study->getSubscriptions();
+        foreach ($subscriptions as $subscription) {
+            $subscription->getObservation()->mergeSubobservations();
+        }
     }
 
     public function listSubObservations($benchmarkGroup)
@@ -541,6 +554,9 @@ class ObservationController extends AbstractActionController
 
             // How did that go?
             if (empty($errorMessages)) {
+                // Merge subobservations
+                $observation->mergeSubobservations();
+
                 // Log any changes
                 $this->getServiceLocator()->get('service.observationAudit')
                     ->logChanges($oldObservation, $observation, 'excel');
