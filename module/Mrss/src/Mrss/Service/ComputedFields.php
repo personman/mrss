@@ -5,7 +5,7 @@ namespace Mrss\Service;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Study;
-use Mrss\Model\Benchmark as  BenchmarkModel;
+use Mrss\Model\Benchmark as BenchmarkModel;
 use Mrss\Model\Observation as ObservationkModel;
 use exprlib\Parser as MathParser;
 
@@ -21,6 +21,16 @@ class ComputedFields
      */
     protected $observationModel;
 
+    /**
+     * @var Benchmark[]
+     */
+    protected $computedBenchmarks;
+
+    /**
+     * @var Study
+     */
+    protected $study;
+
     protected $debug = false;
 
     public function calculate(Benchmark $benchmark, Observation $observation)
@@ -32,6 +42,9 @@ class ComputedFields
             $result = null;
         } else {
             // Populate variables
+            $equationWithVariables = $this
+                ->nestComputedEquations($equationWithVariables);
+
             $equation = $this->prepareEquation($equationWithVariables, $observation);
 
             if (empty($equation)) {
@@ -148,6 +161,38 @@ class ComputedFields
         return $preparedEquation;
     }
 
+    /**
+     * If an equation includes a benchmark that's computed, drop in the equation
+     * rather than the current value. This is so we don't have to worry about
+     * what order the equations are calculated in.
+     *
+     * @param $equation
+     * @return mixed
+     */
+    public function nestComputedEquations($equation)
+    {
+        $variables = $this->getVariables($equation);
+        $computed = $this->getComputedBenchmarks();
+
+        foreach ($variables as $variable) {
+            if (!empty($computed[$variable])) {
+                $insideBenchmark = $computed[$variable];
+                $insideEquation = $insideBenchmark->getEquation();
+
+                // Recurse in case the inside equation contains other computed ones
+                $insideEquation = $this->nestComputedEquations($insideEquation);
+
+                $equation = str_replace(
+                    '{{' . $variable . '}}',
+                    '( ' . $insideEquation . ' )',
+                    $equation
+                );
+            }
+        }
+
+       return $equation;
+    }
+
     public function calculateAllForObservation(Observation $observation, Study $study)
     {
         $benchmarks = $this->getBenchmarkModel()->findComputed($study);
@@ -183,5 +228,33 @@ class ComputedFields
     public function getObservationModel()
     {
         return $this->observationModel;
+    }
+
+    public function setStudy(Study $study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
+    }
+
+    public function getComputedBenchmarks()
+    {
+        if (empty($this->computedBenchmarks)) {
+            $benchmarks = $this->getBenchmarkModel()->findComputed($this->getStudy());
+
+            $computedBenchmarks = array();
+            foreach ($benchmarks as $benchmark) {
+                $computedBenchmarks[$benchmark->getDbColumn()] = $benchmark;
+            }
+
+            $this->computedBenchmarks = $computedBenchmarks;
+        }
+
+        return $this->computedBenchmarks;
     }
 }

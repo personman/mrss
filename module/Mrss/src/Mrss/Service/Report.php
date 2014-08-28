@@ -635,6 +635,8 @@ class Report
                     $observation
                 );
 
+                $benchmarkData['description'] = $benchmark->getDescription();
+
                 $groupData['benchmarks'][] = $benchmarkData;
 
             }

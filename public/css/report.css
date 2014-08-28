@@ -96,3 +96,9 @@ h3.benchmarkGroupTitle {
 tr.topHeading th.nationalPercentiles {
     background: #487ab6;
 }
+
+.nationalDataDefinition {
+    margin: 10px;
+    text-align: left;
+    font-style: italic;
+}

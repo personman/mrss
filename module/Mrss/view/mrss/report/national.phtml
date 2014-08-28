@@ -88,7 +88,15 @@ $this->headScript()->appendFile(
                     </tr>
                     <tr class="nationalReportChart <?= $rowClass ?>">
                         <td></td>
-                        <td colspan="9"><?= $this->chart($benchmark['chart']) ?></td>
+                        <td colspan="9">
+                            <?= $this->chart($benchmark['chart']) ?>
+
+                            <?php if (!empty($benchmark['description'])): ?>
+                            <p class="nationalDataDefinition">
+                                <?= $benchmark['description'] ?>
+                            </p>
+                            <?php endif ?>
+                        </td>
                     </tr>
 
                 <?php endforeach ?>
