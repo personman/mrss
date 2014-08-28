@@ -235,6 +235,10 @@ class Module
                     $observationModel = $sm->get('model.observation');
                     $computedFields->setObservationModel($observationModel);
 
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+                    $computedFields->setStudy($currentStudy);
+
                     return $computedFields;
                 },
                 'validator.equation' => function ($sm) {
