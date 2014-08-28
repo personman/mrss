@@ -611,6 +611,23 @@ class Excel
                     $definition = strip_tags($benchmark->getDescription());
                     $sheet->setCellValue($definitionCol . $rowIndex, $definition);
                 }
+
+                // Because PHPExcel is dropping the cell format: Accounting
+                if (true) {
+                    $benchmark = $this->getBenchmarkModel()
+                        ->findOneByDbColumnAndStudy(
+                            $dbColumn,
+                            $this->getCurrentStudy()->getId()
+                        );
+
+                    if ($benchmark->getInputType() == 'wholedollars') {
+                        $sheet->getStyle($valueColumn . $rowIndex)->getNumberFormat()
+                            ->setFormatCode(
+                                '_("$"* #,##0_);_("$"* \(#,##0\);' .
+                                '_("$"* "-"??_);_(@_)'
+                            );
+                    }
+                }
             }
         }
 
