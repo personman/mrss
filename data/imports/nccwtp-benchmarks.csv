@@ -1,16 +1,16 @@
 benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,excludeFromCompletion
-"Form 1 | Enrollment Information","Duplicated Enrollment (for the 2012/2013 fiscal year)",enrollment_information_duplicated_enrollment,number,"Duplicated non-credit workforce development participant headcount for the 2012/2013 fiscal year",,,,
-"Form 1 | Enrollment Information","Unduplicated Enrollment (for the 2012/2013 fiscal year)",enrollment_information_unduplicated_enrollment,number,"Unduplicated non-credit workforce development participant headcount for the 2012/2013 fiscal year",,,,
-"Form 1 | Enrollment Information","% of Unduplicated Enrollment of Total",enrollment_information_workforce_enrollment_percent,percent,,,1,"{{enrollment_information_unduplicated_enrollment}} / ({{enrollment_information_unduplicated_enrollment}} + {{institutional_demographics_credit_enrollment}})",1
-"Form 1 | Enrollment Information","Number of Organizations Served (for the 2012/2013 fiscal year)",enrollment_information_organizations_served,number,"Unduplicated number of organizations for which contract training was provided. (on- or off-campus, online, as distance learning or on the organization's site for the 2012/2013 fiscal year)",,,,
-"Form 1 | Enrollment Information","Market Penetration Rate",enrollment_information_market_penetration,percent,,,1,"{{enrollment_information_organizations_served}} / {{institutional_demographics_total_companies}}",1
-"Form 1 | Enrollment Information","Number of Training Contracts (for the 2012/2013 fiscal year)",enrollment_information_training_contracts,number,"Number of training contracts executed in the 2012/2013 fiscal year.",,,,
-"Form 1 | Enrollment Information","Total Workforce Faculty Contact Hours (for the 2012/2013 fiscal year)",enrollment_information_total_contact_hours,number,,,,,
-"Form 1 | Enrollment Information","Faculty Contact Hours per Total Students (Duplicated)",enrollment_information_contact_hours_per_student,float,,,1,"{{enrollment_information_total_contact_hours}} / {{enrollment_information_duplicated_enrollment}}",1
+"Form 1 | Enrollment Information","Duplicated Enrollment (2012/2013 fiscal year)",enrollment_information_duplicated_enrollment,number,"Duplicated non-credit workforce development participant headcount for the 2012/2013 fiscal year",,,,
+"Form 1 | Enrollment Information","Unduplicated Enrollment (2012/2013 fiscal year)",enrollment_information_unduplicated_enrollment,number,"Unduplicated non-credit workforce development participant headcount for the 2012/2013 fiscal year",,,,
+"Form 1 | Enrollment Information","% of Unduplicated Enrollment of Total",enrollment_information_workforce_enrollment_percent,percent,"Percentage of unduplicated workforce enrollment of total college enrollment",,1,"{{enrollment_information_unduplicated_enrollment}} / ({{enrollment_information_unduplicated_enrollment}} + {{institutional_demographics_credit_enrollment}})",1
+"Form 1 | Enrollment Information","Number of Organizations Served (2012/2013 fiscal year)",enrollment_information_organizations_served,number,"Unduplicated number of organizations for which contract training was provided. (on- or off-campus, online, as distance learning or on the organization's site for the 2012/2013 fiscal year)",,,,
+"Form 1 | Enrollment Information","Market Penetration Rate",enrollment_information_market_penetration,percent,"Percentage of organization served of total organization in the service area",,1,"{{enrollment_information_organizations_served}} / {{institutional_demographics_total_companies}}",1
+"Form 1 | Enrollment Information","Number of Training Contracts (2012/2013 fiscal year)",enrollment_information_training_contracts,number,"Number of training contracts executed in the 2012/2013 fiscal year.",,,,
+"Form 1 | Enrollment Information","Total Workforce Faculty Contact Hours (2012/2013 fiscal year)",enrollment_information_total_contact_hours,number,,,,,
+"Form 1 | Enrollment Information","Faculty Contact Hours per Total Students (Duplicated)",enrollment_information_contact_hours_per_student,float,"Number of faculty contact hours by duplicated enrollment",,1,"{{enrollment_information_total_contact_hours}} / {{enrollment_information_duplicated_enrollment}}",1
 "Form 2 | Retention","Number of Returning Organizations",retention_returning_organizations,number,"An organization that received contract training in the current fiscal year and at least once previously.",,,,
-"Form 2 | Retention","% Returning Organizations of Total Org Served",retention_percent_returning_organizations_served,percent,,,1,"{{retention_returning_organizations}} / {{enrollment_information_organizations_served}}",1
+"Form 2 | Retention","% Returning Organizations of Total Org Served",retention_percent_returning_organizations_served,percent,"Percentage of returning organizations of total organizations served",,1,"{{retention_returning_organizations}} / {{enrollment_information_organizations_served}}",1
 "Form 2 | Retention","Number of Returning Students",retention_returning_students,number,"An individual who receives workforce training in the current fiscal year and also did so previously.",,,,
-"Form 2 | Retention","% of Returning Students of Total Students",retention_percent_returning_students,percent,,,1,"{{retention_returning_students}} / {{enrollment_information_unduplicated_enrollment}}",1
+"Form 2 | Retention","% of Returning Students of Total Students",retention_percent_returning_students,percent,"Percentage of returning students of total enrolled students",,1,"{{retention_returning_students}} / {{enrollment_information_unduplicated_enrollment}}",1
 "Form 3 | Staffing","Number of Full-time Instructors",staffing_full_time_instructors,number,,,,,
 "Form 3 | Staffing","% of Full-time Instructor of Total Instructors",staffing_full_time_instructors_percent,percent,,,1,"{{staffing_full_time_instructors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Part-time Instructors",staffing_part_time_instructors,number,,,,,
@@ -19,7 +19,7 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 3 | Staffing","% of Independent Contractors to Total Instructors",staffing_independent_contractors_percent,percent,,,1,"{{staffing_independent_contractors}} / ( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} )",1
 "Form 3 | Staffing","Number of Full-time Support Staff",staffing_full_time_support_staff,number,,,,,
 "Form 3 | Staffing","Number of Part-time Support Staff",staffing_part_time_support_staff,number,,,,,
-"Form 3 | Staffing","Instructor/Staff Ratio",staffing_instructor_staff_ratio,float,,,1,"( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} ) / ( {{staffing_full_time_support_staff}} + {{staffing_part_time_support_staff}} )",1
+"Form 3 | Staffing","Instructor/Staff Ratio",staffing_instructor_staff_ratio,float,"Total instructors by total staff",,1,"( {{staffing_full_time_instructors}} + {{staffing_part_time_instructors}} + {{staffing_independent_contractors}} ) / ( {{staffing_full_time_support_staff}} + {{staffing_part_time_support_staff}} )",1
 "Form 4 | Transition from Workforce Training to Credit Coursework","Percentage of Workforce Training Students that Transitioned to Credit Coursework",transition_students,percent,"Percentage of non-credit workforce training students that transitioned to one or more credit courses within one year of completing a non-credit course",,,,
 "Form 5 | Revenue","Federal (non-grant)",revenue_federal,percent,"Percentage of revenue from non-grant federal sources",,,,
 "Form 5 | Revenue","State (non-grant)",revenue_state,percent,"Percentage of revenue from non-grant federal sources",,,,
@@ -27,26 +27,26 @@ benchmarkGroup,name,dbColumn,inputType,description,options,computed,equation,exc
 "Form 5 | Revenue",Grants,revenue_grants,percent,"Percentage of revenue from grants",,,,
 "Form 5 | Revenue","Earned Revenue (tuition, fees, company reimbursement, other)",revenue_earned_revenue,percent,"Percentage of revenue from earned revenue",,,,
 "Form 5 | Revenue","Gross Revenue from Contract Training",revenue_contract_training,dollars,,,,,
-"Form 5 | Revenue","% of Gross Revenue from Contract Training",revenue_contract_training_percent,percent,,,1,"{{revenue_contract_training}} / ( {{revenue_contract_training}} + {{revenue_continuing_education}} )",1
+"Form 5 | Revenue","% of Gross Revenue from Contract Training",revenue_contract_training_percent,percent,"Percentage of total gross revenue from contract training of total gross workforce training revenue",,1,"{{revenue_contract_training}} / ( {{revenue_contract_training}} + {{revenue_continuing_education}} )",1
 "Form 5 | Revenue","Gross Revenue from Continuing Education",revenue_continuing_education,dollars,,,,,
-"Form 5 | Revenue","% of Gross Revenue from Continuing Education",revenue_continuing_education_percent,percent,,,1,"{{revenue_continuing_education}} / ( {{revenue_contract_training}} + {{revenue_continuing_education}} )",1
+"Form 5 | Revenue","% of Gross Revenue from Continuing Education",revenue_continuing_education_percent,percent,"Percentage of total gross revenue from continuing education of total gross workforce training revenue",,1,"{{revenue_continuing_education}} / ( {{revenue_contract_training}} + {{revenue_continuing_education}} )",1
 "Form 5 | Revenue","Total Gross Revenue",revenue_total,dollars,"Revenue in support of all non-credit workforce training - include all public, grant and earned revenue for the 2012/2013 fiscal year.",,1,"{{revenue_contract_training}} + {{revenue_continuing_education}}",
 "Form 6 | Expenditures",Salaries,expenditures_salaries,dollars,,,,,
-"Form 6 | Expenditures","Salaries as a % of Total Expenditures",expenditures_salaries_percent,percent,,,1,"{{expenditures_salaries}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","Salaries as a % of Total Expenditures",expenditures_salaries_percent,percent,"Percent of salaries of total expenditures",,1,"{{expenditures_salaries}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Benefits,expenditures_benefits,dollars,"If you do not have actual benefit dollars, use the national percentage of 25.7% from the AAUP Salary Report.  (Salaries x .257)",,,,
-"Form 6 | Expenditures","Benefits as a % of Total Expenditures",expenditures_benefits_percent,percent,,,1,"{{expenditures_benefits}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","Benefits as a % of Total Expenditures",expenditures_benefits_percent,percent,"Percent of benefits of total expenditures",,1,"{{expenditures_benefits}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Supplies,expenditures_supplies,dollars,,,,,
-"Form 6 | Expenditures","Supplies as a % of Total Expenditures",expenditures_supplies_percent,percent,,,1,"{{expenditures_supplies}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","Supplies as a % of Total Expenditures",expenditures_supplies_percent,percent,"Percent of supplies of total expenditures",,1,"{{expenditures_supplies}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Marketing,expenditures_marketing,dollars,,,,,
-"Form 6 | Expenditures","Marketing as a % of Total Expenditures",expenditures_marketing_percent,percent,,,1,"{{expenditures_marketing}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","Marketing as a % of Total Expenditures",expenditures_marketing_percent,percent,"Percent of marketing of total expenditures",,1,"{{expenditures_marketing}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Capital Equipment",expenditures_capital_equipment,dollars,,,,,
-"Form 6 | Expenditures","Capital Equipment as a % of Total Expenditures",expenditures_capital_equipment_percent,percent,,,1,"{{expenditures_capital_equipment}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","Capital Equipment as a % of Total Expenditures",expenditures_capital_equipment_percent,percent,"Percent of capital equipment of total expenditures",,1,"{{expenditures_capital_equipment}} / {{expenditures_total}}",1
 "Form 6 | Expenditures",Travel,expenditures_travel,dollars,,,,,
-"Form 6 | Expenditures","Travel as a % of Total Expenditures",expenditures_travel_percent,percent,,,1,"{{expenditures_travel}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","Travel as a % of Total Expenditures",expenditures_travel_percent,percent,"Percent of travel of total expenditures",,1,"{{expenditures_travel}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Total Contract Training",expenditures_contract_training,dollars,,,,,
-"Form 6 | Expenditures","% of Contract Training Expenditures of Total",expenditures_contract_training_percent,percent,,,1,"{{expenditures_contract_training}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","% of Contract Training Expenditures of Total",expenditures_contract_training_percent,percent,"Percentage of total expenditures from contract training of total workforce training expenditures",,1,"{{expenditures_contract_training}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Total Continuing Education Workforce Training",expenditures_continuing_education,dollars,,,,,
-"Form 6 | Expenditures","% of Cont Ed Workforce Training Expenditures of Total",expenditures_continuing_education_percent,percent,,,1,"{{expenditures_continuing_education}} / {{expenditures_total}}",1
+"Form 6 | Expenditures","% of Cont Ed Workforce Training Expenditures of Total",expenditures_continuing_education_percent,percent,"Percentage of total expenditures from continuing education of total workforce training expenditures",,1,"{{expenditures_continuing_education}} / {{expenditures_total}}",1
 "Form 6 | Expenditures","Total Expenditures",expenditures_total,dollars,,,,,
 "Form 6 | Expenditures","Overhead (rent & utilities) as percentage of total expenditures",expenditures_overhead,percent,,,,,
 "Form 7 | Retained Revenue","Contract Training",retained_revenue_contract_training,dollars,,,,,
