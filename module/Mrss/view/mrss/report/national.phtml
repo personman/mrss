@@ -73,7 +73,7 @@ $this->headScript()->appendFile(
                             <?php if ($benchmark['percentile_rank'] == '-'): ?>
                                 <?= $benchmark['percentile_rank'] ?>
                             <?php else: ?>
-                                <?= round($benchmark['percentile_rank']) ?>
+                                <?= round($benchmark['percentile_rank']) ?>%
                             <?php endif ?>
                         </td>
                         <?php else: ?>

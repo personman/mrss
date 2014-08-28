@@ -697,7 +697,7 @@ class Report
                 if ($benchmark['percentile_rank'] == '-') {
                     $rank = '-';
                 } elseif ($benchmark['percentile_rank']) {
-                    $rank = round($benchmark['percentile_rank']);
+                    $rank = round($benchmark['percentile_rank']) . '%';
                 } else {
                     $rank = null;
                 }
