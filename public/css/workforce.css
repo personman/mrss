@@ -459,3 +459,8 @@ body #headerLoginForm {
 #control-group-pellGrantRecipients {
     display: none;
 }
+
+/* Admin navigation */
+.adminNavigation {
+    margin-bottom: 30px;
+}
