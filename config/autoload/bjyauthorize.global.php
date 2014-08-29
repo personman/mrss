@@ -104,6 +104,11 @@ return array(
                 array(
                     'controller' => 'zfcuserimpersonate_adminController',
                     'action' => 'unimpersonateUser',
+                    'roles' => array('user', 'admin')
+                ),
+                array(
+                    'controller' => 'subscription',
+                    'action' => 'renew',
                     'roles' => array('user')
                 ),
                 // System admin

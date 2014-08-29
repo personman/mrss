@@ -65,6 +65,10 @@ return array(
                     ),*/
                 )
             ),
+            'renew' => array(
+                'label' => 'Renew',
+                'route' => 'renew',
+            ),
             'data-entry' => array(
                 'label' => 'Data Entry',
                 'route' => 'data-entry',

@@ -75,6 +75,11 @@ class SubscriptionController extends AbstractActionController
         );
     }
 
+    public function renewAction()
+    {
+
+    }
+
     /**
      * Users should only arrive at this page after filling out a valid subscription
      * form.

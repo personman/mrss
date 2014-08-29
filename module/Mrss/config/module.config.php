@@ -344,6 +344,17 @@ return array(
                     ),
                 )
             ),
+            'renew' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/renew',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'renew'
+                    )
+                )
+            ),
             'college' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
