@@ -81,7 +81,7 @@ $this->headScript()->appendFile(
             Number of <br>FTE Faculty / Staff
             <span class="icon-info-sign infotip" title="FTE: Full-time equivalent"></span>
         </th>
-        <th>Number of Academic Year<br>Student Credit Hours</th>
+        <th>Number of Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?><br>Student Credit Hours</th>
     </tr>
     </thead>
 
