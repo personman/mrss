@@ -245,4 +245,26 @@ class ComputedFieldsTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function testCheckEquation()
+    {
+        // Valid
+        $equation = "{{inst_full_expend}} / {{inst_full_num}}";
+        $result = $this->computedFields->checkEquation($equation);
+
+        $this->assertEquals(true, $result);
+
+        // Invalid
+        $equation = "{{inst_full_exp}} / {{inst_full_num}}";
+        $result = $this->computedFields->checkEquation($equation);
+
+        $this->assertEquals(false, $result);
+
+        // Parse error
+        $equation = "{{inst_full_expend}} / {{inst_full_num}} /+)";
+        $result = $this->computedFields->checkEquation($equation);
+
+        $this->assertEquals(false, $result);
+
+    }
 }

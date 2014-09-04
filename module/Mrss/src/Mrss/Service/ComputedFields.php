@@ -33,6 +33,8 @@ class ComputedFields
 
     protected $debug = false;
 
+    protected $error;
+
     public function calculate(Benchmark $benchmark, Observation $observation)
     {
         $equationWithVariables = $benchmark->getEquation();
@@ -73,6 +75,56 @@ class ComputedFields
         $this->getObservationModel()->getEntityManager()->flush();
 
         return $result;
+    }
+
+    public function checkEquation($equation)
+    {
+        $variables = $this->getVariables($equation);
+
+        $parsedEquation = $this->buildEquation($equation);
+        $observation = new Observation();
+
+        $result = true;
+        $vars = array();
+        foreach ($variables as $variable) {
+            if (!$observation->has($variable)) {
+                $result = false;
+                $error = "$variable does not exist in the observation";
+            } else {
+                $vars[$variable] = rand(1, 0);
+            }
+        }
+
+        $preparedEquation = $parsedEquation->setVars($vars);
+
+        try {
+            $equationResult = $preparedEquation->evaluate();
+        } catch (\Exception $exception) {
+            // An exception was thrown, possibly division by zero
+            // Save the value as null
+            $result = false;
+
+            $message = null;
+            if (method_exists($exception, 'getMessage')) {
+                $message = $exception->getMessage();
+            }
+            $error = 'Equation parse error. ' . $message;
+        }
+
+
+
+        if (!empty($error)) {
+            $this->error = $error;
+        } else {
+            $this->error = null;
+        }
+
+        return $result;
+    }
+
+    public function getError()
+    {
+        return $this->error;
     }
 
     public function getVariables($equation)

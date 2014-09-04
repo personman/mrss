@@ -25,7 +25,10 @@ class ImportBenchmarks
     /** @var Observation */
     protected $observation;
 
-    protected $observationPropertiesToAdd = array();
+    /** @var ComputedFields */
+    protected $computedFieldsService;
+
+    protected $messages = array();
 
     protected $sequences = array();
 
@@ -46,23 +49,45 @@ class ImportBenchmarks
         $fh = fopen($filename, 'r');
         $headers = array();
         while (($data = fgetcsv($fh)) !== false) {
+            if (count($data) < 2) {
+                continue;
+            }
+
             if (count($headers) == 0) {
                 $headers = $data;
                 $this->checkHeaders($headers);
             } else {
                 $row = array();
                 foreach ($headers as $key => $field) {
+
                     $row[$field] = trim($data[$key]);
                 }
 
+                // Check equation
+                $this->checkEquation($row['equation'], $row['dbColumn']);
+
+                // Import row
                 $this->importRow($row);
             }
         }
     }
 
-    public function getObservationPropertiesToAdd()
+    public function checkEquation($equation, $dbColumn)
     {
-        return implode('', $this->observationPropertiesToAdd);
+        if (!empty($equation)) {
+            $result = $this->getComputedFieldsService()->checkEquation($equation);
+
+            if (!$result) {
+                $error = $this->getComputedFieldsService()->getError();
+                $error = "<br><br>Error in equation for $dbColumn: $error<br>";
+                $this->messages[] = $error;
+            }
+        }
+    }
+
+    public function getMessages()
+    {
+        return implode('', $this->messages);
     }
 
     public function importRow($row)
@@ -164,7 +189,7 @@ class ImportBenchmarks
             $type = $this->getTypeByInputType($benchmark->getInputType());
             $code = "\n/** @ORM\Column(type=\"$type\", nullable=true) */".
                 "\nprotected $$dbColumn;\n";
-            $this->observationPropertiesToAdd[] = $code;
+            $this->messages[] = $code;
         }
     }
 
@@ -320,5 +345,17 @@ class ImportBenchmarks
             'equation',
             'excludeFromCompletion'
         );
+    }
+
+    public function setComputedFieldsService(ComputedFields $service)
+    {
+        $this->computedFieldsService = $service;
+
+        return $this;
+    }
+
+    public function getComputedFieldsService()
+    {
+        return $this->computedFieldsService;
     }
 }

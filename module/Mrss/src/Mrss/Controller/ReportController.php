@@ -24,6 +24,7 @@ class ReportController extends AbstractActionController
     public function calculateAction()
     {
         $this->longRunningScript();
+        $start = microtime(true);
 
         $years = $this->getReportService()->getCalculationInfo();
         $yearToPrepare = $this->params()->fromRoute('year');
@@ -35,9 +36,11 @@ class ReportController extends AbstractActionController
             $percentiles = $stats['percentiles'];
             $percentileRanks = $stats['percentileRanks'];
 
+            $elapsed = round(microtime(true) - $start, 1);
+
             $this->flashMessenger()->addSuccessMessage(
                 "Report prepared. Benchmarks: $benchmarks. Percentiles: $percentiles.
-                Percentile ranks: $percentileRanks."
+                Percentile ranks: $percentileRanks. Elapsed time: $elapsed seconds."
             );
 
             return $this->redirect()->toRoute('reports/calculate');

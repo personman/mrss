@@ -121,7 +121,7 @@ class StudyController extends AbstractActionController
 
         // Output properties that need to be added to Observation
         return array(
-            'propertiesToAdd' => $importer->getObservationPropertiesToAdd()
+            'propertiesToAdd' => $importer->getMessages()
         );
     }
 

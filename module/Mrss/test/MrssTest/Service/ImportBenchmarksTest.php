@@ -23,14 +23,14 @@ class ImportBenchmarksTest extends PHPUnit_Framework_TestCase
         unset($this->service);
     }
 
-    public function testGetObservationPropertiesToAdd()
+    public function testGetMessages()
     {
         $benchmark = new Benchmark();
         $benchmark->setDbColumn('does_not_exist');
         $benchmark->setInputType('percent');
 
         $this->service->checkObservation($benchmark);
-        $toAdd = $this->service->getObservationPropertiesToAdd();
+        $toAdd = $this->service->getMessages();
 
         $this->assertContains('@ORM', $toAdd);
         $this->assertContains('does_not_exist', $toAdd);

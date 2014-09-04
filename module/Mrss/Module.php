@@ -197,6 +197,9 @@ class Module
                     $benchmarkGroupModel = $sm->get('model.benchmarkGroup');
                     $importer->setBenchmarkGroupModel($benchmarkGroupModel);
 
+                    $computedFieldsService = $sm->get('computedFields');
+                    $importer->setComputedFieldsService($computedFieldsService);
+
                     $importer->setEntityManager($sm->get('em'));
 
                     return $importer;

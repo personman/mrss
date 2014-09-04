@@ -633,6 +633,52 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_budget;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_0_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admissions_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutorings_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_percent_salaries;
+
+
 
 
     // MRSS Form 4
