@@ -637,7 +637,7 @@ class Observation
     protected $ss_salaries;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_0_cost;
+    protected $ss_o_cost;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_contract;
@@ -677,6 +677,153 @@ class Observation
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admissions_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admissions_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admissions_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admissions_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_students_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_students_per_fte_emp;
 
 
 

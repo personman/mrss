@@ -91,7 +91,7 @@ class ComputedFields
                 $result = false;
                 $error = "$variable does not exist in the observation";
             } else {
-                $vars[$variable] = rand(1, 0);
+                $vars[$variable] = rand(1, 9);
             }
         }
 
@@ -107,6 +107,10 @@ class ComputedFields
             $message = null;
             if (method_exists($exception, 'getMessage')) {
                 $message = $exception->getMessage();
+
+                if (empty($message)) {
+                    $message = get_class($exception);
+                }
             }
             $error = 'Equation parse error. ' . $message;
         }

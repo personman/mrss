@@ -1,13 +1,20 @@
 <h3>Import Complete</h3>
 
-<?php if (!empty($propertiesToAdd)): ?>
-    <p>
-        The following properties need to be added to the Observation entity class:
-    </p>
+<a href="<?= $this->url(
+    'studies/import',
+    array('id' => $this->currentStudy()->getId())
+) ?>" onclick="return confirm(
+        'This will make permanent changes to the data. Are you sure you want to do this?')
+        ">
+    <span class="icon-upload"></span>
+    Import again
+</a>
+
+<?php if (!empty($messages)): ?>
 
     <div class="well">
         <pre>
-            <?= $propertiesToAdd ?>
+            <?= $messages ?>
         </pre>
     </div>
 <?php endif ?>

@@ -80,14 +80,19 @@ class ImportBenchmarks
             if (!$result) {
                 $error = $this->getComputedFieldsService()->getError();
                 $error = "<br><br>Error in equation for $dbColumn: $error<br>";
-                $this->messages[] = $error;
+                $this->messages['error'][] = $error;
             }
         }
     }
 
     public function getMessages()
     {
-        return implode('', $this->messages);
+        $allMessages = '';
+        foreach ($this->messages as $type => $messages) {
+            $allMessages .= implode('', $messages);
+        }
+
+        return $allMessages;
     }
 
     public function importRow($row)
@@ -189,7 +194,7 @@ class ImportBenchmarks
             $type = $this->getTypeByInputType($benchmark->getInputType());
             $code = "\n/** @ORM\Column(type=\"$type\", nullable=true) */".
                 "\nprotected $$dbColumn;\n";
-            $this->messages[] = $code;
+            $this->messages['property'][] = $code;
         }
     }
 
