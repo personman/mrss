@@ -174,33 +174,6 @@ class Observation
     protected $ss_admissions;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_advising;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_counseling;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_career;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_financial_aid;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_registrar;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_tutoring;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_testing;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_recruitment;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $ss_cocurricular;
-
-    /** @ORM\Column(type="float", nullable=true) */
     protected $as_tech;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -587,6 +560,80 @@ class Observation
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_contract;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_total;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_admissions_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_recruitment_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_registrar_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_cocurricular_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_budget;
+
+
 
     // MRSS Form 4
     /** @ORM\Column(type="float", nullable=true) */
