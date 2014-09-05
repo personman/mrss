@@ -871,6 +871,57 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_experiential_contract;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_total;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_contract;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_library_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential_budget;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_library_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential_percent_salaries;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_library_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential_percent_o_cost;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_library_cost_per_fte_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential_cost_per_fte_emp;
+
+
+
+
     // MRSS Form 5 Demographics
     /** @ORM\Column(type="string", nullable=true) */
     protected $male_cred_stud;
