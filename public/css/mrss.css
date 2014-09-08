@@ -354,3 +354,14 @@ body #subscription legend {
 #footer .navbar-inverse {
     margin-left: 175px;
 }
+
+a.hover-highlight {
+    display: block;
+    border: 3px solid white;
+    width: 400px;
+    margin-bottom: 10px;
+}
+
+a.hover-highlight:hover {
+    border: 3px solid #809c00;
+}
