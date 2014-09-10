@@ -1297,6 +1297,11 @@ class Report
             $inputTypesToExclude
         );
 
+        // Now look at the checkbox
+        if (!$benchmark->getIncludeInNationalReport()) {
+            $manualExclude = true;
+        }
+
         return ($manualExclude || $inputTypeExclude);
     }
 

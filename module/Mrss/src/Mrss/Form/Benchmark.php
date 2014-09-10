@@ -156,6 +156,16 @@ class Benchmark extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'includeInNationalReport',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Include in National Report'
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 

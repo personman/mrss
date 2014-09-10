@@ -98,6 +98,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      */
     protected $excludeFromCompletion;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $includeInNationalReport;
+
     protected $benchmarkModel;
     protected $completionPercentages;
 
@@ -288,6 +293,22 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getExcludeFromCompletion()
     {
         return $this->excludeFromCompletion;
+    }
+
+    public function setIncludeInNationalReport($includeInNationalReport)
+    {
+        if (empty($includeInNationalReport)) {
+            $includeInNationalReport = false;
+        }
+
+        $this->includeInNationalReport = $includeInNationalReport;
+
+        return $this;
+    }
+
+    public function getIncludeInNationalReport()
+    {
+        return $this->includeInNationalReport;
     }
 
     /**
