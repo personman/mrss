@@ -787,6 +787,26 @@ return array(
                     )
                 )
             ),
+            'institution' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/institution',
+                    'defaults' => array(
+                        'controller' => 'colleges',
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit',
+                            'defaults' => array(
+                                'action' => 'edit'
+                            )
+                        )
+                    )
+                )
+            ),
             'account' => array(
                 'type' => 'segment',
                 'options' => array(

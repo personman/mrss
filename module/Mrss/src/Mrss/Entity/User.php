@@ -363,4 +363,15 @@ class User implements UserInterface, ProviderInterface
         return $this->getPrefix() . ' ' . $this->getFirstName() . ' ' .
         $this->getLastName();
     }
+
+    public function getFullPhone()
+    {
+        $phone = $this->getPhone();
+
+        if ($ext = $this->getExtension()) {
+            $phone .= ' x' . $ext;
+        }
+
+        return $phone;
+    }
 }

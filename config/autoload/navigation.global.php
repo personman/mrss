@@ -159,6 +159,10 @@ return array(
                         'label' => 'Manage Your Account',
                         'route' => 'account',
                     ),
+                    'institution' => array(
+                        'label' => 'Manage Your Institution',
+                        'route' => 'institution/edit'
+                    ),
                     'logout' => array(
                         'label' => 'Sign Out',
                         'route' => 'zfcuser/logout',

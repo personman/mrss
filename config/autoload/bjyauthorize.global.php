@@ -111,6 +111,11 @@ return array(
                     'action' => 'renew',
                     'roles' => array('user')
                 ),
+                array(
+                    'controller' => 'colleges',
+                    'action' => 'edit',
+                    'roles' => array('user')
+                ),
                 // System admin
                 array(
                     'controller' => 'observations',

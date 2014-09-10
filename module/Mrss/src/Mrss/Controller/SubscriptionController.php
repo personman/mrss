@@ -77,7 +77,11 @@ class SubscriptionController extends AbstractActionController
 
     public function renewAction()
     {
+        $college = $this->currentCollege();
 
+        return array(
+            'college' => $college
+        );
     }
 
     /**
