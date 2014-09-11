@@ -33,6 +33,8 @@ class PercentileRank
 
     /**
      * @ORM\ManyToOne(targetEntity="Benchmark")
+     * @ORM\JoinColumn(name="benchmark_id", referencedColumnName="id", onDelete="CASCADE")
+     * This causes the percentilRank row to be deleted when the benchmark is deleted
      */
     protected $benchmark;
 

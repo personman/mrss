@@ -28,6 +28,7 @@ class Percentile
 
     /**
      * @ORM\ManyToOne(targetEntity="Benchmark")
+     * @ORM\JoinColumn(name="benchmark_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $benchmark;
 
