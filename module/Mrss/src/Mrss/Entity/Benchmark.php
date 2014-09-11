@@ -574,6 +574,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $abbr = '$';
         } elseif ($abbr == 'number') {
             $abbr = '#';
+        } elseif ($abbr == 'float') {
+            $abbr = '#.#';
         }
 
         return $abbr;

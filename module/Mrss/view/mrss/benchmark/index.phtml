@@ -111,8 +111,10 @@
         <thead>
             <tr>
                 <th></th>
-                <th>Key</th>
-                <th>Input Type</th>
+                <th>Variable Name</th>
+                <th>Input<br>Type</th>
+                <th>Computed</th>
+                <th>On<br>Report</th>
                 <th>Name</th>
                 <th>Trends</th>
 
@@ -122,7 +124,8 @@
             </tr>
         </thead>
         <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
-        <?php foreach ($benchmarkGroup->getBenchmarks() as /** var Mrss\Entity\Benchmark */ $benchmark): ?>
+        <?php foreach ($benchmarkGroup->getBenchmarks() as $benchmark): ?>
+            <?php /** @var $benchmark \Mrss\Entity\Benchmark */ ?>
             <tr id="benchmark_<?= $benchmark->getId() ?>">
                 <td class="sortHandle">
                     <span class="icon-move"></span>
@@ -133,8 +136,17 @@
 
                 <td class="inputTypeAbbr">
                     <?= $benchmark->getInputTypeAbbr() ?>
+                </td>
+
+                <td style="text-align:center">
                     <?php if ($benchmark->getComputed()): ?>
-                        (computed)
+                        <i class="icon-ok infotip" title="<?= $benchmark->getEquation() ?>"></i>
+                    <?php endif ?>
+                </td>
+
+                <td style="text-align:center">
+                    <?php if ($benchmark->getIncludeInNationalReport()): ?>
+                        <i class="icon-ok"></i>
                     <?php endif ?>
                 </td>
 
