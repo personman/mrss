@@ -60,7 +60,11 @@ class ImportBenchmarks
                 $row = array();
                 foreach ($headers as $key => $field) {
 
-                    $row[$field] = trim($data[$key]);
+                    if (isset($data[$key])) {
+                        $row[$field] = trim($data[$key]);
+                    } else {
+                        $row[$field] = false;
+                    }
                 }
 
                 // Check equation
