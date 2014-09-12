@@ -68,6 +68,7 @@ return array(
             'renew' => array(
                 'label' => 'Renew',
                 'route' => 'renew',
+                'class' => 'renew-nav'
             ),
             'data-entry' => array(
                 'label' => 'Data Entry',

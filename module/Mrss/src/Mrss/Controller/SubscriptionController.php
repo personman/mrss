@@ -7,6 +7,7 @@ use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubscriptionDraft;
 use Mrss\Entity\Payment;
+use Mrss\Form\AbstractForm;
 use Mrss\Form\Payment as PaymentForm;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
@@ -79,8 +80,27 @@ class SubscriptionController extends AbstractActionController
     {
         $college = $this->currentCollege();
 
+        $form = new AbstractForm('renew');
+        $form->add($form->getButtonFieldset('Continue'));
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = array(
+                    'renew' => true,
+                    'college_id' => $this->currentCollege()->getId()
+                );
+
+                $this->saveDraftSubscription($data);
+
+                return $this->redirect()->toRoute('subscribe/user-agreement');
+            }
+        }
+
         return array(
-            'college' => $college
+            'college' => $college,
+            'form' => $form
         );
     }
 
@@ -288,7 +308,12 @@ class SubscriptionController extends AbstractActionController
                 $currentStudyCode = 'mrss';
             } elseif ($studyId == 3) {
                 $currentStudyCode = 'workforce';
+            } elseif ($studyId == 1) {
+                $currentStudyCode = 'nccbp';
+            } else {
+                $currentStudyCode = 'unknown';
             }
+
             $service->setCurrentStudyCode($currentStudyCode);
 
             $discount = $service->checkForDiscount($year, $ipeds);
@@ -507,8 +532,12 @@ class SubscriptionController extends AbstractActionController
         $subscriptionForm = json_decode($subscriptionDraft->getFormData(), true);
 
         // Create or fetch the college
-        $institutionForm = $subscriptionForm['institution'];
-        $college = $this->createOrUpdateCollege($institutionForm);
+        if (empty($subscriptionForm['renew'])) {
+            $institutionForm = $subscriptionForm['institution'];
+            $college = $this->createOrUpdateCollege($institutionForm);
+        } else {
+            $college = $this->currentCollege();
+        }
 
         // Create the observation
         $observation = $this->createOrUpdateObservation($college);
@@ -522,12 +551,20 @@ class SubscriptionController extends AbstractActionController
 
         // Create the users, if needed
         // Data user first
-        $dataContactForm = $subscriptionForm['dataContact'];
-        $dataUser = $this->createOrUpdateUser($dataContactForm, 'data', $college);
+        $dataUser = null;
+        if (!empty($subscriptionForm['dataContact'])) {
+            $dataContactForm = $subscriptionForm['dataContact'];
+            $dataUser = $this
+                ->createOrUpdateUser($dataContactForm, 'data', $college);
+        }
 
         // Admin second (overriding data role if it's the same user)
-        $adminContactForm = $subscriptionForm['adminContact'];
-        $adminUser = $this->createOrUpdateUser($adminContactForm, 'contact', $college);
+        $adminUser = null;
+        if (!empty($subscriptionForm['adminContact'])) {
+            $adminContactForm = $subscriptionForm['adminContact'];
+            $adminUser = $this
+                ->createOrUpdateUser($adminContactForm, 'contact', $college);
+        }
 
 
         // Save it all to the db
@@ -535,7 +572,7 @@ class SubscriptionController extends AbstractActionController
 
         // Send invoice, if needed
         if ($sendInvoice) {
-            $this->sendInvoice($subscription, $adminUser, $dataUser);
+            $this->sendInvoice($subscription, $adminUser, $dataUser, $paymentForm);
         }
 
         // Now clear out the draft subscription
@@ -737,8 +774,9 @@ class SubscriptionController extends AbstractActionController
 
     protected function sendInvoice(
         \Mrss\Entity\Subscription $subscription,
-        User $adminUser,
-        User $dataUser
+        User $adminUser = null,
+        User $dataUser = null,
+        $paymentForm = array()
     ) {
         // Check config to see if emails are being suppressed (by Behat, probably)
         $config = $this->getServiceLocator()->get('config');
@@ -751,7 +789,7 @@ class SubscriptionController extends AbstractActionController
         $invoice = new Message();
         $invoice->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
         $invoice->addTo('dfergu15@jccc.edu');
-        $invoice->addTo('mtaylo24@jccc.edu');
+        //$invoice->addTo('mtaylo24@jccc.edu');
 
         $study = $subscription->getStudy();
         $studyName = $study->getName();
@@ -760,27 +798,36 @@ class SubscriptionController extends AbstractActionController
 
         $year = $subscription->getYear();
 
+        $paymentMethod = $subscription->getPaymentMethod();
+        $paymentSystem = '';
+        if (!empty($paymentForm['system'])) {
+            $paymentSystem = "\nPayment System: " . $paymentForm['system'];
+        }
+
         // Email subject
         if ($subscription->getPaymentMethod() == 'pilot') {
             $subjectIntro = 'Pilot';
-        } else {
+        } elseif ($paymentMethod == 'invoice') {
             $subjectIntro = 'Invoice';
+        } else {
+            $subjectIntro = 'Membership';
         }
 
         $invoice->setSubject(
-            "$subjectIntro: $collegeName subscribed to $studyName for $year"
+            "$subjectIntro: $collegeName joined $studyName for $year"
         );
 
         $date = date('Y-m-d');
 
         $amountDue = number_format($subscription->getPaymentAmount(), 2);
 
-        $invoice->setBody(
+        $body =
             "
             Study: {$study->getName()}
             Year: $year
             Institution: {$college->getName()}
             Amount Due: $amountDue
+            Payment Method: {$subscription->getPaymentMethodForDisplay()}{$paymentSystem}
             Date: $date
             Address: {$college->getAddress()} {$college->getAddress2()}
             City: {$college->getCity()}
@@ -789,6 +836,10 @@ class SubscriptionController extends AbstractActionController
             Digital Signature: {$subscription->getDigitalSignature()}
             Title: {$subscription->getDigitalSignatureTitle()}
 
+            ";
+
+            if ($adminUser && $dataUser) {
+                $body .= "
             Admin User:
                 {$adminUser->getFullName()}
                 {$adminUser->getTitle()}
@@ -800,8 +851,9 @@ class SubscriptionController extends AbstractActionController
                 {$dataUser->getTitle()}
                 {$dataUser->getEmail()}
                 {$dataUser->getPhone()} {$dataUser->getExtension()}
-            "
-        );
+            ";
+            }
+        $invoice->setBody($body);
 
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
     }
