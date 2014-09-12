@@ -190,7 +190,7 @@ class ComputedFields
             }
         }
 
-       return $equation;
+        return $equation;
     }
 
     public function calculateAllForObservation(Observation $observation, Study $study)

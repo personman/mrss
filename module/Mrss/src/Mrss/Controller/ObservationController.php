@@ -395,8 +395,7 @@ class ObservationController extends AbstractActionController
         $config = $this->getServiceLocator()->get('Config');
         $groupedConfig = $config['data-entry']['grouped'][$shortName];
 
-        foreach ($groupedConfig as $key => $groupConf)
-        {
+        foreach ($groupedConfig as $key => $groupConf) {
             $groupConf['title'] = $this->getVariableSubstitutionService()
                 ->substitute($groupConf['title']);
             $groupConf['description'] = $this->getVariableSubstitutionService()

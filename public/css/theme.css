@@ -929,3 +929,21 @@ table.outliers th {
 .renew-nav {
     background: #3E7964;
 }
+
+#content dl {
+    padding: 0.5em;
+}
+#content dt {
+    float: left;
+    clear: left;
+    width: 150px;
+    text-align: right;
+    font-weight: bold;
+}
+#content dt:after {
+    content: ":";
+}
+#content dd {
+    margin: 0 0 0 160px;
+    padding: 0 0 0.5em 0;
+}

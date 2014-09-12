@@ -267,6 +267,28 @@ return array(
                 )
 
             ),
+            'membership' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/membership',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'view'
+                    )
+                )
+            ),
+            'join' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'options' => array(
+                    'route' => '/join',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'add'
+                    )
+                )
+            ),
             'subscribe' => array(
                 'type' => 'segment',
                 'priority' => 10,

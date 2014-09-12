@@ -39,6 +39,10 @@ class CurrentCollege extends AbstractPlugin
     {
         $user = $this->getuserPlugin()->getIdentity();
 
+        if (empty($user)) {
+            return null;
+        }
+
         if ($user->getRole() == 'system_admin'
             && !empty($this->getSystemAdminSessionContainer()->college)) {
 
