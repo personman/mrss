@@ -268,6 +268,20 @@ class College
         return $this;
     }
 
+    public function getExecFullName()
+    {
+        $name = $this->getExecSalutation();
+        $name .= ' ' . $this->getExecFirstName();
+
+        if ($middle = $this->getExecMiddleName()) {
+            $name .= ' ' . $middle;
+        }
+
+        $name .= ' ' . $this->getExecLastName();
+
+        return $name;
+    }
+
     public function getExecLastName()
     {
         return $this->execLastName;
