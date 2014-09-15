@@ -164,6 +164,10 @@ return array(
                         'label' => 'Manage Your Institution',
                         'route' => 'institution/edit'
                     ),
+                    'users' => array(
+                        'label' => 'Manage Your Institution\'s Users',
+                        'route' => 'institution/users'
+                    ),
                     'logout' => array(
                         'label' => 'Sign Out',
                         'route' => 'zfcuser/logout',

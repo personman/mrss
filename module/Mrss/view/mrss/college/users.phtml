@@ -1,0 +1,30 @@
+<?php /** @var \Mrss\Entity\College $college */ ?>
+
+<h2><?= $college->getName() ?> Users</h2>
+
+<p>
+    <a href="<?= $this->url('users/edit', array('id' => 'add')) ?>" class="btn"><i class="icon-plus"></i> Add a User</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($college->getUsers() as $user): ?>
+            <tr>
+                <td><?= $user->getFullName() ?></td>
+                <td><?= $user->getEmail() ?></td>
+                <td><?= $user->getFullPhone() ?></td>
+                <td>
+                    <a href="<?= $this->url('account/edit', array('id' => $user->getId())) ?>">Edit</a>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

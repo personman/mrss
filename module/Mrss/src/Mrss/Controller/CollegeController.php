@@ -102,4 +102,13 @@ class CollegeController extends AbstractActionController
             'form' => $form
         );
     }
+
+    public function usersAction()
+    {
+        $college = $this->currentCollege();
+
+        return array(
+            'college' => $college
+        );
+    }
 }

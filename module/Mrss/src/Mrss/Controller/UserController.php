@@ -29,8 +29,12 @@ class UserController extends AbstractActionController
             $user->setPassword('nothing');
             $user->setRole('data');
 
-            $collegeId = $this->params('college');
-            $college = $collegeModel->find($collegeId);
+            if ($collegeId = $this->params('college')) {
+                $college = $collegeModel->find($collegeId);
+            } else {
+                $college = $this->currentCollege();
+            }
+
             $user->setCollege($college);
         } else {
             if (empty($id)) {
@@ -54,11 +58,24 @@ class UserController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
+                // Double check that they're not trying to slip a user into
+                // another college
+                if (!$this->isAllowed('adminMenu', 'view')) {
+                    $currentCollege = $this->getCollege();
+                    if ($user->getCollege()->getId() != $currentCollege->getId()) {
+                        $this->flashMessenger()
+                            ->addErrorMessage('There was a problem creating the user.');
+                        return $this->redirect()->toRoute('institution/users');
+                    }
+                }
+
+                // Save
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('User saved.');
-                return $this->redirect()->toRoute('admin');
+                //return $this->redirect()->toRoute('admin');
+                return $this->redirect()->toRoute('institution/users');
             } else {
                 $this->flashMessenger()->addErrorMessage('Correct errors below.');
             }
@@ -77,8 +94,30 @@ class UserController extends AbstractActionController
     public function accounteditAction()
     {
         $userModel = $this->getServiceLocator()->get('model.user');
-        $userId = $this->zfcUserAuthentication()->getIdentity()->getId();
+
+        // Is the user editing themselves, or someone else?
+        $someoneElse = false;
+        if ($this->params()->fromRoute('id')) {
+            $userId = $this->params()->fromRoute('id');
+            $someoneElse = true;
+        } elseif ($this->params()->fromPost('user')) {
+            $postUser = $this->params()->fromPost('user');
+            $userId = $postUser['id'];
+            $someoneElse = true;
+        } else {
+            $userId = $this->zfcUserAuthentication()->getIdentity()->getId();
+        }
+
         $user = $userModel->find($userId);
+
+        // Make sure the user exists and belongs to this college
+        $currentCollege = $this->currentCollege();
+        if (empty($user) || $user->getCollege()->getId() != $currentCollege->getId()) {
+            $this->flashMessenger()->addErrorMessage('User not found.');
+            return $this->redirect()->toUrl('/institution/users');
+        }
+
+
         $form = $this->getUserForm($user);
 
         // Handle form submission
@@ -88,19 +127,39 @@ class UserController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
+                // Are they deleting?
+                $buttons = $this->params()->fromPost('buttons');
+                if (!empty($buttons['delete'])) {
+                    $userModel->delete($user);
+                    $this->getServiceLocator()->get('em')->flush();
 
+                    $this->flashMessenger()->addSuccessMessage('User deleted.');
+                    return $this->redirect()->toRoute('institution/users');
+                }
+
+                // Save 'em
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Account saved.');
-                return $this->redirect()->toRoute('account');
+
+                // Where to redirect?
+                if (true) {
+                    $route = 'institution/users';
+                } else {
+                    $route = 'account';
+                }
+
+                return $this->redirect()->toRoute($route);
             } else {
                 $this->flashMessenger()->addErrorMessage('Correct errors below.');
             }
         }
 
         return array(
-            'form' => $form
+            'form' => $form,
+            'someoneElse' => $someoneElse,
+            'user' => $user
         );
     }
 
@@ -124,9 +183,18 @@ class UserController extends AbstractActionController
                 'type' => 'hidden'
             )
         );
+
+        // Is the user editing themselves?
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+        if ($user->getId() != $currentUser->getId()) {
+            $includeDelete = true;
+        } else {
+            $includeDelete = false;
+        }
+
         $fieldset->setUseAsBaseFieldset(true);
         $form->add($fieldset);
-        $form->add($form->getButtonFieldset());
+        $form->add($form->getButtonFieldset('Save', false, $includeDelete));
 
         $form->setHydrator(
             new DoctrineHydrator(

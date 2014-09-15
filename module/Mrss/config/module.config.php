@@ -826,6 +826,15 @@ return array(
                                 'action' => 'edit'
                             )
                         )
+                    ),
+                    'users' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/users',
+                            'defaults' => array(
+                                'action' => 'users'
+                            )
+                        )
                     )
                 )
             ),
@@ -843,9 +852,10 @@ return array(
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/edit',
+                            'route' => '/edit[/:id]',
                             'defaults' => array(
-                                'action' => 'accountedit'
+                                'action' => 'accountedit',
+                                'id' => null
                             )
                         )
                     )

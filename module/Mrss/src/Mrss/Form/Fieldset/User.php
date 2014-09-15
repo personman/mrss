@@ -136,7 +136,6 @@ class User extends Fieldset implements InputFilterProviderInterface
                 )
             );
         }
-        
     }
 
     /**
