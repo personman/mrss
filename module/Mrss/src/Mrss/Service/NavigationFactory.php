@@ -7,6 +7,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Mrss\Entity\Study;
 use Mrss\Entity\User;
 use Mrss\Model\Subscription as SubscriptionModel;
+use BjyAuthorize\Service\Authorize;
 
 /**
  * Class NavigationFactory
@@ -195,6 +196,21 @@ class NavigationFactory extends DefaultNavigationFactory
             }
         }
 
+        // Check permissions
+        /** @var Authorize $authorizeService */
+        $authorizeService = $serviceLocator->get('BjyAuthorizeServiceAuthorize');
+
+        // Hide data entry from those who aren't allowed
+        if (!$authorizeService->isAllowed('dataEntry', 'view')) {
+            unset($pages['data-entry']);
+        }
+
+        // Hide membership management from those who aren't allowed
+        if (!$authorizeService->isAllowed('membership', 'view')) {
+            unset($pages['account']['pages']['institution']);
+            unset($pages['account']['pages']['users']);
+            unset($pages['renew']);
+        }
 
         return $pages;
     }
