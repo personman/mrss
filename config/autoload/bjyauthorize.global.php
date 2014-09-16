@@ -116,6 +116,11 @@ return array(
                     'action' => 'edit',
                     'roles' => array('user')
                 ),
+                array(
+                    'controller' => 'colleges',
+                    'action' => 'users',
+                    'roles' => array('user')
+                ),
                 // System admin
                 array(
                     'controller' => 'observations',
