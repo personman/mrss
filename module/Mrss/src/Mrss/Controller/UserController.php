@@ -108,6 +108,7 @@ class UserController extends AbstractActionController
             $userId = $this->zfcUserAuthentication()->getIdentity()->getId();
         }
 
+        /** @var \Mrss\Entity\User $user */
         $user = $userModel->find($userId);
 
         // Make sure the user exists and belongs to this college

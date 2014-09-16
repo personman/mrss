@@ -4,6 +4,7 @@
  */
 namespace MrssTest\Service;
 
+use Mrss\Entity\College;
 use Mrss\Service\ImportNccbp;
 use PHPUnit_Framework_TestCase;
 use Zend\Debug\Debug;
@@ -61,7 +62,13 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
                             'field_address_value' => '123 Main',
                             'field_city_value' => 'Overland Park',
                             'field_state_value' => 'KS',
-                            'field_zip_code_value' => '66101'
+                            'field_zip_code_value' => '66101',
+                            'field_president_title_value' => 'President',
+                            'field_president_salutation_value' => 'Dr.',
+                            'field_president_first_value' => 'John',
+                            'field_president_middle_value' => 'Q.',
+                            'field_president_last_value' => 'Doe',
+
                         ),
                         array(
                             'field_ipeds_id_value' => '1234',
@@ -70,7 +77,12 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
                             'field_address_value' => '123 Main',
                             'field_city_value' => 'Overland Park',
                             'field_state_value' => 'KS',
-                            'field_zip_code_value' => '66101'
+                            'field_zip_code_value' => '66101',
+                            'field_president_title_value' => 'President',
+                            'field_president_salutation_value' => 'Dr.',
+                            'field_president_first_value' => 'John',
+                            'field_president_middle_value' => 'Q.',
+                            'field_president_last_value' => 'Doe',
                         )
 
                     )
@@ -92,7 +104,7 @@ class ImportNccbpTest extends PHPUnit_Framework_TestCase
 
         $collegeModelMock->expects($this->any())
             ->method('findOneByIpeds')
-            ->will($this->onConsecutiveCalls(null, 'something'));
+            ->will($this->onConsecutiveCalls(null, new College()));
 
         $this->import->setCollegeModel($collegeModelMock);
 
