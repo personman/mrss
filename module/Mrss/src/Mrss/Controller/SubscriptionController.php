@@ -667,6 +667,7 @@ class SubscriptionController extends AbstractActionController
         $user->setTitle($data['title']);
         $user->setPhone($data['phone']);
         $user->setExtension($data['extension']);
+        $user->addStudy($this->getStudy());
 
         // 111111
         $user->setPassword('$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');

@@ -250,6 +250,7 @@ inner join node g on a.group_nid = g.nid";
                 $user->setCollege($college);
                 $user->setRole($this->getRole($row['contact_type']));
                 $user->setPassword($row['pass']);
+                $user->addStudy($this->getStudy());
 
                 $this->getUserModel()->save($user);
             }

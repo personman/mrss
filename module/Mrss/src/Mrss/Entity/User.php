@@ -396,12 +396,30 @@ class User implements UserInterface, ProviderInterface
 
     public function addStudy(Study $study)
     {
-        $this->studies->add($study);
+        if (!$this->hasStudy($study)) {
+            $this->studies->add($study);
+        }
     }
 
     public function removeStudy(Study $study)
     {
-        $this->studies->removeElement($study);
+        if ($this->hasStudy($study)) {
+            $this->studies->removeElement($study);
+        }
+    }
+
+    public function addStudies($studies)
+    {
+        foreach ($studies as $study) {
+            $this->addStudy($study);
+        }
+    }
+
+    public function removeStudies($studies)
+    {
+        foreach ($studies as $study) {
+            $this->removeStudy($study);
+        }
     }
 
     public function setStudies($studies)

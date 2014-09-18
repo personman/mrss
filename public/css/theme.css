@@ -930,20 +930,20 @@ table.outliers th {
     background: #3E7964;
 }
 
-#content dl {
+.renewInfo dl {
     padding: 0.5em;
 }
-#content dt {
+.renewInfo dt {
     float: left;
     clear: left;
     width: 150px;
     text-align: right;
     font-weight: bold;
 }
-#content dt:after {
+.renewInfo dt:after {
     content: ":";
 }
-#content dd {
+.renewInfo dd {
     margin: 0 0 0 160px;
     padding: 0 0 0.5em 0;
 }

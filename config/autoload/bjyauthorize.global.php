@@ -121,6 +121,11 @@ return array(
                     'action' => 'users',
                     'roles' => array('contact')
                 ),
+                array(
+                    'controller' => 'users',
+                    'action' => array('add', 'edit'),
+                    'roles' => array('contact')
+                ),
 
                 // Data users:
                 array(

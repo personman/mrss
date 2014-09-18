@@ -13,6 +13,10 @@ class User extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\User';
 
+    /**
+     * @param $email
+     * @return null|UserEntity
+     */
     public function findOneByEmail($email)
     {
         return $this->getRepository()->findOneBy(array('email' => $email));

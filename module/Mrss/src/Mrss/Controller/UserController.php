@@ -20,6 +20,7 @@ class UserController extends AbstractActionController
     public function editAction()
     {
         $id = $this->params('id');
+        /** @var \Mrss\Model\User $userModel */
         $userModel = $this->getServiceLocator()->get('model.user');
         $collegeModel = $this->getServiceLocator()->get('model.college');
 
@@ -61,13 +62,25 @@ class UserController extends AbstractActionController
                 // Double check that they're not trying to slip a user into
                 // another college
                 if (!$this->isAllowed('adminMenu', 'view')) {
-                    $currentCollege = $this->getCollege();
+                    $currentCollege = $this->currentCollege();
                     if ($user->getCollege()->getId() != $currentCollege->getId()) {
                         $this->flashMessenger()
                             ->addErrorMessage('There was a problem creating the user.');
                         return $this->redirect()->toRoute('institution/users');
                     }
                 }
+
+                // Check to see if a user with this email already exists
+                if ($user->getId() == 'add' &&
+                    $existingUser = $userModel->findOneByEmail($user->getEmail())) {
+                    // If so, update rather than insert
+                    $user->setId($existingUser->getId());
+                    $user->addStudies($existingUser->getStudies());
+                    $user->setPassword($existingUser->getPassword());
+                }
+
+                // Assign the user to this study
+                $user->addStudy($this->currentStudy());
 
                 // Save
                 $userModel->save($user);
@@ -131,7 +144,14 @@ class UserController extends AbstractActionController
                 // Are they deleting?
                 $buttons = $this->params()->fromPost('buttons');
                 if (!empty($buttons['delete'])) {
-                    $userModel->delete($user);
+                    // If the use belongs to more than one study, just remove them
+                    // from this study
+                    if (count($user->getStudies()) > 1) {
+                        $user->removeStudy($this->currentStudy());
+                    } else {
+                        $userModel->delete($user);
+                    }
+
                     $this->getServiceLocator()->get('em')->flush();
 
                     $this->flashMessenger()->addSuccessMessage('User deleted.');
@@ -177,7 +197,10 @@ class UserController extends AbstractActionController
     {
         $form = new AbstractForm('user');
 
-        $fieldset = new UserForm('user', false);
+        $adminControls = $this->isAllowed('adminMenu', 'view');
+        $em = $this->getServiceLocator()->get('em');
+
+        $fieldset = new UserForm('user', false, $adminControls, $em);
         $fieldset->add(
             array(
                 'name' => 'id',

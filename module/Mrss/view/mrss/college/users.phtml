@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($college->getUsers() as $user): ?>
+        <?php foreach ($college->getUsersByStudy($this->currentStudy()) as $user): ?>
             <tr>
                 <td><?= $user->getFullName() ?></td>
                 <td><?= $user->getEmail() ?></td>

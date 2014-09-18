@@ -314,6 +314,18 @@ class College
         return $this->users;
     }
 
+    public function getUsersByStudy(Study $study)
+    {
+        $users = array();
+        foreach ($this->getUsers() as $user) {
+            if ($user->hasStudy($study)) {
+                $users[] = $user;
+            }
+        }
+
+        return $users;
+    }
+
     public function setSubscriptions($subscriptions)
     {
         $this->subscriptions = $subscriptions;

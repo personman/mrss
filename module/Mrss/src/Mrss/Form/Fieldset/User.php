@@ -13,8 +13,12 @@ class User extends Fieldset implements InputFilterProviderInterface
 {
     protected $includeEmailConfirm = true;
 
-    public function __construct($name, $includeEmailConfirm = true)
-    {
+    public function __construct(
+        $name,
+        $includeEmailConfirm = true,
+        $adminControls = false,
+        $em = null
+    ) {
         $this->includeEmailConfirm = $includeEmailConfirm;
 
         parent::__construct($name);
@@ -135,6 +139,43 @@ class User extends Fieldset implements InputFilterProviderInterface
                     )
                 )
             );
+        }
+
+        if ($adminControls) {
+            $this->add(
+                array(
+                    'name' => 'role',
+                    'type' => 'Select',
+                    'required' => true,
+                    'options' => array(
+                        'label' => 'Role'
+                    ),
+                    'attributes' => array(
+                        'options' => array(
+                            'data' => 'Data Manager',
+                            'contact' => 'Membership Coordinator',
+                            'viewer' => 'View Reports Only',
+                            'system_admin' => 'State System Administrator',
+                            'admin' => 'NHEBI Staff'
+                        )
+                    )
+                )
+            );
+
+            if ($em) {
+                $this->add(
+                    array(
+                        'type' => 'DoctrineORMModule\Form\Element\EntityMultiCheckbox',
+                        'name' => 'studies',
+                        'options' => array(
+                            'label' => 'Studies',
+                            'object_manager' => $em,
+                            'target_class'   => 'Mrss\Entity\Study',
+                            'property'       => 'name',
+                        ),
+                    )
+                );
+            }
         }
     }
 

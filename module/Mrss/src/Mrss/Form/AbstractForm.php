@@ -28,8 +28,7 @@ class AbstractForm extends Form
         $buttonText = 'Save',
         $includeReset = false,
         $includeDelete = false
-    )
-    {
+    ) {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
         $buttons->setAttribute('class', 'well well-small');
