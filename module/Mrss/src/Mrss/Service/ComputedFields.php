@@ -35,10 +35,18 @@ class ComputedFields
 
     protected $error;
 
-    public function calculate(Benchmark $benchmark, Observation $observation)
+    public function calculate(Benchmark $benchmark, Observation $observation, $flush = true)
     {
+
+        if ($this->debug) {
+            $start = microtime(1);
+        }
+
         $equationWithVariables = $benchmark->getEquation();
         $benchmarkColumn = $benchmark->getDbColumn();
+        if ($this->debug) {
+            echo "equation prepared: " . round(microtime(1) - $start, 3) . "s<br>";
+        }
 
         if (empty($equationWithVariables)) {
             $result = null;
@@ -69,11 +77,20 @@ class ComputedFields
             $result = $result * 100;
         }
 
+        if ($this->debug) {
+            echo "about to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
+        }
+
         // Save the computed value
         $observation->set($benchmarkColumn, $result);
         $this->getObservationModel()->save($observation);
-        $this->getObservationModel()->getEntityManager()->flush();
 
+        if ($flush) {
+            $this->getObservationModel()->getEntityManager()->flush();
+            if ($this->debug) {
+                echo "flushed: " . round(microtime(1) - $start, 3) . "s<br>";
+            }
+        }
         return $result;
     }
 
@@ -251,14 +268,14 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation, Study $study)
     {
-        $benchmarks = $this->getBenchmarkModel()->findComputed($study);
+        $benchmarks = $this->getComputedBenchmarks();
 
         foreach ($benchmarks as $benchmark) {
             if ($this->debug) {
                 pr($benchmark->getName());
             }
 
-            $this->calculate($benchmark, $observation);
+            $this->calculate($benchmark, $observation, false);
         }
     }
 

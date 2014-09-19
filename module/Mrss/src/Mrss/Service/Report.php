@@ -81,6 +81,8 @@ class Report
      */
     protected $mailTransport;
 
+    protected $debug = false;
+
     public function getYearsWithSubscriptions()
     {
         $years = $this->getSubscriptionModel()
@@ -112,10 +114,12 @@ class Report
 
     public function calculateForYear($year)
     {
+        $this->debug($year);
         // Update any computed fields
         $this->calculateAllComputedFields($year);
 
         $study = $this->getStudy();
+
         $calculator = $this->getCalculator();
         $breakpoints = $this->getPercentileBreakpoints();
         $percentileModel = $this->getPercentileModel();
@@ -133,7 +137,10 @@ class Report
         );
 
         // Loop over benchmarks
-        foreach ($study->getBenchmarksForYear($year) as $benchmark) {
+        $benchmarks = $study->getBenchmarksForYear($year);
+        $this->debug(count($benchmarks));
+
+        foreach ($benchmarks as $benchmark) {
             /** @var Benchmark $benchmark */
 
             // Get all data points for this benchmark
@@ -1505,12 +1512,18 @@ class Report
     {
         $subs = $this->getSubscriptionModel()
             ->findByStudyAndYear($this->getStudy(), $year);
+        $start = microtime(1);
 
         foreach ($subs as $sub) {
             $observation = $sub->getObservation();
             $this->getComputedFieldsService()
                 ->calculateAllForObservation($observation, $this->getStudy());
+            $el = microtime(1) - $start;
+            //pr(round($el, 3));
+            unset($observation);
+            //die('blkajsdls');
         }
+        //die('calculated');
     }
 
     /**
@@ -1700,5 +1713,12 @@ class Report
     public function getMailTransport()
     {
         return $this->mailTransport;
+    }
+
+    protected function debug($variable)
+    {
+        if ($this->debug) {
+            pr($variable);
+        }
     }
 }
