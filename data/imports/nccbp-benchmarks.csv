@@ -214,9 +214,9 @@ If your institution records + or - grades, include them in the letter grades wit
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",m_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",m_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Retention Rate",m_ret_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",m_enr_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Completer Success Rate",m_comp_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Retention Rate",m_ret_rate,percent,,,1,"{{m_abcpdf}} / {{m_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",m_enr_succ,percent,,,1,"{{m_abcp}} / {{m_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Completer Success Rate",m_comp_succ,percent,,,1,"{{m_abcp}} / {{m_abcpdf}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",w_tot_grad_dev_rem,number,"<p>
 Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
