@@ -540,17 +540,18 @@ class Report
         /** @var $subscription /Mrss/Entity/Subscription */
         foreach ($subscriptions as $subscription) {
             /** @var /Mrss/Entity/Observation $observation */
-            $observation = $subscription->getObservation();
-            $dbColumn = $benchmark->getDbColumn();
-            $value = $observation->get($dbColumn);
-            $collegeId = $subscription->getCollege()->getId();
+            if ($observation = $subscription->getObservation()) {
+                $dbColumn = $benchmark->getDbColumn();
+                $value = $observation->get($dbColumn);
+                $collegeId = $subscription->getCollege()->getId();
 
-            // Leave out null values
-            if ($skipNull && $value === null) {
-                continue;
+                // Leave out null values
+                if ($skipNull && $value === null) {
+                    continue;
+                }
+
+                $data[$collegeId] = $value;
             }
-
-            $data[$collegeId] = $value;
         }
 
         return $data;
@@ -1524,8 +1525,14 @@ class Report
 
         foreach ($subs as $sub) {
             $observation = $sub->getObservation();
-            $this->getComputedFieldsService()
-                ->calculateAllForObservation($observation, $this->getStudy());
+            if ($observation) {
+                $this->getComputedFieldsService()
+                    ->calculateAllForObservation($observation, $this->getStudy());
+            } else {
+                //echo "Observation missing for " . $sub->getCollege()->getName() .
+                //    " " . $sub->getYear();
+                //die;
+            }
             $el = microtime(1) - $start;
             //pr(round($el, 3));
             unset($observation);

@@ -110,7 +110,8 @@ class UserController extends AbstractActionController
             $start = microtime(1);
             $this->populateUserStudies();
             $el = round(microtime(1) - $start, 3);
-            echo $el; die('s userstudies done');
+            echo $el;
+            die('s userstudies done');
         }
 
         $userModel = $this->getServiceLocator()->get('model.user');

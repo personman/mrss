@@ -268,6 +268,9 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation, Study $study)
     {
+        if (empty($observation)) {
+            die('empty');
+        }
         $benchmarks = $this->getComputedBenchmarks();
 
         foreach ($benchmarks as $benchmark) {
