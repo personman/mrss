@@ -106,6 +106,13 @@ class UserController extends AbstractActionController
      */
     public function accounteditAction()
     {
+        if (!empty($_GET['usersstudies'])) {
+            $start = microtime(1);
+            $this->populateUserStudies();
+            $el = round(microtime(1) - $start, 3);
+            echo $el; die('s userstudies done');
+        }
+
         $userModel = $this->getServiceLocator()->get('model.user');
 
         // Is the user editing themselves, or someone else?
@@ -229,5 +236,20 @@ class UserController extends AbstractActionController
         $form->bind($user);
 
         return $form;
+    }
+
+    protected function populateUserStudies()
+    {
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        foreach ($collegeModel->findAll() as $college) {
+            foreach ($college->getSubscriptions() as $subscription) {
+                $study = $subscription->getStudy();
+                foreach ($college->getUsers() as $user) {
+                    $user->addStudy($study);
+                }
+            }
+        }
+
+        $this->getServiceLocator()->get('em')->flush();
     }
 }
