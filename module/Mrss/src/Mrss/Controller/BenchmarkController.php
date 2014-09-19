@@ -151,8 +151,21 @@ class BenchmarkController extends AbstractActionController
             if ($form->isValid()) {
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
-
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
+
+                // Check equation
+                /** @var \Mrss\Service\ComputedFields $computedFields */
+                $computedFields = $this->getServiceLocator()->get('computedFields');
+                $equationOk = $computedFields
+                    ->checkEquation($benchmark->getEquation());
+                if (!$equationOk) {
+                    $error = $computedFields->getError();
+                    $dbColumn = $benchmark->getDbColumn();
+                    $error = "Error in equation for $dbColumn: $error<br>";
+                    $this->flashMessenger()->addErrorMessage($error);
+                }
+
+
                 return $this->redirect()->toRoute(
                     'benchmark',
                     array('study' => $benchmark->getBenchmarkGroup()

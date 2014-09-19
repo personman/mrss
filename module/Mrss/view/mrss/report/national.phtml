@@ -82,7 +82,11 @@ $this->headScript()->appendFile(
                         <?php endif ?>
                         <td><?= $benchmark['N'] ?></td>
                         <?php foreach ($benchmark['percentiles'] as $percentile): ?>
-                        <td><?= $benchmark['prefix'] . number_format($percentile, $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
+                        <td>
+                            <?php if (!is_null($percentile)): ?>
+                                <?= $benchmark['prefix'] . number_format($percentile, $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?>
+                            <?php endif ?>
+                        </td>
                         <?php endforeach ?>
                         <td><a href="#" class="btn openChart" title="Display chart"><i class="icon-signal"></i></a></td>
                     </tr>

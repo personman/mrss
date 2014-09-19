@@ -597,6 +597,11 @@ class Report
                         $percentile->getValue();
                 }
 
+                // Pad the array if it's empty
+                if (empty($percentileData)) {
+                    $percentileData = array(null, null, null, null, null);
+                }
+
                 if (!empty($percentileData['N'])) {
                     $benchmarkData['N'] = $percentileData['N'];
                     unset($percentileData['N']);

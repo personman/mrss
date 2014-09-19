@@ -70,9 +70,9 @@ Please use National Student Clearinghouse data.
 <p>
 Degree or certificate completion ""trumps"" transfer.   Students in the fall 2006 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completition.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed in Six Years",pt_perminus7_comp,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Transferred in Six Years",pt_percminus7_tran,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Six Years",pt_pminus7_comtran,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed in Six Years",pt_perminus7_comp,percent,,,1,"{{pt_yminus7_degr}} / {{pt_fminus7_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Transferred in Six Years",pt_percminus7_tran,percent,,,1,"{{pt_yminus7_transf}} / {{pt_fminus7_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Six Years",pt_pminus7_comtran,percent,,,1,"({{pt_yminus7_degr}} + {{pt_yminus7_transf}}) / {{pt_fminus7_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 2: Student Completion and Transfer","Unduplicated Headcount",ft_f_yminus4_headc,number,"<p>
 Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2009 IPEDS GRS cohort.
 </p>
@@ -100,15 +100,15 @@ Enter unduplicated credit headcount of first-time, part-time degree- and certifi
 <p>
 <em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed in Three Years",ft_perc_comp,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Transferred in Three Years",ft_perc_transf,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed in Three Years",ft_perc_comp,percent,,,1,"{{ft_f_yminus4_degr_cert}} / {{ft_f_yminus4_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Transferred in Three Years",ft_perc_transf,percent,,,1,"{{ft_f_yminus4_transf}} / {{ft_f_yminus4_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 2: Student Completion and Transfer","Number Completed Degree or Certificate",pt_f_yminus4_degr_cert,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2012. 
 </p>
 <p>
 Students in the fall 2009 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years",ft_perc_comp_transf,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years",ft_perc_comp_transf,percent,,,1,"({{ft_f_yminus4_degr_cert}} + {{ft_f_yminus4_transf}}) / {{ft_f_yminus4_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 2: Student Completion and Transfer","Number Transferred",pt_f_yminus4_transf,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2012.
 </p>
@@ -118,9 +118,9 @@ Please use National Student Clearinghouse data.
 <p>
 Degree or certificate completion ""trumps"" transfer.   Students in the fall 2009 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completition.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed in Three Years",pt_perc_comp,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Transferred in Three Years",pt_perc_transf,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years",pt_perc_comp_transf,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed in Three Years",pt_perc_comp,percent,,,1,"{{pt_f_yminus4_degr_cert}} / {{pt_f_yminus4_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Transferred in Three Years",pt_perc_transf,percent,,,1,"{{pt_f_yminus4_transf}} / {{pt_f_yminus4_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years",pt_perc_comp_transf,percent,,,1,"({{pt_f_yminus4_degr_cert}} + {{pt_f_yminus4_transf}}) / {{pt_f_yminus4_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 2: Student Completion and Transfer","Unduplicated headcount",f_yminus7_headc,number,"<p>
 Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2006 IPEDS GRS cohort.
 </p>
@@ -142,14 +142,14 @@ Please use National Student Clearinghouse data.
 <p>
 Degree or certificate completion ""trumps"" transfer.   Students in the fall 2006 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completition.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed in Six Years",ft_minus7perc_comp,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Transfered in Six Years",percminus7_transf,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Six Years",percminus7_comtran,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed in Six Years",ft_minus7perc_comp,percent,,,1,"{{ft_yminus7_degr}} / {{f_yminus7_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Transfered in Six Years",percminus7_transf,percent,,,1,"{{ft_yminus7_transf}} / {{f_yminus7_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Six Years",percminus7_comtran,percent,,,1,"({{ft_yminus7_degr}} + {{ft_yminus7_transf}}) / {{f_yminus7_headc}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 3: Student Performance at Transfer Institutions","Total Students Who Transferred",tot_stud_trans,number,"Enter the total number of students with <em>12 or more earned credit hours</em> from the reporting institution who transferred to public and private four-year institutions during the <em>most recent academic year</em> for which National Student Clearinghouse data are available (the data should be less than five years old).",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 3: Student Performance at Transfer Institutions","Cumulative First-year GPA",fst_yr_gpa,number,"Enter the <em>cumulative</em> first-year grade-point average (GPA) at all public and private four-year transfer institutions for all students in Row 1 (Total Students Who Transferred).  GPA should be on a 4-point scale (A = 4, B= 3, C = 2, P = 2, D = 1, F = 0).",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 3: Student Performance at Transfer Institutions","Total First-year Credit Hours",tot_fst_yr_crh,number,"Enter the total credit hours completed (grades A through F) during the first year at all public and private four-year transfer institutions by all students in Row 1 (Total Students Who Transferred).",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 3: Student Performance at Transfer Institutions","Percent Enrolled Next Year",enro_next_yr,percent,"Enter the percent of students in Row 1 (Total Students Who Transferred) that enrolled at the same public and private four-year transfer institutions for the next academic year.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 3: Student Performance at Transfer Institutions","Average First-year Credit Hours",avrg_1y_crh,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 3: Student Performance at Transfer Institutions","Average First-year Credit Hours",avrg_1y_crh,float,,"{{tot_fst_yr_crh}} / {{tot_stud_trans}}",1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 4: Credit Student Enrollment","Credit Students at End of Fall 2011 Term",tot_cr_st,number,"<p>
 Enter the unduplicated number of total full- and part-time credit students (including those who withdrew from all courses) at the end of the fall 2011 term.
 </p>
@@ -160,8 +160,8 @@ Enter the unduplicated number of total full- and part-time credit students (incl
 "Form 4: Credit Student Enrollment","Fall 2011 Credit Students Who Graduated before Fall 2012",grad_bef_fall,number,"Enter the total number of credit students from fall 2011 who graduated or completed certificates before the fall 2012 term.  The number should include graduates and completers from Spring 2012.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 4: Credit Student Enrollment","Fall 2011 Credit Students Who Enrolled in Spring 2012",enr_bef_spr,number,"Enter the total number of credit students from fall 2011 who enrolled in the spring 2012 term. Do not include students who graduated before spring 2012.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 4: Credit Student Enrollment","Fall 2011 Credit Students Who Enrolled in Fall 2012",enr_fall,number,"Enter the total number of credit students from fall 2011 who enrolled in the fall 2012 term. Do not include students who graduated before fall 2012.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 4: Credit Student Enrollment","Next-Term Persistence Rate",next_term_pers,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 4: Credit Student Enrollment","Fall-Fall Persistence Rate",fall_fall_pers,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 4: Credit Student Enrollment","Next-Term Persistence Rate",next_term_pers,percent,,,1,"{{enr_bef_spr}} / ( {{tot_cr_st}} - {{grad_bef_spr}} )",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 4: Credit Student Enrollment","Fall-Fall Persistence Rate",fall_fall_pers,percent,,,1,"{{enr_fall}} / ( {{tot_cr_st}} - {{grad_bef_fall}} )",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 5: Student Satisfaction and Engagement","Active and Collaborative Learning",act_coll_learn,float,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 5: Student Satisfaction and Engagement","Student Effort",stud_eff,float,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 5: Student Satisfaction and Engagement","Academic Challenge",acad_chall,float,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
@@ -200,9 +200,9 @@ P grades (or your institution's equivalent) are awarded when a student takes a c
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 7: Credit College-level Retention, Success","Total A, B, C, P, D, and F Grades",tot_grad_abcpdf,number,"Enter the total number of A, B, C, P, D and F grades (or their institutional equivalents) in credit, college-level courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 7: Credit College-level Retention, Success","Total A, B, C, and P Grades",tot_grad_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in credit, college-level courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 7: Credit College-level Retention, Success","Retention Rate",ret_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 7: Credit College-level Retention, Success","Enrollee Success Rate",enr_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 7: Credit College-level Retention, Success","Completer Success Rate",comp_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 7: Credit College-level Retention, Success","Retention Rate",ret_rate,percent,,,1,"{{tot_grad_abcpdf}} / {{tot_grad_abcpdfw}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 7: Credit College-level Retention, Success","Enrollee Success Rate",enr_succ,percent,,,1,"{{tot_grad_abcp}} / {{tot_grad_abcpdfw}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 7: Credit College-level Retention, Success","Completer Success Rate",comp_succ,percent,,,1,"{{tot_grad_abcp}} / {{tot_grad_abcpdf}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",m_tot_grad_dev_rem,number,"<p>
 Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in Math credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
