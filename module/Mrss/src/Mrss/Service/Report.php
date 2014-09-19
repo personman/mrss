@@ -32,6 +32,11 @@ class Report
     protected $study;
 
     /**
+     * @var array
+     */
+    protected $subscriptions = array();
+
+    /**
      * @var Calculator
      */
     protected $calculator;
@@ -114,9 +119,11 @@ class Report
 
     public function calculateForYear($year)
     {
+        $start = microtime(1);
         $this->debug($year);
         // Update any computed fields
         $this->calculateAllComputedFields($year);
+        $this->debugTimer($start, 'Just computed fields');
 
         $study = $this->getStudy();
 
@@ -125,10 +132,11 @@ class Report
         $percentileModel = $this->getPercentileModel();
         $percentileRankModel = $this->getPercentileRankModel();
 
+        $this->debugTimer($start, 'About to clear values');
         // Clear the stored values
         $percentileModel->deleteByStudyAndYear($study->getId(), $year);
         $percentileRankModel->deleteByStudyAndYear($study->getId(), $year);
-
+        $this->debugTimer($start, 'cleared values');
         // Take note of some stats
         $stats = array(
             'benchmarks' => 0,
@@ -139,6 +147,7 @@ class Report
         // Loop over benchmarks
         $benchmarks = $study->getBenchmarksForYear($year);
         $this->debug(count($benchmarks));
+        $this->debugTimer($start, 'prep done.');
 
         foreach ($benchmarks as $benchmark) {
             /** @var Benchmark $benchmark */
@@ -205,6 +214,7 @@ class Report
             }
 
             $stats['benchmarks']++;
+            $this->debugTimer($start, 'first benchmark done');
         }
 
         // Update the settings table with the calculation date
@@ -524,8 +534,7 @@ class Report
         $year,
         $skipNull = true
     ) {
-        $subscriptions = $this->getSubscriptionModel()
-            ->findByStudyAndYear($this->getStudy()->getId(), $year);
+        $subscriptions = $this->getSubscriptions($year);
 
         $data = array();
         /** @var $subscription /Mrss/Entity/Subscription */
@@ -1510,8 +1519,7 @@ class Report
      */
     public function calculateAllComputedFields($year)
     {
-        $subs = $this->getSubscriptionModel()
-            ->findByStudyAndYear($this->getStudy(), $year);
+        $subs = $this->getSubscriptions($year);
         $start = microtime(1);
 
         foreach ($subs as $sub) {
@@ -1720,5 +1728,29 @@ class Report
         if ($this->debug) {
             pr($variable);
         }
+    }
+
+    protected function debugTimer($start, $message = null)
+    {
+        if ($this->debug) {
+            $elapsed = round(microtime(1) - $start, 3);
+            $message = $elapsed . "s: " . $message;
+            $this->debug($message);
+        }
+    }
+
+    /**
+     * @param $year
+     * @return \Mrss\Entity\Subscription[]
+     */
+    protected function getSubscriptions($year)
+    {
+        if (empty($this->subscriptions[$year])) {
+            $this->subscriptions[$year] = $this->getSubscriptionModel()
+                ->findByStudyAndYear($this->getStudy()->getId(), $year);
+
+        }
+
+        return $this->subscriptions[$year];
     }
 }

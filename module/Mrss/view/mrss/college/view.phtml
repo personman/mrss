@@ -53,6 +53,9 @@
             <ul>
                 <?php foreach ($college->getUsers() as $user): ?>
                     <li>
+                        <a title="Impersonate this user"
+                           href="/admin/user/impersonate/<?= $user->getId() ?>">
+                            <i class="icon icon-fire"></i></a>
                         <a href="<?= $this->url(
                             'users/edit',
                             array('id' => $user->getId())
