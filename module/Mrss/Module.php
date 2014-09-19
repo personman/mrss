@@ -57,6 +57,8 @@ class Module
                 $sm->get('em')->flush();
             }
         });
+
+        $this->checkStudyAtLogin($e);
     }
 
     public function handleError(MvcEvent $e) {
@@ -667,6 +669,43 @@ class Module
                     return $helper;
                 }
             ),
+        );
+    }
+
+    /**
+     * Make sure a user isn't logging into a study they don't have access to
+     *
+     * @param MvcEvent $e
+     */
+    public function checkStudyAtLogin(MvcEvent $e)
+    {
+        $serviceManager = $e->getApplication()->getServiceManager();
+        $zfcServiceEvents = $serviceManager
+            ->get('ZfcUser\Authentication\Adapter\AdapterChain')->getEventManager();
+
+        $zfcServiceEvents->attach(
+            'authenticate',
+            function ($e) use ($serviceManager) {
+                $params = $e->getParams();
+                $userId = $params['identity'];
+                if ($userId) {
+
+                    $userModel = $serviceManager->get('model.user');
+                    $user = $userModel->find($userId);
+
+                    $cpm = $serviceManager->get('ControllerPluginManager');
+                    $currentStudy = $cpm->get('currentStudy')->getCurrentStudy();
+
+                    if (!$user->hasStudy($currentStudy)) {
+                        $cpm->get('flashMessenger')->addErrorMessage(
+                            'You do not have access to this study. If you believe
+                            this is incorrect, please contact us.'
+                        );
+                        header('Location: /');
+                        die();
+                    }
+                }
+            }
         );
     }
 

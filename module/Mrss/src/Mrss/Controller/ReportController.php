@@ -528,7 +528,8 @@ class ReportController extends AbstractActionController
         }
     }
 
-    public function getCountOfReportedData($dbColumn, $year) {
+    public function getCountOfReportedData($dbColumn, $year)
+    {
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
         $count = 0;

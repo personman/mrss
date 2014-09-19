@@ -16,7 +16,7 @@
                 <echo message="Code conforms to PSR2 coding standard." />
             </then>
             <else>
-                <!-- Already printed above<fail message="${codesniffer.output}" /> -->
+                <fail message="${codesniffer.output}" />
             </else>
         </if>
 

@@ -108,6 +108,63 @@ class College extends Fieldset implements InputFilterProviderInterface
                 )
             )
         );
+
+        $this->add(
+            array(
+                'name' => 'execTitle',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Executive Title',
+                    'help-block' => 'For example: President or Chancellor'
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'execSalutation',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Executive Salutation',
+                    'help-block' => 'For example: Ms., Mr., or Dr.'
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'execFirstName',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Executive First Name'
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'execMiddleName',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Executive Middle Name'
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'execLastName',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Executive Last Name'
+                ),
+            )
+        );
     }
 
     public function getInputFilterSpecification()

@@ -209,4 +209,68 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('Dr. Tobias Funke', $user->getFullName());
     }
+
+    public function testCheckCollege()
+    {
+        $user = new User;
+
+        $studyMock = $this->getMock(
+            '\Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(5));
+
+        $user->addStudy($studyMock);
+
+        $result = $user->hasStudy($studyMock);
+
+        $this->assertTrue($result);
+    }
+
+    public function testCheckCollegeNope()
+    {
+        $user = new User;
+
+        $studyMock = $this->getMock(
+            '\Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(5));
+
+        //$user->addStudy($studyMock);
+
+        $result = $user->hasStudy($studyMock);
+
+        $this->assertFalse($result);
+    }
+
+    public function testCheckCollegeRemove()
+    {
+        $user = new User;
+
+        $studyMock = $this->getMock(
+            '\Mrss\Entity\Study',
+            array('getId')
+        );
+        $studyMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(5));
+
+        $user->addStudy($studyMock);
+
+        $result = $user->hasStudy($studyMock);
+
+        $this->assertTrue($result);
+
+        // Now remove
+        $user->removeStudy($studyMock);
+
+        $result = $user->hasStudy($studyMock);
+
+        $this->assertFalse($result);
+    }
 }

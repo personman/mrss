@@ -51,6 +51,31 @@ class College
     protected $zip;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $execTitle;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $execSalutation;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $execFirstName;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $execMiddleName;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $execLastName;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      */
     protected $latitude;
@@ -188,6 +213,80 @@ class College
         return $this;
     }
 
+    public function setExecTitle($title)
+    {
+        $this->execTitle = $title;
+
+        return $this;
+    }
+
+    public function getExecTitle()
+    {
+        return $this->execTitle;
+    }
+
+    public function setExecSalutation($salutation)
+    {
+        $this->execSalutation = $salutation;
+
+        return $this;
+    }
+
+    public function getExecSalutation()
+    {
+        return $this->execSalutation;
+    }
+
+    public function setExecFirstName($name)
+    {
+        $this->execFirstName = $name;
+
+        return $this;
+    }
+
+    public function getExecFirstName()
+    {
+        return $this->execFirstName;
+    }
+
+    public function setExecMiddleName($name)
+    {
+        $this->execMiddleName = $name;
+
+        return $this;
+    }
+
+    public function getExecMiddleName()
+    {
+        return $this->execMiddleName;
+    }
+
+    public function setExecLastName($name)
+    {
+        $this->execLastName = $name;
+
+        return $this;
+    }
+
+    public function getExecFullName()
+    {
+        $name = $this->getExecSalutation();
+        $name .= ' ' . $this->getExecFirstName();
+
+        if ($middle = $this->getExecMiddleName()) {
+            $name .= ' ' . $middle;
+        }
+
+        $name .= ' ' . $this->getExecLastName();
+
+        return $name;
+    }
+
+    public function getExecLastName()
+    {
+        return $this->execLastName;
+    }
+
     public function setObservations($observations)
     {
         $this->observations = $observations;
@@ -213,6 +312,18 @@ class College
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function getUsersByStudy(Study $study)
+    {
+        $users = array();
+        foreach ($this->getUsers() as $user) {
+            if ($user->hasStudy($study)) {
+                $users[] = $user;
+            }
+        }
+
+        return $users;
     }
 
     public function setSubscriptions($subscriptions)

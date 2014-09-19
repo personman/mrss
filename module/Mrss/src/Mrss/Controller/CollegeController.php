@@ -2,9 +2,12 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Form\AbstractForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Debug\Debug;
+use Zend\Form\Form;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class CollegeController extends AbstractActionController
 {
@@ -57,5 +60,55 @@ class CollegeController extends AbstractActionController
         $Colleges = $this->getServiceLocator()->get('model.college');
 
         return array('colleges' => $Colleges->findAll());
+    }
+
+    public function editAction()
+    {
+        $form = new AbstractForm('college');
+
+        $collegeFieldset = new \Mrss\Form\Fieldset\College;
+        $collegeFieldset->setUseAsBaseFieldset(true);
+
+        $college = $this->currentCollege();
+
+        $em = $this->getServiceLocator()->get('em');
+        $collegeFieldset->setHydrator(
+            new DoctrineHydrator($em, 'Mrss\Entity\College')
+        );
+
+        $form->add($collegeFieldset);
+        $form->bind($college);
+        $form->add($form->getButtonFieldset());
+
+        // Process the form
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $collegeModel = $this->getServiceLocator()->get('model.college');
+                $collegeModel->save($college);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Institution saved.');
+                return $this->redirect()->toUrl('/members');
+            }
+
+        }
+
+
+        return array(
+            'form' => $form
+        );
+    }
+
+    public function usersAction()
+    {
+        $college = $this->currentCollege();
+
+        return array(
+            'college' => $college
+        );
     }
 }

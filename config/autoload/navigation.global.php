@@ -65,6 +65,11 @@ return array(
                     ),*/
                 )
             ),
+            'renew' => array(
+                'label' => 'Renew',
+                'route' => 'renew',
+                'class' => 'renew-nav'
+            ),
             'data-entry' => array(
                 'label' => 'Data Entry',
                 'route' => 'data-entry',
@@ -154,6 +159,14 @@ return array(
                     'account' => array(
                         'label' => 'Manage Your Account',
                         'route' => 'account',
+                    ),
+                    'institution' => array(
+                        'label' => 'Manage Your Institution',
+                        'route' => 'institution/edit'
+                    ),
+                    'users' => array(
+                        'label' => 'Manage Your Institution\'s Users',
+                        'route' => 'institution/users'
                     ),
                     'logout' => array(
                         'label' => 'Sign Out',

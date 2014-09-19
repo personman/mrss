@@ -1,4 +1,18 @@
+<script type="text/javascript">
+    $(function() {
+        $('#deleteButton').click(function() {
+            return confirm("Are you sure you want to delete this user?")
+        })
+    })
+</script>
+
+<?php if ($someoneElse): ?>
+    <h2>Edit User</h2>
+    <h4><?= $user->getCollege()->getName() ?></h4>
+
+<?php else: ?>
 <h2>Edit Your Account</h2>
+<?php endif ?>
 
 <?php
 $form->setAttribute('action', $this->url('account/edit'));

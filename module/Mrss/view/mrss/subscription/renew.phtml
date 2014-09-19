@@ -1,0 +1,56 @@
+<?php /** @var \Mrss\Entity\College $college */ ?>
+
+<h2>Renew Your Membership</h2>
+
+<p>Please review the information below and make any necessary changes before continuing.</p>
+
+<div class="row-fluid renewInfo">
+    <div class="span6">
+        <dl>
+            <dt>Institution</dt>
+            <dd><?= $college->getName() ?></dd>
+
+            <dt>IPEDS Unit ID</dt>
+            <dd><?= $college->getIpeds() ?></dd>
+
+            <dt>Address</dt>
+            <dd><?= $college->getFullAddress() ?></dd>
+
+            <dt>Executive Title</dt>
+            <dd><?= $college->getExecTitle() ?></dd>
+
+            <dt>Executive Name</dt>
+            <dd><?= $college->getExecFullName() ?></dd>
+        </dl>
+
+        <p>
+            <a href="/institution/edit" class="btn">Update Institution Information</a>
+        </p>
+    </div>
+
+    <div class="span6">
+        <?php foreach ($college->getUsers() as $user): ?>
+            <dl>
+                <dt>Name</dt>
+                <dd><?= $user->getFullName() ?></dd>
+
+                <dt>Title</dt>
+                <dd><?= $user->getTitle() ?></dd>
+
+                <dt>Email</dt>
+                <dd><?= $user->getEmail() ?></dd>
+
+                <dt>Phone</dt>
+                <dd><?= $user->getFullPhone() ?></dd>
+
+            </dl>
+        <?php endforeach ?>
+
+        <p>
+            <a href="/institution/users" class="btn">Update Institution Users</a>
+        </p>
+
+    </div>
+<p>
+    <?= $this->ztbForm($this->form->prepare()) ?>
+</p>

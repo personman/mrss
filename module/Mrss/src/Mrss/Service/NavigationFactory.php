@@ -5,6 +5,9 @@ namespace Mrss\Service;
 use Zend\Navigation\Service\DefaultNavigationFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Mrss\Entity\Study;
+use Mrss\Entity\User;
+use Mrss\Model\Subscription as SubscriptionModel;
+use BjyAuthorize\Service\Authorize;
 
 /**
  * Class NavigationFactory
@@ -19,9 +22,15 @@ class NavigationFactory extends DefaultNavigationFactory
     /** @var Study */
     protected $currentStudy;
 
+    /** @var SubscriptionModel */
+    protected $subscriptionModel;
+
+    protected $serviceLocator;
+
     public function getPages(ServiceLocatorInterface $serviceLocator)
     {
         $pages = $this->getPagesArray($serviceLocator);
+        $this->serviceLocator = $serviceLocator;
 
         //$configuration['navigation'][$this->getName()] = array();
 
@@ -38,6 +47,8 @@ class NavigationFactory extends DefaultNavigationFactory
 
     public function getPagesArray(ServiceLocatorInterface $serviceLocator)
     {
+        $this->serviceLocator = $serviceLocator;
+
         $pages = parent::getPages($serviceLocator);
         $currentStudy = $this->getCurrentStudy($serviceLocator);
 
@@ -71,10 +82,15 @@ class NavigationFactory extends DefaultNavigationFactory
                 !$currentStudy->getPilotOpen()) {
                 unset($pages['subscribe']);
             }
+
+            // Logged out users can't renew
+            unset($pages['renew']);
         }
 
-        // Add the data entry links (if they're logged in
+
         if ($auth->hasIdentity()) {
+
+            // Add the data entry links (if they're logged in
             $user = $auth->getIdentity();
             $name = $user->getPrefix() . ' ' . $user->getLastName();
             $pages['account']['label'] = $name;
@@ -109,6 +125,15 @@ class NavigationFactory extends DefaultNavigationFactory
             } else {
                 // If there aren't any forms to show, drop the data entry menu item
                 unset($pages['data-entry']);
+            }
+
+            // If enrollment is open and they haven't subscribed, show renew button
+            if ($this->getCurrentStudy()->getEnrollmentOpen() &&
+                !$this->hasSubscription($user)) {
+                // Show renew
+            } else {
+                // Hide it
+                unset($pages['renew']);
             }
         } else {
             // Hide some pages from non-logged-in users
@@ -171,6 +196,21 @@ class NavigationFactory extends DefaultNavigationFactory
             }
         }
 
+        // Check permissions
+        /** @var Authorize $authorizeService */
+        $authorizeService = $serviceLocator->get('BjyAuthorizeServiceAuthorize');
+
+        // Hide data entry from those who aren't allowed
+        if (!$authorizeService->isAllowed('dataEntry', 'view')) {
+            unset($pages['data-entry']);
+        }
+
+        // Hide membership management from those who aren't allowed
+        if (!$authorizeService->isAllowed('membership', 'view')) {
+            unset($pages['account']['pages']['institution']);
+            unset($pages['account']['pages']['users']);
+            unset($pages['renew']);
+        }
 
         return $pages;
     }
@@ -193,5 +233,36 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         return $this->currentStudy;
+    }
+
+    public function setSubscriptionModel(SubscriptionModel $model)
+    {
+        $this->subscriptionModel = $model;
+
+        return $this;
+    }
+
+    public function getSubscriptionModel()
+    {
+        if (empty($this->subscriptionModel)) {
+            if (!empty($this->serviceLocator)) {
+                $this->subscriptionModel = $this->serviceLocator
+                    ->get('model.subscription');
+            }
+        }
+
+        return $this->subscriptionModel;
+    }
+
+    protected function hasSubscription(User $user)
+    {
+        $subModel = $this->getSubscriptionModel();
+        $study = $this->getCurrentStudy();
+        $year = $study->getCurrentYear();
+        $college = $user->getCollege();
+
+        $subscription = $subModel->findOne($year, $college->getId(), $study->getId());
+
+        return (!empty($subscription));
     }
 }

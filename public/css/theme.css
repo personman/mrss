@@ -924,3 +924,26 @@ table.outliers th {
 .emailPreview hr {
     border-top: 4px solid #999;
 }
+
+
+.renew-nav {
+    background: #3E7964;
+}
+
+.renewInfo dl {
+    padding: 0.5em;
+}
+.renewInfo dt {
+    float: left;
+    clear: left;
+    width: 150px;
+    text-align: right;
+    font-weight: bold;
+}
+.renewInfo dt:after {
+    content: ":";
+}
+.renewInfo dd {
+    margin: 0 0 0 160px;
+    padding: 0 0 0.5em 0;
+}

@@ -5,6 +5,7 @@ namespace Mrss\Entity;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use Doctrine\ORM\Mapping as ORM;
 use ZfcUser\Entity\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity
  * @ORM\Table(name="users")
@@ -92,6 +93,19 @@ class User implements UserInterface, ProviderInterface
     protected $college;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Study")
+     * @ORM\JoinTable(name="users_studies",
+     *      joinColumns={@ORM\JoinColumn(
+     *          name="user_id", referencedColumnName="id", onDelete="CASCADE"
+     *      )},
+     *      inverseJoinColumns={@ORM\JoinColumn(
+     *          name="study_id", referencedColumnName="id", onDelete="CASCADE"
+     *      )}
+     *      )
+     */
+    protected $studies;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $role;
@@ -100,6 +114,11 @@ class User implements UserInterface, ProviderInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $lastAccess;
+
+    public function __construct()
+    {
+        $this->studies = new ArrayCollection();
+    }
 
     /**
      * Get id.
@@ -362,5 +381,70 @@ class User implements UserInterface, ProviderInterface
     {
         return $this->getPrefix() . ' ' . $this->getFirstName() . ' ' .
         $this->getLastName();
+    }
+
+    public function getFullPhone()
+    {
+        $phone = $this->getPhone();
+
+        if ($ext = $this->getExtension()) {
+            $phone .= ' x' . $ext;
+        }
+
+        return $phone;
+    }
+
+    public function addStudy(Study $study)
+    {
+        if (!$this->hasStudy($study)) {
+            $this->studies->add($study);
+        }
+    }
+
+    public function removeStudy(Study $study)
+    {
+        if ($this->hasStudy($study)) {
+            $this->studies->removeElement($study);
+        }
+    }
+
+    public function addStudies($studies)
+    {
+        foreach ($studies as $study) {
+            $this->addStudy($study);
+        }
+    }
+
+    public function removeStudies($studies)
+    {
+        foreach ($studies as $study) {
+            $this->removeStudy($study);
+        }
+    }
+
+    public function setStudies($studies)
+    {
+        $this->studies = $studies;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Study[]
+     */
+    public function getStudies()
+    {
+        return $this->studies;
+    }
+
+    public function hasStudy(Study $studyToCheck)
+    {
+        foreach ($this->getStudies() as $study) {
+            if ($study->getId() == $studyToCheck->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -1,0 +1,26 @@
+<?php /** @var \Mrss\Entity\Subscription $subscription */ ?>
+
+<?php if (empty($subscription)): ?>
+    No subscription found.
+<?php else: ?>
+<h2>Membership Information</h2>
+
+<dl>
+    <dt>Study</dt>
+    <dd><?= $subscription->getStudy()->getName() ?></dd>
+
+    <dt>Year</dt>
+    <dd><?= $subscription->getYear() ?></dd>
+
+    <dt>Cost</dt>
+    <dd>$<?= $subscription->getPaymentAmount() ?></dd>
+
+    <dt>Payment Method</dt>
+    <dd><?= $subscription->getPaymentMethodForDisplay() ?></dd>
+
+    <dt>Date</dt>
+    <dd><?= $subscription->getCreated()->format('m/d/Y') ?> </dd>
+
+
+</dl>
+<?php endif ?>

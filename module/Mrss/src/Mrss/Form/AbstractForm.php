@@ -21,10 +21,14 @@ class AbstractForm extends Form
      *
      * @param string $buttonText
      * @param bool $includeReset
+     * @param bool $includeDelete
      * @return Fieldset
      */
-    public function getButtonFieldset($buttonText = 'Save', $includeReset = false)
-    {
+    public function getButtonFieldset(
+        $buttonText = 'Save',
+        $includeReset = false,
+        $includeDelete = false
+    ) {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
         $buttons->setAttribute('class', 'well well-small');
@@ -43,6 +47,16 @@ class AbstractForm extends Form
             $reset->setAttribute('class', 'btn btn-danger');
             $reset->setAttribute('type', 'reset');
             $buttons->add($reset);
+        }
+
+        if ($includeDelete) {
+            // Add the delete button
+            $delete = new Element\Submit('delete');
+            $delete->setValue('Delete');
+            $delete->setAttribute('class', 'btn btn-danger');
+            //$delete->setLabel('Delete');
+            $delete->setAttribute('id', 'deleteButton');
+            $buttons->add($delete);
         }
 
         return $buttons;

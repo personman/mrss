@@ -156,13 +156,13 @@ inner join node g on a.group_nid = g.nid";
 
             if (!empty($existingCollege)) {
                 // Skip this college as we've already imported it
-                $this->stats['skipped']++;
+                //$this->stats['skipped']++;
 
-                continue;
+                //continue;
+                $college = $existingCollege;
+            } else {
+                $college = new College;
             }
-
-            // Populate the college
-            $college = new College;
 
             // College name
             $college->setName($row['field_institution_name_value']);
@@ -175,6 +175,12 @@ inner join node g on a.group_nid = g.nid";
             $college->setCity($row['field_city_value']);
             $college->setState($row['field_state_value']);
             $college->setZip($row['field_zip_code_value']);
+
+            $college->setExecTitle($row['field_president_title_value']);
+            $college->setExecSalutation($row['field_president_salutation_value']);
+            $college->setExecFirstName($row['field_president_first_value']);
+            $college->setExecMiddleName($row['field_president_middle_value']);
+            $college->setExecLastName($row['field_president_last_value']);
 
             $this->getCollegeModel()->save($college);
 
@@ -244,6 +250,7 @@ inner join node g on a.group_nid = g.nid";
                 $user->setCollege($college);
                 $user->setRole($this->getRole($row['contact_type']));
                 $user->setPassword($row['pass']);
+                $user->addStudy($this->getStudy());
 
                 $this->getUserModel()->save($user);
             }

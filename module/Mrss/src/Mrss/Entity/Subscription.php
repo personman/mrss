@@ -226,6 +226,11 @@ class Subscription
             $method = ucwords($method);
         }
 
+        // System payments show which system
+        if ($method == 'System') {
+            $method .= ': ' . $this->getPaymentSystemName();
+        }
+
         return $method;
     }
 

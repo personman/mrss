@@ -7,6 +7,7 @@ use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubscriptionDraft;
 use Mrss\Entity\Payment;
+use Mrss\Form\AbstractForm;
 use Mrss\Form\Payment as PaymentForm;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
@@ -46,6 +47,35 @@ class SubscriptionController extends AbstractActionController
      */
     protected $study;
 
+    /**
+     * A regular user can view his or her subscription details. Redirect here after
+     * subscribing
+     */
+    public function viewAction()
+    {
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $study = $this->currentStudy();
+
+
+        if ($college = $this->currentCollege()) {
+            $collegeId = $college->getId();
+        } else {
+            // Find from session if they're not logged in
+            if ($ipeds = $this->getSessionContainer()->ipeds) {
+                $collegeModel = $this->getServiceLocator()->get('model.college');
+                $college = $collegeModel->findOneByIpeds($ipeds);
+                $collegeId = $college->getId();
+            }
+        }
+
+        $subscription = $subscriptionModel
+            ->findCurrentSubscription($study, $collegeId);
+
+        return array(
+            'subscription' => $subscription,
+        );
+    }
+
     public function addAction()
     {
         $form = new SubscriptionForm;
@@ -71,6 +101,34 @@ class SubscriptionController extends AbstractActionController
         }
 
         return array(
+            'form' => $form
+        );
+    }
+
+    public function renewAction()
+    {
+        $college = $this->currentCollege();
+
+        $form = new AbstractForm('renew');
+        $form->add($form->getButtonFieldset('Continue'));
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = array(
+                    'renew' => true,
+                    'college_id' => $this->currentCollege()->getId()
+                );
+
+                $this->saveDraftSubscription($data);
+
+                return $this->redirect()->toRoute('subscribe/user-agreement');
+            }
+        }
+
+        return array(
+            'college' => $college,
             'form' => $form
         );
     }
@@ -279,7 +337,12 @@ class SubscriptionController extends AbstractActionController
                 $currentStudyCode = 'mrss';
             } elseif ($studyId == 3) {
                 $currentStudyCode = 'workforce';
+            } elseif ($studyId == 1) {
+                $currentStudyCode = 'nccbp';
+            } else {
+                $currentStudyCode = 'unknown';
             }
+
             $service->setCurrentStudyCode($currentStudyCode);
 
             $discount = $service->checkForDiscount($year, $ipeds);
@@ -325,17 +388,12 @@ class SubscriptionController extends AbstractActionController
             $systemForm->setData($this->params()->fromPost());
 
             if ($systemForm->isValid()) {
-                $this->completeSubscription(
+                return $this->completeSubscription(
                     $this->getDraftSubscription(),
                     $systemForm->getData(),
                     true
                 );
 
-                $this->flashMessenger()->addSuccessMessage(
-                    "Thank you for subscribing. "
-                );
-
-                return $this->redirect()->toRoute('subscribe/complete');
             }
         }
     }
@@ -357,17 +415,11 @@ class SubscriptionController extends AbstractActionController
             $invoiceForm->setData($this->params()->fromPost());
 
             if ($invoiceForm->isValid()) {
-                $this->completeSubscription(
+                return $this->completeSubscription(
                     $this->getDraftSubscription(),
                     $invoiceForm->getData(),
                     true
                 );
-
-                $this->flashMessenger()->addSuccessMessage(
-                    "Thank you for subscribing. "
-                );
-
-                return $this->redirect()->toRoute('subscribe/complete');
             }
         }
     }
@@ -384,17 +436,11 @@ class SubscriptionController extends AbstractActionController
             $pilotForm->setData($this->params()->fromPost());
 
             if ($pilotForm->isValid()) {
-                $this->completeSubscription(
+                return $this->completeSubscription(
                     $this->getDraftSubscription(),
                     $pilotForm->getData(),
                     true
                 );
-
-                $this->flashMessenger()->addSuccessMessage(
-                    "Thank you for subscribing. "
-                );
-
-                return $this->redirect()->toRoute('subscribe/complete');
             }
         }
     }
@@ -488,18 +534,25 @@ class SubscriptionController extends AbstractActionController
      * @param SubscriptionDraft $subscriptionDraft
      * @param $paymentForm
      * @param bool $sendInvoice
+     * @param bool $redirect
+     * @return \Zend\Http\Response
      * @internal param $subscriptionForm
      */
     public function completeSubscription(
         SubscriptionDraft $subscriptionDraft,
         $paymentForm,
-        $sendInvoice = false
+        $sendInvoice = false,
+        $redirect = true
     ) {
         $subscriptionForm = json_decode($subscriptionDraft->getFormData(), true);
 
         // Create or fetch the college
-        $institutionForm = $subscriptionForm['institution'];
-        $college = $this->createOrUpdateCollege($institutionForm);
+        if (empty($subscriptionForm['renew'])) {
+            $institutionForm = $subscriptionForm['institution'];
+            $college = $this->createOrUpdateCollege($institutionForm);
+        } else {
+            $college = $this->currentCollege();
+        }
 
         // Create the observation
         $observation = $this->createOrUpdateObservation($college);
@@ -513,12 +566,20 @@ class SubscriptionController extends AbstractActionController
 
         // Create the users, if needed
         // Data user first
-        $dataContactForm = $subscriptionForm['dataContact'];
-        $dataUser = $this->createOrUpdateUser($dataContactForm, 'data', $college);
+        $dataUser = null;
+        if (!empty($subscriptionForm['dataContact'])) {
+            $dataContactForm = $subscriptionForm['dataContact'];
+            $dataUser = $this
+                ->createOrUpdateUser($dataContactForm, 'data', $college);
+        }
 
         // Admin second (overriding data role if it's the same user)
-        $adminContactForm = $subscriptionForm['adminContact'];
-        $adminUser = $this->createOrUpdateUser($adminContactForm, 'contact', $college);
+        $adminUser = null;
+        if (!empty($subscriptionForm['adminContact'])) {
+            $adminContactForm = $subscriptionForm['adminContact'];
+            $adminUser = $this
+                ->createOrUpdateUser($adminContactForm, 'contact', $college);
+        }
 
 
         // Save it all to the db
@@ -532,6 +593,21 @@ class SubscriptionController extends AbstractActionController
         // Now clear out the draft subscription
         $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
         $this->getServiceLocator()->get('em')->flush();
+
+        // Redirect
+        if ($redirect) {
+            if (!empty($subscriptionForm['renew'])) {
+                $message = "Thank you for renewing your membership! ";
+            } else {
+                $message = "Thank you for joining! Each new user should receive an ";
+                $message .= "email with instructions on how to log in and set a ";
+                $message .= "password.";
+            }
+
+            $this->flashMessenger()->addSuccessMessage($message);
+
+            return $this->redirect()->toRoute('membership');
+        }
     }
 
     protected function getCurrentYear()
@@ -591,6 +667,7 @@ class SubscriptionController extends AbstractActionController
         $user->setTitle($data['title']);
         $user->setPhone($data['phone']);
         $user->setExtension($data['extension']);
+        $user->addStudy($this->getStudy());
 
         // 111111
         $user->setPassword('$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');
@@ -728,8 +805,8 @@ class SubscriptionController extends AbstractActionController
 
     protected function sendInvoice(
         \Mrss\Entity\Subscription $subscription,
-        User $adminUser,
-        User $dataUser
+        User $adminUser = null,
+        User $dataUser = null
     ) {
         // Check config to see if emails are being suppressed (by Behat, probably)
         $config = $this->getServiceLocator()->get('config');
@@ -742,7 +819,7 @@ class SubscriptionController extends AbstractActionController
         $invoice = new Message();
         $invoice->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
         $invoice->addTo('dfergu15@jccc.edu');
-        $invoice->addTo('mtaylo24@jccc.edu');
+        //$invoice->addTo('mtaylo24@jccc.edu');
 
         $study = $subscription->getStudy();
         $studyName = $study->getName();
@@ -751,27 +828,32 @@ class SubscriptionController extends AbstractActionController
 
         $year = $subscription->getYear();
 
+        $paymentMethod = $subscription->getPaymentMethod();
+
         // Email subject
         if ($subscription->getPaymentMethod() == 'pilot') {
             $subjectIntro = 'Pilot';
-        } else {
+        } elseif ($paymentMethod == 'invoice') {
             $subjectIntro = 'Invoice';
+        } else {
+            $subjectIntro = 'Membership';
         }
 
         $invoice->setSubject(
-            "$subjectIntro: $collegeName subscribed to $studyName for $year"
+            "$subjectIntro: $collegeName joined $studyName for $year"
         );
 
         $date = date('Y-m-d');
 
         $amountDue = number_format($subscription->getPaymentAmount(), 2);
 
-        $invoice->setBody(
+        $body =
             "
             Study: {$study->getName()}
             Year: $year
             Institution: {$college->getName()}
             Amount Due: $amountDue
+            Payment Method: {$subscription->getPaymentMethodForDisplay()}
             Date: $date
             Address: {$college->getAddress()} {$college->getAddress2()}
             City: {$college->getCity()}
@@ -780,6 +862,10 @@ class SubscriptionController extends AbstractActionController
             Digital Signature: {$subscription->getDigitalSignature()}
             Title: {$subscription->getDigitalSignatureTitle()}
 
+            ";
+
+        if ($adminUser && $dataUser) {
+                $body .= "
             Admin User:
                 {$adminUser->getFullName()}
                 {$adminUser->getTitle()}
@@ -791,8 +877,9 @@ class SubscriptionController extends AbstractActionController
                 {$dataUser->getTitle()}
                 {$dataUser->getEmail()}
                 {$dataUser->getPhone()} {$dataUser->getExtension()}
-            "
-        );
+            ";
+        }
+        $invoice->setBody($body);
 
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
     }
@@ -939,6 +1026,9 @@ class SubscriptionController extends AbstractActionController
         $this->getSubscriptionDraftModel()->getEntityManager()->flush();
 
         $this->saveTransIdToSession($draft->getId());
+
+        // Save college id to session
+        $this->getSessionContainer()->ipeds = $data['institution']['ipeds'];
     }
 
     public function setDraftSubscription(SubscriptionDraft $draft)

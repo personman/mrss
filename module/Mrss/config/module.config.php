@@ -267,6 +267,28 @@ return array(
                 )
 
             ),
+            'membership' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/membership',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'view'
+                    )
+                )
+            ),
+            'join' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'options' => array(
+                    'route' => '/join',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'add'
+                    )
+                )
+            ),
             'subscribe' => array(
                 'type' => 'segment',
                 'priority' => 10,
@@ -342,6 +364,17 @@ return array(
                             )
                         )
                     ),
+                )
+            ),
+            'renew' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/renew',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'renew'
+                    )
                 )
             ),
             'college' => array(
@@ -776,6 +809,35 @@ return array(
                     )
                 )
             ),
+            'institution' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/institution',
+                    'defaults' => array(
+                        'controller' => 'colleges',
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit',
+                            'defaults' => array(
+                                'action' => 'edit'
+                            )
+                        )
+                    ),
+                    'users' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/users',
+                            'defaults' => array(
+                                'action' => 'users'
+                            )
+                        )
+                    )
+                )
+            ),
             'account' => array(
                 'type' => 'segment',
                 'options' => array(
@@ -790,9 +852,10 @@ return array(
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/edit',
+                            'route' => '/edit[/:id]',
                             'defaults' => array(
-                                'action' => 'accountedit'
+                                'action' => 'accountedit',
+                                'id' => null
                             )
                         )
                     )

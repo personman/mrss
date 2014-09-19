@@ -34,6 +34,8 @@ return array(
             'BjyAuthorize\Provider\Resource\Config' => array(
                 'adminMenu' => array(),
                 'system_admin' => array(),
+                'dataEntry' => array(),
+                'membership' => array()
             ),
         ),
 
@@ -44,7 +46,10 @@ return array(
                 'allow' => array(
                     // allow guests and users (and admins, through inheritance)
                     // the "wear" privilege on the resource "pants"
-                    array(array('admin'), 'adminMenu', 'view')
+                    array(array('admin'), 'adminMenu', 'view'),
+                    array(array('data'), 'dataEntry', 'view'),
+                    // 'membership' = editing yr college, users, renewing
+                    array(array('contact'), 'membership', 'view'),
                 ),
             ),
         ),
@@ -85,18 +90,6 @@ return array(
                 ),
                 // Only authenticated users can look at these:
                 array(
-                    'controller' => 'observations',
-                    'roles' => array('user')
-                ),
-                array(
-                    'controller' => 'subobservations',
-                    'roles' => array('user')
-                ),
-                array(
-                    'controller' => 'reports',
-                    'roles' => array('user')
-                ),
-                array(
                     'controller' => 'users',
                     'action' => array('account', 'accountedit'),
                     'roles' => array('user')
@@ -104,8 +97,46 @@ return array(
                 array(
                     'controller' => 'zfcuserimpersonate_adminController',
                     'action' => 'unimpersonateUser',
-                    'roles' => array('user')
+                    'roles' => array('user', 'admin')
                 ),
+
+                // Report viewers:
+                array(
+                    'controller' => 'reports',
+                    'roles' => array('viewer')
+                ),
+                // Membership coordinators (contact):
+                array(
+                    'controller' => 'subscription',
+                    'action' => 'renew',
+                    'roles' => array('contact')
+                ),
+                array(
+                    'controller' => 'colleges',
+                    'action' => 'edit',
+                    'roles' => array('contact')
+                ),
+                array(
+                    'controller' => 'colleges',
+                    'action' => 'users',
+                    'roles' => array('contact')
+                ),
+                array(
+                    'controller' => 'users',
+                    'action' => array('add', 'edit'),
+                    'roles' => array('contact')
+                ),
+
+                // Data users:
+                array(
+                    'controller' => 'observations',
+                    'roles' => array('data')
+                ),
+                array(
+                    'controller' => 'subobservations',
+                    'roles' => array('data')
+                ),
+
                 // System admin
                 array(
                     'controller' => 'observations',
