@@ -145,7 +145,9 @@ class Observation extends AbstractModel
 
         $sparkline = array();
         foreach ($data as $row) {
-            $sparkline[] = $row[1];
+            if (!is_null($row[1])) {
+                $sparkline[] = $row[1];
+            }
         }
 
         return $sparkline;

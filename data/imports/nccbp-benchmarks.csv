@@ -231,8 +231,8 @@ If your institution records + or - grades, include them in the letter grades wit
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",w_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",w_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Retention Rate",w_ret_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",w_enr_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Retention Rate",w_ret_rate,percent,,,1,"{{w_abcpdf}} / {{w_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",w_enr_succ,percent,,,1,"{{w_abcp}} / {{w_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",rw_tot_grad_dev_rem,number,"<p>
 Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
@@ -245,11 +245,11 @@ Reading and Writing includes courses in which both reading and writing instructi
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Completer Success Rate",w_comp_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Completer Success Rate",w_comp_succ,percent,,,1,"{{w_abcp}} / {{w_abcpdf}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",rw_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",rw_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Retention Rate",rw_ret_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",rw_enr_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Retention Rate",rw_ret_rate,percent,,,1,"{{rw_abcpdf}} / {{rw_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",rw_enr_succ,percent,,,1,"{{rw_abcp}} / {{rw_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total Grades in Developmental / Remedial Courses",r_tot_grad_dev_rem,number,"<p>
 Enter the total number of A, B, C, P, D, F, and W grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term (include high school students earning college credits).  Do not include incompletes, audits, or grades in ESL courses.
 </p>
@@ -262,12 +262,12 @@ Reading and Writing includes courses in which both reading and writing instructi
 <p>
 If your institution records + or - grades, include them in the letter grades with which they are associated (e.g. C+ grades would be reported with C grades).
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Completer Success Rate",rw_comp_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Completer Success Rate",rw_comp_succ,percent,,,1,"{{rw_abcp}} / {{rw_abcpdf}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C, P, D and F Grades",r_abcpdf,number,"Enter the total number of A, B, C, P, D, and F grades (or their institutional equivalents) in credit developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 8: Credit Developmental Retention, Success","Total A, B, C and P Grades",r_abcp,number,"Enter the total number of A, B, C, and P grades (or their institutional equivalents) in developmental/remedial courses at the end of the fall 2011 term.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Retention Rate",r_ret_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",r_enr_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 8: Credit Developmental Retention, Success","Completer Success Rate",r_comp_succ,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Retention Rate",r_ret_rate,percent,,,1,"{{r_abcpdf}} / {{r_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Enrollee Success Rate",r_enr_succ,percent,,,1,"{{r_abcp}} / {{r_tot_grad_dev_rem}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 8: Credit Developmental Retention, Success","Completer Success Rate",r_comp_succ,percent,,,1,"{{r_abcp}} / {{r_abcpdf}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 9: Credit Developmental Retention, Success, First College-level","Total A, B, C and P Grades in Fall 2010, Highest-level Developmental Courses",m_tot_abcp_hld,number,"<p>
 Enter the total number of students who received A, B, C, and P grades (or their institutional equivalents) in the highest-level, credit developmental/remedial math courses at the end of the fall 2010 term.
 </p>
@@ -308,14 +308,14 @@ Related writing courses will most likely be college level English composition co
 "Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 2 Who Completed College-level Courses with ABCPD and F Grades",w_compl_abcpdf,number,"Enter the total number of students from row 2 (Enrolled in Related College-level Courses) who completed related college-level courses with A, B, C, D, P, and F grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2011.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 3 Who Completed College-level Courses with A, B,C and P Grades",m_compl_abcp,number,"Enter the total number of students from row 3 (Completed College-level Courses with A, B, C, P and D Grades) who completed related college-level courses with A, B, C, and P grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2011.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 9: Credit Developmental Retention, Success, First College-level","Total from Row 3 Who Completed College-level Courses with A, B,C and P Grades",w_compl_abcp,number,"Enter the total number of students from row 3 (Completed College-level Courses with A, B, C, P and D Grades) who completed related college-level courses with A, B, C, and P grades (or their institutional equivalents) <em>within one subsequent academic year</em>, i.e., through fall 2011.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Retention Rate",m_coll_lev_ret_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Retention Rate",w_coll_lev_ret_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Enrollee Success Rate",m_coll_lev_enr_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Enrollee Success Rate",w_coll_lev_enr_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Completer Success Rate",m_coll_lev_compl_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Completer Success Rate",w_coll_lev_compl_rate,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Retention Rate",m_coll_lev_ret_rate,percent,,,1,"{{m_compl_abcpdf}} / {{m_enr_coll_cour}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Retention Rate",w_coll_lev_ret_rate,percent,,,1,"{{w_compl_abcpdf}} / {{w_enr_coll_cour}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Enrollee Success Rate",m_coll_lev_enr_rate,percent,,,1,"{{m_compl_abcp}} / {{m_enr_coll_cour}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Enrollee Success Rate",w_coll_lev_enr_rate,percent,,,1,"{{w_compl_abcp}} / {{w_enr_coll_cour}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Completer Success Rate",m_coll_lev_compl_rate,percent,,,1,"{{m_compl_abcp}} / {{m_compl_abcpdf}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 9: Credit Developmental Retention, Success, First College-level","College-level Course Completer Success Rate",w_coll_lev_compl_rate,percent,,,1,"{{w_compl_abcp}} / {{w_compl_abcpdf}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017"
 "Form 10: Career Program Completers","Total Responding Employers",tot_resp_empl,number,"Enter the total number of responding employers.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 10: Career Program Completers","Number of Employers Satisfied with Completers' Overall in %",emp_satis_prep_perc,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 10: Career Program Completers","Number of Employers Satisfied with Completers' Overall in %",emp_satis_prep_perc,percent,,,1,"{{empl_satis_prep}} / {{tot_resp_empl}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 10: Career Program Completers","Total Completers for Whom Data Are Available",tot_compl,number,"Enter the total number of career program completers for whom employment data are available.  Count as completers students who completed career programs and were awarded  Associate's degrees or certificates.  Career programs would include programs such as Automotive Technology, Interior Design, or Practical Nursing.",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 10: Career Program Completers","Total from Row 1 | Employed in Related Field",no_tot_empl_rel,number,"<p>
 Enter the total from Row 1 (Total Completers for Whom Data Are Available) who are employed full- or part-time in a field related to their career program education.  Include those in the military.
@@ -331,8 +331,8 @@ Enter total from Row 1 (Total Completers for Whom Data Are Available) who are pu
 <p>
 <em>Pursuing Education refers to students who continue to enroll in classes after completion of a career program.  This information is typically a self-reported item collected on a follow-up survey.</em>
 </p>",,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 10: Career Program Completers","Total from Row 1 | Employed in Related Field in %",no_tot_emp_rel_perc,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 10: Career Program Completers","Total from Row 1 | Pursuing Education in %",no_tot_purs_edu_perc,computed,,,1,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 10: Career Program Completers","Total from Row 1 | Employed in Related Field in %",no_tot_emp_rel_perc,percent,,,1,"{{no_tot_empl_rel}} / {{tot_compl}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 10: Career Program Completers","Total from Row 1 | Pursuing Education in %",no_tot_purs_edu_perc,percent,,,1,"{{no_tot_purs_edu}} / {{tot_compl}}",,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 10: Career Program Completers","Number of Employers Satisfied with Completers' Overall Preparation",empl_satis_prep,number,"<p>
 Enter the total number of employers from row 1 (Total Responding Employers) who indicated satisfaction with completers' overall preparation.
 </p>
