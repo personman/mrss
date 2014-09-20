@@ -38,7 +38,11 @@ class Benchmark extends AbstractModel
             )
         );
 
-        if (empty($benchmark)) {
+        if (empty($benchmarkGroup)) {
+            pr($dbColumn);
+        }
+
+        if (empty($benchmark) && !empty($benchmarkGroup)) {
             // If that returns nothing, try with the benchmark group prefix on the
             // dbColumn
             $dbColumn = $benchmarkGroup->getShortName() . '_' . $dbColumn;

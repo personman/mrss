@@ -103,6 +103,46 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      */
     protected $includeInNationalReport;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $reportLabel;
+
+    /**
+     * @ORM\Column(type="integer", length=3, nullable=true)
+     */
+    protected $reportWeight;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $peerReportLabel;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $descriptiveReportLabel;
+
+    /**
+     * @ORM\Column(type="integer", length=3, nullable=true)
+     */
+    protected $yearOffset;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $yearPrefix;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $includeInBestPerformer;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $highIsBetter;
+
     protected $benchmarkModel;
     protected $completionPercentages;
 
@@ -310,6 +350,165 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     {
         return $this->includeInNationalReport;
     }
+
+
+    /**
+     * @param mixed $descriptiveReportLabel
+     * @return $this
+     */
+    public function setDescriptiveReportLabel($descriptiveReportLabel)
+    {
+        $this->descriptiveReportLabel = $descriptiveReportLabel;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescriptiveReportLabel()
+    {
+        if (empty($this->descriptiveReportLabel)) {
+            return $this->getReportLabel();
+        }
+
+
+        return $this->descriptiveReportLabel;
+    }
+
+    /**
+     * @param mixed $highIsBetter
+     * @return $this
+     */
+    public function setHighIsBetter($highIsBetter)
+    {
+        $this->highIsBetter = $highIsBetter;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHighIsBetter()
+    {
+        return $this->highIsBetter;
+    }
+
+    /**
+     * @param mixed $includeInBestPerformer
+     * @return $this
+     */
+    public function setIncludeInBestPerformer($includeInBestPerformer)
+    {
+        $this->includeInBestPerformer = $includeInBestPerformer;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIncludeInBestPerformer()
+    {
+        return $this->includeInBestPerformer;
+    }
+
+    /**
+     * @param mixed $peerReportLabel
+     * @return $this
+     */
+    public function setPeerReportLabel($peerReportLabel)
+    {
+        $this->peerReportLabel = $peerReportLabel;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPeerReportLabel()
+    {
+        if (empty($this->peerReportLabel)) {
+            return $this->getReportLabel();
+        }
+
+        return $this->peerReportLabel;
+    }
+
+    /**
+     * @param mixed $reportLabel
+     * @return $this
+     */
+    public function setReportLabel($reportLabel)
+    {
+        $this->reportLabel = $reportLabel;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReportLabel()
+    {
+        if (empty($this->reportLabel)) {
+            return $this->getName();
+        }
+
+        return $this->reportLabel;
+    }
+
+    /**
+     * @param mixed $reportWeight
+     * @return $this
+     */
+    public function setReportWeight($reportWeight)
+    {
+        $this->reportWeight = $reportWeight;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReportWeight()
+    {
+        return $this->reportWeight;
+    }
+
+    /**
+     * @param mixed $yearOffset
+     * @return $this
+     */
+    public function setYearOffset($yearOffset)
+    {
+        $this->yearOffset = $yearOffset;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getYearOffset()
+    {
+        return $this->yearOffset;
+    }
+
+    /**
+     * @param mixed $yearPrefix
+     * @return $this
+     */
+    public function setYearPrefix($yearPrefix)
+    {
+        $this->yearPrefix = $yearPrefix;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getYearPrefix()
+    {
+        return $this->yearPrefix;
+    }
+
 
     /**
      * Implement the FormElementProviderInterface

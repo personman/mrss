@@ -147,6 +147,13 @@ class ImportBenchmarks
 
         $benchmark->setBenchmarkGroup($benchmarkGroup);
         $benchmark->setName($name);
+        $benchmark->setReportLabel($row['reportLabel']);
+        $benchmark->setPeerReportLabel($row['peerReportLabel']);
+        $benchmark->setDescriptiveReportLabel($row['descriptiveReportLabel']);
+        $benchmark->setYearPrefix($row['yearPrefix']);
+        $benchmark->setYearOffset($row['yearOffset']);
+        $benchmark->setIncludeInBestPerformer($row['includeInBestPerformer']);
+        $benchmark->setHighIsBetter($row['highIsBetter']);
         $benchmark->setDbColumn($row['dbColumn']);
         $benchmark->setInputType($row['inputType']);
         $benchmark->setDescription($row['description']);
@@ -272,6 +279,11 @@ class ImportBenchmarks
                 $studyBenchmarks[] = array(
                     $formName,
                     $benchmark->getName(),
+                    $benchmark->getReportLabel(),
+                    $benchmark->getPeerReportLabel(),
+                    $benchmark->getDescriptiveReportLabel(),
+                    $benchmark->getYearPrefix(),
+                    $benchmark->getYearOffset(),
                     $benchmark->getDbColumn(),
                     $benchmark->getInputType(),
                     $benchmark->getDescription(),
@@ -280,6 +292,8 @@ class ImportBenchmarks
                     $benchmark->getEquation(),
                     $benchmark->getExcludeFromCompletion(),
                     $benchmark->getIncludeInNationalReport(),
+                    $benchmark->getIncludeInBestPerformer(),
+                    $benchmark->getHighIsBetter(),
                     implode(',', $benchmark->getYearsAvailable())
                 );
             }
@@ -351,6 +365,11 @@ class ImportBenchmarks
         return array(
             'benchmarkGroup',
             'name',
+            'reportLabel',
+            'peerReportLabel',
+            'descriptiveLabel',
+            'yearPrefix',
+            'yearOffset',
             'dbColumn',
             'inputType',
             'description',
@@ -359,6 +378,8 @@ class ImportBenchmarks
             'equation',
             'excludeFromCompletion',
             'includeInNationalReport',
+            'includeInBestPerformer',
+            'highIsBetter',
             'yearsAvailable'
         );
     }

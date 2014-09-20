@@ -23,10 +23,44 @@ class Benchmark extends AbstractForm
                 'name' => 'name',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Name'
+                    'label' => 'Data Entry Label'
                 )
             )
         );
+
+        $this->add(
+            array(
+                'name' => 'reportLabel',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Report Label'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'peerReportLabel',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Peer Report Label'
+                )
+            )
+        );
+
+
+        $this->add(
+            array(
+                'name' => 'descriptiveReportLabel',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Descriptive Label',
+                    'help-block' => 'Used for Executive Report'
+                )
+            )
+        );
+
+
 
         $this->add(
             array(
@@ -72,6 +106,30 @@ class Benchmark extends AbstractForm
                         'computed' => 'Computed',
                         'radio' => 'Radio'
                     )
+                )
+            )
+        );
+
+
+
+        $this->add(
+            array(
+                'name' => 'yearPrefix',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Year Prefix',
+                    'help-block' => 'E.g., Fall, Spring, FY, academic year'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'yearOffset',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Year offset',
+                    'help-block' => 'Collection year - x = data year.'
                 )
             )
         );
@@ -162,6 +220,26 @@ class Benchmark extends AbstractForm
                 'type' => 'Checkbox',
                 'options' => array(
                     'label' => 'Include in National Report'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'includeInBestPerformer',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Include in Best Performers Report'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'highIsBetter',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'High Values Are Better'
                 )
             )
         );

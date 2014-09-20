@@ -530,9 +530,19 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             if ($exampleObservation->has($dbColumn)) {
 
                 // Find the benchmarkGroup
-                $benchmarkGroupShortName = $result['type_name'];
+                $benchmarkGroupShortName = str_replace(
+                    'group_',
+                    '',
+                    $result['type_name']
+                );
+
                 $benchmarkGroup = $this->getBenchmarkGroupModel()
                     ->findOneByShortName($benchmarkGroupShortName);
+
+                if (empty($benchmarkGroup)) {
+                    echo 'benchmarkGroupShortName: ';
+                    pr($benchmarkGroupShortName);
+                }
 
                 // Find or create the Benchmark entity
                 $benchmark = $this->getBenchmarkModel()
@@ -553,17 +563,67 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                     }
                 }
 
+                $reportField = $this->getReportField($result['field_name']);
+
                 // Populate the benchmark
                 $benchmark->setDbColumn($dbColumn);
                 $benchmark->setName($result['label']);
                 $benchmark->setDescription($result['description']);
                 $benchmark->setSequence($result['weight']);
+
                 $inputType = $this->convertInputType($result['widget_type']);
+                if ($inputType == 'computed') {
+                    if (stristr($benchmark->getName(), 'Rate')) {
+                        $inputType = 'percent';
+                    } elseif (stristr($benchmark->getName(), '%')) {
+                        $inputType = 'percent';
+                    } elseif (stristr($benchmark->getName(), 'Percent')) {
+                        $inputType = 'percent';
+                    } elseif (stristr($benchmark->getName(), 'Hours')) {
+                        $inputType = 'float';
+                    }
+                }
                 $benchmark->setInputType($inputType);
+
                 $benchmark->setYearsAvailable(
                     $this->getYearsAvailable($result['field_name'])
                 );
                 $benchmark->setExcludeFromCompletion(false);
+
+
+                $benchmark->setHighIsBetter(true);
+
+                if (empty($reportField)) {
+                    $benchmark->setIncludeInNationalReport(false);
+                    $benchmark->setIncludeInBestPerformer(false);
+                } else {
+                    $benchmark->setIncludeInNationalReport(true);
+                    $benchmark->setReportLabel(
+                        $reportField['field_rf_benchmark_report_label_value']
+                    );
+                    $benchmark->setYearPrefix($reportField['field_rf_prefix_value']);
+                    $benchmark->setYearOffset(
+                        $reportField['field_rf_data_collection_year_value']
+                    );
+                    $benchmark->setIncludeInBestPerformer(
+                        ($reportField['field_rf_best_practices_value'] > 0)
+                    );
+                    $benchmark->setReportWeight(
+                        $reportField['field_rf_weight_value']
+                    );
+                    $benchmark->setPeerReportLabel(
+                        $reportField['field_rf_peer_report_label_value']
+                    );
+                    $benchmark->setDescriptiveReportLabel(
+                        $reportField['field_descriptive_label_value']
+                    );
+
+                    $hib = $reportField['field_rf_best_practices_high_low_value'];
+                    $hib = (intval($hib) == 1);
+                    $benchmark->setHighIsBetter($hib);
+
+
+                }
 
                 // Set the benchmark group
                 if (!empty($benchmarkGroup)) {
@@ -1058,6 +1118,44 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         );
 
         return $imports;
+    }
+
+    protected function getReportField($key)
+    {
+        $sql = new Sql($this->dbAdapter);
+        $select = $sql->select();
+
+        $select->columns(
+            array(
+                'field_rf_benchmark_report_label_value',
+                'field_rf_prefix_value',
+                'field_rf_data_collection_year_value',
+                'field_rf_best_practices_value',
+                'field_rf_weight_value',
+                'field_rf_peer_report_label_value',
+                'field_rf_best_practices_high_low_value',
+                'field_descriptive_label_value'
+            )
+        );
+        $select->from('content_type_report_fields');
+        $select->join(
+            'node',
+            'content_type_report_fields.nid = node.nid',
+            array('title')
+        );
+        $select->where(array('title' => $key));
+
+        $statement = $sql->prepareStatementForSqlObject($select);
+
+        $results = $statement->execute();
+
+        $reportField = null;
+        if ($results) {
+            $reportField = $results->next();
+        }
+
+        return $reportField;
+
     }
 
     public function getType()
