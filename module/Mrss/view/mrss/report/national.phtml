@@ -36,7 +36,9 @@ $this->headScript()->appendFile(
         <?php if (stristr($benchmarkGroup['benchmarkGroup'], '|')): ?>
             <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
         <?php elseif (stristr($benchmarkGroup['benchmarkGroup'], ':')): ?>
-            <?php list($formNumber, $formTitle) = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
+            <?php $nameParts = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
+            <?php $formNumber = array_shift($nameParts) ?>
+            <?php $formTitle = implode(': ', $nameParts) ?>
         <?php endif ?>
         <h3 class="benchmarkGroupTitle">
             <span class="small-heading"><?= $formNumber ?></span><br>
@@ -77,8 +79,8 @@ $this->headScript()->appendFile(
                             <?php endif ?>
                         </td>
                         <?php else: ?>
-                            <td></td>
-                            <td></td>
+                            <td>-</td>
+                            <td>-</td>
                         <?php endif ?>
                         <td><?= $benchmark['N'] ?></td>
                         <?php foreach ($benchmark['percentiles'] as $percentile): ?>
