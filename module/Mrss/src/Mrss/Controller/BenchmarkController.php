@@ -293,7 +293,6 @@ class BenchmarkController extends AbstractActionController
                         'value' => $benchmark->getEquation()
                     )
                 )
-
             );
         }
 
