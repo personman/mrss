@@ -38,7 +38,8 @@ class Change
     protected $newValue;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Benchmark",)
+     * @ORM\ManyToOne(targetEntity="Benchmark")
+     * @ORM\JoinColumn(name="benchmark_id", referencedColumnName="id", onDelete="CASCADE")
      * @var Benchmark
      */
     protected $benchmark;

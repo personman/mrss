@@ -173,4 +173,18 @@ class Benchmark extends AbstractModel
 
         return $completionPercentages;
     }
+
+    public function findEmptyEquations(StudyEntity $study)
+    {
+        $computed = $this->findComputed($study);
+        $emptyEquations = array();
+
+        foreach ($computed as $benchmark) {
+            if ($benchmark->getEquation() == '') {
+                $emptyEquations[] = $benchmark;
+            }
+        }
+
+        return $emptyEquations;
+    }
 }

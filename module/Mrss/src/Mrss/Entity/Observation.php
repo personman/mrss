@@ -2301,87 +2301,87 @@ class Observation
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_a;
+    protected $form17b_dist_learn_grad_a;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_b;
+    protected $form17b_dist_learn_grad_b;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_c;
+    protected $form17b_dist_learn_grad_c;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_d;
+    protected $form17b_dist_learn_grad_d;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_p;
+    protected $form17b_dist_learn_grad_p;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_f;
+    protected $form17b_dist_learn_grad_f;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_w;
+    protected $form17b_dist_learn_grad_w;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_total;
+    protected $form17b_dist_learn_grad_total;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_a_perc;
+    protected $form17b_dist_learn_grad_a_perc;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_b_perc;
+    protected $form17b_dist_learn_grad_b_perc;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_c_perc;
+    protected $form17b_dist_learn_grad_c_perc;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_d_perc;
+    protected $form17b_dist_learn_grad_d_perc;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_p_perc;
+    protected $form17b_dist_learn_grad_p_perc;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_f_perc;
+    protected $form17b_dist_learn_grad_f_perc;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_w_perc;
+    protected $form17b_dist_learn_grad_w_perc;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_withdrawal;
+    protected $form17b_dist_learn_grad_withdrawal;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_completed;
+    protected $form17b_dist_learn_grad_completed;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -2391,12 +2391,12 @@ class Observation
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_enr_succ;
+    protected $form17b_dist_learn_grad_enr_succ;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form17b_anb;
+    protected $form17b_dist_learn_grad_anb;
 
 
 

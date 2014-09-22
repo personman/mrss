@@ -367,7 +367,7 @@ class ImportBenchmarks
             'name',
             'reportLabel',
             'peerReportLabel',
-            'descriptiveLabel',
+            'descriptiveReportLabel',
             'yearPrefix',
             'yearOffset',
             'dbColumn',

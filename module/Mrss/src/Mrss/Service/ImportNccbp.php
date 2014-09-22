@@ -414,7 +414,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
             $oldObservation = clone $observation;
 
-
             // Loop over the row's columns, convert the field name and set the value
             foreach ($row as $key => $value) {
                 if ($value === null) {
@@ -423,7 +422,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
                 // If the fieldname isn't converted, just skip it
                 try {
-                    $formName = null; // @todo: How can I get this
+                    $formName = str_replace('content_type_', '', $table);
                     $fieldName = $this->convertFieldName($key, $formName);
                     //echo "$fieldName: $value<br>\n";
                     $observation->set($fieldName, $value);
@@ -527,6 +526,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 continue;
             }
 
+            /*if (stristr($result['type_name'], '17b')) {
+                pr($dbColumn);
+                prd($result);
+            }*/
             if ($exampleObservation->has($dbColumn)) {
 
                 // Find the benchmarkGroup
@@ -559,7 +562,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                     if (!empty($existingBenchmark)) {
                         // Since a benchmark with this dbColumn (but not this
                         // benchmark group) already exists, modify the dbColumn
-                        $dbColumn = $benchmarkGroupShortName . '_' . $dbColumn;
+                        //$dbColumn = $benchmarkGroupShortName . '_' . $dbColumn;
                     }
                 }
 
@@ -582,8 +585,12 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                     } elseif (stristr($benchmark->getName(), 'Hours')) {
                         $inputType = 'float';
                     }
+                    $benchmark->setComputed(true);
                 }
-                $benchmark->setInputType($inputType);
+
+                //if ($inputType != 'computed') {
+                    $benchmark->setInputType($inputType);
+                //}
 
                 $benchmark->setYearsAvailable(
                     $this->getYearsAvailable($result['field_name'])
@@ -908,6 +915,9 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         if (preg_match('/^\d/', $converted)) {
             $converted = 'n' . $converted;
         }
+
+        // Remove 'group_' from form name
+        $formName = str_replace('group_', '', $formName);
 
         // Now see if we need to prepend the form name
         $emptyObservation = new Observation();

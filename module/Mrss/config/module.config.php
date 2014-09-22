@@ -552,6 +552,15 @@ return array(
                                 'action' => 'reorder'
                             )
                         )
+                    ),
+                    'equations' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/equations',
+                            'defaults' => array(
+                                'action' => 'equations'
+                            )
+                        )
                     )
                 )
             ),
