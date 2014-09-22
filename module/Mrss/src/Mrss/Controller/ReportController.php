@@ -35,12 +35,14 @@ class ReportController extends AbstractActionController
             $benchmarks = $stats['benchmarks'];
             $percentiles = $stats['percentiles'];
             $percentileRanks = $stats['percentileRanks'];
+            $noData = $stats['noData'];
 
             $elapsed = round(microtime(true) - $start, 1);
 
             $this->flashMessenger()->addSuccessMessage(
                 "Report prepared. Benchmarks: $benchmarks. Percentiles: $percentiles.
-                Percentile ranks: $percentileRanks. Elapsed time: $elapsed seconds."
+                Percentile ranks: $percentileRanks. Benchmarks without data: $noData.
+                Elapsed time: $elapsed seconds."
             );
 
             return $this->redirect()->toRoute('reports/calculate');

@@ -141,7 +141,8 @@ class Report
         $stats = array(
             'benchmarks' => 0,
             'percentiles' => 0,
-            'percentileRanks' => 0
+            'percentileRanks' => 0,
+            'noData' => 0
         );
 
         // Loop over benchmarks
@@ -157,6 +158,7 @@ class Report
             $data = $this->collectDataForBenchmark($benchmark, $year);
 
             if (empty($data)) {
+                $stats['noData']++;
                 continue;
             }
 
@@ -577,15 +579,15 @@ class Report
                 'benchmarkGroup' => $benchmarkGroup->getName(),
                 'benchmarks' => array()
             );
-
             $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
+
             foreach ($benchmarks as $benchmark) {
                 if ($this->isBenchmarkExcludeFromReport($benchmark)) {
                     continue;
                 }
 
                 $benchmarkData = array(
-                    'benchmark' => $benchmark->getName(),
+                    'benchmark' => $benchmark->getReportLabel(),
                 );
 
                 $percentiles = $this->getPercentileModel()
@@ -660,7 +662,6 @@ class Report
                 $benchmarkData['description'] = $benchmark->getDescription();
 
                 $groupData['benchmarks'][] = $benchmarkData;
-
             }
 
             $reportData[] = $groupData;
@@ -1051,7 +1052,7 @@ class Report
         $chartConfig
     ) {
         if (empty($chartConfig['title'])) {
-            $chartConfig['title'] = $benchmark->getName();
+            $chartConfig['title'] = $benchmark->getReportLabel();
         }
 
         unset($percentileData['N']);
@@ -1403,7 +1404,7 @@ class Report
 
             // Skip benchmarks with not enough peers
             if (count($data) <= $minPeers) {
-                $report['skipped'][] = $benchmark->getName();
+                $report['skipped'][] = $benchmark->getPeer();
                 continue;
             }
 
@@ -1415,7 +1416,7 @@ class Report
             $data = $this->sortAndLabelPeerData($data, $peerGroup->getCollege());
 
             $reportSection = array(
-                'benchmark' => $benchmark->getName(),
+                'benchmark' => $benchmark->getPeerReportLabel(),
                 'data' => $data,
                 'chart' => $this->getPeerBarChart($benchmark, $data)
             );
