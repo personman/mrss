@@ -815,6 +815,15 @@ return array(
                                 'action' => 'unimpersonate'
                             )
                         )
+                    ),
+                    'exportLoginLinks' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/export-login-links',
+                            'defaults' => array(
+                                'action' => 'exportLoginLinks'
+                            )
+                        )
                     )
                 )
             ),

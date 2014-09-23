@@ -3,6 +3,7 @@
 
 namespace Mrss\Controller;
 
+use PHPExcel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\User as UserEntity;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -252,5 +253,108 @@ class UserController extends AbstractActionController
         }
 
         $this->getServiceLocator()->get('em')->flush();
+    }
+
+    /**
+     * Generate a one-time login link for all users that haven't logged in.
+     * Export to Excel.
+     */
+    public function exportLoginLinksAction()
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(3600);
+
+        /** @var \GoalioForgotPassword\Service\Password $passwordService */
+        $passwordService = $this->getServiceLocator()
+            ->get('goalioforgotpassword_password_service');
+
+        // Get all users with NCCBP subscriptions who have never logged in
+        $users = $this->getAllNewNCCBPUsers();
+
+        $excelArray = array(
+            array('email', 'name', 'college', 'loginLink')
+        );
+
+        foreach ($users as $user) {
+            $userId = $user->getId();
+
+            $passwordService->cleanPriorForgotRequests($userId);
+            $class = $passwordService->getOptions()->getPasswordEntityClass();
+
+            /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
+            $model = new $class;
+
+            $model->setUserId($userId);
+            $model->setRequestTime(new \DateTime('now'));
+            $model->generateRequestKey();
+            $passwordService->getPasswordMapper()->persist($model);
+
+            $serverUrl = $this->getServiceLocator()
+                ->get('viewhelpermanager')->get('serverUrl');
+
+            $urlHelper = $this->getServiceLocator()
+                ->get('viewhelpermanager')->get('url');
+
+            // Build the one-time login url
+            $key = $model->getRequestKey();
+            $url = $serverUrl->__invoke($urlHelper->__invoke('zfcuser/resetpassword', array('userId' => $userId, 'token' => $key)));
+
+            $excelArray[] = array(
+                $user->getEmail(),
+                $user->getFullName(),
+                $user->getCollege()->getName(),
+                $url
+            );
+
+        }
+        $this->getServiceLocator()->get('em')->flush();
+
+        // Export to Excel
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $sheet->fromArray($excelArray);
+        foreach (range(0, 3) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        $filename = 'new-' . $this->currentStudy()->getName() . '-users';
+
+        header(
+            'Content-Type: '.
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+
+        die;
+    }
+
+    /**
+     * @return \Mrss\Entity\User[]
+     */
+    protected function getAllNewNCCBPUsers()
+    {
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        /** @var \Mrss\Entity\College[] $colleges */
+        $colleges = $collegeModel->findAll();
+        $study = $this->currentStudy();
+
+        $users = array();
+        foreach ($colleges as $college) {
+            foreach ($college->getUsers() as $user) {
+                if ($user->hasStudy($study)) {
+                    $lastAccess = $user->getLastAccess();
+                    if (empty($lastAccess)) {
+                        $users[] = $user;
+                        //pr($user->getFullName() . ' ' . $user->getCollege()->getName());
+                    }
+                }
+            }
+        }
+
+        return $users;
     }
 }

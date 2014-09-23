@@ -4,8 +4,15 @@
     <li>
         <a href="<?= $this->url(
             'tools/exceldiff'
-        ) ?>">Process Excel File for Email Blast</a> - Upload an Excel files and get a download of the
+        ) ?>">Process Excel File for Email Blast</a> - Upload an Excel file and get a download of the
         file with column C containing all emails from column A that are not in column
         B. Used for email blasts.
+    </li>
+
+    <li>
+        <a href="<?= $this->url(
+            'users/exportLoginLinks'
+        ) ?>">Export One-time Login Links</a> - Download an Excel file of users who belong to the current
+        study but have never logged in. Created for NCCBP migration.
     </li>
 </ul>
