@@ -1127,10 +1127,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 'label' => 'Users',
                 'method' => 'importUsers'
             ),
-            'benchmarkGroups' => array(
+            /*'benchmarkGroups' => array(
                 'label' => 'Benchmark Groups',
                 'method' => 'importBenchmarkGroups'
-            ),
+            ),*/
             'benchmarks' => array(
                 'label' => 'Benchmarks',
                 'method' => 'importFieldMetadata'
