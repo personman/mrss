@@ -302,7 +302,12 @@ class UserController extends AbstractActionController
 
             // Build the one-time login url
             $key = $model->getRequestKey();
-            $url = $serverUrl->__invoke($urlHelper->__invoke('zfcuser/resetpassword', array('userId' => $userId, 'token' => $key)));
+            $url = $serverUrl->__invoke(
+                $urlHelper->__invoke(
+                    'zfcuser/resetpassword',
+                    array('userId' => $userId, 'token' => $key)
+                )
+            );
 
             $excelArray[] = array(
                 $user->getEmail(),

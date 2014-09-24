@@ -24,6 +24,7 @@ use Mrss\Form\Fieldset\Agreement;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Mail\Message;
 use DateTime;
+use PHPExcel;
 
 /**
  * Class SubscriptionController
@@ -1067,6 +1068,15 @@ class SubscriptionController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Model\Subscription
+     */
+    public function getSubscriptionModel()
+    {
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        return $subscriptionModel;
+    }
+
+    /**
      * @return \Mrss\Model\SubscriptionDraft
      */
     public function getSubscriptionDraftModel()
@@ -1077,5 +1087,47 @@ class SubscriptionController extends AbstractActionController
         }
 
         return $this->subscriptionDraftModel;
+    }
+
+    public function downloadAction()
+    {
+        $model = $this->getSubscriptionModel();
+        $study = $this->currentStudy();
+        $year = $this->params()->fromRoute('year');
+
+        $subscriptions = $model->findByStudyAndYear($study, $year);
+        $c = count($subscriptions);
+
+        $subscriptionsInfo[] = array(
+            'Institution',
+            'State',
+        );
+        foreach ($subscriptions as $sub) {
+            $subscriptionsInfo[] = array(
+                $sub->getCollege()->getName(),
+                $sub->getCollege()->getState()
+            );
+        }
+
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $sheet->fromArray($subscriptionsInfo);
+
+        foreach (range(0, count($subscriptionsInfo[0])) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        $filename = $this->currentStudy()->getName() . '-Members-' . $year;
+
+        header(
+            'Content-Type: '.
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+        die;
     }
 }

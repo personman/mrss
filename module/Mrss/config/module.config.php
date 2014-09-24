@@ -853,7 +853,18 @@ return array(
                                 'action' => 'users'
                             )
                         )
-                    )
+                    ),
+                    'subscribed' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/subscribed/:year',
+                            'defaults' => array(
+                                'controller' => 'subscription',
+                                'action' => 'download',
+                                'year' => null
+                            )
+                        )
+                    ),
                 )
             ),
             'account' => array(

@@ -743,7 +743,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             AND field_years_value  = i.subscribe_year COLLATE utf8_unicode_ci
             LEFT JOIN nccbp_payment_upay p ON i.session_hash = p.ext_trans_id
             $yearWhere
-            ORDER BY field_institution_name_value;";
+            ORDER BY field_institution_name_value";
 
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();

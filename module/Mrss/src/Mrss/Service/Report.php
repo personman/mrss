@@ -119,6 +119,8 @@ class Report
 
     public function calculateForYear($year)
     {
+        $baseMemory = memory_get_usage();
+
         $start = microtime(1);
         $this->debug($year);
         // Update any computed fields
@@ -131,6 +133,8 @@ class Report
         $breakpoints = $this->getPercentileBreakpoints();
         $percentileModel = $this->getPercentileModel();
         $percentileRankModel = $this->getPercentileRankModel();
+
+        $percentileRankModel->getEntityManager()->flush();
 
         $this->debugTimer($start, 'About to clear values');
         // Clear the stored values
@@ -216,7 +220,15 @@ class Report
             }
 
             $stats['benchmarks']++;
-            $this->debugTimer($start, 'first benchmark done');
+
+            // Flush periodically
+            if ($stats['benchmarks'] % 50 == 0) {
+                $i = $stats['benchmarks'];
+                //pr($stats['benchmarks']);
+                //echo sprintf( '%8d: ', $i ), memory_get_usage() - $baseMemory, "\n<br>";
+                $percentileModel->getEntityManager()->flush();
+                //echo sprintf( '%8d: ', $i ), memory_get_usage() - $baseMemory, "\n<br>";
+            }
         }
 
         // Update the settings table with the calculation date

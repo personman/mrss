@@ -28,6 +28,13 @@ $this->headScript()->appendFile(
             'format' => 'excel'
         )
     ) ?>" class="btn">Download</a>
+
+    <a href="<?= $this->url(
+        'institution/subscribed',
+        array(
+            'year' => $year
+        )
+    ) ?>" class="btn">Subscribers</a>
 </p>
 
 <div class="report">
