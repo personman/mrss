@@ -14,6 +14,7 @@ use Zend\Console\Request as ConsoleRequest;
 
 class ImportController extends AbstractActionController
 {
+    protected $triggerInBackground = true;
 
     /**
      * Display controls and progress bars for managing all import types
@@ -43,7 +44,7 @@ class ImportController extends AbstractActionController
         }
 
         // Trigger the importer in the background
-        if (false) {
+        if ($this->triggerInBackground) {
             $config = $this->getServiceLocator()->get('config');
             if (!empty($config['php_path'])) {
                 $php = $config['php_path'];

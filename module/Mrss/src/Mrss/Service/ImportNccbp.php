@@ -16,6 +16,7 @@ use Mrss\Model;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
 use Zend\Json\Json;
+use DateTime;
 
 /**
  * Import data from NCCBP database
@@ -726,25 +727,29 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
         $this->setType('subscriptions');
 
-        $yearWhere = '';
         if ($year) {
-            $yearWhere = " AND field_years_value = '$year' ";
+            $yearWhere = "WHERE field_years_value = '$year' ";
+        } else {
+            $yearWhere = '';
         }
 
-        $query = "SELECT field_institution_name_value, field_ipeds_id_value, field_years_value, payment_amount
+        $query = "SELECT field_ipeds_id_value, field_institution_name_value,
+            field_years_value, payment_amount, payment_status, payment_date
             FROM content_type_group_subs_info
-            LEFT JOIN content_field_years
+            INNER JOIN content_field_years
             ON content_type_group_subs_info.nid = content_field_years.nid
-            INNER JOIN nccbp_payment_institution i ON i.ipeds_id = field_ipeds_id_value
-            INNER JOIN nccbp_payment_upay p ON i.session_hash = p.ext_trans_id
-            WHERE field_years_value IS NOT NULL
+            LEFT JOIN nccbp_payment_institution i
+            ON i.ipeds_id = field_ipeds_id_value
+            AND field_years_value  = i.subscribe_year COLLATE utf8_unicode_ci
+            LEFT JOIN nccbp_payment_upay p ON i.session_hash = p.ext_trans_id
             $yearWhere
-            ORDER BY field_years_value";
+            ORDER BY field_institution_name_value;";
 
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
 
         $total = count($result);
+        //prd($total);
         $this->saveProgress(0, $total);
 
         $studyId = 1;
@@ -778,7 +783,22 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $subscription->setStudy($this->getStudy());
             $subscription->setYear($year);
             $subscription->setStatus('imported');
-            $subscription->setPaymentAmount($row['payment_amount']);
+
+            if (!empty($row['payment_amount'])) {
+                $subscription->setPaymentAmount($row['payment_amount']);
+            }
+
+            if (!empty($row['payment_status'])) {
+                $subscription->setPaymentMethod(
+                    $this->convertPaymentMethod($row['payment_status'])
+                );
+            }
+
+            if (!empty($row['payment_date'])) {
+                $subscription->setCreated(
+                    new DateTime($row['payment_date'])
+                );
+            }
 
             if (!empty($observation)) {
                 $subscription->setObservation($observation);
@@ -790,14 +810,31 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
 
             // Flush every so often
-            if ($i % 100 == 0) {
+            //if ($i % 100 == 0) {
+                // Some duplicates are getting through when we don't flush after
+                // every subscription
                 $this->saveProgress($i);
                 // saveProgress flushes
                 //$this->entityManager->flush();
-            }
+            //}
         }
 
         $this->saveProgress($i);
+    }
+
+    protected function convertPaymentMethod($method)
+    {
+        $map = array(
+            'check' => 'invoice',
+            'success' => 'creditCard',
+            'system' => 'system'
+        );
+
+        if (!empty($map[$method])) {
+            $method = $map[$method];
+        }
+
+        return $method;
     }
 
     /**

@@ -958,10 +958,11 @@ return array(
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/admin',
+                    'route' => '/admin[/:year]',
                     'defaults' => array(
                         'controller' => 'Admin',
-                        'action' => 'dashboard'
+                        'action' => 'dashboard',
+                        'year' => null
                     )
                 ),
                 'child_routes' => array(

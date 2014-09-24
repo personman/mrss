@@ -14,15 +14,36 @@ class AdminController extends AbstractActionController
         // Get a list of subscriptions to the current study
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $studyId = $this->currentStudy()->getId();
-        $currentYear = $this->currentStudy()->getCurrentYear();
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
 
         $subscriptions = $subscriptionModel->findByStudyAndYear(
             $studyId,
-            $currentYear
+            $year
         );
 
+        $showCompletion = (count($subscriptions) < 100);
+
+        // Years for tabs
+        $years = $this->getServiceLocator()->get('model.subscription')
+            ->getYearsWithSubscriptions($this->currentStudy());
+        rsort($years);
+
+        // Total
+        $total = 0;
+        foreach ($subscriptions as $sub) {
+            $total += $sub->getPaymentAmount();
+        }
+
         return array(
-            'subscriptions' => $subscriptions
+            'subscriptions' => $subscriptions,
+            'showCompletion' => $showCompletion,
+            'years' => $years,
+            'currentYear' => $year,
+            'total' => $total
         );
     }
 

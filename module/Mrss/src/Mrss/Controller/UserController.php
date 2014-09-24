@@ -72,16 +72,21 @@ class UserController extends AbstractActionController
                 }
 
                 // Check to see if a user with this email already exists
-                if ($user->getId() == 'add' &&
-                    $existingUser = $userModel->findOneByEmail($user->getEmail())) {
-                    // If so, update rather than insert
-                    $user->setId($existingUser->getId());
-                    $user->addStudies($existingUser->getStudies());
-                    $user->setPassword($existingUser->getPassword());
-                }
+                if ($user->getId() == 'add') {
+                    $existingUser = $userModel->findOneByEmail($user->getEmail());
+                    if ($existingUser) {
+                        // If so, update rather than insert
+                        $user->setId($existingUser->getId());
+                        $user->setPassword($existingUser->getPassword());
+                        if (!count($user->getStudies())) {
+                            $user->addStudies($existingUser->getStudies());
+                        }
+                    } else {
+                        // Assign the user to this study
+                        $user->addStudy($this->currentStudy());
+                    }
 
-                // Assign the user to this study
-                $user->addStudy($this->currentStudy());
+                }
 
                 // Save
                 $userModel->save($user);

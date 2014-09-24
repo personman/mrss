@@ -227,7 +227,7 @@ class Subscription
         }
 
         // System payments show which system
-        if ($method == 'System') {
+        if ($method == 'System' && $this->getPaymentSystemName()) {
             $method .= ': ' . $this->getPaymentSystemName();
         }
 
@@ -246,7 +246,7 @@ class Subscription
         return $this->paymentSystemName;
     }
 
-    public function setObservation(\Mrss\Entity\Observation $observation)
+    public function setObservation(Observation $observation)
     {
         $this->observation = $observation;
 

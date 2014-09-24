@@ -8,7 +8,7 @@
 <form>
     <select name="year" id="year">
         <?php foreach (range(2007, date('Y')) as $year): ?>
-            <option value="<?= $year ?>" <?php if ($year == date('Y') - 1) echo ' selected="selected"' ?>><?= $year ?></option>
+            <option value="<?= $year ?>" <?php if ($year == date('Y')) echo ' selected="selected"' ?>><?= $year ?></option>
         <?php endforeach ?>
     </select>
 </form>

@@ -4,11 +4,27 @@
 
 <h2>Subscriptions</h2>
 
+<ul class="nav nav-tabs">
+    <?php foreach ($years as $year): ?>
+        <li<? if ($year == $currentYear) echo ' class="active"' ?>>
+            <a href="<?= $this->url('admin', array('year' => $year)) ?>"><?= $year ?></a>
+        </li>
+    <?php endforeach ?>
+</ul>
+
+
 <?php if (count($subscriptions)): ?>
+<p>
+    <?= count($subscriptions) ?> subscriptions, $<?= number_format($total, 2) ?>.
+</p>
+
+
 <table class="table table-striped">
     <thead>
         <tr>
+            <?php if ($showCompletion): ?>
             <th>Completion</th>
+            <?php endif ?>
             <th>Institution</th>
             <th>Users</th>
             <th>Subscription Date</th>
@@ -18,10 +34,9 @@
         </tr>
     </thead>
     <tbody>
-        <?php $total = 0; ?>
         <?php foreach ($subscriptions as $subscription): ?>
-            <?php $total += $subscription->getPaymentAmount() ?>
             <tr>
+                <?php if ($showCompletion): ?>
                 <td>
                     <a href="<?= $this->url(
                         'observation',
@@ -32,6 +47,7 @@
                         ) ?>%
                     </a>
                 </td>
+                <?php endif ?>
                 <td>
                     <a href="<?= $this->url(
                         'colleges/view',
@@ -44,7 +60,9 @@
                 <td>
                     <?php
                         $userList = array();
-                        foreach ($subscription->getCollege()->getUsers() as $user):
+                        $users = $subscription->getCollege()
+                            ->getUsersByStudy($this->currentStudy());
+                        foreach ($users as $user):
                             $name = $user->getFullName();
 
                             // Wrap in a link
@@ -100,9 +118,6 @@
     </tbody>
 </table>
 
-<p>
-    <?= count($subscriptions) ?> subscriptions, $<?= number_format($total, 2) ?>.
-</p>
 
 <?php else: ?>
     <p>No one has signed up yet.</p>
