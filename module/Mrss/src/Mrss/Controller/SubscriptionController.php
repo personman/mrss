@@ -1101,11 +1101,13 @@ class SubscriptionController extends AbstractActionController
         $subscriptionsInfo[] = array(
             'Institution',
             'State',
+            'IPEDS'
         );
         foreach ($subscriptions as $sub) {
             $subscriptionsInfo[] = array(
                 $sub->getCollege()->getName(),
-                $sub->getCollege()->getState()
+                $sub->getCollege()->getState(),
+                $sub->getCollege()->getIpeds()
             );
         }
 

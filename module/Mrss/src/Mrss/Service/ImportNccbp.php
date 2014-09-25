@@ -757,7 +757,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         foreach ($result as $row) {
             $i++;
 
-            $ipeds = $row['field_ipeds_id_value'];
+            $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
             $year = $row['field_years_value'];
 
             // Find the college
