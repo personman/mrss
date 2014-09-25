@@ -54,8 +54,8 @@ class ImportController extends AbstractActionController
             $output = array();
             $command = "nohup nice -n 10 $php public/index.php import $type $year > /dev/null &";
             exec($command, $output);
-            pr($command);
-            pr($output);
+            //pr($command);
+            //pr($output);
         } else {
             $this->backgroundAction($type, $year);
         }
