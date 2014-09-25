@@ -57,15 +57,37 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     protected $useSubObservation;
 
     /**
+     * @param mixed $benchmarkHeadings
+     */
+    public function setBenchmarkHeadings($benchmarkHeadings)
+    {
+        $this->benchmarkHeadings = $benchmarkHeadings;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBenchmarkHeadings()
+    {
+        return $this->benchmarkHeadings;
+    }
+
+    /**
      * @ORM\Column(type="integer")
      */
     protected $sequence;
 
     /**
      * @ORM\OneToMany(targetEntity="Benchmark", mappedBy="benchmarkGroup")
-     * @ORM\OrderBy({"reportWeight" = "ASC"})
+     * @ORM\OrderBy({"sequence" = "ASC"})
      */
     protected $benchmarks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="BenchmarkHeading", mappedBy="benchmarkGroup")
+     * @ORM\OrderBy({"sequence" = "ASC"})
+     */
+    protected $benchmarkHeadings;
 
     /**
      * @ORM\ManyToOne(targetEntity="Study", inversedBy="benchmarkGroups")
@@ -473,5 +495,20 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         }
 
         return $this->inputFilter;
+    }
+
+    public function getChildren()
+    {
+        $children = array();
+        foreach ($this->getBenchmarks() as $benchmark) {
+            $children[$benchmark->getSequence()] = $benchmark;
+        }
+        foreach ($this->getBenchmarkHeadings() as $heading) {
+            $children[$heading->getSequence()] = $heading;
+        }
+
+        ksort($children, SORT_NUMERIC);
+
+        return $children;
     }
 }

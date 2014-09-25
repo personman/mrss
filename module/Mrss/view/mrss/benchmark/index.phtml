@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/benchmarks.css"/>
 <script type="text/javascript" src="/js/jquery.sparkline.min.js"></script>
 <script type="text/javascript">
     $(function() {
@@ -7,16 +8,30 @@
             update: function(event, ui) {
                 parent = ui.item.parent()
 
+
                 var benchmarkGroupId = parent.attr('id').split('_').pop()
 
                 var benchmarkIds = [];
+                var headingIds = [];
+                var i = 1;
                 parent.find('tr').each(function() {
-                    benchmarkIds.push(parseInt($(this).attr('id').split('_').pop()))
+                    var idParts = $(this).attr('id').split('_')
+                    var id = parseInt(idParts.pop())
+
+                    if (idParts.pop() == 'heading') {
+                        headingIds[i] = id
+                    } else {
+                        benchmarkIds[i] = id
+                    }
+
+                    i = i + 1
                 })
+                console.log(headingIds)
 
                 data = {
                     benchmarkGroupId: benchmarkGroupId,
-                    benchmarks: benchmarkIds
+                    benchmarks: benchmarkIds,
+                    headings: headingIds
                 }
 
                 $.post('/benchmark/reorder', data, function(result) {
@@ -124,70 +139,82 @@
             </tr>
         </thead>
         <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
-        <?php foreach ($benchmarkGroup->getBenchmarks() as $benchmark): ?>
-            <?php /** @var $benchmark \Mrss\Entity\Benchmark */ ?>
-            <tr id="benchmark_<?= $benchmark->getId() ?>">
-                <td class="sortHandle">
-                    <span class="icon-move"></span>
-                </td>
-                <td>
-                    <?= $benchmark->getDbColumn() ?>
-                </td>
-
-                <td class="inputTypeAbbr">
-                    <?= $benchmark->getInputTypeAbbr() ?>
-                </td>
-
-                <td style="text-align:center">
-                    <?php if ($benchmark->getComputed()): ?>
-                        <i class="icon-ok infotip" title="<?= $benchmark->getEquation() ?>"></i>
-                    <?php endif ?>
-                </td>
-
-                <td style="text-align:center">
-                    <?php if ($benchmark->getIncludeInNationalReport()): ?>
-                        <i class="icon-ok"></i>
-                    <?php endif ?>
-                </td>
-
-                <td>
-                    <a href="<?= $this->url(
-                        'benchmark/edit',
-                        array(
-                            'id' => $benchmark->getId()
-                        )
-                    ) ?>"><?= $benchmark->getName() ?></a>
-                </td>
-
-                <td class="trends">
-                    <a title="Showing <?= $activeCollege->getName() ?> values. Click for more trend data." href="<?= $this->url(
-                        'benchmark/view',
-                        array(
-                            'id' => $benchmark->getId()
-                        )
-                    ) ?>">
-                        <span class="inlinesparkline"><?= $sparklines[$benchmark->getId()] ?></span>
-                    </a>
-                </td>
-
-
-                <?php foreach ($this->yearsToShow as $year): ?>
+        <?php foreach ($benchmarkGroup->getChildren() as $row): ?>
+            <? //pr(get_class($row)) ?>
+            <?php if (get_class($row) == 'Mrss\Entity\Benchmark'): ?>
+                <?php $benchmark = $row; ?>
+                <?php /** @var $benchmark \Mrss\Entity\Benchmark */ ?>
+                <tr id="benchmark_<?= $benchmark->getId() ?>">
+                    <td class="sortHandle">
+                        <span class="icon-move"></span>
+                    </td>
                     <td>
-                        <?php if ($benchmark->isAvailableForYear($year)): ?>
-                            <? $percentage = round(
-                                $benchmark->getCompletionPercentage($year)
-                            )?>
-                            <div
-                                class="heatmapCell heatmapCellBlue"
-                                style="opacity: <?= $percentage / 100 ?>">
-                                <?= $percentage ?>%
-                            </div>
-                        <?php else: ?>
-                            <div style="color:#ccc; text-align:center">N/A</div>
+                        <?= $benchmark->getDbColumn() ?>
+                    </td>
+
+                    <td class="inputTypeAbbr">
+                        <?= $benchmark->getInputTypeAbbr() ?>
+                    </td>
+
+                    <td style="text-align:center">
+                        <?php if ($benchmark->getComputed()): ?>
+                            <i class="icon-ok infotip" title="<?= $benchmark->getEquation() ?>"></i>
                         <?php endif ?>
                     </td>
-                <?php endforeach ?>
-            </tr>
+
+                    <td style="text-align:center">
+                        <?php if ($benchmark->getIncludeInNationalReport()): ?>
+                            <i class="icon-ok"></i>
+                        <?php endif ?>
+                    </td>
+
+                    <td>
+                        <a href="<?= $this->url(
+                            'benchmark/edit',
+                            array(
+                                'id' => $benchmark->getId()
+                            )
+                        ) ?>"><?= $benchmark->getName() ?></a>
+                    </td>
+
+                    <td class="trends">
+                        <a title="Showing <?= $activeCollege->getName() ?> values. Click for more trend data." href="<?= $this->url(
+                            'benchmark/view',
+                            array(
+                                'id' => $benchmark->getId()
+                            )
+                        ) ?>">
+                            <span class="inlinesparkline"><?= $sparklines[$benchmark->getId()] ?></span>
+                        </a>
+                    </td>
+
+
+                    <?php foreach ($this->yearsToShow as $year): ?>
+                        <td>
+                            <?php if ($benchmark->isAvailableForYear($year)): ?>
+                                <? $percentage = round(
+                                    $benchmark->getCompletionPercentage($year)
+                                )?>
+                                <div
+                                    class="heatmapCell heatmapCellBlue"
+                                    style="opacity: <?= $percentage / 100 ?>">
+                                    <?= $percentage ?>%
+                                </div>
+                            <?php else: ?>
+                                <div style="color:#ccc; text-align:center">N/A</div>
+                            <?php endif ?>
+                        </td>
+                    <?php endforeach ?>
+                </tr>
+            <?php else: ?>
+                <?php $heading = $row ?>
+                <tr class="subGroup" id="heading_<?= $heading->getId() ?>">
+                    <td class="sortHandle">
+                        <span class="icon-move"></span>
+                    </td>
+                    <td colspan="6"><h4><?= $heading->getName() ?></h4></td>
+                </tr>
+            <?php endif ?>
         <?php endforeach ?>
         </tbody>
     </table>

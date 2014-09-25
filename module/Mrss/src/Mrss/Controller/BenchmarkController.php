@@ -39,8 +39,7 @@ class BenchmarkController extends AbstractActionController
                 $sparklines[$benchmark->getId()] = $asString;
             }
         }
-
-
+//pr($benchmarkGroup->getChildren());
         return array(
             //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
             'benchmarkGroups' => $benchmarkGroups,
@@ -204,7 +203,13 @@ class BenchmarkController extends AbstractActionController
     {
         $benchmarkGroupId = $this->params()->fromPost('benchmarkGroupId');
         $newBenchmarkSequences = $this->params()->fromPost('benchmarks');
+        $newBenchmarkHeadingSequences = $this->params()
+            ->fromPost('headings');
         $newBenchmarkSequences = array_flip($newBenchmarkSequences);
+        $newBenchmarkHeadingSequences = array_flip($newBenchmarkHeadingSequences);
+
+        //pr($newBenchmarkSequences);
+        //pr($newBenchmarkHeadingSequences);
 
         /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
         $benchmarkGroupModel = $this->getServiceLocator()
@@ -217,8 +222,18 @@ class BenchmarkController extends AbstractActionController
 
             foreach ($benchmarks as $benchmark) {
                 if (isset($newBenchmarkSequences[$benchmark->getId()])) {
+                    echo $benchmark->getId() . ' ';
                     $benchmark->setSequence(
                         $newBenchmarkSequences[$benchmark->getId()]
+                    );
+                }
+            }
+
+            $headings = $benchmarkGroup->getBenchmarkHeadings();
+            foreach ($headings as $heading) {
+                if (isset($newBenchmarkHeadingSequences[$heading->getId()])) {
+                    $heading->setSequence(
+                        $newBenchmarkHeadingSequences[$heading->getId()]
                     );
                 }
             }
