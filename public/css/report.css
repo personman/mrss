@@ -102,3 +102,11 @@ tr.topHeading th.nationalPercentiles {
     text-align: left;
     font-style: italic;
 }
+
+.report tbody tr.reportSubHeading td {
+    background-color: #adadad;
+    text-align: left;
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 120%;
+}

@@ -7,6 +7,7 @@ use Mrss\Model\Benchmark as BenchmarkModel;
 use Mrss\Model\BenchmarkGroup as BenchmarkGroupModel;
 use Mrss\Entity\BenchmarkGroup;
 use Mrss\Entity\Benchmark;
+use Mrss\Entity\BenchmarkHeading;
 use Mrss\Entity\Observation;
 
 class ImportBenchmarks
@@ -31,6 +32,8 @@ class ImportBenchmarks
     protected $messages = array();
 
     protected $sequences = array();
+
+    protected $headings = array();
 
     /**
      * Doesn't currently modify benchmark sequence
@@ -74,6 +77,8 @@ class ImportBenchmarks
                 $this->importRow($row);
             }
         }
+
+        $this->saveHeadings();
     }
 
     public function checkEquation($equation, $dbColumn)
@@ -104,11 +109,45 @@ class ImportBenchmarks
         // Find or create the benchmarkGroup
         $benchmarkGroup = $this->findOrCreateBenchmarkGroup($row);
 
-        // Update or create the benchmark
-        $benchmark = $this->updateOrCreateBenchmark($row, $benchmarkGroup);
+        // Is it a benchmark or heading?
+        if ($row['inputType'] == 'heading') {
+            $this->addHeading($row, $benchmarkGroup);
+        } else {
+            // Update or create the benchmark
+            $benchmark = $this->updateOrCreateBenchmark($row, $benchmarkGroup);
 
-        // See if it exists in the observation entity
-        $this->checkObservation($benchmark);
+            // See if it exists in the observation entity
+            $this->checkObservation($benchmark);
+
+        }
+
+        $this->entityManager->flush();
+    }
+
+    public function addHeading($row, $benchmarkGroup)
+    {
+        $gId = $benchmarkGroup->getId();
+        if (!isset($this->headings[$gId])) {
+            $this->headings[$gId] = array();
+        }
+
+        $heading = new BenchmarkHeading();
+        $heading->setBenchmarkGroup($benchmarkGroup);
+        $heading->setName($row['name']);
+        $heading->setDescription($row['description']);
+        $heading->setDbColumn($row['dbColumn']);
+        $heading->setSequence($this->getSequence($heading));
+
+        $this->headings[$gId][] = $heading;
+    }
+
+    public function saveHeadings()
+    {
+        foreach ($this->headings as $gId => $headings)
+        {
+            $this->getBenchmarkGroupModel()->find($gId)
+                ->setBenchmarkHeadings($headings);
+        }
 
         $this->entityManager->flush();
     }
@@ -179,13 +218,13 @@ class ImportBenchmarks
     /**
      * Get the sequence by keeping track of the number of benchmarks per group
      *
-     * @param Benchmark $benchmark
+     * @param $benchmark
      */
-    public function getSequence(Benchmark $benchmark)
+    public function getSequence($benchmark)
     {
         $benchmarkGroupName = $benchmark->getBenchmarkGroup()->getName();
         if (!isset($this->sequences[$benchmarkGroupName])) {
-            $this->sequences[$benchmarkGroupName] = 0;
+            $this->sequences[$benchmarkGroupName] = 1;
         }
 
         $sequence = $this->sequences[$benchmarkGroupName];
@@ -274,28 +313,51 @@ class ImportBenchmarks
         $studyBenchmarks = array();
         foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
             $formName = $benchmarkGroup->getName();
+            $children = $benchmarkGroup->getChildren();
 
-            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
-                $studyBenchmarks[] = array(
-                    $formName,
-                    $benchmark->getName(),
-                    $benchmark->getReportLabel(),
-                    $benchmark->getPeerReportLabel(),
-                    $benchmark->getDescriptiveReportLabel(),
-                    $benchmark->getYearPrefix(),
-                    $benchmark->getYearOffset(),
-                    $benchmark->getDbColumn(),
-                    $benchmark->getInputType(),
-                    $benchmark->getDescription(),
-                    $benchmark->getOptions(),
-                    $benchmark->getComputed(),
-                    $benchmark->getEquation(),
-                    $benchmark->getExcludeFromCompletion(),
-                    $benchmark->getIncludeInNationalReport(),
-                    $benchmark->getIncludeInBestPerformer(),
-                    $benchmark->getHighIsBetter(),
-                    implode(',', $benchmark->getYearsAvailable())
-                );
+            foreach ($children as $child) {
+                if ($child instanceof BenchmarkHeading) {
+                    $heading = $child;
+                    $studyBenchmarks[] = array(
+                        $formName,
+                        $heading->getName(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        $heading->getDbColumn(),
+                        'heading',
+                        $heading->getDescription()
+                    );
+
+                } else {
+                    /** @var Benchmark $benchmark */
+                    $benchmark = $child;
+
+                    $studyBenchmarks[] = array(
+                        $formName,
+                        $benchmark->getName(),
+                        $benchmark->getReportLabel(),
+                        $benchmark->getPeerReportLabel(),
+                        $benchmark->getDescriptiveReportLabel(),
+                        $benchmark->getYearPrefix(),
+                        $benchmark->getYearOffset(),
+                        $benchmark->getDbColumn(),
+                        $benchmark->getInputType(),
+                        $benchmark->getDescription(),
+                        $benchmark->getOptions(),
+                        $benchmark->getComputed(),
+                        $benchmark->getEquation(),
+                        $benchmark->getExcludeFromCompletion(),
+                        $benchmark->getIncludeInNationalReport(),
+                        $benchmark->getIncludeInBestPerformer(),
+                        $benchmark->getHighIsBetter(),
+                        implode(',', $benchmark->getYearsAvailable())
+                    );
+
+                }
+
             }
         }
 

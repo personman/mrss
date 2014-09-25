@@ -39,7 +39,7 @@ class BenchmarkController extends AbstractActionController
                 $sparklines[$benchmark->getId()] = $asString;
             }
         }
-//pr($benchmarkGroup->getChildren());
+
         return array(
             //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
             'benchmarkGroups' => $benchmarkGroups,
@@ -222,7 +222,6 @@ class BenchmarkController extends AbstractActionController
 
             foreach ($benchmarks as $benchmark) {
                 if (isset($newBenchmarkSequences[$benchmark->getId()])) {
-                    echo $benchmark->getId() . ' ';
                     $benchmark->setSequence(
                         $newBenchmarkSequences[$benchmark->getId()]
                     );

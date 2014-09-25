@@ -102,38 +102,6 @@ class BenchmarkHeading
     }
 
     /**
-     * @param mixed $entityManager
-     */
-    public function setEntityManager($entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    /**
-     * @param mixed $equationValidator
-     */
-    public function setEquationValidator($equationValidator)
-    {
-        $this->equationValidator = $equationValidator;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEquationValidator()
-    {
-        return $this->equationValidator;
-    }
-
-    /**
      * @param mixed $id
      */
     public function setId($id)
@@ -147,22 +115,6 @@ class BenchmarkHeading
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param mixed $inputFilter
-     */
-    public function setInputFilter($inputFilter)
-    {
-        $this->inputFilter = $inputFilter;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInputFilter()
-    {
-        return $this->inputFilter;
     }
 
     /**

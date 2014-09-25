@@ -307,13 +307,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      * @param $year
      * @return \Mrss\Entity\Benchmark[]
      */
-    public function getBenchmarksForYear($year)
+    public function getBenchmarksForYear($year = null)
     {
         $benchmarksForYear = array();
 
         $benchmarks = $this->getBenchmarks();
         foreach ($benchmarks as $benchmark) {
-            if ($benchmark->isAvailableForYear($year)) {
+            if (is_null($year) || $benchmark->isAvailableForYear($year)) {
                 $benchmarksForYear[] = $benchmark;
             }
         }
@@ -497,10 +497,10 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->inputFilter;
     }
 
-    public function getChildren()
+    public function getChildren($year = null)
     {
         $children = array();
-        foreach ($this->getBenchmarks() as $benchmark) {
+        foreach ($this->getBenchmarks($year) as $benchmark) {
             $children[$benchmark->getSequence()] = $benchmark;
         }
         foreach ($this->getBenchmarkHeadings() as $heading) {

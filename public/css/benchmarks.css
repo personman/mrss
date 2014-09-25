@@ -1,8 +1,9 @@
 .subGroup h4 {
     text-align: center;
 }
-.subGroup {
+.subGroup, .table-striped>tbody>tr.subGroup:nth-child(odd)>td {
     background-color: #808080 !important;
+    color: white;
 }
 
 body.dragging, body.dragging * {

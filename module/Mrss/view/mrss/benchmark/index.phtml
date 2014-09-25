@@ -212,7 +212,7 @@
                     <td class="sortHandle">
                         <span class="icon-move"></span>
                     </td>
-                    <td colspan="6"><h4><?= $heading->getName() ?></h4></td>
+                    <td colspan="<?= (6 + count($this->yearsToShow)) ?>"><h4><?= $heading->getName() ?></h4></td>
                 </tr>
             <?php endif ?>
         <?php endforeach ?>

@@ -591,9 +591,19 @@ class Report
                 'benchmarkGroup' => $benchmarkGroup->getName(),
                 'benchmarks' => array()
             );
-            $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
+            $benchmarks = $benchmarkGroup->getChildren($year);
 
             foreach ($benchmarks as $benchmark) {
+                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                    /** @var \Mrss\Entity\BenchmarkHeading $heading */
+                    $heading = $benchmark;
+                    $groupData['benchmarks'][] = array(
+                        'heading' => true,
+                        'name' => $heading->getName()
+                    );
+                    continue;
+                }
+
                 if ($this->isBenchmarkExcludeFromReport($benchmark)) {
                     continue;
                 }
