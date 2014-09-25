@@ -14,7 +14,7 @@ use Zend\Console\Request as ConsoleRequest;
 
 class ImportController extends AbstractActionController
 {
-    protected $triggerInBackground = true;
+    protected $triggerInBackground = false;
 
     /**
      * Display controls and progress bars for managing all import types
