@@ -84,7 +84,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     protected $benchmarks;
 
     /**
-     * @ORM\OneToMany(targetEntity="BenchmarkHeading", mappedBy="benchmarkGroup")
+     * @ORM\OneToMany(targetEntity="BenchmarkHeading", mappedBy="benchmarkGroup", cascade={"persist", "remove"})
      * @ORM\OrderBy({"sequence" = "ASC"})
      */
     protected $benchmarkHeadings;

@@ -74,6 +74,7 @@ $this->headScript()->appendFile(
             <tbody>
                 <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
                     <?php if (!empty($benchmark['heading'])): ?>
+                        <tr class="retportSeparator"></tr>
                         <tr class="reportSubHeading">
                             <td colspan="10"><?= $benchmark['name'] ?></td>
                         </tr>

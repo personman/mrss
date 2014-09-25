@@ -108,7 +108,7 @@ class ComputedFields
                 $result = false;
                 $error = "$variable does not exist in the observation";
             } else {
-                $vars[$variable] = rand(1, 9);
+                $vars[$variable] = rand(1, 99);
             }
         }
 

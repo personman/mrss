@@ -728,6 +728,17 @@ class Report
 
             // Data
             foreach ($benchmarkGroup['benchmarks'] as $benchmark) {
+                // Is this a subheading?
+                if (!empty($benchmark['heading'])){
+                    $dataRow = array(
+                        $benchmark['name']
+                    );
+
+                    $sheet->fromArray($dataRow, null, 'A' . $row);
+                    $row++;
+                    continue;
+                }
+
                 if (null !== $benchmark['reported']) {
                     $reported = $benchmark['prefix'] .
                         number_format(
