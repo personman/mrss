@@ -729,7 +729,7 @@ class Report
             // Data
             foreach ($benchmarkGroup['benchmarks'] as $benchmark) {
                 // Is this a subheading?
-                if (!empty($benchmark['heading'])){
+                if (!empty($benchmark['heading'])) {
                     $dataRow = array(
                         $benchmark['name']
                     );
