@@ -552,8 +552,11 @@ class SubscriptionController extends AbstractActionController
             $institutionForm = $subscriptionForm['institution'];
             $college = $this->createOrUpdateCollege($institutionForm);
         } else {
-            $college = $this->currentCollege();
+            $collegeId = $subscriptionForm['college_id'];
+            $college = $this->getServiceLocator()
+                ->get('model.college')->find($collegeId);
         }
+
 
         // Create the observation
         $observation = $this->createOrUpdateObservation($college);
