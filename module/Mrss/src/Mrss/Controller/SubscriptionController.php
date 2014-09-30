@@ -1133,7 +1133,7 @@ class SubscriptionController extends AbstractActionController
         $study = $this->currentStudy();
         $year = $this->params()->fromRoute('year');
 
-        $subscriptions = $model->findByStudyAndYear($study, $year);
+        $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
         $c = count($subscriptions);
 
         $subscriptionsInfo[] = array(
