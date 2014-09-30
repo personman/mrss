@@ -894,11 +894,32 @@ class SubscriptionController extends AbstractActionController
         /** @var \Mrss\Model\Subscription $subscriptionModel */
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
 
-        /** @var \Mrss\Model\Observation $observationModel */
-        $observationModel = $this->getServiceLocator()->get('model.observation');
-
         $subscriptionId = $this->params()->fromRoute('id');
-        $subscription = $subscriptionModel->find($subscriptionId);
+
+        if ($subscriptionId == 'all') {
+            ini_set('memory_limit', '512M');
+            set_time_limit(3600);
+
+            /** @var \Mrss\Entity\Study $study */
+            $study = $this->currentStudy();
+            if ($year = $this->params()->fromQuery('year')) {
+                $subscriptions = $study->getSubscriptionsForYear($year);
+            } else {
+                $subscriptions = $study->getSubscriptions();
+            }
+
+            $message = '';
+            foreach ($subscriptions as $subscription) {
+                $message .= $this->deleteSubscription($subscription) . "<br>\n";
+            }
+
+            $this->flashMessenger()->addSuccessMessage($message);
+            return $this->redirect()->toUrl('/admin');
+
+        } else {
+            $subscription = $subscriptionModel->find($subscriptionId);
+        }
+
 
         // If the subscription's not found, redirect them
         if (empty($subscription)) {
@@ -909,8 +930,23 @@ class SubscriptionController extends AbstractActionController
             return $this->redirect()->toUrl('/admin');
         }
 
-        $message = '';
+        $message = $this->deleteSubscription($subscription);
 
+
+        $this->flashMessenger()->addSuccessMessage($message);
+        return $this->redirect()->toUrl('/admin');
+    }
+
+    protected function deleteSubscription(\Mrss\Entity\Subscription $subscription)
+    {
+        /** @var \Mrss\Model\Observation $observationModel */
+        $observationModel = $this->getServiceLocator()->get('model.observation');
+
+        // Load the subscription
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        $message = '';
         // See if this is the college's last subscription
         $college = $subscription->getCollege();
         if (count($college->getSubscriptions()) == 1) {
@@ -959,8 +995,7 @@ class SubscriptionController extends AbstractActionController
 
         $message .= "Subscription deleted. ";
 
-        $this->flashMessenger()->addSuccessMessage($message);
-        return $this->redirect()->toUrl('/admin');
+        return $message;
     }
 
     protected function getBenchmarkKeysInThisStudyOnly()

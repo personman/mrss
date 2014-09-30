@@ -28,6 +28,7 @@ class PercentileRank
 
     /**
      * @ORM\ManyToOne(targetEntity="College")
+     * @ORM\JoinColumn(name="college_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $college;
 
