@@ -976,30 +976,31 @@ class SubscriptionController extends AbstractActionController
         } else {
             $observation = $subscription->getObservation();
 
-            // Should we delete this year's observation
-            $subscriptions = $observation->getSubscriptions();
-            if (count($subscriptions) == 1) {
-                // This is the only subscription using the observation, so axe it
-                $observationModel->delete($observation);
-                $message .= "Observation deleted. ";
-            } else {
-                // This college has other subscriptions. Don't delete the users or obs
-                // But do clear out their data for fields not in other studies
-                $benchmarkKeysToNull = $this->getBenchmarkKeysInThisStudyOnly(
-                    $observation
-                );
+            if ($observation) {
+                // Should we delete this year's observation
+                $subscriptions = $observation->getSubscriptions();
+                if (count($subscriptions) == 1) {
+                    // This is the only subscription using the observation, so axe it
+                    $observationModel->delete($observation);
+                    $message .= "Observation deleted. ";
+                } else {
+                    // This college has other subscriptions. Don't delete the users or obs
+                    // But do clear out their data for fields not in other studies
+                    $benchmarkKeysToNull = $this->getBenchmarkKeysInThisStudyOnly(
+                        $observation
+                    );
 
-                foreach ($benchmarkKeysToNull as $dbColumn) {
-                    $observation->set($dbColumn, null);
+                    foreach ($benchmarkKeysToNull as $dbColumn) {
+                        $observation->set($dbColumn, null);
+                    }
+
+                    $observationModel->save($observation);
+
+                    $count = count($benchmarkKeysToNull);
+                    $message .= "$count fields cleared out from this year's observation. ";
+
                 }
-
-                $observationModel->save($observation);
-
-                $count = count($benchmarkKeysToNull);
-                $message .= "$count fields cleared out from this year's observation. ";
-
             }
-
         }
 
         // Delete the subscription row
