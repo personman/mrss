@@ -500,7 +500,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     public function getChildren($year = null)
     {
         $children = array();
-        foreach ($this->getBenchmarks($year) as $benchmark) {
+        foreach ($this->getBenchmarksForYear($year) as $benchmark) {
             $children[$benchmark->getSequence()] = $benchmark;
         }
         foreach ($this->getBenchmarkHeadings() as $heading) {
