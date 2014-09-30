@@ -3,7 +3,15 @@
 
 <script>
     $(document).ready(function() {
-        $('#subscriptions').dataTable();
+        $('#subscriptions').dataTable({
+            'aoColumnDefs': [
+                // Don't sort on the action column
+                {'bSortable': false, 'aTargets': [5]}
+            ],
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
     } );
 </script>
 
