@@ -42,12 +42,14 @@ class ChangeSet
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="changes")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      * @var User
      */
     protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="impersonatingUser_id", referencedColumnName="id", onDelete="SET NULL")
      * @var User
      */
     protected $impersonatingUser;

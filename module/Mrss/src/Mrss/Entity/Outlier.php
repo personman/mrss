@@ -18,6 +18,7 @@ class Outlier
 
     /**
      * @ORM\ManyToOne(targetEntity="Benchmark",)
+     * @ORM\JoinColumn(name="benchmark_id", referencedColumnName="id", onDelete="CASCADE")
      * @var Benchmark
      */
     protected $benchmark;
@@ -30,6 +31,7 @@ class Outlier
 
     /**
      * @ORM\ManyToOne(targetEntity="College")
+     * @ORM\JoinColumn(name="college_id", referencedColumnName="id", onDelete="CASCADE")
      * @var College
      */
     protected $college;

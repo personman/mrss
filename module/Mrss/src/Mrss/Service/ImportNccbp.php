@@ -758,11 +758,13 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             $i++;
 
             $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
+            echo "<br>\n$i: $ipeds ";
             $year = $row['field_years_value'];
 
             // Find the college
             $college = $this->getCollegeByIpeds($ipeds);
             if (empty($college)) {
+                echo 'skipped';
                 continue;
             }
 
@@ -1119,7 +1121,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getImports()
     {
         $imports = array(
-            /*'colleges' => array(
+            'colleges' => array(
                 'label' => 'Colleges',
                 'method' => 'importColleges'
             ),
