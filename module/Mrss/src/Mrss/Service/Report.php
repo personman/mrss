@@ -576,9 +576,9 @@ class Report
 
         ksort($iData);
         //if ($benchmark->getDbColumn() == 'ft_perc_comp') {
-        if ($benchmark->getDbColumn() == 'fst_yr_gpa') {
-            //pr(count($iData));
-            //prd($iData);
+        if ($benchmark->getDbColumn() == 'ipeds_enr') {
+            pr(count($iData));
+            prd($iData);
         }
         //echo $benchmark->getName();
         //echo implode('<br>', $iData); die('ok');
