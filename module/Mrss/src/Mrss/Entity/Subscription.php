@@ -41,7 +41,7 @@ class Subscription
     protected $study;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Observation")
+     * @ORM\ManyToOne(targetEntity="Observation", inversedBy="subscriptions")
      */
     protected $observation;
 

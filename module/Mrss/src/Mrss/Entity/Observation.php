@@ -40,6 +40,12 @@ class Observation
      */
     protected $subObservations;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Subscription", mappedBy="observation")
+     * @var Subscription[]
+     */
+    protected $subscriptions;
+
 
     // MRSS
 
@@ -2872,6 +2878,20 @@ class Observation
     public function getCipCode()
     {
         return $this->cipCode;
+    }
+
+    public function setSubscriptions($subscriptions)
+    {
+        $this->subscriptions = $subscriptions;
+        return $this;
+    }
+
+    /**
+     * @return Subscription[]
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 
     public function setSubObservations($subObservations)

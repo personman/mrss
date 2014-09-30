@@ -974,19 +974,32 @@ class SubscriptionController extends AbstractActionController
             $message .= "Since {$college->getName()} only has this one subscription,
             the college and its users have been deleted. ";
         } else {
-            // This college has other subscriptions. Don't delete the users or obs
-            // But do clear out their data for fields not in other studies
-            $benchmarkKeysToNull = $this->getBenchmarkKeysInThisStudyOnly();
-
             $observation = $subscription->getObservation();
-            foreach ($benchmarkKeysToNull as $dbColumn) {
-                $observation->set($dbColumn, null);
+
+            // Should we delete this year's observation
+            $subscriptions = $observation->getSubscriptions();
+            if (count($subscriptions) == 1) {
+                // This is the only subscription using the observation, so axe it
+                $observationModel->delete($observation);
+                $message .= "Observation deleted. ";
+            } else {
+                // This college has other subscriptions. Don't delete the users or obs
+                // But do clear out their data for fields not in other studies
+                $benchmarkKeysToNull = $this->getBenchmarkKeysInThisStudyOnly(
+                    $observation
+                );
+
+                foreach ($benchmarkKeysToNull as $dbColumn) {
+                    $observation->set($dbColumn, null);
+                }
+
+                $observationModel->save($observation);
+
+                $count = count($benchmarkKeysToNull);
+                $message .= "$count fields cleared out from this year's observation. ";
+
             }
 
-            $observationModel->save($observation);
-
-            $count = count($benchmarkKeysToNull);
-            $message .= "$count fields cleared out from this year's observation. ";
         }
 
         // Delete the subscription row
@@ -998,14 +1011,16 @@ class SubscriptionController extends AbstractActionController
         return $message;
     }
 
-    protected function getBenchmarkKeysInThisStudyOnly()
+    protected function getBenchmarkKeysInThisStudyOnly(Observation $observation)
     {
-        /** @var \Mrss\Model\Study $studyModel */
-        $studyModel = $this->getServiceLocator()->get('model.study');
-
         /** @var \Mrss\Entity\Study $currentStudy */
         $currentStudy = $this->getStudy();
-        $allStudies = $studyModel->findAll();
+
+        $subscriptions = $observation->getSubscriptions();
+        $allStudies = array();
+        foreach ($subscriptions as $subscription) {
+            $allStudies[] = $subscription->getStudy();
+        }
 
         $benchmarksInCurrentStudy = $currentStudy->getAllBenchmarkKeys();
         $benchmarksInCurrentStudyOnly = $benchmarksInCurrentStudy;
