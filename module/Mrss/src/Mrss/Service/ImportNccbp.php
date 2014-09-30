@@ -1137,7 +1137,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 'label' => 'Benchmarks',
                 'method' => 'importFieldMetadata'
             ),
-            /*'observations' => array(
+            'observations' => array(
                 'label' => 'Observations',
                 'method' => 'importAllObservations'
             )*/
