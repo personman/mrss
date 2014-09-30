@@ -1024,6 +1024,10 @@ class SubscriptionController extends AbstractActionController
         }
 
         $benchmarksInCurrentStudy = $currentStudy->getAllBenchmarkKeys();
+
+        // Temp fix. This will clear out some Max data, but it should get re-imported
+        return $benchmarksInCurrentStudy;
+
         $benchmarksInCurrentStudyOnly = $benchmarksInCurrentStudy;
 
         foreach ($allStudies as $study) {
