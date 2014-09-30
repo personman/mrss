@@ -657,7 +657,7 @@ class Report
                 );
 
                 $benchmarkData['reported_decimal_places'] = $this
-                    ->getDecimalPlaces($benchmark->getDbColumn());
+                    ->getDecimalPlaces($benchmark);
 
                 $percentileRank = $this->getPercentileRankModel()
                     ->findOneByCollegeBenchmarkAndYear(
@@ -817,20 +817,26 @@ class Report
      * Most reported values should be rounded to 0 decimal places.
      * These are the exceptions
      *
-     * @param $dbColumn
+     * @param Benchmark $benchmark
      * @return int
      */
-    public function getDecimalPlaces($dbColumn)
+    public function getDecimalPlaces(Benchmark $benchmark)
     {
+        $dbColumn = $benchmark->getDbColumn();
+
         $map = array(
             'enrollment_information_contact_hours_per_student' => 1,
             'enrollment_information_market_penetration' => 1
         );
 
+        $decimalPlaces = 0;
         if (isset($map[$dbColumn])) {
             $decimalPlaces = $map[$dbColumn];
         } else {
-            $decimalPlaces = 0;
+            //All NCCBP percentages should use 2 decimal places
+            if ($this->getStudy()->getId() == 1 && $benchmark->isPercent()) {
+                $decimalPlaces = 2;
+            }
         }
 
         return $decimalPlaces;
@@ -1134,7 +1140,7 @@ class Report
         $chartValues = array_combine($chartXCategories, $chartValues);
         asort($chartValues);
         $chartXCategories = array_keys($chartValues);
-        $roundTo = $this->getDecimalPlaces($benchmark->getDbColumn());
+        $roundTo = $this->getDecimalPlaces($benchmark);
 
         $chartData = array();
         foreach ($chartValues as $i => $value) {
