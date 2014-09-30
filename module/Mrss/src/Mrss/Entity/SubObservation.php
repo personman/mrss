@@ -25,6 +25,7 @@ class SubObservation
 
     /**
      * @ORM\ManyToOne(targetEntity="Observation", inversedBy="subobservations")
+     * * @ORM\JoinColumn(name="observation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $observation;
 

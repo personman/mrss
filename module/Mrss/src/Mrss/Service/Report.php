@@ -166,6 +166,9 @@ class Report
                 continue;
             }
 
+            // Debug
+            //prd($data);
+
             $calculator->setData($data);
 
             // Percentiles
@@ -551,6 +554,7 @@ class Report
         $subscriptions = $this->getSubscriptions($year);
 
         $data = array();
+        $iData = array();
         /** @var $subscription /Mrss/Entity/Subscription */
         foreach ($subscriptions as $subscription) {
             /** @var /Mrss/Entity/Observation $observation */
@@ -565,8 +569,20 @@ class Report
                 }
 
                 $data[$collegeId] = $value;
+                $ipeds = $subscription->getCollege()->getIpeds();
+                $iData[$ipeds] = $value;
             }
         }
+
+        ksort($iData);
+        //if ($benchmark->getDbColumn() == 'ft_perc_comp') {
+        if ($benchmark->getDbColumn() == 'fst_yr_gpa') {
+            //pr(count($iData));
+            //prd($iData);
+        }
+        //echo $benchmark->getName();
+        //echo implode('<br>', $iData); die('ok');
+        //prd($iData);
 
         return $data;
     }

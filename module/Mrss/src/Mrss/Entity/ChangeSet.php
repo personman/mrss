@@ -22,12 +22,14 @@ class ChangeSet
 
     /**
      * @ORM\ManyToOne(targetEntity="Observation", inversedBy="changes")
+     * @ORM\JoinColumn(name="observation_id", referencedColumnName="id", onDelete="SET NULL")
      * @var Observation
      */
     protected $observation;
 
     /**
      * @ORM\ManyToOne(targetEntity="SubObservation")
+     * @ORM\JoinColumn(name="subobservation_id", referencedColumnName="id", onDelete="SET NULL")
      * @var SubObservation
      */
     protected $subObservation;
