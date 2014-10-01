@@ -2,6 +2,7 @@
 
 namespace Mrss\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Zend\InputFilter\InputFilterAwareInterface;
@@ -65,11 +66,24 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     }
 
     /**
-     * @return mixed
+     * @return BenchmarkHeading[]
      */
     public function getBenchmarkHeadings()
     {
         return $this->benchmarkHeadings;
+    }
+
+    public function getBenchmarkHeadingByName($name)
+    {
+        $match = null;
+        foreach ($this->getBenchmarkHeadings() as $heading) {
+            if ($heading->getName() == $name) {
+                $match = $heading;
+                break;
+            }
+        }
+
+        return $match;
     }
 
     /**
@@ -100,7 +114,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      */
     public function __construct()
     {
-        $this->benchmarks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->benchmarks = new ArrayCollection();
     }
 
     public function getId()

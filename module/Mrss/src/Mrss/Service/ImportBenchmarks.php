@@ -124,6 +124,10 @@ class ImportBenchmarks
         $this->entityManager->flush();
     }
 
+    /**
+     * @param $row
+     * @param \Mrss\Entity\BenchmarkGroup $benchmarkGroup
+     */
     public function addHeading($row, $benchmarkGroup)
     {
         $gId = $benchmarkGroup->getId();
@@ -131,7 +135,13 @@ class ImportBenchmarks
             $this->headings[$gId] = array();
         }
 
-        $heading = new BenchmarkHeading();
+        $matchingHeading = $benchmarkGroup->getBenchmarkHeadingByName($row['name']);
+        if ($matchingHeading) {
+            $heading = $matchingHeading;
+        } else {
+            $heading = new BenchmarkHeading();
+        }
+
         $heading->setBenchmarkGroup($benchmarkGroup);
         $heading->setName($row['name']);
         $heading->setDescription($row['description']);
