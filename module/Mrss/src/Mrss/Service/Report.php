@@ -826,7 +826,31 @@ class Report
 
         $map = array(
             'enrollment_information_contact_hours_per_student' => 1,
-            'enrollment_information_market_penetration' => 1
+            'enrollment_information_market_penetration' => 1,
+            'fst_yr_gpa' => 2,
+            'avrg_1y_crh' => 2,
+            'n96_exp' => 1,
+            'n97_ova_exp' => 1,
+            'n98_enr_again' => 1,
+            'ac_adv_coun' => 1,
+            'ac_serv' => 1,
+            'adm_fin_aid' => 1,
+            'camp_clim' => 1,
+            'camp_supp' => 1,
+            'conc_indiv' => 1,
+            'instr_eff' => 1,
+            'reg_eff' => 1,
+            'resp_div_pop' => 1,
+            'safe_sec' => 1,
+            'serv_exc' => 1,
+            'stud_centr' => 1,
+            'act_coll_learn' => 1,
+            'stud_eff' => 1,
+            'acad_chall' => 1,
+            'stud_fac_int' => 1,
+            'sup_learn' => 1,
+            'choo_again' => 1,
+            'ova_impr' => 1
         );
 
         $decimalPlaces = 0;
@@ -845,7 +869,7 @@ class Report
     public function downloadExcel($excel, $filename)
     {
         header(
-            'Content-Type: '.
+                        'Content-Type: '.
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         );
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
