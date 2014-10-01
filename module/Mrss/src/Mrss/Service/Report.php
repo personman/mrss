@@ -691,7 +691,11 @@ class Report
                 $benchmarkData['suffix'] = $suffix;
 
                 // Chart
-                $chartConfig = array('dbColumn' => $benchmark->getDbColumn());
+                $chartConfig = array(
+                    'dbColumn' => $benchmark->getDbColumn(),
+                    'decimal_places' => $this->getDecimalPlaces($benchmark)
+                );
+
                 $benchmarkData['chart'] = $this->getPercentileBarChart(
                     $chartConfig,
                     $observation
@@ -869,7 +873,7 @@ class Report
     public function downloadExcel($excel, $filename)
     {
         header(
-                        'Content-Type: '.
+            'Content-Type: '.
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         );
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
@@ -1164,7 +1168,21 @@ class Report
         $chartValues = array_combine($chartXCategories, $chartValues);
         asort($chartValues);
         $chartXCategories = array_keys($chartValues);
-        $roundTo = $this->getDecimalPlaces($benchmark);
+
+        if (isset($chartConfig['decimal_places'])) {
+            $roundTo = $chartConfig['decimal_places'];
+        } else {
+            $roundTo = $this->getDecimalPlaces($benchmark);
+        }
+
+        if (false && $benchmark->getDbColumn() == 'hs_stud_hdct') {
+            $r = $benchmark->isPercent();
+            pr($r);
+            pr($benchmark->getId());
+            pr($benchmark->getInputType());
+            pr($benchmark->getDbColumn());
+            prd($roundTo);
+        }
 
         $chartData = array();
         foreach ($chartValues as $i => $value) {

@@ -268,7 +268,7 @@ inner join node g on a.group_nid = g.nid";
         $map = array(
             'Data' => 'data',
             'Administrative' => 'contact',
-            'Administrative and Data' => 'contact',
+            'Administrative and Data' => 'data',
             'College System' => 'system_admin',
             'State System' => 'system_admin'
         );

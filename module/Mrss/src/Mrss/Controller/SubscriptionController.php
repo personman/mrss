@@ -569,20 +569,21 @@ class SubscriptionController extends AbstractActionController
         );
 
         // Create the users, if needed
-        // Data user first
-        $dataUser = null;
-        if (!empty($subscriptionForm['dataContact'])) {
-            $dataContactForm = $subscriptionForm['dataContact'];
-            $dataUser = $this
-                ->createOrUpdateUser($dataContactForm, 'data', $college);
-        }
 
-        // Admin second (overriding data role if it's the same user)
+        // Admin first
         $adminUser = null;
         if (!empty($subscriptionForm['adminContact'])) {
             $adminContactForm = $subscriptionForm['adminContact'];
             $adminUser = $this
                 ->createOrUpdateUser($adminContactForm, 'contact', $college);
+        }
+
+        // Data user overrides (if it's the same user)
+        $dataUser = null;
+        if (!empty($subscriptionForm['dataContact'])) {
+            $dataContactForm = $subscriptionForm['dataContact'];
+            $dataUser = $this
+                ->createOrUpdateUser($dataContactForm, 'data', $college);
         }
 
 
