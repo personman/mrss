@@ -350,7 +350,14 @@ class ObservationController extends AbstractActionController
 
         $subscriptions = $study->getSubscriptions();
         foreach ($subscriptions as $subscription) {
-            $subscription->getObservation()->mergeSubobservations();
+            $observation = $subscription->getObservation();
+
+            if ($observation) {
+                $observation->mergeSubobservations();
+            } else {
+                prd($subscription->getId());
+            }
+
         }
     }
 
