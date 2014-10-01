@@ -72,7 +72,7 @@ class ComputedFields
         }
         // debug
         $me = ($_SERVER['REMOTE_ADDR'] == '108.238.235.80');
-        if ($benchmark->getDbColumn() == 'enr_succ' && $me) {
+        if (false && $benchmark->getDbColumn() == 'enr_succ' && $me) {
             pr($result);
             pr($equationWithVariables);
             prd($exception);
