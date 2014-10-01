@@ -297,6 +297,11 @@ class ObservationController extends AbstractActionController
 
             //var_dump($form->getElements()); die;
             if ($form->isValid()) {
+                // This may take a minute
+                ini_set('memory_limit', '512M');
+                set_time_limit(3600);
+
+
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
 

@@ -237,7 +237,7 @@ inner join node g on a.group_nid = g.nid";
                     $user = new User;
                 }
 
-                if (empty($row['pass'])) {
+                if (!$user->getPassword()) {
                     $row['pass'] = 'fake_pass';
                 }
 
@@ -250,7 +250,7 @@ inner join node g on a.group_nid = g.nid";
                 $user->setEmail($row['mail']);
                 $user->setCollege($college);
                 $user->setRole($this->getRole($row['contact_type']));
-                $user->setPassword($row['pass']);
+                //$user->setPassword($row['pass']);
                 $user->addStudy($this->getStudy());
 
                 $this->getUserModel()->save($user);
@@ -1125,6 +1125,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 'label' => 'Colleges',
                 'method' => 'importColleges'
             ),
+            'systems' => array(
+                'label' => 'Systems',
+                'method' => 'importSystems'
+            ),
             'users' => array(
                 'label' => 'Users',
                 'method' => 'importUsers'
@@ -1204,6 +1208,11 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         }
 
         return $reportField;
+
+    }
+
+    public function importSystems()
+    {
 
     }
 
