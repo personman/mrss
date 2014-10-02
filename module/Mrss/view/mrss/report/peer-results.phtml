@@ -82,3 +82,14 @@
     </ul>
 
 <?php endif ?>
+
+<?php if (!empty($report['youHaveNoData'])): ?>
+    <p>The following benchmarks are not included in the report because your institution did not submit data for them:</p>
+
+    <ul>
+        <?php foreach ($report['youHaveNoData'] as $benchmark): ?>
+            <li><?= $benchmark ?></li>
+        <?php endforeach ?>
+    </ul>
+
+<?php endif ?>

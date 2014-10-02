@@ -1467,6 +1467,7 @@ class Report
 
         $report = array(
             'skipped' => array(),
+            'youHaveNoData' => array(),
             'sections' => array(),
             'colleges' => array(),
             'currentCollege' => $peerGroup->getCollege()->getName(),
@@ -1496,6 +1497,7 @@ class Report
 
 
         foreach ($benchmarks as $benchmarkId) {
+            /** @var \Mrss\Entity\Benchmark $benchmark */
             $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
 
             // Build the report data
@@ -1514,12 +1516,13 @@ class Report
 
             // Skip benchmarks with not enough peers
             if (count($data) <= $minPeers) {
-                $report['skipped'][] = $benchmark->getPeer();
+                $report['skipped'][] = $benchmark->getPeerReportLabel();
                 continue;
             }
 
             // Also skip benchmarks where the current college didn't report
             if (!isset($data[$peerGroup->getCollege()->getId()])) {
+                $report['youHaveNoData'][] = $benchmark->getPeerReportLabel();
                 continue;
             }
 
