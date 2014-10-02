@@ -185,6 +185,11 @@ class ReportController extends AbstractActionController
 
         if (empty($year)) {
             $year = $this->currentStudy()->getCurrentYear();
+
+            // But if reports aren't open yet, show them last year's by default
+            if (!$this->currentStudy()->getReportsOpen()) {
+                $year = $year - 1;
+            }
         }
 
         return $year;
