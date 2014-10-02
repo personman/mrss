@@ -854,7 +854,10 @@ class Report
             'stud_fac_int' => 1,
             'sup_learn' => 1,
             'choo_again' => 1,
-            'ova_impr' => 1
+            'ova_impr' => 1,
+            'av_cred_sec_size' => 2,
+            'griev_occ_rate' => 4,
+            'harass_occ_rate' => 4
         );
 
         $decimalPlaces = 0;
