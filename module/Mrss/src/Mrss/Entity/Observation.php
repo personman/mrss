@@ -2205,6 +2205,21 @@ class Observation
     protected $av_cred_sec_size;
 
 
+    // Form 16B
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $tot_fte_fac;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $form16b_cred_co_stud_fac_tot_fte_stud;
+
+    /**
+     * @ORM\Column(type="float", length=20, nullable=true)
+     */
+    protected $stu_fac_ratio;
+
+
     // Form 16c
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -2542,9 +2557,6 @@ class Observation
      */
     protected $tot_fy_stud_crh;
 
-    /** @ORM\Column(type="integer", nullable=true) */
-    protected $tot_fte_fac;
-
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
@@ -2559,9 +2571,6 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $cst_fte_stud;
-
-
-
 
     // Form 20b
     /**

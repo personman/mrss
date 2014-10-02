@@ -866,7 +866,8 @@ class Report
             'ova_impr' => 1,
             'av_cred_sec_size' => 2,
             'griev_occ_rate' => 4,
-            'harass_occ_rate' => 4
+            'harass_occ_rate' => 4,
+            'stu_fac_ratio' => 2
         );
 
         $decimalPlaces = 0;
