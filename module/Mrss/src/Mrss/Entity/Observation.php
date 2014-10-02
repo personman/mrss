@@ -1996,7 +1996,9 @@ class Observation
 
 
     // NCCBP form 13a
-
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
     protected $empl_inst_pop;
 
     /**

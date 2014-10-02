@@ -555,6 +555,7 @@ class Report
 
         $data = array();
         $iData = array();
+        $skipped = 0;
         /** @var $subscription /Mrss/Entity/Subscription */
         foreach ($subscriptions as $subscription) {
             /** @var /Mrss/Entity/Observation $observation */
@@ -562,9 +563,13 @@ class Report
                 $dbColumn = $benchmark->getDbColumn();
                 $value = $observation->get($dbColumn);
                 $collegeId = $subscription->getCollege()->getId();
-
+                if (!empty($_GET['debug'])
+                    && $benchmark->getDbColumn() == $_GET['debug']) {
+                    pr($value);
+                }
                 // Leave out null values
                 if ($skipNull && $value === null) {
+                    $skipped++;
                     continue;
                 }
 
@@ -577,7 +582,11 @@ class Report
         ksort($iData);
         //if ($benchmark->getDbColumn() == 'ft_perc_comp') {
         if (!empty($_GET['debug']) && $benchmark->getDbColumn() == $_GET['debug']) {
+            pr(count($subscriptions));
             pr(count($iData));
+            pr($year);
+            echo 'skipped:';
+            pr($skipped);
             prd($iData);
         }
         //echo $benchmark->getName();
