@@ -168,7 +168,10 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Hide reports for MRSS since it's never had them open
             // The rest of the studies retain the links for prior years
-            unset($pages['reports']);
+            if ((empty($user) || $user->getCollege()->getId() != 101)
+                && !$impersonationService->isImpersonated()) {
+                unset($pages['reports']);
+            }
         }
 
         // Workforce
