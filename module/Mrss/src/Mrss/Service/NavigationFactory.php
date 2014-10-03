@@ -165,6 +165,10 @@ class NavigationFactory extends DefaultNavigationFactory
             $pages['about2']['pages']['overview']['label'] = 'Maximizing Resources';
 
             unset($pages['about']['pages']);
+
+            // Hide reports for MRSS since it's never had them open
+            // The rest of the studies retain the links for prior years
+            unset($pages['reports']);
         }
 
         // Workforce
@@ -195,6 +199,7 @@ class NavigationFactory extends DefaultNavigationFactory
                 unset($pages['reports']['pages']['peer']);
             }
         }*/
+
 
         // Check permissions
         /** @var Authorize $authorizeService */
