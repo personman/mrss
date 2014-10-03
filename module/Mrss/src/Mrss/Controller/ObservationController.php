@@ -262,7 +262,33 @@ class ObservationController extends AbstractActionController
             return $this->listSubObservations($benchmarkGroup);
         }
 
-        $observation = $this->getCurrentObservation();
+        try {
+            $observation = $this->getCurrentObservation();
+        } catch (\Exception $e) {
+            // If the observation is not found, check a prior year
+            if (empty($observation)) {
+                /** @var \Mrss\Model\Observation $ObservationModel */
+                $ObservationModel = $this->getServiceLocator()->get('model.observation');
+                $observation = $ObservationModel->findOne(
+                    $this->currentCollege(),
+                    $this->currentStudy()->getCurrentYear() - 1
+                );
+
+                if (empty($observation)) {
+                    $this->flashMessenger()->addErrorMessage(
+                        'There was a problem retrieving the observation.'
+                    );
+
+                    return $this->redirect()->toUrl('/');
+                }
+            }
+
+        }
+
+
+
+
+
         $oldObservation = clone $observation;
 
         $formService = $this->getServiceLocator()
