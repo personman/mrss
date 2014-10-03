@@ -565,7 +565,7 @@ class Report
                 $collegeId = $subscription->getCollege()->getId();
                 if (!empty($_GET['debug'])
                     && $benchmark->getDbColumn() == $_GET['debug']) {
-                    pr($value);
+                    //pr($value);
                 }
                 // Leave out null values
                 if ($skipNull && $value === null) {

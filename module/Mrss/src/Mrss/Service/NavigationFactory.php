@@ -182,7 +182,7 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         // Show all reports for JCCC users
-        if ((!empty($user) && $user->getCollege()->getId() != 101)
+        /*if ((!empty($user) && $user->getCollege()->getId() != 101)
             && !$impersonationService->isImpersonated()) {
             // Hide reports link if reporting isn't enabled yet
             if (!$currentStudy->getReportsOpen() && !$currentStudy->getOutlierReportsOpen()) {
@@ -194,7 +194,7 @@ class NavigationFactory extends DefaultNavigationFactory
                 unset($pages['reports']['pages']['summary']);
                 unset($pages['reports']['pages']['peer']);
             }
-        }
+        }*/
 
         // Check permissions
         /** @var Authorize $authorizeService */

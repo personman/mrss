@@ -219,6 +219,9 @@ inner join node g on a.group_nid = g.nid";
         $count = count($result);
         $this->saveProgress(0, $count);
 
+        // Placeholder encrypted password for new users
+        $pass = '$2y$10$110LLMtUracaSOMEl4gfIuduZul57iLcPxQ8.6vKBCFKFzUHLFagm';
+
         $i = 0;
         foreach ($result as $row) {
             if ($i % 20 == 0) {
@@ -235,6 +238,7 @@ inner join node g on a.group_nid = g.nid";
                 $user = $this->getUserModel()->findOneByEmail($row['mail']);
                 if (empty($user)) {
                     $user = new User;
+                    $newUser = true;
                 }
 
                 if (!$user->getPassword()) {
@@ -254,6 +258,11 @@ inner join node g on a.group_nid = g.nid";
                 $user->addStudy($this->getStudy());
 
                 $this->getUserModel()->save($user);
+
+
+                if (!empty($newUser)) {
+                    $user->setPassword($pass);
+                }
             }
 
             $i++;
@@ -1124,11 +1133,11 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             'colleges' => array(
                 'label' => 'Colleges',
                 'method' => 'importColleges'
-            ),
+            ),/*
             'systems' => array(
                 'label' => 'Systems',
                 'method' => 'importSystems'
-            ),
+            ),*/
             'users' => array(
                 'label' => 'Users',
                 'method' => 'importUsers'
