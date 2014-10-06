@@ -180,6 +180,134 @@ return array(
                 'class' => 'headerLoginLink'
             ),
         ),
+        'nccbp' => array(
+            'nccbp' => array(
+                'label' => 'NCCBP',
+                'uri' => '#',
+                'pages' => array(
+                    'overview' => array(
+                        'label' => 'Overview',
+                        'uri' => '/overview'
+                    ),
+                    'benchmarks' => array(
+                        'label' => 'Benchmarks',
+                        'uri' => '/benchmarks'
+                    )
+                )
+            ),
+            'who-we-help' => array(
+                'label' => 'Who We Help',
+                'uri' => '#',
+                'pages' => array(
+                    'map' => array(
+                        'label' => 'Peer Institutions',
+                        'uri' => '/peers'
+                    ),
+                    'researchers' => array(
+                        'label' => 'Researchers',
+                        'uri' => '/researchers'
+                    ),
+                    'executives' => array(
+                        'label' => 'Executive Leadership',
+                        'uri' => '/executive-leadership'
+                    ),
+                    'systems' => array(
+                        'label' => 'Systems',
+                        'uri' => '/systems'
+                    )
+                )
+            ),
+            'reports-overview' => array(
+                'label' => 'Reports (Overview)',
+                'uri' => '#',
+                'pages' => array(
+                    'national-report' => array(
+                        'label' => 'National and System Reports',
+                        'uri' => '/national-report'
+                    ),
+                    'executive-report' => array(
+                        'label' => 'Executive Report',
+                        'uri' => '/executive-report'
+                    ),
+                    'trend' => array(
+                        'label' => 'Trend Report',
+                        'uri' => '/trend-report'
+                    ),
+                    'peer-report' => array(
+                        'label' => 'Peer Comparisons',
+                        'uri' => '/peer-report'
+                    ),
+                    'best-performers-report' => array(
+                        'label' => 'Best Performers',
+                        'uri' => '/best-performers-report'
+                    ),
+                    'schedule-demo' => array(
+                        'label' => 'Schedule Demo',
+                        'uri' => '/schedule-demo'
+                    ),
+                )
+            ),
+            'join' => array(
+                'label' => 'Join Now',
+                'uri' => '#',
+                'pages' => array(
+                    'join-form' => array(
+                        'label' => 'Join Form',
+                        'uri' => '/join'
+                    ),
+                    'benefits' => array(
+                        'label' => 'Benefits',
+                        'uri' => '/benefits'
+                    ),
+                    'qa-process' => array(
+                        'label' => 'QA Process',
+                        'uri' => 'qa-process'
+                    ),
+                    'timeline' => array(
+                        'label' => 'Timeline',
+                        'uri' => '/timeline'
+                    ),
+                    'schedule-demo' => array(
+                        'label' => 'Schedule Demo',
+                        'uri' => '/schedule-demo'
+                    ),
+                )
+            ),
+            'about' => array(
+                'label' => 'About Us',
+                'uri' => '#',
+                'pages' => array(
+                    'benchmarking-institute' => array(
+                        'label' => 'Benchmarking Institute',
+                        'uri' => '/benchmarking-institute'
+                    ),
+                    'projects' => array(
+                        'label' => 'Other Projects',
+                        'uri' => '/projects'
+                    ),
+                    'staff' => array(
+                        'label' => 'Our Staff',
+                        'uri' => '/staff'
+                    ),
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    )
+
+                )
+            ),
+            'contact' => array(
+                'label' => 'Contact Us',
+                'uri' => '/contact',
+                'pages' => array(
+                    'schedule-demo' => array(
+                        'label' => 'Schedule Demo',
+                        'uri' => '/schedule-demo'
+                    ),
+                )
+            ),
+
+        ),
         'admin' => array(
             'dashboard' => array(
                 'label' => 'Dashboard',

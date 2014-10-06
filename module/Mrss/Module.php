@@ -132,6 +132,8 @@ class Module
                 'footer_navigation' => 'Mrss\Service\FooterNavigationFactory',
                 'admin_navigation' =>
                 'Mrss\Service\AdminNavigationFactory',
+                'nccbp_navigation' =>
+                'Mrss\Service\NccbpNavigationFactory',
                 'import.nccbp' => function ($sm) {
                     // Prepare the importer with the db to import from and the em
                     $nccbpDb = $sm->get('nccbp-db');
