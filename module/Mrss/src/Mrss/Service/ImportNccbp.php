@@ -12,6 +12,7 @@ use Mrss\Entity\Benchmark;
 use Mrss\Entity\BenchmarkGroup;
 use Mrss\Entity\Study;
 use Mrss\Entity\Subscription;
+use Mrss\Entity\System;
 use Mrss\Model;
 use Zend\Db\Sql\Sql;
 use Zend\Session\Container;
@@ -71,6 +72,11 @@ class ImportNccbp
      * @var \Mrss\Model\Subscription
      */
     protected $subscriptionModel;
+
+    /**
+     * @var \Mrss\Model\System
+     */
+    protected $systemModel;
 
     /**
      * @var \Mrss\Model\Setting
@@ -1134,10 +1140,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 'label' => 'Colleges',
                 'method' => 'importColleges'
             ),
-            /*'systems' => array(
+            'systems' => array(
                 'label' => 'Systems',
                 'method' => 'importSystems'
-            ),*/
+            ),
             'users' => array(
                 'label' => 'Users',
                 'method' => 'importUsers'
@@ -1222,7 +1228,110 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
     public function importSystems()
     {
+        $collegeModel = $this->getCollegeModel();
 
+        $this->setType('systems');
+
+        $systems = $this->getSystems();
+        $count = count($systems);
+
+        foreach ($systems as $systemInfo) {
+            $name = $systemInfo['title'];
+
+            $existingSystem = $this->getSystemModel()->findByName($name);
+
+            if ($existingSystem) {
+                $system = $existingSystem;
+            } else {
+                $system = new System();
+                $system->setName($name);
+            }
+
+            $this->getSystemModel()->save($system);
+
+            foreach ($systemInfo['members'] as $ipeds) {
+                $college = $collegeModel->findOneByIpeds($ipeds);
+
+                if ($college) {
+                    $college->setSystem($system);
+                }
+            }
+        }
+
+        $this->saveProgress($count, $count);
+
+        $this->getSystemModel()->getEntityManager()->flush();
+    }
+
+    public function getSystems()
+    {
+        $sql = new Sql($this->dbAdapter);
+        $select = $sql->select();
+
+        $select->columns(
+            array()
+        );
+        $select->from('content_type_indiv_bench_grp');
+        $select->join(
+            'node',
+            'content_type_indiv_bench_grp.nid = node.nid',
+            array('title', 'nid', 'status')
+        );
+        $select->order('node.nid ASC');
+
+        $statement = $sql->prepareStatementForSqlObject($select);
+
+        $results = $statement->execute();
+
+        $systems = array();
+        foreach ($results as $row) {
+            $systems[$row['title']] = $row;
+        }
+
+        // Now find member institutions
+        $systemsWithMembers = array();
+        foreach ($systems as $system) {
+            $select = $sql->select();
+
+            $select->columns(
+                array('field_ibg_institutions_value')
+            );
+            $select->from('content_field_ibg_institutions');
+            $select->where(
+                array(
+                    'content_field_ibg_institutions.nid' => $system['nid']
+                )
+            );
+
+            $statement = $sql->prepareStatementForSqlObject($select);
+
+            $results = $statement->execute();
+
+            $members = array();
+            foreach ($results as $row) {
+                $gid = $row['field_ibg_institutions_value'];
+                $ipeds = $this->gidToIpeds($gid);
+                $members[] = $ipeds;
+            }
+            $system['members'] = $members;
+            $systemsWithMembers[$system['title']] = $system;
+
+        }
+
+        return $systemsWithMembers;
+    }
+
+    public function gidToIpeds($gid) {
+        $query = "SELECT field_ipeds_id_value FROM content_type_group_subs_info LEFT JOIN og_ancestry ON (content_type_group_subs_info.nid = og_ancestry.nid) WHERE group_nid = '$gid'";
+
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+
+        foreach ($result as $row) {
+            $ipeds = $row['field_ipeds_id_value'];
+            $ipeds = $this->padIpeds($ipeds);
+            return $ipeds;
+        }
     }
 
     public function getType()
@@ -1327,6 +1436,18 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getSubscriptionModel()
     {
         return $this->subscriptionModel;
+    }
+
+    public function setSystemModel($model)
+    {
+        $this->systemModel = $model;
+
+        return $this;
+    }
+
+    public function getSystemModel()
+    {
+        return $this->systemModel;
     }
 
     public function setSettingModel($model)

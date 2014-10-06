@@ -1,3 +1,4 @@
+<?php /** @var \Mrss\Entity\System[] $systems */ ?>
 <h2>Systems</h2>
 
 <a class="btn" href="<?= $this->url('systems/add') ?>">
@@ -8,12 +9,19 @@
 <?php if (!empty($systems)): ?>
 
     <table class="table">
+        <thead>
+            <th>System</th>
+            <th>Member Colleges</th>
+        </thead>
         <?php foreach ($systems as $system): ?>
             <tr>
                 <td>
                     <a href="<?= $this->url('systems/view', array('id' => $system->getId())) ?>">
                         <?= $system->getName() ?>
                     </a>
+                </td>
+                <td>
+                    <?= count($system->getColleges()) ?>
                 </td>
             </tr>
         <?php endforeach ?>

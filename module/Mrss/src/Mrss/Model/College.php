@@ -20,6 +20,10 @@ class College extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\College';
 
+    /**
+     * @param $ipeds
+     * @return \Mrss\Entity\College|null
+     */
     public function findOneByIpeds($ipeds)
     {
         return $this->getRepository()->findOneBy(array('ipeds' => $ipeds));

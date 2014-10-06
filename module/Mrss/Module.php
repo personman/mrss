@@ -168,6 +168,10 @@ class Module
                     $subscriptionModel = $sm->get('model.subscription');
                     $importer->setSubscriptionModel($subscriptionModel);
 
+                    // Inject the system model
+                    $systemModel = $sm->get('model.system');
+                    $importer->setSystemModel($systemModel);
+
                     // Inject settings
                     $settingModel = $sm->get('model.setting');
                     $importer->setSettingModel($settingModel);

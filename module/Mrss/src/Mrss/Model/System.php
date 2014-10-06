@@ -23,6 +23,11 @@ class System extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function findByName($name)
+    {
+        return $this->getRepository()->findOneBy(array('name' => $name));
+    }
+
     /**
      * Find all systems, ordered by name
      */
