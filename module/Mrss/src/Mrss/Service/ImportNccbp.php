@@ -263,12 +263,11 @@ inner join node g on a.group_nid = g.nid";
                 //$user->setPassword($row['pass']);
                 $user->addStudy($this->getStudy());
 
-                $this->getUserModel()->save($user);
-
-
                 if (!empty($newUser)) {
                     $user->setPassword($pass);
                 }
+
+                $this->getUserModel()->save($user);
             }
 
             $i++;
@@ -1258,6 +1257,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             }
         }
 
+        $this->importSystemUsers();
+
         $this->saveProgress($count, $count);
 
         $this->getSystemModel()->getEntityManager()->flush();
@@ -1319,6 +1320,100 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         }
 
         return $systemsWithMembers;
+    }
+
+    public function importSystemUsers()
+    {
+        $query = 'select u.name username, u.mail, u.uid,
+            sal.value AS salutation, name.value as name, title.value as title,
+            phone.value as phone, ext.value as extension,
+            contact.value as contact_type
+            from users u
+            inner join profile_values sal on u.uid = sal.uid AND sal.fid = 7
+            inner join profile_values name on u.uid = name.uid AND name.fid = 8
+            inner join profile_values title on u.uid = title.uid AND title.fid = 9
+            inner join profile_values phone on u.uid = phone.uid AND phone.fid = 10
+            inner join profile_values ext on u.uid = ext.uid AND ext.fid = 11
+            inner join profile_values contact on u.uid = contact.uid AND contact.fid = 51
+            inner join users_roles ur on u.uid = ur.uid
+            inner join role r on r.rid = ur.rid
+            where u.uid not in (1, 1650, 2481)
+            and r.rid in (7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21)
+            and ucase(mid(u.name, 1, 1)) BETWEEN "A" AND "Z";';
+
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+
+        // Placeholder encrypted password for new users
+        $pass = '$2y$10$110LLMtUracaSOMEl4gfIuduZul57iLcPxQ8.6vKBCFKFzUHLFagm';
+
+
+        foreach ($result as $row) {
+            list($firstName, $lastName) = $this->parseName($row['name']);
+
+            // Identify the system they belong to
+            $system = $this->getSystemFromUserName($row['username']);
+
+            if (empty($system)) {
+                $name = $row['username'];
+                die("System not found for $name");
+            }
+
+            // Now pick a college from that system
+            $firstCollege = null;
+            foreach ($system->getColleges() as $college) {
+                $firstCollege = $college;
+                break;
+            }
+
+            // Does the user already exist?
+            $user = $this->getUserModel()->findOneByEmail($row['mail']);
+            if (empty($user)) {
+                $user = new User;
+                $newUser = true;
+            }
+
+            $user->setPrefix($row['salutation']);
+            $user->setFirstName($firstName);
+            $user->setLastName($lastName);
+            $user->setTitle($row['title']);
+            $user->setPhone($row['phone']);
+            $user->setExtension($row['extension']);
+            $user->setEmail($row['mail']);
+            $user->setCollege($firstCollege);
+            $user->setRole('system_admin');
+            $user->addStudy($this->getStudy());
+
+            if (!empty($newUser)) {
+                $user->setPassword($pass);
+            }
+
+            $this->getUserModel()->save($user);
+        }
+
+        $this->getUserModel()->getEntityManager()->flush();
+    }
+
+    /**
+     * @param $name
+     * @return System
+     */
+    public function getSystemFromUserName($name)
+    {
+        // We just need the bit before the first underbar
+        $parts = explode('_', $name);
+        $systemName = array_shift($parts);
+
+        // Some conversions
+        if ($systemName == 'SouthCarolina') {
+            $systemName = 'South Carolina';
+        } elseif ($systemName == 'Ivy') {
+            $systemName = 'Ivy Tech';
+        }
+
+        $system = $this->getSystemModel()->findByName($systemName);
+
+        return $system;
     }
 
     public function gidToIpeds($gid) {
