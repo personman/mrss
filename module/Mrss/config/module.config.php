@@ -704,7 +704,20 @@ return array(
                             'defaults' => array(
                                 'action' => 'national',
                                 'year' => null,
-                                'format' => 'html'
+                                'format' => 'html',
+                                'system' => false
+                            )
+                        )
+                    ),
+                    'system' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/system[/:year][/:format]',
+                            'defaults' => array(
+                                'action' => 'national',
+                                'year' => null,
+                                'format' => 'html',
+                                'system' => true
                             )
                         )
                     ),

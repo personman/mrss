@@ -77,28 +77,7 @@ return array(
 
                 )
             ),
-            'reports' => array(
-                'label' => 'Reports',
-                'uri' => '/reports',
-                'pages' => array(
-                    'outlier' => array(
-                        'label' => 'Outlier Report',
-                        'uri' => '/reports/outlier'
-                    ),
-                    'national' => array(
-                        'label' => 'National Report',
-                        'uri' => '/reports/national'
-                    ),
-                    'summary' => array(
-                        'label' => 'Summary Report',
-                        'uri' => '/reports/summary'
-                    ),
-                    'peer' => array(
-                        'label' => 'Peer Comparison',
-                        'uri' => '/reports/peer'
-                    )
-                )
-            ),
+            'reports' => getReportMenu(),
             'reports_preview' => array(
                 'label' => 'Reports',
                 'uri' => '/Membership-Benefits'
@@ -247,6 +226,7 @@ return array(
                     ),
                 )
             ),
+            'reports' => getReportMenu(),
             'join' => array(
                 'label' => 'Join Now',
                 'uri' => '#',
@@ -364,3 +344,33 @@ return array(
         )
     )
 );
+
+function getReportMenu()
+{
+    return array(
+        'label' => 'Reports',
+        'uri' => '/reports',
+        'pages' => array(
+            'outlier' => array(
+                'label' => 'Outlier Report',
+                'uri' => '/reports/outlier'
+            ),
+            'national' => array(
+                'label' => 'National Report',
+                'uri' => '/reports/national'
+            ),
+            'system' => array(
+                'label' => 'System Report',
+                'uri' => '/reports/system'
+            ),
+            'summary' => array(
+                'label' => 'Summary Report',
+                'uri' => '/reports/summary'
+            ),
+            'peer' => array(
+                'label' => 'Peer Comparison',
+                'uri' => '/reports/peer'
+            )
+        )
+    );
+}

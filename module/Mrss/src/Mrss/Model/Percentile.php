@@ -21,14 +21,16 @@ class Percentile extends AbstractModel
     /**
      * @param $benchmark
      * @param $year
+     * @param null $system
      * @return PercentileEntity[]
      */
-    public function findByBenchmarkAndYear($benchmark, $year)
+    public function findByBenchmarkAndYear($benchmark, $year, $system = null)
     {
         return $this->getRepository()->findBy(
             array(
                 'benchmark' => $benchmark,
-                'year' => $year
+                'year' => $year,
+                'system' => $system
             ),
             array(
                 'percentile' => 'ASC'

@@ -165,6 +165,22 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
+        // Is this a system report?
+        $systemVersion = $this->params()->fromRoute('system');
+        $system = null;
+        if ($systemVersion) {
+            // Confirm they're actually part of a system
+            $system = $this->currentCollege()->getSystem();
+
+            if (empty($system)) {
+                $this->flashMessenger()->addErrorMessage(
+                    'Your institution is not part of a system.'
+                );
+
+                return $this->redirect()->toUrl('/members');
+            }
+        }
+
         $year = $this->getYearFromRouteOrStudy();
         $subscriptions = $this->currentCollege()
             ->getSubscriptionsForStudy($this->currentStudy());
@@ -177,14 +193,20 @@ class ReportController extends AbstractActionController
         }
 
         $observation = $this->currentObservation($year);
-        $reportData = $this->getReportService()->getNationalReportData($observation);
+        $reportData = $this->getReportService()
+            ->getNationalReportData($observation, $system);
 
         // HTML or Excel?
         $format = $this->params()->fromRoute('format');
 
         if ($format == 'excel') {
-            $this->getReportService()->downloadNationalReport($reportData);
+            $this->getReportService()->downloadNationalReport($reportData, $system);
             die;
+        }
+
+        $reportPath = 'national';
+        if ($system) {
+            $reportPath = 'system';
         }
 
         return array(
@@ -193,7 +215,9 @@ class ReportController extends AbstractActionController
             'reportData' => $reportData,
             'college' => $observation->getCollege(),
             'breakpoints' => $this->getReportService()
-                    ->getPercentileBreakPointLabels()
+                    ->getPercentileBreakPointLabels(),
+            'system' => $system,
+            'reportPath' => $reportPath
         );
     }
 

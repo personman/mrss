@@ -662,9 +662,10 @@ class Report
      * arrays, suitable for building an html, csv, or excel report.
      *
      * @param Observation $observation
+     * @param null|\Mrss\Entity\System $system
      * @return array
      */
-    public function getNationalReportData(Observation $observation)
+    public function getNationalReportData(Observation $observation, $system = null)
     {
         $year = $observation->getYear();
         $reportData = array();
@@ -699,7 +700,7 @@ class Report
                 );
 
                 $percentiles = $this->getPercentileModel()
-                    ->findByBenchmarkAndYear($benchmark, $year);
+                    ->findByBenchmarkAndYear($benchmark, $year, $system);
 
                 $percentileData = array();
                 foreach ($percentiles as $percentile) {
@@ -733,7 +734,8 @@ class Report
                     ->findOneByCollegeBenchmarkAndYear(
                         $observation->getCollege(),
                         $benchmark,
-                        $year
+                        $year,
+                        $system
                     );
 
                 if (!empty($percentileRank)) {
@@ -783,9 +785,13 @@ class Report
         return $reportData;
     }
 
-    public function downloadNationalReport($reportData)
+    public function downloadNationalReport($reportData, $system = null)
     {
         $filename = 'national-report';
+        if ($system) {
+            $name = strtolower(str_replace(' ', '-', $system->getName()));
+            $filename = $name . '-report';
+        }
 
         $excel = new PHPExcel();
         $sheet = $excel->getActiveSheet();
@@ -1971,7 +1977,7 @@ class Report
                     if ($sub) {
                         $subscriptions[] = $sub;
                     } else {
-                    
+
                     }
 
                     /*foreach ($college->getSubscriptionsForStudy($study) as $sub) {

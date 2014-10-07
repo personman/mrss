@@ -18,13 +18,18 @@ class PercentileRank extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
-    public function findOneByCollegeBenchmarkAndYear($college, $benchmark, $year)
-    {
+    public function findOneByCollegeBenchmarkAndYear(
+        $college,
+        $benchmark,
+        $year,
+        $system = null
+    ) {
         return $this->getRepository()->findOneBy(
             array(
                 'college' => $college,
                 'benchmark' => $benchmark,
-                'year' => $year
+                'year' => $year,
+                'system' => $system
             )
         );
     }

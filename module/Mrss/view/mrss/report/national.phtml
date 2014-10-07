@@ -5,12 +5,18 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
-<h2>Report of National Aggregate Data</h2>
+<h2>
+    <?php if (empty($system)): ?>
+        Report of National Aggregate Data
+    <?php else: ?>
+        <?= $system->getName() ?> Report
+    <?php endif ?>
+</h2>
 
 <ul class="nav nav-tabs">
     <?php foreach ($subscriptions as $subscription): ?>
         <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
-            <a href="<?= $this->url('reports/national', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
+            <a href="<?= $this->url('reports/' . $reportPath, array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
         </li>
     <?php endforeach ?>
 </ul>
@@ -22,7 +28,7 @@ $this->headScript()->appendFile(
 
 <p>
     <a href="<?= $this->url(
-        'reports/national',
+        'reports/' . $reportPath,
         array(
             'year' => $year,
             'format' => 'excel'
