@@ -40,6 +40,17 @@ class PercentileRank
     protected $benchmark;
 
     /**
+     * @ORM\ManyToOne(targetEntity="System")
+     * @ORM\JoinColumn(
+     *      name="system_id",
+     *      referencedColumnName="id",
+     *      onDelete="CASCADE",
+     *      nullable=true
+     * )
+     */
+    protected $system;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Study")
      */
     protected $study;
@@ -108,6 +119,18 @@ class PercentileRank
     public function getBenchmark()
     {
         return $this->benchmark;
+    }
+
+    public function setSystem(System $system)
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    public function getSystem()
+    {
+        return $this->system;
     }
 
     public function setStudy(Study $study)

@@ -53,5 +53,25 @@
         </div>
     </div>
 
+    <h4>System Reports</h4>
+    <div class="row-fluid">
+        <div class="span6">
+            <p>
+                Calculate percentiles for System Reports.
+            </p>
+
+        </div>
+        <div class="span6">
+            <a class="btn" href="/reports/calculateSystems/year/<?= $year ?>">Prepare System Reports</a>
+            <br>
+            <?php if (!empty($calculationDates['system'])): ?>
+                Prepared on <?= $calculationDates['system'] ?>
+            <?php else: ?>
+                Not yet prepared.
+            <?php endif ?>
+
+        </div>
+    </div>
+
 
 <?php endforeach ?>

@@ -350,6 +350,10 @@ class College
         return $this->peerGroups;
     }
 
+    /**
+     * @param Study $study
+     * @return Subscription[]
+     */
     public function getSubscriptionsForStudy(Study $study)
     {
         $subscriptions = array();

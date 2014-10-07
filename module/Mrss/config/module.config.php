@@ -658,6 +658,16 @@ return array(
                             )
                         )
                     ),
+                    'calculateSystems' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculateSystems/year/:year',
+                            'defaults' => array(
+                                'action' => 'calculateSystems',
+                                'year' => null
+                            )
+                        )
+                    ),
                     'calculateOutliers' => array(
                         'type' => 'segment',
                         'options' => array(

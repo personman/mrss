@@ -169,6 +169,9 @@ class System
         return $this;
     }
 
+    /**
+     * @return College[]
+     */
     public function getColleges()
     {
         return $this->colleges;

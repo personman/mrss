@@ -36,13 +36,27 @@ class PercentileRank extends AbstractModel
         // Flush here or leave it to some other code?
     }
 
-    public function deleteByStudyAndYear($studyId, $year)
+    public function deleteByStudyAndYear($studyId, $year, $system = null)
     {
-        $query = $this->getEntityManager()->createQuery(
-            'DELETE Mrss\Entity\PercentileRank p WHERE p.year = ?1 AND p.study = ?2'
-        );
+        $dql = 'DELETE Mrss\Entity\PercentileRank p
+            WHERE p.year = ?1
+            AND p.study = ?2';
+
+        if ($system) {
+            $dql .= ' AND p.system = ?3';
+        } else {
+            $dql .= ' AND p.system IS NULL';
+        }
+
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
         $query->setParameter(1, $year);
         $query->setParameter(2, $studyId);
+
+        if ($system) {
+            $query->setParameter(3, $system);
+        }
 
         $query->execute();
     }

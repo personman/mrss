@@ -4,6 +4,7 @@ namespace Mrss\Controller;
 
 use Mrss\Form\Explore;
 use Mrss\Form\PeerComparisonDemographics;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Service\Report;
 use Mrss\Form\PeerComparison;
@@ -51,6 +52,43 @@ class ReportController extends AbstractActionController
         return array(
             'years' => $years
         );
+    }
+
+    public function calculateSystemsAction()
+    {
+        $this->longRunningScript();
+        $start = microtime(true);
+
+        $yearToPrepare = $this->params()->fromRoute('year');
+
+        if (empty($yearToPrepare)) {
+            throw new \Exception(
+                'Year parameter required to calculate system reports.'
+            );
+        }
+
+
+
+        if (!empty($yearToPrepare)) {
+            // Now calculate percentiles
+            $stats = $this->getReportService()->calculateSystems($yearToPrepare);
+            $benchmarks = $stats['benchmarks'];
+            $percentiles = $stats['percentiles'];
+            $percentileRanks = $stats['percentileRanks'];
+            $noData = $stats['noData'];
+            $systems = $stats['systems'];
+
+            $elapsed = round(microtime(true) - $start, 1);
+
+            $this->flashMessenger()->addSuccessMessage(
+                "Reports prepared for $systems systems. Benchmarks: $benchmarks.
+                Percentiles: $percentiles.
+                Percentile ranks: $percentileRanks. Benchmarks without data: $noData.
+                Elapsed time: $elapsed seconds."
+            );
+
+            return $this->redirect()->toRoute('reports/calculate');
+        }
     }
 
     public function calculateOutliersAction()

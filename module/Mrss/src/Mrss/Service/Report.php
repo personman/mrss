@@ -82,11 +82,23 @@ class Report
     protected $outlierModel;
 
     /**
+     * @var \Mrss\Model\System
+     */
+    protected $systemModel;
+
+    /**
      * @var Smtp
      */
     protected $mailTransport;
 
     protected $debug = false;
+    
+    protected $start;
+    
+    public function __construct()
+    {
+        $this->start = microtime(true);
+    }
 
     public function getYearsWithSubscriptions()
     {
@@ -109,6 +121,10 @@ class Report
             $yearsWithCalculationDates[$year]['report'] = $this->getSettingModel()
                 ->getValueForIdentifier($key);
 
+            $key = $this->getReportCalculatedSettingKey($year, true);
+            $yearsWithCalculationDates[$year]['system'] = $this->getSettingModel()
+                ->getValueForIdentifier($key);
+
             $key = $this->getOutliersCalculatedSettingKey($year);
             $yearsWithCalculationDates[$year]['outliers'] = $this->getSettingModel()
                 ->getValueForIdentifier($key);
@@ -117,15 +133,19 @@ class Report
         return $yearsWithCalculationDates;
     }
 
-    public function calculateForYear($year)
+    public function calculateForYear($year, $system = null)
     {
         $baseMemory = memory_get_usage();
 
         $start = microtime(1);
         $this->debug($year);
+
+
         // Update any computed fields
-        $this->calculateAllComputedFields($year);
-        $this->debugTimer($start, 'Just computed fields');
+        if (!$system) {
+            $this->calculateAllComputedFields($year);
+            $this->debugTimer('Just computed fields');
+        }
 
         $study = $this->getStudy();
 
@@ -134,13 +154,12 @@ class Report
         $percentileModel = $this->getPercentileModel();
         $percentileRankModel = $this->getPercentileRankModel();
 
-        $percentileRankModel->getEntityManager()->flush();
-
-        $this->debugTimer($start, 'About to clear values');
         // Clear the stored values
-        $percentileModel->deleteByStudyAndYear($study->getId(), $year);
-        $percentileRankModel->deleteByStudyAndYear($study->getId(), $year);
-        $this->debugTimer($start, 'cleared values');
+        $this->debugTimer('About to clear values');
+        $percentileModel->deleteByStudyAndYear($study->getId(), $year, $system);
+        $percentileRankModel->deleteByStudyAndYear($study->getId(), $year, $system);
+        $this->debugTimer('cleared values');
+
         // Take note of some stats
         $stats = array(
             'benchmarks' => 0,
@@ -152,14 +171,14 @@ class Report
         // Loop over benchmarks
         $benchmarks = $study->getBenchmarksForYear($year);
         $this->debug(count($benchmarks));
-        $this->debugTimer($start, 'prep done.');
+        $this->debugTimer('prep done.');
 
         foreach ($benchmarks as $benchmark) {
             /** @var Benchmark $benchmark */
 
             // Get all data points for this benchmark
             // Can't just pull from observations. have to consider subscriptions, too
-            $data = $this->collectDataForBenchmark($benchmark, $year);
+            $data = $this->collectDataForBenchmark($benchmark, $year, true, $system);
 
             if (empty($data)) {
                 $stats['noData']++;
@@ -182,6 +201,10 @@ class Report
                 $percentileEntity->setPercentile($breakpoint);
                 $percentileEntity->setValue($value);
 
+                if ($system) {
+                    $percentileEntity->setSystem($system);
+                }
+
                 $percentileModel->save($percentileEntity);
                 $stats['percentiles']++;
             }
@@ -194,6 +217,9 @@ class Report
             $percentileEntity->setBenchmark($benchmark);
             $percentileEntity->setPercentile('N');
             $percentileEntity->setValue($n);
+            if ($system) {
+                $percentileEntity->setSystem($system);
+            }
 
             $percentileModel->save($percentileEntity);
 
@@ -213,6 +239,10 @@ class Report
                 $percentileRank->setYear($year);
                 $percentileRank->setBenchmark($benchmark);
                 $percentileRank->setRank($percentile);
+
+                if ($system) {
+                    $percentileRank->setSystem($system);
+                }
 
                 $college = $percentileRankModel->getEntityManager()
                     ->getReference('Mrss\Entity\College', $collegeId);
@@ -235,7 +265,7 @@ class Report
         }
 
         // Update the settings table with the calculation date
-        $settingKey = $this->getReportCalculatedSettingKey($year);
+        $settingKey = $this->getReportCalculatedSettingKey($year, $system);
         $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
 
         // Flush
@@ -243,6 +273,30 @@ class Report
 
         // Return some stats
         return $stats;
+    }
+
+    public function calculateSystems($year)
+    {
+        $statTotals = array(
+            'benchmarks' => 0,
+            'percentiles' => 0,
+            'percentileRanks' => 0,
+            'noData' => 0,
+            'systems' => 0
+        );
+
+        $systems = $this->getSystemModel()->findAll();
+        foreach ($systems as $system) {
+            $stats = $this->calculateForYear($year, $system);
+
+            $statTotals['systems']++;
+            $statTotals['benchmarks'] += $stats['benchmarks'];
+            $statTotals['percentiles'] += $stats['percentiles'];
+            $statTotals['percentileRanks'] += $stats['percentileRanks'];
+            $statTotals['noData'] += $stats['noData'];
+        }
+
+        return $statTotals;
     }
 
     public function calculateOutliersForYear($year)
@@ -520,13 +574,18 @@ class Report
      * Build a unique key for the year and study
      *
      * @param $year
+     * @param bool $systems
      * @return string
      */
-    public function getReportCalculatedSettingKey($year)
+    public function getReportCalculatedSettingKey($year, $systems = false)
     {
         $studyId = $this->getStudy()->getId();
 
         $key = "report_calculated_{$studyId}_$year";
+
+        if ($systems) {
+            $key = 'system_' . $key;
+        }
 
         return $key;
     }
@@ -549,9 +608,11 @@ class Report
     public function collectDataForBenchmark(
         Benchmark $benchmark,
         $year,
-        $skipNull = true
+        $skipNull = true,
+        $system = null
     ) {
-        $subscriptions = $this->getSubscriptions($year);
+        $subscriptions = $this->getSubscriptions($year, $system);
+        //prd(count($subscriptions));
 
         $data = array();
         $iData = array();
@@ -1825,6 +1886,22 @@ class Report
         return $this->outlierModel;
     }
 
+    public function setSystemModel($model)
+    {
+        $this->systemModel = $model;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\System
+     */
+    public function getSystemModel()
+    {
+        return $this->systemModel;
+    }
+
+
     public function setCalculator(Calculator $calculator)
     {
         $this->calculator = $calculator;
@@ -1856,10 +1933,11 @@ class Report
         }
     }
 
-    protected function debugTimer($start, $message = null)
+    protected function debugTimer($message = null)
     {
         if ($this->debug) {
-            $elapsed = round(microtime(1) - $start, 3);
+            
+            $elapsed = round(microtime(1) - $this->start, 3);
             $message = $elapsed . "s: " . $message;
             $this->debug($message);
         }
@@ -1867,16 +1945,57 @@ class Report
 
     /**
      * @param $year
+     * @param \Mrss\Entity\System $system
      * @return \Mrss\Entity\Subscription[]
      */
-    protected function getSubscriptions($year)
+    protected function getSubscriptions($year, $system = null)
     {
-        if (empty($this->subscriptions[$year])) {
-            $this->subscriptions[$year] = $this->getSubscriptionModel()
-                ->findByStudyAndYear($this->getStudy()->getId(), $year);
+        $key = $year;
 
+        if ($system) {
+            $key = $year . '_' . $system->getId();
         }
 
-        return $this->subscriptions[$year];
+        if (!isset($this->subscriptions[$key])) {
+            $this->debugTimer("Starting to collect subscriptions. ");
+            if ($system) {
+                $study = $this->getStudy();
+
+                $subscriptions = array();
+                foreach ($system->getColleges() as $college) {
+                    $sub = $college->getSubscriptionByStudyAndYear(
+                        $study->getId(),
+                        $year
+                    );
+
+                    if ($sub) {
+                        $subscriptions[] = $sub;
+                    } else {
+                    
+                    }
+
+                    /*foreach ($college->getSubscriptionsForStudy($study) as $sub) {
+                        if ($sub->getYear() == $year) {
+                            $subscriptions[] = $sub;
+                        }
+                    }*/
+                }
+
+                $count = count($subscriptions);
+                $this->debugTimer(
+                    "Subscriptions collected for system {$system->getName()}:
+                     {$count}. "
+                );
+
+                //echo '<pre>'; var_dump($subscriptions); die;
+            } else {
+                $subscriptions = $this->getSubscriptionModel()
+                    ->findByStudyAndYear($this->getStudy()->getId(), $year);
+            }
+
+            $this->subscriptions[$key] = $subscriptions;
+        }
+
+        return $this->subscriptions[$key];
     }
 }

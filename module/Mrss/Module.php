@@ -516,6 +516,7 @@ class Module
                     $service->setCollegeModel($sm->get('model.college'));
                     $service->setSettingModel($sm->get('model.setting'));
                     $service->setOutlierModel($sm->get('model.outlier'));
+                    $service->setSystemModel($sm->get('model.system'));
                     $service->setComputedFieldsService($sm->get('computedFields'));
                     $service->setMailTransport($sm->get('mail.transport'));
 
