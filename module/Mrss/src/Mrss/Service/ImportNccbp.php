@@ -1416,8 +1416,13 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         return $system;
     }
 
-    public function gidToIpeds($gid) {
-        $query = "SELECT field_ipeds_id_value FROM content_type_group_subs_info LEFT JOIN og_ancestry ON (content_type_group_subs_info.nid = og_ancestry.nid) WHERE group_nid = '$gid'";
+    public function gidToIpeds($gid)
+    {
+        $query = "SELECT field_ipeds_id_value
+            FROM content_type_group_subs_info
+            LEFT JOIN og_ancestry
+            ON (content_type_group_subs_info.nid = og_ancestry.nid)
+            WHERE group_nid = '$gid'";
 
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
