@@ -31,6 +31,17 @@ class NccbpNavigationFactory extends DefaultNavigationFactory
             unset($pages['reports']['pages']['system']);
         }
 
+
+        if ($auth->hasIdentity()) {
+
+            // Add the data entry links (if they're logged in
+            $user = $auth->getIdentity();
+            $name = $user->getPrefix() . ' ' . $user->getLastName();
+            $pages['account']['label'] = $name;
+        } else {
+            unset($pages['account']);
+        }
+
         // change pages here
         //unset($pages['studies']);
 

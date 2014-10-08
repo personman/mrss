@@ -1,4 +1,4 @@
-.navbar.navbar-inverse .navbar-inner {
+/*.navbar.navbar-inverse .navbar-inner {
     background: #FFF
 }
 
@@ -22,4 +22,166 @@ body {
 #headerLoginForm {
     position: relative;
 }
+*/
 
+
+html, body { background: #f7f7f7; }
+
+/*	FONTS */
+
+h1 { font-family: 'Fira Sans', sans-serif; font-size: 30px; font-weight: 500; line-height: 30px; text-transform: uppercase; color: #00508d; margin: 0 0 10px 0; padding-bottom: 0px; border-bottom:  4px solid #9cc03e; }
+h2 { font-size: 20px; font-weight: 700; line-height: 24px; text-transform: uppercase; color: #00508d; margin: 0px; }
+
+p { font-size: 16px; font-weight: 400; line-height: 24px; }
+a, a:visited { color: #000000; }
+a:hover { text-decoration: none; }
+
+.darkblue { color: #00508d; }
+.slateblue { color: #286ea5; }
+.lightblue { color: #6394c0; }
+
+/*	HEADER---------------------------------------*/
+header { width: 100%; background-color: #FFFFFF; }
+.logo { text-align: center; padding: 1% 0; }
+.logo img { display: inherit; }
+
+header .btn { font-family: 'Fira Sans', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 1px;  margin-top: 15%; }
+a.schedule-btn {  background: #004f8c; color: #F7F7F7; }
+a.login-btn {  background: #9cc03e; color: #F7F7F7; float: right;  }
+a.login-btn:hover, a.schedule-btn:hover { background: #333; color: #CCC; }
+
+.navbar { min-height: 40px; margin-bottom: 0; }
+.navbar-nav { float: none; text-align: justify; }
+ul.navbar-nav:after {width: 100%; display: inline-block; content: ""; visibility: hidden}
+.navbar-default { background: none; box-shadow: none; border-bottom: 1px solid #e7e7e7; border-top: 1px solid #e7e7e7; border-radius: 0; border-left: none; border-right: none; }
+.navbar-default .navbar-nav > li > a { text-transform: uppercase; font-weight: 700; font-size: 12px; color: #666; }
+.navbar-default .navbar-nav > li { float: none; display: inline-block; }
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus { background: #DDD;  }
+
+.dropdown-menu { background: #5081b2;}
+.dropdown-menu > li > a { color: #fff; }
+
+/*	HOME */
+.wrapper-slider { width: 100%; background-color: #d7d7d7; margin-bottom: 7%; }
+.wrapper-slider .container { background: url('/images/nccbp/imghome-blue-bg.jpg') no-repeat bottom center; padding: 5% 0; max-height: 494px; }
+.wrapper-slider h1 { font-size: 38px; line-height: 36px; font-weight: 500; text-align: center;  color: #FFFFFF; text-shadow: 1px 2px #113149; border-top: 1px solid #6394c0; border-bottom: 1px solid #6394c0; margin: 0px 4% 4% 4%; padding: 25px 0px; }
+.wrapper-slider p { font-family: 'Fira Sans', sans-serif; font-size: 15px; line-height: 20px; font-style: italic; color: #ebebeb; margin-bottom: 15px; font-weight: 300; }
+.wrapper-slider  .btn-lg { float: left; margin: 2% 5% 0 0; font-family: 'Fira Sans', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 1px; padding: 2.5% 7%; }
+
+.laptop { position: absolute; z-index: 9999; right: 0; top:  0; }
+
+.home-column { margin-bottom: 3%; }
+.home-column p {font-family: 'Fira Sans', sans-serif;  font-size: 18px; line-height: 24px; font-weight: 300; font-style: italic;  color: #777; }
+.home-column a, .home-column a:visited { font-size: 14px; font-weight: 700; letter-spacing: 1px; text-decoration: none; text-transform: uppercase; }
+.home-column a:hover {color: #256a9e;  }
+
+.home-quote { border-top: 1px solid #d7d7d7; border-bottom: 1px solid #d7d7d7; background-image: url("/images/nccbp/quotes_home_bg.png"); background-repeat: no-repeat; background-position: center 20%; text-align:center; padding: 3% 0; text-align: center; margin-bottom: 3%; }
+.home-quote blockquote { border: none; padding: 0 }
+.home-quote blockquote p { font-family: 'Fira Sans', sans-serif; font-weight: 300; font-style: italic;  color: #666;  font-size: 200%; line-height: 100%;  }
+.home-quote blockquote footer { font-size: 14px; line-height: 16px;color: #6394c0; font-weight: 500; }
+.home-quote blockquote footer cite { color: #00508d; font-size: 16px; }
+
+.view-more { text-transform: uppercase; font-size: 14px; float: right; font-weight: 700; line-height: 14px; }
+
+/*	SECONDARY PAGES TEMPLATE */
+
+.sec-header h1 { border-bottom:  4px solid #9cc03e; margin-bottom: 2%; line-height: 34px; }
+
+.breadcrumb { text-transform: uppercase; margin: 2% 0 .5% 0; padding: 0; font-size: 80%; }
+.breadcrumb>.active {  color: #6394c0; }
+
+p.sec-intro{ border-bottom: 1px solid #999;font-family: 'Fira Sans', sans-serif;  font-size: 24px; font-weight: 300; line-height: 32px; font-style: italic; color: #888; margin-bottom:  3%; padding-bottom: 1.75%; }
+
+.sec-img-hdr { margin-bottom: 3%; }
+.sec-banner { position: absolute; top: 20%; right: 0;  z-index: 9999; display: inline-block; width: 40%; background-color: rgba(155, 191, 61, .9); padding: 3.5% 4%; }
+.sec-banner p { font-family: 'Fira Sans', sans-serif; font-size: 28px; font-weight: 300; line-height: 34px; font-style: italic; text-align: center; color: #FEFEFE}
+
+.caption p { border-top: 1px solid #c0c0c0; font-size: 12px; font-style: italic; color: #999; text-align: right; }
+
+/*	WHO WE HELP */
+.table { margin-top: 2%; }
+.table > thead > tr > th { text-transform: uppercase; border-bottom: 2px solid #9cc03e; color: #286ea5; }
+
+.peertable tr td { padding-left: 0 !important; }
+.peertable tr td:not(:first-child) { text-align: center; }
+.peertable tr:first-child { border-bottom: 2px solid #48ad8b; font-size: 16px; text-transform: uppercase; color: #00508d;  }
+.peertable tr:first-child td {padding-bottom: 0; }
+
+/*	REPORTS */
+.reports-body { margin-top: 25px; margin-bottom: 75px; }
+
+blockquote { border: none; padding: 0; text-align: center; padding: 3.5% 5%; border-top: 1px solid #d7d7d7; border-bottom: 1px solid #d7d7d7; margin: 3% 0; }
+blockquote p { font-family: 'Fira Sans', sans-serif; font-weight: 300; font-style: italic;  color: #666;  font-size: 150%; line-height: 100%;  }
+blockquote footer { font-size: 11px; line-height: 13px;color: #6394c0; font-weight: 500; }
+blockquote footer cite { color: #00508d; font-size: 12px; }
+
+/*	FOOTER */
+.footer { width: 100%; background-color: #555555; margin-top: 3%; }
+.footer .container { padding-top: 16px; padding-bottom: 20px; }
+
+.footer-nav { text-align: right; margin: 5px 0; }
+.footer-nav li { display: inline-block; font-size: 11px; font-weight: 400; line-height: 14px;  text-transform: uppercase; margin-left: 1.5%; letter-spacing: 1px; }
+.footer-nav li a, .footer-nav li a:visited {  color: #ebebeb; text-decoration: none;}
+.footer-nav li a:hover { color: #9cc03e; text-decoration: none; }
+.footer p { display: inline-block; float: right;color: #ebebeb; font-size: 9px; line-height: 14px; letter-spacing: .5px; }
+
+
+#headerLoginForm {
+    display: none;
+}
+
+/* Hide the heading, forgot password link and errors */
+#headerLoginForm h1, #headerLoginForm a, #headerLoginForm .help-inline {
+    display: none;
+}
+
+#headerLoginForm form {
+    margin: 0px;
+}
+#headerLoginForm dl {
+
+}
+
+#headerLoginForm dt {
+
+    display: none;
+}
+
+#headerLoginForm dd {
+    float: left;
+    width: 100px;
+    padding-top: 5px;
+}
+
+#headerLoginForm dd input {
+    width: 90px;
+}
+
+#headerLoginForm button {
+    margin-top: 0px;
+}
+
+
+/* Admin navigation */
+.adminNavigation {
+    border: 1px solid #ccc;
+    border-bottom: 2px solid #bbb;
+    background: #ddd;
+    padding: 10px;
+}
+
+.adminNavigation li {
+    float: left;
+    padding-left: 15px;
+}
+.adminNavigation h3 {
+    width: 200px;
+    float: left;
+    line-height: 20px;
+    margin: 0px;
+}
+
+.adminNavigation .nav {
+    margin: 0px;
+}

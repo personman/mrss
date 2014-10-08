@@ -59,6 +59,22 @@ class Module
         });
 
         $this->checkStudyAtLogin($e);
+
+        $this->setLayout($e);
+    }
+
+    public function setLayout(MvcEvent $e)
+    {
+        $e->getApplication()->getEventManager()->getSharedManager()
+            ->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
+                    $controller = $e->getTarget();
+                    $currentStudy = $controller->currentStudy();
+
+                    // NCCBP gets a different layout file
+                    if ($currentStudy->getId() == 1) {
+                        $controller->layout('layout/nccbp.phtml');
+                    }
+                }, 100);
     }
 
     public function handleError(MvcEvent $e) {
