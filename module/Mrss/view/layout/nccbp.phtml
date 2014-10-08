@@ -50,8 +50,9 @@
         <div class="col-xs-3"><a href="#" class="btn schedule-btn" role="button">SCHEDULE DEMO</a></div>
         <div class="col-xs-6 logo"><a href="index.html"><img class="img-responsive" src="/images/nccbp-logo.jpg" /></a></div>
         <div class="col-xs-3">
-            <a href="#" class="btn login-btn" role="button" id="loginButton">LOGIN</a>
+
             <?php if(!$this->zfcUserIdentity()): ?>
+                <a href="#" class="btn login-btn" role="button" id="loginButton">LOGIN</a>
                 <div id="headerLoginForm">
                     <? $form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
                     $form->get('identity')->setAttribute('placeHolder', 'Email');
