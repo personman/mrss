@@ -192,7 +192,7 @@ return array(
                     ),
                     'systems' => array(
                         'label' => 'Systems',
-                        'uri' => '/systems'
+                        'uri' => '/college-systems'
                     )
                 )
             ),
