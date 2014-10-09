@@ -15,6 +15,8 @@ class Module
     {
         $eventManager        = $e->getApplication()->getEventManager();
 
+        $this->setLayout($e);
+
         // Log exceptions and errors
         $eventManager->attach(
             MvcEvent::EVENT_DISPATCH_ERROR,
@@ -59,8 +61,6 @@ class Module
         });
 
         $this->checkStudyAtLogin($e);
-
-        $this->setLayout($e);
     }
 
     public function setLayout(MvcEvent $e)
