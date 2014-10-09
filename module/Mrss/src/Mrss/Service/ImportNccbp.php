@@ -1258,7 +1258,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         }
 
         $this->getSystemModel()->getEntityManager()->flush();
-        
+
         $this->importSystemUsers();
 
         $this->saveProgress($count, $count);
@@ -1366,6 +1366,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             foreach ($system->getColleges() as $college) {
                 $firstCollege = $college;
                 break;
+            }
+
+            if (empty($firstCollege)) {
+                die('No colleges found for ' . $system->getName());
             }
 
             // Does the user already exist?
