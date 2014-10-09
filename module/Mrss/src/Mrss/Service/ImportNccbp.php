@@ -964,6 +964,14 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
         $converted = $matches[2];
 
+        // Some ad hoc field conversions
+        $map = array(
+            '1st_gen_stud' => 'first_gen_students'
+        );
+        if (!empty($map[$converted])) {
+            $converted = $map[$converted];
+        }
+
         // Since class properties can't begin with a number, prepend an 'n'
         if (preg_match('/^\d/', $converted)) {
             $converted = 'n' . $converted;

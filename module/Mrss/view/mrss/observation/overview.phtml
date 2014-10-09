@@ -41,17 +41,22 @@
 
 
     <div class="row row-fluid">
-        <div class="span1">
+        <div class="span1 col-md-1">
 
         </div>
 
-        <div class="span9">
+        <div class="span9 col-md-9">
             <div class="progress">
-                <div class="bar" style="width: <?= $completionPercentage ?>%;"></div>
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="<?= $completionPercentage ?>"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: <?= $completionPercentage ?>%;"></div>
             </div>
         </div>
 
-        <div class="span2">
+        <div class="span2 col-md-2">
             <strong>
                 <?= $completionPercentage ?>%
             </strong>
@@ -65,11 +70,11 @@
 
 <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
     <div class="row row-fluid">
-        <div class="span1">
+        <div class="span col-md-1">
 
         </div>
 
-        <div class="span4">
+        <div class="span4 col-md-4">
             <a href="<?= $this->url(
                 'data-entry/edit',
                 array(
@@ -91,10 +96,15 @@
             <?php endif ?>
         </div>
 
-        <div class="span7">
+        <?php $completion = $benchmarkGroup->getCompletionPercentageForObservation($observation) ?>
+        <div class="span7 col-md-7">
             <div class="progress benchmarkGroupProgress">
-                <div class="bar" style="width: <?= $benchmarkGroup->getCompletionPercentageForObservation($observation) ?>%;
-                    "></div>
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="<?= $completion ?>"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: <?= $completion ?>%;"></div>
             </div>
         </div>
 
@@ -105,11 +115,11 @@
 
 <?php if (!$this->currentStudy()->getDataEntryOpen()): ?>
 <div class="row row-fluid">
-    <div class="span1">
+    <div class="span1 col-md-1">
 
     </div>
 
-    <div class="span4">
+    <div class="span4 col-md-4">
         <a href="<?= $this->url('data-entry/all') ?>">All Submitted Values</a>
     </div>
 </div>

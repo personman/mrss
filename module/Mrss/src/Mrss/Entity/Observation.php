@@ -1059,6 +1059,7 @@ class Observation
      */
     protected $fem_cred_stud;
 
+    // The following field is not used and can be deleted
     /** @ORM\Column(type="float", nullable=true) */
     protected $first_gen_stud;
 

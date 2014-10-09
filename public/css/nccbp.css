@@ -185,3 +185,55 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
 .adminNavigation .nav {
     margin: 0px;
 }
+
+
+
+/* BenchmarkGroup progress */
+.benchmarkGroupProgress {
+    width: 150px;
+    float: left;
+    margin-right: 20px;
+    height: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.heatmapCell {
+    background-color: green;
+    color: white;
+    text-align: center;
+    padding: 1px
+}
+
+.heatmapCellBlue {
+    background-color: blue;
+}
+
+.table.heatmap td {
+    padding: 0;
+}
+
+
+/* highlight form */
+.control-group {
+    padding: 10px;
+    margin-bottom: 10px !important;
+}
+
+
+/* cmsPage */
+.cmsPage {
+    padding: 0px 15px;
+}
+
+/* recaptcha on contact form */
+.recaptcha_r7_c1, .recaptcha_r8_c1 {
+    /*display: none;*/
+}
+
+#controls-captcha {
+    width: 465px;
+    background-color: #FFF;
+}
