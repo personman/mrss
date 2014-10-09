@@ -33,14 +33,14 @@ $this->headScript()->appendFile(
             'year' => $year,
             'format' => 'excel'
         )
-    ) ?>" class="btn">Download</a>
+    ) ?>" class="btn btn-default">Download</a>
 
     <a href="<?= $this->url(
         'institution/subscribed',
         array(
             'year' => $year
         )
-    ) ?>" class="btn">Members</a>
+    ) ?>" class="btn btn-default">Members</a>
 </p>
 
 <div class="report">
@@ -73,7 +73,7 @@ $this->headScript()->appendFile(
                     <?php foreach ($breakpoints as $breakpoint): ?>
                     <th><?= $breakpoint ?></th>
                     <?php endforeach ?>
-                    <th><a href="#" class="btn showAllCharts" title="Display all charts"><i class="icon-signal"></i></a></th>
+                    <th><a href="#" class="btn btn-default showAllCharts" title="Display all charts"><i class="icon-signal glyphicon glyphicon-signal"></i></a></th>
                 </tr>
             </thead>
 
@@ -111,7 +111,7 @@ $this->headScript()->appendFile(
                             <?php endif ?>
                         </td>
                         <?php endforeach ?>
-                        <td><a href="#" class="btn openChart" title="Display chart"><i class="icon-signal"></i></a></td>
+                        <td><a href="#" class="btn btn-default openChart" title="Display chart"><i class="icon-signal glyphicon glyphicon-signal"></i></a></td>
                     </tr>
                     <tr class="nationalReportChart <?= $rowClass ?>">
                         <td></td>
