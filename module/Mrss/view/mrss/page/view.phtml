@@ -2,18 +2,19 @@
     <div class="page-header">
         <h2><?php echo $page->getTitle() ?></h2>
 
-        <?php if ($this->isAllowed('adminMenu', 'view')): ?>
-            <a href="<?= $this->url(
-                'pages',
-                array(
-                    'action' => 'edit',
-                    'id' => $page->getId()
-                )
-            ) ?>">
-                Edit
-            </a>
-        <?php endif ?>
     </div>
+<?php endif ?>
+
+<?php if ($this->isAllowed('adminMenu', 'view')): ?>
+    <a href="<?= $this->url(
+        'pages',
+        array(
+            'action' => 'edit',
+            'id' => $page->getId()
+        )
+    ) ?>">
+        Edit
+    </a>
 <?php endif ?>
 
 
