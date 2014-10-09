@@ -19,7 +19,7 @@
 
 <a href="/admin/changes">Recent data changes</a>
 
-<h2>Subscriptions</h2>
+<h1>Subscriptions</h1>
 
 <ul class="nav nav-tabs">
     <?php foreach ($years as $year): ?>
@@ -90,7 +90,7 @@
                             );
                             $item = '<a title="Impersonate this user"
                                 href="/admin/user/impersonate/' . $user->getId()
-                                . '"><i class="icon icon-fire"></i></a> ';
+                                . '"><i class="icon icon-fire glyphicon glyphicon-transfer"></i></a> ';
                             $item .= "<a href='$url'>$name</a>";
 
                             if ($access = $user->getLastAccess()) {
