@@ -4,8 +4,8 @@
     <h3><?= $year ?></h3>
 
     <h4>Outlier Report</h4>
-    <div class="row-fluid">
-        <div class="span6">
+    <div class="row-fluid row">
+        <div class="span6 col-md-6">
             <p>
                 Calculate outlier and missing data.
             </p>
@@ -14,15 +14,15 @@
                 <a href="/admin/outliers">View Admin Outlier Report</a>
             </p>
         </div>
-        <div class="span6">
-            <a class="btn" href="/reports/calculateOutliers/year/<?= $year ?>">Prepare Outlier Report</a>
+        <div class="span6 col-md-6">
+            <a class="btn btn-default" href="/reports/calculateOutliers/year/<?= $year ?>">Prepare Outlier Report</a>
             <br>
             <?php if (!empty($calculationDates['outliers'])): ?>
                 Prepared on <?= $calculationDates['outliers'] ?>
                 <br>
                 <br>
-                <a class="btn" href="/reports/emailOutliers/preview" >Preview Outlier Emails</a>
-                <a class="btn" href="/reports/emailOutliers" onclick="return confirm('Are you sure you want to send outlier report emails to all member institutions?')">Send Outlier Emails</a>
+                <a class="btn btn-default" href="/reports/emailOutliers/preview" >Preview Outlier Emails</a>
+                <a class="btn btn-default" href="/reports/emailOutliers" onclick="return confirm('Are you sure you want to send outlier report emails to all member institutions?')">Send Outlier Emails</a>
             <?php else: ?>
                 Not yet prepared.
             <?php endif ?>
@@ -31,8 +31,8 @@
     </div>
 
     <h4>National Report</h4>
-    <div class="row-fluid">
-        <div class="span6">
+    <div class="row-fluid row">
+        <div class="span6 col-md-6">
             <p>
                 Calculate percentiles for National Report.
             </p>
@@ -41,8 +41,8 @@
                 <a href="/reports/national">View National Report</a>
             </p>
         </div>
-        <div class="span6">
-            <a class="btn" href="/reports/calculate/year/<?= $year ?>">Prepare National Report</a>
+        <div class="span6 col-md-6">
+            <a class="btn btn-default" href="/reports/calculate/year/<?= $year ?>">Prepare National Report</a>
             <br>
             <?php if (!empty($calculationDates['report'])): ?>
                 Prepared on <?= $calculationDates['report'] ?>
@@ -54,15 +54,15 @@
     </div>
 
     <h4>System Reports</h4>
-    <div class="row-fluid">
-        <div class="span6">
+    <div class="row-fluid row">
+        <div class="span6 col-md-6">
             <p>
                 Calculate percentiles for System Reports.
             </p>
 
         </div>
-        <div class="span6">
-            <a class="btn" href="/reports/calculateSystems/year/<?= $year ?>">Prepare System Reports</a>
+        <div class="span6 col-md-6">
+            <a class="btn btn-default" href="/reports/calculateSystems/year/<?= $year ?>">Prepare System Reports</a>
             <br>
             <?php if (!empty($calculationDates['system'])): ?>
                 Prepared on <?= $calculationDates['system'] ?>
