@@ -1257,6 +1257,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             }
         }
 
+        $this->getSystemModel()->getEntityManager()->flush();
+        
         $this->importSystemUsers();
 
         $this->saveProgress($count, $count);
