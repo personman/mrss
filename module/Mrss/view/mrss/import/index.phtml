@@ -13,19 +13,19 @@
     </select>
 </form>
 
-<div class="row-fluid">
-    <div class="span2 offset10">
+<div class="row-fluid row">
+    <div class="span2 offset10 col-md-2 col-md-offset-10">
         <button class="btn btn-primary" id="importAll">Import All</button>
     </div>
 </div>
 
 <?php foreach ($this->imports as $key => $import): ?>
-    <div class="row-fluid paddedTop" id="row-<?= $key ?>">
-        <div class="span2">
+    <div class="row-fluid row paddedTop" id="row-<?= $key ?>">
+        <div class="span2 col-md-2">
             <h4><?= $import['label'] ?></h4>
         </div>
 
-        <div class="span8">
+        <div class="span8 col-md-8">
             <div class="progress" style="margin-top:7px">
                 <div class="bar" style="width: 0%;"></div>
             </div>
@@ -35,8 +35,8 @@
             </div>
         </div>
 
-        <div class="span2">
-            <button class="btn import-button" id="import-<?= $key
+        <div class="span2 col-md-2">
+            <button class="btn import-button btn-default" id="import-<?= $key
             ?>">Import</button>
 
             <span class="progressComplete">
