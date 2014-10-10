@@ -1143,7 +1143,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getImports()
     {
         $imports = array(
-            'colleges' => array(
+            /*'colleges' => array(
                 'label' => 'Colleges',
                 'method' => 'importColleges'
             ),
@@ -1154,7 +1154,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             'users' => array(
                 'label' => 'Users',
                 'method' => 'importUsers'
-            ),
+            ),*/
             /*'benchmarkGroups' => array(
                 'label' => 'Benchmark Groups',
                 'method' => 'importBenchmarkGroups'
