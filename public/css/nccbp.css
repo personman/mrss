@@ -237,3 +237,84 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     width: 465px;
     background-color: #FFF;
 }
+
+
+
+/* Member home page */
+.sidebar {
+    background-color: #0065a1;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    border-top:3px solid #0065a1;
+    border-bottom:3px solid #0065a1;
+    border-left:1px solid #0065a1;
+    border-right:1px solid #0065a1;
+    display:inline-block;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.sidebar h2 {
+    color:#FFFFFF;
+}
+
+.sidebar h3 {
+    color:#FFFFFF;
+    line-height:125%;
+}
+
+.sidebar h4 {
+    color:#FFFFFF;
+}
+
+.sidebarinset h4 {
+    margin:0px;
+}
+
+
+.sidebar p {
+    margin-top:10px;
+    color:#FFFFFF;
+}
+
+.sidebar p a {
+    color:#FFFFFF;
+}
+
+.sidebar p a:hover {
+    color:#002c57;
+}
+
+.sidebarinset {
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    border-top:3px solid #0065a1;
+    border-bottom:3px solid #0065a1;
+    border-left:1px solid #0065a1;
+    border-right:1px solid #0065a1;
+    display:inline-block;
+    margin-top:15px;
+    padding:15px;
+    background-color: #FFFFFF;
+}
+
+.sidebarinset h4 {
+    margin:0px;
+    color: #0065a1;
+}
+
+.sidebar .sidebarinset p {
+    color:#000000;
+}
+
+.sidebar .sidebarinset a {
+    color:#0065a1
+}
+
+.sidebar .sidebarinset p a:hover {
+    color: #002c57;
+}
