@@ -2,17 +2,16 @@
 
 namespace Mrss\Service;
 
-use Zend\Navigation\Service\DefaultNavigationFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class NccbpNavigationFactory extends DefaultNavigationFactory
+class NccbpNavigationFactory extends NavigationFactory
 {
     public function getName()
     {
         return 'nccbp';
     }
 
-    public function getPages(ServiceLocatorInterface $serviceLocator)
+    public function getPagesArray(ServiceLocatorInterface $serviceLocator)
     {
         $auth = $serviceLocator->get('zfcuser_auth_service');
         $user = null;
@@ -22,7 +21,8 @@ class NccbpNavigationFactory extends DefaultNavigationFactory
             $system = $user->getCollege()->getSystem();
         }
 
-        $pages = parent::getPages($serviceLocator);
+        //$pages = parent::getPages($serviceLocator);
+        $pages = parent::getPagesArray($serviceLocator);
 
         if ($system) {
             $label = $system->getName() . ' Report';
@@ -31,8 +31,21 @@ class NccbpNavigationFactory extends DefaultNavigationFactory
             unset($pages['reports']['pages']['system']);
         }
 
-
+        // If the user is logged in, hide some stuff
         if ($auth->hasIdentity()) {
+            unset($pages['nccbp']);
+            unset($pages['reports-overview']);
+            unset($pages['who-we-help']);
+            unset($pages['join']);
+            unset($pages['contact']['pages']);
+            unset($pages['about']);
+        } else {
+            unset($pages['home']);
+            unset($pages['help']);
+        }
+
+
+        /*if ($auth->hasIdentity()) {
 
             // Add the data entry links (if they're logged in
             $user = $auth->getIdentity();
@@ -40,7 +53,7 @@ class NccbpNavigationFactory extends DefaultNavigationFactory
             $pages['account']['label'] = $name;
         } else {
             unset($pages['account']);
-        }
+        }*/
 
         // change pages here
         //unset($pages['studies']);

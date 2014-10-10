@@ -85,6 +85,9 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Logged out users can't renew
             unset($pages['renew']);
+
+            // Data doc
+            unset($pages['data-documentation']);
         }
 
 

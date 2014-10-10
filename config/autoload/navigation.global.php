@@ -65,18 +65,8 @@ return array(
                     ),*/
                 )
             ),
-            'renew' => array(
-                'label' => 'Renew',
-                'route' => 'renew',
-                'class' => 'renew-nav'
-            ),
-            'data-entry' => array(
-                'label' => 'Data Entry',
-                'route' => 'data-entry',
-                'pages' => array(
-
-                )
-            ),
+            'renew' => getRenewMenu(),
+            'data-entry' => getDataMenu(),
             'reports' => getReportMenu(),
             'reports_preview' => array(
                 'label' => 'Reports',
@@ -127,32 +117,7 @@ return array(
                 'label' => 'Contact Us',
                 'uri' => '/contact'
             ),
-            'account' => array(
-                'label' => 'Your Account',
-                'route' => 'account',
-                'pages' => array(
-                    'home' => array(
-                        'label' => 'Member Home',
-                        'uri' => '/members'
-                    ),
-                    'account' => array(
-                        'label' => 'Manage Your Account',
-                        'route' => 'account',
-                    ),
-                    'institution' => array(
-                        'label' => 'Manage Your Institution',
-                        'route' => 'institution/edit'
-                    ),
-                    'users' => array(
-                        'label' => 'Manage Your Institution\'s Users',
-                        'route' => 'institution/users'
-                    ),
-                    'logout' => array(
-                        'label' => 'Sign Out',
-                        'route' => 'zfcuser/logout',
-                    )
-                )
-            ),
+            'account' => getAccountMenu(),
             'login' => array(
                 'label' => 'Sign In',
                 'route' => 'zfcuser/login',
@@ -160,6 +125,10 @@ return array(
             ),
         ),
         'nccbp' => array(
+            'home' => array(
+                'label' => 'Home',
+                'route' => 'home'
+            ),
             'nccbp' => array(
                 'label' => 'NCCBP',
                 'uri' => '#',
@@ -226,6 +195,8 @@ return array(
                     ),
                 )
             ),
+            'renew' => getRenewMenu(),
+            'data-entry' => getDataMenu(),
             'reports' => getReportMenu(),
             'join' => array(
                 'label' => 'Join Now',
@@ -276,6 +247,42 @@ return array(
 
                 )
             ),
+            'data-documentation' => array(
+                'label' => 'Data Documentation',
+                'uri' => '#',
+                'pages' => array(
+                    'faq' => array(
+                        'label' => 'Submitted Values',
+                        'uri' => '/submitted-values'
+                    ),
+                    'contact' => array(
+                        'label' => 'Data Dictionary',
+                        'uri' => '/data-dictionary'
+                    ),
+                    'calculations' => array(
+                        'label' => 'Benchmark Calculations',
+                        'uri' => '/calculations'
+                    ),
+                    'changes' => array(
+                        'label' => 'Changes and Errata',
+                        'uri' => '/changes'
+                    ),
+                )
+            ),
+            'help' => array(
+                'label' => 'Help',
+                'uri' => '#',
+                'pages' => array(
+                    'faq' => array(
+                        'label' => 'FAQ',
+                        'uri' => '/faq'
+                    ),
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
+                )
+            ),
             'contact' => array(
                 'label' => 'Contact Us',
                 'uri' => '/contact',
@@ -286,32 +293,7 @@ return array(
                     ),
                 )
             ),
-            'account' => array(
-                'label' => 'Your Account',
-                'route' => 'account',
-                'pages' => array(
-                    'home' => array(
-                        'label' => 'Member Home',
-                        'uri' => '/members'
-                    ),
-                    'account' => array(
-                        'label' => 'Manage Your Account',
-                        'route' => 'account',
-                    ),
-                    'institution' => array(
-                        'label' => 'Manage Your Institution',
-                        'route' => 'institution/edit'
-                    ),
-                    'users' => array(
-                        'label' => 'Manage Your Institution\'s Users',
-                        'route' => 'institution/users'
-                    ),
-                    'logout' => array(
-                        'label' => 'Sign Out',
-                        'route' => 'zfcuser/logout',
-                    )
-                )
-            ),
+            'account' => getAccountMenu(),
         ),
         'admin' => array(
             'dashboard' => array(
@@ -397,5 +379,55 @@ function getReportMenu()
                 'uri' => '/reports/peer'
             )
         )
+    );
+}
+
+function getAccountMenu()
+{
+    return array(
+        'label' => 'Your Account',
+        'route' => 'account',
+        'pages' => array(
+            'home' => array(
+                'label' => 'Member Home',
+                'uri' => '/members'
+            ),
+            'account' => array(
+                'label' => 'Manage Your Account',
+                'route' => 'account',
+            ),
+            'institution' => array(
+                'label' => 'Manage Your Institution',
+                'route' => 'institution/edit'
+            ),
+            'users' => array(
+                'label' => 'Manage Your Institution\'s Users',
+                'route' => 'institution/users'
+            ),
+            'logout' => array(
+                'label' => 'Sign Out',
+                'route' => 'zfcuser/logout',
+            )
+        )
+    );
+}
+
+function getDataMenu()
+{
+    return array(
+        'label' => 'Data Entry',
+        'route' => 'data-entry',
+        'pages' => array(
+
+        )
+    );
+}
+
+function getRenewMenu()
+{
+    return array(
+        'label' => 'Renew',
+        'route' => 'renew',
+        'class' => 'renew-nav'
     );
 }
