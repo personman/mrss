@@ -47,21 +47,23 @@
 <!-- BEGIN HEADER -->
 <header>
     <div class="container">
-        <div class="col-xs-3"><a href="#" class="btn schedule-btn" role="button">SCHEDULE DEMO</a></div>
-        <div class="col-xs-6 logo"><a href="index.html"><img class="img-responsive" src="/images/nccbp-logo.jpg" /></a></div>
-        <div class="col-xs-3">
+        <div class="row">
+            <div class="col-xs-4"><a href="/schedule-demo" class="btn schedule-btn" role="button">SCHEDULE DEMO</a></div>
+            <div class="col-xs-4 logo"><a href="index.html"><img class="img-responsive" src="/images/nccbp-logo.jpg" /></a></div>
+            <div class="col-xs-4">
 
-            <?php if(!$this->zfcUserIdentity()): ?>
-                <a href="#" class="btn login-btn" role="button" id="loginButton">LOGIN</a>
-                <div id="headerLoginForm">
-                    <? $form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
-                    $form->get('identity')->setAttribute('placeHolder', 'Email');
-                    $form->get('credential')->setAttribute('placeHolder', 'Password');
-                    ?>
-                    <?= $this->zfcUserLoginWidget() ?>
-                </div>
-            <?php endif ?>
+                <?php if(!$this->zfcUserIdentity()): ?>
+                    <a href="#" class="btn login-btn" role="button" id="loginButton">SIGN IN</a>
+                    <div id="headerLoginForm">
+                        <? $form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
+                        $form->get('identity')->setAttribute('placeHolder', 'Email');
+                        $form->get('credential')->setAttribute('placeHolder', 'Password');
+                        ?>
+                        <?= $this->zfcUserLoginWidget() ?>
+                    </div>
+                <?php endif ?>
 
+            </div>
         </div>
         <div class="col-xs-12">
 

@@ -1,3 +1,7 @@
+<?php if ($this->currentStudy()->getId() == 1): ?>
+    <?php $this->layout('layout/nccbp.phtml') ?>
+<?php endif ?>
+
 <h2>Forbidden</h2>
 
 <p>In order to access the requested page, you need to be logged in and have sufficient permissions.</p>

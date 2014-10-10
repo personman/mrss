@@ -1043,6 +1043,18 @@ return array(
                     )
                 )
             ),
+            'schedule-demo' => array(
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/schedule-demo',
+                    'defaults' => array(
+                        'controller' => 'PhlyContact\Controller\Contact',
+                        'action' => 'index',
+                        'subject' => 'Schedule Demo'
+                    )
+                )
+            ),
             // CMS:
             'cmsPage' => array(
                 'type' => 'segment',

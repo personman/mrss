@@ -6,6 +6,18 @@ use PhlyContact\Controller\ContactController as PhlyController;
 
 class ContactController extends PhlyController
 {
+
+    public function indexAction()
+    {
+        $subject = $this->params()->fromRoute('subject');
+        if ($subject) {
+            $this->form->get('subject')->setValue($subject);
+        }
+
+        return array(
+            'form' => $this->form,
+        );
+    }
     /**
      * Override this function to add MRSS info to the email
      *
