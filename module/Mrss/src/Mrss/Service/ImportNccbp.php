@@ -1382,6 +1382,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
 
             // Does the user already exist?
             $user = $this->getUserModel()->findOneByEmail($row['mail']);
+            $newUser = false;
             if (empty($user)) {
                 $user = new User;
                 $newUser = true;
