@@ -89,8 +89,8 @@ return array(
                     'roles' => array('guest')
                 ),
                 array(
-                    'controller' => 'college',
-                    'action' => 'index',
+                    'controller' => 'colleges',
+                    'action' => 'peers',
                     'roles' => array('guest')
                 ),
                 // Only authenticated users can look at these:
