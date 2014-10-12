@@ -19,7 +19,6 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 <script>
     $(document).ready(function() {
-
         // Data table
         var dataTable = $('#subscriptions').dataTable({
             // show X entries options
@@ -29,7 +28,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 
         // Map
-        $('#peer-map').vectorMap({
+        var map = $('#peer-map').vectorMap({
             map: 'us_aea_en',
             zoomOnScroll: false,
             markerStyle: {
@@ -70,17 +69,23 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             </ol>
             <h1>Peer Institutions</h1>
         </div>
+    </div>
+
+    <div class="row">
         <div class="col-xs-12">
             <p class="lead sec-intro">The following <?= count($subscriptions) ?> community colleges participated in <?= $year ?>, including but not limited to state systems and districts of New York (SUNY), Indiana (Ivy Tech), Missouri, Pennsylvania, Wyoming, Hawaii, Wyoming, Maricopa, Dallas. <span class="bold">Click on states in the map below to filter the list.</span></p>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-md-12 sec-image">
-        <div id="past-participants"><div id='peer-map' style='width: 940px; height: 430px'></div>
-        <script>
+            <div id="past-participants"><div id='peer-map' style='width: 940px; height: 430px'></div>
+        </div>
 
-        </script>
+    </div>
 
-            </div>
+    <div class="row">
+
         <div class="col-md-12 whowehelp-content">
             <table class="table table-striped" id="subscriptions">
                 <thead>
