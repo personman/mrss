@@ -28,6 +28,11 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 
         // Map
+        var width = $('#peer-map').parent().width();
+        var height = width * 0.45
+        $('#peer-map').css('width', width + 'px')
+        $('#peer-map').css('height', height + 'px')
+
         var map = $('#peer-map').vectorMap({
             map: 'us_aea_en',
             zoomOnScroll: false,
