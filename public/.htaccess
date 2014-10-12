@@ -14,12 +14,6 @@ RewriteRule ^(.*)$ http://maximizingresources.org/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} nccwtbp\.org [NC]
 RewriteRule ^(.*)$ http://workforceproject.org/$1 [R=301,L]
 
-#favicon
-RewriteCond %{HTTP_HOST} ^nccbp.org$ [NC]
-RewriteRule ^favicon\.ico$ images/nccbp-favicon.ico [L,NC]
-
-RewriteCond %{HTTP_HOST} ^new.nccbp.org$ [NC]
-RewriteRule ^favicon\.ico$ images/nccbp-favicon.ico [L,NC]
 
 
 # The following rule tells Apache that if the requested filename
@@ -37,3 +31,13 @@ RewriteRule ^.*$ - [NC,L]
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]
 RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
+
+#favicon
+RewriteCond %{HTTP_HOST} ^nccbp.org$ [NC]
+RewriteRule ^favicon\.ico$ images/nccbp-favicon.ico [L,NC]
+
+RewriteCond %{HTTP_HOST} ^new.nccbp.org$ [NC]
+RewriteRule ^favicon\.ico$ images/nccbp-favicon.ico [L,NC]
+
+RewriteCond %{HTTP_HOST} ^alpha.nccbp.dan.com$ [NC]
+RewriteRule ^favicon\.ico$ images/nccbp-favicon.ico [L,NC]

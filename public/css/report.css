@@ -2,7 +2,7 @@
     margin-top: 30px;
 }
 
-tr.topHeading th {
+.table > thead > tr.topHeading th {
     background: #608CC0;
     color: #FFF;
     text-align: center;
@@ -13,9 +13,10 @@ tr.topHeading th.benchmarkGroupTitle {
     color: #000;
 }
 
-tr.secondHeading th {
+.table > thead > tr.secondHeading th {
     background: #DCE6F1;
     text-align: center;
+    color: #000;
 }
 
 .report tbody td {
