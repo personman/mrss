@@ -45,6 +45,10 @@ header { width: 100%; background-color: #FFFFFF; }
 .logo { text-align: center; padding: 1% 0; }
 .logo img { display: inherit; }
 
+.btn {
+    font-style: normal;
+}
+
 header .btn { font-family: 'Fira Sans', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 1px;  margin-top: 11%; }
 a.schedule-btn {  background: #004f8c; color: #F7F7F7; }
 a.login-btn {  background: #9cc03e; color: #F7F7F7; float: right;  }
