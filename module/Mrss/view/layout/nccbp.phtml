@@ -79,6 +79,19 @@
 
             </div>
         </div>
+
+        <?php if(!$this->zfcUserIdentity()): ?>
+        <div class="row" id="actionItems">
+            <div class="col-xs-6">
+                <a href="/schedule-demo" class="btn schedule-btn" role="button">SCHEDULE DEMO</a>
+            </div>
+
+            <div class="col-xs-6">
+                <a href="/user/login" class="btn login-btn" role="button">SIGN IN</a>
+            </div>
+        </div>
+        <?php endif ?>
+
         <div class="col-xs-12">
 
             <nav class="navbar navbar-default" role="navigation">

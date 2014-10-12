@@ -331,6 +331,18 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     min-height: 0;
 }
 
+#actionItems {
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+#actionItems .login-btn {
+    float: none;
+}
+header #actionItems .btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
