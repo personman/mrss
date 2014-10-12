@@ -88,6 +88,11 @@ return array(
                     'action' => 'search',
                     'roles' => array('guest')
                 ),
+                array(
+                    'controller' => 'college',
+                    'action' => 'index',
+                    'roles' => array('guest')
+                ),
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'users',

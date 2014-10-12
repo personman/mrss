@@ -1,0 +1,108 @@
+<?php
+$this->headScript()->appendFile(
+    '/map/jquery-jvectormap-1.2.2.min.js',
+    'text/javascript'
+);
+$this->headScript()->appendFile(
+    '/map/jquery-jvectormap-us-aea-en.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/map/jquery-jvectormap-1.2.2.css');
+?>
+
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.css"/>
+<script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        // Data table
+        var dataTable = $('#subscriptions').dataTable({
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
+
+
+        // Map
+        $('#peer-map').vectorMap({
+            map: 'us_aea_en',
+            zoomOnScroll: false,
+            markerStyle: {
+                initial: {
+                    fill: '#336699'
+                },
+                hover: {
+                    fill: '#8BAF42'
+                }
+            },
+            regionStyle: {
+                initial: {
+                    fill: '#FFFFFF',
+                    stroke: '#7bc6f6',
+                    "stroke-width": 1,
+                    "stroke-opacity": 1
+                },
+                hover: {
+                    fill: '#d3ecfc'
+                }
+            },
+            markers: <?= $markers ?>,
+            onRegionClick: function(event, code) {
+                code = code.replace('US-', '')
+                dataTable.fnFilter(code, 1)
+            }
+        });
+    });
+</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 sec-header">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">Who We Help</li>
+            </ol>
+            <h1>Peer Institutions</h1>
+        </div>
+        <div class="col-xs-12">
+            <p class="lead sec-intro">The following <?= count($subscriptions) ?> community colleges participated in <?= $year ?>, including but not limited to state systems and districts of New York (SUNY), Indiana (Ivy Tech), Missouri, Pennsylvania, Wyoming, Hawaii, Wyoming, Maricopa, Dallas. <span class="bold">Click on states in the map below to filter the list.</span></p>
+        </div>
+
+        <div class="col-md-12 sec-image">
+        <div id="past-participants"><div id='peer-map' style='width: 940px; height: 430px'></div>
+        <script>
+
+        </script>
+
+            </div>
+        <div class="col-md-12 whowehelp-content">
+            <table class="table table-striped" id="subscriptions">
+                <thead>
+                <tr>
+                    <th>Institution</th>
+                    <th>State</th>
+                    <th>System</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <?php foreach ($subscriptions as $subscription): ?>
+
+                    <tr>
+                        <td><?= $subscription->getCollege()->getName() ?></td>
+                        <td><?= $subscription->getCollege()->getState() ?></td>
+                        <td>
+                            <?php if ($system = $subscription->getCollege()->getSystem()): ?>
+                                <?= $system->getName() ?>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -103,4 +103,74 @@ class ToolController extends AbstractActionController
             'form' => $form
         );
     }
+
+    public function geocodeAction()
+    {
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $subscriptionModel = $this->getServiceLocator()
+            ->get('model.college');
+
+
+        $colleges = $collegeModel->findAll();
+        $attempt = $found = 0;
+        $notFound = array();
+        foreach ($colleges as $college)
+        {
+            if ($college->getLatitude()) {
+                continue;
+            }
+
+
+            $address = $college->getFullAddress();
+            $address = str_replace('<br>', ',', $address);
+            $geo = $this->geocode($address);
+            $attempt++;
+
+            if ($geo) {
+                $college->setLatitude($geo['lat']);
+                $college->setLongitude($geo['lon']);
+
+                $collegeModel->save($college);
+                $found++;
+            } else {
+                $notFound[] = "Not found: " . $college->getName() . "<br>" .
+                    $address;
+            }
+        }
+
+        $collegeModel->getEntityManager()->flush();
+
+        $message = "$found colleges geocoded (of $attempt attempts). <br>";
+        $message .= implode('<br><br>', $notFound);
+
+        $this->flashMessenger()->addSuccessMessage($message);
+
+        return $this->redirect()->toUrl('/tools');
+    }
+
+    public function geocode($address)
+    {
+        $address = urlencode($address);
+        $url = "http://maps.googleapis.com/maps/api/geocode/json?address=$address&sensor=false";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $json = curl_exec($ch);
+        $info = json_decode($json, true);
+
+        if ($info['status'] == 'OK') {
+            $lat = $info['results'][0]['geometry']['location']['lat'];
+            $lon = $info['results'][0]['geometry']['location']['lng'];
+
+            return array(
+                'lat' => $lat,
+                'lon' => $lon
+            );
+        } else {
+            //var_dump($address);
+            //var_dump($info);
+        }
+
+        return false;
+    }
 }

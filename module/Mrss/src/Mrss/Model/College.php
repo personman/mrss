@@ -36,6 +36,7 @@ class College extends AbstractModel
 
     /**
      * Find all colleges, ordered by name
+     * @return \Mrss\Entity\College[]
      */
     public function findAll()
     {

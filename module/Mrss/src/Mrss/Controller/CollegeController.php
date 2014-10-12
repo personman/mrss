@@ -62,6 +62,54 @@ class CollegeController extends AbstractActionController
         return array('colleges' => $Colleges->findAll());
     }
 
+    public function peersAction()
+    {
+        // Get a list of subscriptions to the current study
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $studyId = $this->currentStudy()->getId();
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        $subscriptions = $subscriptionModel->findByStudyAndYear(
+            $studyId,
+            $year
+        );
+
+        $showCompletion = (count($subscriptions) < 100);
+
+        // Years for tabs
+        $years = $this->getServiceLocator()->get('model.subscription')
+            ->getYearsWithSubscriptions($this->currentStudy());
+        rsort($years);
+
+        // Map markers
+        $markers = array();
+        foreach ($subscriptions as $subscription) {
+            $college = $subscription->getCollege();
+            $lat = $college->getLatitude();
+            $lon = $college->getLongitude();
+
+            if ($lat && $lon) {
+                $markers[] = array(
+                    'latLng' => array($lat, $lon),
+                    'name' => $college->getName()
+                );
+            }
+        }
+        $markers = json_encode($markers);
+
+        return array(
+            'subscriptions' => $subscriptions,
+            'year' => $year,
+            'years' => $years,
+            'markers' => $markers
+        );
+    }
+
     public function editAction()
     {
         $form = new AbstractForm('college');

@@ -287,6 +287,30 @@ class College
         return $this->execLastName;
     }
 
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
     public function setObservations($observations)
     {
         $this->observations = $observations;

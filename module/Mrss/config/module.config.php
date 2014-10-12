@@ -387,6 +387,18 @@ return array(
                     ),
                 ),
             ),
+            'peer-institutions' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/peers',
+                    'defaults' => array(
+                        'controller' => 'colleges',
+                        'action' => 'peers'
+                    )
+                ),
+            ),
             'colleges' => array(
                 'type' => 'segment',
                 'priority' => 10,
@@ -1038,6 +1050,15 @@ return array(
                             'route' => '/exceldiff',
                             'defaults' => array(
                                 'action' => 'exceldiff'
+                            )
+                        )
+                    ),
+                    'geocode' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/geocode',
+                            'defaults' => array(
+                                'action' => 'geocode'
                             )
                         )
                     )
