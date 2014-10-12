@@ -1,7 +1,14 @@
-<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.css"/>
-<script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<?php
 
-<script>
+// Data Tables
+$this->headScript()->appendFile(
+'/js/jquery.dataTables.min.js',
+'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+        <script>
     $(document).ready(function() {
         $('#subscriptions').dataTable({
             'aoColumnDefs': [

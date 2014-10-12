@@ -1,4 +1,26 @@
-<?php /** @var \Mrss\Entity\Page[] $pages */ ?>
+<?php
+
+// Data Tables
+$this->headScript()->appendFile(
+'/js/jquery.dataTables.min.js',
+'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+<script>
+    $(document).ready(function() {
+
+        // Data table
+        var dataTable = $('#pages').dataTable({
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
+    })
+</script>
+
+        <?php /** @var \Mrss\Entity\Page[] $pages */ ?>
 
 <h2>Pages</h2>
 
@@ -9,7 +31,7 @@
     </a>
 </p>
 
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered" id="pages">
     <thead>
         <tr>
             <th>Title</th>
