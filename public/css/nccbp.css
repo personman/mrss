@@ -33,7 +33,7 @@ h1, .page-header h2 { font-family: 'Fira Sans', sans-serif; font-size: 30px; fon
 h2 { font-size: 20px; font-weight: 700; line-height: 24px; text-transform: uppercase; color: #00508d; margin: 0px; }
 
 p { font-size: 16px; font-weight: 400; line-height: 24px; }
-a, a:visited { color: #000000; }
+a, a:visited { color: #004f8c; }
 a:hover { text-decoration: none; }
 
 .darkblue { color: #00508d; }
@@ -133,6 +133,7 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
 
 #headerLoginForm {
     display: none;
+    padding-top: 15px;
 }
 
 /* Hide the heading, forgot password link and errors */
@@ -191,6 +192,10 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     margin: 0px;
 }
 
+
+.report-nav {
+    margin-bottom: 15px;
+}
 
 
 /* BenchmarkGroup progress */

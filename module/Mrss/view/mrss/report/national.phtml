@@ -5,15 +5,15 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
-<h2>
+<h1>
     <?php if (empty($system)): ?>
         Report of National Aggregate Data
     <?php else: ?>
         <?= $system->getName() ?> Report
     <?php endif ?>
-</h2>
+</h1>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-pills report-nav">
     <?php foreach ($subscriptions as $subscription): ?>
         <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
             <a href="<?= $this->url('reports/' . $reportPath, array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
