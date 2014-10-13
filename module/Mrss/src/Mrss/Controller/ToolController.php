@@ -114,8 +114,7 @@ class ToolController extends AbstractActionController
         $colleges = $collegeModel->findAll();
         $attempt = $found = 0;
         $notFound = array();
-        foreach ($colleges as $college)
-        {
+        foreach ($colleges as $college) {
             if ($college->getLatitude()) {
                 continue;
             }

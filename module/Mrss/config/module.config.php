@@ -33,6 +33,18 @@ return array(
                 )
             ),
 
+            'submitted-values' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/submitted-values[/:year]',
+                    'defaults' => array(
+                        'controller' => 'observations',
+                        'action' => 'submittedValues',
+                        'year' => null
+                    )
+                )
+            ),
             // Data entry route with benchmarkGroup id
             // We could support a benchmarkGroup short name for nicer urls in the
             // future

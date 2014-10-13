@@ -764,6 +764,87 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    public function submittedValuesAction()
+    {
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->getCurrentStudy()->getCurrentYear();
+        }
+
+        // Get their subscriptions
+        $subscriptions = $this->currentCollege()
+            ->getSubscriptionsForStudy($this->getCurrentStudy());
+
+        // Get the observation
+        /** @var \Mrss\Model\Observation $ObservationModel */
+        $ObservationModel = $this->getServiceLocator()->get('model.observation');
+        $observation = $ObservationModel->findOne(
+            $this->currentCollege(),
+            $year
+        );
+
+        // We'll use the report service to determine decimal places
+        $reportService = $this->getServiceLocator()->get('service.report');
+
+        if (empty($observation)) {
+            $collegeId = $this->currentCollege()->getId();
+            throw new \Exception(
+                "Observation not found for college $collegeId and year $year."
+            );
+        }
+
+        $submittedValues = array();
+
+        // Get the benchmark groups
+        $benchmarkGroups = $this->getCurrentStudy()->getBenchmarkGroups();
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            $groupData = array(
+                'benchmarkGroup' => $benchmarkGroup->getName(),
+                'benchmarks' => array()
+            );
+            $benchmarks = $benchmarkGroup->getChildren($year);
+
+            foreach ($benchmarks as $benchmark) {
+                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                    /** @var \Mrss\Entity\BenchmarkHeading $heading */
+                    $heading = $benchmark;
+                    $groupData['benchmarks'][] = array(
+                        'heading' => true,
+                        'name' => $heading->getName()
+                    );
+                    continue;
+                }
+
+                $prefix = $suffix = '';
+                if ($benchmark->isPercent()) {
+                    $suffix = '%';
+                } elseif ($benchmark->isDollars()) {
+                    $prefix = '$';
+                }
+
+                $value = $observation->get($benchmark->getDbColumn());
+                if (!is_null($value)) {
+                    $decimalPlaces = $reportService->getDecimalPlaces($benchmark);
+                    $value = $prefix .
+                        number_format($value, $decimalPlaces) .
+                        $suffix;
+                }
+                $groupData['benchmarks'][] = array(
+                    'benchmark' => $benchmark,
+                    'value' => $value
+                );
+            }
+
+            $submittedValues[] = $groupData;
+        }
+
+        return array(
+            'subscriptions' => $subscriptions,
+            'year' => $year,
+            'submittedValues' => $submittedValues
+        );
+    }
+
     /**
      * Get field metadata from the benchmark entity
      *
@@ -804,5 +885,13 @@ class ObservationController extends AbstractActionController
     public function getVariableSubstitutionService()
     {
         return $this->getServiceLocator()->get('service.variableSubstitution');
+    }
+
+    /**
+     * @return \Mrss\Entity\Study
+     */
+    protected function getCurrentStudy()
+    {
+        return $this->currentStudy();
     }
 }

@@ -59,7 +59,7 @@
             'benchmarkgroups/add',
             array('study' => $study->getId())
         )?>">
-            <span class="icon-plus-sign"></span>
+            <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
             Add a benchmark group
         </a>
     </li>
@@ -68,7 +68,7 @@
             'studies/export',
             array('id' => $study->getId())
         ) ?>">
-            <span class="icon-download"></span>
+            <span class="icon-download glyphicon glyphicon-download"></span>
             Export benchmark setup to csv
         </a>
     </li>
@@ -79,7 +79,7 @@
         ) ?>" onclick="return confirm(
         'This will make permanent changes to the data. Are you sure you want to do this?')
         ">
-            <span class="icon-upload"></span>
+            <span class="icon-upload glyphicon glyphicon-upload"></span>
             Import benchmark setup from csv
         </a>
     </li>
@@ -97,7 +97,7 @@
 
     <ul class="benchmarkGroupControls">
         <li>
-            <span class="icon-cog"></span>
+            <span class="icon-cog glyphicon glyphicon-cog"></span>
             <a href="<?= $this->url(
                 'benchmarkgroups/edit',
                 array('id' => $benchmarkGroup->getId())
@@ -105,7 +105,7 @@
         </li>
 
         <li>
-            <span class="icon-plus-sign"></span>
+            <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
             <a href="<?= $this->url(
                 'benchmark/add',
                 array('benchmarkGroup' => $benchmarkGroup->getId())
@@ -113,7 +113,7 @@
         </li>
 
         <li>
-            <span class="icon-edit"></span>
+            <span class="icon-edit glyphicon glyphicon-edit"></span>
             <a href="<?= $this->url(
                 'data-entry/edit',
                 array('benchmarkGroup' => $benchmarkGroup->getId())
@@ -158,13 +158,13 @@
 
                     <td style="text-align:center">
                         <?php if ($benchmark->getComputed()): ?>
-                            <i class="icon-ok infotip" title="<?= $benchmark->getEquation() ?>"></i>
+                            <i class="icon-ok glyphicon glyphicon-ok infotip" title="<?= $benchmark->getEquation() ?>"></i>
                         <?php endif ?>
                     </td>
 
                     <td style="text-align:center">
                         <?php if ($benchmark->getIncludeInNationalReport()): ?>
-                            <i class="icon-ok"></i>
+                            <i class="icon-ok glyphicon glyphicon-ok"></i>
                         <?php endif ?>
                     </td>
 
@@ -210,7 +210,7 @@
                 <?php $heading = $row ?>
                 <tr class="subGroup" id="heading_<?= $heading->getId() ?>">
                     <td class="sortHandle">
-                        <span class="icon-move"></span>
+                        <span class="icon-move glyphicon glyphicon-move"></span>
                     </td>
                     <td colspan="<?= (6 + count($this->yearsToShow)) ?>"><h4><?= $heading->getName() ?></h4></td>
                 </tr>

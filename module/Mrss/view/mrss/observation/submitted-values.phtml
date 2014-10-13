@@ -1,0 +1,61 @@
+<style type="text/css">
+    html table.table.submittedValues {
+        width: 50%;
+    }
+    td.value {
+        text-align: right;
+    }
+    td.computed {
+        font-style: italic;
+        color: #888;
+    }
+    .submittedValues h2 {
+        padding-top: 20px;
+    }
+    .submittedValues h3 {
+        font-size: 19px;
+    }
+</style>
+
+<h1>Submitted Values</h1>
+
+<ul class="nav nav-pills report-nav">
+    <?php foreach ($subscriptions as $subscription): ?>
+        <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
+            <a href="<?= $this->url('submitted-values', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
+        </li>
+    <?php endforeach ?>
+</ul>
+
+<p>
+    <strong>Please note:</strong> The website has created the values in grey italics based on the data you entered.
+</p>
+
+<table class="table submittedValues">
+<?php foreach ($submittedValues as $benchmarkGroup): ?>
+    <thead>
+        <tr>
+            <th colspan="2">
+                <h2><?= $benchmarkGroup['benchmarkGroup'] ?></h2>
+            </th>
+        </tr>
+    </thead>
+
+    <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
+        <tr>
+
+        <?php if (!empty($benchmark['heading'])): ?>
+            <td colspan="2">
+                <h3><?= $benchmark['name'] ?></h3>
+            </td>
+
+        <?php else: ?>
+            <?php $b = $benchmark['benchmark'] ?>
+            <?php $class = ($b->getComputed()) ? 'computed' : 'submitted' ?>
+            <td class="<?= $class ?>"><?= $b->getName() ?></td>
+            <td class="value <?= $class ?>"><?= $benchmark['value'] ?></td>
+        <?php endif ?>
+        </tr>
+    <?php endforeach ?>
+<?php endforeach ?>
+</table>
