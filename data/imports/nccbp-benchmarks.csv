@@ -1,7 +1,9 @@
 benchmarkGroup,name,reportLabel,peerReportLabel,descriptiveReportLabel,yearPrefix,yearOffset,dbColumn,inputType,description,options,computed,equation,excludeFromCompletion,includeInNationalReport,includeInBestPerformer,highIsBetter,yearsAvailable
+"Form 1: Subscriber Information","Service Area",,,,,,,heading,
 "Form 1: Subscriber Information","Total Population","Service Area Total Population","Service Area Total Population","Service Area Total Population",Fall,2,total_pop,number,"<strong>Service Area Total Population</strong> should reflect state's definition of your institution's service area, most recent census estimates, and include all age groups.",,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","Unemployment Rate","Service Area Unemployment Rate","Service Area Unemployment Rate","Service Area Unemployment Rate",Fall,2,unemp_rate,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","Median Household Income","Service Area Median Household Income","Service Area Median Household Income","Service Area Median Household Income",Fall,2,med_hhold_inc,dollars,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
+"Form 1: Subscriber Information","Enrollment Information",,,,,,,heading,
 "Form 1: Subscriber Information","IPEDS Fall Enrollment","IPEDS Enrollment","IPEDS Enrollment","IPEDS Enrollment",Fall,2,ipeds_enr,number,"<strong>Full-time Credit Headcount</strong> plus <strong>Part-time Credit Headcount</strong> should equal <strong>IPEDS Enrollment</strong>.",,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","Full-time Credit Headcount","Full-time Credit Headcount","Full-time Credit Headcount","Full-time Credit Headcount",Fall,2,ft_cr_head,number,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","Part-time Credit Headcount","Part-time Credit Headcount","Part-time Credit Headcount","Part-time Credit Headcount",Fall,2,pt_cr_head,number,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
@@ -15,6 +17,7 @@ benchmarkGroup,name,reportLabel,peerReportLabel,descriptiveReportLabel,yearPrefi
 "Form 1: Subscriber Information","Credit Student Median Age","Credit Student Median Age","Credit Student Median Age","Credit Student Median Age",Fall,2,crd_stud_minc,number,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","Female Credit Students","% Female Credit Students","% Female Credit Students","% Female Credit Students",Fall,2,fem_cred_stud,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","First-generation Student","First-generation Student","First-generation Student","First-generation Student",,0,first_gen_students,percent,"<strong>First-generation Student</strong> should be the percent of fall credit students that represent the first generation of their families to attend a higher education institution.",,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 1: Subscriber Information","Race/Ethnicity",,,,,,,heading,
 "Form 1: Subscriber Information","Nonresident Alien","% Nonresident Alien","% Nonresident Alien","% Nonresident Alien",Fall,2,non_res_alien,percent,,,,,,1,,,"2007,2008,2009,2010,2011"
 "Form 1: Subscriber Information","Nonresident Alien","% Nonresident Alien","% Nonresident Alien","% Nonresident Alien",Fall,2,non_res_alien_2012,percent,,,,,,1,1,1,"2012,2013,2014,2015"
 "Form 1: Subscriber Information","Black, Non-Hispanic","% Black, Non-Hispanic","% Black, Non-Hispanic","% Black, Non-Hispanic",Fall,2,blk_n_hisp,percent,,,,,,1,,,"2007,2008,2009,2010,2011"
@@ -31,6 +34,7 @@ benchmarkGroup,name,reportLabel,peerReportLabel,descriptiveReportLabel,yearPrefi
 "Form 1: Subscriber Information","White, Non-Hispanic","% White, Non-Hispanic","% White, Non-Hispanic","% White, Non-Hispanic",Fall,2,wht_n_hisp,percent,,,,,,1,,,"2007,2008,2009,2010,2011"
 "Form 1: Subscriber Information","Race/Ethnicity Unknown","% Race/Ethnicity Unknown","% Race/Ethnicity Unknown","% Race/Ethnicity Unknown",Fall,2,race_eth_unk,percent,,,,,,1,,,"2007,2008,2009,2010,2011"
 "Form 1: Subscriber Information","Race and Ethnicity Unknown","% Race/Ethnicity Unknown","% Race/Ethnicity Unknown","% Race/Ethnicity Unknown",Fall,2,race_eth_unk_2012,percent,,,,,,1,1,1,"2012,2013,2014,2015"
+"Form 1: Subscriber Information","Fiscal Information",,,,,,,heading,
 "Form 1: Subscriber Information","Tuition and Fees per Credit Hour","Tuition and Fees per Credit Hour","Tuition and Fees per Credit Hour","Tuition and Fees per Credit Hour",Fall,2,tuition_fees,dollars,"<p>
 Use fall 2012 data.
 </p>
@@ -46,6 +50,7 @@ Use fiscal year 2013 data.
 <p>
 <strong>Unrestricted Operating Revenue</strong> is defined by the National Association of College and University Business Officers (NACUBO) as ""resources received that have no limitations or stipulations placed on them by external agencies or donors.""
 </p>",,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
+"Form 1: Subscriber Information","Operating Revenue Sources",,,,,,,heading,
 "Form 1: Subscriber Information","From Local Sources","% Funds From Local Sources","% Funds From Local Sources","% Funds From Local Sources",FY,1,loc_sour,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","From State","% Funds From State","% Funds From State","% Funds From State",FY,1,state_sour,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","From Tuition & Fees","% Funds From Tuition and Fees","% Funds From Tuition and Fees","% Funds From Tuition and Fees",FY,1,tuition_fees_sour,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
