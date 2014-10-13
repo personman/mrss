@@ -97,7 +97,7 @@ class SystemAdmin extends AbstractHelper
                 'type' => 'Submit',
                 'attributes' => array(
                     'value' => 'Switch',
-                    'class' => 'btn'
+                    'class' => 'btn btn-default'
                 )
             )
         );
