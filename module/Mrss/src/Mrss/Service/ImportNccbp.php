@@ -1138,9 +1138,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     /**
      * Return some import meta data
      *
+     * @param bool $all
      * @return array
      */
-    public function getImports()
+    public function getImports($all = false)
     {
         $imports = array(
             'colleges' => array(
@@ -1169,7 +1170,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             )*/
         );
 
-        if (empty($_GET['all'])) {
+        if (empty($_GET['all']) && !$all) {
             unset($imports['colleges']);
             unset($imports['systems']);
             unset($imports['users']);

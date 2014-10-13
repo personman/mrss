@@ -37,7 +37,7 @@ class ImportController extends AbstractActionController
         $type = $this->params()->fromQuery('type');
         $year = $this->params()->fromQuery('year');
 
-        $imports = $this->getImports();
+        $imports = $this->getImports(true);
 
         if (empty($imports[$type])) {
             throw new \Exception('Invalid import type.');
@@ -89,7 +89,7 @@ class ImportController extends AbstractActionController
             $year = $this->params('year');
         }
 
-        $imports = $this->getImports();
+        $imports = $this->getImports(true);
 
         if (empty($imports[$type])) {
             throw new \Exception("'$type' is an invalid import type.");
@@ -199,9 +199,9 @@ class ImportController extends AbstractActionController
         return $this->redirect()->toUrl('/colleges');
     }
 
-    protected function getImports()
+    protected function getImports($all = false)
     {
-        return $this->getServiceLocator()->get('import.nccbp')->getImports();
+        return $this->getServiceLocator()->get('import.nccbp')->getImports($all);
     }
 
     public function disableQueryLogging()
