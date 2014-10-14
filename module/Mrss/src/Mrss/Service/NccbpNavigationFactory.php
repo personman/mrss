@@ -24,13 +24,6 @@ class NccbpNavigationFactory extends NavigationFactory
         //$pages = parent::getPages($serviceLocator);
         $pages = parent::getPagesArray($serviceLocator);
 
-        if ($system) {
-            $label = $system->getName() . ' Report';
-            $pages['reports']['pages']['system']['label'] = $label;
-        } else {
-            unset($pages['reports']['pages']['system']);
-        }
-
         // If the user is logged in, hide some stuff
         if ($auth->hasIdentity()) {
             unset($pages['nccbp']);

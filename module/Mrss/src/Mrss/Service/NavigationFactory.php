@@ -58,6 +58,7 @@ class NavigationFactory extends DefaultNavigationFactory
         $impersonationService = $serviceLocator
             ->get('zfcuserimpersonate_user_service');
 
+        $system = null;
 
         if ($auth->hasIdentity()) {
             // If the user is logged in, hide the login and subscription links
@@ -70,6 +71,10 @@ class NavigationFactory extends DefaultNavigationFactory
             // Since they're logged in, also change the home page
             unset($pages['home']['route']);
             $pages['home']['uri'] = '/members';
+
+            // Do they belong to a system?
+            $user = $auth->getIdentity();
+            $system = $user->getCollege()->getSystem();
         } else {
             // If they're logged out, hide the logout button
             unset($pages['logout']);
@@ -89,6 +94,16 @@ class NavigationFactory extends DefaultNavigationFactory
             // Data doc
             unset($pages['data-documentation']);
         }
+
+
+        // Rename or hide system report link
+        if ($system) {
+            $label = $system->getName() . ' Report';
+            $pages['reports']['pages']['system']['label'] = $label;
+        } else {
+            unset($pages['reports']['pages']['system']);
+        }
+
 
 
         if ($auth->hasIdentity()) {
