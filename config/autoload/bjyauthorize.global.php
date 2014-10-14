@@ -106,7 +106,7 @@ return array(
                 ),
                 array(
                     'controller' => 'studies',
-                    'action' => 'dictionary',
+                    'action' => array('dictionary', 'calculations'),
                     'roles' => array('user')
                 ),
 
