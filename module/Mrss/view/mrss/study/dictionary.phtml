@@ -1,0 +1,46 @@
+<?php /** @var \Mrss\Entity\Study $study */ ?>
+<style type="text/css">
+    #data-dictionary h2{
+        margin: 35px 0 15px 0;
+    }
+
+    #data-dictionary .row {
+        border: 2px solid #eee;
+        padding: 15px;
+        margin: 5px 0;
+        background: white;
+    }
+
+    #data-dictionary .benchmarkName {
+        font-size: 120%;
+        font-weight: bold;
+    }
+</style>
+
+<h1>Data Dictionary for <?= $this->currentStudy()->getName() ?></h1>
+
+<div id="data-dictionary">
+<?php foreach ($study->getBenchmarkGroups() as $benchmarkGroup): ?>
+    <h2><?= $benchmarkGroup->getName() ?></h2>
+
+    <?php foreach ($benchmarkGroup->getChildren(null, false) as $benchmark): ?>
+        <?php if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading'): ?>
+            <?php // Skip subheadings for NCCBP form 2 ?>
+            <?php if ($benchmarkGroup->getId() == '2') continue ?>
+
+            <h3><?= $benchmark->getName() ?></h3>
+        <?php else: ?>
+            <div class="row">
+                <div class="col-md-3 benchmarkName">
+                    <?= $benchmark->getName() ?>
+                </div>
+
+                <div class="col-md-9 benchmarkDescription">
+                    <?= $benchmark->getDescription() ?>
+                </div>
+            </div>
+        <?php endif ?>
+
+    <?php endforeach ?>
+<?php endforeach ?>
+</div>

@@ -160,6 +160,18 @@ class StudyController extends AbstractActionController
     }
 
     /**
+     * List all the benchmarks with their data definitions
+     */
+    public function dictionaryAction()
+    {
+        $study = $this->currentStudy();
+
+        return array(
+            'study' => $study
+        );
+    }
+
+    /**
      * @param integer $id
      * @throws \Exception
      * @return Study

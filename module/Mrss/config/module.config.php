@@ -232,6 +232,17 @@ return array(
                     )
                 )
             ),
+            'data-dictionary' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/data-dictionary',
+                    'defaults' => array(
+                        'controller' => 'studies',
+                        'action' => 'dictionary'
+                    )
+                )
+            ),
             'offercodes' => array(
                 'type' => 'segment',
                 'may_terminate' => true,

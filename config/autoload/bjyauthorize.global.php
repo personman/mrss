@@ -104,6 +104,11 @@ return array(
                     'action' => 'unimpersonateUser',
                     'roles' => array('user', 'admin')
                 ),
+                array(
+                    'controller' => 'studies',
+                    'action' => 'dictionary',
+                    'roles' => array('user')
+                ),
 
                 // Report viewers:
                 array(

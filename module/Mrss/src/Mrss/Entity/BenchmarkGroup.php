@@ -511,10 +511,18 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->inputFilter;
     }
 
-    public function getChildren($year = null)
+    public function getChildren($year = null, $includeComputed = true)
     {
         $children = array();
-        foreach ($this->getBenchmarksForYear($year) as $benchmark) {
+
+        // Include computed?
+        if ($includeComputed) {
+            $benchmarks = $this->getBenchmarksForYear($year);
+        } else {
+            $benchmarks = $this->getNonComputedBenchmarksForYear($year);
+        }
+
+        foreach ($benchmarks as $benchmark) {
             $children[$benchmark->getSequence()] = $benchmark;
         }
         foreach ($this->getBenchmarkHeadings() as $heading) {
