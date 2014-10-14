@@ -251,7 +251,7 @@ class ReportController extends AbstractActionController
             // But if reports aren't open yet, show them last year's by default
             $college = $this->currentCollege();
             $isJCCC = ($college->getId() == 101);
-            if (!$isJCCC && !$this->currentStudy()->getReportsOpen()) {
+            if (/*!$isJCCC && */!$this->currentStudy()->getReportsOpen()) {
                 $year = $year - 1;
             }
         }
