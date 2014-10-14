@@ -1,0 +1,55 @@
+<style type="text/css">
+    #calculations h2{
+        margin: 35px 0 15px 0;
+    }
+
+    #calculations .row {
+        border: 2px solid #eee;
+        padding: 15px;
+        margin: 5px 0;
+        background: white;
+    }
+
+    #calculations .benchmarkName {
+        font-size: 120%;
+        font-weight: bold;
+    }
+
+    #calculations .benchmarkEquation {
+        font-size: 16px;
+    }
+
+    #calculations .benchmarkEquation span.fieldName {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+    }
+</style>
+
+<h1>Benchmark Calculations</h1>
+
+<div id="calculations">
+<?php foreach ($computedBenchmarks as $benchmarkGroup => $benchmarks): ?>
+    <h2><?= $benchmarkGroup ?></h2>
+
+    <?php if ($benchmarks): ?>
+        <?php foreach ($benchmarks as $benchmark): ?>
+        <div class="row">
+            <div class="col-md-3 benchmarkName">
+                <?= $benchmark['benchmark'] ?>
+            </div>
+
+            <div class="col-md-9 benchmarkEquation">
+                <?= $benchmark['equation'] ?>
+            </div>
+
+        </div>
+        <?php endforeach ?>
+    <?php else: ?>
+        <p>This form does not contain any calculated benchmarks.</p>
+    <?php endif ?>
+
+
+<?php endforeach ?>
+</div>
+
+<?//php prd($computedBenchmarks) ?>

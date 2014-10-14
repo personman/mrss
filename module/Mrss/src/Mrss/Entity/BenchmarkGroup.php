@@ -260,6 +260,26 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     }
 
     /**
+     * Leave out noncomputed benchmarks, we don't need to show them in the form
+     *
+     * @param $year
+     * @return \Mrss\Entity\Benchmark[]
+     */
+    public function getComputedBenchmarksForYear($year)
+    {
+        $benchmarks = $this->getBenchmarksForYear($year);
+        $computedBenchmarks = array();
+
+        foreach ($benchmarks as $benchmark) {
+            if ($benchmark->getComputed()) {
+                $computedBenchmarks[] = $benchmark;
+            }
+        }
+
+        return $computedBenchmarks;
+    }
+
+    /**
      * Leave out computed benchmarks and those those excluded from completion calc
      *
      * @param $year

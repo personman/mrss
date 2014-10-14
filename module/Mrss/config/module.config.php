@@ -243,6 +243,17 @@ return array(
                     )
                 )
             ),
+            'calculations' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/calculations',
+                    'defaults' => array(
+                        'controller' => 'studies',
+                        'action' => 'calculations'
+                    )
+                )
+            ),
             'offercodes' => array(
                 'type' => 'segment',
                 'may_terminate' => true,

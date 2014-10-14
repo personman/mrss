@@ -171,6 +171,70 @@ class StudyController extends AbstractActionController
         );
     }
 
+    public function calculationsAction()
+    {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+        $computedFields = $this->getServiceLocator()->get('computedFields');
+
+        $year = $study->getCurrentYear();
+
+        $keyedBenchmarks = $this->getBenchmarksFromStudy($study);
+        $computedBenchmarks = array();
+        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+            $computed = array();
+
+            $benchmarks = $benchmarkGroup->getComputedBenchmarksForYear($year);
+            foreach ($benchmarks as $benchmark) {
+                $equation = $benchmark->getEquation();
+                $variables = $computedFields->getVariables($equation);
+
+                foreach ($variables as $variable) {
+                    if (!empty($keyedBenchmarks[$variable])) {
+                        /** @var \Mrss\Entity\Benchmark $benchmarkToInsert */
+                        $benchmarkToInsert = $keyedBenchmarks[$variable];
+                        $fieldName = $benchmarkToInsert->getDescriptiveReportLabel();
+                        $fieldName = "<span class='fieldName'>$fieldName</span>";
+
+                        // Replace the dbColumn in the equation with a field name
+                        $variableWithBraces = '{{' . $variable . '}}';
+                        $equation = str_replace(
+                            $variableWithBraces,
+                            $fieldName,
+                            $equation
+                        );
+                    }
+                }
+
+                $computed[] = array(
+                    'benchmark' => $benchmark->getDescriptiveReportLabel(),
+                    'equation' => $equation
+                );
+            }
+
+            $computedBenchmarks[$benchmarkGroup->getName()] = $computed;
+        }
+
+        return array(
+            'computedBenchmarks' => $computedBenchmarks
+        );
+    }
+
+    /**
+     * @param \Mrss\Entity\Study $study
+     * @return array
+     */
+    protected function getBenchmarksFromStudy($study)
+    {
+        $year = $study->getCurrentYear();
+        $benchmarks = array();
+        foreach ($study->getBenchmarksForYear($year) as $benchmark) {
+            $benchmarks[$benchmark->getDbColumn()] = $benchmark;
+        }
+
+        return $benchmarks;
+    }
+
     /**
      * @param integer $id
      * @throws \Exception
