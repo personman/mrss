@@ -46,6 +46,19 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 <script>
     var map
+    // Highlight states with systems
+    var systemColor = '#9CBF3D'
+    var systemColors = {
+        'US-WY': systemColor,
+        'US-TN': systemColor,
+        'US-NY': systemColor,
+        'US-SC': systemColor,
+        'US-PA': systemColor,
+        'US-MO': systemColor,
+        'US-KY': systemColor,
+        'US-HA': systemColor,
+        'US-CO': systemColor
+    }
     $(document).ready(function() {
         // Data table
         var dataTable = $('#subscriptions').dataTable({
@@ -89,6 +102,11 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                     fill: '#d3ecfc'
                 }
             },
+            series: {
+                regions: [{
+                    values: systemColors
+                }]
+            },
             markers: <?= $markers ?>,
             onRegionClick: function(event, code) {
                 code = code.replace('US-', '')
@@ -96,6 +114,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                 $('#allStates').show()
             }
         });
+
+
 
         $('#allStates').click(function() {
             map.clearSelectedRegions()
