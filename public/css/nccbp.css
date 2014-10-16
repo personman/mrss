@@ -105,7 +105,7 @@ p.sec-intro{ border-bottom: 1px solid #999;font-family: 'Fira Sans', sans-serif;
 
 /*	WHO WE HELP */
 .table { margin-top: 2%; }
-.table > thead > tr > th { text-transform: uppercase; border-bottom: 2px solid #9cc03e; color: #286ea5; }
+.table > thead > tr > th, table.table.dataTable > thead > tr > th { text-transform: uppercase; border-bottom: 2px solid #9cc03e; color: #286ea5; }
 
 .peertable tr td { padding-left: 0 !important; }
 .peertable tr td:not(:first-child) { text-align: center; }

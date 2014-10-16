@@ -59,6 +59,28 @@ class College extends AbstractModel
         );
 
         return $query->getResult();
+    }
+
+    /**
+     * Find all colleges that have ever subscribed to the study
+     *
+     * @param StudyEntity $study
+     * @return CollegeEntity[]
+     */
+    public function findByStudy(StudyEntity $study)
+    {
+        $studyId = $study->getId();
+
+        $query = $this->getEntityManager()->createQuery(
+            "SELECT DISTINCT c
+            FROM Mrss\Entity\College c
+            INNER JOIN Mrss\Entity\Subscription s
+            WHERE s.college = c.id
+            AND s.study = $studyId
+            ORDER BY c.name ASC"
+        );
+
+        return $query->getResult();
 
     }
 

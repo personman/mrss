@@ -64,32 +64,16 @@ class CollegeController extends AbstractActionController
 
     public function peersAction()
     {
-        // Get a list of subscriptions to the current study
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        // Get a list of subscriptions to the current study for all years
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
         $studyId = $this->currentStudy()->getId();
 
-        $year = $this->params()->fromRoute('year');
-        if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
-        }
-
-        $subscriptions = $subscriptionModel->findByStudyAndYear(
-            $studyId,
-            $year
-        );
-
-        $showCompletion = (count($subscriptions) < 100);
-
-        // Years for tabs
-        $years = $this->getServiceLocator()->get('model.subscription')
-            ->getYearsWithSubscriptions($this->currentStudy());
-        rsort($years);
+        $colleges = $collegeModel->findByStudy($this->currentStudy());
 
         // Map markers
         $markers = array();
-        foreach ($subscriptions as $subscription) {
-            $college = $subscription->getCollege();
+        foreach ($colleges as $college) {
             $lat = $college->getLatitude();
             $lon = $college->getLongitude();
 
@@ -103,9 +87,7 @@ class CollegeController extends AbstractActionController
         $markers = json_encode($markers);
 
         return array(
-            'subscriptions' => $subscriptions,
-            'year' => $year,
-            'years' => $years,
+            'colleges' => $colleges,
             'markers' => $markers
         );
     }

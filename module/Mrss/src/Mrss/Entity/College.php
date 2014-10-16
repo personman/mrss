@@ -397,6 +397,9 @@ class College
         return $this;
     }
 
+    /**
+     * @return null|System
+     */
     public function getSystem()
     {
         return $this->system;
