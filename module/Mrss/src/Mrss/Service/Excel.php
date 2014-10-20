@@ -632,6 +632,7 @@ class Excel
         }
 
         // Now hide some stuff
+        $sheet = $spreadsheet->setActiveSheetIndex(0);
         $sheet->getColumnDimension($dbColumnCol)->setVisible(false);
         $sheet->getColumnDimension('E')->setVisible(false);
         $sheet->getColumnDimension('F')->setVisible(false);

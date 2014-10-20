@@ -1095,6 +1095,15 @@ return array(
                                 'action' => 'geocode'
                             )
                         )
+                    ),
+                    'nccbpAudit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/nccbpAudit',
+                            'defaults' => array(
+                                'action' => 'nccbpReportAudit'
+                            )
+                        )
                     )
                 )
             ),

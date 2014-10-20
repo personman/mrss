@@ -8,6 +8,7 @@ use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
+use Mrss\Service\NccbpMigration;
 
 class ToolController extends AbstractActionController
 {
@@ -145,6 +146,17 @@ class ToolController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($message);
 
         return $this->redirect()->toUrl('/tools');
+    }
+
+    public function nccbpReportAuditAction()
+    {
+        $service = new NccbpMigration();
+
+        $response = $service->getOldReport();
+
+        return array(
+            'responseBody' => $response->getBody()
+        );
     }
 
     public function geocode($address)
