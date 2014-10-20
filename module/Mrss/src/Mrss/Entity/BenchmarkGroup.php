@@ -483,6 +483,24 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $incompletes;
     }
 
+    public function getCompleteBenchmarksForObservation(Observation $observation)
+    {
+        $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
+            $observation->getYear()
+        );
+
+        $completes = array();
+        foreach ($benchmarks as $benchmark) {
+            $value = $observation->get($benchmark->getDbColumn());
+
+            if ($value !== null) {
+                $completes[] = $benchmark;
+            }
+        }
+
+        return $completes;
+    }
+
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         $this->inputFilter = $inputFilter;

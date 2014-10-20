@@ -94,6 +94,17 @@
                 <?php endforeach ?>
                 </div>
             <?php endif ?>
+
+            <?php // List complete fields (for debugging ?>
+            <?php $completes = $benchmarkGroup->getCompleteBenchmarksForObservation($observation) ?>
+            <?php if (false && count($completes)): ?>
+                <div style="margin-left: 20px">
+                Complete fields:<br>
+                <?php foreach ($completes as $benchmark): ?>
+                    <?= $benchmark->getName() ?> (<?= $benchmark->getDbColumn() ?>)<br>
+                <?php endforeach ?>
+                </div>
+            <?php endif ?>
         </div>
 
         <?php $completion = $benchmarkGroup->getCompletionPercentageForObservation($observation) ?>
