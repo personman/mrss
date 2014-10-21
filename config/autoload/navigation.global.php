@@ -129,7 +129,12 @@ return array(
                 'label' => 'Home',
                 'route' => 'home'
             ),
-            'nccbp' => array(
+            'benchmarks' => array(
+                'label' => 'Benchmarks',
+                'uri' => '/benchmarks'
+            ),
+
+            /*'nccbp' => array(
                 'label' => 'NCCBP',
                 'uri' => '#',
                 'pages' => array(
@@ -142,7 +147,7 @@ return array(
                         'uri' => '/benchmarks'
                     )
                 )
-            ),
+            ),*/
             'who-we-help' => array(
                 'label' => 'Who We Help',
                 'uri' => '#',
