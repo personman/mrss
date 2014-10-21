@@ -49,8 +49,8 @@ header { width: 100%; background-color: #FFFFFF; }
     font-style: normal;
 }
 
-header .btn { font-family: 'Fira Sans', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 1px;  margin-top: 11%; }
-a.schedule-btn {  background: #004f8c; color: #F7F7F7; }
+header .btn { font-family: 'Fira Sans', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 1px;  margin-top: 35px; }
+a.schedule-btn {  background: #004f8c; color: #F7F7F7; float: right; margin-right: 20px;}
 a.login-btn {  background: #9cc03e; color: #F7F7F7; float: right;  }
 a.login-btn:hover, a.schedule-btn:hover { background: #333; color: #CCC; }
 
@@ -137,6 +137,7 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
 #headerLoginForm {
     display: none;
     padding-top: 15px;
+    float: right;
 }
 
 /* Hide the heading, forgot password link and errors */

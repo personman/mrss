@@ -8,6 +8,7 @@ function setupLoginButton()
     $('#loginButton').click(function() {
         $('#headerLoginForm').show()
         $('#loginButton').hide()
+        $('#schedule-demo').hide()
 
         return false
     })
