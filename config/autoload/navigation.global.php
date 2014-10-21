@@ -207,9 +207,9 @@ return array(
                 'label' => 'Join Now',
                 'uri' => '#',
                 'pages' => array(
-                    'join-form' => array(
-                        'label' => 'Join Form',
-                        'uri' => '/join'
+                    'how-to-join' => array(
+                        'label' => 'How to Join',
+                        'uri' => '/how-to-join'
                     ),
                     'benefits' => array(
                         'label' => 'Benefits',
