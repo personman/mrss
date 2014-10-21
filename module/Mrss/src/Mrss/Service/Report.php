@@ -1237,12 +1237,7 @@ class Report
         }
 
 
-        $format = "{y}";
-        if ($benchmark->isPercent()) {
-            $format = "{y}%";
-        } elseif ($benchmark->isDollars()) {
-            $format = '${y}';
-        }
+        $format = $this->getFormat($benchmark);
 
         // Put the college's data in its place
         $chartValues = array_combine($chartXCategories, $chartValues);
@@ -1324,8 +1319,16 @@ class Report
             ),
             'yAxis' => array(
                 'title' => false,
-                'gridLineWidth' => 0
+                'gridLineWidth' => 0,
+                'labels' => array(
+                    'format' => str_replace('y', 'value', $format)
+                )
             ),
+            'tooltip' => array(
+                //'pointFormat' => $format
+                'pointFormat' => str_replace('y', 'point.y', $format)
+            ),
+
             'series' => $series,
             'credits' => array(
                 'enabled' => false
@@ -1360,12 +1363,15 @@ class Report
     public function getPeerBarChart(Benchmark $benchmark, $data)
     {
         $title = $benchmark->getName();
+        $decimalPlaces = $this->getDecimalPlaces($benchmark);
         //prd($data);
+
+        $format = $this->getFormat($benchmark);
 
         $chartData = array();
         $chartXCategories = array();
         foreach ($data as $name => $value) {
-            $value = round($value);
+            $value = round($value, $decimalPlaces);
 
             $label = $name;
 
@@ -1387,7 +1393,8 @@ class Report
                 'dataLabels' => array(
                     'enabled' => $dataLabelEnabled,
                     'crop' => false,
-                    'overflow' => 'none'
+                    'overflow' => 'none',
+                    'format' => $format
                 )
             );
         }
@@ -1421,7 +1428,14 @@ class Report
             ),
             'yAxis' => array(
                 'title' => false,
-                'gridLineWidth' => 0
+                'gridLineWidth' => 0,
+                'labels' => array(
+                    'format' => str_replace('y', 'value', $format)
+                )
+            ),
+            'tooltip' => array(
+                //'pointFormat' => $format
+                'pointFormat' => str_replace('y', 'point.y', $format)
             ),
             'series' => $series,
             'credits' => array(
@@ -1429,13 +1443,40 @@ class Report
             ),
             'legend' => false,
             'plotOptions' => array(
-                'series' => array(
-                    'animation' => false
+                'column' => array(
+                    'animation' => false,
+                    'dataLabels' => array(
+                        'enabled' => true,
+                        'format' => $format
+                    )
                 )
             )
         );
 
+        // Percent
+        if ($benchmark->isPercent()) {
+            $chart['yAxis']['max'] = 100;
+            $chart['yAxis']['tickInterval'] = 25;
+            $chart['yAxis']['labels']['format'] = '{value}%';
+        }
+
         return $chart;
+    }
+
+    public function getFormat(Benchmark $benchmark)
+    {
+        $decimalPlaces = $this->getDecimalPlaces($benchmark);
+
+        $numberFormat = ',.' . $decimalPlaces . 'f';
+        $format = "{y:$numberFormat}";
+
+        if ($benchmark->isPercent()) {
+            $format = "{y:$numberFormat}%";
+        } elseif ($benchmark->isDollars()) {
+            $format = "\${y:$numberFormat}";
+        }
+
+        return $format;
     }
 
     public function getPercentileBreakpoints()
@@ -1595,10 +1636,21 @@ class Report
 
             $data = $this->sortAndLabelPeerData($data, $peerGroup->getCollege());
 
+            // Data labels
+            $prefix = $suffix = '';
+            if ($benchmark->isPercent()) {
+                $suffix = '%';
+            } elseif ($benchmark->isDollars()) {
+                $prefix = '$';
+            }
+
             $reportSection = array(
                 'benchmark' => $benchmark->getPeerReportLabel(),
+                'decimal_places' => $this->getDecimalPlaces($benchmark),
                 'data' => $data,
-                'chart' => $this->getPeerBarChart($benchmark, $data)
+                'chart' => $this->getPeerBarChart($benchmark, $data),
+                'prefix' => $prefix,
+                'suffix' => $suffix
             );
 
             $report['sections'][] = $reportSection;

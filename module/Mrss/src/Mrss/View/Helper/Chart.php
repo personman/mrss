@@ -48,7 +48,7 @@ class Chart extends AbstractHelper
         $html .= "<script type='text/javascript'>
         $(function() {
             var chartConfig = $chartConfigJson;
-            chartConfig = addFormatters(chartConfig)
+            //chartConfig = addFormatters(chartConfig)
             $('#$chartId').highcharts(chartConfig)
         })
     </script>";
@@ -80,10 +80,11 @@ class Chart extends AbstractHelper
                 'text/javascript'
             );
 
+            /* Deprecated
             $this->getView()->headScript()->appendFile(
                 $this->chartSupportJsUri,
                 'text/javascript'
-            );
+            );*/
 
             $this->javascriptPlaced = true;
         }

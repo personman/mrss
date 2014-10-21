@@ -1,8 +1,12 @@
 // Since the chart view helper is fed a php-built json object, which can't contain functions,
 // we need to set up anonymous formatter functions after the fact in js
+// Deprecated. format now supports decimal places
 
 function addFormatters(chartConfig)
 {
+
+    return chartConfig
+
     // get dataType
     var dataType = extractDataType(chartConfig)
 

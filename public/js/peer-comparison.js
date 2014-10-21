@@ -16,6 +16,17 @@ $(function() {
 
 function updateColleges()
 {
+    // Cancel any previous ajax request
+    if (typeof request != 'undefined') {
+        request.abort()
+    }
+
+    // Hold on to any selected peers so we can restore them
+    var selectedValues = $('#peers').val()
+    if (!selectedValues) {
+        selectedValues = []
+    }
+
     $('#peers').empty();
 
     var year = $('#reportingPeriod').val();
@@ -39,7 +50,7 @@ function updateColleges()
 
     // Fetch the available peer colleges
     url = '/reports/peer-colleges/' + year + '?benchmarks=' + benchmarkIds;
-    $.get(url, function(result) {
+    var request = $.get(url, function(result) {
         var colleges = result.colleges
         if (typeof colleges == 'undefined') {
             return false;
@@ -47,6 +58,11 @@ function updateColleges()
 
         // Find the college select box (multi)
         var select = $('#peers');
+
+        var selectedValues2 = select.val()
+        if (!selectedValues2) {
+            selectedValues2 = []
+        }
 
         // Empty the select
         select.empty();
@@ -58,6 +74,11 @@ function updateColleges()
 
             select.append(option)
         })
+
+        // Restore selected values
+        selectedValues = selectedValues.concat(selectedValues2)
+        selectedValues = $.unique(selectedValues)
+        select.val(selectedValues)
 
         addSavedPeerGroups()
     })

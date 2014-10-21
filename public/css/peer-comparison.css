@@ -3,7 +3,7 @@
     height: 150px;
 }
 
-.table th {
+.table > thead > tr > th {
     background: #608CC0;
     color: #fff;
     font-weight: bold;
