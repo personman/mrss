@@ -20,7 +20,7 @@ class NccbpMigration
      */
     protected $cookies;
 
-    function getOldReport($year = 2014)
+    public function getOldReport($year = 2014)
     {
         $this->logIn();
 
@@ -31,12 +31,13 @@ class NccbpMigration
         $this->client->setMethod('GET');
 
         $response = $this->client->send();
-        echo $response->getBody(); die;
+        echo $response->getBody();
+        die;
 
         return $response;
     }
 
-    function logIn()
+    public function logIn()
     {
         $loginUrl = $this->oldUrl . '/user/login';
         $this->client = new Client($loginUrl);
