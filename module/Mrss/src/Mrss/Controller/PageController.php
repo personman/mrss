@@ -115,8 +115,23 @@ class PageController extends AbstractActionController
             $this->layout()->noWrapper = true;
         }
 
+        // Load from html file for dev
+        $pageFromFile = null;
+        if ($fileName = $this->params()->fromQuery('page')) {
+            $directory = '/data/imports/pages/';
+            $path = getcwd() . $directory . $fileName . '.html';
+
+            if (file_exists($path)) {
+                $pageFromFile = file_get_contents($path);
+            } else {
+                echo 'no file found here: ';
+                prd($path);
+            }
+        }
+
         return array(
-            'page' => $page
+            'page' => $page,
+            'pageFromFile' => $pageFromFile
         );
     }
 }

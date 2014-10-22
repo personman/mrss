@@ -17,14 +17,17 @@
     </div>
 <?php endif ?>
 
-
-<?php if ($page->getShowWrapper()): ?>
-    <div class="row cmsPage">
-        <div class="span12" id="cmsPageContent">
-            <?= $page->getContent() ?>
-        </div>
-    </div>
+<?php if ($pageFromFile): ?>
+    <?= $pageFromFile ?>
 <?php else: ?>
-    <?= $page->getContent() ?>
+    <?php if ($page->getShowWrapper()): ?>
+        <div class="row cmsPage">
+            <div class="span12" id="cmsPageContent">
+                <?= $page->getContent() ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <?= $page->getContent() ?>
+    <?php endif ?>
 <?php endif ?>
 
