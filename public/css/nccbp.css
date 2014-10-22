@@ -346,6 +346,11 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     color: #002c57;
 }
 
+.sidebar.sidebar-alt {
+    background-color: #9cc03e;
+    border-color: #9cc03e;
+}
+
 /* Navbar */
 .navbar-toggle {
     border-color: #ddd;
