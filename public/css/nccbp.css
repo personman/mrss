@@ -497,6 +497,10 @@ input:focus, textarea:focus {
         font-size: 28px;
     }
 
+    ul.navbar-nav {
+        height: 40px;
+    }
+
 
 }
 
