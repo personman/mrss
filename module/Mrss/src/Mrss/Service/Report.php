@@ -1362,7 +1362,7 @@ class Report
 
     public function getPeerBarChart(Benchmark $benchmark, $data)
     {
-        $title = $benchmark->getName();
+        $title = $benchmark->getPeerReportLabel();
         $decimalPlaces = $this->getDecimalPlaces($benchmark);
         //prd($data);
 
@@ -1375,16 +1375,17 @@ class Report
 
             $label = $name;
 
-            $chartXCategories[] = $label;
-
             // Your college
             if (strlen($name) > 2) {
                 $dataLabelEnabled = true;
                 $color = '#002C57';
+                $label = 'Your College';
             } else {
                 $dataLabelEnabled = false;
                 $color = '#0065A1';
             }
+
+            $chartXCategories[] = $label;
 
             $chartData[] = array(
                 'name' => $label,
@@ -1410,10 +1411,10 @@ class Report
         $chart = array(
             'id' => 'chart_' . $benchmark->getDbColumn(),
             'chart' => array(
-                'type' => 'column'
+                'type' => 'bar'
             ),
             'title' => array(
-                //'text' => $title,
+                'text' => $title,
             ),
             'xAxis' => array(
                 'categories' => $chartXCategories,
