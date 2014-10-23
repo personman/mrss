@@ -219,10 +219,10 @@ return array(
                         'label' => 'Benefits',
                         'uri' => '/benefits'
                     ),
-                    'qa-process' => array(
+                    /*'qa-process' => array(
                         'label' => 'QA Process',
                         'uri' => 'qa-process'
-                    ),
+                    ),*/
                     'timeline' => array(
                         'label' => 'Timeline',
                         'uri' => '/timeline'
