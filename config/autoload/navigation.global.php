@@ -186,18 +186,18 @@ return array(
                         'label' => 'Executive Report',
                         'uri' => '/executive-report'
                     ),
-                    'trend' => array(
+                    /*'trend' => array(
                         'label' => 'Trend Report',
                         'uri' => '/trend-report'
-                    ),
+                    ),*/
                     'peer-report' => array(
                         'label' => 'Peer Comparisons',
                         'uri' => '/peer-report'
                     ),
-                    'best-performers-report' => array(
+                    /*'best-performers-report' => array(
                         'label' => 'Best Performers',
                         'uri' => '/best-performers-report'
-                    ),
+                    ),*/
                     'schedule-demo' => array(
                         'label' => 'Schedule Demo',
                         'uri' => '/schedule-demo'
@@ -282,10 +282,10 @@ return array(
                 'label' => 'Help',
                 'uri' => '#',
                 'pages' => array(
-                    'faq' => array(
+                    /*'faq' => array(
                         'label' => 'FAQ',
                         'uri' => '/faq'
-                    ),
+                    ),*/
                     'contact' => array(
                         'label' => 'Contact Us',
                         'uri' => '/contact'
