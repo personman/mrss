@@ -97,6 +97,7 @@ ul.navbar-nav li {height:40px}
     /*height: 494px;
     /*height: 200px;*/
     /*position: relative*/
+    min-height: 180px;
     background-size: cover;
     background-repeat: no-repeat;
 }
