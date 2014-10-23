@@ -233,6 +233,40 @@ p.sec-intro{ border-bottom: 1px solid #999;font-family: 'Fira Sans', sans-serif;
     font-size: 9px;
 }
 
+/*  TIMELINE */
+#timeline h4 {
+    background-color:#0065a1;
+    color: #FFFFFF;
+    width: 20%;
+    valign:center;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    padding: 10px 1%;
+    text-align:right;
+    float: left;
+    clear: none;
+    margin:20px 0px;
+}
+
+#timeline p {
+    width: 74%;
+    float: left;
+    padding: 0px 2%;
+    margin: 15px 0px 20px 0px;
+}
+
+#timeline div {
+    float: left;
+    width:100%;
+    border-bottom:1px solid #AAAAAA;
+}
+
+#firsttimediv {
+    border-top:1px solid #AAAAAA;
+}
+
 /*	REPORTS */
 .reports-body { margin-top: 25px; margin-bottom: 75px; }
 
