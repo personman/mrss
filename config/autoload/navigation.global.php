@@ -171,9 +171,13 @@ return array(
                 )
             ),
             'reports-overview' => array(
-                'label' => 'Reports (Overview)',
+                'label' => 'Reports',
                 'uri' => '#',
                 'pages' => array(
+                    'overview' => array(
+                        'label' => 'Overview',
+                        'uri' => '/reports-overview'
+                    ),
                     'national-report' => array(
                         'label' => 'National and System Reports',
                         'uri' => '/national-report'
