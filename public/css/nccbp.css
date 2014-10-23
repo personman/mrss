@@ -216,6 +216,23 @@ p.sec-intro{ border-bottom: 1px solid #999;font-family: 'Fira Sans', sans-serif;
     margin-bottom: 35px;
 }
 
+.benefits {
+    position: relative;
+}
+.benefits .sec-banner {
+    max-height: none;
+    max-width: 80%;
+}
+
+.benefits .sec-banner ul {
+    color: #FFFFFF;
+    padding: 10px;
+}
+
+.benefits .sec-banner ul, .benefits .sec-banner p {
+    font-size: 9px;
+}
+
 /*	REPORTS */
 .reports-body { margin-top: 25px; margin-bottom: 75px; }
 
@@ -584,6 +601,19 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
         display: none;
     }
 
+    .sec-banner p, .benefits .sec-banner p {
+        font-size: 23px;
+    }
+
+    .benefits .sec-banner ul {
+        font-size: 13px;
+    }
+
+    .benefits .sec-banner {
+        max-width: 60%;
+    }
+
+
 }
 
 /* Medium devices (desktops, 992px and up) */
@@ -597,9 +627,18 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
         margin: 0 0 15px 0;
     }
 
-    .sec-banner p {
+    .sec-banner p, .benefits .sec-banner p {
         font-size: 28px;
     }
+
+    .benefits .sec-banner ul {
+        font-size: 15px;
+    }
+
+    .benefits .sec-banner {
+        max-width: 50%;
+    }
+
 
     ul.navbar-nav {
         height: 40px;
@@ -612,6 +651,7 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
         padding: 15px;
         width: 275px;
     }
+
 
 
 }
