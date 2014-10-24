@@ -191,15 +191,14 @@
             <a href="/benchmarking-institute"><img src="/images/nccbp/benchmark_logo.png" /></a>
         </div>
         <div class="col-xs-10">
-            <ul class="footer-nav">
-                <li><a href="#">NCCBP</a></li>
-                <li><a href="#">Who We Help</a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Join Now</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Confidentiality</a></li>
-            </ul>
+            <div class="nav-collapse footer-nav">
+                <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
+                <?php $partial = array('mrss/menu/navigation.phtml', 'nccbp') ?>
+                <?= $this->navigation()->menu('nccbp_navigation')
+                    ->setPartial($partial)
+                    ->render(); ?>
+            </div>
+
             <p>© 2004 - <?= date('Y') ?> Johnson County Community College</p>
         </div>
     </div>

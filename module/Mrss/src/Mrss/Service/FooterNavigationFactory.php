@@ -10,17 +10,20 @@ class FooterNavigationFactory extends NavigationFactory
     public function getPages(ServiceLocatorInterface $serviceLocator)
     {
         $pages = $this->getPagesArray($serviceLocator);
+        $currentStudy = $this->getCurrentStudy($serviceLocator);
 
         $confidentiality = array(
             'label' => 'Confidentiality',
             'uri' => 'confidentiality'
         );
 
-        $nhebi = array(
-            'label' => 'NHEBI',
-            'title' => 'National Higher Education Benchmarking Institute',
-            'uri' => 'http://www.nccbp.org/national-higher-education-benchmarking-institute'
-        );
+        if ($currentStudy->getId() != 1) {
+            $nhebi = array(
+                'label' => 'NHEBI',
+                'title' => 'National Higher Education Benchmarking Institute',
+                'uri' => 'http://www.nccbp.org/national-higher-education-benchmarking-institute'
+            );
+        }
 
         // Add this in second to last:
         // First, chop off the last item

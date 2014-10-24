@@ -300,7 +300,14 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
 .footer-nav li a, .footer-nav li a:visited {  color: #ebebeb; text-decoration: none;}
 .footer-nav li a:hover { color: #9cc03e; text-decoration: none; }
 .footer p { display: inline-block; float: right;color: #ebebeb; font-size: 9px; line-height: 14px; letter-spacing: .5px; }
+.footer-nav .pull-right {
+    float: none !important;
+}
 
+/* hide footer nav from phones */
+.footer-nav {
+    display: none;
+}
 
 #headerLoginForm {
     display: none;
@@ -704,6 +711,8 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
         padding: 15px;
         width: 275px;
     }
+
+    .footer-nav { display: block; }
 
 
 

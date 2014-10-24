@@ -323,14 +323,6 @@ return array(
                 'route' => 'reports/calculate'
             ),
             array(
-                'label' => 'Import',
-                'route' => 'import'
-            ),
-            array(
-                'label' => 'Export',
-                'route' => 'export'
-            ),
-            array(
                 'label' => 'Colleges',
                 'controller' => 'colleges',
                 'action' => 'index',
