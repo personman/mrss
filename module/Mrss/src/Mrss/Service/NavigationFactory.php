@@ -227,6 +227,14 @@ class NavigationFactory extends DefaultNavigationFactory
             }
         }*/
 
+        // Hide outliers if closed
+        if (!empty($user)) {
+            if (!$currentStudy->getOutlierReportsOpen()) {
+                unset($pages['reports']['pages']['outlier']);
+            }
+        }
+
+
 
         // Check permissions
         /** @var Authorize $authorizeService */

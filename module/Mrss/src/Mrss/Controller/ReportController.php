@@ -192,6 +192,14 @@ class ReportController extends AbstractActionController
             throw new \Exception('Subscription not found for year ' . $year);
         }
 
+        // Nccbp migration: temporary
+        if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
+            $this->flashMessenger()->addErrorMessage(
+                "Reports prior to 2014 are under review and will be available soon."
+            );
+            return $this->redirect()->toUrl('/reports/national/2014');
+        }
+
         $observation = $this->currentObservation($year);
         $reportData = $this->getReportService()
             ->getNationalReportData($observation, $system);

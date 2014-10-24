@@ -39,6 +39,11 @@ class NccbpNavigationFactory extends NavigationFactory
         // Hide the summary report
         unset($pages['reports']['pages']['summary']);
 
+        // Hide submitted values as NCCBP handles them under data documentation
+        if ($pages['data-entry']['label'] == 'Submitted Values') {
+            unset($pages['data-entry']);
+        }
+
         /*if ($auth->hasIdentity()) {
 
             // Add the data entry links (if they're logged in

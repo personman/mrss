@@ -619,6 +619,17 @@ input:focus, textarea:focus {
     line-height: 1.3em;
 }
 
+
+/* Impersonation */
+.impersonation {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background: #DDD;
+    border-top: 2px solid #0065a1;
+    border-bottom: 2px solid #0065a1;
+}
+
+
 /* From pre-launch tweaks: */
 .logo { text-align: left }
 h3 { font-size: 16px; font-weight: 400; line-height: 18px; text-transform: uppercase; color: #9cc03e; margin: 0 0 5px 0; }
