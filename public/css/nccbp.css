@@ -58,7 +58,6 @@ a.login-btn:hover, a.schedule-btn:hover { background: #333; color: #CCC; }
 .navbar { min-height: 40px; margin-bottom: 0; }
 .navbar-nav { float: none; text-align: justify; }
 ul.navbar-nav:after {width: 100%; display: inline-block; content: ""; visibility: hidden}
-ul.navbar-nav > li {height:40px}
 
 
 .navbar-default { background: none; box-shadow: none; border-bottom: 1px solid #e7e7e7; border-top: 1px solid #e7e7e7; border-radius: 0; border-left: none; border-right: none; }
@@ -69,6 +68,23 @@ ul.navbar-nav > li {height:40px}
 
 .dropdown-menu { background: #5081b2;}
 .dropdown-menu > li > a { color: #fff; }
+
+
+/* Collapse menu for small screens */
+.navbar-nav .open .dropdown-menu > li > a,
+.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #FFFFFF;
+}
+.navbar-nav .open .dropdown-menu {
+    background: #5081b2;
+}
+.navbar-default .navbar-nav > li {
+    display: block;
+}
+ul.navbar-nav > li {
+    height: auto;
+}
+
 
 /*	HOME */
 
@@ -647,6 +663,9 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
         max-width: 60%;
     }
 
+    /* bigger screens get the horizontal menu */
+    ul.navbar-nav > li {height:40px}
+    .navbar-default .navbar-nav > li { display: inline-block;}
 
 }
 
