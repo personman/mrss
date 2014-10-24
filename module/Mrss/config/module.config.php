@@ -777,6 +777,16 @@ return array(
                             )
                         )
                     ),
+                    'executive' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/executive[/:year]',
+                            'defaults' => array(
+                                'action' => 'executive',
+                                'year' => null
+                            )
+                        )
+                    ),
                     'peer' => array(
                         'type' => 'segment',
                         'options' => array(

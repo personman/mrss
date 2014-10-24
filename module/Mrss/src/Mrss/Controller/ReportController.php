@@ -241,6 +241,11 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function executiveAction()
+    {
+        return array();
+    }
+
     public function getYearFromRouteOrStudy()
     {
         $year = $this->params()->fromRoute('year');

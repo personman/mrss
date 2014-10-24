@@ -36,6 +36,8 @@ class NccbpNavigationFactory extends NavigationFactory
             unset($pages['help']);
         }
 
+        // Hide the summary report
+        unset($pages['reports']['pages']['summary']);
 
         /*if ($auth->hasIdentity()) {
 

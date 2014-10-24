@@ -383,6 +383,10 @@ function getReportMenu()
                 'label' => 'Summary Report',
                 'uri' => '/reports/summary'
             ),
+            'executive' => array(
+                'label' => 'Executive Report',
+                'uri' => '/reports/executive'
+            ),
             'peer' => array(
                 'label' => 'Peer Comparison',
                 'uri' => '/reports/peer'

@@ -190,6 +190,9 @@ class NavigationFactory extends DefaultNavigationFactory
                 && !$impersonationService->isImpersonated()) {
                 unset($pages['reports']);
             }
+
+            // Hide the executive report
+            unset($pages['executive']);
         }
 
         // Workforce
@@ -199,6 +202,9 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Don't show the faq for workforce yet
             unset($pages['help']['pages']['faq']);
+
+            // Hide the executive report
+            unset($pages['executive']);
         }
 
         // If the help section is empty, drop it from the menu

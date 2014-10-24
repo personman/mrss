@@ -58,7 +58,7 @@ a.login-btn:hover, a.schedule-btn:hover { background: #333; color: #CCC; }
 .navbar { min-height: 40px; margin-bottom: 0; }
 .navbar-nav { float: none; text-align: justify; }
 ul.navbar-nav:after {width: 100%; display: inline-block; content: ""; visibility: hidden}
-ul.navbar-nav li {height:40px}
+ul.navbar-nav > li {height:40px}
 
 
 .navbar-default { background: none; box-shadow: none; border-bottom: 1px solid #e7e7e7; border-top: 1px solid #e7e7e7; border-radius: 0; border-left: none; border-right: none; }
