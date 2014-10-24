@@ -64,7 +64,11 @@ ul.navbar-nav:after {width: 100%; display: inline-block; content: ""; visibility
 .navbar-default .navbar-nav > li > a { text-transform: uppercase; font-weight: 700; font-size: 12px; color: #666; }
 .navbar-default .navbar-nav > li { float: none; display: inline-block; }
 
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus { background: #DDD;  }
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus { background: #DDD; color: #333 }
+
+.navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+    color: #333;
+}
 
 .dropdown-menu { background: #5081b2;}
 .dropdown-menu > li > a { color: #fff; }
