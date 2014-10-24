@@ -594,7 +594,7 @@ class ReportController extends AbstractActionController
 
                     if ($count >= 5) {
                         $benchmarkData[] = array(
-                            'name' => $benchmark->getName(),
+                            'name' => $benchmark->getPeerReportLabel(),
                             'id' => $benchmark->getId()
                         );
                     }
