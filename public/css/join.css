@@ -44,6 +44,7 @@
 
 #subscription .control-group input {
     width:100%;
+    display: inline-block;
 }
 
 #subscription #fieldset-submit .btn-primary {
