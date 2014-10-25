@@ -1848,23 +1848,124 @@ class Report
 
     public function getExecutiveBarChart($config)
     {
+        $yourCollegeLabel = 'Your College';
+        $chartXCategories = array();
+
+        $colorConfig = $colors = array(
+            'seriesColors' => array(
+                '#41AA85', // '#519548' lightened 30%
+                '#6190BC', // '#005595' lightened 40%
+            ),
+            'yourCollegeColors' => array(
+                '#25604B',
+                '#375D81'
+            )
+        );
+        // What color will the bar be?
+        $seriesColors = $colorConfig['seriesColors'];
+        $yourCollegeColors = $colorConfig['yourCollegeColors'];
+
+
+
         $series = array();
+        $i = 0;
         foreach ($config['benchmarks'] as $dbColumn => $label) {
+            $benchmark = $this->getBenchmarkModel()
+                ->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
+
             // Get the college's reported value
+            $o = $this->getObservation();
             $reportedValue = $this->getObservation()->get($dbColumn);
 
-            $chartValues = array($reportedValue);
+            $format = $this->getFormat($benchmark);
+
+            $chartValues = array($yourCollegeLabel => $reportedValue);
+
+            // Load the percentiles
+            $percentiles = $this->getPercentileModel()
+                ->findByBenchmarkAndYear($benchmark, $this->getYear());
+
+            $percentileData = array();
+            foreach ($percentiles as $percentile) {
+                $percentileData[$percentile->getPercentile()] =
+                    floatval($percentile->getValue());
+            }
+            unset($percentileData['N']);
+
+            $chartValues = $chartValues + $percentileData;
+
+            $chartData = array();
+
+            foreach ($chartValues as $key => $value) {
+                $dataPoint = array(
+                    'name' => $label,
+                    'y' => floatval($value),
+                    'color' => $yourCollegeColors[$i],
+                    'dataLabels' => array(
+                        'format' => $format,
+                        'enabled' => false
+                    )
+                );
+
+                // Show the value as a dataLabel for Your College
+                if ($key == $yourCollegeLabel) {
+                    $dataPoint['dataLabels'] = array(
+                        'enabled' => true
+                    );
+                }
+
+                $chartData[] = $dataPoint;
+            }
+
+
+
+            // Set up the categories
+            if (empty($chartXCategories)) {
+                foreach ($chartValues as $key => $chartValue) {
+                    //$label = nccbp_report_presidents_x_label($key);
+                    $chartXCategories[] = $key;
+                }
+            }
+
+
+            // Set the colors explicitly on the first column
+            $chartValues = array_values($chartValues);
+            $firstValue = array_shift($chartValues);
+
+            //if ($firstValue != 0) {
+            $firstValue = array(
+                'y' => floatval($firstValue),
+                'color' => $yourCollegeColors[$i],
+                'dataLabels' => array(
+                    'enabled' => true,
+                    'format' => 'format'
+                )
+            );
+
+            pr($chartData);
+            pr($chartValues);
+
+            // Data label color
+            if (!empty($config['stacked'])) {
+                $firstValue['dataLabels']['enabled'] = false;
+            }
+
+            array_unshift($chartValues, $firstValue);
+
+
 
             $series[] = array(
                 'name' => $config['benchmarks'][$dbColumn],
                 'data' => $chartValues,
-                //'color' => $seriesColors[$i]
+                'color' => $seriesColors[$i]
             );
+
+            //pr($series);
+            $i++;
 
         }
 
         $chartTitle = $config['title'];
-
 
         $highChartsConfig = array(
             'id' => rand(1,10000),
@@ -1875,7 +1976,7 @@ class Report
                 'text' => $chartTitle,
             ),
             'xAxis' => array(
-                //'categories' => $chartXCategories,
+                'categories' => $chartXCategories,
                 'tickLength' => 0,
                 'title' => array(
                     'text' => 'Percentiles'
@@ -1887,7 +1988,14 @@ class Report
                 'tickInterval' => 25,
                 'stackLabels' => array(
                     'enabled' => true,
+                ),
+                'labels' => array(
+                    'format' => str_replace('y', 'value', $format)
                 )
+            ),
+            'tooltip' => array(
+                //'pointFormat' => $format
+                'pointFormat' => str_replace('y', 'point.y', $format)
             ),
             'series' => $series,
             'credits' => array(
@@ -2245,5 +2353,10 @@ class Report
     public function getObservation()
     {
         return $this->observation;
+    }
+
+    public function getYear()
+    {
+        return $this->getObservation()->getYear();
     }
 }
