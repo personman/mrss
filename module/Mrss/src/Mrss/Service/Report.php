@@ -87,6 +87,11 @@ class Report
     protected $systemModel;
 
     /**
+     * @var \Mrss\Entity\Observation
+     */
+    protected $observation;
+
+    /**
      * @var Smtp
      */
     protected $mailTransport;
@@ -1752,6 +1757,178 @@ class Report
         return $dataWithLabels;
     }
 
+    public function getExecutiveReportData()
+    {
+        $reportData = array();
+        $important = $this->getExecutiveImportant();
+
+        $reportData['important'] = $important;
+
+        return $reportData;
+    }
+
+    public function getExecutiveReportConfig($year)
+    {
+        return array(
+            array(
+                'title' => 'Full-time Students Completed or Transferred in Three Years',
+                'stacked' => true,
+                'percent' => true,
+                'benchmarks' => array(
+                    'ft_perc_transf' => 'Transferred', // Transferred in 3 years, full time
+                    'ft_perc_comp' => 'Completed', // Completed in 3 years, full time
+                ),
+                'description' => 'The percent of students out of the unduplicated full-time, first-time, credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree or certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before fall ' . ($year - 1)  . '.'
+
+            ),
+            array(
+                'title' => 'Part-time Students Completed or Transferred in Six Years',
+                'stacked' => true,
+                'percent' => true,
+                'benchmarks' => array(
+                    'pt_percminus7_tran' => 'Transferred',
+                    'pt_perminus7_comp' => 'Completed'
+                ),
+                'description' => 'The percent of part-time students out of the unduplicated part-time, first-time, credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree or certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before fall ' . ($year - 1)  . '.'
+            ),
+            array(
+                'title' => 'Persistence Rate',
+                'percent' => true,
+                'benchmarks' => array(
+                    'next_term_pers' => 'Next-Term', // Next-term persistence
+                    'fall_fall_pers' => 'Fall-Fall', // Fall-fall persistence
+                ),
+                'description' => 'The persistence rate is the percent of Fall ' . ($year - 2)  . ' credit students, both full- and part-time, who return to the campus for the next term (usually Spring ' . ($year - 1)  . '), or for the next fall term (Fall ' . ($year - 1)  . '). This metric excludes students who graduated or completed certificates in the time frame.'
+            ),
+            array(
+                'title' => 'Instructional Cost per FTE Student',
+                'dollars' => true,
+                'max' => 15000,
+                'benchmarks' => array(
+                    'cst_fte_stud' => 'Cost Per FTE Student', // Cost per FTE student
+                ),
+                'description' => '' . ($year - 1)  . ' instructional costs include salaries, benefits, supplies, travel and equipment for all full- and part-time faculty and other instructional administration and support personnel per full-time equivalent student.'
+            ),
+            array(
+                'title' => 'College-level Courses:<br>Completer Success Rate',
+                'percent' => true,
+                'benchmarks' => array(
+                    'comp_succ' => 'Completer Success Rate', // Completer success rate
+                ),
+                'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or Pass in college-level credit courses in fall ' . ($year - 2)  . '.'
+            ),
+            array(
+                'title' => 'Developmental Completer Success Rate',
+                'percent' => true,
+                'benchmarks' => array(
+                    'm_comp_succ' => 'Math', // Dev math enrollee success rate
+                    'w_comp_succ' => 'Writing' // Dev writing enrollee success rate
+                ),
+                'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or Pass in developmental/remedial math and writing courses in fall ' . ($year - 2)  . '.'
+            )
+
+        );
+    }
+
+    public function getExecutiveImportant()
+    {
+        $importantBenchmarkCharts = array();
+
+        $config = $this->getExecutiveReportConfig(
+            $this->getObservation()->getYear()
+        );
+
+        foreach ($config as $importantConfig) {
+            $importantBenchmarkCharts[] = $this
+                ->getExecutiveBarChart($importantConfig);
+        }
+
+        return $importantBenchmarkCharts;
+    }
+
+    public function getExecutiveBarChart($config)
+    {
+        $series = array();
+        foreach ($config['benchmarks'] as $dbColumn => $label) {
+            // Get the college's reported value
+            $reportedValue = $this->getObservation()->get($dbColumn);
+
+            $chartValues = array($reportedValue);
+
+            $series[] = array(
+                'name' => $config['benchmarks'][$dbColumn],
+                'data' => $chartValues,
+                //'color' => $seriesColors[$i]
+            );
+
+        }
+
+        $chartTitle = $config['title'];
+
+
+        $highChartsConfig = array(
+            'id' => rand(1,10000),
+            'chart' => array(
+                'type' => 'column'
+            ),
+            'title' => array(
+                'text' => $chartTitle,
+            ),
+            'xAxis' => array(
+                //'categories' => $chartXCategories,
+                'tickLength' => 0,
+                'title' => array(
+                    'text' => 'Percentiles'
+                )
+            ),
+            'yAxis' => array(
+                'title' => false,
+                'gridLineWidth' => 0,
+                'tickInterval' => 25,
+                'stackLabels' => array(
+                    'enabled' => true,
+                )
+            ),
+            'series' => $series,
+            'credits' => array(
+                'enabled' => false
+            ),
+            'plotOptions' => array(
+                'series' => array(
+                    'animation' => false,
+                    'dataLabels' => array(
+                        'overflow' => 'none',
+                        'crop' => false
+                    )
+                )
+            )
+        );
+
+        if (!empty($config['stacked'])) {
+            $highChartsConfig['plotOptions']['column'] = array(
+                'stacking' => 'normal'
+            );
+        }
+
+        if (!empty($config['percent'])) {
+            $highChartsConfig['yAxis']['max'] = 100;
+            $highChartsConfig['yAxis']['labels'] = array(
+                'format' => '{value}%'
+            );
+        }
+
+        if (!empty($config['dollars'])) {
+            $highChartsConfig['yAxis']['labels'] = array(
+                'format' => '${value}'
+            );
+        }
+
+        return array(
+            'chart' => $highChartsConfig,
+            'description' => $config['description']
+        );
+    }
+
     /**
      * Calculate all computed fields for the current study and the given year
      *
@@ -2056,5 +2233,17 @@ class Report
         }
 
         return $this->subscriptions[$key];
+    }
+
+    public function setObservation(Observation $observation)
+    {
+        $this->observation = $observation;
+
+        return $this;
+    }
+
+    public function getObservation()
+    {
+        return $this->observation;
     }
 }

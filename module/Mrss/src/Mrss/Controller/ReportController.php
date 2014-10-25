@@ -251,7 +251,24 @@ class ReportController extends AbstractActionController
 
     public function executiveAction()
     {
-        return array();
+        $open = (!empty($_GET['open']));
+        $year = $this->getYearFromRouteOrStudy();
+        $college = $this->currentCollege();
+
+        $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+        $this->getReportService()->setObservation($observation);
+        $reportData = $this->getReportService()->getExecutiveReportData();
+
+        return array(
+            'reportData' => $reportData,
+            'year' => $year,
+            'subscriptions' => $subscriptions,
+            'college' => $college,
+            'open' => $open,
+        );
     }
 
     public function getYearFromRouteOrStudy()
