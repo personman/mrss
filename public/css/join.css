@@ -174,9 +174,13 @@ legend + .control-group {
     float:left;
 }
 
+#subscription #controls-same-as-admin {
+    clear: both;
+}
+
 #subscription #controls-same-as-admin input {
-    width:5%;
-    margin:12px 0%;
+    width: auto !important;
+    margin: 0;
     float:left;
 }
 

@@ -79,6 +79,12 @@ class SubscriptionController extends AbstractActionController
 
     public function addAction()
     {
+        // Are they signed in? If so, reirect them to renew
+        $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
+        if ($auth->hasIdentity()) {
+            return $this->redirect()->toRoute('renew');
+        }
+
         $form = new SubscriptionForm;
 
         // Handle form submission
@@ -111,7 +117,7 @@ class SubscriptionController extends AbstractActionController
         $college = $this->currentCollege();
 
         $form = new AbstractForm('renew');
-        $form->add($form->getButtonFieldset('Continue'));
+        $form->add($form->getButtonFieldset('Renew'));
 
         if ($this->getRequest()->isPost()) {
             $form->setData($this->params()->fromPost());
