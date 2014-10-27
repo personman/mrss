@@ -248,7 +248,7 @@ p.sec-intro{ border-bottom: 1px solid #999;font-family: 'Fira Sans', sans-serif;
 
 .benefits .sec-banner ul {
     color: #FFFFFF;
-    padding: 0 30px;
+    padding: 0 15px;
 }
 
 .benefits .sec-banner ul, .benefits .sec-banner p {
@@ -687,6 +687,7 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
 
     .benefits .sec-banner ul {
         font-size: 13px;
+        padding: 30px;
     }
 
     .benefits .sec-banner {
