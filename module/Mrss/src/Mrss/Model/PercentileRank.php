@@ -41,10 +41,16 @@ class PercentileRank extends AbstractModel
      * @param \Mrss\Entity\Study $study
      * @param $year
      * @param bool $weaknesses
+     * @param null $benchmarkGroupToExclude
      * @return PercentileRankEntity[]
      */
-    public function findStrengths(CollegeEntity $college, StudyEntity $study, $year, $weaknesses = false)
-    {
+    public function findStrengths(
+        CollegeEntity $college,
+        StudyEntity $study,
+        $year,
+        $weaknesses = false,
+        $benchmarkGroupToExclude = null) {
+
         $limit = 5;
 
 
@@ -86,6 +92,11 @@ class PercentileRank extends AbstractModel
             $qb->orderBy('p.rank', 'DESC');
         } else {
             $qb->orderBy('p.rank', 'ASC');
+        }
+
+        if ($benchmarkGroupToExclude) {
+            $qb->andWhere('b.benchmarkGroup != :group_id');
+            $qb->setParameter('group_id', $benchmarkGroupToExclude);
         }
 
         $qb->setFirstResult(0)->setMaxResults($limit);

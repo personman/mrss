@@ -2028,7 +2028,7 @@ class Report
         $study = $this->getStudy();
 
         $percentileRanks = $this->getPercentileRankModel()
-            ->findStrengths($college, $study, $year, $weaknesses);
+            ->findStrengths($college, $study, $year, $weaknesses, 1);
 
 
         $ranks = array();
