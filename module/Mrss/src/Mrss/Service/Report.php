@@ -1953,7 +1953,7 @@ class Report
         $chartTitle = $config['title'];
 
         $highChartsConfig = array(
-            'id' => rand(1,10000),
+            'id' => rand(1, 10000),
             'chart' => array(
                 'type' => 'column',
                 'events' => array(

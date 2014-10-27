@@ -49,7 +49,8 @@ class PercentileRank extends AbstractModel
         StudyEntity $study,
         $year,
         $weaknesses = false,
-        $benchmarkGroupToExclude = null) {
+        $benchmarkGroupToExclude = null
+    ) {
 
         $limit = 5;
 

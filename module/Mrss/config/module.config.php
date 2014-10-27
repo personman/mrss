@@ -1044,11 +1044,23 @@ return array(
                     )
                 )
             ),
+            'subscriptions' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/subscriptions[/:year]',
+                    'defaults' => array(
+                        'controller' => 'Admin',
+                        'action' => 'dashboard',
+                        'year' => null
+                    )
+                )
+            ),
             'admin' => array(
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/admin[/:year]',
+                    'route' => '/admin',
                     'defaults' => array(
                         'controller' => 'Admin',
                         'action' => 'dashboard',
