@@ -38,7 +38,8 @@ class Chart extends AbstractHelper
     public function showChart($chartConfig)
     {
         $this->headScript();
-        $chartConfigJson = json_encode($chartConfig);
+        $chartConfigJson = $this->encodeAndAddEvents($chartConfig);
+
 
         $html = '<div class="chartWrapper">';
 
@@ -60,6 +61,24 @@ class Chart extends AbstractHelper
         $html .= '</div>';
 
         return $html;
+    }
+
+    public function encodeAndAddEvents($chartConfig)
+    {
+        $events = array();
+        if (!empty($chartConfig['chart']['events'])) {
+            $events = $chartConfig['chart']['events'];
+        }
+
+        $config = json_encode($chartConfig);
+
+        foreach ($events as $event => $function) {
+            $functionLabel = '"' . $function .  '"';
+            $script = "function (event) { $function(event) }";
+            $config = str_replace($functionLabel, $script, $config);
+        }
+
+        return $config;
     }
 
     public function headScript()

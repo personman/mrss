@@ -1469,9 +1469,13 @@ class Report
         return $chart;
     }
 
-    public function getFormat(Benchmark $benchmark)
+    public function getFormat(Benchmark $benchmark, $forceDecimalPlaces = null)
     {
-        $decimalPlaces = $this->getDecimalPlaces($benchmark);
+        if ($forceDecimalPlaces !== null) {
+            $decimalPlaces = $forceDecimalPlaces;
+        } else {
+            $decimalPlaces = $this->getDecimalPlaces($benchmark);
+        }
 
         $numberFormat = ',.' . $decimalPlaces . 'f';
         $format = "{y:$numberFormat}";
@@ -1763,6 +1767,8 @@ class Report
         $important = $this->getExecutiveImportant();
 
         $reportData['important'] = $important;
+        $reportData['strengths'] = $this->getStrengths();
+        $reportData['weaknesses'] = $this->getWeaknesses();
 
         return $reportData;
     }
@@ -1874,10 +1880,10 @@ class Report
                 ->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
 
             // Get the college's reported value
-            $o = $this->getObservation();
             $reportedValue = $this->getObservation()->get($dbColumn);
 
             $format = $this->getFormat($benchmark);
+            $roundedFormat = $this->getFormat($benchmark, 0);
 
             $chartValues = array($yourCollegeLabel => $reportedValue);
 
@@ -1900,18 +1906,23 @@ class Report
                 $dataPoint = array(
                     'name' => $label,
                     'y' => floatval($value),
-                    'color' => $yourCollegeColors[$i],
+                    'color' => $seriesColors[$i],
                     'dataLabels' => array(
-                        'format' => $format,
+                        'format' => $roundedFormat,
                         'enabled' => false
                     )
                 );
 
-                // Show the value as a dataLabel for Your College
+                // The First bar: your college
                 if ($key == $yourCollegeLabel) {
-                    $dataPoint['dataLabels'] = array(
-                        'enabled' => true
-                    );
+                    // Show the value as a dataLabel for Your College
+                    $dataPoint['dataLabels']['enabled'] = true;
+                    $dataPoint['color'] = $yourCollegeColors[$i];
+
+                    // Don't show them for stacked bars (we'll show the total)
+                    if (!empty($config['stacked'])) {
+                        $dataPoint['dataLabels']['enabled'] = false;
+                    }
                 }
 
                 $chartData[] = $dataPoint;
@@ -1927,36 +1938,10 @@ class Report
                 }
             }
 
-
-            // Set the colors explicitly on the first column
-            $chartValues = array_values($chartValues);
-            $firstValue = array_shift($chartValues);
-
-            //if ($firstValue != 0) {
-            $firstValue = array(
-                'y' => floatval($firstValue),
-                'color' => $yourCollegeColors[$i],
-                'dataLabels' => array(
-                    'enabled' => true,
-                    'format' => 'format'
-                )
-            );
-
-            pr($chartData);
-            pr($chartValues);
-
-            // Data label color
-            if (!empty($config['stacked'])) {
-                $firstValue['dataLabels']['enabled'] = false;
-            }
-
-            array_unshift($chartValues, $firstValue);
-
-
-
             $series[] = array(
                 'name' => $config['benchmarks'][$dbColumn],
-                'data' => $chartValues,
+                //'data' => $chartValues,
+                'data' => $chartData,
                 'color' => $seriesColors[$i]
             );
 
@@ -1970,7 +1955,10 @@ class Report
         $highChartsConfig = array(
             'id' => rand(1,10000),
             'chart' => array(
-                'type' => 'column'
+                'type' => 'column',
+                'events' => array(
+                    'load' => 'chartLoaded'
+                )
             ),
             'title' => array(
                 'text' => $chartTitle,
@@ -1985,16 +1973,15 @@ class Report
             'yAxis' => array(
                 'title' => false,
                 'gridLineWidth' => 0,
-                'tickInterval' => 25,
                 'stackLabels' => array(
                     'enabled' => true,
+                    'format' => str_replace('y', 'total', $roundedFormat)
                 ),
                 'labels' => array(
                     'format' => str_replace('y', 'value', $format)
                 )
             ),
             'tooltip' => array(
-                //'pointFormat' => $format
                 'pointFormat' => str_replace('y', 'point.y', $format)
             ),
             'series' => $series,
@@ -2020,21 +2007,45 @@ class Report
 
         if (!empty($config['percent'])) {
             $highChartsConfig['yAxis']['max'] = 100;
-            $highChartsConfig['yAxis']['labels'] = array(
-                'format' => '{value}%'
-            );
+            $highChartsConfig['yAxis']['labels']['format'] = '{value}%';
+            $highChartsConfig['yAxis']['tickInterval'] = 25;
         }
 
         if (!empty($config['dollars'])) {
-            $highChartsConfig['yAxis']['labels'] = array(
-                'format' => '${value}'
-            );
+            $highChartsConfig['yAxis']['labels']['format'] =  '${value}';
         }
 
         return array(
             'chart' => $highChartsConfig,
             'description' => $config['description']
         );
+    }
+
+    public function getStrengths($weaknesses = false)
+    {
+        $college = $this->getObservation()->getCollege();
+        $year = $this->getObservation()->getYear();
+        $study = $this->getStudy();
+
+        $percentileRanks = $this->getPercentileRankModel()
+            ->findStrengths($college, $study, $year, $weaknesses);
+
+
+        $ranks = array();
+        foreach ($percentileRanks as $pRank) {
+            $ranks[] = array(
+                'name' => $pRank->getBenchmark()->getDescriptiveReportLabel(),
+                'rank' => $pRank->getRank(),
+                'benchmark_id' => $pRank->getBenchmark()->getId()
+            );
+        }
+
+        return $ranks;
+    }
+
+    public function getWeaknesses()
+    {
+        return $this->getStrengths(true);
     }
 
     /**

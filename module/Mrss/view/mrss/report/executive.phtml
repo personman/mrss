@@ -56,41 +56,35 @@
     <div class="executiveReportStrengths">
         <h3>Strengths</h3>
         <p>The following benchmarks are where your community college performed at its best. The benchmark is followed by the percent rank for your institution.</p>
-        <ol class="executiveReportList"><li>
-                % of Full-Time Students that Transferred in Three Years
-                <div class="executiveReportRank">Your Rank - 89<sup>th</sup> Percentile</div>
-            </li><li>
-                % of Leavers and Non-Completers  that Achieved their Educational Goal
-                <div class="executiveReportRank">Your Rank - 82<sup>nd</sup> Percentile</div>
-            </li><li>
-                Training Expenditures per FTE Employee
-                <div class="executiveReportRank">Your Rank - 78<sup>th</sup> Percentile</div>
-            </li><li>
-                % of Part-Time Students that Transferred in Three Years
-                <div class="executiveReportRank">Your Rank - 76<sup>th</sup> Percentile</div>
+        <?php //pr($reportData['strengths']) ?>
+        <ol class="executiveReportList">
+            <?php foreach ($reportData['strengths'] as $benchmark): ?>
+            <li>
+                <?= $benchmark['name'] ?>
+                <div class="executiveReportRank">Your Rank - <?= round($benchmark['rank']) ?><sup>th</sup> Percentile</div>
             </li>
+            <?php endforeach ?>
+
         </ol>
     </div>
 
     <div class="executiveReportImprovements">
         <h3>Opportunities for Improvement</h3>
         <p>The following benchmarks are where your community college may need improvement. The benchmark is followed by the percent rank for your institution.</p>
-        <ol class="executiveReportList"><li>
-                % of Students that Received a Passing Grade in Writing Developmental/Remedial Courses of those that Completed the Course
-                <div class="executiveReportRank">Your Rank - 11<sup>th</sup> Percentile</div>
-            </li><li>
-                % of Students that Completed a Reading Developmental/Remedial Courses of those that Enrolled in the Course
-                <div class="executiveReportRank">Your Rank - 16<sup>th</sup> Percentile</div>
-            </li><li>
-                % of Full-Time Students that Completed in Three Years
-                <div class="executiveReportRank">Your Rank - 20<sup>th</sup> Percentile</div>
-            </li>
+        <ol class="executiveReportList">
+            <?php foreach ($reportData['weaknesses'] as $benchmark): ?>
+                <li>
+                    <?= $benchmark['name'] ?>
+                    <div class="executiveReportRank">Your Rank - <?= round($benchmark['rank']) ?><sup>th</sup> Percentile</div>
+                </li>
+            <?php endforeach ?>
+
         </ol>
     </div>
 
 
     <div class="executiveReportPeerCallout">
-        <h4>Next Steps – Peer Comparisons</h4>
+        <h4>Next Steps &mdash; Peer Comparisons</h4>
 
         <p>The NCCBP On-Line Peer Comparison Tool allows you to compare your results to similar community colleges.  Please contact us if you would like assistance using this tool.</p>
     </div>
@@ -131,3 +125,74 @@
     <?php //pr($reportData) ?>
 <?php endif ?>
 </div>
+
+
+<script type='text/javascript'>
+    function chartLoaded(event)
+    {
+        var lastChart = this
+        fixupExecCharts()
+    }
+
+    function fixupExecCharts() {
+    var zeros = [0, '0%', '0.00%', '$0']
+    //$(function() {
+        // Only show the first stack total label
+        $('.highcharts-stack-labels text').hide();
+        $('.highcharts-stack-labels text:first-child').show()
+
+        // Handle not reported
+        var ycLabel = $('.highcharts-stack-labels text:first-child');
+        ycLabel.each(function() {
+            var label = $(this);
+            if (zeros.indexOf(label.text()) > -1) {
+                label.text('Not Reported');
+            }
+        })
+
+        // Handle not reported for non-stack charts
+        var ycLabel = $('.highcharts-data-labels text:first-child');
+        var parent;
+        ycLabel.each(function() {
+            label = $(this);
+            if (zeros.indexOf(label.text()) > -1) {
+                label.text('Not Reported');
+                label.attr('x', -23);
+
+                if (label.parent().parent().parent().parent().is(parent)) {
+                    label.hide();
+                }
+
+                parent = label.parent().parent().parent().parent();
+            }
+        })
+
+        // If a multibar is reported and its neighbor is not, just leave
+        // the neighbor's label blank
+        multiCharts = [
+            'chart_w_comp_succ',
+            'chart_fall_fall_pers',
+        ];
+
+        for (var i in multiCharts) {
+            var multiChart = multiCharts[i]
+            var labels = $('#' + multiChart + ' .highcharts-data-labels text:first-child tspan');
+
+            values = [];
+            labels.each(function() {
+                values.push($(this).text());
+            })
+
+            if ((values[0] == 'Not Reported' && values[1] != 'Not Reported')) {
+                $(labels[0]).hide()
+            }
+            if ((values[1] == 'Not Reported' && values[0] != 'Not Reported')) {
+                $(labels[1]).hide()
+            }
+        }
+
+        // bar stack label
+        $('#chart_pt_perminus7_comp .highcharts-stack-labels text:first-child').attr('visibility', 'show')
+    }
+    //})
+</script>

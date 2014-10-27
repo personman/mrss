@@ -116,6 +116,9 @@ class PercentileRank
         return $this;
     }
 
+    /**
+     * @return Benchmark
+     */
     public function getBenchmark()
     {
         return $this->benchmark;
