@@ -628,6 +628,21 @@ input:focus, textarea:focus {
 }
 
 
+/* Report overview slides */
+#reports-slides .carousel-inner {
+    max-width: 540px;
+}
+
+#reports-slides .carousel-caption {
+    background-color: #666;
+    background-color: rgba(10, 10, 10, 0.4);
+}
+
+#reports-slide-container .carousel-control.left,
+#reports-slide-container .carousel-control.right {
+    background-image: none;
+}
+
 /* Impersonation */
 .impersonation {
     margin-bottom: 20px;
