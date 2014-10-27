@@ -552,6 +552,10 @@ header #actionItems .btn {
     font-weight: 500;
 }
 
+.contact textarea {
+    width: 98%;
+}
+
 form dd {
     margin-bottom: 15px;
 }
@@ -561,7 +565,6 @@ form dd {
 /* Forms */
 input, textarea {
     display: block;
-    height: 34px;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
@@ -575,6 +578,9 @@ input, textarea {
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+input {
+    height: 34px;
 }
 input:focus, textarea:focus {
     border-color: #66afe9;

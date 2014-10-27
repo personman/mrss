@@ -14,6 +14,11 @@ class ContactController extends PhlyController
             $this->form->get('subject')->setValue($subject);
         }
 
+        $body = $this->params()->fromRoute('body');
+        if ($body) {
+            $this->form->get('body')->setValue($body);
+        }
+
         return array(
             'form' => $this->form,
         );

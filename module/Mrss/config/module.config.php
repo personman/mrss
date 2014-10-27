@@ -1137,7 +1137,8 @@ return array(
                     'defaults' => array(
                         'controller' => 'PhlyContact\Controller\Contact',
                         'action' => 'index',
-                        'subject' => 'Schedule Demo'
+                        'subject' => 'Schedule Demo',
+                        'body' => "Your institution:\n\n\nPreferred time and dates:\n\n\nWho will join the demo:"
                     )
                 )
             ),
