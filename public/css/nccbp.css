@@ -345,6 +345,7 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
 #headerButtons {
     position: absolute;
     right: 10px;
+    width: 300px;
 }
 
 #headerLoginForm {
