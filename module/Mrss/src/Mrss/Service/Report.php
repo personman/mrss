@@ -1859,12 +1859,12 @@ class Report
 
         $colorConfig = $colors = array(
             'seriesColors' => array(
-                '#41AA85', // '#519548' lightened 30%
-                '#6190BC', // '#005595' lightened 40%
+                '#9cc03e', // '#005595' lightened 40%
+                '#3366B4', // '#519548' lightened 30%
             ),
             'yourCollegeColors' => array(
-                '#25604B',
-                '#375D81'
+                '#507400',
+                '#001A68'
             )
         );
         // What color will the bar be?

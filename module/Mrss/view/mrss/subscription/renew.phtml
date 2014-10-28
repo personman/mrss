@@ -40,7 +40,7 @@
             <a href="/institution/users/renew" class="btn btn-default">Update Institution Users</a>
         </p>
 
-        <?php foreach ($college->getUsers() as $user): ?>
+        <?php foreach ($college->getUsersByStudy($this->currentStudy()) as $user): ?>
             <dl>
                 <dt>Name</dt>
                 <dd><?= $user->getFullName() ?></dd>

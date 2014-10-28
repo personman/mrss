@@ -338,6 +338,10 @@ class College
         return $this->users;
     }
 
+    /**
+     * @param Study $study
+     * @return \Doctrine\Common\Collections\ArrayCollection|\Mrss\Entity\User[]
+     */
     public function getUsersByStudy(Study $study)
     {
         $users = array();

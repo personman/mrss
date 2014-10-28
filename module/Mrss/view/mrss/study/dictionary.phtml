@@ -27,7 +27,7 @@
 <?php foreach ($study->getBenchmarkGroups() as $benchmarkGroup): ?>
     <h2><?= $benchmarkGroup->getName() ?></h2>
 
-    <?php foreach ($benchmarkGroup->getChildren(null, false) as $benchmark): ?>
+    <?php foreach ($benchmarkGroup->getChildren($this->currentStudy()->getCurrentYear(), false) as $benchmark): ?>
         <?php if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading'): ?>
             <?php // Skip subheadings for NCCBP form 2 ?>
             <?php if ($benchmarkGroup->getId() == '2') continue ?>

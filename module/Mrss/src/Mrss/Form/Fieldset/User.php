@@ -230,7 +230,7 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'required' => true
             ),
             'title' => array(
-                'required' => true
+                'required' => false
             ),
             'phone' => array(
                 'required' => true
