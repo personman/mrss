@@ -240,7 +240,10 @@ class UserController extends AbstractActionController
         $adminControls = $this->isAllowed('adminMenu', 'view');
         $em = $this->getServiceLocator()->get('em');
 
-        $fieldset = new UserForm('user', false, $adminControls, $em);
+        // Can this user choose from a subset of roles?
+        $roleSubset = $this->isAllowed('membership', 'view');
+
+        $fieldset = new UserForm('user', false, $adminControls, $em, $roleSubset);
         $fieldset->add(
             array(
                 'name' => 'id',

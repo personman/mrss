@@ -17,7 +17,8 @@ class User extends Fieldset implements InputFilterProviderInterface
         $name,
         $includeEmailConfirm = true,
         $adminControls = false,
-        $em = null
+        $em = null,
+        $roleSubset = false
     ) {
         $this->includeEmailConfirm = $includeEmailConfirm;
 
@@ -148,7 +149,8 @@ class User extends Fieldset implements InputFilterProviderInterface
                     'type' => 'Select',
                     'required' => true,
                     'options' => array(
-                        'label' => 'Role'
+                        'label' => 'Role',
+                        'help-block' => $this->getRoleHelp()
                     ),
                     'attributes' => array(
                         'options' => array(
@@ -176,7 +178,35 @@ class User extends Fieldset implements InputFilterProviderInterface
                     )
                 );
             }
+        } elseif ($roleSubset) {
+            $this->add(
+                array(
+                    'name' => 'role',
+                    'type' => 'Select',
+                    'required' => true,
+                    'options' => array(
+                        'label' => 'Role',
+                        'help-block' => $this->getRoleHelp()
+                    ),
+                    'attributes' => array(
+                        'options' => array(
+                            'data' => 'Data Manager',
+                            'contact' => 'Membership Coordinator',
+                            'viewer' => 'View Reports Only'
+                        )
+                    )
+                )
+            );
+
         }
+    }
+
+    protected function getRoleHelp()
+    {
+        return '<em>View Reports Only</em> users can only view reports.
+            <em>Membership Coordinators</em> can view reports, renew membership, and
+            manage users. <em>Data Managers</em> can view reports, renew memberships,
+            manage users, and enter data.';
     }
 
     /**
