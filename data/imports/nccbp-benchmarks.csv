@@ -17,7 +17,7 @@ benchmarkGroup,name,reportLabel,peerReportLabel,descriptiveReportLabel,yearPrefi
 "Form 1: Subscriber Information","Credit Student Median Age","Credit Student Median Age","Credit Student Median Age","Credit Student Median Age",Fall,2,crd_stud_minc,number,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","Female Credit Students","% Female Credit Students","% Female Credit Students","% Female Credit Students",Fall,2,fem_cred_stud,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","First-generation Student","First-generation Student","First-generation Student","First-generation Student",,0,first_gen_students,percent,"<strong>First-generation Student</strong> should be the percent of fall credit students that represent the first generation of their families to attend a higher education institution.",,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 1: Subscriber Information","Race/Ethnicity",,,,,,,heading,
+"Form 1: Subscriber Information",Race/Ethnicity,,,,,,,heading,
 "Form 1: Subscriber Information","Nonresident Alien","% Nonresident Alien","% Nonresident Alien","% Nonresident Alien",Fall,2,non_res_alien,percent,,,,,,1,,,"2007,2008,2009,2010,2011"
 "Form 1: Subscriber Information","Nonresident Alien","% Nonresident Alien","% Nonresident Alien","% Nonresident Alien",Fall,2,non_res_alien_2012,percent,,,,,,1,1,1,"2012,2013,2014,2015"
 "Form 1: Subscriber Information","Black, Non-Hispanic","% Black, Non-Hispanic","% Black, Non-Hispanic","% Black, Non-Hispanic",Fall,2,blk_n_hisp,percent,,,,,,1,,,"2007,2008,2009,2010,2011"
@@ -463,7 +463,7 @@ Enter the total FTE students at end of fall 2011 term.
 </p>
 <p>
 Total FTE Students should equal total student credit hours for which all students were enrolled  / 15. <em>Exclude high school students taking classes taught by high school faculty in their high schools for college credit</em>.
-</p>",,,,,1,,,"2013,2014,2015,2016"
+</p>",,,,,,,,"2013,2014,2015,2016"
 "Form 16B: Credit Course Stud/Fac Ratio",Total,Total,Total,Total,,0,form16b_cred_co_stud_fac_tot_fte_stud,number,"<p>
 Enter the total FTE students at end of fall 2012 term.
 </p>
@@ -513,18 +513,18 @@ Credit distance learning courses should include those that are Web-based, comput
 "Form 17A: Dist Learning Sec and Cred Hrs","Total Taught","Total Taught","Total Taught","Total Taught",,0,tot_crs_tght,number,"Enter the total number of <em>both non-distance and distance</em> credit sections at your institution.",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17A: Dist Learning Sec and Cred Hrs","Distance Learning Proportion of Credit Hours","DL % of Credit Hours","Distance Learning: % of Credit Hours","% of Distance Learning Credit Hours of Total Credit Hours",,0,dist_prop_crh,percent,,,1,"{{tot_dis_lear_stud_hrs}} / {{tot_crh_tght}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 17A: Dist Learning Sec and Cred Hrs","Distance Learning Proportion of Total Credit Sections","DL % of Total Credit Sections","Distance Learning: % of Sections","% of Distance Learning Sections of Total Sections",,0,dist_prop_crs,percent,,,1,"{{tot_dis_lear_sec}} / {{tot_crs_tght}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
-"Form 17B: Distance Learning Grades",A,A,A,A,,,form17b_dist_learn_grad_a,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 17B: Distance Learning Grades",B,B,B,B,,,form17b_dist_learn_grad_b,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 17B: Distance Learning Grades",A,A,A,A,,0,form17b_dist_learn_grad_a,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 17B: Distance Learning Grades",B,B,B,B,,0,form17b_dist_learn_grad_b,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",Total,Total,Total,Total,,0,form17b_dist_learn_grad_total,float,,,1,"{{form17b_dist_learn_grad_a}} + {{form17b_dist_learn_grad_b}} + {{form17b_dist_learn_grad_c}} + {{form17b_dist_learn_grad_p}} + {{form17b_dist_learn_grad_d}} + {{form17b_dist_learn_grad_f}} + {{form17b_dist_learn_grad_w}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 17B: Distance Learning Grades",C,C,C,C,,,form17b_dist_learn_grad_c,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 17B: Distance Learning Grades",C,C,C,C,,0,form17b_dist_learn_grad_c,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",A%,A%,A%,A%,,0,form17b_dist_learn_grad_a_perc,percent,,,1,"{{form17b_dist_learn_grad_a}} / {{form17b_dist_learn_grad_total}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 17B: Distance Learning Grades",P,P,P,P,,,form17b_dist_learn_grad_p,number,"Include all other passing grades here.",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 17B: Distance Learning Grades",P,P,P,P,,0,form17b_dist_learn_grad_p,number,"Include all other passing grades here.",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",B%,B%,B%,B%,,0,form17b_dist_learn_grad_b_perc,percent,,,1,"{{form17b_dist_learn_grad_b}} / {{form17b_dist_learn_grad_total}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 17B: Distance Learning Grades",D,D,D,D,,,form17b_dist_learn_grad_d,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 17B: Distance Learning Grades",D,D,D,D,,0,form17b_dist_learn_grad_d,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",C%,C%,C%,C%,,0,form17b_dist_learn_grad_c_perc,percent,,,1,"{{form17b_dist_learn_grad_c}} / {{form17b_dist_learn_grad_total}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 17B: Distance Learning Grades",F,F,F,F,,,form17b_dist_learn_grad_f,number,"Include all other non-passing grades here.",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 17B: Distance Learning Grades",F,F,F,F,,0,form17b_dist_learn_grad_f,number,"Include all other non-passing grades here.",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",P%,P%,P%,P%,,0,form17b_dist_learn_grad_p_perc,percent,,,1,"{{form17b_dist_learn_grad_p}} / {{form17b_dist_learn_grad_total}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 17B: Distance Learning Grades",W,W,W,W,,,form17b_dist_learn_grad_w,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 17B: Distance Learning Grades",W,W,W,W,,0,form17b_dist_learn_grad_w,number,,,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",D%,D%,D%,D%,,0,form17b_dist_learn_grad_d_perc,percent,,,1,"{{form17b_dist_learn_grad_d}} / {{form17b_dist_learn_grad_total}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",F%,F%,F%,F%,,0,form17b_dist_learn_grad_f_perc,percent,,,1,"{{form17b_dist_learn_grad_f}} / {{form17b_dist_learn_grad_total}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 17B: Distance Learning Grades",W%,W%,W%,W%,,0,form17b_dist_learn_grad_w_perc,percent,,,1,"{{form17b_dist_learn_grad_w}} / {{form17b_dist_learn_grad_total}}",,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
