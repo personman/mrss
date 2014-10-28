@@ -833,7 +833,7 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
 
     .benefits .sec-banner ul {
         font-size: 13px;
-        padding: 15px;
+        padding: 15px 15px 15px 25px;
     }
 
     .benefits .sec-banner li {
