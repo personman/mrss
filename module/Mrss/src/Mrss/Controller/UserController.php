@@ -24,6 +24,7 @@ class UserController extends AbstractActionController
         /** @var \Mrss\Model\User $userModel */
         $userModel = $this->getServiceLocator()->get('model.user');
         $collegeModel = $this->getServiceLocator()->get('model.college');
+        $redirect = $this->params('redirect');
 
         if ($id == 'add' || (empty($id) && empty($_POST['user']['id']))) {
             $user = new UserEntity();
@@ -53,11 +54,15 @@ class UserController extends AbstractActionController
 
         $form = $this->getUserForm($user);
 
+        // Redirect to renew if needed
+        $form->addRedirect($redirect);
+
         // Handle form submission
         if ($this->getRequest()->isPost()) {
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $post = $this->params()->fromPost();
+            $form->setData($post);
 
             if ($form->isValid()) {
                 // Double check that they're not trying to slip a user into
@@ -93,7 +98,11 @@ class UserController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('User saved.');
-                //return $this->redirect()->toRoute('admin');
+
+                if (!empty($post['redirect'])) {
+                    return $this->redirect()->toUrl('/' . $post['redirect']);
+                }
+
                 return $this->redirect()->toRoute('institution/users');
             } else {
                 $this->flashMessenger()->addErrorMessage('Correct errors below.');
@@ -145,14 +154,20 @@ class UserController extends AbstractActionController
             return $this->redirect()->toUrl('/institution/users');
         }
 
+        $redirect = $this->params('redirect');
 
         $form = $this->getUserForm($user);
+
+        // Redirect to renew if needed
+        $form->addRedirect($redirect);
+
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $post = $this->params()->fromPost();
+            $form->setData($post);
 
             if ($form->isValid()) {
                 // Are they deleting?
@@ -169,6 +184,12 @@ class UserController extends AbstractActionController
                     $this->getServiceLocator()->get('em')->flush();
 
                     $this->flashMessenger()->addSuccessMessage('User deleted.');
+
+                    if (!empty($post['redirect'])) {
+                        return $this->redirect()->toUrl('/' . $post['redirect']);
+                    }
+
+
                     return $this->redirect()->toRoute('institution/users');
                 }
 
@@ -177,6 +198,11 @@ class UserController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Account saved.');
+
+                if (!empty($post['redirect'])) {
+                    return $this->redirect()->toUrl('/' . $post['redirect']);
+                }
+
 
                 // Where to redirect?
                 if (true) {

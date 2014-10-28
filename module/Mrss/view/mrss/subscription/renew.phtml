@@ -12,7 +12,7 @@
 <div class="row-fluid row renewInfo">
     <div class="span6 col-md-6">
         <p>
-            <a href="/institution/edit" class="btn btn-default">Update Institution Information</a>
+            <a href="/institution/edit/renew" class="btn btn-default">Update Institution Information</a>
         </p>
 
         <dl>
@@ -37,7 +37,7 @@
     <div class="span6 col-md-6">
 
         <p>
-            <a href="/institution/users" class="btn btn-default">Update Institution Users</a>
+            <a href="/institution/users/renew" class="btn btn-default">Update Institution Users</a>
         </p>
 
         <?php foreach ($college->getUsers() as $user): ?>
@@ -53,7 +53,7 @@
 
                 <dt>Phone</dt>
                 <dd><?= $user->getFullPhone() ?></dd>
-
+                <br style="clear:both">
             </dl>
         <?php endforeach ?>
 

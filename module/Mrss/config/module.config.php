@@ -868,11 +868,12 @@ return array(
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/:id[/college/:college]',
+                            'route' => '/:id[/college/:college][/:redirect]',
                             'defaults' => array(
                                 'action' => 'edit',
                                 'id' => 0,
-                                'college' => 0
+                                'college' => 0,
+                                'redirect' => null
                             )
                         )
                     ),
@@ -918,18 +919,20 @@ return array(
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/edit',
+                            'route' => '/edit[/:redirect]',
                             'defaults' => array(
-                                'action' => 'edit'
+                                'action' => 'edit',
+                                'redirect' => null
                             )
                         )
                     ),
                     'users' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/users',
+                            'route' => '/users[/:redirect]',
                             'defaults' => array(
-                                'action' => 'users'
+                                'action' => 'users',
+                                'redirect' => null
                             )
                         )
                     ),
@@ -960,10 +963,11 @@ return array(
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/edit[/:id]',
+                            'route' => '/edit[/:id][/:redirect]',
                             'defaults' => array(
                                 'action' => 'accountedit',
-                                'id' => null
+                                'id' => null,
+                                'redirect' => null
                             )
                         )
                     )

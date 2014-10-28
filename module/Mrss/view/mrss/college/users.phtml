@@ -1,9 +1,10 @@
 <?php /** @var \Mrss\Entity\College $college */ ?>
 
-<h2><?= $college->getName() ?> Users</h2>
+<h1><?= $college->getName() ?> Users</h1>
 
 <p>
-    <a href="<?= $this->url('users/edit', array('id' => 'add')) ?>" class="btn btn-default"><i class="icon-plus"></i> Add a User</a>
+
+    <a href="<?= $this->url('users/edit', array('id' => 'add', 'redirect' => 'renew')) ?>" class="btn btn-default"><span class="glyphicon glyphicon-plus icon icon-plus"></span> Add a User</a>
 </p>
 
 <table class="table table-striped">
@@ -22,7 +23,10 @@
                 <td><?= $user->getEmail() ?></td>
                 <td><?= $user->getFullPhone() ?></td>
                 <td>
-                    <a href="<?= $this->url('account/edit', array('id' => $user->getId())) ?>">Edit</a>
+                    <a href="<?= $this->url(
+                        'account/edit',
+                        array('id' => $user->getId(), 'redirect' => 'renew')
+                    ) ?>">Edit</a>
                 </td>
             </tr>
         <?php endforeach ?>

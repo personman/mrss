@@ -62,6 +62,22 @@ class AbstractForm extends Form
         return $buttons;
     }
 
+    public function addRedirect($redirect)
+    {
+        // Redirect to renew if needed
+        if (!empty($redirect)) {
+            $this->add(
+                array(
+                    'name' => 'redirect',
+                    'type' => 'Hidden',
+                    'attributes' => array(
+                        'value' => $redirect
+                    )
+                )
+            );
+        }
+    }
+
     public function getStates($includeBlankOption = true)
     {
         $states = array(

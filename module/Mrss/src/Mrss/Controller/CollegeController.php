@@ -101,6 +101,8 @@ class CollegeController extends AbstractActionController
 
         $college = $this->currentCollege();
 
+        $redirect = $this->params()->fromRoute('redirect');
+
         $em = $this->getServiceLocator()->get('em');
         $collegeFieldset->setHydrator(
             new DoctrineHydrator($em, 'Mrss\Entity\College')
@@ -109,6 +111,9 @@ class CollegeController extends AbstractActionController
         $form->add($collegeFieldset);
         $form->bind($college);
         $form->add($form->getButtonFieldset());
+
+        // Redirect to renew if needed
+        $form->addRedirect($redirect);
 
         // Process the form
         if ($this->getRequest()->isPost()) {
@@ -122,6 +127,13 @@ class CollegeController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Institution saved.');
+
+                // Get the redirect
+                $data = $this->params()->fromPost();
+                if (!empty($data['redirect'])) {
+                    return $this->redirect()->toUrl('/' . $data['redirect']);
+                }
+
                 return $this->redirect()->toUrl('/members');
             }
 
@@ -138,7 +150,8 @@ class CollegeController extends AbstractActionController
         $college = $this->currentCollege();
 
         return array(
-            'college' => $college
+            'college' => $college,
+            'redirect' => $this->params()->fromRoute('redirect')
         );
     }
 }

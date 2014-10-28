@@ -300,6 +300,10 @@ return array(
                         'label' => 'Schedule Demo',
                         'uri' => '/schedule-demo'
                     ),
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
                 )
             ),
             'account' => getAccountMenu(),
