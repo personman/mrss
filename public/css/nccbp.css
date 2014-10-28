@@ -579,7 +579,7 @@ form dd {
 .renew-nav {
     background: #9cc03e;
 }
-.renew-nav a {
+.navbar-default .navbar-nav > li.renew-nav > a {
     color: white;
 }
 

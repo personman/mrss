@@ -40,9 +40,12 @@ class NccbpNavigationFactory extends NavigationFactory
         unset($pages['reports']['pages']['summary']);
 
         // Hide submitted values as NCCBP handles them under data documentation
-        if ($pages['data-entry']['label'] == 'Submitted Values') {
-            unset($pages['data-entry']);
+        if (!empty($pages['data-entry'])) {
+            if ($pages['data-entry']['label'] == 'Submitted Values') {
+                unset($pages['data-entry']);
+            }
         }
+
 
         /*if ($auth->hasIdentity()) {
 
