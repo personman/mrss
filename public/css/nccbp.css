@@ -672,6 +672,23 @@ input:focus, textarea:focus {
     background-image: none;
 }
 
+
+/* Other projects page */
+#orgbox h2 {
+    display: none;
+}
+#orgbox #cost-and-productivity img.img-responsive {
+    max-height: 100px;
+}
+
+#orgbox div.col-md-4 {
+    margin-bottom: 50px
+}
+
+#orgbox div.col-md-4 img {
+    margin-bottom: 20px;
+}
+
 /* Impersonation */
 .impersonation {
     margin-bottom: 20px;
