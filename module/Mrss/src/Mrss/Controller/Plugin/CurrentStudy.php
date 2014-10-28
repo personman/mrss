@@ -56,7 +56,7 @@ class CurrentStudy extends AbstractPlugin
                     );
                 }
             } else {
-                throw new \Exception("Unable to determine current study from url.");
+                throw new \Exception("Unable to determine current study from url: $url");
             }
         }
 
