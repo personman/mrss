@@ -6,9 +6,8 @@ $(function() {
 function setupLoginButton()
 {
     $('#loginButton').click(function() {
-        $('#headerLoginForm').show()
-        $('#loginButton').hide()
-        $('#schedule-demo').hide()
+        $('#headerButtons').hide('drop', {direction: 'up'})
+        $('#headerLoginForm').show('drop', {direction: 'down'})
 
         return false
     })
