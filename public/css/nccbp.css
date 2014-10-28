@@ -183,9 +183,9 @@ ul.navbar-nav > li {
 
 #accountability .carousel-caption {
     top: auto;
-    right: 15%;
+    left: 3%;
     bottom: 8%;
-    left: auto;
+    right: auto;
 
     background-color: rgba(155, 155, 155, .85);
 }
