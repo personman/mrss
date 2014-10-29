@@ -851,6 +851,9 @@ input:focus, textarea:focus {
 }
 
 
+#control-group-UPAY_SITE_ID, #control-group-EXT_TRANS_ID, #control-group-AMT {
+    display: none;
+}
 
 .nav-tabs {
     margin-bottom: 15px;
