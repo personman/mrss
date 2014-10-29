@@ -939,7 +939,9 @@ class Report
             'av_cred_sec_size' => 2,
             'griev_occ_rate' => 4,
             'harass_occ_rate' => 4,
-            'stu_fac_ratio' => 2
+            'stu_fac_ratio' => 2,
+            'stud_inst_serv_ratio' => 2,
+            'empl_inst_serv_ratio' => 2
         );
 
         $decimalPlaces = 0;
