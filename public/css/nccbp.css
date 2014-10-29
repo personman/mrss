@@ -595,6 +595,9 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     background-color: #9cc03e;
     border-color: #9cc03e;
 }
+.sidebar .sidebarinset.sidebarinset-alt {
+    border-color: #9cc03e;
+}
 
 /* Navbar */
 .navbar-toggle {
