@@ -313,6 +313,12 @@ class SubscriptionController extends AbstractActionController
         // Get this dynamically based on study and date
         $amount = $this->getStudy()->getCurrentPrice();
 
+        // Renewal price @todo: make this dymanic
+        $sub = json_decode($this->getDraftSubscription()->getFormData(), true);
+        if (!empty($sub['renew'])) {
+            $amount = 1250;
+        }
+
         // Check for offer code
         $agreement = json_decode(
             $this->getDraftSubscription()->getAgreementData(),
