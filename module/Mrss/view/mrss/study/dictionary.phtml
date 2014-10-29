@@ -30,7 +30,18 @@
     <?php foreach ($benchmarkGroup->getChildren($this->currentStudy()->getCurrentYear(), false) as $benchmark): ?>
         <?php if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading'): ?>
             <?php // Skip subheadings for NCCBP form 2 ?>
-            <?php if ($benchmarkGroup->getId() == '2') continue ?>
+            <?php if ($benchmarkGroup->getId() == '2') {
+                //$name = $benchmark->getName();
+                //if (in_array($name, array('% Compl. or Transf. in Three Years', '% Compl. or Transf. in Six Years'))) {
+                continue;
+                /*} else {
+                    $name = str_replace('% ', '', $name);
+                    $benchmark->setName($name);
+                }*/
+
+
+            }
+                ?>
 
             <h3><?= $benchmark->getName() ?></h3>
         <?php else: ?>

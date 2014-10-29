@@ -193,7 +193,7 @@ class StudyController extends AbstractActionController
                     if (!empty($keyedBenchmarks[$variable])) {
                         /** @var \Mrss\Entity\Benchmark $benchmarkToInsert */
                         $benchmarkToInsert = $keyedBenchmarks[$variable];
-                        $fieldName = $benchmarkToInsert->getDescriptiveReportLabel();
+                        $fieldName = $benchmarkToInsert->getReportLabel();
                         $fieldName = "<span class='fieldName'>$fieldName</span>";
 
                         // Replace the dbColumn in the equation with a field name
@@ -207,7 +207,7 @@ class StudyController extends AbstractActionController
                 }
 
                 $computed[] = array(
-                    'benchmark' => $benchmark->getDescriptiveReportLabel(),
+                    'benchmark' => $benchmark->getReportLabel(),
                     'equation' => $equation
                 );
             }
