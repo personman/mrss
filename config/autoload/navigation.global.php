@@ -223,6 +223,7 @@ return array(
             'join' => array(
                 'label' => 'Join Now',
                 'uri' => '#',
+                'class' => 'join-nav',
                 'pages' => array(
                     'how-to-join' => array(
                         'label' => 'How to Join',

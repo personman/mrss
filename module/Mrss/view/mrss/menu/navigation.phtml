@@ -13,7 +13,7 @@
                 <?php echo $this->translate($page->getLabel()) ?>
             </a>
         <?php else: ?>
-            <li class="dropdown">
+            <li class="dropdown <?= $page->getClass() ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <span><?php echo $this->translate($page->getLabel()) ?></span>
                 <b class="caret"></b>

@@ -8,6 +8,7 @@ use Zend\Validator;
 use Zend\Filter;
 use Zend\Form\Element;
 use Mrss\Form\Fieldset\User as UserFieldset;
+use Mrss\Form\Fieldset\College;
 
 class Subscription extends AbstractForm
 {
@@ -16,7 +17,7 @@ class Subscription extends AbstractForm
         // Call the parent constructor
         parent::__construct('subscription');
 
-        $institution = new \Mrss\Form\Fieldset\College;
+        $institution = new College;
         $this->add($institution);
 
         // Administrative Contact
@@ -34,6 +35,8 @@ class Subscription extends AbstractForm
                 'Data Contact'
             )
         );
+
+        $this->labelRequired();
 
         // Submit button
         $this->add(
@@ -81,5 +84,14 @@ class Subscription extends AbstractForm
         );
 
         return $fieldset;
+    }
+
+    public function labelRequired()
+    {
+        //$e = $this->get();
+        //prd($this);
+        //foreach ($this->g() as $element) {
+        //    prd($element);
+        //}
     }
 }
