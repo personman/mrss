@@ -55,6 +55,12 @@ Use fiscal year 2013 data.
 "Form 1: Subscriber Information","From State","% Funds From State","% Funds From State","% Funds From State",FY,1,state_sour,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 1: Subscriber Information","From Tuition & Fees","% Funds From Tuition and Fees","% Funds From Tuition and Fees","% Funds From Tuition and Fees",FY,1,tuition_fees_sour,percent,,,,,,1,,,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
 "Form 2: Student Completion and Transfer","% Completed in Three Years",,,,,,,heading,
+"Form 2: Student Completion and Transfer","Unduplicated Headcount","Unduplicated Headcount","Unduplicated Headcount","Unduplicated Headcount",,0,pt_f_yminus4_headc,number,"<p>
+Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2010 IPEDS GRS cohort.
+</p>
+<p>
+<em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
+</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 2: Student Completion and Transfer","Unduplicated Headcount","Unduplicated Headcount","Unduplicated Headcount","Unduplicated Headcount",,0,ft_f_yminus4_headc,number,"<p>
 Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2010 IPEDS GRS cohort.
 </p>
@@ -73,21 +79,9 @@ Enter the number of students from ""Unduplicated Headcount"" who completed a deg
 <p>
 Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
 </p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Number Transferred","Number Transferred","Number Transferred","Number Transferred",,0,ft_f_yminus4_transf,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
-</p>
-<p>
-Please use National Student Clearinghouse data. 
-</p>
-<p>
-Degree or certificate completion ""trumps"" transfer.   Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
-</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Unduplicated Headcount","Unduplicated Headcount","Unduplicated Headcount","Unduplicated Headcount",,0,pt_f_yminus4_headc,number,"<p>
-Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2010 IPEDS GRS cohort.
-</p>
-<p>
-<em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
-</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed in Three Years","Full-time, First-time","Completed: FT Students in Three Years","% of Full-Time Students that Completed in Three Years",,0,ft_perc_comp,percent,,,1,"{{ft_f_yminus4_degr_cert}} / {{ft_f_yminus4_headc}}",,1,1,1,"2015,2014,2013,2012,2011,2010,2009,2008,2007"
+"Form 2: Student Completion and Transfer","Percent Completed in Three Years","Part-time, First-time","Completed: PT Students in Three Years","% of Part-Time Students that Completed in Three Years",,0,pt_perc_comp,percent,,,1,"{{pt_f_yminus4_degr_cert}} / {{pt_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
+"Form 2: Student Completion and Transfer","% Transferred in Three Years",,,,,,,heading,
 "Form 2: Student Completion and Transfer","Number Transferred","Number Transferred","Number Transferred","Number Transferred",,0,pt_f_yminus4_transf,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
 </p>
@@ -97,29 +91,29 @@ Please use National Student Clearinghouse data.
 <p>
 Degree or certificate completion ""trumps"" transfer.   Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Unduplicated headcount","Unduplicated headcount","Unduplicated headcount","Unduplicated headcount",,0,f_yminus7_headc,number,"<p>
-Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2007 IPEDS GRS cohort.
-</p>
-<p>
-<em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
-</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Number Completed Degree or Certificate","Number Completed Degree or Certificate","Number Completed Degree or Certificate","Number Completed Degree or Certificate",,0,ft_yminus7_degr,number,"<p>
-Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2013. 
-</p>
-<p>
-Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
-</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Number Transferred","Number Transferred","Number Transferred","Number Transferred",,0,ft_yminus7_transf,number,"<p>
+"Form 2: Student Completion and Transfer","Number Transferred","Number Transferred","Number Transferred","Number Transferred",,0,ft_f_yminus4_transf,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
 </p>
 <p>
 Please use National Student Clearinghouse data. 
 </p>
 <p>
-Degree or certificate completion ""trumps"" transfer.   Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
+Degree or certificate completion ""trumps"" transfer.   Students in the fall 2010 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Transferred in Three Years","Full-time, First-time","Transferred: FT Students in Three Years","% of Full-Time Students that Transferred in Three Years",,0,ft_perc_transf,percent,,,1,"{{ft_f_yminus4_transf}} / {{ft_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
+"Form 2: Student Completion and Transfer","Percent Transferred in Three Years","Part-time, First-time","Transferred: PT Students in Three Years","% of Part-Time Students that Transferred in Three Years",,0,pt_perc_transf,percent,,,1,"{{pt_f_yminus4_transf}} / {{pt_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
+"Form 2: Student Completion and Transfer","% Compl. or Transf. in Three Years",,,,,,,heading,
+"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years","Full-time, First-time","Completed or Transferred in Three Years: FT Students","% of Full-Time Students that Completed or Transferred in Three Years",,0,ft_perc_comp_transf,percent,,,1,"({{ft_f_yminus4_degr_cert}} + {{ft_f_yminus4_transf}}) / {{ft_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
+"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years","Part-time, First-time","Completed or Transferred in Three Years: PT Students","% of Part-Time Students that Completed or Transferred in Three Years",,0,pt_perc_comp_transf,percent,,,1,"({{pt_f_yminus4_degr_cert}} + {{pt_f_yminus4_transf}}) / {{pt_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
+"Form 2: Student Completion and Transfer","% Completed in Six Years",,,,,,,heading,
 "Form 2: Student Completion and Transfer","Unduplicated headcount","Unduplicated headcount","Unduplicated headcount","Unduplicated headcount",,0,pt_fminus7_headc,number,"<p>
 Enter unduplicated credit headcount of first-time, part-time degree- and certificate-seeking students in the fall 2007 IPEDS GRS cohort.
+</p>
+<p>
+<em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
+</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Unduplicated headcount","Unduplicated headcount","Unduplicated headcount","Unduplicated headcount",,0,f_yminus7_headc,number,"<p>
+Enter unduplicated credit headcount of first-time, full-time degree- and certificate-seeking students in the fall 2007 IPEDS GRS cohort.
 </p>
 <p>
 <em>Degree</em> and <em>Certificate</em> should be as defined by the reporting institution for credit student work.
@@ -130,6 +124,15 @@ Enter the number of students from ""Unduplicated Headcount"" who completed a deg
 <p>
 Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
 </p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Number Completed Degree or Certificate","Number Completed Degree or Certificate","Number Completed Degree or Certificate","Number Completed Degree or Certificate",,0,ft_yminus7_degr,number,"<p>
+Enter the number of students from ""Unduplicated Headcount"" who completed a degree or certificate before fall 2013. 
+</p>
+<p>
+Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates. Degree or certificate completion ""trumps"" transfer.
+</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
+"Form 2: Student Completion and Transfer","Percent Completed in Six Years","Full-time, First-time","Completed: Students in Six Years: FT Students","Full-time, First-time",,7,ft_minus7perc_comp,percent,,,1,"{{ft_yminus7_degr}} / {{f_yminus7_headc}}",,1,,,"2012,2013,2014,2015"
+"Form 2: Student Completion and Transfer","Percent Completed in Six Years","Part-time, First-time","Completed: Students in Six Years: PT Students","Part-time, First-time",,7,pt_perminus7_comp,percent,,,1,"{{pt_yminus7_degr}} / {{pt_fminus7_headc}}",,1,,,"2012,2013,2014,2015"
+"Form 2: Student Completion and Transfer","% Transferred in Six Years",,,,,,,heading,
 "Form 2: Student Completion and Transfer","Number Transferred","Number Transferred","Number Transferred","Number Transferred",,0,pt_yminus7_transf,number,"<p>
 Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
 </p>
@@ -139,18 +142,15 @@ Please use National Student Clearinghouse data.
 <p>
 Degree or certificate completion ""trumps"" transfer.   Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
 </p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
-"Form 2: Student Completion and Transfer","Percent Completed in Three Years","Full-time, First-time","Completed: FT Students in Three Years","% of Full-Time Students that Completed in Three Years",,0,ft_perc_comp,percent,,,1,"{{ft_f_yminus4_degr_cert}} / {{ft_f_yminus4_headc}}",,1,1,1,"2015,2014,2013,2012,2011,2010,2009,2008,2007"
-"Form 2: Student Completion and Transfer","Percent Completed in Three Years","Part-time, First-time","Completed: PT Students in Three Years","% of Part-Time Students that Completed in Three Years",,0,pt_perc_comp,percent,,,1,"{{pt_f_yminus4_degr_cert}} / {{pt_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
-"Form 2: Student Completion and Transfer","% Transferred in Three Years",,,,,,,heading,
-"Form 2: Student Completion and Transfer","Percent Transferred in Three Years","Full-time, First-time","Transferred: FT Students in Three Years","% of Full-Time Students that Transferred in Three Years",,0,ft_perc_transf,percent,,,1,"{{ft_f_yminus4_transf}} / {{ft_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
-"Form 2: Student Completion and Transfer","Percent Transferred in Three Years","Part-time, First-time","Transferred: PT Students in Three Years","% of Part-Time Students that Transferred in Three Years",,0,pt_perc_transf,percent,,,1,"{{pt_f_yminus4_transf}} / {{pt_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
-"Form 2: Student Completion and Transfer","% Compl. or Transf. in Three Years",,,,,,,heading,
-"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years","Full-time, First-time","Completed or Transferred in Three Years: FT Students","% of Full-Time Students that Completed or Transferred in Three Years",,0,ft_perc_comp_transf,percent,,,1,"({{ft_f_yminus4_degr_cert}} + {{ft_f_yminus4_transf}}) / {{ft_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
-"Form 2: Student Completion and Transfer","Percent Completed or Transferred in Three Years","Part-time, First-time","Completed or Transferred in Three Years: PT Students","% of Part-Time Students that Completed or Transferred in Three Years",,0,pt_perc_comp_transf,percent,,,1,"({{pt_f_yminus4_degr_cert}} + {{pt_f_yminus4_transf}}) / {{pt_f_yminus4_headc}}",,1,1,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015"
-"Form 2: Student Completion and Transfer","% Completed in Six Years",,,,,,,heading,
-"Form 2: Student Completion and Transfer","Percent Completed in Six Years","Full-time, First-time","Completed: Students in Six Years: FT Students","Full-time, First-time",,7,ft_minus7perc_comp,percent,,,1,"{{ft_yminus7_degr}} / {{f_yminus7_headc}}",,1,,,"2012,2013,2014,2015"
-"Form 2: Student Completion and Transfer","Percent Completed in Six Years","Part-time, First-time","Completed: Students in Six Years: PT Students","Part-time, First-time",,7,pt_perminus7_comp,percent,,,1,"{{pt_yminus7_degr}} / {{pt_fminus7_headc}}",,1,,,"2012,2013,2014,2015"
-"Form 2: Student Completion and Transfer","% Transferred in Six Years",,,,,,,heading,
+"Form 2: Student Completion and Transfer","Number Transferred","Number Transferred","Number Transferred","Number Transferred",,0,ft_yminus7_transf,number,"<p>
+Enter the number of students from ""Unduplicated Headcount"" who transferred to public and private four-year institutions before fall 2013.
+</p>
+<p>
+Please use National Student Clearinghouse data. 
+</p>
+<p>
+Degree or certificate completion ""trumps"" transfer.   Students in the fall 2007 IPEDS GRS cohort who received degrees or certificates and then transferred to four-year institutions should be included in degree or certificate completion.  Only those students who transferred but did not receive degrees or certificates should be included in ""Number Transferred"".
+</p>",,,,,,,1,"2007,2008,2009,2010,2011,2012,2013,2014,2015,2016"
 "Form 2: Student Completion and Transfer","Percent Transferred in Six Years","Full-time, First-time","Transferred: FT Students in Six Years","Full-time, First-time",,7,percminus7_transf,percent,,,1,"{{ft_yminus7_transf}} / {{f_yminus7_headc}}",,1,,,"2012,2013,2014,2015"
 "Form 2: Student Completion and Transfer","Percent Transferred in Six Years","Part-time, First-time","Transferred: PT Students in Six Years","Part-time, First-time",,7,pt_percminus7_tran,percent,,,1,"{{pt_yminus7_transf}} / {{pt_fminus7_headc}}",,1,,,"2012,2013,2014,2015"
 "Form 2: Student Completion and Transfer","% Compl. or Transf. in Six Years",,,,,,,heading,
