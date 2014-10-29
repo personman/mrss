@@ -26,7 +26,7 @@ class NccbpNavigationFactory extends NavigationFactory
 
         // If the user is logged in, hide some stuff
         if ($auth->hasIdentity()) {
-            unset($pages['benchmarks']);
+            unset($pages['nccbp']);
             unset($pages['reports-overview']);
             unset($pages['who-we-help']);
             unset($pages['join']);
