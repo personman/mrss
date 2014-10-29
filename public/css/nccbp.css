@@ -47,7 +47,7 @@ p a, li a, h4 a {
 
 /*	HEADER---------------------------------------*/
 header { width: 100%; background-color: #FFFFFF; }
-.logo { text-align: center; padding: 1% 0; }
+.logo { text-align: center; padding: 1% 0; margin-left: 9px; }
 .logo img { display: inherit; }
 
 a.btn {
@@ -456,6 +456,9 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     margin-bottom: 15px;
 }
 
+.benchmark-container .sec-banner p {
+    font-size: 11px;
+}
 
 /* BenchmarkGroup progress */
 .benchmarkGroupProgress {
@@ -848,6 +851,10 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
     /* bigger screens get the horizontal menu */
     ul.navbar-nav > li {height:40px}
     .navbar-default .navbar-nav > li { display: inline-block;}
+
+    .benchmark-container .sec-banner p {
+        font-size: 25px;
+    }
 
 
 }
