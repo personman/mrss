@@ -1,6 +1,34 @@
 
 <h2>Demographic Peer Comparison</h2>
 
+<script>
+    $(function() {
+        $('.formClearButton').click(function() {
+            var form = $(this).parents('form')
+            form.find('select, input').each(function(i, e) {
+                if ($(e).attr('type') != 'submit') {
+                    $(e).val('')
+                }
+
+            })
+
+            return false
+        })
+    })
+</script>
+
+<style type="text/css">
+    #fieldset-buttons .control-group {
+        width: 15%;
+        float: left;
+    }
+
+    #fieldset-buttons label {
+        display: none;
+    }
+</style>
+
+
 <?php
 // Add an action and submit button to the form
 $form->setAttribute('action', $this->url('reports/peer-demographic'));

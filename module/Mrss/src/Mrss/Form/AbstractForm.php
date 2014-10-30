@@ -42,10 +42,10 @@ class AbstractForm extends Form
 
         if ($includeReset) {
             // Add the reset button
-            $reset = new Element\Submit('reset');
-            $reset->setValue('Reset');
-            $reset->setAttribute('class', 'btn btn-danger');
-            $reset->setAttribute('type', 'reset');
+            $reset = new Element\Button('reset');
+            $reset->setValue('Clear');
+            $reset->setLabel('Clear');
+            $reset->setAttribute('class', 'btn btn-danger formClearButton');
             $buttons->add($reset);
         }
 
