@@ -58,7 +58,20 @@
         <p>The following benchmarks are where your community college performed at its best. The benchmark is followed by the percent rank for your institution.</p>
         <?php //pr($reportData['strengths']) ?>
         <ol class="executiveReportList">
+            <?
+            // Make sure this section doesn't get too long
+            $maxTotalLabelLength = 750;
+            $totalLabelLength = 0;
+            ?>
+
             <?php foreach ($reportData['strengths'] as $benchmark): ?>
+                <?php
+                $totalLabelLength += strlen($benchmark['name']) + 100;
+                if ($totalLabelLength > $maxTotalLabelLength) {
+                    continue;
+                }
+                ?>
+
             <li>
                 <?= $benchmark['name'] ?>
                 <div class="executiveReportRank">Your Rank - <?= round($benchmark['rank']) ?><sup>th</sup> Percentile</div>
@@ -72,7 +85,19 @@
         <h3>Opportunities for Improvement</h3>
         <p>The following benchmarks are where your community college may need improvement. The benchmark is followed by the percent rank for your institution.</p>
         <ol class="executiveReportList">
+            <?php
+            $maxTotalLabelLength = 750;
+            $totalLabelLength = 0;
+            ?>
+
             <?php foreach ($reportData['weaknesses'] as $benchmark): ?>
+                <?php
+                $totalLabelLength += strlen($benchmark['name']) + 100;
+                if ($totalLabelLength > $maxTotalLabelLength) {
+                    continue;
+                }
+                ?>
+
                 <li>
                     <?= $benchmark['name'] ?>
                     <div class="executiveReportRank">Your Rank - <?= round($benchmark['rank']) ?><sup>th</sup> Percentile</div>
@@ -99,7 +124,7 @@
 
             <p>The full NCCBP report, available online, contains more than 150 benchmarks on student demographics, measures of student success, faculty and staff data, workforce and community outreach, and institutional characteristics and effectiveness metrics.</p>
 
-            <p class="executiveReportLinkToThisPage">To view this report online, go to <a href="http://nccbp.org/report/executive">nccbp.org/report/executive</a> and log in.</p>
+            <p class="executiveReportLinkToThisPage">To view this report online, go to <a href="http://nccbp.org/reports/executive">nccbp.org/reports/executive</a> and log in.</p>
 
         </div>
 

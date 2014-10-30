@@ -255,6 +255,15 @@ class ReportController extends AbstractActionController
         $year = $this->getYearFromRouteOrStudy();
         $college = $this->currentCollege();
 
+        // Nccbp migration: temporary
+        if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
+            $this->flashMessenger()->addErrorMessage(
+                "Reports prior to 2014 are under review and will be available soon."
+            );
+            return $this->redirect()->toUrl('/reports/executive/2014');
+        }
+
+
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
 
         /** @var \Mrss\Entity\Observation $observation */
