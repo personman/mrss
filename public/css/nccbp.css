@@ -781,6 +781,13 @@ input:focus, textarea:focus {
     background-color: #f2dede;
     border-color: #b94a48;
 }
+.alert.alert-error input {
+    border-color: #b94a48;
+}
+.alert.alert-error, .help-inline {
+    color: #b94a48;
+}
+
 .control-group.success .control-label,
 .control-group.success .help-block,
 .control-group.success .help-inline {
