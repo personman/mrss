@@ -315,7 +315,23 @@ class SubscriptionController extends AbstractActionController
 
         // Renewal price @todo: make this dymanic
         $sub = json_decode($this->getDraftSubscription()->getFormData(), true);
+
+        $isRenewal = false;
         if (!empty($sub['renew'])) {
+            $isRenewal = true;
+        } else {
+            // Are they renewing via the new join form?
+            $ipeds = $sub['institution']['ipeds'];
+            /** @var \Mrss\Model\College $collegeModel */
+            $collegeModel = $this->getServiceLocator()->get('model.college');
+            $college = $collegeModel->findOneByIpeds($ipeds);
+
+            if (!empty($college)) {
+                $isRenewal = true;
+            }
+        }
+
+        if ($isRenewal) {
             $amount = 1250;
         }
 
