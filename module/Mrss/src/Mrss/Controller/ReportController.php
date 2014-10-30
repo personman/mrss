@@ -304,8 +304,15 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
+        $years = $this->getReportService()->getYearsWithSubscriptions();
+
+        // If reports are closed, remove the last year
+        if (!$this->currentStudy()->getReportsOpen()) {
+            array_shift($years);
+        }
+
         $form = new PeerComparison(
-            $this->getReportService()->getYearsWithSubscriptions()
+            $years
         );
 
         $peerGroup = $this->getPeerGroupFromSession();
