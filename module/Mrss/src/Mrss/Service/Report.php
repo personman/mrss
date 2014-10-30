@@ -1884,17 +1884,6 @@ class Report
             // Get the college's reported value
             $reportedValue = $this->getObservation()->get($dbColumn);
 
-            // For demo only
-            if ($dbColumn == 'fall_fall_pers') {
-                $reportedValue = 46;
-            }
-            if ($dbColumn == 'next_term_pers') {
-                $reportedValue = 68;
-            }
-            if ($dbColumn == 'comp_succ') {
-                $reportedValue = 84;
-            }
-
             $format = $this->getFormat($benchmark);
             $roundedFormat = $this->getFormat($benchmark, 0);
 
