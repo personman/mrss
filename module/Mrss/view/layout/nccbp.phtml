@@ -7,12 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $this->currentStudy()->getDescription() ?></title>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/js/bootstrap3.min.js"></script>
-
-
     <link rel="stylesheet" type="text/css" href="/css/content.css">
     <link rel="stylesheet" type="text/css" href="/css/tooltipster.css">
 
@@ -25,6 +19,17 @@
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Fira+Sans:500,700,300italic|Cabin:400,400italic,500,700' rel='stylesheet' type='text/css'>
 
+    <link rel="icon" href="/images/nccbp-favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/nccbp-favicon.ico" type="image/x-icon">
+
+    <?php echo $this->headLink() ?>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/js/bootstrap3.min.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -32,15 +37,11 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link rel="icon" href="/images/nccbp-favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="/nccbp-favicon.ico" type="image/x-icon">
-
     <script type="text/javascript" src="/js/jquery-ui.js"></script>
     <script type="text/javascript" src="/js/jquery.tooltipster.min.js"></script>
     <script type="text/javascript" src="/js/theme.js"></script>
     <script type="text/javascript" src="/js/nccbp.js"></script>
 
-    <?php echo $this->headLink() ?>
     <?php echo $this->headScript() ?>
 </head>
 <body>
