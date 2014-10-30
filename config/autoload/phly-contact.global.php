@@ -69,6 +69,8 @@ if (!empty($_SERVER['HTTP_HOST'])) {
         $settings['message']['to'][] = 'td-ticket-nccwts@jccc.edu';
     } elseif (strpos($_SERVER['HTTP_HOST'], 'maximizingresources.org') !== false) {
         $settings['message']['to'][] = 'td-ticket-mrss@jccc.edu';
+    } elseif (strpos($_SERVER['HTTP_HOST'], 'nccbp.org') !== false) {
+        $settings['message']['to'][] = 'td-ticket-nccbp@jccc.edu';
     }
 }
 
