@@ -290,6 +290,29 @@ class SubscriptionController extends AbstractActionController
         die('ok');
     }
 
+    public function isRenewal()
+    {
+        // Renewal price @todo: make this dymanic
+        $sub = json_decode($this->getDraftSubscription()->getFormData(), true);
+
+        $isRenewal = false;
+        if (!empty($sub['renew'])) {
+            $isRenewal = true;
+        } else {
+            // Are they renewing via the new join form?
+            $ipeds = $sub['institution']['ipeds'];
+            /** @var \Mrss\Model\College $collegeModel */
+            $collegeModel = $this->getServiceLocator()->get('model.college');
+            $college = $collegeModel->findOneByIpeds($ipeds);
+
+            if (!empty($college)) {
+                $isRenewal = true;
+            }
+        }
+
+        return $isRenewal;
+    }
+
     public function paymentAction()
     {
         // Catch subscription completion via credit card
@@ -313,23 +336,7 @@ class SubscriptionController extends AbstractActionController
         // Get this dynamically based on study and date
         $amount = $this->getStudy()->getCurrentPrice();
 
-        // Renewal price @todo: make this dymanic
-        $sub = json_decode($this->getDraftSubscription()->getFormData(), true);
-
-        $isRenewal = false;
-        if (!empty($sub['renew'])) {
-            $isRenewal = true;
-        } else {
-            // Are they renewing via the new join form?
-            $ipeds = $sub['institution']['ipeds'];
-            /** @var \Mrss\Model\College $collegeModel */
-            $collegeModel = $this->getServiceLocator()->get('model.college');
-            $college = $collegeModel->findOneByIpeds($ipeds);
-
-            if (!empty($college)) {
-                $isRenewal = true;
-            }
-        }
+        $isRenewal = $this->isRenewal();
 
         if ($isRenewal) {
             $amount = 1250;
@@ -767,6 +774,14 @@ class SubscriptionController extends AbstractActionController
         $draftSubscription = $this->getDraftSubscription();
         $agreement = json_decode($draftSubscription->getAgreementData(), true);
         $amount = $this->getStudy()->getCurrentPrice();
+        //prd($draftSubscription->getFormData());
+
+        $isRenewal = $this->isRenewal();
+
+        if ($isRenewal) {
+            $amount = 1250;
+        }
+
 
         // Check for offer code
         if (!empty($agreement['offerCode'])) {
