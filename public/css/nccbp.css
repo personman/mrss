@@ -961,10 +961,10 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
 
 
 .logo.col-xs-4 {
-    width: 66%;
+    width: 64%;
 }
 .headerLogin.col-xs-8 {
-    width: 33%;
+    width: 32%;
 }
 
 
@@ -973,10 +973,10 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
 @media (min-width: 768px) {
 
     .logo.col-xs-4 {
-        width: 33%;
+        width: 31%;
     }
     .headerLogin.col-xs-8 {
-        width: 66%;
+        width: 64%;
     }
 
 
