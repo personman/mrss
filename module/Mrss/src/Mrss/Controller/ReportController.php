@@ -311,6 +311,9 @@ class ReportController extends AbstractActionController
             array_shift($years);
         }
 
+        // temp close old reports:
+        $years = array(2014);
+
         $form = new PeerComparison(
             $years
         );
