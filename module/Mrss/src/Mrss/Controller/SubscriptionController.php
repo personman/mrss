@@ -232,6 +232,14 @@ class SubscriptionController extends AbstractActionController
         $payment->setPostback($_REQUEST);
 
         $transId = $this->params()->fromPost('EXT_TRANS_ID');
+
+        $status = $this->params()->fromPost('pmt_status');
+        if ($status == 'cancelled') {
+            $this->flashMessenger()
+                ->addErrorMessage('Credit card payment cancelled.');
+            return $this->redirect()->toUrl('/members');
+        }
+
         $payment->setTransId($transId);
         $payment->setProcessed(false);
 
