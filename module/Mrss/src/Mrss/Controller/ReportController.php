@@ -626,7 +626,7 @@ class ReportController extends AbstractActionController
                     if (!$benchmark->getIncludeInNationalReport()) {
                         continue;
                     }
-                    
+
                     // Only include benchmarks with at least 5 reported values
                     $count = $this->getCountOfReportedData(
                         $benchmark->getDbColumn(),
