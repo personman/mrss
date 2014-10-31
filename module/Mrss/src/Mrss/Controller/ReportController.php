@@ -622,6 +622,11 @@ class ReportController extends AbstractActionController
 
                 $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
                 foreach ($benchmarks as $benchmark) {
+                    // Skip benchmarks that are not on the report
+                    if (!$benchmark->getIncludeInNationalReport()) {
+                        continue;
+                    }
+                    
                     // Only include benchmarks with at least 5 reported values
                     $count = $this->getCountOfReportedData(
                         $benchmark->getDbColumn(),
