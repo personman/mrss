@@ -837,7 +837,7 @@ class ObservationController extends AbstractActionController
                 }
 
                 $value = $observation->get($benchmark->getDbColumn());
-                if (!is_null($value)) {
+                if (!is_null($value) && $benchmark->getInputType() != 'radio') {
                     $decimalPlaces = $reportService->getDecimalPlaces($benchmark);
                     $value = $prefix .
                         number_format($value, $decimalPlaces) .
