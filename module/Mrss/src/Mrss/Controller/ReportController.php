@@ -635,11 +635,13 @@ class ReportController extends AbstractActionController
                 }
 
                 // Only include benchmarks with at least 5 reported values
-                $count = $this->getCountOfReportedData(
+                /*$count = $this->getCountOfReportedData(
                     $benchmark->getDbColumn(),
                     $year
-                );
+                );*/
 
+                $count = 10;
+                
                 if ($count >= 5) {
                     $benchmarkData[] = array(
                         'name' => $benchmark->getPeerReportLabel(),
