@@ -1,7 +1,9 @@
 $(function() {
     // Update the form on document ready
-    updateColleges();
-    updateBenchmarks();
+    // Comment these out so we can send the initial values with the form instead of
+    // loading them async
+    //updateColleges();
+    //updateBenchmarks();
 
     // And again if the year changes
     $('#reportingPeriod').change(function() {

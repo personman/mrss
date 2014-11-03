@@ -22,6 +22,8 @@ class ReportController extends AbstractActionController
 
     protected $sessionContainer;
 
+    protected $observations;
+
     public function calculateAction()
     {
         $this->longRunningScript();
@@ -314,8 +316,14 @@ class ReportController extends AbstractActionController
         // temp close old reports:
         $years = array(2014);
 
+        $s = microtime(1);
+        $defaultBenchmarks = $this->getPeerBenchmarks($years[0], true);
+        $e = microtime(1) - $s;
+        //prd($e);
+
         $form = new PeerComparison(
-            $years
+            $years,
+            $defaultBenchmarks
         );
 
         $peerGroup = $this->getPeerGroupFromSession();
@@ -607,44 +615,70 @@ class ReportController extends AbstractActionController
         }
     }
 
+    public function getPeerBenchmarks($year, $collapse = false)
+    {
+        $this->longRunningScript();
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $benchmarkGroupData = array();
+        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+            $group = $benchmarkGroup->getName();
+            $benchmarkData = array();
+
+            $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
+            foreach ($benchmarks as $benchmark) {
+                // Skip benchmarks that are not on the report
+                if (!$benchmark->getIncludeInNationalReport()) {
+                    continue;
+                }
+
+                // Only include benchmarks with at least 5 reported values
+                $count = $this->getCountOfReportedData(
+                    $benchmark->getDbColumn(),
+                    $year
+                );
+
+                if ($count >= 5) {
+                    $benchmarkData[] = array(
+                        'name' => $benchmark->getPeerReportLabel(),
+                        'id' => $benchmark->getId()
+                    );
+                }
+            }
+
+            if (count($benchmarkData)) {
+                $benchmarkGroupData[$group] = $benchmarkData;
+            }
+        }
+
+        if ($collapse && !empty($benchmarkGroupData)) {
+            $collapsed = array();
+            foreach ($benchmarkGroupData as $groupName => $benchmarks) {
+                $collapsedBenchmarks = array();
+                foreach ($benchmarks as $benchmark) {
+                    $collapsedBenchmarks[$benchmark['id']] = $benchmark['name'];
+                }
+
+                $collapsed[] = array(
+                    'label' => $groupName,
+                    'options' => $collapsedBenchmarks
+                );
+            }
+
+            $benchmarkGroupData = $collapsed;
+        }
+
+        return $benchmarkGroupData;
+    }
+
     public function peerBenchmarksAction()
     {
         $year = $this->params()->fromRoute('year');
 
         if (!empty($year)) {
-            /** @var \Mrss\Entity\Study $study */
-            $study = $this->currentStudy();
-
-            $benchmarkGroupData = array();
-            foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
-                $group = $benchmarkGroup->getName();
-                $benchmarkData = array();
-
-                $benchmarks = $benchmarkGroup->getBenchmarksForYear($year);
-                foreach ($benchmarks as $benchmark) {
-                    // Skip benchmarks that are not on the report
-                    if (!$benchmark->getIncludeInNationalReport()) {
-                        continue;
-                    }
-
-                    // Only include benchmarks with at least 5 reported values
-                    $count = $this->getCountOfReportedData(
-                        $benchmark->getDbColumn(),
-                        $year
-                    );
-
-                    if ($count >= 5) {
-                        $benchmarkData[] = array(
-                            'name' => $benchmark->getPeerReportLabel(),
-                            'id' => $benchmark->getId()
-                        );
-                    }
-                }
-
-                if (count($benchmarkData)) {
-                    $benchmarkGroupData[$group] = $benchmarkData;
-                }
-            }
+            $benchmarkGroupData = $this->getPeerBenchmarks($year);
 
             return new JsonModel(
                 array(
@@ -656,17 +690,30 @@ class ReportController extends AbstractActionController
 
     public function getCountOfReportedData($dbColumn, $year)
     {
+        $observations = $this->getObservations($year);
+
         /** @var \Mrss\Entity\Study $study */
-        $study = $this->currentStudy();
         $count = 0;
-        foreach ($study->getSubscriptionsForYear($year) as $subscription) {
-            $observation = $subscription->getObservation();
+        foreach ($observations as $observation) {
             if (!is_null($observation->get($dbColumn))) {
                 $count++;
             }
         }
 
         return $count;
+    }
+
+    public function getObservations($year)
+    {
+        if (empty($this->observations[$year])) {
+            /** @var \Mrss\Model\Observation $observationModel */
+            $observationModel = $this->getServiceLocator()->get('model.observation');
+
+            $this->observations[$year] = $observationModel
+                ->findByYearAndStudy($year, $this->currentStudy());
+        }
+
+        return $this->observations[$year];
     }
 
     public function getBenchmarksToExclude()

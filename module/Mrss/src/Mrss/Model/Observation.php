@@ -68,6 +68,47 @@ class Observation extends AbstractModel
     }
 
     /**
+     * Return all observations belonging to a subscription for the given year
+     * and study.
+     *
+     * @param $year
+     * @param $study
+     * @return array
+     */
+    public function findByYearAndStudy($year, $study)
+    {
+        // Prepare a queryBuilder
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->add('select', 'o');
+        $qb->add('from', '\Mrss\Entity\Observation o');
+
+
+        // Join subscriptions
+        $qb->innerJoin(
+            '\Mrss\Entity\Subscription',
+            's',
+            'WITH',
+            's.observation = o.id'
+        );
+
+        $qb->andWhere('s.year = :year');
+        $qb->setParameter('year', $year);
+
+        $qb->andWhere('s.study = :study_id');
+        $qb->setParameter('study_id', $study->getId());
+
+        try {
+            $data = $qb->getQuery()->getResult();
+        } catch (\Exception $e) {
+            return array();
+        }
+
+        return $data;
+    }
+
+    /**
      * Get all the observations
      *
      * @return array
