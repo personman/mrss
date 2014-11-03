@@ -200,6 +200,10 @@ class Module
                     $settingModel = $sm->get('model.setting');
                     $importer->setSettingModel($settingModel);
 
+                    // Inject the peer group model
+                    $peerGroupModel = $sm->get('model.peerGroup');
+                    $importer->setPeerGroupModel($peerGroupModel);
+
                     // Inject the observation logger
                     $logger = $sm->get('service.observationAudit');
                     $importer->setObservationAudit($logger);

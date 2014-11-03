@@ -3,6 +3,7 @@
 namespace Mrss\Service;
 
 use Mrss\Entity\Exception\InvalidBenchmarkException;
+use Mrss\Entity\PeerGroup;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Debug\Debug;
 use Mrss\Entity\College;
@@ -82,6 +83,11 @@ class ImportNccbp
      * @var \Mrss\Model\Setting
      */
     protected $settingModel;
+
+    /**
+     * @var \Mrss\Model\PeerGroup
+     */
+    protected $peerGroupModel;
 
     /**
      * @var \Mrss\Service\ObservationAudit
@@ -201,7 +207,7 @@ inner join node g on a.group_nid = g.nid";
 
     public function importCampus()
     {
-        $this->setType('colleges');
+        $this->setType('campusInfo');
 
         $query = "select g.title, i.*
 from content_type_group_subs_info i
@@ -275,6 +281,88 @@ inner join node g on a.group_nid = g.nid";
             unset($existingCollege);
             unset($college);
             unset($row);
+        }
+
+        $this->saveProgress($count, $count);
+
+        $this->entityManager->flush();
+    }
+
+    public function importPeerGroups()
+    {
+        $this->setType('peerGroups');
+
+        $query = "select field_ipeds_id_value ipeds, p.name, p.peer_ids
+            from content_type_group_subs_info i
+            inner join node n on n.nid = i.nid
+            inner join og_ancestry a on n.nid = a.nid
+            inner join node g on a.group_nid = g.nid
+            inner join nccbp_peer_groups p ON p.group_id = g.nid";
+
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $count = count($result);
+        $this->saveProgress(0, $count);
+
+        $i = 0;
+        foreach ($result as $row) {
+            $i++;
+
+            if ($i % 20 == 0) {
+                $this->saveProgress($i - 1);
+            }
+
+            $ipeds = $this->padIpeds($row['ipeds']);
+
+            // Find the college
+            $college = $this->getCollegeModel()->findOneByIpeds($ipeds);
+
+            if (!empty($college)) {
+                // Loop over the gids and find their
+                $peerGids = explode(',', $row['peer_ids']);
+
+                $peerIds = array();
+                foreach ($peerGids as $gid) {
+                    if (empty($gid)) {
+                        continue;
+                    }
+
+                    // Convert the gid to the ipeds, then to the college id
+                    $peerIpeds = $this->gidToIpeds($gid);
+                    $peerIpeds = $this->padIpeds($peerIpeds);
+                    $peer = $this->getCollegeModel()->findOneByIpeds($peerIpeds);
+
+                    if (!empty($peer)) {
+                        $peerId = $peer->getId();
+                        $peerIds[] = $peerId;
+                    } else {
+                        // Skip 'em. Hope this doesn't happen
+                    }
+                }
+
+                // See if the peer group exists
+                $name = $row['name'];
+                $existingGroup = $this->getPeerGroupModel()
+                    ->findOneByCollegeAndName($college, $name);
+
+                if (!empty($existingGroup)) {
+                    $peerGroup = $existingGroup;
+                } else {
+                    $peerGroup = new PeerGroup();
+                    $peerGroup->setCollege($college);
+                    $peerGroup->setName($name);
+                }
+
+                $peerGroup->setPeers($peerIds);
+                $peerGroup->setYear(2014);
+                $peerGroup->setBenchmarks(array());
+
+                $this->getPeerGroupModel()->save($peerGroup);
+            }
+
+            $this->getPeerGroupModel()->getEntityManager()->flush();
+
         }
 
         $this->saveProgress($count, $count);
@@ -1235,6 +1323,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 'label' => 'Campus Information',
                 'method' => 'importCampus'
             ),
+            'peerGroups' => array(
+                'label' => 'Peer Groups',
+                'method' => 'importPeerGroups'
+            ),
             'systems' => array(
                 'label' => 'Systems',
                 'method' => 'importSystems'
@@ -1669,6 +1761,18 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getSettingModel()
     {
         return $this->settingModel;
+    }
+
+    public function setPeerGroupModel($model)
+    {
+        $this->peerGroupModel = $model;
+
+        return $this;
+    }
+
+    public function getPeerGroupModel()
+    {
+        return $this->peerGroupModel;
     }
 
     public function setObservationAudit($audit)
