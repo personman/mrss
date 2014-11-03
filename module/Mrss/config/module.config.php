@@ -1325,6 +1325,12 @@ return array(
                 ),
             ),
         ),
+        'configuration' => array(
+          'orm_default' => array(
+              //'metadata_cache' => 'my_memcache',
+              //'query_cache' => 'filesystem'
+          )
+        ),
         'driver' => array(
             // defines an annotation driver with two paths, and names it `my_annotation_driver`
             'my_annotation_driver' => array(

@@ -352,7 +352,7 @@ class College extends AbstractModel
 
             var_dump($count);
             var_dump($colleges);
-            die;
+            die('findByPeerGroup');
             //var_dump($qb); die;*/
         }
 

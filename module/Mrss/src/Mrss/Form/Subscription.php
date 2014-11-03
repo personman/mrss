@@ -9,6 +9,7 @@ use Zend\Filter;
 use Zend\Form\Element;
 use Mrss\Form\Fieldset\User as UserFieldset;
 use Mrss\Form\Fieldset\College;
+use Mrss\Form\Fieldset\Executive;
 
 class Subscription extends AbstractForm
 {
@@ -19,6 +20,11 @@ class Subscription extends AbstractForm
 
         $institution = new College;
         $this->add($institution);
+
+        // Executive Contact
+        $executive = new Executive;
+        $this->add($executive);
+
 
         // Administrative Contact
         $this->add(

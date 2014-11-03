@@ -8,7 +8,7 @@ use Zend\Validator\Regex;
 
 class College extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct()
+    public function __construct($includeExec = false)
     {
         parent::__construct('institution');
 
@@ -109,62 +109,73 @@ class College extends Fieldset implements InputFilterProviderInterface
             )
         );
 
-        $this->add(
-            array(
-                'name' => 'execTitle',
-                'type' => 'Text',
-                'required' => true,
-                'options' => array(
-                    'label' => 'Executive Title',
-                    'help-block' => 'For example: President or Chancellor'
-                ),
-            )
-        );
+        if ($includeExec) {
 
-        $this->add(
-            array(
-                'name' => 'execSalutation',
-                'type' => 'Text',
-                'required' => true,
-                'options' => array(
-                    'label' => 'Executive Salutation',
-                    'help-block' => 'For example: Ms., Mr., or Dr.'
-                ),
-            )
-        );
+            $this->add(
+                array(
+                    'name' => 'execTitle',
+                    'type' => 'Text',
+                    'required' => true,
+                    'options' => array(
+                        'label' => 'Executive Title',
+                        'help-block' => 'For example: President or Chancellor'
+                    ),
+                )
+            );
 
-        $this->add(
-            array(
-                'name' => 'execFirstName',
-                'type' => 'Text',
-                'required' => true,
-                'options' => array(
-                    'label' => 'Executive First Name'
-                ),
-            )
-        );
+            $this->add(
+                array(
+                    'name' => 'execSalutation',
+                    'type' => 'Select',
+                    'options' => array(
+                        'label' => 'Prefix'
+                    ),
+                    'attributes' => array(
+                        'options' => array(
+                            '' => 'Select Prefix',
+                            'Dr.' => 'Dr.',
+                            'Mr.' => 'Mr.',
+                            'Ms.' => 'Ms.'
+                        )
+                    )
+                )
+            );
 
-        $this->add(
-            array(
-                'name' => 'execMiddleName',
-                'type' => 'Text',
-                'required' => true,
-                'options' => array(
-                    'label' => 'Executive Middle Name'
-                ),
-            )
-        );
 
-        $this->add(
-            array(
-                'name' => 'execLastName',
-                'type' => 'Text',
-                'required' => true,
-                'options' => array(
-                    'label' => 'Executive Last Name'
-                ),
-            )
-        );
+            $this->add(
+                array(
+                    'name' => 'execFirstName',
+                    'type' => 'Text',
+                    'required' => true,
+                    'options' => array(
+                        'label' => 'First Name'
+                    ),
+                )
+            );
+
+            $this->add(
+                array(
+                    'name' => 'execLastName',
+                    'type' => 'Text',
+                    'required' => true,
+                    'options' => array(
+                        'label' => 'Last Name'
+                    ),
+                )
+            );
+
+            $this->add(
+                array(
+                    'name' => 'execEmail',
+                    'type' => 'Text',
+                    'required' => true,
+                    'options' => array(
+                        'label' => 'E-Mail Address'
+                    ),
+                )
+            );
+
+        }
     }
 
     public function getInputFilterSpecification()

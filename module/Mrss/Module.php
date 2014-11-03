@@ -150,6 +150,14 @@ class Module
                 'Mrss\Service\AdminNavigationFactory',
                 'nccbp_navigation' =>
                 'Mrss\Service\NccbpNavigationFactory',
+                /*'doctrine.cache.my_memcache' => function ($sm) {
+                        $cache = new \Doctrine\Common\Cache\MemcacheCache();
+                        //$memcache = new \Memcached();
+                        //$memcache->
+                        //$memcache->connect('localhost', 11211);
+                        $cache->setMemcache($memcache);
+                        return $cache;
+                },*/
                 'import.nccbp' => function ($sm) {
                     // Prepare the importer with the db to import from and the em
                     $nccbpDb = $sm->get('nccbp-db');

@@ -199,6 +199,89 @@ inner join node g on a.group_nid = g.nid";
         $this->entityManager->flush();
     }
 
+    public function importCampus()
+    {
+        $this->setType('colleges');
+
+        $query = "select g.title, i.*
+from content_type_group_subs_info i
+inner join node n on n.nid = i.nid
+inner join og_ancestry a on n.nid = a.nid
+inner join node g on a.group_nid = g.nid";
+
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $count = count($result);
+        //die("Count about to be set: $count");
+        $this->saveProgress(0, $count);
+
+        $i = 0;
+        foreach ($result as $row) {
+            $i++;
+
+            if ($i % 20 == 0) {
+                $this->saveProgress($i - 1);
+            }
+
+            $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
+
+            // Does this college already exist?
+            $existingCollege = $this->getCollegeModel()->findOneByIpeds($ipeds);
+
+            // This class will need to know very little about
+            // Doctrine ORM. We do still have the flush() call below.
+
+            if (!empty($existingCollege)) {
+                // Skip this college as we've already imported it
+                //$this->stats['skipped']++;
+
+                //continue;
+                $college = $existingCollege;
+            } else {
+                // Skip colleges that aren't imported (should be none)
+                continue;
+            }
+
+            $campusType = $row['field_campus_type_value'];
+            $envir = $row['field_campus_environment_value'];
+            $faculty = $row['field_faculty_unionized_value'];
+            $staff = $row['field_staff_unionized_value'];
+            $control = $row['field_control_value'];
+            $calendar = $row['field_calendar_value'];
+
+            // Import these for all of the school's observations
+            foreach ($college->getObservations() as $observation) {
+                $oldObservation = clone $observation;
+
+                $observation
+                    ->set('institutional_type', $campusType)
+                    ->set('institutional_demographics_campus_environment', $envir)
+                    ->set('institutional_demographics_faculty_unionized', $faculty)
+                    ->set('institutional_demographics_staff_unionized', $staff)
+                    ->set('institutional_control', $control)
+                    ->set('institutional_demographics_calendar', $calendar);
+                $this->getObservationModel()->save($observation);
+
+                $this->getObservationAudit()->logChanges(
+                    $oldObservation,
+                    $observation,
+                    'importNCCBP'
+                );
+
+                unset($observation);
+            }
+
+            unset($existingCollege);
+            unset($college);
+            unset($row);
+        }
+
+        $this->saveProgress($count, $count);
+
+        $this->entityManager->flush();
+    }
+
     public function importUsers()
     {
         $this->setType('users');
@@ -1147,6 +1230,10 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             'colleges' => array(
                 'label' => 'Colleges',
                 'method' => 'importColleges'
+            ),
+            'campusInfo' => array(
+                'label' => 'Campus Information',
+                'method' => 'importCampus'
             ),
             'systems' => array(
                 'label' => 'Systems',

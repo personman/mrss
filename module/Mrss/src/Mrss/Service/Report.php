@@ -1457,8 +1457,12 @@ class Report
                         'enabled' => true,
                         'format' => $format
                     )
+                ),
+                'series' => array(
+                    'animation' => false
                 )
-            )
+            ),
+
         );
 
         // Percent

@@ -86,6 +86,8 @@ class PeerGroup
      */
     public function setEnvironments($environments)
     {
+        $environments = implode('|', $environments);
+
         $this->environments = $environments;
 
         return $this;
@@ -96,11 +98,19 @@ class PeerGroup
      */
     public function getEnvironments()
     {
-        return $this->environments;
+        $environments = explode('|', $this->environments);
+
+        if ($environments[0] == '') {
+            $environments = array();
+        }
+
+        return $environments;
     }
     
     public function setInstitutionalControl($control)
     {
+        $control = implode('|', $control);
+
         $this->institutionalControl = $control;
         
         return $this;
@@ -108,23 +118,39 @@ class PeerGroup
     
     public function getInstitutionalControl()
     {
-        return $this->institutionalControl;
+        $control = explode('|', $this->institutionalControl);
+
+        if ($control[0] == '') {
+            $control = array();
+        }
+
+        return $control;
     }
     
     public function setInstitutionalType($type)
     {
+        $type = implode('|', $type);
+
         $this->institutionalType = $type;
-        
+
         return $this;
     }
     
     public function getInstitutionalType()
     {
-        return $this->institutionalType;
+        $type = explode('|', $this->institutionalType);
+
+        if ($type[0] == '') {
+            $type = array();
+        }
+
+        return $type;
     }
 
     public function setFacultyUnionized($facultyUnionized)
     {
+        $facultyUnionized = implode('|', $facultyUnionized);
+
         $this->facultyUnionized = $facultyUnionized;
 
         return $this;
@@ -132,11 +158,19 @@ class PeerGroup
 
     public function getFacultyUnionized()
     {
-        return $this->facultyUnionized;
+        $unionized = explode('|', $this->facultyUnionized);
+
+        if ($unionized[0] == '') {
+            $unionized = array();
+        }
+
+        return $unionized;
     }
 
     public function setStaffUnionized($staffUnionized)
     {
+        $staffUnionized = implode('|', $staffUnionized);
+
         $this->staffUnionized = $staffUnionized;
 
         return $this;
@@ -144,7 +178,13 @@ class PeerGroup
 
     public function getStaffUnionized()
     {
-        return $this->staffUnionized;
+        $unionized = explode('|', $this->staffUnionized);
+
+        if ($unionized[0] == '') {
+            $unionized = array();
+        }
+
+        return $unionized;
     }
 
     /**

@@ -76,6 +76,11 @@ class College
     protected $execLastName;
 
     /**
+     * @ORM\Column(type="string", length=200, nullable=true)
+     */
+    protected $execEmail;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      */
     protected $latitude;
@@ -268,6 +273,23 @@ class College
         return $this;
     }
 
+    public function getExecLastName()
+    {
+        return $this->execLastName;
+    }
+
+    public function setExecEmail($email)
+    {
+        $this->execEmail = $email;
+
+        return $this;
+    }
+
+    public function getExecEmail()
+    {
+        return $this->execEmail;
+    }
+
     public function getExecFullName()
     {
         $name = $this->getExecSalutation();
@@ -281,12 +303,6 @@ class College
 
         return $name;
     }
-
-    public function getExecLastName()
-    {
-        return $this->execLastName;
-    }
-
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
@@ -318,6 +334,9 @@ class College
         return $this;
     }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection|Observation[]
+     */
     public function getObservations()
     {
         return $this->observations;

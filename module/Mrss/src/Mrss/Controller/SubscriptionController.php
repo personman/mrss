@@ -593,6 +593,8 @@ class SubscriptionController extends AbstractActionController
         // Create or fetch the college
         if (empty($subscriptionForm['renew'])) {
             $institutionForm = $subscriptionForm['institution'];
+            $execForm = $subscriptionForm['executive'];
+            $institutionForm = array_merge($institutionForm, $execForm);
             $college = $this->createOrUpdateCollege($institutionForm);
         } else {
             $collegeId = $subscriptionForm['college_id'];

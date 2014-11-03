@@ -34,6 +34,9 @@ class ImportController extends AbstractActionController
      */
     public function triggerAction()
     {
+        ini_set('memory_limit', '512M');
+        set_time_limit(3600);
+
         $type = $this->params()->fromQuery('type');
         $year = $this->params()->fromQuery('year');
 

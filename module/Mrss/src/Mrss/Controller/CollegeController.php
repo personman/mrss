@@ -96,9 +96,11 @@ class CollegeController extends AbstractActionController
     {
         $form = new AbstractForm('college');
 
-        $collegeFieldset = new \Mrss\Form\Fieldset\College;
+        $collegeFieldset = new \Mrss\Form\Fieldset\College(true);
+
         $collegeFieldset->setUseAsBaseFieldset(true);
 
+        /** @var \Mrss\Entity\College $college */
         $college = $this->currentCollege();
 
         $redirect = $this->params()->fromRoute('redirect');
@@ -107,6 +109,7 @@ class CollegeController extends AbstractActionController
         $collegeFieldset->setHydrator(
             new DoctrineHydrator($em, 'Mrss\Entity\College')
         );
+
 
         $form->add($collegeFieldset);
         $form->bind($college);

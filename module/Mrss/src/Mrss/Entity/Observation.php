@@ -1198,6 +1198,10 @@ class Observation
      */
     protected $hs_stud_hdct;
 
+    // Most of the campus information fields are on Workforce, too
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $institutional_demographics_calendar;
+
 
     // NCCBP form 2
 

@@ -57,13 +57,6 @@ $form->setAttribute('action', $this->url('reports/peer'));
                 </p>
             <?php endif ?>
 
-            <?php if ($peerGroup->getEnvironments()): ?>
-                <p>
-                    <strong>Campus Environment(s):</strong>
-                    <?= implode(', ', $peerGroup->getEnvironments()) ?>
-                </p>
-            <?php endif ?>
-
             <?php if ($peerGroup->getFacultyUnionized()): ?>
                 <p>
                     <strong>Faculty Unionized:</strong>

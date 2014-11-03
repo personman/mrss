@@ -1,4 +1,6 @@
-<h3><?= $this->college->getName() ?></h3>
+<? /** @var \Mrss\Entity\College $college */ ?>
+
+<h1><?= $college->getName() ?></h1>
 
 <table class="style1">
     <tr>
@@ -6,7 +8,7 @@
             IPEDS:
         </td>
         <td>
-            <?= $this->college->getIpeds() ?>
+            <?= $college->getIpeds() ?>
         </td>
     </tr>
     <tr>
@@ -14,7 +16,17 @@
             Address:
         </td>
         <td>
-            <?= $this->college->getFullAddress() ?>
+            <?= $college->getFullAddress() ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Executive:
+        </td>
+        <td>
+            <?= $college->getExecTitle() ?><br>
+            <?= $college->getExecFullName() ?><br>
+            <?= $college->getExecEmail() ?>
         </td>
     </tr>
     <tr>
