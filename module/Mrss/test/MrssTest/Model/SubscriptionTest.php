@@ -81,7 +81,7 @@ class SubscriptionTest extends ModelTestAbstract
         $this->assertEquals('placeholder', $result);
     }
 
-    public function testFindByStudyAndYear()
+    /*public function testFindByStudyAndYear()
     {
         $repoMock = $this->getMock(
             'Doctrine\ORM\EntityRepository',
@@ -101,7 +101,7 @@ class SubscriptionTest extends ModelTestAbstract
         $result = $this->model->findByStudyAndYear(5, 2013);
 
         $this->assertEquals('placeholder', $result);
-    }
+    }*/
 
     public function testSave()
     {

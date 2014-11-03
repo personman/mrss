@@ -80,6 +80,7 @@ class Calculator
         $n = count($data);
 
         $counter = 0;
+        //var_dump($data);
         foreach ($data as $val) {
             if ($val > $value) {
                 $counter++;
@@ -88,6 +89,10 @@ class Calculator
 
         $counter = $counter + 1;
         $percentile = (($n - $counter) / $n);
+
+        //echo "\n\n(($n - $counter) / $n)\n";
+        //echo $percentile;
+
 
         return  $percentile * (100);
     }

@@ -648,12 +648,15 @@ class Report
         ksort($iData);
         //if ($benchmark->getDbColumn() == 'ft_perc_comp') {
         if (!empty($_GET['debug']) && $benchmark->getDbColumn() == $_GET['debug']) {
-            pr(count($subscriptions));
-            pr(count($iData));
-            pr($year);
-            echo 'skipped:';
-            pr($skipped);
-            prd($iData);
+            if (empty($system) ||
+                (!empty($_GET['system']) && $_GET['system'] == $system->getId())) {
+                pr(count($subscriptions));
+                pr(count($iData));
+                pr($year);
+                echo 'skipped:';
+                pr($skipped);
+                prd($iData);
+            }
         }
         //echo $benchmark->getName();
         //echo implode('<br>', $iData); die('ok');

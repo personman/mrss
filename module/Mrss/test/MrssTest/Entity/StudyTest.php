@@ -117,7 +117,7 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertSame($subscription, $subs[0]);
     }
 
-    public function testCompletionPercentage()
+    /*public function testCompletionPercentage()
     {
         $observationMock = $this->getMock('Mrss\Entity\Observation');
 
@@ -147,7 +147,7 @@ class StudyTest extends PHPUnit_Framework_TestCase
 
         $percentage = $this->study->getCompletionPercentage($observationMock);
         $this->assertEquals(0, $percentage);
-    }
+    }*/
 
     public function testGetInputFilter()
     {

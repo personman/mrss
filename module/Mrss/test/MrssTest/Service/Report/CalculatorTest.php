@@ -171,6 +171,50 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $stdDev);
     }
 
+
+    /*public function testSouthCarolinaBug()
+    {
+        $data = array(
+            217615 => 48.10,
+            217712 => 48.80,
+            217837 => 49.30,
+            218113 => 47.20,
+            218140 => 49.30,
+            218353 => 46.80,
+            218487 => 0.00, // Zero!
+            218520 => 50.60,
+            218830 => 50.10,
+            218858 => 54.50,
+            218885 => 47.20,
+            218955 => 59.30,
+            218991 => 51.70
+        );
+
+        $this->calculator->setData($data);
+
+        $tenth = $this->calculator->getValueForPercentile(10);
+        $this->assertEquals(18.72, $tenth);
+
+        $rank = $this->calculator->getPercentileForValue(46.8);
+        //echo "Rank: $rank"; die;
+        // This must be wrong because it makes things out of order (8th percentile
+        // value is higher than 25th
+        $this->assertEquals(7.69230769231, $rank);
+
+        // Now remove the zero
+        unset($data[218487]);
+
+        $this->calculator->setData($data);
+
+        $tenth = $this->calculator->getValueForPercentile(10);
+        $this->assertEquals(46.92, $tenth);
+
+        $rank = $this->calculator->getPercentileForValue(46.8);
+        //echo "Rank: $rank"; die;
+        $this->assertEquals(0, $rank);
+
+    }*/
+
     public function getPercentileData()
     {
         return array(
