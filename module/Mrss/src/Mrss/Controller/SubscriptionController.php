@@ -314,6 +314,11 @@ class SubscriptionController extends AbstractActionController
             $college = $collegeModel->findOneByIpeds($ipeds);
 
             if (!empty($college)) {
+                $subscriptions = $college
+                    ->getSubscriptionsForStudy($this->getStudy());
+            }
+
+            if (!empty($subscriptions)) {
                 $isRenewal = true;
             }
         }
