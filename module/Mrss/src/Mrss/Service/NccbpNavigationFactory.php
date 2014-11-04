@@ -32,6 +32,7 @@ class NccbpNavigationFactory extends NavigationFactory
             unset($pages['join']);
             unset($pages['contact']['pages']);
             unset($pages['about']);
+            unset($pages['help']);
         } else {
             unset($pages['help']);
         }
