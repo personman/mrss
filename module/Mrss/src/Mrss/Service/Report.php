@@ -1115,7 +1115,7 @@ class Report
         $study = $this->getStudy();
 
         $subscriptions = $this->getSubscriptionModel()
-            ->findByStudyAndYear($study->getId(), $study->getCurrentYear());
+            ->findByStudyAndYear($study->getId(), $study->getCurrentYear() - 1);
 
         $data = array();
         foreach ($subscriptions as $subscription) {
@@ -2120,6 +2120,30 @@ class Report
 
         }
         return $filteredColleges;
+    }
+
+    public function getTrends($dbColumn, $colleges)
+    {
+        $report = array();
+        $i = 1;
+        foreach ($colleges as $collegeId) {
+            $college = $this->getCollegeModel()->find($collegeId);
+
+            $values = array();
+            foreach ($college->getObservations() as $observation) {
+                $value = $observation->get($dbColumn);
+                $value = round($value, 2);
+                $values[$observation->getYear()] = $value;
+            }
+
+            $label = "College " . $this->numberToLetter($i);
+
+            $report[$label] = $values;
+
+            $i++;
+        }
+
+        return $report;
     }
 
     /**

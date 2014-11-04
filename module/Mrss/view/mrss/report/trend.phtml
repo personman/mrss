@@ -1,0 +1,58 @@
+<h1>Trend Report</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Institution</th>
+            <?php foreach ($years as $year): ?>
+                <th><?= $year ?></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($report as $label => $values): ?>
+            <tr>
+                <td><?= $label ?></td>
+                <?php foreach ($years as $year): ?>
+                    <td>
+                        <?php if (!empty($values[$year])): ?>
+                            <?= $values[$year] ?>
+                        <?php endif ?>
+                    </td>
+                <?php endforeach ?>
+
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+
+<table class="table" id="datatable">
+    <thead>
+    <tr>
+        <th>Year</th>
+        <?php foreach ($report as $label => $values): ?>
+            <th><?= $label ?></th>
+        <?php endforeach ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($years as $year): ?>
+        <tr>
+            <td><?= $year ?></td>
+            <?php foreach ($report as $label => $values): ?>
+                <td>
+                    <?php if (!empty($values[$year])): ?>
+                        <?= $values[$year] ?>
+                    <?php endif ?>
+                </td>
+            <?php endforeach ?>
+
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
+
+
+

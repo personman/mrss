@@ -29,6 +29,10 @@ class College extends AbstractModel
         return $this->getRepository()->findOneBy(array('ipeds' => $ipeds));
     }
 
+    /**
+     * @param $id
+     * @return null|\Mrss\Entity\College
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);

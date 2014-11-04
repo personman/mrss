@@ -853,6 +853,15 @@ return array(
                             )
                         )
                     ),
+                    'trend' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/trend',
+                            'defaults' => array(
+                                'action' => 'trend'
+                            )
+                        )
+                    )
                 )
             ),
             'users' => array(

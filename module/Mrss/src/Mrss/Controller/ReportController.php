@@ -690,6 +690,21 @@ class ReportController extends AbstractActionController
         }
     }
 
+    public function trendAction()
+    {
+        $colleges = array(101,/* 225, 150,*/ 211, 84, 231, 170, 59, 313, 172);
+        $dbColumn = 'fall_fall_pers';
+        $dbColumn = 'ft_perc_comp';
+        $years = range(2007, 2014);
+
+        $report = $this->getReportService()->getTrends($dbColumn, $colleges);
+
+        return array(
+            'years' => $years,
+            'report' => $report
+        );
+    }
+
     public function getCountOfReportedData($dbColumn, $year)
     {
         $observations = $this->getObservations($year);

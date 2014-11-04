@@ -232,6 +232,9 @@ inner join node g on a.group_nid = g.nid";
 
             $ipeds = $this->padIpeds($row['field_ipeds_id_value']);
 
+            //pr($ipeds);
+
+
             // Does this college already exist?
             $existingCollege = $this->getCollegeModel()->findOneByIpeds($ipeds);
 
@@ -257,7 +260,10 @@ inner join node g on a.group_nid = g.nid";
             $calendar = $row['field_calendar_value'];
 
             // Import these for all of the school's observations
+            $i = 0;
             foreach ($college->getObservations() as $observation) {
+                $i++;
+
                 $oldObservation = clone $observation;
 
                 $observation
