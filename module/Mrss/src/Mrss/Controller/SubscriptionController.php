@@ -1218,13 +1218,28 @@ class SubscriptionController extends AbstractActionController
         $subscriptionsInfo[] = array(
             'Institution',
             'State',
-            'IPEDS'
+            'IPEDS',
+            'Campus Type',
+            'Calendar',
+            'Campus Environment',
+            'Faculty Unionized',
+            'Staff Unionized',
+            'Control'
         );
         foreach ($subscriptions as $sub) {
+            $college = $sub->getCollege();
+            $observation = $sub->getObservation();
+
             $subscriptionsInfo[] = array(
-                $sub->getCollege()->getName(),
-                $sub->getCollege()->getState(),
-                $sub->getCollege()->getIpeds()
+                $college->getName(),
+                $college->getState(),
+                $college->getIpeds(),
+                $observation->get('institutional_type'),
+                $observation->get('institutional_demographics_calendar'),
+                $observation->get('institutional_demographics_campus_environment'),
+                $observation->get('institutional_demographics_faculty_unionized'),
+                $observation->get('institutional_demographics_staff_unionized'),
+                $observation->get('institutional_control'),
             );
         }
 
@@ -1235,6 +1250,9 @@ class SubscriptionController extends AbstractActionController
         foreach (range(0, count($subscriptionsInfo[0])) as $column) {
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         }
+
+        // Make the first row bold
+        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
 
         $filename = $this->currentStudy()->getName() . '-Members-' . $year;
 

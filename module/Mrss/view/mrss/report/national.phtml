@@ -33,14 +33,20 @@ $this->headScript()->appendFile(
             'year' => $year,
             'format' => 'excel'
         )
-    ) ?>" class="btn btn-default">Download</a>
+    ) ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download Report
+    </a>
 
     <a href="<?= $this->url(
         'institution/subscribed',
         array(
             'year' => $year
         )
-    ) ?>" class="btn btn-default">Members</a>
+    ) ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download Members
+    </a>
 </p>
 
 <div class="report">
