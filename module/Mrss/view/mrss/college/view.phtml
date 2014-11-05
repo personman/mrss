@@ -67,7 +67,7 @@
                     <li>
                         <a title="Impersonate this user"
                            href="/admin/user/impersonate/<?= $user->getId() ?>">
-                            <i class="icon icon-fire"></i></a>
+                            <i class="icon icon-fire glyphicon glyphicon-transfer"></i></a>
                         <a href="<?= $this->url(
                             'users/edit',
                             array('id' => $user->getId())
@@ -79,7 +79,7 @@
             </ul>
 
             <a href="<?= $this->url('users/edit', array('id' => 'add', 'college' => $college->getId())) ?>" class="btn btn-default">
-                <i class="glyphicon glyphicon-plus icon icon-plus"></i>
+                <span class="glyphicon glyphicon-plus icon icon-plus"></span>
                 Add User
             </a>
         </td>
