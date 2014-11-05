@@ -8,12 +8,16 @@ use Zend\Mvc\MvcEvent;
 use Mrss\View\Helper\FlashMessages;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Zend\Session\Container;
+use Zend\Session\SessionManager;
 
 class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
         $eventManager        = $e->getApplication()->getEventManager();
+
+        $this->bootstrapSession($e);
 
         $this->setLayout($e);
 
@@ -61,6 +65,24 @@ class Module
         });
 
         $this->checkStudyAtLogin($e);
+    }
+
+    public function bootstrapSession(MvcEvent $e)
+    {
+        // 7 days
+        $sessionSeconds = 60 * 60 * 24 * 7;
+
+        $manager = new SessionManager();
+
+        $manager->getConfig()
+            ->setOption('gc_maxlifetime', $sessionSeconds);
+        $manager->getConfig()
+            ->setOption('remember_me_seconds', $sessionSeconds);
+        $manager->rememberMe($sessionSeconds);
+
+        $r = $manager->getConfig()->getOption('remember_me_seconds');
+
+        Container::setDefaultManager($manager);
     }
 
     public function setLayout(MvcEvent $e)
