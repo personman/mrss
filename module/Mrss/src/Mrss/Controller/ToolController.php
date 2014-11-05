@@ -18,6 +18,7 @@ class ToolController extends AbstractActionController
     {
         return array(
             'gc_lifetime' => ini_get('session.gc_maxlifetime'),
+            'cookie_lifetime' => ini_get('session.cookie_lifetime'),
             'remember_me_seconds' => ini_get('session.remember_me_seconds')
         );
     }
