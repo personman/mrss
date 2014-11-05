@@ -9,12 +9,17 @@ use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
 use Mrss\Service\NccbpMigration;
+use Zend\Session\Container;
+
 
 class ToolController extends AbstractActionController
 {
     public function indexAction()
     {
-
+        return array(
+            'gc_lifetime' => ini_get('session.gc_maxlifetime'),
+            'remember_me_seconds' => ini_get('session.remember_me_seconds')
+        );
     }
 
     public function exceldiffAction()
