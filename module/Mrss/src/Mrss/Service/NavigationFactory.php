@@ -167,6 +167,11 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Only show reports for workforce (for now)
             //unset($pages['reports']);
+        } else {
+            // Hide the executive report
+            unset($pages['executive']);
+            unset($pages['reports']['pages']['executive']);
+
         }
 
         // Hide the partners page for non-MRSS sites
@@ -193,6 +198,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Hide the executive report
             unset($pages['executive']);
+            unset($pages['reports']['pages']['executive']);
         }
 
         // Workforce
