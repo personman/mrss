@@ -22,11 +22,11 @@ $form->setAttribute('action', $this->url('reports/explore'));
 ?>
 
 <div class="explore row row-fluid">
-    <div class="span4">
+    <div class="span4 col-md-4">
         <?= $this->ztbForm($this->form->prepare()) ?>
     </div>
 
-    <div class="span8">
+    <div class="span8 col-md-8">
         <div id="chart">
             <?= $this->chart($chart) ?>
         </div>
