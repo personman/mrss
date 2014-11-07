@@ -305,10 +305,11 @@ return array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/membership',
+                    'route' => '/membership[/:paymentMethod]',
                     'defaults' => array(
                         'controller' => 'subscription',
-                        'action' => 'view'
+                        'action' => 'view',
+                        'paymentMethod' => null
                     )
                 )
             ),
@@ -780,10 +781,11 @@ return array(
                     'executive' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/executive[/:year]',
+                            'route' => '/executive[/:ipeds[/:year]]',
                             'defaults' => array(
                                 'action' => 'executive',
-                                'year' => null
+                                'year' => null,
+                                'ipeds' => null
                             )
                         )
                     ),

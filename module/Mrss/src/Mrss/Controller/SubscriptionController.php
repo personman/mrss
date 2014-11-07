@@ -661,7 +661,9 @@ class SubscriptionController extends AbstractActionController
 
             $this->flashMessenger()->addSuccessMessage($message);
 
-            return $this->redirect()->toRoute('membership');
+            $method = $subscription->getPaymentMethod();
+            $routeParams = array('paymentMethod' => $method);
+            return $this->redirect()->toRoute('membership', $routeParams);
         }
     }
 
