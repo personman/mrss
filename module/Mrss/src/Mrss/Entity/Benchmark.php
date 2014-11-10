@@ -44,6 +44,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $description;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    protected $reportDescription;
+
+    /**
      * @ORM\Column(type="string")
      */
     protected $dbColumn;
@@ -182,6 +187,25 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function setReportDescription($description)
+    {
+        $this->reportDescription = $description;
+
+        return $this;
+    }
+
+    public function getReportDescription($fallback = false)
+    {
+        $description = $this->reportDescription;
+
+        // If it's empty, use the data entry description
+        if ($fallback && empty($description)) {
+            $description = $this->getDescription();
+        }
+
+        return $description;
     }
 
     public function setDbColumn($column)

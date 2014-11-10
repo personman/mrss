@@ -782,7 +782,7 @@ class Report
                     $observation
                 );
 
-                $benchmarkData['description'] = $benchmark->getDescription();
+                $benchmarkData['description'] = $benchmark->getReportDescription(1);
 
 
                 if ($benchmarkData['percentile_rank'] === '-') {

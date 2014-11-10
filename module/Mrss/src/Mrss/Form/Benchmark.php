@@ -67,7 +67,20 @@ class Benchmark extends AbstractForm
                 'name' => 'description',
                 'type' => 'Textarea',
                 'options' => array(
-                    'label' => 'Description'
+                    'label' => 'Data Entry Description'
+                ),
+                'attributes' => array(
+                    'rows' => 8
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'reportDescription',
+                'type' => 'Textarea',
+                'options' => array(
+                    'label' => 'Report Description'
                 ),
                 'attributes' => array(
                     'rows' => 8
