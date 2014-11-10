@@ -99,7 +99,7 @@ $this->headScript()->appendFile(
                         <?php if ($benchmark['reported'] !== null): ?>
                         <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
                         <td class="percentileColor">
-                            <?php if ($benchmark['percentile_rank'] == '-'): ?>
+                            <?php if (!empty($benchmark['do_not_format_rank'])): ?>
                                 <?= $benchmark['percentile_rank'] ?>
                             <?php else: ?>
                                 <?= round($benchmark['percentile_rank']) ?>%

@@ -785,28 +785,34 @@ class Report
                 $benchmarkData['description'] = $benchmark->getDescription();
 
 
-                if ($benchmarkData['percentile_rank'] == '-') {
-                    $rank = '-';
+                if ($benchmarkData['percentile_rank'] === '-') {
+                    $benchmarkData['do_not_format_rank'] = true;
                 } elseif ($benchmarkData['percentile_rank'] < 1) {
                     $rank = '<1%';
-
                     $benchmarkData['percentile_rank'] = $rank;
-                    //prd($benchmarkData);
+                    $benchmarkData['do_not_format_rank'] = true;
                 } elseif ($benchmarkData['percentile_rank'] > 99) {
                     $rank = '>99%';
-                } elseif ($benchmarkData['percentile_rank']) {
-                    $rank = round($benchmarkData['percentile_rank']) . '%';
-                } else {
-                    $rank = null;
+                    $benchmarkData['percentile_rank'] = $rank;
+                    $benchmarkData['do_not_format_rank'] = true;
                 }
+
+                /*if ($benchmarkData['benchmark'] == '% High School Student Concurrent Enrollment Headcount') {
+                    if ($benchmarkData['percentile_rank'] < 1) {
+                        $benchmarkData['percentile_rank'] = 'test';
+                    }
+                    prd($benchmarkData);
+                }*/
 
 
                 $groupData['benchmarks'][] = $benchmarkData;
             }
 
             $reportData[] = $groupData;
+
         }
 
+        //prd($reportData);
         //echo '<pre>' . print_r($reportData, 1) . '</pre>';
         return $reportData;
     }
