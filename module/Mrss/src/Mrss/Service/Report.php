@@ -754,6 +754,7 @@ class Report
                     if ($benchmarkData['reported'] == 0) {
                         $benchmarkData['percentile_rank'] = '-';
                     }
+
                 } else {
                     $benchmarkData['percentile_rank_id'] = '';
                     $benchmarkData['percentile_rank'] = '';
@@ -782,6 +783,23 @@ class Report
                 );
 
                 $benchmarkData['description'] = $benchmark->getDescription();
+
+
+                if ($benchmarkData['percentile_rank'] == '-') {
+                    $rank = '-';
+                } elseif ($benchmarkData['percentile_rank'] < 1) {
+                    $rank = '<1%';
+
+                    $benchmarkData['percentile_rank'] = $rank;
+                    //prd($benchmarkData);
+                } elseif ($benchmarkData['percentile_rank'] > 99) {
+                    $rank = '>99%';
+                } elseif ($benchmarkData['percentile_rank']) {
+                    $rank = round($benchmarkData['percentile_rank']) . '%';
+                } else {
+                    $rank = null;
+                }
+
 
                 $groupData['benchmarks'][] = $benchmarkData;
             }
@@ -856,6 +874,11 @@ class Report
 
                 if ($benchmark['percentile_rank'] == '-') {
                     $rank = '-';
+                } elseif ($benchmark['percentile_rank'] < 1) {
+                    $rank = '<1%';
+                    $benchmark['percentile_rank'] = $rank;
+                } elseif ($benchmark['percentile_rank'] > 99) {
+                    $rank = '>99%';
                 } elseif ($benchmark['percentile_rank']) {
                     $rank = round($benchmark['percentile_rank']) . '%';
                 } else {
@@ -1962,7 +1985,7 @@ class Report
         $chartTitle = $config['title'];
 
         $highChartsConfig = array(
-            'id' => rand(1, 10000),
+            'id' => $dbColumn,
             'chart' => array(
                 'type' => 'column',
                 'events' => array(
@@ -2389,6 +2412,7 @@ class Report
 
     public function setObservation(Observation $observation)
     {
+        $observation->getYear();
         $this->observation = $observation;
 
         return $this;

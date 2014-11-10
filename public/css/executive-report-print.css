@@ -2,7 +2,20 @@
     display: none;
 } */
 
-.nav, .adminNavigation {
+@page { margin: 0; }
+
+p {
+    font-size: 14px;
+}
+#content h1 {
+    border-bottom: none !important;
+}
+
+a[href]:after {
+    content: none;
+}
+
+.nav, .adminNavigation, .footer, #headerButtons, #headerLogin {
     display: none;
 }
 
@@ -18,6 +31,9 @@
 
 #page { font-size: 0.875em; line-height: 1.25em }
 
+.highcharts-container {
+    width: 423px;
+}
 
 .executiveReportIntro {
     width: 100%;

@@ -255,7 +255,17 @@ class ReportController extends AbstractActionController
     {
         $open = (!empty($_GET['open']));
         $year = $this->getYearFromRouteOrStudy();
-        $college = $this->currentCollege();
+
+        $ipeds = $this->params()->fromRoute('ipeds');
+        if ($ipeds) {
+            /** @var \Mrss\Model\college $collegeModel */
+            $collegeModel = $this->getServiceLocator()->get('model.college');
+            $college = $collegeModel->findOneByIpeds($ipeds);
+        }
+
+        if (empty($college)) {
+            $college = $this->currentCollege();
+        }
 
         // Nccbp migration: temporary
         if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
@@ -269,9 +279,16 @@ class ReportController extends AbstractActionController
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
 
         /** @var \Mrss\Entity\Observation $observation */
-        $observation = $this->currentObservation($year);
+        $observation = $college->getObservationForYear($year);
         $this->getReportService()->setObservation($observation);
         $reportData = $this->getReportService()->getExecutiveReportData();
+
+        $forcePrintStyles = $this->params()->fromQuery('print');
+        if ($forcePrintStyles) {
+            $media = 'screen,print';
+        } else {
+            $media = 'print';
+        }
 
         return array(
             'reportData' => $reportData,
@@ -279,6 +296,7 @@ class ReportController extends AbstractActionController
             'subscriptions' => $subscriptions,
             'college' => $college,
             'open' => $open,
+            'media' => $media
         );
     }
 
@@ -291,7 +309,7 @@ class ReportController extends AbstractActionController
 
             // But if reports aren't open yet, show them last year's by default
             $college = $this->currentCollege();
-            $isJCCC = ($college->getId() == 101);
+            $isJCCC = (!empty($college) && $college->getId() == 101);
             if (/*!$isJCCC && */!$this->currentStudy()->getReportsOpen()) {
                 $year = $year - 1;
             }

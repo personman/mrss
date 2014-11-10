@@ -1,5 +1,10 @@
-<?= $this->headLink()->appendStylesheet('/css/executive-report.css') ?>
-<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css', 'print') ?>
+<?php
+$open = true;
+$media = 'screen';
+?>
+
+<?= $this->headLink()->appendStylesheet('/css/executive-report.css', 'screen,print') ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=1', $media) ?>
 
 <?php /** @var \Mrss\Entity\College $college */ ?>
 <?php /** @var \Mrss\Entity\Subscription[] $subscriptions */ ?>
@@ -7,7 +12,7 @@
 <div id="executiveReport" class="page">
 <?php if (empty($open)): ?>
     <h1>Executive Report</h1>
-    <p>The 2015 Executive Report is not yet available.</p>
+    <p>The 2014 Executive Report is not yet available.</p>
 <?php else: ?>
     <ul class="nav nav-pills report-nav">
         <?php foreach ($subscriptions as $subscription): ?>
@@ -116,7 +121,7 @@
         <p>The NCCBP On-Line Peer Comparison Tool allows you to compare your results to similar community colleges.  Please contact us if you would like assistance using this tool.</p>
     </div>
 
-    
+
     <div class="executiveReportFooter">
         <div class="executiveReportMoreInfo">
             <h3>More Information</h3>

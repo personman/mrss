@@ -113,7 +113,7 @@ return array(
                 // Report viewers:
                 array(
                     'controller' => 'reports',
-                    'roles' => array('viewer')
+                    'roles' => array('viewer', 'guest')
                 ),
                 // Membership coordinators (contact):
                 array(
@@ -242,7 +242,7 @@ return array(
                 ),
                 array(
                     'controller' => 'reports',
-                    'action' => 'emailOutliers',
+                    'action' => array('emailOutliers', 'explore'),
                     'roles' => array('admin')
                 ),
                 // Since the background action is fired by console, lift guard

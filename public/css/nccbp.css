@@ -602,6 +602,13 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     border-color: #9cc03e;
 }
 
+/* Pills/tabs (for years, usuall */
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+    background-color: #00508d;
+}
+
 /* Navbar */
 .navbar-toggle {
     border-color: #ddd;
