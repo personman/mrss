@@ -16,10 +16,13 @@ class ToolController extends AbstractActionController
 {
     public function indexAction()
     {
+        $baseTime = round(microtime(1) - REQUEST_MICROTIME, 3);
+
         return array(
             'gc_lifetime' => ini_get('session.gc_maxlifetime'),
             'cookie_lifetime' => ini_get('session.cookie_lifetime'),
-            'remember_me_seconds' => ini_get('session.remember_me_seconds')
+            'remember_me_seconds' => ini_get('session.remember_me_seconds'),
+            'baseTime' => $baseTime
         );
     }
 
