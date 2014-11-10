@@ -2,6 +2,15 @@
 <h1><?= $action ?> User</h1>
 <h2><?= $user->getCollege()->getName() ?></h2>
 
+<?php if (!empty($passwordReset)): ?>
+    <p><strong>Password reset link:</strong>
+        <?php $url = $this->serverUrl($this->url('zfcuser/resetpassword', array('userId' => $passwordReset->getUserId(), 'token' => $passwordReset->getRequestKey()))); ?>
+        <a href="<?= $url ?>"><?= $url ?></a>
+    </p>
+
+
+<?php endif ?>
+
 <?php
 $form->setAttribute('action', $this->url('users/edit', array('college' => $user->getCollege()->getId())));
 ?>

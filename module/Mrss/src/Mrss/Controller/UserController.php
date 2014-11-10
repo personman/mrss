@@ -20,6 +20,8 @@ class UserController extends AbstractActionController
      */
     public function editAction()
     {
+        $passwordReset = null;
+
         $id = $this->params('id');
         /** @var \Mrss\Model\User $userModel */
         $userModel = $this->getServiceLocator()->get('model.user');
@@ -49,6 +51,13 @@ class UserController extends AbstractActionController
             }
 
             $user = $userModel->find($id);
+
+            // Display password reset links to admins
+            if ($this->isAllowed('adminMenu', 'view')) {
+                $passwordService = $this->getServiceLocator()
+                    ->get('goalioforgotpassword_password_mapper');
+                $passwordReset = $passwordService->findByUser($user->getId());
+            }
         }
 
 
@@ -112,7 +121,8 @@ class UserController extends AbstractActionController
 
         return array(
             'user' => $user,
-            'form' => $form
+            'form' => $form,
+            'passwordReset' => $passwordReset
         );
     }
 
