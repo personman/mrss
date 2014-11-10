@@ -2,6 +2,40 @@
     <?php $this->layout('layout/nccbp.phtml') ?>
 <?php endif ?>
 
+<?php if ($this->zfcUserIdentity()): ?>
 <h2>Forbidden</h2>
 
-<p>In order to access the requested page, you need to be logged in and have sufficient permissions.</p>
+<p>In order to access the requested page, you need to be signed in and have sufficient permissions.</p>
+<?php else: ?>
+
+    <div class="row-fluid row">
+
+        <p>In order to access the requested page, you need to be signed in and have sufficient permissions.</p>
+
+        <div class="span12 col-xs-12">
+
+            <h1>Sign In</h1>
+
+
+            <form action="/user/login?redirect=" method="post">
+                <dl class="zend_form">
+
+                    <dt><label for="identity">Email</label></dt>
+                    <dd><input name="identity" type="text" value=""></dd>
+
+                    <dt><label for="credential">Password</label></dt>
+                    <dd><input name="credential" type="password" value=""></dd>
+
+                    <input type="hidden" name="redirect" value="<?= $_SERVER['REQUEST_URI'] ?>">
+
+                    <dd><button type="submit" name="submit" class="btn btn-primary" value="">Sign In</button></dd>
+                </dl>
+
+            </form>
+            <p><a href="/user/forgot-password">Forgot your password?</a></p>
+
+
+        </div>
+    </div>
+
+<?php endif ?>
