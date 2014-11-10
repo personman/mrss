@@ -80,7 +80,9 @@ class Benchmark extends AbstractForm
                 'name' => 'reportDescription',
                 'type' => 'Textarea',
                 'options' => array(
-                    'label' => 'Report Description'
+                    'label' => 'Report Description',
+                    'help-block' => 'If this field is left blank, the data entry
+                    version will be used in reports.'
                 ),
                 'attributes' => array(
                     'rows' => 8
