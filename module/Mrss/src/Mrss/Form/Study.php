@@ -66,6 +66,17 @@ class Study extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'renewalPrice',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Renewal Price',
+                    'help-block' => 'Renewal price trumps early-bird price.'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'earlyPrice',
                 'type' => 'Text',
                 'options' => array(

@@ -352,7 +352,7 @@ class SubscriptionController extends AbstractActionController
         $isRenewal = $this->isRenewal();
 
         if ($isRenewal) {
-            $amount = 1250;
+            $amount = $this->getStudy()->getRenewalPrice();
         }
 
         // Check for offer code
@@ -796,7 +796,7 @@ class SubscriptionController extends AbstractActionController
         $isRenewal = $this->isRenewal();
 
         if ($isRenewal) {
-            $amount = 1250;
+            $amount = $this->getStudy()->getRenewalPrice();
         }
 
 

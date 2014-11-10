@@ -53,6 +53,11 @@ class Study
     /**
      * @ORM\Column(type="float")
      */
+    protected $renewalPrice;
+
+    /**
+     * @ORM\Column(type="float")
+     */
     protected $earlyPrice;
 
     /**
@@ -257,6 +262,18 @@ class Study
     public function getPrice()
     {
         return $this->price;
+    }
+
+    public function setRenewalPrice($price)
+    {
+        $this->renewalPrice = $price;
+
+        return $this;
+    }
+
+    public function getRenewalPrice()
+    {
+        return $this->renewalPrice;
     }
 
     public function setEarlyPrice($earlyPrice)
