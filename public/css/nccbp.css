@@ -924,7 +924,8 @@ input:focus, textarea:focus {
     display: none;
 }
 #orgbox #cost-and-productivity img.img-responsive {
-    max-height: 100px;
+    height: 100px;
+    width: 212px;
 }
 
 #orgbox div.col-md-4 {
