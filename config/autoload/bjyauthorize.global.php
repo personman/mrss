@@ -113,7 +113,7 @@ return array(
                 // Report viewers:
                 array(
                     'controller' => 'reports',
-                    'roles' => array('viewer', 'guest')
+                    'roles' => array('viewer')
                 ),
                 // Membership coordinators (contact):
                 array(
