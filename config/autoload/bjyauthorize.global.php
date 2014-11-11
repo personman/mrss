@@ -93,6 +93,11 @@ return array(
                     'action' => 'peers',
                     'roles' => array('guest')
                 ),
+                array(
+                    'controller' => 'reports',
+                    'action' => 'executiveprint',
+                    'roles' => array('guest')
+                ),
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'users',

@@ -789,6 +789,17 @@ return array(
                             )
                         )
                     ),
+                    'executive-print' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/executive-print[/:ipeds[/:year]]',
+                            'defaults' => array(
+                                'action' => 'executiveprint',
+                                'year' => null,
+                                'ipeds' => null
+                            )
+                        )
+                    ),
                     'peer' => array(
                         'type' => 'segment',
                         'options' => array(

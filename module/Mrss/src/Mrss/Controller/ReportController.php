@@ -12,6 +12,7 @@ use Mrss\Entity\PeerGroup;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class ReportController extends AbstractActionController
 {
@@ -251,6 +252,11 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function executiveprintAction()
+    {
+        return $this->executiveAction();
+    }
+
     public function executiveAction()
     {
         $open = (!empty($_GET['open']));
@@ -283,21 +289,27 @@ class ReportController extends AbstractActionController
         $this->getReportService()->setObservation($observation);
         $reportData = $this->getReportService()->getExecutiveReportData();
 
-        $forcePrintStyles = $this->params()->fromQuery('print');
+        $forcePrintStyles = $this->params()->fromRoute('print');
         if ($forcePrintStyles) {
             $media = 'screen,print';
         } else {
             $media = 'print';
         }
 
-        return array(
-            'reportData' => $reportData,
-            'year' => $year,
-            'subscriptions' => $subscriptions,
-            'college' => $college,
-            'open' => $open,
-            'media' => $media
+        $view = new ViewModel(
+            array(
+                'reportData' => $reportData,
+                'year' => $year,
+                'subscriptions' => $subscriptions,
+                'college' => $college,
+                'open' => $open,
+                'media' => $media
+            )
         );
+        $view->setTemplate('mrss/report/executive.phtml');
+
+
+        return $view;
     }
 
     public function getYearFromRouteOrStudy()

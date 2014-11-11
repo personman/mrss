@@ -23,7 +23,12 @@ h1.title {
     font-weight: bold;
 }
 
-.complete-chart-box p { font-size: 80%; line-height:  1.4em; padding:  5px 0; color: #777; }
+.complete-chart-box p {
+    font-size: 80%;
+    line-height:  1.4em;
+    padding:  5px 0;
+    color: #777 !important;
+}
 
 .executiveReportStrengths, .executiveReportFooter {
     clear: both;
@@ -53,7 +58,7 @@ ol.executiveReportList li {
 
 .executiveReportRank {
     margin-left: 5px;
-    color: #005595;
+    color: #336699 !important;
     font-weight: bold;
 }
 
@@ -73,7 +78,7 @@ ol.executiveReportList li {
 .executiveReportMoreInfo {
     width: 60%;
     float: left;
-    margin: 0px 20px 10px 0px;
+    margin: 0px 20px 0px 0px;
 }
 
 
@@ -98,6 +103,7 @@ ol.executiveReportList li {
     font-size: 150%;
     margin-bottom: 0px;
     margin-top: 20px;
+    font-weight: bold;
 }
 
 .executiveReportPeerCallout p {
@@ -117,13 +123,18 @@ ol.executiveReportList li {
     width: 22%;
     float: right;
     margin-right: 5%;
-    margin-top: 30px;
+    margin-top: 25px;
+    line-height: 18px !important;
 }
 
+p.directorName {
+    line-height: 18px;
+}
 p.directorContact {
     font-size: 80%;
     line-height: 18px;
 }
+
 
 body #content {
     margin:0;
@@ -348,6 +359,18 @@ fieldset legend {
 
 #content {
     background: white !important;
+}
+
+.executiveReportLinkToThisPage a, .directorContact a {
+    text-decoration: underline;
+    color: #336699 !important;
+}
+
+p.instituteLogo {
+    margin-bottom: 0;
+}
+.instituteLogo img {
+    width: 170px;
 }
 
 @-moz-document url-prefix() {fieldset legend{margin-bottom:0;}}ul.symbol-links{list-style-type:none;padding:0px;margin:0px;}ul.symbol-links li{background-repeat:no-repeat;background-position:0px 2px;padding-left:24px;padding-bottom:5px;}.page-content-subscribe ul.symbol-links li{margin-left:0;margin-bottom:0.5em;}ul li.information{background-image:url(/sites/all/themes/nccbp_new/images/symbols_info.gif);}ul li.contact{background-image:url(/sites/all/themes/nccbp_new/images/symbols_contact.gif);}ul li.form{background-image:url(/sites/all/themes/nccbp_new/images/symbols_form.gif);}

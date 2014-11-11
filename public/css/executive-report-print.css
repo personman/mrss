@@ -2,11 +2,16 @@
     display: none;
 } */
 
-@page { margin: 0; }
+/*@page { margin: 0; }*/
 
 p {
     font-size: 14px;
 }
+
+#executiveReport {
+    width: 940px;
+}
+
 #content h1 {
     border-bottom: none !important;
 }
@@ -15,10 +20,13 @@ a[href]:after {
     content: none;
 }
 
-.nav, .adminNavigation, .footer, #headerButtons, #headerLogin {
+.nav, .adminNavigation, .footer, #headerButtons, #headerLogin, #headerLogin button {
     display: none;
 }
 
+.navbar-toggle {
+    border-color: transparent !important;
+}
 .with-navbar #content { margin-top:  -4em; }
 
 #header {
@@ -27,9 +35,12 @@ a[href]:after {
     margin-left: 10px;
 }
 
-#content, #content-inner { margin-top:  -.75em !important; }
+/*#content, #content-inner { margin-top:  -.75em !important; }*/
 
-#page { font-size: 0.875em; line-height: 1.25em }
+.page {
+    font-size: 0.875em;
+    line-height: 1.25em
+}
 
 .highcharts-container {
     width: 423px;
@@ -53,7 +64,7 @@ a[href]:after {
 
 .complete-chart-box {
     margin: 0px 20px 30px 20px;
-    width: 45%;
+    width: 43%;
     height: 350px;
     padding:  10px 0;
     float: left;
