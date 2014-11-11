@@ -796,7 +796,8 @@ return array(
                             'defaults' => array(
                                 'action' => 'executiveprint',
                                 'year' => null,
-                                'ipeds' => null
+                                'ipeds' => null,
+                                'print' => true
                             )
                         )
                     ),
