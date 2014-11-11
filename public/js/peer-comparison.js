@@ -183,6 +183,8 @@ function addSavedPeerGroups()
 
 function selectPeerGroup(group)
 {
+    var peers = $.map(group.peers, Number)
+
     // Loop over the options, selecting any that belong to the group
     var selectBox = $('#peers')
     selectBox.val('')
@@ -195,7 +197,7 @@ function selectPeerGroup(group)
             var value = parseInt(option.attr('value'))
             if (value) {
                 // Check to see if the option's value is in the peer group
-                if ($.inArray(value, group.peers) > -1) {
+                if ($.inArray(value, peers) > -1) {
                     //option.attr('selected', 'selected')
                     // This works in IE10 and 11. above doesn't
                     option[0].selected = 'selected'
