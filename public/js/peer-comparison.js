@@ -192,7 +192,7 @@ function selectPeerGroup(group)
         if (Math.floor(i) == i) {
             var option = $(selectBox[0].options[i])
 
-            var value = option.attr('value')
+            var value = parseInt(option.attr('value'))
             if (value) {
                 // Check to see if the option's value is in the peer group
                 if ($.inArray(value, group.peers) > -1) {
