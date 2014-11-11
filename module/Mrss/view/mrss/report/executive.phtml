@@ -2,6 +2,8 @@
 //$open = false;
 //$media = 'screen,print';
 ?>
+<?php $this->headTitle()->prepend('Executive Report') ?>
+<?php $this->headTitle()->prepend($college->getName()) ?>
 
 <?= $this->headLink()->appendStylesheet('/css/executive-report.css', 'screen,print') ?>
 <?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=1', $media) ?>

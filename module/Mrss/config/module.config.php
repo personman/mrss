@@ -797,7 +797,18 @@ return array(
                                 'action' => 'executiveprint',
                                 'year' => null,
                                 'ipeds' => null,
-                                'print' => true
+                                'print' => true,
+                                'open' => true
+                            )
+                        )
+                    ),
+                    'executive-list' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/executive-list[/:year]',
+                            'defaults' => array(
+                                'action' => 'executiveList',
+
                             )
                         )
                     ),

@@ -8,6 +8,7 @@ use Zend\Mvc\MvcEvent;
 use Mrss\View\Helper\FlashMessages;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Zend\Navigation\Page\Mvc;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
 
@@ -65,6 +66,8 @@ class Module
         });
 
         $this->checkStudyAtLogin($e);
+
+        $this->setupTitle($e);
     }
 
     public function bootstrapSession(MvcEvent $e)
@@ -97,6 +100,29 @@ class Module
                         $controller->layout('layout/nccbp.phtml');
                     }
                 }, 100);
+    }
+
+    public function setupTitle(MvcEvent $e)
+    {
+        $serviceManager = $e->getApplication()->getServiceManager();
+        $cpm = $serviceManager->get('ControllerPluginManager');
+        $currentStudy = $cpm->get('currentStudy')->getCurrentStudy();
+
+        // Getting the view helper manager from the application service manager
+        $viewHelperManager = $e->getApplication()->getServiceManager()
+            ->get('viewHelperManager');
+
+        // Getting the headTitle helper from the view helper manager
+        $headTitleHelper   = $viewHelperManager->get('headTitle');
+
+        // Setting a separator string for segments
+        $headTitleHelper->setSeparator(' - ');
+
+        $studyName = $currentStudy->getDescription();
+
+        // Setting the action, controller, module and site name as title segments
+        $headTitleHelper->append($studyName);
+
     }
 
     public function handleError(MvcEvent $e) {

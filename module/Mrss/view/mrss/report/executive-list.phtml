@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    $(function() {
+        $('#list').select()
+    })
+
+</script>
+
+<textarea id="list" cols="80" rows="100">
+<?php foreach ($ipedsIds as $ipeds): ?>
+<?= $this->serverUrl($this->url('reports/executive-print', array('ipeds' => $ipeds))) . "\n" ?>
+<?php endforeach ?>
+</textarea>

@@ -260,6 +260,10 @@ class ReportController extends AbstractActionController
     public function executiveAction()
     {
         $open = (!empty($_GET['open']));
+        if ($this->params()->fromRoute('open')) {
+            $open = true;
+        }
+
         $year = $this->getYearFromRouteOrStudy();
 
         $ipeds = $this->params()->fromRoute('ipeds');
@@ -272,6 +276,8 @@ class ReportController extends AbstractActionController
         if (empty($college)) {
             $college = $this->currentCollege();
         }
+
+        //$this->view->headTitle('test');
 
         // Nccbp migration: temporary
         if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
@@ -310,6 +316,37 @@ class ReportController extends AbstractActionController
 
 
         return $view;
+    }
+
+    public function executiveListAction()
+    {
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $studyId = $this->currentStudy()->getId();
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+
+            // If reports aren't open yet, show the previous year
+            if (!$this->currentStudy()->getReportsOpen()) {
+                $year = $year - 1;
+            }
+        }
+
+        $subscriptions = $subscriptionModel->findByStudyAndYear(
+            $studyId,
+            $year
+        );
+
+        $ipedsIds = array();
+        foreach ($subscriptions as $subscription) {
+            $ipeds = $subscription->getCollege()->getIpeds();
+            $ipedsIds[] = $ipeds;
+        }
+
+        return array(
+            'ipedsIds' => $ipedsIds
+        );
     }
 
     public function getYearFromRouteOrStudy()
