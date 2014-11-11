@@ -1414,7 +1414,7 @@ class Report
 
             $label = $name;
 
-            // Your college
+            // Your college 
             if (strlen($name) > 5) {
                 $dataLabelEnabled = true;
                 $color = '#002C57';
