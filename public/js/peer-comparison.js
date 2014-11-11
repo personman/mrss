@@ -196,7 +196,9 @@ function selectPeerGroup(group)
             if (value) {
                 // Check to see if the option's value is in the peer group
                 if ($.inArray(value, group.peers) > -1) {
-                    option.attr('selected', 'selected')
+                    //option.attr('selected', 'selected')
+                    // This works in IE10 and 11. above doesn't
+                    option[0].selected = 'selected'
                 }
             }
 
