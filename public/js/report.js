@@ -39,3 +39,21 @@ $(function() {
         return false
     })
 })
+
+function loadChart(event, chart)
+{
+    // Enable data labels when exporting
+    if (chart.options.chart.forExport) {
+        var data = chart.series[0].data
+        var dataWithLabels = []
+        for (i in data) {
+            var point = data[i]
+            point.dataLabels.enabled = true
+            dataWithLabels.push(point)
+        }
+        chart.series[0].setData(dataWithLabels)
+        chart.redraw()
+
+    }
+
+}

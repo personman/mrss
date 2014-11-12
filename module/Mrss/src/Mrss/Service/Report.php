@@ -1338,10 +1338,21 @@ class Report
         );
 
 
+        $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
+
+
         $chart = array(
             'id' => 'chart_' . $benchmark->getDbColumn(),
             'chart' => array(
-                'type' => 'column'
+                'type' => 'column',
+                'events' => array(
+                    'load' => 'loadChart'
+                ),
+            ),
+            'exporting' => array(
+                'chartOptions' => array(
+                    'series' => $seriesWithDataLabels,
+                )
             ),
             'title' => array(
                 'text' => $chartConfig['title'],
@@ -1397,6 +1408,25 @@ class Report
         //var_dump($chartConfig);
         //var_dump($chart);
         return $chart;
+    }
+
+    public function forceDataLabelsInSeries($series)
+    {
+        $seriesWithDataLabels = array();
+
+        foreach ($series as $dataSet) {
+            $chartData = $dataSet['data'];
+            $chartDataWithLabels = array();
+            foreach ($chartData as $point) {
+                $point['dataLabels']['enabled'] = true;
+                $chartDataWithLabels[] = $point;
+            }
+
+            $dataSet['data'] = $chartDataWithLabels;
+            $seriesWithDataLabels[] = $dataSet;
+        }
+
+        return $seriesWithDataLabels;
     }
 
     public function getPeerBarChart(Benchmark $benchmark, $data)

@@ -74,7 +74,7 @@ class Chart extends AbstractHelper
 
         foreach ($events as $event => $function) {
             $functionLabel = '"' . $function .  '"';
-            $script = "function (event) { $function(event) }";
+            $script = "function (event) { $function(event, this) }";
             $config = str_replace($functionLabel, $script, $config);
         }
 
