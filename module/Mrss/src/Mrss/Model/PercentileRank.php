@@ -76,7 +76,7 @@ class PercentileRank extends AbstractModel
             'p.benchmark = b.id'
         );
 
-        $qb->andWhere("b.includeInNationalReport = TRUE");
+        $qb->andWhere("b.includeInBestPerformer = TRUE");
 
         $qb->andWhere("p.college = :college_id");
         $qb->setParameter('college_id', $college->getId());
