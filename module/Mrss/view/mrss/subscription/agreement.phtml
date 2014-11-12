@@ -11,10 +11,8 @@
 <?php else: ?>
 
     Annual subscription fees are as follows:
-    <?php if ($this->currentStudy()->getId() == 1): ?>
     <br>
-    <?php endif ?>
-    Renewal registration: $<?= number_format(1250) ?>
+    Renewal registration: $<?= number_format($this->currentStudy()->getRenewalPrice()) ?>
     <br>
     Early-Bird registration: $<?= number_format($this->currentStudy()->getEarlyPrice()) ?>
     <br>
