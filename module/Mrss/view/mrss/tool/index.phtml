@@ -61,7 +61,7 @@
     <ul>
         <?php foreach ($collegesWithNoExec as $college): ?>
             <li>
-                <a href="<?= $this->url('colleges/view', array('id' => $college->getId())) ?>">
+                <a href="<?= $this->url('colleges/edit', array('id' => $college->getId())) ?>">
                     <?= $college->getName() ?>
                 </a>
             </li>

@@ -109,6 +109,13 @@ class College extends Fieldset implements InputFilterProviderInterface
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'id',
+                'type' => 'Hidden',
+            )
+        );
+
         if ($includeExec) {
 
             $this->add(

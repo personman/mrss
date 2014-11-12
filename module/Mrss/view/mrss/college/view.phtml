@@ -2,6 +2,8 @@
 
 <h1><?= $college->getName() ?></h1>
 
+<a href="<?= $this->url('colleges/edit', array('id' => $college->getId())) ?>">Edit college</a>
+
 <table class="style1">
     <tr>
         <td>

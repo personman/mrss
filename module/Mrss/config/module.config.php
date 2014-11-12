@@ -455,6 +455,16 @@ return array(
                                 'id' => 0
                             )
                         )
+                    ),
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => 0
+                            )
+                        )
                     )
                 )
             ),

@@ -94,14 +94,29 @@ class CollegeController extends AbstractActionController
 
     public function editAction()
     {
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
         $form = new AbstractForm('college');
 
         $collegeFieldset = new \Mrss\Form\Fieldset\College(true);
 
         $collegeFieldset->setUseAsBaseFieldset(true);
 
-        /** @var \Mrss\Entity\College $college */
-        $college = $this->currentCollege();
+        $collegeId = $this->params()->fromRoute('id');
+        if (empty($collegeId)) {
+            if ($institution = $this->params()->fromPost('institution')) {
+                $collegeId = $institution['id'];
+            }
+        }
+
+        if (empty($collegeId)) {
+            /** @var \Mrss\Entity\College $college */
+            $college = $this->currentCollege();
+            $isAdmin = false;
+        } else {
+            $college = $collegeModel->find($collegeId);
+            $isAdmin = true;
+        }
 
         $redirect = $this->params()->fromRoute('redirect');
 
@@ -125,7 +140,6 @@ class CollegeController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $collegeModel = $this->getServiceLocator()->get('model.college');
                 $collegeModel->save($college);
                 $this->getServiceLocator()->get('em')->flush();
 
@@ -133,18 +147,27 @@ class CollegeController extends AbstractActionController
 
                 // Get the redirect
                 $data = $this->params()->fromPost();
-                if (!empty($data['redirect'])) {
-                    return $this->redirect()->toUrl('/' . $data['redirect']);
+
+                if (!empty($isAdmin)) {
+                    $redirect = $this->redirect()
+                        ->toUrl('/colleges/view/' . $college->getId());
+                } elseif (!empty($data['redirect'])) {
+                    $redirect = $this->redirect()->toUrl('/' . $data['redirect']);
+                } else {
+                    $redirect = $this->redirect()->toUrl('/members');
                 }
 
-                return $this->redirect()->toUrl('/members');
+
+
+                return $redirect;
             }
 
         }
 
 
         return array(
-            'form' => $form
+            'form' => $form,
+            'isAdmin' => $isAdmin
         );
     }
 
