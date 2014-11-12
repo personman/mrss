@@ -64,8 +64,10 @@ class PercentileRank extends AbstractModel
         //->setFetchMode('MyBundle\Entity\User', 'addresses', \Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER)
 
 
+        // For some benchmarks, lower is better. Calculate an absolute rank so we can sort by that.
+        $absoluteRank = 'CASE WHEN b.highIsBetter = true THEN p.rank ELSE 100 - p.rank END AS absolute_rank';
 
-        $qb->select('p');
+        $qb->select(array('p', $absoluteRank));
         $qb->from('\Mrss\Entity\Benchmark', 'b');
 
         // Join subscriptions
@@ -90,9 +92,9 @@ class PercentileRank extends AbstractModel
         $qb->andWhere('p.system IS NULL');
 
         if (!$weaknesses) {
-            $qb->orderBy('p.rank', 'DESC');
+            $qb->orderBy('absolute_rank', 'DESC');
         } else {
-            $qb->orderBy('p.rank', 'ASC');
+            $qb->orderBy('absolute_rank', 'ASC');
         }
 
         if ($benchmarkGroupToExclude) {
@@ -111,48 +113,14 @@ class PercentileRank extends AbstractModel
             return array();
         }
 
-        /*
-        $connection = $this->getEntityManager()->getConnection();
-        $connection->setFetchMode(\PDO::FETCH_ASSOC);
-
-        $qb = $connection->createQueryBuilder();
-
-        $qb->select('p');
-        //$qb->from('\Mrss\Entity\PercentileRank', 'p');
-        $qb->from('\Mrss\Entity\Benchmark', 'b');
-
-        // Join benchmarks so we only get report ones
-        $qb->innerJoin(
-            '\Mrss\Entity\PercentileRank',
-            'p',
-            'WITH',
-            'b.id = p.benchmark'
-        );
-
-        $qb->where("b.includeInNationalReport IS TRUE");
-        $qb->where("p.college_id =  :college_id");
-        $qb->setParameter('college_id', $college->getId());
-
-        $qb->where("p.year =  :year");
-        $qb->setParameter('year', $year);
-
-        if (!$weaknesses) {
-            $qb->orderBy('p.rank', 'DESC');
-        } else {
-            $qb->orderBy('p.rank', 'ASC');
+        // Convert back to array of rank objects
+        $ranks = array();
+        foreach ($results as $row) {
+            $rank = $row[0];
+            $ranks[] = $rank;
         }
+        $results = $ranks;
 
-        $qb->setFirstResult(0)->setMaxResults($limit);
-
-
-        try {
-            $results = $qb->execute()->fetchAll();
-        } catch (\Exception $e) {
-            prd($e->getMessage());
-            return array();
-        }
-        //prd($results);
-        */
         return $results;
     }
 
