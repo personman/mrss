@@ -27,6 +27,13 @@ a[href]:after {
 .navbar-toggle {
     border-color: transparent !important;
 }
+.navbar-toggle .icon-bar {
+    background-color: transparent;
+}
+#actionItems {
+    display: none;
+}
+
 .with-navbar #content { margin-top:  -4em; }
 
 #header {
