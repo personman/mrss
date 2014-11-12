@@ -55,3 +55,17 @@
     <dd><?= $baseTime ?> seconds</dd>
 
 </dl>
+
+<?php if ($collegesWithNoExec): ?>
+    <h3>Colleges With No Executive</h3>
+    <ul>
+        <?php foreach ($collegesWithNoExec as $college): ?>
+            <li>
+                <a href="<?= $this->url('colleges/view', array('id' => $college->getId())) ?>">
+                    <?= $college->getName() ?>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+
+<?php endif ?>

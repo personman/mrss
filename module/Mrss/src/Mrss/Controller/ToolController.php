@@ -21,8 +21,41 @@ class ToolController extends AbstractActionController
             'gc_lifetime' => ini_get('session.gc_maxlifetime'),
             'cookie_lifetime' => ini_get('session.cookie_lifetime'),
             'remember_me_seconds' => ini_get('session.remember_me_seconds'),
-            'baseTime' => $baseTime
+            'baseTime' => $baseTime,
+            'collegesWithNoExec' => $this->getMembersWithNoExec()
         );
+    }
+
+    public function getMembersWithNoExec()
+    {
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $studyId = $this->currentStudy()->getId();
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+
+            // If reports aren't open yet, show the previous year
+            if (!$this->currentStudy()->getReportsOpen()) {
+                $year = $year - 1;
+            }
+        }
+
+        $subscriptions = $subscriptionModel->findByStudyAndYear(
+            $studyId,
+            $year
+        );
+
+        $collegesWithNoExec = array();
+        foreach ($subscriptions as $subscription) {
+            $college = $subscription->getCollege();
+            if (!$college->getExecLastName()) {
+                $collegesWithNoExec[] = $college;
+            }
+        }
+
+        return $collegesWithNoExec;
     }
 
     public function exceldiffAction()
