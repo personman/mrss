@@ -109,13 +109,13 @@ class CollegeController extends AbstractActionController
             }
         }
 
+        $isAdmin = $this->isAllowed('adminMenu', 'view');
+
         if (empty($collegeId)) {
             /** @var \Mrss\Entity\College $college */
             $college = $this->currentCollege();
-            $isAdmin = false;
         } else {
             $college = $collegeModel->find($collegeId);
-            $isAdmin = true;
         }
 
         $redirect = $this->params()->fromRoute('redirect');
