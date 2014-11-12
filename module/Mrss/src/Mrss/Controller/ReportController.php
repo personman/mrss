@@ -314,7 +314,6 @@ class ReportController extends AbstractActionController
         );
         $view->setTemplate('mrss/report/executive.phtml');
 
-
         return $view;
     }
 
