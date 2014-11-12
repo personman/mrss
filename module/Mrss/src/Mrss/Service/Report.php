@@ -2073,7 +2073,7 @@ class Report
         foreach ($percentileRanks as $pRank) {
             $ranks[] = array(
                 'name' => $pRank->getBenchmark()->getDescriptiveReportLabel(),
-                'rank' => $pRank->getRank(),
+                'rank' => $this->getOrdinal($pRank->getRank()),
                 'benchmark_id' => $pRank->getBenchmark()->getId()
             );
         }

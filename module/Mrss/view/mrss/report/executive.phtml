@@ -83,7 +83,7 @@
 
             <li>
                 <?= $benchmark['name'] ?>
-                <div class="executiveReportRank">Your Rank - <?= round($benchmark['rank']) ?><sup>th</sup> Percentile</div>
+                <div class="executiveReportRank">Your Rank - <?= $benchmark['rank'] ?> Percentile</div>
             </li>
             <?php endforeach ?>
 
@@ -109,7 +109,7 @@
 
                 <li>
                     <?= $benchmark['name'] ?>
-                    <div class="executiveReportRank">Your Rank - <?= round($benchmark['rank']) ?><sup>th</sup> Percentile</div>
+                    <div class="executiveReportRank">Your Rank - <?= $benchmark['rank'] ?> Percentile</div>
                 </li>
             <?php endforeach ?>
 
@@ -211,7 +211,7 @@
         // the neighbor's label blank
         multiCharts = [
             'chart_w_comp_succ',
-            'chart_fall_fall_pers',
+            'chart_fall_fall_pers'
         ];
 
         for (var i in multiCharts) {
