@@ -141,9 +141,9 @@ ol.executiveReportList li {
 p.directorName {
     line-height: 18px;
 }
-p.directorContact {
+#executiveReport p.directorContact {
     font-size: 80%;
-    line-height: 18px;
+    line-height: 16px;
 }
 
 
