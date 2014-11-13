@@ -8,8 +8,12 @@ use Zend\Validator\Regex;
 
 class PeerComparisonDemographics extends AbstractForm
 {
-    public function __construct()
+    protected $studyId;
+
+    public function __construct($studyId)
     {
+        $this->studyId = $studyId;
+
         // Call the parent constructor
         parent::__construct('peerComparison');
 
@@ -143,21 +147,23 @@ class PeerComparisonDemographics extends AbstractForm
             )
         );
 
-        $this->add(
-            array(
-                'name' => 'fiscalCreditHours',
-                'type' => 'Text',
-                'required' => false,
-                'options' => array(
-                    'label' => 'Fiscal Year Student Credit Hours',
-                    'help-block' => 'Specify a range (e.g., "9000 - 34000", without
+        if ($studyId == 2) {
+            $this->add(
+                array(
+                    'name' => 'fiscalCreditHours',
+                    'type' => 'Text',
+                    'required' => false,
+                    'options' => array(
+                        'label' => 'Fiscal Year Student Credit Hours',
+                        'help-block' => 'Specify a range (e.g., "9000 - 34000", without
                         quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'fiscalCreditHours',
+                    ),
+                    'attributes' => array(
+                        'id' => 'fiscalCreditHours',
+                    )
                 )
-            )
-        );
+            );
+        }
 
         $this->add(
             array(
@@ -195,35 +201,38 @@ class PeerComparisonDemographics extends AbstractForm
 
         // @todo: % of Workforce Training Enrollment of Total
 
-        $this->add(
-            array(
-                'name' => 'workforceEnrollment',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Unduplicated Workforce Enrollment',
-                    'help-block' => 'Specify a range (e.g., "2000 - 4000", without
-                        quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'workforceEnrollment',
+        // Workforce only
+        if ($studyId == 3) {
+            $this->add(
+                array(
+                    'name' => 'workforceEnrollment',
+                    'type' => 'Text',
+                    'options' => array(
+                        'label' => 'Unduplicated Workforce Enrollment',
+                        'help-block' => 'Specify a range (e.g., "2000 - 4000", without
+                            quotes).'
+                    ),
+                    'attributes' => array(
+                        'id' => 'workforceEnrollment',
+                    )
                 )
-            )
-        );
+            );
 
-        $this->add(
-            array(
-                'name' => 'workforceRevenue',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Total Workforce Gross Revenue',
-                    'help-block' => 'Specify a range (e.g., "19000000 - 30000000",
-                        without quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'workforceRevenue',
+            $this->add(
+                array(
+                    'name' => 'workforceRevenue',
+                    'type' => 'Text',
+                    'options' => array(
+                        'label' => 'Total Workforce Gross Revenue',
+                        'help-block' => 'Specify a range (e.g., "19000000 - 30000000",
+                            without quotes).'
+                    ),
+                    'attributes' => array(
+                        'id' => 'workforceRevenue',
+                    )
                 )
-            )
-        );
+            );
+        }
 
         $this->add(
             array(
@@ -308,10 +317,12 @@ class PeerComparisonDemographics extends AbstractForm
         $ipedsEnrollement->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($ipedsEnrollement);
 
-        $fiscalCreditHours = new Input('fiscalCreditHours');
-        $fiscalCreditHours->setRequired(false);
-        $fiscalCreditHours->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($fiscalCreditHours);
+        if ($this->studyId == 2) {
+            $fiscalCreditHours = new Input('fiscalCreditHours');
+            $fiscalCreditHours->setRequired(false);
+            $fiscalCreditHours->getValidatorChain()->attach($this->getRangeValidator());
+            $filter->add($fiscalCreditHours);
+        }
 
         $pellGrantRecipients = new Input('pellGrantRecipients');
         $pellGrantRecipients->setRequired(false);
@@ -323,15 +334,17 @@ class PeerComparisonDemographics extends AbstractForm
         $operatingRevenue->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($operatingRevenue);
 
-        $enrollment = new Input('workforceEnrollment');
-        $enrollment->setRequired(false);
-        $enrollment->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($enrollment);
+        if ($this->studyId == 3) {
+            $enrollment = new Input('workforceEnrollment');
+            $enrollment->setRequired(false);
+            $enrollment->getValidatorChain()->attach($this->getRangeValidator());
+            $filter->add($enrollment);
 
-        $revenue = new Input('workforceRevenue');
-        $revenue->setRequired(false);
-        $revenue->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($revenue);
+            $revenue = new Input('workforceRevenue');
+            $revenue->setRequired(false);
+            $revenue->getValidatorChain()->attach($this->getRangeValidator());
+            $filter->add($revenue);
+        }
 
         $pop = new Input('serviceAreaPopulation');
         $pop->setRequired(false);
