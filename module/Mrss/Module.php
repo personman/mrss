@@ -604,13 +604,23 @@ class Module
 
                     $transport = new \Zend\Mail\Transport\Smtp();
                     $options = new \Zend\Mail\Transport\SmtpOptions(
-                        array(
+                        /*array(
                             'host' => 'smtp.gmail.com',
                             'connection_class' => 'login',
                             'connection_config' => array(
                                 'ssl' => 'tls',
                                 'username' => 'dan.ferguson.mo@gmail.com',
                                 'password' => 'nhebiemail'
+                            ),
+                            'port' => 587
+                        )*/
+                        array(
+                            'host' => 'smtp.mandrillapp.com',
+                            'connection_class' => 'login',
+                            'connection_config' => array(
+                                'ssl' => 'tls',
+                                'username' => 'dfergu15@jccc.edu',
+                                'password' => '3vheGQZghNh6NoReuj6d2w'
                             ),
                             'port' => 587
                         )

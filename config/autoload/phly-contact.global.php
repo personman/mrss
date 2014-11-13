@@ -50,13 +50,13 @@ $settings = array(
     'mail_transport' => array(
         'class'   => 'Zend\Mail\Transport\Smtp',
         'options' => array(
-            'host'             => 'smtp.gmail.com',
+            'host'             => 'smtp.mandrillapp.com',
             'port'             => 587,
             'connectionClass'  => 'login',
             'connectionConfig' => array(
                 'ssl'      => 'tls',
-                'username' => 'dan.ferguson.mo@gmail.com',
-                'password' => 'nhebiemail'
+                'username' => 'dfergu15@jccc.edu',
+                'password' => '3vheGQZghNh6NoReuj6d2w'
             ),
         ),
     ),

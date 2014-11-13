@@ -79,6 +79,19 @@ class SubscriptionController extends AbstractActionController
 
     public function addAction()
     {
+        if (!empty($_GET['send'])) {
+            $message = new Message();
+            $message->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
+            $message->addTo('personman2@gmail.com');
+            $message->setSubject("Email test");
+            $body = "Test email";
+
+            $this->getLog()->alert($body);
+            $message->setBody($body);
+            $this->getServiceLocator()->get('mail.transport')->send($message);
+            die('sent');
+        }
+
         // Are they signed in? If so, reirect them to renew
         $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
         if ($auth->hasIdentity()) {
