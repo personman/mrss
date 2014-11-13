@@ -72,7 +72,7 @@ a[href]:after {
 #closure-blocks {
     display: none;
 }
-.executiveReportStrengths, .executiveReportImprovements { margin: 20px 20px 0px 20px; }
+.executiveReportStrengths, .executiveReportImprovements { margin: 0px 20px 0px 20px; }
 body {
     background-color: #FFF !important;
 }

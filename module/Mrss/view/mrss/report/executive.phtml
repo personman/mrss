@@ -34,7 +34,7 @@
     <div class="executiveReportIntro">
         <h3>Key National Benchmarks – Where Does Your Institution Stand?</h3>
 
-        <p>Your college participated in the National Community College Benchmark Project in <?= $year ?>.  This research is conducted annually by The National Higher Education Benchmarking Institute (NHEBI) at Johnson County Community College.  We would like to share some of the key results of this study with you. The report illustrates how your college compared to national data, representing 270 community colleges.</p>
+        <p>Your college participated in the National Community College Benchmark Project in <?= $year ?>.  This research is conducted annually by The National Higher Education Benchmarking Institute (NHEBI) at Johnson County Community College.  We would like to share some of the key results of this study with you. The report illustrates how your college compared to national data, representing 261 community colleges.</p>
 
         <p>The full NCCBP report, available online, contains more than 150 benchmarks on student demographics, measures of student success, faculty and staff data, workforce and community outreach, and institutional characteristics and effectiveness metrics.</p>
 
@@ -63,6 +63,7 @@
         </div>
     <?php endforeach ?>
 
+    <div class="executiveReportStrengthsImprovements">
     <div class="executiveReportStrengths">
         <h3>Strengths</h3>
         <p>The following benchmarks are where your community college performed at its best. The benchmark is followed by the percent rank for your institution.</p>
@@ -114,6 +115,7 @@
             <?php endforeach ?>
 
         </ol>
+    </div>
     </div>
 
 
@@ -243,6 +245,8 @@
             .css('font-size', '10px')
             .last().attr('x', '7')
 
+        // Swap out the logo
+        $('.logo img').attr('src', '/images/NCCBP-logo-cmyk.png')
 
     }
     //})

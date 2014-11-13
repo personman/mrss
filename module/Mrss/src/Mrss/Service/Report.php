@@ -1892,7 +1892,7 @@ class Report
                 'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or Pass in college-level credit courses in fall ' . ($year - 2)  . '.'
             ),
             array(
-                'title' => 'Developmental Completer Success Rate',
+                'title' => "Developmental Completer <br>Success Rate",
                 'percent' => true,
                 'benchmarks' => array(
                     'm_comp_succ' => 'Math', // Dev math enrollee success rate

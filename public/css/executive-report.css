@@ -13,7 +13,7 @@ h1.title {
 
 .complete-chart-box {
     margin: 0px 20px 20px 20px;
-    width: 43%;
+    width: 44%;
     height: 350px;
     padding:  10px 0;
     float: left;
@@ -24,16 +24,18 @@ h1.title {
     font-weight: bold;
 }
 
-.complete-chart-box p {
+#executiveReport .complete-chart-box p {
     font-size: 80%;
-    line-height:  1.4em;
+    line-height: 16px;
     padding:  0 0 5px 0;
     color: #999 !important;
+    margin-top: 0px;
+    padding-top: 0px;
 }
 
-.executiveReportStrengths, .executiveReportFooter {
+.executiveReportFooter {
     clear: both;
-    border-top:  2px #336699 solid;
+    border-top:  3px #336699 solid;
 }
 
 /*#chart_field_20a_cst_fte_stud, #chart_field_4_fall_fall_pers {
@@ -50,7 +52,6 @@ h1.title {
     float: left;
     height: 410px;
     margin: 20px;
-    border-top:  3px #336699 solid;
 }
 
 ol.executiveReportList li {
@@ -72,6 +73,12 @@ ol.executiveReportList li {
     border-bottom:  1px #CCC solid;
 }
 
+.executiveReportStrengthsImprovements {
+    border-top:  3px #336699 solid;
+    width: 100%;
+    clear: both;
+}
+
 
 .executiveReportIntro p { line-height: 1.5em }
 
@@ -81,7 +88,7 @@ ol.executiveReportList li {
     float: left;
     margin: 0px 20px 0px 0px;
 }
-.executiveReportMoreInfo p {
+#executiveReport p {
     line-height: 18px;
 }
 
@@ -96,7 +103,7 @@ ol.executiveReportList li {
 .executiveReportPeerCallout {
     margin: 0 50px 25px;
     padding: 0 25px;
-    width :85%;
+    width: 90%;
     border-top: 1px solid #AAA;
     border-bottom: 1px solid #AAA;
     float: right;
@@ -196,7 +203,7 @@ h1 {
 h2 {
     font-size: 1em;
     line-height: 1.5em;
-    margin-top: 2em;
+    margin-top: 20px;
     margin-bottom: 0;
 }
 
@@ -378,7 +385,7 @@ p.instituteLogo {
     margin-bottom: 0;
 }
 .instituteLogo img {
-    width: 170px;
+    width: 200px;
 }
 
 .execAppend {
