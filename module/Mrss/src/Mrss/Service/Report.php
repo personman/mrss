@@ -2030,12 +2030,18 @@ class Report
             ),
             'title' => array(
                 'text' => $chartTitle,
+                'style' => array(
+                    'color' => '#336699'
+                )
             ),
             'xAxis' => array(
                 'categories' => $chartXCategories,
                 'tickLength' => 0,
                 'title' => array(
-                    'text' => 'Percentiles'
+                    'text' => 'Percentiles',
+                    'style' => array(
+                        'color' => '#336699'
+                    )
                 )
             ),
             'yAxis' => array(

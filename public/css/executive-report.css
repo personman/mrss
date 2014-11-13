@@ -26,8 +26,8 @@ h1.title {
 .complete-chart-box p {
     font-size: 80%;
     line-height:  1.4em;
-    padding:  5px 0;
-    color: #777 !important;
+    padding:  0 0 5px 0;
+    color: #999 !important;
 }
 
 .executiveReportStrengths, .executiveReportFooter {
@@ -80,6 +80,9 @@ ol.executiveReportList li {
     float: left;
     margin: 0px 20px 0px 0px;
 }
+.executiveReportMoreInfo p {
+    line-height: 18px;
+}
 
 
 
@@ -119,8 +122,8 @@ ol.executiveReportList li {
 
 .executiveReportDirector {
     border: 0px solid #AAA;
-    padding: 3px 20px 3px 0px;
-    width: 22%;
+    padding: 3px 17px 3px 0px;
+    width: 23%;
     float: right;
     margin-right: 5%;
     margin-top: 25px;
@@ -197,7 +200,7 @@ h2 {
 }
 
 h3 {
-    font-size: 1.3em;
+    font-size: 18px;
     line-height: 1.3em;
     margin-top: 0.75em;
     margin-bottom: -0.5em;
@@ -294,7 +297,7 @@ a:visited {
 }
 
 a:hover, a:focus {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 a:active {
@@ -362,7 +365,11 @@ fieldset legend {
 }
 
 .executiveReportLinkToThisPage a, .directorContact a {
-    text-decoration: underline;
+    /*text-decoration: underline;*/
+    color: #336699 !important;
+}
+
+.highcharts-title tspan {
     color: #336699 !important;
 }
 
@@ -377,6 +384,12 @@ p.instituteLogo {
     color: #BBB;
     font-weight: normal;
 }
+
+.page {
+    font-size: 14px;
+    line-height: 18px;
+}
+
 
 @-moz-document url-prefix() {fieldset legend{margin-bottom:0;}}ul.symbol-links{list-style-type:none;padding:0px;margin:0px;}ul.symbol-links li{background-repeat:no-repeat;background-position:0px 2px;padding-left:24px;padding-bottom:5px;}.page-content-subscribe ul.symbol-links li{margin-left:0;margin-bottom:0.5em;}ul li.information{background-image:url(/sites/all/themes/nccbp_new/images/symbols_info.gif);}ul li.contact{background-image:url(/sites/all/themes/nccbp_new/images/symbols_contact.gif);}ul li.form{background-image:url(/sites/all/themes/nccbp_new/images/symbols_form.gif);}
 

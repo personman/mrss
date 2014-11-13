@@ -20,7 +20,7 @@ a[href]:after {
     content: none;
 }
 
-.nav, .adminNavigation, .footer, #headerButtons, #headerLogin, #headerLogin button {
+.nav, .adminNavigation, .footer, #headerButtons, #headerLogin, #headerLogin button, .navbar-default {
     display: none;
 }
 
@@ -44,20 +44,15 @@ a[href]:after {
 
 /*#content, #content-inner { margin-top:  -.75em !important; }*/
 
-.page {
-    font-size: 0.875em;
-    line-height: 1.25em
-}
-
 .highcharts-container {
     width: 423px;
 }
 
 .executiveReportIntro {
-    width: 100%;
+    width: 940px;
     float: left;
-    padding-right: 20px;
-    margin:  20px 0 20px 0;
+    padding-right: 0px;
+    margin:  20px 0 15px 0;
     border-top:  3px #336699 solid;
 }
 
@@ -70,7 +65,7 @@ a[href]:after {
 }
 
 .complete-chart-box {
-    margin: 0px 20px 30px 20px;
+    margin: 0px 20px 22px 20px;
     width: 43%;
     height: 350px;
     padding:  10px 0;

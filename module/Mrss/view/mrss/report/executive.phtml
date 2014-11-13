@@ -7,6 +7,7 @@
 
 <?= $this->headLink()->appendStylesheet('/css/executive-report.css', 'screen,print') ?>
 <?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=1', $media) ?>
+<?= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
 
 <?php /** @var \Mrss\Entity\College $college */ ?>
 <?php /** @var \Mrss\Entity\Subscription[] $subscriptions */ ?>
@@ -69,7 +70,7 @@
         <ol class="executiveReportList">
             <?
             // Make sure this section doesn't get too long
-            $maxTotalLabelLength = 900;
+            $maxTotalLabelLength = 750;
             $totalLabelLength = 0;
             ?>
 
@@ -126,13 +127,13 @@
     <div class="executiveReportFooter">
         <div class="executiveReportMoreInfo">
             <h3>More Information</h3>
-            <p>Thank you for being an NCCBP member. Find more information on the NCCBP by visiting our website <a href="http://nccbp.org">nccbp.org</a> or by calling or emailing the Benchmark Institute.</p>
+            <p>Thank you for being an NCCBP member. Find more information on the NCCBP by visiting our website <a href="http://nccbp.org">NCCBP.org</a> or by calling or emailing the Benchmark Institute.</p>
 
             <p>Your research office will be able to provide additional benchmarks from the research, including peer comparisons.</p>
 
             <p>The full NCCBP report, available online, contains more than 150 benchmarks on student demographics, measures of student success, faculty and staff data, workforce and community outreach, and institutional characteristics and effectiveness metrics.</p>
 
-            <p class="executiveReportLinkToThisPage">To view this report online, go to <a href="http://nccbp.org/reports/executive">nccbp.org/reports/executive</a> and log in.</p>
+            <p class="executiveReportLinkToThisPage">To view this report online, go to <a href="http://nccbp.org/reports/executive">NCCBP.org/reports/executive</a> and log in.</p>
 
         </div>
 
@@ -228,10 +229,18 @@
             if ((values[1] == 'Not Reported' && values[0] != 'Not Reported')) {
                 $(labels[1]).hide()
             }
+
         }
 
         // bar stack label
         $('#chart_pt_perminus7_comp .highcharts-stack-labels text:first-child').attr('visibility', 'show')
+
+        // Shrink completer success labels to avoid overlap
+        $('#chart_w_comp_succ .highcharts-data-labels text')
+            .css('font-size', '10px')
+            .last().attr('x', '7')
+
+
     }
     //})
 </script>
