@@ -245,8 +245,10 @@
             .css('font-size', '10px')
             .last().attr('x', '7')
 
-        // Swap out the logo
-        $('.logo img').attr('src', '/images/NCCBP-logo-cmyk.png')
+        // Swap out the logo for a higher quality one for printing
+        $('.logo img')
+            .attr('src', '/images/NCCBP-logo-cmyk.png')
+            .css('width', '300px')
 
     }
     //})
