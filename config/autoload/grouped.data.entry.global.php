@@ -80,11 +80,11 @@ May not add up to 100%.',
                    'title' => 'Campus Information',
                    'description' => '',
                    'benchmarks' => array(
-                       'institutional_demographics_campus_type',
+                       'institutional_type',
                        'institutional_demographics_campus_environment',
                        'institutional_demographics_faculty_unionized',
                        'institutional_demographics_staff_unionized',
-                       'institutional_demographics_control',
+                       'institutional_control',
                        'institutional_demographics_calendar'
                    ),
                ),

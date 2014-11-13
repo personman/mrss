@@ -3,15 +3,18 @@ var formErrorMessages = {}
 $(function() {
     // Type hints:
     // Dollars
-    $('input.input-dollars').wrap('<div class="input-prepend" />')
-    $('input.input-dollars').before('<span class="add-on">$</span>')
+    $('input.input-dollars').addClass('form-control')
+    $('input.input-dollars').wrap('<div class="input-prepend input-group" />')
+    $('input.input-dollars').before('<span class="add-on input-group-addon">$</span>')
 
-    $('input.input-wholedollars').wrap('<div class="input-prepend" />')
-    $('input.input-wholedollars').before('<span class="add-on">$</span>')
+    $('input.input-wholedollars').addClass('form-control')
+    $('input.input-wholedollars').wrap('<div class="input-prepend input-group" />')
+    $('input.input-wholedollars').before('<span class="add-on input-group-addon">$</span>')
 
     // Percentage
-    $('input.input-percent, input.input-wholepercent').wrap('<div class="input-append" />')
-    $('input.input-percent, input.input-wholepercent').after('<span class="add-on">%</span>')
+    $('input.input-percent, input.input-wholepercent').addClass('form-control')
+    $('input.input-percent, input.input-wholepercent').wrap('<div class="input-append input-group" />')
+    $('input.input-percent, input.input-wholepercent').after('<span class="add-on input-group-addon">%</span>')
 
 
     // Wrap selected input in well to highlight it

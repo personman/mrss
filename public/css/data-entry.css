@@ -43,6 +43,11 @@ form#system-admin-switch select {
     clear: both;
 }
 
+/* NCCBP */
+.input-group .form-control, .input-group {
+    width: 137px;
+}
+
 
 /* Workforce Project */
 
