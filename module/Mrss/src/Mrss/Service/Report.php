@@ -2099,12 +2099,20 @@ class Report
             ->findStrengths($college, $study, $year, $weaknesses, 1);
 
 
+
         $ranks = array();
         foreach ($percentileRanks as $pRank) {
+            $name = $pRank->getBenchmark()->getDescriptiveReportLabel();
+            $append = '';
+            if (!$pRank->getBenchmark()->getHighIsBetter()) {
+                $append = '<span class="execAppend">(Low is better)</span>';
+            }
+
             $ranks[] = array(
-                'name' => $pRank->getBenchmark()->getDescriptiveReportLabel(),
+                'name' => $name,
                 'rank' => $this->getOrdinal($pRank->getRank()),
-                'benchmark_id' => $pRank->getBenchmark()->getId()
+                'benchmark_id' => $pRank->getBenchmark()->getId(),
+                'append' => $append
             );
         }
 

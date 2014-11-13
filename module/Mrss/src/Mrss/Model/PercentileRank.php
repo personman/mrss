@@ -117,6 +117,9 @@ class PercentileRank extends AbstractModel
         $ranks = array();
         foreach ($results as $row) {
             $rank = $row[0];
+            $hib = ($row['absolute_rank'] == $rank->getRank());
+            $rank->setHighIsBetter($hib);
+
             $ranks[] = $rank;
         }
         $results = $ranks;

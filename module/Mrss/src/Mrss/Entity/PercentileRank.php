@@ -60,6 +60,8 @@ class PercentileRank
      */
     protected $rank;
 
+    protected $highIsBetter = true;
+
 
     public function getId()
     {
@@ -158,5 +160,17 @@ class PercentileRank
     public function getRank()
     {
         return $this->rank;
+    }
+
+    public function setHighIsBetter($is)
+    {
+        $this->highIsBetter = $is;
+
+        return $this;
+    }
+
+    public function getHighIsBetter()
+    {
+        return $this->highIsBetter;
     }
 }
