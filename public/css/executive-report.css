@@ -12,12 +12,13 @@ h1.title {
 }
 
 .complete-chart-box {
-    margin: 0px 20px 30px 20px;
-    width: 45%;
+    margin: 0px 20px 20px 20px;
+    width: 43%;
     height: 350px;
     padding:  10px 0;
     float: left;
 }
+
 
 #executiveReport .chart .highcharts-title {
     font-weight: bold;
@@ -93,7 +94,7 @@ ol.executiveReportList li {
 }
 
 .executiveReportPeerCallout {
-    margin: 0 50px 50px;
+    margin: 0 50px 25px;
     padding: 0 25px;
     width :85%;
     border-top: 1px solid #AAA;

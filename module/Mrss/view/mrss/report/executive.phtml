@@ -5,8 +5,8 @@
 <?php $this->headTitle()->prepend('Executive Report') ?>
 <?php $this->headTitle()->prepend($college->getName()) ?>
 
-<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=2', 'screen,print') ?>
-<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=2', $media) ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=3', 'screen,print') ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=3', $media) ?>
 <?= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
 
 <?php /** @var \Mrss\Entity\College $college */ ?>
@@ -237,6 +237,9 @@
 
         // Shrink completer success labels to avoid overlap
         $('#chart_w_comp_succ .highcharts-data-labels text')
+            .css('font-size', '10px')
+            .last().attr('x', '7')
+        $('#chart_fall_fall_pers .highcharts-data-labels text')
             .css('font-size', '10px')
             .last().attr('x', '7')
 

@@ -64,13 +64,6 @@ a[href]:after {
     padding:  0 0 10px 0;
 }
 
-.complete-chart-box {
-    margin: 0px 20px 22px 20px;
-    width: 43%;
-    height: 350px;
-    padding:  10px 0;
-    float: left;
-}
 .highcharts-button {
     display: none;
 }
