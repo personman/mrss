@@ -881,6 +881,9 @@ input:focus, textarea:focus {
     line-height: 1.3em;
 }
 
+#resources h4 {
+    font-weight: bold;
+}
 
 /* Report overview slides */
 #reports-slides .carousel-inner {
