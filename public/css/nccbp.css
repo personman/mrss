@@ -959,11 +959,21 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
 
 
 /* Fancybox */
-a.fancybox img {
+/*a.fancybox img {
     border: 3px solid transparent;
 }
 a:hover.fancybox img {
     border: 3px solid #9cc03e;
+}*/
+span.rollover {
+    background:url(/images/mag.png) center center no-repeat #000;
+    height: 346px;
+    position: absolute;
+    width: 347px;
+    z-index: 10;
+    -webkit-box-shadow: 0px 0px 4px #000;
+    -moz-box-shadow: 0px 0px 4px  #000;
+    box-shadow: 0px 0px 4px  #000;
 }
 
 /* Extra small devices (phones, less than 768px) */
