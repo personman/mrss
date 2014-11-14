@@ -129,23 +129,9 @@ return array(
                 'label' => 'Home',
                 'route' => 'home'
             ),
-            'nccbp' => array(
-                'label' => 'NCCBP',
-                'uri' => '#',
-                'pages' => array(
-                    'benchmarks' => array(
-                        'label' => 'Benchmarks',
-                        'uri' => '/benchmarks'
-                    ),
-                    'testimonials' => array(
-                        'label' => 'Testimonials',
-                        'uri' => '/testimonials'
-                    ),
-                    'resources' => array(
-                        'label' => 'Resources',
-                        'uri' => '/resources'
-                    )
-                )
+            'benchmarks' => array(
+                'label' => 'Benchmarks',
+                'uri' => '/benchmarks'
             ),
             /*'nccbp' => array(
                 'label' => 'NCCBP',
@@ -180,6 +166,10 @@ return array(
                     'systems' => array(
                         'label' => 'Systems',
                         'uri' => '/college-systems'
+                    ),
+                    'testimonials' => array(
+                        'label' => 'Testimonials',
+                        'uri' => '/testimonials'
                     )
                 )
             ),
@@ -211,6 +201,10 @@ return array(
                         'label' => 'Best Performers',
                         'uri' => '/best-performers-report'
                     ),*/
+                    'case-studies' => array(
+                        'label' => 'Case Studies',
+                        'uri' => '/case-studies'
+                    ),
                     'schedule-demo' => array(
                         'label' => 'Schedule Demo',
                         'uri' => '/schedule-demo'
