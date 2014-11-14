@@ -202,8 +202,8 @@ return array(
                         'uri' => '/best-performers-report'
                     ),*/
                     'case-studies' => array(
-                        'label' => 'Use Cases',
-                        'uri' => '/use-cases'
+                        'label' => 'Case Studies',
+                        'uri' => '/case-studies'
                     ),
                     'schedule-demo' => array(
                         'label' => 'Schedule Demo',
