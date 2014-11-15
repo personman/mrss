@@ -11,6 +11,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <script>
     $(document).ready(function() {
         $('#subscriptions').dataTable({
+            "order": [[1, "asc"]],
             'aoColumnDefs': [
                 // Don't sort on the action column
                 {'bSortable': false, 'aTargets': [5]}
@@ -46,9 +47,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 <table class="table table-striped" id="subscriptions">
     <thead>
         <tr>
-            <?php if ($showCompletion): ?>
             <th>Completion</th>
-            <?php endif ?>
             <th>Institution</th>
             <th>Users</th>
             <th>Subscription Date</th>
@@ -60,18 +59,14 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     <tbody>
         <?php foreach ($subscriptions as $subscription): ?>
             <tr>
-                <?php if ($showCompletion): ?>
                 <td>
                     <a href="<?= $this->url(
                         'observation',
                         array('id' => $subscription->getObservation()->getId())
                     ) ?>">
-                        <?= $this->currentStudy()->getCompletionPercentage(
-                            $subscription->getObservation()
-                        ) ?>%
+                        <?= $subscription->getCompletion() ?>%
                     </a>
                 </td>
-                <?php endif ?>
                 <td>
                     <a href="<?= $this->url(
                         'colleges/view',

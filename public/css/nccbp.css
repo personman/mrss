@@ -475,19 +475,22 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     clear: both;
 }
 
-.heatmapCell {
-    background-color: green;
+.table > tbody > tr > td.heatmapCell {
     color: white;
     text-align: center;
-    padding: 1px
+    vertical-align: middle;
 }
 
 .heatmapCellBlue {
-    background-color: blue;
+    background-color: #004f8c;
 }
 
-.table.heatmap td {
-    padding: 0;
+table.dataTable thead .sorting.heatMapYear {
+    background: none;
+}
+
+.dataTables_filter input {
+    display: inline;
 }
 
 

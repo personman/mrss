@@ -116,6 +116,11 @@ class Subscription
     protected $digitalSignatureTitle;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $completion;
+
+    /**
      * @Gedmo\Mapping\Annotation\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
@@ -295,5 +300,17 @@ class Subscription
     public function getCreated()
     {
         return $this->created;
+    }
+
+    public function setCompletion($completion)
+    {
+        $this->completion = $completion;
+
+        return $this;
+    }
+
+    public function getCompletion()
+    {
+        return $this->completion;
     }
 }

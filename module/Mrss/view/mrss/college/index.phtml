@@ -1,15 +1,45 @@
-<h2>Colleges</h2>
+<?php
 
-<table class="style1">
+// Data Tables
+$this->headScript()->appendFile(
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+<script>
+    $(document).ready(function() {
+        $('#colleges').dataTable({
+            "order": [[1, "asc"]],
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
+
+        $('.heatMapYear, .heatmapTd').css('width', '20px')
+
+        //$('.heatmapCell').tooltip()
+    });
+</script>
+
+
+<h1>Colleges</h1>
+
+<table class="style1 table heatmap" id="colleges">
+    <thead>
     <tr>
         <th>IPEDS</th>
         <th>College</th>
-        <th>Address</th>
+        <?php foreach ($years as $year): ?>
+            <th class="heatMapYear"><?= $year ?></th>
+        <?php endforeach ?>
         <th>City</th>
         <th>State</th>
-        <th>Zip</th>
     </tr>
+    </thead>
 
+    <tbody>
     <?php foreach ($this->colleges as $college): ?>
 
         <tr>
@@ -24,11 +54,27 @@
                     <?= $college->getName() ?>
                 </a>
             </td>
-            <td><?= $college->getAddress() ?></td>
+            <?php $subs = $college->getSubscriptionsForStudy($this->currentStudy()) ?>
+            <?php foreach ($years as $year): ?>
+
+                <?php if (!empty($subs[$year]) && $sub = $subs[$year]): ?>
+                    <?php $percentage = $sub->getCompletion(); ?>
+                    <td class="heatmapTd heatmapCell heatmapCellBlue" style="opacity: <?= $percentage / 100 ?>">
+                        <div data-toggle=tooltip" data-placement="bottom" title="<?= $year ?>">
+                            <?= round($percentage) ?>%
+                        </div>
+
+                    </td>
+                <?php else: ?>
+                    <td></td>
+                <?php endif ?>
+
+            <?php endforeach ?>
+
             <td><?= $college->getCity() ?></td>
             <td><?= $college->getState() ?></td>
-            <td><?= $college->getZip() ?></td>
         </tr>
 
     <?php endforeach ?>
+    </tbody>
 </table>

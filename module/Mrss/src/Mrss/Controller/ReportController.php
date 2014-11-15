@@ -700,6 +700,27 @@ class ReportController extends AbstractActionController
                     continue;
                 }
 
+                // Skip NCCBP form one, with these exceptions:
+                $nccbpFormOneInclude = array(
+                    'ft_cr_head',
+                    'pt_cr_head',
+                    'fem_cred_stud',
+                    'first_gen_students',
+                    'trans_cred',
+                    't_c_crh',
+                    'dev_crh',
+                    'crd_stud_minc',
+                    'loc_sour',
+                    'state_sour',
+                    'tuition_fees_sour'
+                );
+
+                if ($benchmarkGroup->getId() == 1 &&
+                    !in_array($benchmark->getDbColumn(), $nccbpFormOneInclude)) {
+                    continue;
+                }
+
+
                 // Only include benchmarks with at least 5 reported values
                 /*$count = $this->getCountOfReportedData(
                     $benchmark->getDbColumn(),

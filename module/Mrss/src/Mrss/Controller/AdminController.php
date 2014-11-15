@@ -25,7 +25,6 @@ class AdminController extends AbstractActionController
             $year
         );
 
-        $showCompletion = (count($subscriptions) < 100);
 
         // Years for tabs
         $years = $this->getServiceLocator()->get('model.subscription')
@@ -40,7 +39,6 @@ class AdminController extends AbstractActionController
 
         return array(
             'subscriptions' => $subscriptions,
-            'showCompletion' => $showCompletion,
             'years' => $years,
             'currentYear' => $year,
             'total' => $total

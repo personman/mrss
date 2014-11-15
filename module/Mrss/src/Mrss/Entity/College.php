@@ -406,7 +406,7 @@ class College
         $subscriptions = array();
         foreach ($this->getSubscriptions() as $sub) {
             if ($sub->getStudy()->getId() == $study->getId()) {
-                $subscriptions[] = $sub;
+                $subscriptions[$sub->getYear()] = $sub;
             }
         }
 

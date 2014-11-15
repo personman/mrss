@@ -225,4 +225,46 @@ class ToolController extends AbstractActionController
 
         return false;
     }
+
+    public function calcCompletionAction()
+    {
+        $this->longRunningScript();
+
+        $start = microtime(1);
+        $subscriptions = 0;
+
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        // Loop over all subscriptions
+        foreach ($study->getSubscriptions() as $subscription) {
+            $completion = $study->getCompletionPercentage(
+                $subscription->getObservation()
+            );
+
+            $subscription->setCompletion($completion);
+            $subscriptionModel->save($subscription);
+
+            $subscriptions++;
+        }
+
+        $subscriptionModel->getEntityManager()->flush();
+
+
+        $elapsed = round(microtime(1) - $start, 3);
+        $this->flashMessenger()
+            ->addSuccessMessage("$subscriptions processed in $elapsed seconds.");
+        return $this->redirect()->toRoute('tools');
+
+    }
+
+    protected function longRunningScript()
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(3600);
+    }
+
 }

@@ -16,8 +16,15 @@ class CollegeController extends AbstractActionController
     {
         $Colleges = $this->getServiceLocator()->get('model.college');
 
+        // For completion heatmap
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $years = $subscriptionModel
+            ->getYearsWithSubscriptions($this->currentStudy());
+
+
         return array(
-            'colleges' => $Colleges->findAll()
+            'colleges' => $Colleges->findAll(),
+            'years' => $years
         );
     }
 

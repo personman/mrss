@@ -1174,7 +1174,16 @@ return array(
                                 'action' => 'nccbpReportAudit'
                             )
                         )
-                    )
+                    ),
+                    'calc-completion' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calc-completion',
+                            'defaults' => array(
+                                'action' => 'calcCompletion'
+                            )
+                        )
+                    ),
                 )
             ),
             'schedule-demo' => array(
