@@ -241,8 +241,13 @@ class ToolController extends AbstractActionController
 
         // Loop over all subscriptions
         foreach ($study->getSubscriptions() as $subscription) {
+            $observation = $subscription->getObservation();
+            if (empty($observation)) {
+                continue;
+            }
+            
             $completion = $study->getCompletionPercentage(
-                $subscription->getObservation()
+                $observation
             );
 
             $subscription->setCompletion($completion);
