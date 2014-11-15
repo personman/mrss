@@ -245,7 +245,7 @@ class ToolController extends AbstractActionController
             if (empty($observation)) {
                 continue;
             }
-            
+
             $completion = $study->getCompletionPercentage(
                 $observation
             );
