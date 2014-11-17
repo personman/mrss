@@ -59,7 +59,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
                 <?php if (!empty($subs[$year]) && $sub = $subs[$year]): ?>
                     <?php $percentage = $sub->getCompletion(); ?>
-                    <td class="heatmapTd heatmapCell heatmapCellBlue" style="opacity: <?= $percentage / 100 ?>">
+                    <td class="heatmapTd heatmapCell heatmapCellBlue" style="opacity: <?= ($percentage / 120) + 0.2 ?>">
                         <div data-toggle=tooltip" data-placement="bottom" title="<?= $year ?>">
                             <?= round($percentage) ?>%
                         </div>
