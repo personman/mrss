@@ -2144,7 +2144,7 @@ class Report
             $observation = $sub->getObservation();
             if ($observation) {
                 $this->getComputedFieldsService()
-                    ->calculateAllForObservation($observation, $this->getStudy());
+                    ->calculateAllForObservation($observation);
             } else {
                 //echo "Observation missing for " . $sub->getCollege()->getName() .
                 //    " " . $sub->getYear();
