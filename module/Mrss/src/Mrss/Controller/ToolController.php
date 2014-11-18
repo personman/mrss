@@ -266,6 +266,14 @@ class ToolController extends AbstractActionController
 
     }
 
+    public function bestAction()
+    {
+        $benchmarkGroups = $this->currentStudy()->getBenchmarkGroups();
+        return array(
+            'benchmarkGroups' => $benchmarkGroups
+        );
+    }
+
     protected function longRunningScript()
     {
         ini_set('memory_limit', '512M');

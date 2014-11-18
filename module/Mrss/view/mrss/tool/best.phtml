@@ -1,0 +1,33 @@
+<?php /** @var \Mrss\Entity\BenchmarkGroup[] $benchmarkGroups */ ?>
+
+<h1>Benchmarks for Strengths/Weaknesses</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Form</th>
+            <th>Variable Name</th>
+            <th>Label</th>
+            <th>High or Low</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
+            <?php foreach ($benchmarkGroup->getBenchmarksForYear(2014) as $benchmark): ?>
+                <?php if (!$benchmark->getIncludeInBestPerformer()) continue; ?>
+                <tr>
+                    <td><?= $benchmarkGroup->getName() ?></td>
+                    <td><?= $benchmark->getDbColumn() ?></td>
+                    <td><?= $benchmark->getName() ?></td>
+                    <td>
+                        <?php if ($benchmark->getHighIsBetter()): ?>
+                            High is better
+                        <?php else: ?>
+                            Low is better
+                        <?php endif ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        <?php endforeach ?>
+    </tbody>
+</table>

@@ -1184,6 +1184,15 @@ return array(
                             )
                         )
                     ),
+                    'best' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/best',
+                            'defaults' => array(
+                                'action' => 'best'
+                            )
+                        )
+                    ),
                 )
             ),
             'schedule-demo' => array(
