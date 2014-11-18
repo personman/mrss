@@ -18,7 +18,7 @@
                 <tr>
                     <td><?= $benchmarkGroup->getName() ?></td>
                     <td><?= $benchmark->getDbColumn() ?></td>
-                    <td><?= $benchmark->getName() ?></td>
+                    <td><?= $benchmark->getDescriptiveReportLabel() ?></td>
                     <td>
                         <?php if ($benchmark->getHighIsBetter()): ?>
                             High is better
