@@ -103,7 +103,8 @@ class BenchmarkController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $data = $this->params()->fromPost();
+            $form->setData($data);
 
             if ($form->isValid()) {
                 $this->getBenchmarkModel()->save($benchmark);
@@ -145,7 +146,12 @@ class BenchmarkController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $data = $this->params()->fromPost();
+            if (empty($data['computeAfter'])) {
+                $data['computeAfter'] = null;
+            }
+
+            $form->setData($data);
 
             if ($form->isValid()) {
                 $this->getBenchmarkModel()->save($benchmark);
