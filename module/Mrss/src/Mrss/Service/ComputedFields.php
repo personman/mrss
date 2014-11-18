@@ -53,7 +53,10 @@ class ComputedFields
         } else {
             // Populate variables
             $equationWithVariables = $this
-                ->nestComputedEquations($equationWithVariables);
+                ->nestComputedEquations(
+                    $equationWithVariables,
+                    $observation->getYear()
+                );
 
             $equation = $this->prepareEquation($equationWithVariables, $observation);
 
@@ -239,12 +242,13 @@ class ComputedFields
      * what order the equations are calculated in.
      *
      * @param $equation
+     * @param $year
      * @return mixed
      */
-    public function nestComputedEquations($equation)
+    public function nestComputedEquations($equation, $year)
     {
         $variables = $this->getVariables($equation);
-        $computed = $this->getComputedBenchmarks();
+        $computed = $this->getComputedBenchmarks($year);
 
         foreach ($variables as $variable) {
             if (!empty($computed[$variable])) {
@@ -252,7 +256,7 @@ class ComputedFields
                 $insideEquation = $insideBenchmark->getEquation();
 
                 // Recurse in case the inside equation contains other computed ones
-                $insideEquation = $this->nestComputedEquations($insideEquation);
+                $insideEquation = $this->nestComputedEquations($insideEquation, $year);
 
                 $equation = str_replace(
                     '{{' . $variable . '}}',
@@ -265,12 +269,12 @@ class ComputedFields
         return $equation;
     }
 
-    public function calculateAllForObservation(Observation $observation, Study $study)
+    public function calculateAllForObservation(Observation $observation)
     {
         if (empty($observation)) {
             die('empty');
         }
-        $benchmarks = $this->getComputedBenchmarks();
+        $benchmarks = $this->getComputedBenchmarks($observation->getYear());
 
         foreach ($benchmarks as $benchmark) {
             if ($this->debug) {
@@ -317,13 +321,19 @@ class ComputedFields
         return $this->study;
     }
 
-    public function getComputedBenchmarks()
+    public function getComputedBenchmarks($year)
     {
         if (empty($this->computedBenchmarks)) {
             $benchmarks = $this->getBenchmarkModel()->findComputed($this->getStudy());
 
             $computedBenchmarks = array();
             foreach ($benchmarks as $benchmark) {
+                $computeAfter = $benchmark->getComputeAfter();
+                if (!empty($computeAfter) && $year <= $computeAfter) {
+                    // Skip computed benchmarks that are static in prior years
+                    continue;
+                }
+
                 $computedBenchmarks[$benchmark->getDbColumn()] = $benchmark;
             }
 

@@ -71,7 +71,7 @@ class ObservationController extends AbstractActionController
             if ($form->isValid()) {
                 $ObservationModel->save($observation);
                 $this->getServiceLocator()->get('computedFields')
-                    ->calculateAllForObservation($observation, $this->currentStudy());
+                    ->calculateAllForObservation($observation);
 
                 $this->getServiceLocator()->get('em')->flush();
 
@@ -335,7 +335,7 @@ class ObservationController extends AbstractActionController
                     ->logChanges($oldObservation, $observation, 'dataEntry');
 
                 $this->getServiceLocator()->get('computedFields')
-                    ->calculateAllForObservation($observation, $this->currentStudy());
+                    ->calculateAllForObservation($observation);
 
                 $this->mergeAllSubobservations();
 

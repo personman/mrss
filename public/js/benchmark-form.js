@@ -11,7 +11,7 @@ function toggleEquationDisplay()
 {
     var computedLength = $('#control-group-computed input').length;
     var computed = $('#control-group-computed input').get(computedLength- 1).checked;
-    var equationControl = $('#control-group-equation')
+    var equationControl = $('#control-group-equation, #control-group-computeAfter')
 
     if (computed) {
         equationControl.show()

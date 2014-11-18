@@ -99,6 +99,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $equation;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $computeAfter;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     protected $excludeFromCompletion;
@@ -336,6 +341,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         $this->options = $options;
 
         return $this;
+    }
+
+    public function setComputeAfter($computeAfter)
+    {
+        $this->computeAfter = $computeAfter;
+
+        return $this;
+    }
+
+    public function getComputeAfter()
+    {
+        return $this->computeAfter;
     }
 
     public function getOptions()

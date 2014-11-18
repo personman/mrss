@@ -26,7 +26,7 @@ class BenchmarkController extends AbstractActionController
 
         $years = $this->getServiceLocator()->get('model.subscription')
             ->getYearsWithSubscriptions($study);
-        sort($years);
+        rsort($years);
 
         // Sparklines
         $observationModel = $this->getServiceLocator()->get('model.observation');
@@ -103,7 +103,8 @@ class BenchmarkController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $data = $this->params()->fromPost();
+            $form->setData($data);
 
             if ($form->isValid()) {
                 $this->getBenchmarkModel()->save($benchmark);
@@ -145,7 +146,12 @@ class BenchmarkController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $data = $this->params()->fromPost();
+            if (empty($data['computeAfter'])) {
+                $data['computeAfter'] = null;
+            }
+
+            $form->setData($data);
 
             if ($form->isValid()) {
                 $this->getBenchmarkModel()->save($benchmark);

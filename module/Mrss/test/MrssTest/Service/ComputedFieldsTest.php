@@ -206,8 +206,7 @@ class ComputedFieldsTest extends TestCase
 
 
         $this->computedFields->calculateAllForObservation(
-            $this->observationMock,
-            $studyMock
+            $this->observationMock
         );
     }
 
