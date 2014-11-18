@@ -208,6 +208,35 @@ class Benchmark extends AbstractForm
             )
         );
 
+        $options = array(
+            '' => 'Always compute'
+        );
+        $years = range(2007, date('Y') + 3);
+        $years = array_combine($years, $years);
+        $options = $options + $years;
+        $this->add(
+            array(
+                'name' => 'computeAfter',
+                'type' => 'Text',
+                'options' => array(
+                    'empty_option' => 'This is the empty option',
+                    'label' => 'Compute After',
+                    'help-block' => 'For some computed benchmarks, older versions
+                     of the app only include the computed value, not the reported
+                     values required to generate it. Use this setting to select the
+                     last year where the value should not be computed. For NCCBP,
+                     the value should be 2010 on many benchmarks.'
+                ),
+                'attributes' => array(
+                    'id' => 'computeAfter',
+                    'options' => $options
+                )
+            )
+        );
+
+        //$this->getInputFilter();
+
+
         $this->add(
             array(
                 'name' => 'yearsAvailable',

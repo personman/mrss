@@ -26,7 +26,7 @@ class BenchmarkController extends AbstractActionController
 
         $years = $this->getServiceLocator()->get('model.subscription')
             ->getYearsWithSubscriptions($study);
-        sort($years);
+        rsort($years);
 
         // Sparklines
         $observationModel = $this->getServiceLocator()->get('model.observation');
