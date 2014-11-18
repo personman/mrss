@@ -358,7 +358,7 @@ body #subscription legend {
 a.hover-highlight {
     display: block;
     border: 3px solid white;
-    width: 400px;
+    /*width: 200px;*/
     margin-bottom: 10px;
 }
 
