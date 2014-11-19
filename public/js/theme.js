@@ -65,3 +65,7 @@ var servicesCircle = {
     }
 }
 
+function loadChart()
+{
+
+}
