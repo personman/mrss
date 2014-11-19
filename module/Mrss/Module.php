@@ -68,6 +68,21 @@ class Module
         $this->checkStudyAtLogin($e);
 
         $this->setupTitle($e);
+
+        $this->setupNavigation($e);
+    }
+
+    public function setupNavigation(MvcEvent $e)
+    {
+        $sm = $e->getApplication()->getServiceManager();
+
+        // Add ACL information to the Navigation view helper
+        $authorize = $sm->get('BjyAuthorizeServiceAuthorize');
+        $acl = $authorize->getAcl();
+        $role = $authorize->getIdentity();
+        \Zend\View\Helper\Navigation::setDefaultAcl($acl);
+        \Zend\View\Helper\Navigation::setDefaultRole($role);
+
     }
 
     public function bootstrapSession(MvcEvent $e)

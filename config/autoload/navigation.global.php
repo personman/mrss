@@ -123,6 +123,13 @@ return array(
                 'route' => 'zfcuser/login',
                 'class' => 'headerLoginLink'
             ),
+            'admin' => array(
+                'label' => '<span class="glyphicon glyphicon-cog icon-cog icon-white adminMenuIcon"></span>',
+                'uri' => '/admin',
+                'resource' => 'adminMenu',
+                'privilege' => 'view',
+                'pages' => getAdminMenu()
+            )
         ),
         'nccbp' => array(
             'home' => array(
@@ -315,55 +322,19 @@ return array(
                 )
             ),
             'account' => getAccountMenu(),
+            'admin' => array(
+                'label' => '<span class="glyphicon glyphicon-cog icon icon-cog adminMenuIcon"></span>',
+                'uri' => '/admin',
+                'resource' => 'adminMenu',
+                'privilege' => 'view',
+                'pages' => getAdminMenu()
+            )
         ),
-        'admin' => array(
-            'dashboard' => array(
-                'label' => 'Dashboard',
-                'route' => 'admin'
-            ),
-            'studies' => array(
-                'label' => 'Studies',
-                'controller' => 'studies',
-                'route' => 'studies'
-            ),
-            'reports/explore' => array(
-                'label' => 'Explore Data',
-                'route' => 'reports/explore'
-            ),
-            'reports' => array(
-                'label' => 'Reports',
-                'route' => 'reports/calculate'
-            ),
-            array(
-                'label' => 'Colleges',
-                'controller' => 'colleges',
-                'action' => 'index',
-                'route' => 'colleges'
-            ),
-            array(
-                'label' => 'Systems',
-                'route' => 'systems'
-            ),
-            array(
-                'label' => 'Pages',
-                'route' => 'pages',
-                'controller' => 'pages',
-                'action' => 'index'
-            ),
-            array(
-                'label' => 'Tools',
-                'route' => 'tools',
-            ),
-            array(
-                'label' => 'User',
-                'route' => 'zfcuser',
-                'controller' => 'zfcuser',
-                'action' => 'index',
-                'ulClass' => 'dropdown-menu',
-            ),
-        )
+        'admin' => getAdminMenu()
     )
 );
+
+
 
 function getReportMenu()
 {
@@ -447,4 +418,56 @@ function getRenewMenu()
         'route' => 'renew',
         'class' => 'renew-nav'
     );
+}
+
+
+function getAdminMenu()
+{
+    return array(
+    'dashboard' => array(
+        'label' => 'Memberships',
+        'route' => 'admin'
+    ),
+    'studies' => array(
+        'label' => 'Studies',
+        'controller' => 'studies',
+        'route' => 'studies'
+    ),
+    'reports/explore' => array(
+        'label' => 'Explore Data',
+        'route' => 'reports/explore'
+    ),
+    'reports' => array(
+        'label' => 'Reports',
+        'route' => 'reports/calculate'
+    ),
+    array(
+        'label' => 'Colleges',
+        'controller' => 'colleges',
+        'action' => 'index',
+        'route' => 'colleges'
+    ),
+    array(
+        'label' => 'Systems',
+        'route' => 'systems'
+    ),
+    array(
+        'label' => 'Pages',
+        'route' => 'pages',
+        'controller' => 'pages',
+        'action' => 'index'
+    ),
+    array(
+        'label' => 'Tools',
+        'route' => 'tools',
+    ),
+    array(
+        'label' => 'User',
+        'route' => 'zfcuser',
+        'controller' => 'zfcuser',
+        'action' => 'index',
+        'ulClass' => 'dropdown-menu',
+    )
+);
+
 }

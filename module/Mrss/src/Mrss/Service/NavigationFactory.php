@@ -27,6 +27,8 @@ class NavigationFactory extends DefaultNavigationFactory
 
     protected $serviceLocator;
 
+    protected $isAdmin;
+
     public function getPages(ServiceLocatorInterface $serviceLocator)
     {
         $pages = $this->getPagesArray($serviceLocator);
@@ -245,6 +247,10 @@ class NavigationFactory extends DefaultNavigationFactory
         // Check permissions
         /** @var Authorize $authorizeService */
         $authorizeService = $serviceLocator->get('BjyAuthorizeServiceAuthorize');
+
+
+        // Admin menu is done through config via integration with zend nav
+        // @todo: move these others there, too.
 
         // Hide data entry from those who aren't allowed
         if (!$authorizeService->isAllowed('dataEntry', 'view')) {

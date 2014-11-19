@@ -166,19 +166,6 @@
     <?php endif ?>
 <?php endif ?>
 
-<?php if ($this->isAllowed('adminMenu', 'view')): ?>
-    <div class="adminNavigation">
-        <h3>Admin</h3>
-
-        <?php $partial = array('mrss/menu/navigation.phtml',
-            'default') ?>
-        <?= $this->navigation('admin_navigation')
-            ->menu()
-            ->render(); ?>
-        <div class="clearfix"></div>
-    </div>
-<?php endif ?>
-
 <?php if (empty($this->noWrapper)): ?>
     <div id="content">
 
