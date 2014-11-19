@@ -98,8 +98,8 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
 
-        // Rename or hide system report link
-        if ($system) {
+        // Rename or hide system report link (only show for NCCBP)
+        if ($system && $currentStudy->getId() == 1) {
             $label = $system->getName() . ' Report';
             $pages['reports']['pages']['system']['label'] = $label;
         } else {
