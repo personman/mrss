@@ -201,6 +201,9 @@ class NavigationFactory extends DefaultNavigationFactory
             // Hide the executive report
             unset($pages['executive']);
             unset($pages['reports']['pages']['executive']);
+
+            // Hide all max reports
+            unset($pages['reports']);
         }
 
         // Workforce
