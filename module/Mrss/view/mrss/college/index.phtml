@@ -36,6 +36,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <?php endforeach ?>
         <th>City</th>
         <th>State</th>
+        <th>System</th>
     </tr>
     </thead>
 
@@ -73,6 +74,11 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
             <td><?= $college->getCity() ?></td>
             <td><?= $college->getState() ?></td>
+            <td>
+                <?php if ($system = $college->getSystem()): ?>
+                    <?= $system->getName() ?>
+                <?php endif ?>
+            </td>
         </tr>
 
     <?php endforeach ?>
