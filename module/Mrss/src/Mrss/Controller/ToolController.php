@@ -246,6 +246,9 @@ class ToolController extends AbstractActionController
                 continue;
             }
 
+            // Debug
+            //if ($subscription->getYear() != 2010) continue;
+
             $completion = $study->getCompletionPercentage(
                 $observation
             );

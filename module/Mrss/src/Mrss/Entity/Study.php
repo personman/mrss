@@ -503,9 +503,9 @@ class Study
                 ->countCompleteFieldsInObservation($observation);
         }
 
-        if ($observation->getYear() == 2010) {
+        /*if ($observation->getYear() == 2010) {
             pr($total); prd($completed);
-        }
+        }*/
         if ($total > 0) {
             $percentage = ($completed / $total * 100);
             $percentage = round($percentage, 1);

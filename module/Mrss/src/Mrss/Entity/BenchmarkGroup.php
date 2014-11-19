@@ -297,10 +297,10 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
             }
         }
 
-        if ($year == 2010) {
+        //if ($year == 2010 && $this->getId() == 4) {
             //pr(count($benchmarks));
             //prd(count($benchmarksForCompletion));
-        }
+        //}
 
         return $benchmarksForCompletion;
     }
