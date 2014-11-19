@@ -297,6 +297,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
             }
         }
 
+        if ($year == 2010) {
+            //pr(count($benchmarks));
+            //prd(count($benchmarksForCompletion));
+        }
+
         return $benchmarksForCompletion;
     }
 
@@ -346,6 +351,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         $benchmarksForYear = array();
 
         $benchmarks = $this->getBenchmarks();
+        //if ($year == 2010) pr(count($benchmarks));
         foreach ($benchmarks as $benchmark) {
             if (is_null($year) || $benchmark->isAvailableForYear($year)) {
                 $benchmarksForYear[] = $benchmark;
