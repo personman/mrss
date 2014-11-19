@@ -1321,7 +1321,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function getImports($all = false)
     {
         $imports = array(
-            'colleges' => array(
+            /*'colleges' => array(
                 'label' => 'Colleges',
                 'method' => 'importColleges'
             ),
@@ -1378,11 +1378,11 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         }
 
         // Add subscription importer at the end
-        $imports['subscriptions'] = array(
+        /*$imports['subscriptions'] = array(
             'label' => 'Subscriptions',
             'method' => 'importSubscriptions',
             'year' => true
-        );
+        );*/
 
         return $imports;
     }
