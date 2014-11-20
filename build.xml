@@ -182,7 +182,6 @@
     <target name="q" depends="codesniffer,phpunit" />
 
     <target name="deploy">
-        <!--ssh host="nccbp.org" username="max" key command="phing update" /-->
-        <exec command="ssh max@nccbp.org 'cd maximizingresources.org; phing update'" passthru="true"/>
+        <exec command="ssh max@maximizingresources.org 'cd maximizingresources.org; bin/phing update'" passthru="true"/>
     </target>
 </project>
