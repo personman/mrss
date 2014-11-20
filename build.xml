@@ -167,7 +167,7 @@
 
 
     <target name="update" description="Update suitable for production"
-            depends="gitpull,composer,migrate" />
+            depends="gitpull,migrate" />
 
     <target name="test-db-teardown" description="Undo the changes made in the test-db task">
         <exec command="mv config/autoload/db.php.bak config/autoload/db.php" />
@@ -180,4 +180,9 @@
             depends="test-db,migrate,behat,test-db-teardown" />
 
     <target name="q" depends="codesniffer,phpunit" />
+
+    <target name="deploy">
+        <!--ssh host="nccbp.org" username="max" key command="phing update" /-->
+        <exec command="ssh max@nccbp.org 'cd maximizingresources.org; phing update'" passthru="true"/>
+    </target>
 </project>
