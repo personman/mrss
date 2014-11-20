@@ -25,6 +25,9 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Mail\Message;
 use DateTime;
 use PHPExcel;
+use FullyBaked\Pslackr\Messages\CustomMessage;
+use FullyBaked\Pslackr\Pslackr;
+
 
 /**
  * Class SubscriptionController
@@ -75,6 +78,43 @@ class SubscriptionController extends AbstractActionController
         return array(
             'subscription' => $subscription,
         );
+    }
+
+    /*public function testSlack()
+    {
+
+        $this->slack('hello from the NCCBP app', 'development', ':nccbp:');
+
+        die('slack test');
+    }*/
+
+    public function slack(
+        $message,
+        $room = "development",
+        $icon = ":nccbp:",
+        $username = "NCCBP-bot"
+    ) {
+        $room = ($room) ? $room : "engineering";
+        $username = ($username) ? $username : 'NCCBP-bot';
+
+        $data = "payload=" . json_encode(array(
+                    "channel"       =>  "#{$room}",
+                    'username' => $username,
+                    "text"          =>  $message,
+                    "icon_emoji"    =>  $icon
+                ));
+
+        // You can get your webhook endpoint from your Slack settings
+        $url = "https://hooks.slack.com/services/" .
+            "T0316049N/B031HJY29/FHHvaDQ6Mgh60nXqh6i59zrC";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return $result;
     }
 
     public function addAction()
@@ -662,6 +702,9 @@ class SubscriptionController extends AbstractActionController
         $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
         $this->getServiceLocator()->get('em')->flush();
 
+        // Send a notification to slack
+        $this->sendSlackNotification($subscription);
+
         // Redirect
         if ($redirect) {
             if (!empty($subscriptionForm['renew'])) {
@@ -677,6 +720,54 @@ class SubscriptionController extends AbstractActionController
             $method = $subscription->getPaymentMethod();
             $routeParams = array('paymentMethod' => $method);
             return $this->redirect()->toRoute('membership', $routeParams);
+        }
+    }
+
+    protected function sendSlackNotification(\Mrss\Entity\Subscription $subscription)
+    {
+        $college = $subscription->getCollege()->getName();
+        $state = $subscription->getCollege()->getState();
+        $college .= " ($state)";
+        $appName = $this->currentStudy()->getName();
+        $cost = number_format($subscription->getPaymentAmount());
+        $cost .= ' (' . $subscription->getPaymentMethodForDisplay() . ')';
+        $message = "New $appName membership for $college. ";
+
+        $message .= "Cost: $$cost. ";
+
+        // Add notes about subscription totals:
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $studyId = $this->currentStudy()->getId();
+
+        $year = $subscription->getYear();
+
+        $subscriptions = $subscriptionModel->findByStudyAndYear(
+            $studyId,
+            $year
+        );
+
+        // Total
+        $total = 0;
+        foreach ($subscriptions as $sub) {
+            $total += $sub->getPaymentAmount();
+        }
+        $count = count($subscriptions);
+        $total = number_format($total);
+
+        $message .= "\n";
+        $message .= "$count members, $$total. ";
+
+        // Configure channel, etc
+        $map = array(
+            1 => array('nccbp-website', ':nccbp:', 'NCCBP-bot'),
+            2 => array('maximizing-website', ':maximizing:', 'Max-bot'),
+            3 => array('workforce-website', ':workforce:', 'Workforce-bot')
+        );
+
+        if (!empty($map[$studyId])) {
+            list($channel, $icon, $username) = $map[$studyId];
+
+            $this->slack($message, $channel, $icon, $username);
         }
     }
 
