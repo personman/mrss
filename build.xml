@@ -165,6 +165,10 @@
         <exec command="git pull" passthru="true"/>
     </target>
 
+    <target name="slack-deploy-message">
+        <exec command="./slack" passthru="true" />
+    </target>
+
 
     <target name="update" description="Update suitable for production"
             depends="gitpull,migrate" />
@@ -181,7 +185,9 @@
 
     <target name="q" depends="codesniffer,phpunit" />
 
-    <target name="deploy">
+    <target name="ssh-git-deploy">
         <exec command="ssh max@maximizingresources.org 'cd maximizingresources.org; bin/phing update'" passthru="true"/>
     </target>
+
+    <target name="deploy" depends="ssh-git-deploy,slack-deploy-message" />
 </project>
