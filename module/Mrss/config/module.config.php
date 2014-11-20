@@ -1193,6 +1193,15 @@ return array(
                             )
                         )
                     ),
+                    'exec-addresses' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/exec-addresses',
+                            'defaults' => array(
+                                'action' => 'execAddresses'
+                            )
+                        )
+                    )
                 )
             ),
             'schedule-demo' => array(

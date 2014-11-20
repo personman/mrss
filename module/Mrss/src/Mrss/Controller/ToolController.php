@@ -8,6 +8,7 @@ use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
+use PHPExcel_Style_Fill;
 use Mrss\Service\NccbpMigration;
 use Zend\Session\Container;
 
@@ -275,6 +276,112 @@ class ToolController extends AbstractActionController
         return array(
             'benchmarkGroups' => $benchmarkGroups
         );
+    }
+
+    public function execAddressesAction()
+    {
+        // Start the excel file
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $row = 1;
+
+        // Header row
+        $header = array(
+            'Executive Full Name',
+            'Executive Title',
+            'Executive Prefix',
+            'Executive Last Name',
+            'Institution Name',
+            'Address',
+            'Address2',
+            'City',
+            'State',
+            'Zip'
+        );
+
+        // Format for header row
+        $blueBar = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'DCE6F1')
+            )
+        );
+
+        $sheet->fromArray($header, null, 'A' . $row);
+        $sheet->getStyle("A$row:J$row")->applyFromArray($blueBar);
+        $row++;
+
+        // Get the subscriptions
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $studyId = $this->currentStudy()->getId();
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+
+            // If reports aren't open yet, show the previous year
+            if (!$this->currentStudy()->getReportsOpen()) {
+                $year = $year - 1;
+            }
+        }
+
+        $filename = 'exec-report-addresses-' . $year;
+
+        $subscriptions = $subscriptionModel->findByStudyAndYear(
+            $studyId,
+            $year
+        );
+
+        // Exclude some for 2014:
+        $ipedsToExclude = array(
+            '217989',
+            '146603',
+            '020774',
+            '107992'
+        );
+
+        foreach ($subscriptions as $subscription) {
+            $college = $subscription->getCollege();
+
+            if (in_array($college->getIpeds(), $ipedsToExclude)) {
+                continue;
+            }
+
+
+            $dataRow = array(
+                $college->getExecFullName(),
+                $college->getExecTitle(),
+                $college->getExecSalutation(),
+                $college->getExecLastName(),
+                $college->getName(),
+                $college->getAddress(),
+                $college->getAddress2(),
+                $college->getCity(),
+                $college->getState(),
+                $college->getZip()
+            );
+
+            $sheet->fromArray($dataRow, null, 'A' . $row);
+            $row++;
+        }
+
+        // Some formatting
+        foreach (range(0, count($header) - 1) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        header(
+            'Content-Type: '.
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+
+        die;
     }
 
     protected function longRunningScript()
