@@ -19,6 +19,7 @@
 <?php else: ?>
     <ul class="nav nav-pills report-nav">
         <?php foreach ($subscriptions as $subscription): ?>
+            <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
             <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
                 <a href="<?= $this->url('reports/executive', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
             </li>

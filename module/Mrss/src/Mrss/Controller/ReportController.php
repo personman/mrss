@@ -259,7 +259,8 @@ class ReportController extends AbstractActionController
 
     public function executiveAction()
     {
-        $open = (!empty($_GET['open']));
+        $open = true;
+
         if ($this->params()->fromRoute('open')) {
             $open = true;
         }
