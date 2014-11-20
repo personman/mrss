@@ -183,6 +183,54 @@ class PeerComparisonDemographics extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'blk',
+                'type' => 'Text',
+                'required' => false,
+                'options' => array(
+                    'label' => '% Black or African American',
+                    'help-block' => 'Specify a range (e.g., "5 - 15", without
+                        quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'blk',
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'asian',
+                'type' => 'Text',
+                'required' => false,
+                'options' => array(
+                    'label' => '% Asian',
+                    'help-block' => 'Specify a range (e.g., "5 - 15", without
+                        quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'asian',
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'hispAnyrace',
+                'type' => 'Text',
+                'required' => false,
+                'options' => array(
+                    'label' => '% Hispanics of Any Race',
+                    'help-block' => 'Specify a range (e.g., "5 - 15", without
+                        quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'hispAnyrace',
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'operatingRevenue',
                 'type' => 'Text',
                 'required' => false,
@@ -328,6 +376,21 @@ class PeerComparisonDemographics extends AbstractForm
         $pellGrantRecipients->setRequired(false);
         $pellGrantRecipients->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($pellGrantRecipients);
+
+        $blk = new Input('blk');
+        $blk->setRequired(false);
+        $blk->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($blk);
+
+        $asian = new Input('asian');
+        $asian->setRequired(false);
+        $asian->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($asian);
+
+        $hispAnyrace = new Input('hispAnyrace');
+        $hispAnyrace->setRequired(false);
+        $hispAnyrace->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($hispAnyrace);
 
         $operatingRevenue = new Input('operatingRevenue');
         $operatingRevenue->setRequired(false);

@@ -63,6 +63,15 @@ class PeerGroup
     protected $pellGrantRecipients;
 
     /** @ORM\Column(type="string", nullable=true) */
+    protected $blk;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $asian;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $hispAnyrace;
+
+    /** @ORM\Column(type="string", nullable=true) */
     protected $operatingRevenue;
 
     /** @ORM\Column(type="string", nullable=true) */
@@ -427,6 +436,90 @@ class PeerGroup
     }
 
     /**
+     * @param $blk
+     * @return $this
+     */
+    public function setBlk($blk)
+    {
+        $this->blk = $blk;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    public function getBlk($type = 'range')
+    {
+        $blk = $this->blk;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($blk);
+
+            $blk = $range[$type];
+        }
+
+        return $blk;
+    }
+
+    /**
+     * @param $asian
+     * @return $this
+     */
+    public function setAsian($asian)
+    {
+        $this->asian = $asian;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    public function getAsian($type = 'range')
+    {
+        $asian = $this->asian;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($asian);
+
+            $asian = $range[$type];
+        }
+
+        return $asian;
+    }
+
+    /**
+     * @param $hispanyrace
+     * @return $this
+     */
+    public function setHispAnyrace($hispanyrace)
+    {
+        $this->hispAnyrace = $hispanyrace;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    public function getHispAnyrace($type = 'range')
+    {
+        $hispanyrace = $this->hispAnyrace;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($hispanyrace);
+
+            $hispanyrace = $range[$type];
+        }
+
+        return $hispanyrace;
+    }
+
+    /**
      * @param $revenue
      * @return $this
      */
@@ -584,7 +677,10 @@ class PeerGroup
             $this->getFacultyUnionized() ||
             $this->getStaffUnionized() ||
             $this->getInstitutionalControl() ||
-            $this->getInstitutionalType()
+            $this->getInstitutionalType() ||
+            $this->getBlk() ||
+            $this->getAsian() ||
+            $this->getHispAnyrace()
         );
     }
 }

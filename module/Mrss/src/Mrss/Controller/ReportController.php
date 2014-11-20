@@ -665,7 +665,7 @@ class ReportController extends AbstractActionController
             $collegeData = array();
             foreach ($colleges as $college) {
                 $collegeData[] = array(
-                    'name' => $college->getName(),
+                    'name' => $college->getName() . " (" . $college->getState() . ")",
                     'id' => $college->getId()
                 );
             }

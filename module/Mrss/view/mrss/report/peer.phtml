@@ -106,6 +106,27 @@ $form->setAttribute('action', $this->url('reports/peer'));
                 </p>
             <?php endif ?>
 
+            <?php if ($peerGroup->getBlk()): ?>
+                <p>
+                    <strong>% Black or African American:</strong>
+                    <?= $peerGroup->getBlk() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getAsian()): ?>
+                <p>
+                    <strong>% Asian:</strong>
+                    <?= $peerGroup->getAsian() ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getHispAnyrace()): ?>
+                <p>
+                    <strong>% Hispanic of Any Race:</strong>
+                    <?= $peerGroup->getHispAnyrace() ?>
+                </p>
+            <?php endif ?>
+
             <?php if ($peerGroup->getOperatingRevenue()): ?>
                 <p>
                     <strong>Unrestricted Operating Revenue:</strong>

@@ -274,6 +274,51 @@ class College extends AbstractModel
             );
         }
 
+        // Filter by % blk
+        if ($peerGroup->getBlk()) {
+            $qb->andWhere(
+                'o.blk_2012 BETWEEN :blk_min AND :blk_max'
+            );
+            $qb->setParameter(
+                'blk_min',
+                $peerGroup->getBlk('min')
+            );
+            $qb->setParameter(
+                'blk_max',
+                $peerGroup->getBlk('max')
+            );
+        }
+
+        // Filter by % asian
+        if ($peerGroup->getAsian()) {
+            $qb->andWhere(
+                'o.asian_2012 BETWEEN :asian_min AND :asian_max'
+            );
+            $qb->setParameter(
+                'asian_min',
+                $peerGroup->getAsian('min')
+            );
+            $qb->setParameter(
+                'asian_max',
+                $peerGroup->getAsian('max')
+            );
+        }
+
+        // Filter by % hispanic
+        if ($peerGroup->getHispAnyrace()) {
+            $qb->andWhere(
+                'o.hisp_anyrace_2012 BETWEEN :hisp_min AND :hisp_max'
+            );
+            $qb->setParameter(
+                'hisp_min',
+                $peerGroup->getHispAnyrace('min')
+            );
+            $qb->setParameter(
+                'hisp_max',
+                $peerGroup->getHispAnyrace('max')
+            );
+        }
+
         // Filter by revenue
         if ($peerGroup->getOperatingRevenue()) {
             $qb->andWhere(
