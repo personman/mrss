@@ -18,7 +18,7 @@ class PeerComparisonTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $yearsWithData = range(2005, 2007);
-        $this->form = new PeerComparison($yearsWithData);
+        $this->form = new PeerComparison($yearsWithData, array());
     }
 
     public function testFormConstruction()

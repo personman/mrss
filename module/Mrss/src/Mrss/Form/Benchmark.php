@@ -274,7 +274,8 @@ class Benchmark extends AbstractForm
                 'type' => 'Checkbox',
                 'options' => array(
                     'label' => 'Include in Best Performers Report',
-                    'help-block' => 'Also used to determine which benchmarks are included in the executive report\'s strengths and weaknesses.'
+                    'help-block' => 'Also used to determine which benchmarks are ' .
+                        'included in the executive report\'s strengths and weaknesses.'
                 )
             )
         );

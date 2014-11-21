@@ -17,7 +17,7 @@ class PeerComparisonDemographicsTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->form = new PeerComparisonDemographics;
+        $this->form = new PeerComparisonDemographics(1);
     }
 
     public function testFormConstruction()
@@ -27,7 +27,5 @@ class PeerComparisonDemographicsTest extends PHPUnit_Framework_TestCase
         // Make sure the elements are present
         $this->assertNotEmpty($this->form->get('states'));
         $this->assertNotEmpty($this->form->get('environments'));
-        $this->assertNotEmpty($this->form->get('workforceEnrollment'));
-        $this->assertNotEmpty($this->form->get('workforceRevenue'));
     }
 }

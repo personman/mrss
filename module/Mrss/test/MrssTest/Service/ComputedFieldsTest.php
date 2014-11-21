@@ -238,7 +238,7 @@ class ComputedFieldsTest extends TestCase
         $observation->set('inst_full_num', 20);
 
 
-        $result = $this->computedFields->nestComputedEquations($equation);
+        $result = $this->computedFields->nestComputedEquations($equation, 2014);
 
         $expected = "{{inst_full_expend}} / ( {{inst_part_expend}} / {{inst_part_num}} )";
 

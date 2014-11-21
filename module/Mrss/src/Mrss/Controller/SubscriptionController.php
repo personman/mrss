@@ -25,9 +25,6 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Mail\Message;
 use DateTime;
 use PHPExcel;
-use FullyBaked\Pslackr\Messages\CustomMessage;
-use FullyBaked\Pslackr\Pslackr;
-
 
 /**
  * Class SubscriptionController

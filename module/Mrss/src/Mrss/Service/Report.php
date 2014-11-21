@@ -1852,7 +1852,10 @@ class Report
                     'ft_perc_transf' => 'Transferred', // Transferred in 3 years, full time
                     'ft_perc_comp' => 'Completed', // Completed in 3 years, full time
                 ),
-                'description' => 'The percent of students out of the unduplicated full-time, first-time, credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree or certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before fall ' . ($year - 1)  . '.'
+                'description' => 'The percent of students out of the unduplicated full-time, first-time,
+                    credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree
+                    or certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions
+                    before fall ' . ($year - 1)  . '.'
 
             ),
             array(
@@ -1863,7 +1866,10 @@ class Report
                     'pt_percminus7_tran' => 'Transferred',
                     'pt_perminus7_comp' => 'Completed'
                 ),
-                'description' => 'The percent of part-time students out of the unduplicated part-time, first-time, credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree or certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before fall ' . ($year - 1)  . '.'
+                'description' => 'The percent of part-time students out of the unduplicated part-time, first-time,
+                 credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree or
+                 certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before
+                 fall ' . ($year - 1)  . '.'
             ),
             array(
                 'title' => 'Persistence Rate',
@@ -1872,7 +1878,10 @@ class Report
                     'next_term_pers' => 'Next-Term', // Next-term persistence
                     'fall_fall_pers' => 'Fall-Fall', // Fall-fall persistence
                 ),
-                'description' => 'The persistence rate is the percent of Fall ' . ($year - 2)  . ' credit students, both full- and part-time, who return to the campus for the next term (usually Spring ' . ($year - 1)  . '), or for the next fall term (Fall ' . ($year - 1)  . '). This metric excludes students who graduated or completed certificates in the time frame.'
+                'description' => 'The persistence rate is the percent of Fall ' . ($year - 2)  . ' credit students,
+                    both full- and part-time, who return to the campus for the next term (usually Spring ' .
+                    ($year - 1) . '), or for the next fall term (Fall ' . ($year - 1)  . '). This metric excludes
+                     students who graduated or completed certificates in the time frame.'
             ),
             array(
                 'title' => 'Instructional Cost per FTE Student',
@@ -1881,7 +1890,9 @@ class Report
                 'benchmarks' => array(
                     'cst_fte_stud' => 'Cost Per FTE Student', // Cost per FTE student
                 ),
-                'description' => '' . ($year - 1)  . ' instructional costs include salaries, benefits, supplies, travel and equipment for all full- and part-time faculty and other instructional administration and support personnel per full-time equivalent student.'
+                'description' => '' . ($year - 1)  . ' instructional costs include salaries, benefits, supplies,
+                 travel and equipment for all full- and part-time faculty and other instructional administration
+                 and support personnel per full-time equivalent student.'
             ),
             array(
                 'title' => 'College-level Courses:<br>Completer Success Rate',
@@ -1889,7 +1900,8 @@ class Report
                 'benchmarks' => array(
                     'comp_succ' => 'Completer Success Rate', // Completer success rate
                 ),
-                'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or Pass in college-level credit courses in fall ' . ($year - 2)  . '.'
+                'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or
+                Pass in college-level credit courses in fall ' . ($year - 2)  . '.'
             ),
             array(
                 'title' => "Developmental Completer <br>Success Rate",
@@ -1898,7 +1910,8 @@ class Report
                     'm_comp_succ' => 'Math', // Dev math enrollee success rate
                     'w_comp_succ' => 'Writing' // Dev writing enrollee success rate
                 ),
-                'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or Pass in developmental/remedial math and writing courses in fall ' . ($year - 2)  . '.'
+                'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or
+                Pass in developmental/remedial math and writing courses in fall ' . ($year - 2)  . '.'
             )
 
         );
