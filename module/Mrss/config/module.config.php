@@ -1249,6 +1249,26 @@ return array(
                     )
                 )
             ),
+            'members' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/members',
+                    'defaults' => array(
+                        'controller' => 'pages',
+                        'action' => 'view'
+                    )
+                )
+            ),
+            'reset-password' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/reset-password',
+                    'defaults' => array(
+                        'controller' => 'goalioforgotpassword_forgot',
+                        'action' => 'forgot'
+                    )
+                )
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
