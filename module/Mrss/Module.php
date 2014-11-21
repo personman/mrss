@@ -148,7 +148,7 @@ class Module
         if (!empty($exception)) {
             $logger->err($exception->getMessage());
         } else {
-            $server = print_r($_SERVER, 1) . print_r($_REQUEST, 1);
+            $server = print_r($_SERVER['REQUEST_URI'], 1);// . print_r($e, 1);
             $logger->err('Error with no exception object. ' . $server);
         }
 
