@@ -19,6 +19,7 @@ Redirect 301 /content/peer-institutions http://nccbp.org/peers
 
 # The old drupal sites directory is gone
 RewriteRule ^sites/default/ - [G,L]
+RewriteRule ^sites/all/ - [G,L]
 RewriteRule ^institution/profile - [G,L]
 RewriteRule ^_FileLibrary - [G,L]
 
