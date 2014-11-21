@@ -23,9 +23,9 @@
         "phpoffice/phpexcel": "1.8.*",
         "mwillbanks/zfc-twitter-bootstrap": "*",
         "bjyoungblood/bjy-authorize": "1.*",
-        "goalio/goalio-mailservice": "0.*",
-        "goalio/goalio-forgotpassword": "0.*",
-        "goalio/goalio-forgotpassword-doctrine-orm": "dev-master",
+        "goalio/goalio-mailservice": "*",
+        "goalio/goalio-forgotpassword": "*",
+        "goalio/goalio-forgotpassword-doctrine-orm": "*",
         "rezzza/exprlib": "*",
         "guzzle/guzzle": "3.5.*"
     },
