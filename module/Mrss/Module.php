@@ -148,7 +148,8 @@ class Module
         if (!empty($exception)) {
             $logger->err($exception->getMessage());
         } else {
-            $logger->err('Error with no exception object.');
+            $server = print_r($_SERVER, 1) . print_r($_REQUEST, 1);
+            $logger->err('Error with no exception object. ' . $server);
         }
 
         if (!empty($_SERVER['REMOTE_ADDR'])) {
