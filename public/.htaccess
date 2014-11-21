@@ -16,7 +16,7 @@ RewriteRule ^(.*)$ http://workforceproject.org/$1 [R=301,L]
 
 # Redirect some old NCCBP urls
 Redirect 301 /content/peer-institutions http://nccbp.org/peers
-Redirect 301 /nccbp-favicon.ico http://nccbp.org/images/images/nccbp-favicon.ico
+Redirect 301 /nccbp-favicon.ico http://nccbp.org/images/nccbp-favicon.ico
 
 # The old drupal sites directory is gone
 RewriteRule ^sites/default/ - [G,L]
