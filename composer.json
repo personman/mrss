@@ -14,7 +14,7 @@
         "zendframework/zendservice-recaptcha": "2.0.*@dev",
         "phly/phly-contact": "dev-master",
         "phing/phing": "2.5.*",
-        "zf-commons/zfc-user": "0.*",
+        "zf-commons/zfc-user": "*",
         "zf-commons/zfc-user-doctrine-orm": "*",
         "mtudor/zfc-user-impersonate": "dev-master",
         "doctrine/doctrine-orm-module": "0.*",
