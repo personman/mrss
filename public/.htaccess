@@ -16,13 +16,15 @@ RewriteRule ^(.*)$ http://workforceproject.org/$1 [R=301,L]
 
 # Redirect some old NCCBP urls
 Redirect 301 /content/peer-institutions http://nccbp.org/peers
+Redirect 301 /content/data-confidentiality-and-use http://nccbp.org/confidentiality
 Redirect 301 /nccbp-favicon.ico http://nccbp.org/images/nccbp-favicon.ico
 
-# The old drupal sites directory is gone
+# Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
 RewriteRule ^sites/all/ - [G,L]
 RewriteRule ^institution/profile - [G,L]
 RewriteRule ^_FileLibrary - [G,L]
+RewriteRule ^payment/ipeds - [G,L]
 
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
