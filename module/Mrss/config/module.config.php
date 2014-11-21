@@ -1085,10 +1085,11 @@ return array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/export[/:action]',
+                    'route' => '/export[/:action][/:year]',
                     'defaults' => array(
                         'controller' => 'export',
-                        'action' => 'index'
+                        'action' => 'index',
+                        'year' => null
                     )
                 )
             ),

@@ -46,7 +46,7 @@ class UserExport
         return $this->subscriptionModel;
     }
 
-    public function export()
+    public function export($year = null)
     {
         if (empty($this->study)) {
             throw new \Exception("Study cannot be empty. Please use setStudy().");
@@ -55,7 +55,7 @@ class UserExport
         // Start building the Excel file
         $this->excel = new PHPExcel();
         $this->writeHeaders();
-        $this->writeData();
+        $this->writeData($year);
 
         $this->download();
     }
@@ -87,9 +87,9 @@ class UserExport
         $headerRow->getFont()->setBold(true);
     }
 
-    protected function writeData()
+    protected function writeData($year)
     {
-        $subscriptions = $this->getSubscriptions();
+        $subscriptions = $this->getSubscriptions($year);
         $sheet = $this->excel->getActiveSheet();
 
         $row = 2;
@@ -126,14 +126,17 @@ class UserExport
         }
     }
 
-    protected function getSubscriptions()
+    protected function getSubscriptions($year)
     {
-        $currentYear = $this->getStudy()->getCurrentYear();
+        if (empty($year)) {
+            $year = $this->getStudy()->getCurrentYear();
+        }
+
         $studyId = $this->getStudy()->getId();
 
         $subscriptions = $this->getSubscriptionModel()->findByStudyAndYear(
             $studyId,
-            $currentYear
+            $year
         );
 
         return $subscriptions;

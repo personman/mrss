@@ -9,7 +9,13 @@ class ExportController extends AbstractActionController
 
     public function indexAction()
     {
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $years = $subscriptionModel->getYearsWithSubscriptions($this->currentStudy());
 
+        return array(
+            'years' => $years
+        );
     }
 
     /**
@@ -17,7 +23,7 @@ class ExportController extends AbstractActionController
      */
     public function fullAction()
     {
-        /** @var /Mrss/Service/DataExport $exportService */
+        /** @var \Mrss\Service\DataExport $exportService */
         $exportService = $this->getServiceLocator()->get('export');
 
         $studies = array($this->currentStudy()->getId());
@@ -34,7 +40,7 @@ class ExportController extends AbstractActionController
      */
     public function nccbpAction()
     {
-        /** @var /Mrss/Service/DataExport $exportService */
+        /** @var \Mrss\Service\DataExport $exportService */
         //$exportService = $this->getServiceLocator()->get('export');
 
         //$exportService->getFullDataDump(array(1));
@@ -49,10 +55,13 @@ class ExportController extends AbstractActionController
 
     public function usersAction()
     {
-        /** @var /Mrss/Service/UserExport $exportService */
+        /** @var \Mrss\Service\UserExport $exportService */
         $exportService = $this->getServiceLocator()->get('export.users');
+
+        $year = $this->params()->fromRoute('year', null);
+
         $exportService->setStudy($this->currentStudy());
-        $exportService->export();
+        $exportService->export($year);
 
         die;
     }
