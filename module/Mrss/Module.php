@@ -141,19 +141,23 @@ class Module
     }
 
     public function handleError(MvcEvent $e) {
-        $logger = $this->getErrorLog();
+        $message = '';
+
 
         $exception = $e->getParam('exception');
 
         if (!empty($exception)) {
-            $logger->err($exception->getMessage());
+            $message .= $exception->getMessage();
         } else {
-            $server = print_r($_SERVER['REQUEST_URI'], 1);// . print_r($e, 1);
-            $logger->err('Error with no exception object. ' . $server);
+
+
+            $message .= "Error with no exception object. ";
+            $message .= "\n" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            $message .= "\nUser-agent: " . $_SERVER['HTTP_USER_AGENT'];
         }
 
         if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $logger->info('IP: ' . $_SERVER['REMOTE_ADDR']);
+            $message .= "\nIP: " . $_SERVER['REMOTE_ADDR'];
         }
 
         // Log user identity, if present
@@ -163,8 +167,10 @@ class Module
         // Set the current User
         $user = $userService->getIdentity();
         if ($user) {
-            $logger->info("User: " . $user->getId());
+            $message .= "\nUser: " . $user->getEmail();
         }
+
+        $this->getErrorLog()->err($message);
     }
 
     public function getConfig()
@@ -796,8 +802,9 @@ class Module
             'authenticate',
             function ($e) use ($serviceManager) {
                 $params = $e->getParams();
-                $userId = $params['identity'];
-                if ($userId) {
+
+                if (!empty($params['identity'])) {
+                    $userId = $params['identity'];
 
                     $userModel = $serviceManager->get('model.user');
                     $user = $userModel->find($userId);
