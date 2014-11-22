@@ -16,7 +16,11 @@ RewriteRule ^(.*)$ http://workforceproject.org/$1 [R=301,L]
 
 # Redirect some old NCCBP urls
 Redirect 301 /content/peer-institutions http://nccbp.org/peers
+Redirect 301 /content/benchmarks http://nccbp.org/benchmarks
+Redirect 301 /content/staff http://nccbp.org/staff
+Redirect 301 /national-higher-education-benchmarking-institute http://nccbp.org/benchmarking-institute
 Redirect 301 /content/data-confidentiality-and-use http://nccbp.org/confidentiality
+Redirect 301 /node/10 http://nccbp.org/confidentiality
 Redirect 301 /user/confidentiality http://nccbp.org/confidentiality
 Redirect 301 /nccbp-favicon.ico http://nccbp.org/images/nccbp-favicon.ico
 
