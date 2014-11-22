@@ -23,6 +23,9 @@ Redirect 301 /content/data-confidentiality-and-use http://nccbp.org/confidential
 Redirect 301 /node/10 http://nccbp.org/confidentiality
 Redirect 301 /user/confidentiality http://nccbp.org/confidentiality
 Redirect 301 /nccbp-favicon.ico http://nccbp.org/images/nccbp-favicon.ico
+Redirect 301 /content/membership-benefits http://nccbp.org/benefits
+Redirect 301 /content/timeline http://nccbp.org/timeline
+Redirect 301 /Contact http://nccbp.org/contact
 
 # Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
@@ -30,6 +33,7 @@ RewriteRule ^sites/all/ - [G,L]
 RewriteRule ^institution/profile - [G,L]
 RewriteRule ^_FileLibrary - [G,L]
 RewriteRule ^payment/ipeds - [G,L]
+RewriteRule ^admin\.php - [G,L]
 RewriteRule ^files/out\.html - [G,L]
 
 # The following rule tells Apache that if the requested filename
