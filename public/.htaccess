@@ -31,6 +31,8 @@ Redirect 301 /content/subscribe http://nccbp.org/how-to-join
 Redirect 301 /content/testimonials http://nccbp.org/testimonials
 Redirect 301 /user/password http://nccbp.org/reset-password
 Redirect 301 /resources http://nccbp.org/case-studies
+Redirect 301 /content/about-us http://nccbp.org/about
+Redirect 301 /content/reports http://nccbp.org/reports-overview
 
 # Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
