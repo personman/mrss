@@ -26,6 +26,7 @@ Redirect 301 /nccbp-favicon.ico http://nccbp.org/images/nccbp-favicon.ico
 Redirect 301 /content/membership-benefits http://nccbp.org/benefits
 Redirect 301 /content/timeline http://nccbp.org/timeline
 Redirect 301 /Contact http://nccbp.org/contact
+Redirect 301 /payment/start http://nccbp.org/join
 
 # Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
@@ -35,6 +36,7 @@ RewriteRule ^_FileLibrary - [G,L]
 RewriteRule ^payment/ipeds - [G,L]
 RewriteRule ^admin\.php - [G,L]
 RewriteRule ^files/out\.html - [G,L]
+RewriteRule ^admin/scripts - [G,L]
 
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
