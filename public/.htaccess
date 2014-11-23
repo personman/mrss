@@ -27,6 +27,10 @@ Redirect 301 /content/membership-benefits http://nccbp.org/benefits
 Redirect 301 /content/timeline http://nccbp.org/timeline
 Redirect 301 /Contact http://nccbp.org/contact
 Redirect 301 /payment/start http://nccbp.org/join
+Redirect 301 /content/subscribe http://nccbp.org/how-to-join
+Redirect 301 /content/testimonials http://nccbp.org/testimonials
+Redirect 301 /user/password http://nccbp.org/reset-password
+Redirect 301 /resources http://nccbp.org/case-studies
 
 # Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
