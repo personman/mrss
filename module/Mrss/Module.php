@@ -149,10 +149,11 @@ class Module
         if (!empty($exception)) {
             $message .= $exception->getMessage();
         } else {
-
-
             $message .= "Error with no exception object. ";
-            $message .= "\n" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        }
+
+        $message .= "\n" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
             $message .= "\nUser-agent: " . $_SERVER['HTTP_USER_AGENT'];
         }
 
@@ -168,6 +169,8 @@ class Module
         $user = $userService->getIdentity();
         if ($user) {
             $message .= "\nUser: " . $user->getEmail();
+        } else {
+            $message .= "\nNot logged in.";
         }
 
         $this->getErrorLog()->err($message);

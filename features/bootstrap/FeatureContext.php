@@ -46,7 +46,7 @@ class FeatureContext extends MinkContext
             print_r($config);
         }
 
-        $dbConfig = $config['db'];
+        $dbConfig = $config['db']['adapters']['db'];
         preg_match('/dbname\=(.*)\;/', $dbConfig['dsn'], $matches);
         $dbName = $matches[1];
         $dbUser = $dbConfig['username'];
@@ -54,8 +54,8 @@ class FeatureContext extends MinkContext
         $fileToLoad = __DIR__ . '/' . self::$sqlPrepareFile;
 
         // Load from .sql file
-        $command = "mysql -u $dbUser -p$dbPassword $dbName < $fileToLoad";
-
+        //$command = "mysql -u $dbUser -p$dbPassword $dbName < $fileToLoad";
+        $command = null;
         // Don't actually run it yet. We do that before each scenario
         self::$sqlPrepareCommand = $command;
 
@@ -104,7 +104,7 @@ class FeatureContext extends MinkContext
      * @BeforeScenario */
     public static function testDbSetup()
     {
-        shell_exec(self::$sqlPrepareCommand);
+        //shell_exec(self::$sqlPrepareCommand);
     }
 
 
