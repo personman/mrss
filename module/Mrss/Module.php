@@ -759,8 +759,10 @@ class Module
 
                     // Inject the user
                     $auth = $sm->getServiceLocator()->get('zfcuser_auth_service');
-                    $user = $auth->getIdentity();
-                    $helper->setUser($user);
+                    if ($auth->hasIdentity()) {
+                        $user = $auth->getIdentity();
+                        $helper->setUser($user);
+                    }
 
                     // Inject the controller plugin
                     $plugin = $sm->getServiceLocator()
