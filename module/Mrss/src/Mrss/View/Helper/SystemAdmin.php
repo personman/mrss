@@ -39,22 +39,33 @@ class SystemAdmin extends AbstractHelper
     {
         $html = '';
 
-        if ($this->getUser()->getRole() == 'system_admin') {
+        $user = $this->getUser();
+        if (!empty($user) && $user->getRole() == 'system_admin') {
             $activeCollege = $this->getActiveCollege();
 
-            if (!empty($activeCollege)) {
-                $collegeName = $activeCollege->getName();
-                $form = $this->getSwitchForm();
-                $overviewUrl = $this->getOverviewUrl();
-
-                $html = "<div class='well'>
-                    You are entering data for <strong>$collegeName</strong>. You
-                    may <a href='$overviewUrl'>return to the system overview</a>
-                    or switch to another institution:
-                    $form
-                </div>";
-
+            $collegeSelected = true;
+            if (empty($activeCollege)) {
+                $activeCollege = $user->getCollege();
+                $collegeSelected = false;
             }
+
+            $collegeName = $activeCollege->getName();
+            $systemName = $activeCollege->getSystem()->getName();
+
+            $form = $this->getSwitchForm();
+            $overviewUrl = $this->getOverviewUrl();
+
+            $returnOr = null;
+            if ($collegeSelected) {
+                $returnOr = "<a href='$overviewUrl'>return to the $systemName system</a> or ";
+            }
+
+            $html = "<div class='well'>
+                You are working as <strong>$collegeName</strong>. You
+                may $returnOr switch to another institution:
+                $form
+            </div>";
+
         }
 
         return $html;
@@ -63,7 +74,7 @@ class SystemAdmin extends AbstractHelper
     public function getOverviewUrl()
     {
         $url = $this->getView()->url(
-            'data-entry/switch',
+            'users/switch',
             array('college_id' => 'overview')
         );
 
@@ -76,16 +87,22 @@ class SystemAdmin extends AbstractHelper
         $colleges = $this->getColleges();
 
         $form->setAttribute('method', 'get');
-        $form->setAttribute('action', '/data-entry/switch');
+        $form->setAttribute('action', '/users/switch');
         $form->setAttribute('class', 'form-horizontal');
         $form->setAttribute('id', 'system-admin-switch');
+
+
+        $value = null;
+        if ($college = $this->getActiveCollege()) {
+            $value = $college->getId();
+        }
 
         $form->add(
             array(
                 'name' => 'college_id',
                 'type' => 'Select',
                 'attributes' => array(
-                    'value' => $this->getActiveCollege()->getId(),
+                    'value' => $value,
                     'options' => $colleges
                 )
             )
@@ -121,6 +138,8 @@ class SystemAdmin extends AbstractHelper
      */
     public function getColleges()
     {
+        $requireSubscription = false;
+
         $system = $this->getUser()->getCollege()->getSystem();
 
         if (empty($system)) {
@@ -132,13 +151,15 @@ class SystemAdmin extends AbstractHelper
         $collegesKeyed = array();
         foreach ($colleges as $college) {
             // Make sure there's a subscription
-            $subscription = $college->getSubscriptionByStudyAndYear(
-                $study->getId(),
-                $study->getCurrentYear()
-            );
+            if ($requireSubscription) {
+                $subscription = $college->getSubscriptionByStudyAndYear(
+                    $study->getId(),
+                    $study->getCurrentYear()
+                );
 
-            if (empty($subscription)) {
-                continue;
+                if (empty($subscription)) {
+                    continue;
+                }
             }
 
             $collegesKeyed[$college->getId()] = $college->getName();

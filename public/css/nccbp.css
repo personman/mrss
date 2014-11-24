@@ -955,7 +955,10 @@ input:focus, textarea:focus {
     border-bottom: 2px solid #0065a1;
 }
 
-
+/* System college switching */
+#system-admin-switch .btn {
+    margin-left: 15px;
+}
 /* From pre-launch tweaks: */
 .logo { text-align: left }
 h3 { font-size: 16px; font-weight: bold; line-height: 18px; text-transform: uppercase; color: #9cc03e; margin: 0 0 5px 0; }

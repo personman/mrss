@@ -173,6 +173,11 @@ return array(
                     'action' => 'switch',
                     'roles' => array('system_admin')
                 ),
+                array(
+                    'controller' => 'users',
+                    'action' => 'switch',
+                    'roles' => array('system_admin')
+                ),
                 // Admin stuff
                 array(
                     'controller' => 'pages',

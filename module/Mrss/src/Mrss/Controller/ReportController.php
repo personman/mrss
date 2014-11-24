@@ -192,7 +192,9 @@ class ReportController extends AbstractActionController
             ->findOne($year, $this->currentCollege(), $this->currentStudy());
 
         if (empty($subscription)) {
-            throw new \Exception('Subscription not found for year ' . $year);
+            //throw new \Exception('Subscription not found for year ' . $year);
+
+            return $this->observationNotFound();
         }
 
         // Nccbp migration: temporary
@@ -293,6 +295,11 @@ class ReportController extends AbstractActionController
 
         /** @var \Mrss\Entity\Observation $observation */
         $observation = $college->getObservationForYear($year);
+
+        if (empty($observation)) {
+            return $this->observationNotFound();
+        }
+
         $this->getReportService()->setObservation($observation);
         $reportData = $this->getReportService()->getExecutiveReportData();
 
@@ -892,5 +899,13 @@ class ReportController extends AbstractActionController
     public function getPeerGroupModel()
     {
         return $this->getServiceLocator()->get('model.peerGroup');
+    }
+
+    public function observationNotFound()
+    {
+        $this->flashMessenger()->addErrorMessage(
+            'Unable to find membership.'
+        );
+        return $this->redirect()->toUrl('/members');
     }
 }

@@ -940,6 +940,16 @@ return array(
                             )
                         )
                     ),
+                    'switch' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/switch[/:college_id]',
+                            'defaults' => array(
+                                'action' => 'switch',
+                                'college_id' => 0
+                            )
+                        )
+                    ),
                     'exportLoginLinks' => array(
                         'type' => 'segment',
                         'options' => array(

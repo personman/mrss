@@ -802,9 +802,11 @@ class ObservationController extends AbstractActionController
 
         if (empty($observation)) {
             $collegeId = $this->currentCollege()->getId();
-            throw new \Exception(
+            /*throw new \Exception(
                 "Observation not found for college $collegeId and year $year."
-            );
+            );*/
+
+            return $this->observationNotFound();
         }
 
         $submittedValues = array();
@@ -907,5 +909,13 @@ class ObservationController extends AbstractActionController
     protected function getCurrentStudy()
     {
         return $this->currentStudy();
+    }
+
+    public function observationNotFound()
+    {
+        $this->flashMessenger()->addErrorMessage(
+            'Unable to find membership.'
+        );
+        return $this->redirect()->toUrl('/members');
     }
 }

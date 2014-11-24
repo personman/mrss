@@ -193,7 +193,7 @@
         <exec command="ssh max@maximizingresources.org 'shopt -s expand_aliases; ./mrssdump; tar czf mrss.production.tgz  mrss.production.sql;'" passthru="true"/>
         <exec command="scp max@maximizingresources.org:mrss.production.tgz /tmp" passthru="true" />
         <exec command="tar zxf /tmp/mrss.production.tgz -C /tmp" passthru="true" />
-        <exec command="mysql -u root -proot mrss_test \< /tmp/mrss.production.sql" passthru="true" />
+        <exec command="mysql -u root -proot mrss_test &lt; /tmp/mrss.production.sql" passthru="true" />
         <echo>Done.</echo>
     </target>
     <target name="deploy" depends="ssh-git-deploy,slack-deploy-message" />

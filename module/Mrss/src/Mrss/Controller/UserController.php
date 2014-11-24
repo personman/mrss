@@ -9,6 +9,7 @@ use Mrss\Entity\User as UserEntity;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\AbstractForm;
 use Mrss\Form\Fieldset\User as UserForm;
+use Zend\Session\Container;
 
 class UserController extends AbstractActionController
 {
@@ -284,6 +285,51 @@ class UserController extends AbstractActionController
         return $form;
     }
 
+    /**
+     * Allow a system admin to switch the college they're entering data for
+     */
+    public function switchAction()
+    {
+        $referer = $this->getRequest()->getHeader('Referer')->getUri();
+        if (empty($referer)) {
+            $referer = '/members';
+        }
+
+        $collegeId = $this->params('college_id');
+        if (empty($collegeId)) {
+            $collegeId = $this->params()->fromQuery('college_id');
+        }
+
+        // Clear active college and return to system overview
+        if ($collegeId == 'overview') {
+            $this->getSystemAdminSessionContainer()->college = null;
+
+            return $this->redirect()->toUrl($referer);
+        }
+
+        // Make sure that this college belongs to the right system
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $college = $collegeModel->find($collegeId);
+        $targetSystem = $college->getSystem();
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $userSystem = $user->getCollege()->getSystem();
+        $role = $user->getRole();
+
+        if (empty($targetSystem) || empty($userSystem) || $role != 'system_admin'
+            || $userSystem != $targetSystem) {
+            throw new \Exception(
+                'You do not have permission to enter data for that college'
+            );
+        }
+
+        // Set the session variable
+        $this->getSystemAdminSessionContainer()->college = $collegeId;
+
+
+        // Redirect to the referrer
+        return $this->redirect()->toUrl($referer);
+    }
+
     protected function populateUserStudies()
     {
         $collegeModel = $this->getServiceLocator()->get('model.college');
@@ -405,5 +451,15 @@ class UserController extends AbstractActionController
         }
 
         return $users;
+    }
+
+    public function getSystemAdminSessionContainer()
+    {
+        if (empty($this->systemAdminSessionContainer)) {
+            $container = new Container('system_admin');
+            $this->systemAdminSessionContainer = $container;
+        }
+
+        return $this->systemAdminSessionContainer;
     }
 }
