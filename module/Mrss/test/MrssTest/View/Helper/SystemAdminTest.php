@@ -38,7 +38,7 @@ class SystemAdminTest extends PHPUnit_Framework_TestCase
             'Mrss\Entity\College',
             array('getSubscriptionByStudyAndYear')
         );
-        $optionCollegeMock->expects($this->once())
+        $optionCollegeMock->expects($this->any())
             ->method('getSubscriptionByStudyAndYear')
             ->will($this->returnValue(null));
 
@@ -50,7 +50,7 @@ class SystemAdminTest extends PHPUnit_Framework_TestCase
             'Mrss\Entity\Subscription',
             array()
         );
-        $optionCollegeMock2->expects($this->once())
+        $optionCollegeMock2->expects($this->any())
             ->method('getSubscriptionByStudyAndYear')
             ->will($this->returnValue($subscriptionMock));
 
