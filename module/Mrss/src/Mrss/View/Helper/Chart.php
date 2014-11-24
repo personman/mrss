@@ -16,11 +16,11 @@ class Chart extends AbstractHelper
     /**
      * @var string
      */
-    protected $chartJsUri = 'http://code.highcharts.com/highcharts.js';
+    protected $chartJsUri = '/js/highcharts.js';
 
-    protected $exportingJsUri = 'http://code.highcharts.com/modules/exporting.js';
+    protected $exportingJsUri = '/js/highcharts-exporting.js';
 
-    protected $moreJsUri = 'http://code.highcharts.com/highcharts-more.js';
+    protected $moreJsUri = '/js/highcharts-more.js';
 
     protected $chartSupportJsUri = '/js/chart-support.js';
 
