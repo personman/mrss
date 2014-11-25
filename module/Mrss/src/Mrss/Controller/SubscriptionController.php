@@ -23,6 +23,8 @@ use Mrss\Form\Subscription as SubscriptionForm;
 use Mrss\Form\Fieldset\Agreement;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Mail\Message;
+use Zend\Mime\Part as MimePart;
+use Zend\Mime\Message as MimeMessage;
 use DateTime;
 use PHPExcel;
 
@@ -695,6 +697,9 @@ class SubscriptionController extends AbstractActionController
             $this->sendInvoice($subscription, $adminUser, $dataUser);
         }
 
+        // Send welcome email
+        $this->sendWelcomeEmail($subscription, $adminUser, $dataUser);
+
         // Now clear out the draft subscription
         $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
         $this->getServiceLocator()->get('em')->flush();
@@ -1048,6 +1053,50 @@ class SubscriptionController extends AbstractActionController
         $invoice->setBody($body);
 
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
+    }
+
+    protected function sendWelcomeEmail(\Mrss\Entity\Subscription $subscription) {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $mailer = $this->getServiceLocator()->get('mail.transport');
+        $renderer = $this->getServiceLocator()->get('ViewRenderer');
+
+        $params = array(
+            'year' => $study->getCurrentYear(),
+            'studyUrl' => $renderer->serverUrl('/'),
+            'studyName' => $study->getName(),
+            'resetUrl' => $renderer->serverUrl('/reset-password'),
+            'contactUrl' => $renderer->serverUrl('/contact')
+        );
+
+        $message = new Message();
+        $message->setSubject("Welcome to " . $study->getName());
+        $message->setFrom('no-reply@jccc.edu');
+        $message->addBcc('michelletaylor@jccc.edu');
+
+        // Add recipients
+        $users = $subscription->getCollege()->getUsersByStudy($study);
+        foreach ($users as $user) {
+            $message->setTo($user->getEmail());
+
+            // Plug in the user's name
+            $params['fullName'] = $user->getPrefix() . ' ' . $user->getLastName();
+            $content = $renderer->render('mrss/email/welcome', $params);
+
+            // make a header as html
+            $html = new MimePart($content);
+            $html->type = "text/html";
+            $text = new MimePart(strip_tags($content));
+            $text->type = "text/plain";
+            $body = new MimeMessage();
+            $body->setParts(array($text, $html));
+
+            $message->setBody($body);
+            $message->getHeaders()->get('content-type')->setType('multipart/alternative');
+
+            $mailer->send($message);
+        }
     }
 
     public function deleteAction()

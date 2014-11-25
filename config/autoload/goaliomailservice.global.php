@@ -16,7 +16,7 @@ $settings = array(
     
     'options_class' => 'Zend\Mail\Transport\SmtpOptions',
     
-    'options' => array(
+    'transport_options' => array(
         'host' => 'smtp.mandrillapp.com',
         'connection_class' => 'login',
         'connection_config' => array(
@@ -63,14 +63,8 @@ $settings = array(
      */
 );
 
-/*
-// Study-specific email config
-if ($_SERVER['HTTP_HOST'] == 'workforceproject.org') {
-    $settings['options'] = $settings['options_workforce'];
-} elseif (strpos($_SERVER['HTTP_HOST'], 'maximizingresources.org') !== false) {
-    $settings['options'] = $settings['options_max'];
-}
-*/
+// Copy the options just in case we're running a different version of the module
+$settings['options'] = $settings['transport_options'];
 
 /**
  * You do not need to edit below this line
