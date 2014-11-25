@@ -34,7 +34,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <?php foreach ($years as $year): ?>
             <th class="heatMapYear"><?= $year ?></th>
         <?php endforeach ?>
-        <th>City</th>
+        <th>Users</th>
         <th>State</th>
         <th>System</th>
     </tr>
@@ -72,7 +72,16 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
             <?php endforeach ?>
 
-            <td><?= $college->getCity() ?></td>
+            <td style="font-size:80%">
+                <?php foreach ($college->getUsers() as $user): ?>
+                    <a href="<?= $this->url(
+                        'users/edit',
+                        array('id' => $user->getId())
+                    ) ?>">
+                        <?= $user->getFullName() ?>
+                    </a><br>
+                <?php endforeach ?>
+            </td>
             <td><?= $college->getState() ?></td>
             <td>
                 <?php if ($system = $college->getSystem()): ?>
