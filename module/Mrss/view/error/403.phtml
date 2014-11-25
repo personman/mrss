@@ -26,7 +26,7 @@
                     <dt><label for="credential">Password</label></dt>
                     <dd><input name="credential" type="password" value=""></dd>
 
-                    <input type="hidden" name="redirect" value="<?= $_SERVER['REQUEST_URI'] ?>">
+                    <input type="hidden" name="redirect" value="<?= substr($_SERVER['REQUEST_URI'], 1) ?>">
 
                     <dd><button type="submit" name="submit" class="btn btn-primary" value="">Sign In</button></dd>
                 </dl>
