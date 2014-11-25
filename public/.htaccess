@@ -33,6 +33,7 @@ Redirect 301 /user/password http://nccbp.org/reset-password
 Redirect 301 /resources http://nccbp.org/case-studies
 Redirect 301 /content/about-us http://nccbp.org/about
 Redirect 301 /content/reports http://nccbp.org/reports-overview
+Redirect 301 /nccbp_home http://nccbp.org
 
 # Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
@@ -43,6 +44,9 @@ RewriteRule ^payment/ipeds - [G,L]
 RewriteRule ^admin\.php - [G,L]
 RewriteRule ^files/out\.html - [G,L]
 RewriteRule ^admin/scripts - [G,L]
+RewriteRule ^DataCollection - [G,L]
+RewriteRule \.asp$ - [G,L]
+RewriteRule ^misc/ - [G,L]
 
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.

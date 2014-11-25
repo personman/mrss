@@ -141,13 +141,21 @@ class Module
     }
 
     public function handleError(MvcEvent $e) {
-        $message = '';
+        // Log user identity, if present
+        $userService = $e->getApplication()
+            ->getServiceManager()->get('zfcuser_auth_service');
+        $user = $userService->getIdentity();
 
+        $message = '';
 
         $exception = $e->getParam('exception');
 
         if (!empty($exception)) {
             $message .= $exception->getMessage();
+            // Don't log not-authed errors
+            if (strpos($message, 'not authorized to access') !== false && empty($user)) {
+                return false;
+            }
         } else {
             $message .= "Error with no exception object. ";
         }
@@ -161,12 +169,8 @@ class Module
             $message .= "\nIP: " . $_SERVER['REMOTE_ADDR'];
         }
 
-        // Log user identity, if present
-        $userService = $e->getApplication()
-            ->getServiceManager()->get('zfcuser_auth_service');
 
         // Set the current User
-        $user = $userService->getIdentity();
         if ($user) {
             $message .= "\nUser: " . $user->getEmail();
         } else {
