@@ -1055,7 +1055,8 @@ class SubscriptionController extends AbstractActionController
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
     }
 
-    protected function sendWelcomeEmail(\Mrss\Entity\Subscription $subscription) {
+    protected function sendWelcomeEmail(\Mrss\Entity\Subscription $subscription)
+    {
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 

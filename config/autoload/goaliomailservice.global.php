@@ -63,9 +63,6 @@ $settings = array(
      */
 );
 
-// Copy the options just in case we're running a different version of the module
-$settings['options'] = $settings['transport_options'];
-
 /**
  * You do not need to edit below this line
  */
