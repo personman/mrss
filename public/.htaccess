@@ -34,6 +34,8 @@ Redirect 301 /resources http://nccbp.org/case-studies
 Redirect 301 /content/about-us http://nccbp.org/about
 Redirect 301 /content/reports http://nccbp.org/reports-overview
 Redirect 301 /nccbp_home http://nccbp.org
+Redirect 301 /report/president http://nccbp.org/reports/executive
+
 
 # Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
