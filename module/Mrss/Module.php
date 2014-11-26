@@ -150,32 +150,43 @@ class Module
 
         $exception = $e->getParam('exception');
 
-        if (!empty($exception)) {
+        $error = $e->getError();
+        // error-unauthorized-controller
+        // error-router-no-match
+
+        if ($error == 'error-unauthorized-controller') {
+            // Don't log unauthorized. They just need to log in.
+            return false;
+        }
+
+        $message .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ' | ';
+
+        if ($error == 'error-router-no-match') {
+            $message .= 'Not found. ';
+        } elseif (!empty($exception)) {
             $message .= $exception->getMessage();
-            // Don't log not-authed errors
-            if (strpos($message, 'not authorized to access') !== false && empty($user)) {
-                return false;
-            }
         } else {
-            $message .= "Error with no exception object. ";
+            if ($error) {
+                $message .= $error;
+            } else {
+                $message .= "Unknown error. ";
+            }
         }
-
-        $message .= "\n" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
-            $message .= "\nUser-agent: " . $_SERVER['HTTP_USER_AGENT'];
-        }
-
-        if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $message .= "\nIP: " . $_SERVER['REMOTE_ADDR'];
-        }
-
 
         // Set the current User
         if ($user) {
-            $message .= "\nUser: " . $user->getEmail();
-        } else {
-            $message .= "\nNot logged in.";
+            $message .= " | User: " . $user->getEmail();
         }
+
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            //$message .= " | User-agent: " . $_SERVER['HTTP_USER_AGENT'];
+        }
+
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $message .= " | IP: " . $_SERVER['REMOTE_ADDR'];
+        }
+
+
 
         $this->getErrorLog()->err($message);
     }

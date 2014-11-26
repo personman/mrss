@@ -42,11 +42,14 @@ RewriteRule ^institution/profile - [G,L]
 RewriteRule ^_FileLibrary - [G,L]
 RewriteRule ^payment/ipeds - [G,L]
 RewriteRule ^admin\.php - [G,L]
+RewriteRule ^browserconfig\.xml - [G,L]
 RewriteRule ^files/out\.html - [G,L]
 RewriteRule ^admin/scripts - [G,L]
 RewriteRule ^DataCollection - [G,L]
 RewriteRule \.asp$ - [G,L]
 RewriteRule ^misc/ - [G,L]
+
+
 
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
