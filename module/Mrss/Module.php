@@ -3,6 +3,7 @@
 namespace Mrss;
 
 use Doctrine\Common\Proxy\Autoloader;
+use Zend\Log\Formatter\Simple;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Mrss\View\Helper\FlashMessages;
@@ -162,14 +163,14 @@ class Module
         $message .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ' | ';
 
         if ($error == 'error-router-no-match') {
-            $message .= 'Not found. ';
+            $message .= 'Not found.';
         } elseif (!empty($exception)) {
             $message .= $exception->getMessage();
         } else {
             if ($error) {
                 $message .= $error;
             } else {
-                $message .= "Unknown error. ";
+                $message .= "Unknown error.";
             }
         }
 
@@ -847,8 +848,12 @@ class Module
 
     protected function getErrorLog()
     {
-        $logger = new Logger;
+        $formatter = new Simple('%message%' . PHP_EOL);
+
         $writer = new Stream('error.log');
+        $writer->setFormatter($formatter);
+
+        $logger = new Logger;
         $logger->addWriter($writer);
 
         return $logger;
