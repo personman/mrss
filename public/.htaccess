@@ -56,6 +56,11 @@ RewriteRule ^DataCollection - [G,L]
 RewriteRule \.asp$ - [G,L]
 RewriteRule ^misc/ - [G,L]
 
+# No Wordpress here. Begone, brute force bots
+RewriteRule wp-login\.php - [G,L]
+RewriteRule wp-admin - [G,L]
+RewriteRule wp-content - [G,L]
+
 
 
 # The following rule tells Apache that if the requested filename
