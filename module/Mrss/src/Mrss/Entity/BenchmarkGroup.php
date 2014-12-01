@@ -201,6 +201,9 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\Study
+     */
     public function getStudy()
     {
         return $this->study;

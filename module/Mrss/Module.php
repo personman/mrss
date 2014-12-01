@@ -189,7 +189,7 @@ class Module
 
 
 
-        $this->getErrorLog()->err($message);
+        $this->getErrorLog(true)->err($message);
     }
 
     public function getConfig()
@@ -846,12 +846,15 @@ class Module
         );
     }
 
-    protected function getErrorLog()
+    protected function getErrorLog($shortFormat = false)
     {
         $formatter = new Simple('%message%' . PHP_EOL);
 
         $writer = new Stream('error.log');
-        $writer->setFormatter($formatter);
+
+        if ($shortFormat) {
+            $writer->setFormatter($formatter);
+        }
 
         $logger = new Logger;
         $logger->addWriter($writer);

@@ -1992,7 +1992,7 @@ class Observation
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    protected $group_form12_instw_cred_grad_enr_succ;
+    protected $form12_instw_cred_grad_enr_succ;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -2141,7 +2141,7 @@ class Observation
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $group_form14b_serv_pop;
+    protected $form14b_serv_pop;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

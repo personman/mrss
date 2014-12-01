@@ -1055,7 +1055,7 @@ class Report
     public function getPercentileBarChart($config, Observation $observation)
     {
         $dbColumn = $config['dbColumn'];
-        $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+        $benchmark = $this->getBenchmarkModel()->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
 
         if (empty($benchmark)) {
             return false;
