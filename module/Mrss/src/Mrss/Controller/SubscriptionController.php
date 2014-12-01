@@ -431,7 +431,7 @@ class SubscriptionController extends AbstractActionController
                 true
             );
 
-            $ipeds = $subscription['institution']['ipeds'];
+            $ipeds = $this->getIpeds();
 
             $studyId = $this->getStudy()->getId();
             if ($studyId == 2) {
@@ -1299,13 +1299,20 @@ class SubscriptionController extends AbstractActionController
         $this->saveTransIdToSession($draft->getId());
 
         // Save college id to session
+        $this->getSessionContainer()->ipeds = $this->getIpeds();
+    }
+
+    public function getIpeds()
+    {
         if (!empty($data['institution']['ipeds'])) {
-            $this->getSessionContainer()->ipeds = $data['institution']['ipeds'];
+            $ipeds = $data['institution']['ipeds'];
         } elseif ($college = $this->currentCollege()) {
-            $this->getSessionContainer()->ipeds = $college->getIpeds();
+            $ipeds = $college->getIpeds();
         } else {
             throw new \Exception('Cannot save draft subscription without ipeds.');
         }
+
+        return $ipeds;
     }
 
     public function setDraftSubscription(SubscriptionDraft $draft)
