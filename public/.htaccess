@@ -40,6 +40,7 @@ Redirect 301 /content/about-us http://nccbp.org/about
 Redirect 301 /content/reports http://nccbp.org/reports-overview
 Redirect 301 /nccbp_home http://nccbp.org
 Redirect 301 /report/president http://nccbp.org/reports/executive
+Redirect 301 /member_home http://nccbp.org/members
 
 
 # Some old NCCBP urls that are just gone for good
@@ -60,6 +61,8 @@ RewriteRule ^misc/ - [G,L]
 RewriteRule wp-login\.php - [G,L]
 RewriteRule wp-admin - [G,L]
 RewriteRule wp-content - [G,L]
+RewriteRule editor/filemanager - [G,L]
+RewriteRule phpmyadmin - [G,L]
 
 
 
