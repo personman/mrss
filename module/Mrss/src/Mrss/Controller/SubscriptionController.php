@@ -1299,12 +1299,14 @@ class SubscriptionController extends AbstractActionController
         $this->saveTransIdToSession($draft->getId());
 
         // Save college id to session
-        $this->getSessionContainer()->ipeds = $this->getIpeds();
+        $this->getSessionContainer()->ipeds = $this->getIpeds($data);
     }
 
-    public function getIpeds()
+    public function getIpeds($data = null)
     {
-        if (!empty($data['institution']['ipeds'])) {
+        if (!empty($this->getSessionContainer()->ipeds)) {
+            $ipeds = $this->getSessionContainer()->ipeds;
+        } elseif (!empty($data['institution']['ipeds'])) {
             $ipeds = $data['institution']['ipeds'];
         } elseif ($college = $this->currentCollege()) {
             $ipeds = $college->getIpeds();
