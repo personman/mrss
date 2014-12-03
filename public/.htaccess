@@ -62,7 +62,8 @@ RewriteRule wp-login\.php - [G,L]
 RewriteRule wp-admin - [G,L]
 RewriteRule wp-content - [G,L]
 RewriteRule editor/filemanager - [G,L]
-RewriteRule phpmyadmin - [G,L]
+RewriteRule myadmin - [G,L]
+RewriteRule fckeditor - [G,L]
 
 
 
