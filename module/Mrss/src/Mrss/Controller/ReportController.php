@@ -44,7 +44,7 @@ class ReportController extends AbstractActionController
             $elapsed = round(microtime(true) - $start, 1);
 
             $this->flashMessenger()->addSuccessMessage(
-                "Report prepared. Benchmarks: $benchmarks. Percentiles: $percentiles.
+                "Report prepared for $yearToPrepare. Benchmarks: $benchmarks. Percentiles: $percentiles.
                 Percentile ranks: $percentileRanks. Benchmarks without data: $noData.
                 Elapsed time: $elapsed seconds."
             );
@@ -84,7 +84,7 @@ class ReportController extends AbstractActionController
             $elapsed = round(microtime(true) - $start, 1);
 
             $this->flashMessenger()->addSuccessMessage(
-                "Reports prepared for $systems systems. Benchmarks: $benchmarks.
+                "Reports prepared for $systems systems for $yearToPrepare. Benchmarks: $benchmarks.
                 Percentiles: $percentiles.
                 Percentile ranks: $percentileRanks. Benchmarks without data: $noData.
                 Elapsed time: $elapsed seconds."
