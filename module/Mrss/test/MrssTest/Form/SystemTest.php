@@ -29,4 +29,17 @@ class SystemTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->form->get('id'));
         $this->assertNotEmpty($this->form->get('address'));
     }
+
+    public function testAddRedirect()
+    {
+        $this->form->addRedirect('/members');
+
+        $this->assertTrue($this->form->has('redirect'));
+    }
+
+    public function testDeleteButton()
+    {
+        $buttons = $this->form->getButtonFieldset('Save', true, true);
+        $this->assertTrue($buttons->has('delete'));
+    }
 }
