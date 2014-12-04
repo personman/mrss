@@ -1,4 +1,4 @@
-<?
+<?php
 
 // Dump a variable in pre tags with print_r. Show the caller file so we can find them
 function pr($var, $callee = null) {
