@@ -23,6 +23,20 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         });
 
     $(document).ready(function() {
+        // Send invoice
+        console.log('ok here')
+        $('.sendLink').click(function() {
+            console.log('in click')
+            var id = $(this).attr('id').split('-').pop()
+            var to = prompt('To whom?')
+
+            var redirect = '/memberships/invoice';
+            $.redirectPost(redirect, {id: id, to: to});
+
+            return false
+        })
+
+
         $('#subscriptions').dataTable({
             "order": [[1, "asc"]],
             'aoColumnDefs': [
@@ -34,16 +48,6 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             'iDisplayLength': 25
         });
 
-        // Send invoice
-        $('.sendLink').click(function() {
-            var id = $(this).attr('id').split('-').pop()
-            var to = prompt('To whom?')
-
-            var redirect = '/memberships/invoice';
-            $.redirectPost(redirect, {id: id, to: to});
-
-            return false
-        })
     } );
 
 
