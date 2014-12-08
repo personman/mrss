@@ -698,7 +698,7 @@ class SubscriptionController extends AbstractActionController
         }
 
         // Send welcome email
-        $this->sendWelcomeEmail($subscription, $adminUser, $dataUser);
+        $this->sendWelcomeEmail($subscription);
 
         // Now clear out the draft subscription
         $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
@@ -990,6 +990,7 @@ class SubscriptionController extends AbstractActionController
         $invoice = new Message();
         $invoice->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
         $invoice->addTo('dfergu15@jccc.edu');
+        $invoice->addTo('personman2@gmail.com');
         $invoice->addTo('michelletaylor@jccc.edu');
 
         $study = $subscription->getStudy();
