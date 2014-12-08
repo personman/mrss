@@ -8,36 +8,7 @@ $this->headScript()->appendFile(
 $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
-<script>
-    $(document).ready(function() {
-        $('#subscriptions').dataTable({
-            "order": [[1, "asc"]],
-            'aoColumnDefs': [
-                // Don't sort on the action column
-                {'bSortable': false, 'aTargets': [6]}
-            ],
-            // show X entries options
-            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-            'iDisplayLength': 25
-        });
-    } );
-
-    // Send invoice
-            $(function() {
-                $('.sendLink').click(function() {
-                    var id = $(this).attr('id').split('-').pop()
-                    var to = prompt('To whom?')
-
-                    console.log(id)
-                    console.log(to)
-
-                    var redirect = '/memberships/invoice';
-                    $.redirectPost(redirect, {id: id, to: to});
-
-                    return false
-                })
-            })
-
+<script type="text/javascript">
     // jquery extend function
     $.extend(
         {
@@ -50,6 +21,32 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                 $('<form action="'+location+'" method="POST">'+form+'</form>').appendTo('body').submit();
             }
         });
+
+    $(document).ready(function() {
+        $('#subscriptions').dataTable({
+            "order": [[1, "asc"]],
+            'aoColumnDefs': [
+                // Don't sort on the action column
+                {'bSortable': false, 'aTargets': [6]}
+            ],
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
+
+        // Send invoice
+        $('.sendLink').click(function() {
+            var id = $(this).attr('id').split('-').pop()
+            var to = prompt('To whom?')
+
+            var redirect = '/memberships/invoice';
+            $.redirectPost(redirect, {id: id, to: to});
+
+            return false
+        })
+    } );
+
+
 
 </script>
 
