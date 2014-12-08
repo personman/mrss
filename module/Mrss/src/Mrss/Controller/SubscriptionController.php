@@ -981,7 +981,7 @@ class SubscriptionController extends AbstractActionController
         $to = $this->params()->fromPost('to');
 
         if ($id && $sub = $this->getSubscriptionModel()->find($id)) {
-            $this->sendInvoice($sub);
+            $this->sendInvoice($sub, null, null, $to);
             $this->flashMessenger()->addSuccessMessage('Invoice sent to ' . $to);
         } else {
             $this->flashMessenger()->addErrorMessage('No membership found for id: ' . $to);
