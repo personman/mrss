@@ -247,7 +247,7 @@ return array(
                 ),
                 array(
                     'controller' => 'subscription',
-                    'action' => 'delete',
+                    'action' => array('delete', 'sendinvoice'),
                     'roles' => array('admin')
                 ),
                 array(

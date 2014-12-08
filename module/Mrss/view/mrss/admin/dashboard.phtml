@@ -8,7 +8,7 @@ $this->headScript()->appendFile(
 $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
-        <script>
+<script>
     $(document).ready(function() {
         $('#subscriptions').dataTable({
             "order": [[1, "asc"]],
@@ -21,6 +21,36 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             'iDisplayLength': 25
         });
     } );
+
+    // Send invoice
+            $(function() {
+                $('.sendLink').click(function() {
+                    var id = $(this).attr('id').split('-').pop()
+                    var to = prompt('To whom?')
+
+                    console.log(id)
+                    console.log(to)
+
+                    var redirect = '/memberships/invoice';
+                    $.redirectPost(redirect, {id: id, to: to});
+
+                    return false
+                })
+            })
+
+    // jquery extend function
+    $.extend(
+        {
+            redirectPost: function(location, args)
+            {
+                var form = '';
+                $.each( args, function( key, value ) {
+                    form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+                });
+                $('<form action="'+location+'" method="POST">'+form+'</form>').appendTo('body').submit();
+            }
+        });
+
 </script>
 
 <?php /** @var \Mrss\Entity\Subscription[] $subscriptions */ ?>
@@ -131,7 +161,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                         array('id' => $subscription->getId())
                     ) ?>" class="deleteLink" onclick="return confirm('Are you sure you want to delete this subscription and all of its data?')">
                         delete
-                    </a>
+                    </a><br>
+                    <a href="#" class="sendLink" id="invoice-<?= $subscription->getId() ?>">send invoice</a>
                 </td>
             </tr>
         <?php endforeach ?>

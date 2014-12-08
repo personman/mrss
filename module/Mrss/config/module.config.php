@@ -1115,6 +1115,28 @@ return array(
                     )
                 )
             ),
+            'memberships' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/memberships',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'invoice' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/invoice',
+                            'defaults' => array(
+                                'action' => 'sendinvoice'
+                            )
+                        )
+                    )
+                )
+            ),
             'admin' => array(
                 'type' => 'Segment',
                 'may_terminate' => true,

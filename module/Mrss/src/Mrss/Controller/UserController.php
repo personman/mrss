@@ -183,6 +183,7 @@ class UserController extends AbstractActionController
             if ($form->isValid()) {
                 // Are they deleting?
                 $buttons = $this->params()->fromPost('buttons');
+                prd($buttons);
                 if (!empty($buttons['delete'])) {
                     // If the use belongs to more than one study, just remove them
                     // from this study

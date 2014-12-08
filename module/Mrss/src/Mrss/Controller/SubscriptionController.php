@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\Subscription;
 use Mrss\Entity\User;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
@@ -725,7 +726,7 @@ class SubscriptionController extends AbstractActionController
         }
     }
 
-    protected function sendSlackNotification(\Mrss\Entity\Subscription $subscription)
+    protected function sendSlackNotification(Subscription $subscription)
     {
         $college = $subscription->getCollege()->getName();
         $state = $subscription->getCollege()->getState();
@@ -878,7 +879,7 @@ class SubscriptionController extends AbstractActionController
         );
 
         if (empty($subscription)) {
-            $subscription = new \Mrss\Entity\Subscription();
+            $subscription = new Subscription();
         }
 
         // Status: cc = complete, invoice or system = pending
@@ -974,10 +975,32 @@ class SubscriptionController extends AbstractActionController
         return $this->study;
     }
 
+    public function sendinvoiceAction()
+    {
+        $id = $this->params()->fromPost('id');
+        $to = $this->params()->fromPost('to');
+
+        if ($id && $sub = $this->getSubscriptionModel()->find($id)) {
+            $this->sendInvoice($sub);
+            $this->flashMessenger()->addSuccessMessage('Invoice sent to ' . $to);
+        } else {
+            $this->flashMessenger()->addErrorMessage('No membership found for id: ' . $to);
+        }
+
+        $url = $this->getRequest()->getHeader('Referer')->getUri();
+
+        if (!$url) {
+            $url = '/';
+        }
+
+        return $this->redirect()->toUrl($url);
+    }
+
     protected function sendInvoice(
-        \Mrss\Entity\Subscription $subscription,
+        Subscription $subscription,
         User $adminUser = null,
-        User $dataUser = null
+        User $dataUser = null,
+        $to = null
     ) {
         // Check config to see if emails are being suppressed (by Behat, probably)
         $config = $this->getServiceLocator()->get('config');
@@ -989,10 +1012,13 @@ class SubscriptionController extends AbstractActionController
 
         $invoice = new Message();
         $invoice->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
-        $invoice->addTo('dfergu15@jccc.edu');
-        $invoice->addTo('personman2@gmail.com');
-        $invoice->addTo('michelletaylor@jccc.edu');
 
+        if ($to) {
+            $invoice->addTo($to);
+        } else {
+            $invoice->addTo('dfergu15@jccc.edu');
+            $invoice->addTo('michelletaylor@jccc.edu');
+        }
         $study = $subscription->getStudy();
         $studyName = $study->getName();
 
@@ -1056,7 +1082,7 @@ class SubscriptionController extends AbstractActionController
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
     }
 
-    protected function sendWelcomeEmail(\Mrss\Entity\Subscription $subscription)
+    protected function sendWelcomeEmail(Subscription $subscription)
     {
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
@@ -1150,7 +1176,7 @@ class SubscriptionController extends AbstractActionController
         return $this->redirect()->toUrl('/admin');
     }
 
-    protected function deleteSubscription(\Mrss\Entity\Subscription $subscription)
+    protected function deleteSubscription(Subscription $subscription)
     {
         /** @var \Mrss\Model\Observation $observationModel */
         $observationModel = $this->getServiceLocator()->get('model.observation');
