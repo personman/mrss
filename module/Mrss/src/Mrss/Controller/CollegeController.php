@@ -46,7 +46,7 @@ class CollegeController extends AbstractActionController
 
         // Handle invalid id
         if (empty($college)) {
-            $this->flashMessenger()->addErrorMessage("Invalide college id.");
+            $this->flashMessenger()->addErrorMessage("Invalid college id.");
             return $this->redirect()->toUrl('/colleges');
         }
 

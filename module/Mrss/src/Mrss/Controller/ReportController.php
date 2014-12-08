@@ -198,7 +198,7 @@ class ReportController extends AbstractActionController
         }
 
         // Nccbp migration: temporary
-        if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
+        if (false && $year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
             $this->flashMessenger()->addErrorMessage(
                 "Reports prior to 2014 are under review and will be available soon."
             );
