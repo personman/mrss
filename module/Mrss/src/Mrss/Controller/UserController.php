@@ -75,6 +75,30 @@ class UserController extends AbstractActionController
             $form->setData($post);
 
             if ($form->isValid()) {
+                // Are they deleting?
+                $buttons = $this->params()->fromPost('buttons');
+
+                if (!empty($buttons['delete'])) {
+                    // If the use belongs to more than one study, just remove them
+                    // from this study
+                    if (count($user->getStudies()) > 1) {
+                        $user->removeStudy($this->currentStudy());
+                    } else {
+                        $userModel->delete($user);
+                    }
+
+                    $this->getServiceLocator()->get('em')->flush();
+
+                    $this->flashMessenger()->addSuccessMessage('User deleted.');
+
+                    if (!empty($post['redirect'])) {
+                        return $this->redirect()->toUrl('/' . $post['redirect']);
+                    }
+
+
+                    return $this->redirect()->toRoute('institution/users');
+                }
+
                 // Double check that they're not trying to slip a user into
                 // another college
                 if (!$this->isAllowed('adminMenu', 'view')) {
@@ -183,7 +207,7 @@ class UserController extends AbstractActionController
             if ($form->isValid()) {
                 // Are they deleting?
                 $buttons = $this->params()->fromPost('buttons');
-                prd($buttons);
+
                 if (!empty($buttons['delete'])) {
                     // If the use belongs to more than one study, just remove them
                     // from this study
