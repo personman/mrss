@@ -5,6 +5,7 @@ namespace Mrss\Service\Report;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Study;
 use Mrss\Entity\Benchmark;
+use Mrss\Entity\System;
 use Mrss\Service\Report;
 use PHPExcel;
 use PHPExcel_Worksheet;
@@ -27,6 +28,7 @@ class National extends Report
      */
     protected $percentileRankModel;
 
+    protected $system;
 
     public function __construct(Study $study)
     {
@@ -35,6 +37,8 @@ class National extends Report
 
     public function getData(Observation $observation, $system = null)
     {
+        $this->setObservation($observation);
+        $this->setSystem($system);
         $year = $observation->getYear();
         $reportData = array();
 
@@ -60,114 +64,11 @@ class National extends Report
                 }
 
                 /** @var \Mrss\Entity\BenchmarkHeading $benchmark */
-
                 if ($this->isBenchmarkExcludeFromReport($benchmark)) {
                     continue;
                 }
 
-                $benchmarkData = array(
-                    'benchmark' => $benchmark->getReportLabel(),
-                );
-
-                $percentiles = $this->getPercentileModel()
-                    ->findByBenchmarkAndYear($benchmark, $year, $system);
-
-                $percentileData = array();
-                foreach ($percentiles as $percentile) {
-                    $percentileData[$percentile->getPercentile()] =
-                        $percentile->getValue();
-                }
-
-                // Pad the array if it's empty
-                if (empty($percentileData)) {
-                    $percentileData = array(null, null, null, null, null);
-                }
-
-                if (!empty($percentileData['N'])) {
-                    $benchmarkData['N'] = $percentileData['N'];
-                    unset($percentileData['N']);
-                } else {
-                    $benchmarkData['N'] = '';
-                }
-
-
-                $benchmarkData['percentiles'] = $percentileData;
-
-                $benchmarkData['reported'] = $observation->get(
-                    $benchmark->getDbColumn()
-                );
-
-                $benchmarkData['reported_decimal_places'] = $this
-                    ->getDecimalPlaces($benchmark);
-
-                $percentileRank = $this->getPercentileRankModel()
-                    ->findOneByCollegeBenchmarkAndYear(
-                        $observation->getCollege(),
-                        $benchmark,
-                        $year,
-                        $system
-                    );
-
-                if (!empty($percentileRank)) {
-                    $benchmarkData['percentile_rank_id'] = $percentileRank->getId();
-                    $benchmarkData['percentile_rank'] = $percentileRank->getRank();
-
-                    // Show - rather than 0 percentile
-                    if ($benchmarkData['reported'] == 0) {
-                        $benchmarkData['percentile_rank'] = '-';
-                    }
-
-                } else {
-                    $benchmarkData['percentile_rank_id'] = '';
-                    $benchmarkData['percentile_rank'] = '';
-                }
-
-                // Data labels
-                $prefix = $suffix = '';
-                if ($benchmark->isPercent()) {
-                    $suffix = '%';
-                } elseif ($benchmark->isDollars()) {
-                    $prefix = '$';
-                }
-
-                $benchmarkData['prefix'] = $prefix;
-                $benchmarkData['suffix'] = $suffix;
-
-                // Chart
-                $chartConfig = array(
-                    'dbColumn' => $benchmark->getDbColumn(),
-                    'decimal_places' => $this->getDecimalPlaces($benchmark)
-                );
-
-                $benchmarkData['chart'] = $this->getPercentileBarChart(
-                    $chartConfig,
-                    $observation
-                );
-
-                $benchmarkData['description'] = $benchmark->getReportDescription(1);
-
-
-                if ($benchmarkData['percentile_rank'] === '-') {
-                    $benchmarkData['do_not_format_rank'] = true;
-                } elseif ($benchmarkData['percentile_rank'] < 1) {
-                    $rank = '<1%';
-                    $benchmarkData['percentile_rank'] = $rank;
-                    $benchmarkData['do_not_format_rank'] = true;
-                } elseif ($benchmarkData['percentile_rank'] > 99) {
-                    $rank = '>99%';
-                    $benchmarkData['percentile_rank'] = $rank;
-                    $benchmarkData['do_not_format_rank'] = true;
-                }
-
-                /*if ($benchmarkData['benchmark'] == '% High School Student Concurrent Enrollment Headcount') {
-                    if ($benchmarkData['percentile_rank'] < 1) {
-                        $benchmarkData['percentile_rank'] = 'test';
-                    }
-                    prd($benchmarkData);
-                }*/
-
-
-                $groupData['benchmarks'][] = $benchmarkData;
+                $groupData['benchmarks'][] = $this->getBenchmarkData($benchmark);
             }
 
             $reportData[] = $groupData;
@@ -177,6 +78,106 @@ class National extends Report
         //prd($reportData);
         //echo '<pre>' . print_r($reportData, 1) . '</pre>';
         return $reportData;
+    }
+
+    public function getBenchmarkData(Benchmark $benchmark)
+    {
+        $benchmarkData = array(
+            'benchmark' => $benchmark->getReportLabel(),
+        );
+
+        $year = $this->getObservation()->getYear();
+        $percentiles = $this->getPercentileModel()
+            ->findByBenchmarkAndYear($benchmark, $year, $this->getSystem());
+
+        $percentileData = array();
+        foreach ($percentiles as $percentile) {
+            $percentileData[$percentile->getPercentile()] =
+                $percentile->getValue();
+        }
+
+        // Pad the array if it's empty
+        if (empty($percentileData)) {
+            $percentileData = array(null, null, null, null, null);
+        }
+
+        if (!empty($percentileData['N'])) {
+            $benchmarkData['N'] = $percentileData['N'];
+            unset($percentileData['N']);
+        } else {
+            $benchmarkData['N'] = '';
+        }
+
+
+        $benchmarkData['percentiles'] = $percentileData;
+
+        $benchmarkData['reported'] = $this->getObservation()->get(
+            $benchmark->getDbColumn()
+        );
+
+        $benchmarkData['reported_decimal_places'] = $this
+            ->getDecimalPlaces($benchmark);
+
+        $percentileRank = $this->getPercentileRankModel()
+            ->findOneByCollegeBenchmarkAndYear(
+                $this->getObservation()->getCollege(),
+                $benchmark,
+                $year,
+                $this->getSystem()
+            );
+
+        if (!empty($percentileRank)) {
+            $benchmarkData['percentile_rank_id'] = $percentileRank->getId();
+            $benchmarkData['percentile_rank'] = $percentileRank->getRank();
+
+            // Show - rather than 0 percentile
+            if ($benchmarkData['reported'] == 0) {
+                $benchmarkData['percentile_rank'] = '-';
+            }
+
+        } else {
+            $benchmarkData['percentile_rank_id'] = '';
+            $benchmarkData['percentile_rank'] = '';
+        }
+
+        // Data labels
+        $prefix = $suffix = '';
+        if ($benchmark->isPercent()) {
+            $suffix = '%';
+        } elseif ($benchmark->isDollars()) {
+            $prefix = '$';
+        }
+
+        $benchmarkData['prefix'] = $prefix;
+        $benchmarkData['suffix'] = $suffix;
+
+        // Chart
+        $chartConfig = array(
+            'dbColumn' => $benchmark->getDbColumn(),
+            'decimal_places' => $this->getDecimalPlaces($benchmark)
+        );
+
+        $benchmarkData['chart'] = $this->getPercentileBarChart(
+            $chartConfig,
+            $this->getObservation()
+        );
+
+        $benchmarkData['description'] = $benchmark->getReportDescription(1);
+
+
+        if ($benchmarkData['percentile_rank'] === '-') {
+            $benchmarkData['do_not_format_rank'] = true;
+        } elseif ($benchmarkData['percentile_rank'] < 1) {
+            $rank = '<1%';
+            $benchmarkData['percentile_rank'] = $rank;
+            $benchmarkData['do_not_format_rank'] = true;
+        } elseif ($benchmarkData['percentile_rank'] > 99) {
+            $rank = '>99%';
+            $benchmarkData['percentile_rank'] = $rank;
+            $benchmarkData['do_not_format_rank'] = true;
+        }
+
+        return $benchmarkData;
     }
 
     public function download($reportData, $system = null)
@@ -351,5 +352,17 @@ class National extends Report
     public function getPercentileRankModel()
     {
         return $this->percentileRankModel;
+    }
+
+    public function setSystem(System $system)
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    public function getSystem()
+    {
+        return $this->system;
     }
 }
