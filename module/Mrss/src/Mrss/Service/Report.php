@@ -693,7 +693,7 @@ class Report
 
     public function downloadNationalReport($reportData, $system = null)
     {
-       $this->createNationalReport()->download($reportData, $system);
+        $this->createNationalReport()->download($reportData, $system);
     }
 
     /**
