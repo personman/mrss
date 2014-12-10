@@ -61,7 +61,7 @@ class ReportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Your College', $this->report->getYourCollegeLabel());
     }
 
-    public function testIsBenchmarkExclude()
+    /*public function testIsBenchmarkExclude()
     {
         $benchmarkMock = $this->getMock(
             '\Mrss\Entity\Benchmark',
@@ -76,5 +76,5 @@ class ReportTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(
             $this->report->isBenchmarkExcludeFromReport($benchmarkMock)
         );
-    }
+    }*/
 }
