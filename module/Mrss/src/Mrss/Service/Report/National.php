@@ -354,7 +354,7 @@ class National extends Report
         return $this->percentileRankModel;
     }
 
-    public function setSystem(System $system)
+    public function setSystem($system)
     {
         $this->system = $system;
 
