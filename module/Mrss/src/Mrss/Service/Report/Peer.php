@@ -5,6 +5,7 @@ namespace Mrss\Service\Report;
 use Mrss\Service\Report;
 use Mrss\Entity\PeerGroup;
 use Mrss\Entity\College;
+use Mrss\Entity\Benchmark as BenchmarkEntity;
 use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
@@ -196,7 +197,7 @@ class Peer extends Report
         return $dataWithLabels;
     }
 
-    public function getPeerBarChart(Benchmark $benchmark, $data)
+    public function getPeerBarChart(BenchmarkEntity $benchmark, $data)
     {
         $title = $benchmark->getPeerReportLabel();
         $decimalPlaces = $this->getDecimalPlaces($benchmark);
