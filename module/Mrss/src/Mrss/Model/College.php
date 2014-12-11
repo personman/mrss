@@ -48,6 +48,11 @@ class College extends AbstractModel
         return $c;
     }
 
+    /**
+     * @param StudyEntity $study
+     * @param $year
+     * @return \Mrss\Entity\College[]
+     */
     public function findByStudyAndYear(StudyEntity $study, $year)
     {
         $studyId = $study->getId();

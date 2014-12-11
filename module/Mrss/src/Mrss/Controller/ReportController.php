@@ -35,7 +35,10 @@ class ReportController extends AbstractActionController
 
         if (!empty($yearToPrepare)) {
             // Now calculate percentiles
-            $stats = $this->getReportService()->calculateForYear($yearToPrepare);
+            //$stats = $this->getReportService()->calculateForYear($yearToPrepare);
+            $stats = $this->getServiceLocator()->get('service.report.percentile')
+                ->calculateForYear($yearToPrepare);
+
             $benchmarks = $stats['benchmarks'];
             $percentiles = $stats['percentiles'];
             $percentileRanks = $stats['percentileRanks'];
@@ -74,7 +77,8 @@ class ReportController extends AbstractActionController
 
         if (!empty($yearToPrepare)) {
             // Now calculate percentiles
-            $stats = $this->getReportService()->calculateSystems($yearToPrepare);
+            $stats = $this->getServiceLocator()->get('service.report.percentile')
+                ->calculateSystems($yearToPrepare);
             $benchmarks = $stats['benchmarks'];
             $percentiles = $stats['percentiles'];
             $percentileRanks = $stats['percentileRanks'];
@@ -100,7 +104,8 @@ class ReportController extends AbstractActionController
 
         $yearToPrepare = $this->params()->fromRoute('year');
 
-        $stats = $this->getReportService()->calculateOutliersForYear($yearToPrepare);
+        $stats = $this->getServiceLocator()->get('service.report.outliers')
+            ->calculateOutliersForYear($yearToPrepare);
         $low = $stats['low'];
         $high = $stats['high'];
         $missing = $stats['missing'];
@@ -117,7 +122,8 @@ class ReportController extends AbstractActionController
 
     public function adminOutliersAction()
     {
-        $outlierReport = $this->getReportService()->getAdminOutlierReport();
+        $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
+            ->getAdminOutlierReport();
 
         return array(
             'report' => $outlierReport
@@ -127,7 +133,8 @@ class ReportController extends AbstractActionController
     public function outlierAction()
     {
         $college = $this->currentCollege();
-        $outlierReport = $this->getReportService()->getOutlierReport($college);
+        $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
+            ->getOutlierReport($college);
 
         return array(
             'report' => $outlierReport
@@ -138,12 +145,13 @@ class ReportController extends AbstractActionController
     {
         $renderer = $this->getServiceLocator()
             ->get('Zend\View\Renderer\RendererInterface');
+        $outliersService = $this->getServiceLocator()->get('service.report.outliers');
 
         $task = $this->params()->fromRoute('task');
         if ($task == 'preview') {
-            $stats = $this->getReportService()->emailOutliers($renderer, false);
+            $stats = $outliersService->emailOutliers($renderer, false);
         } elseif ($task == 'send') {
-            $stats = $this->getReportService()->emailOutliers($renderer);
+            $stats = $outliersService->emailOutliers($renderer);
 
             $count = $stats['emails'];
             $this->flashMessenger()->addSuccessMessage("$count outlier emails sent.");
@@ -206,14 +214,15 @@ class ReportController extends AbstractActionController
         }
 
         $observation = $this->currentObservation($year);
-        $reportData = $this->getReportService()
-            ->getNationalReportData($observation, $system);
+        $reportData = $this->getServiceLocator()->get('service.report.national')
+            ->getData($observation, $system);
 
         // HTML or Excel?
         $format = $this->params()->fromRoute('format');
 
         if ($format == 'excel') {
-            $this->getReportService()->downloadNationalReport($reportData, $system);
+            $this->getServiceLocator()->get('service.report.national')
+                ->download($reportData, $system);
             die;
         }
 

@@ -226,7 +226,9 @@ class Module
     public function getServiceConfig()
     {
         return array(
-            'abstract_factories' => array(),
+            'abstract_factories' => array(
+                'Factory' => 'Mrss\Service\Report\Factory'
+            ),
             'aliases' => array(
                 'em' => 'doctrine.entitymanager.orm_default',
             ),
@@ -239,6 +241,7 @@ class Module
                 'Mrss\Service\AdminNavigationFactory',
                 'nccbp_navigation' =>
                 'Mrss\Service\NccbpNavigationFactory',
+                //'service.report.percentile' => 'Mrss\Service\Report\Factory',
                 /*'doctrine.cache.my_memcache' => function ($sm) {
                         $cache = new \Doctrine\Common\Cache\MemcacheCache();
                         //$memcache = new \Memcached();
