@@ -27,17 +27,17 @@ class ReportController extends AbstractActionController
 
     public function calculateAction()
     {
+        $percentileService = $this->getServiceLocator()->get('service.report.percentile');
         $this->longRunningScript();
         $start = microtime(true);
 
-        $years = $this->getReportService()->getCalculationInfo();
+        $years = $percentileService->getCalculationInfo();
         $yearToPrepare = $this->params()->fromRoute('year');
 
         if (!empty($yearToPrepare)) {
             // Now calculate percentiles
             //$stats = $this->getReportService()->calculateForYear($yearToPrepare);
-            $stats = $this->getServiceLocator()->get('service.report.percentile')
-                ->calculateForYear($yearToPrepare);
+            $stats = $percentileService->calculateForYear($yearToPrepare);
 
             $benchmarks = $stats['benchmarks'];
             $percentiles = $stats['percentiles'];
@@ -309,8 +309,9 @@ class ReportController extends AbstractActionController
             return $this->observationNotFound();
         }
 
-        $this->getReportService()->setObservation($observation);
-        $reportData = $this->getReportService()->getExecutiveReportData();
+        $executive = $this->getServiceLocator()->get('service.report.executive');
+        $executive->setObservation($observation);
+        $reportData = $executive->getData();
 
         $forcePrintStyles = $this->params()->fromRoute('print');
         if ($forcePrintStyles) {
@@ -389,7 +390,8 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
-        $years = $this->getReportService()->getYearsWithSubscriptions();
+        $peerService = $this->getServiceLocator()->get('service.report.peer');
+        $years = $peerService->getYearsWithSubscriptions();
 
         // If reports are closed, remove the last year
         if (!$this->currentStudy()->getReportsOpen()) {
@@ -476,15 +478,17 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
+        $peerService = $this->getServiceLocator()->get('service.report.peer');
+
         $format = $this->params()->fromRoute('format');
 
         ini_set('memory_limit', '512M');
         $peerGroup = $this->getPeerGroupFromSession();
 
-        $report = $this->getReportService()->getPeerReport($peerGroup);
+        $report = $peerService->getPeerReport($peerGroup);
 
         if ($format == 'excel') {
-            $this->getReportService()->downloadPeerReport($report, $peerGroup);
+            $peerService->downloadPeerReport($report, $peerGroup);
         }
 
         return array(
@@ -657,6 +661,7 @@ class ReportController extends AbstractActionController
     {
         $year = $this->params()->fromRoute('year');
         $benchmarks = $this->params()->fromQuery('benchmarks');
+        $peerService = $this->getServiceLocator()->get('service.report.peer');
 
         if (!empty($year)) {
             $peerGroup = $this->getPeerGroupFromSession();
@@ -672,7 +677,7 @@ class ReportController extends AbstractActionController
 
             if (!empty($benchmarks)) {
                 $benchmarkIds = explode(',', $benchmarks);
-                $colleges = $this->getReportService()->filterCollegesByBenchmarks(
+                $colleges = $peerService->filterCollegesByBenchmarks(
                     $colleges,
                     $benchmarkIds,
                     $year

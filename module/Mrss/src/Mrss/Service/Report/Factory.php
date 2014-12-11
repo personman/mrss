@@ -58,6 +58,8 @@ class Factory implements AbstractFactoryInterface
             'service.report.national' => 'Mrss\Service\Report\National',
             'service.report.percentile' => 'Mrss\Service\Report\Percentile',
             'service.report.outliers' => 'Mrss\Service\Report\Outliers',
+            'service.report.executive' => 'Mrss\Service\Report\Executive',
+            'service.report.peer' => 'Mrss\Service\Report\Peer',
         );
     }
 }
