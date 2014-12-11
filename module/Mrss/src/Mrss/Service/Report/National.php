@@ -16,8 +16,6 @@ use PHPExcel_Shared_Font;
 
 class National extends Report
 {
-    protected $study;
-
     /**
      * @var \Mrss\Model\Percentile
      */
@@ -30,10 +28,6 @@ class National extends Report
 
     protected $system;
 
-    public function __construct(Study $study)
-    {
-        $this->study = $study;
-    }
 
     public function getData(Observation $observation, $system = null)
     {
@@ -291,11 +285,6 @@ class National extends Report
 
         // redirect output to client browser
         $this->downloadExcel($excel, $filename);
-    }
-
-    public function getStudy()
-    {
-        return $this->study;
     }
 
     public function getBenchmarksToExcludeFromReport()
