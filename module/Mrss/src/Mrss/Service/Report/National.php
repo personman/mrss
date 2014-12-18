@@ -44,7 +44,7 @@ class National extends Report
                 'benchmarkGroup' => $benchmarkGroup->getName(),
                 'benchmarks' => array()
             );
-            $benchmarks = $benchmarkGroup->getChildren($year);
+            $benchmarks = $benchmarkGroup->getChildren($year, true, 'report');
 
             foreach ($benchmarks as $benchmark) {
                 if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
