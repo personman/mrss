@@ -478,6 +478,21 @@ class UserController extends AbstractActionController
         return $users;
     }
 
+    public function benchmarkorgAction()
+    {
+        $org = $this->params()->fromRoute('org');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $user->setAdminBenchmarkSorting($org);
+
+        /** @var \Mrss\Model\User $userModel */
+        $userModel = $this->getServiceLocator()->get('model.user');
+        $userModel->save($user);
+        $userModel->getEntityManager()->flush();
+
+        $this->flashMessenger()->addSuccessMessage("Benchmark organization changed to $org.");
+        return $this->redirect()->toRoute('benchmark');
+    }
+
     public function getSystemAdminSessionContainer()
     {
         if (empty($this->systemAdminSessionContainer)) {

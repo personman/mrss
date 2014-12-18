@@ -467,6 +467,25 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     font-size: 11px;
 }
 
+/** benchmark management backend **/
+.benchmarkGroupControls li, .studyControls li {
+    display: inline;
+    padding-right: 20px;
+}
+.benchmarkGroupSection {
+    margin-top: 70px;
+}
+.studyControls a.active {
+    background: #004f8c;
+    color: white;
+    padding: 2px 5px;
+    text-decoration: none;
+}
+.benchmarkContents li {
+    list-style-type: none;
+}
+
+
 /* BenchmarkGroup progress */
 .benchmarkGroupProgress {
     width: 150px;

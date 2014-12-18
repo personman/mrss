@@ -17,6 +17,10 @@ class Study extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Study';
 
+    /**
+     * @param $id
+     * @return \Mrss\Entity\Study
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);

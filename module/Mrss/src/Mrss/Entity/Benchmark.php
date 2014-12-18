@@ -54,9 +54,15 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $dbColumn;
 
     /**
+     * Default sequence is for data entry
      * @ORM\Column(type="integer")
      */
     protected $sequence;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $reportSequence;
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -235,6 +241,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    public function setReportSequence($sequence)
+    {
+        $this->reportSequence = $sequence;
+
+        return $this;
+    }
+
+    public function getReportSequence()
+    {
+        return $this->reportSequence;
     }
 
     public function setBenchmarkGroup(BenchmarkGroup $benchmarkGroup)

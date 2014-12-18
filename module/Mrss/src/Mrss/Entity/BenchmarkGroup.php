@@ -66,11 +66,23 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     }
 
     /**
+     * @param string $organization
      * @return BenchmarkHeading[]
      */
-    public function getBenchmarkHeadings()
+    public function getBenchmarkHeadings($organization = 'data-entry')
     {
-        return $this->benchmarkHeadings;
+        if (!empty($organization)) {
+            $headings = array();
+            foreach ($this->benchmarkHeadings as $heading) {
+                if ($heading->getType() == $organization) {
+                    $headings[] = $heading;
+                }
+            }
+        } else {
+            $headings = $this->benchmarkHeadings;
+        }
+
+        return $headings;
     }
 
     public function getBenchmarkHeadingByName($name)
@@ -558,7 +570,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->inputFilter;
     }
 
-    public function getChildren($year = null, $includeComputed = true)
+    public function getChildren($year = null, $includeComputed = true, $organization = 'data-entry')
     {
         $children = array();
 
@@ -570,10 +582,19 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         }
 
         foreach ($benchmarks as $benchmark) {
-            $children[$benchmark->getSequence()] = $benchmark;
+            if ($organization == 'report') {
+                $sequence = $benchmark->getReportSequence();
+            } else {
+                $sequence = $benchmark->getSequence();
+            }
+
+            $children[$sequence] = $benchmark;
         }
-        foreach ($this->getBenchmarkHeadings() as $heading) {
-            $children[$heading->getSequence()] = $heading;
+
+        foreach ($this->getBenchmarkHeadings($organization) as $heading) {
+            $sequence = $heading->getSequence();
+
+            $children[$sequence] = $heading;
         }
 
         ksort($children, SORT_NUMERIC);

@@ -621,6 +621,28 @@ return array(
                     )
                 )
             ),
+            'benchmarkheadings' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/benchmarkheadings',
+                    'defaults' => array(
+                        'controller' => 'heading'
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id/:benchmarkGroup',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => null,
+                                'benchmarkGroup' => null
+                            )
+                        )
+                    )
+                )
+            ),
             'benchmarkgroups' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
@@ -956,6 +978,16 @@ return array(
                             'route' => '/export-login-links',
                             'defaults' => array(
                                 'action' => 'exportLoginLinks'
+                            )
+                        )
+                    ),
+                    'benchmarkorg' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/benchmarkorg/:org',
+                            'defaults' => array(
+                                'action' => 'benchmarkorg',
+                                'org' => 'data-entry'
                             )
                         )
                     )
@@ -1386,6 +1418,7 @@ return array(
             'observations' => 'Mrss\Controller\ObservationController',
             'subobservations' => 'Mrss\Controller\SubObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',
+            'heading' => 'Mrss\Controller\HeadingController',
             'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
             'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController',

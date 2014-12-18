@@ -28,6 +28,10 @@ class BenchmarkGroup extends AbstractModel
         return $this->getRepository()->findOneBy(array('shortName' => $shortName));
     }
 
+    /**
+     * @param $id
+     * @return \Mrss\Entity\BenchmarkGroup
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);

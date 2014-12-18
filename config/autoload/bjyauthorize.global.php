@@ -224,6 +224,10 @@ return array(
                     'roles' => array('admin')
                 ),
                 array(
+                    'controller' => 'heading',
+                    'roles' => array('admin')
+                ),
+                array(
                     'controller' => 'DoctrineORMModule\Yuml\YumlController',
                     'roles' => array('admin')
                 ),

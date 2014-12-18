@@ -1,3 +1,4 @@
+<? /** @var \Mrss\Entity\BenchmarkGroup[] $benchmarkGroups */ ?>
 <link rel="stylesheet" href="/css/benchmarks.css"/>
 <script type="text/javascript" src="/js/jquery.sparkline.min.js"></script>
 <script type="text/javascript">
@@ -26,7 +27,6 @@
 
                     i = i + 1
                 })
-                console.log(headingIds)
 
                 data = {
                     benchmarkGroupId: benchmarkGroupId,
@@ -34,10 +34,13 @@
                     headings: headingIds
                 }
 
+                console.log(data)
+
                 $.post('/benchmark/reorder', data, function(result) {
                     //console.log(result)
                     if (result != 'ok') {
-                        alert('There was a problem saving your sequence.');
+                        alert('There was a problem saving your sequence. ');
+                        console.log(result)
                     }
                 })
             }
@@ -83,16 +86,24 @@
             Import benchmark setup from csv
         </a>
     </li>
+
+    <?php $orgs = array('data-entry' => 'Data entry', 'report' => 'Reports'); ?>
+    <li>
+        Organize for:
+        <?php foreach ($orgs as $key => $label): ?>
+            <a href="<?= $this->url('users/benchmarkorg', array('org' => $key)) ?>"<?php if ($key == $organization) echo ' class="active"'?>><?= $label ?></a>
+        <?php endforeach ?>
+    </li>
 </ul>
 
 <h3>Forms</h3>
-<?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
-<ul>
+<?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
+<ul class="benchmarkContents">
     <li><a href="#benchmarkGroup<?= $benchmarkGroup->getId() ?>"><?= $benchmarkGroup->getName() ?></a></li>
 </ul>
 <?php endforeach ?>
 
-<?php foreach ($this->benchmarkGroups as $benchmarkGroup): ?>
+<?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
     <h3 class="benchmarkGroupSection" id="benchmarkGroup<?= $benchmarkGroup->getId() ?>"><?= $benchmarkGroup->getName() ?></h3>
 
     <ul class="benchmarkGroupControls">
@@ -113,6 +124,14 @@
         </li>
 
         <li>
+            <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
+            <a href="<?= $this->url(
+                'benchmarkheadings/edit',
+                array('benchmarkGroup' => $benchmarkGroup->getId(), 'id' => 'add')
+            ) ?>">Add heading</a>
+        </li>
+
+        <li>
             <span class="icon-edit glyphicon glyphicon-edit"></span>
             <a href="<?= $this->url(
                 'data-entry/edit',
@@ -121,7 +140,7 @@
         </li>
     </ul>
 
-    <h5>Benchmarks</h5>
+
     <table class="table heatmap">
         <thead>
             <tr>
@@ -139,7 +158,7 @@
             </tr>
         </thead>
         <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
-        <?php foreach ($benchmarkGroup->getChildren() as $row): ?>
+        <?php foreach ($benchmarkGroup->getChildren(null, true, $organization) as $row): ?>
             <? //pr(get_class($row)) ?>
             <?php if (get_class($row) == 'Mrss\Entity\Benchmark'): ?>
                 <?php $benchmark = $row; ?>
@@ -169,12 +188,19 @@
                     </td>
 
                     <td>
+                        <?php
+                            if ($organization == 'report') {
+                                $name = $benchmark->getReportLabel();
+                            } else {
+                                $name = $benchmark->getName();
+                            }
+                        ?>
                         <a href="<?= $this->url(
                             'benchmark/edit',
                             array(
                                 'id' => $benchmark->getId()
                             )
-                        ) ?>"><?= $benchmark->getName() ?></a>
+                        ) ?>"><?= $name ?></a>
                     </td>
 
                     <td class="trends">
@@ -211,7 +237,12 @@
                     <td class="sortHandle">
                         <span class="icon-move glyphicon glyphicon-move"></span>
                     </td>
-                    <td colspan="<?= (6 + count($this->yearsToShow)) ?>"><h4><?= $heading->getName() ?></h4></td>
+                    <td colspan="<?= (5 + count($this->yearsToShow)) ?>">
+                        <h4><?= $heading->getName() ?></h4>
+                    </td>
+                    <td>
+                        <a href="<?= $this->url('benchmarkheadings/edit', array('id' => $heading->getId(), 'benchmarkGroup' => $heading->getBenchmarkGroup()->getId())) ?>">Edit</a>
+                    </td>
                 </tr>
             <?php endif ?>
         <?php endforeach ?>

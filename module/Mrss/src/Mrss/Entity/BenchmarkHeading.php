@@ -38,7 +38,7 @@ class BenchmarkHeading
     protected $description;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $dbColumn;
 
@@ -46,6 +46,12 @@ class BenchmarkHeading
      * @ORM\Column(type="integer")
      */
     protected $sequence;
+
+    /**
+     * Type should be 'data-entry' or 'report'
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $type;
 
     /**
      * @ORM\ManyToOne(targetEntity="BenchmarkGroup", inversedBy="benchmarkHeadings")
@@ -147,5 +153,17 @@ class BenchmarkHeading
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getType()
+    {
+        return $this->type;
     }
 }

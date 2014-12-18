@@ -115,6 +115,12 @@ class User implements UserInterface, ProviderInterface
      */
     protected $lastAccess;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $adminBenchmarkSorting;
+
     public function __construct()
     {
         $this->studies = new ArrayCollection();
@@ -375,6 +381,29 @@ class User implements UserInterface, ProviderInterface
     public function getLastAccess()
     {
         return $this->lastAccess;
+    }
+
+    /**
+     * Passed value should be 'data-entry' or 'report'
+     *
+     * @param $sorting
+     * @return $this
+     */
+    public function setAdminBenchmarkSorting($sorting)
+    {
+        $this->adminBenchmarkSorting = $sorting;
+
+        return $this;
+    }
+
+    public function getAdminBenchmarkSorting()
+    {
+        // Default to report
+        if (empty($this->adminBenchmarkSorting)) {
+            $this->setAdminBenchmarkSorting('report');
+        }
+
+        return $this->adminBenchmarkSorting;
     }
 
     public function getFullName()

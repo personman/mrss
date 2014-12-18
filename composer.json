@@ -39,7 +39,9 @@
         "behat/mink-selenium2-driver": "*",
         "behat/mink-zombie-driver": "*",
         "symfony/http-kernel": "*",
-        "phpmd/phpmd": "*"
+        "phpmd/phpmd": "*",
+        "psr/log": "1.0.0",
+        "codeclimate/php-test-reporter": "dev-master"
     },
     "minimum-stability": "dev",
     "config": {

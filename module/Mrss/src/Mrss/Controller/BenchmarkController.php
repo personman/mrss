@@ -19,6 +19,7 @@ class BenchmarkController extends AbstractActionController
     public function indexAction()
     {
         $studyId = $this->params()->fromRoute('study');
+        /** @var \Mrss\Model\Study $studyModel */
         $studyModel = $this->getServiceLocator()
             ->get('model.study');
         $study = $studyModel->find($studyId);
@@ -27,6 +28,10 @@ class BenchmarkController extends AbstractActionController
         $years = $this->getServiceLocator()->get('model.subscription')
             ->getYearsWithSubscriptions($study);
         rsort($years);
+
+        // Are we organizing the benchmarks for data-entry or reports?
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $organization = $user->getAdminBenchmarkSorting();
 
         // Sparklines
         $observationModel = $this->getServiceLocator()->get('model.observation');
@@ -46,7 +51,8 @@ class BenchmarkController extends AbstractActionController
             'study' => $study,
             'yearsToShow' => $years,
             'sparklines' => $sparklines,
-            'activeCollege' => $this->currentCollege()
+            'activeCollege' => $this->currentCollege(),
+            'organization' => $organization
         );
     }
 
@@ -223,18 +229,25 @@ class BenchmarkController extends AbstractActionController
 
         $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
 
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $organization = $user->getAdminBenchmarkSorting();
+
         if (!empty($benchmarkGroup)) {
             $benchmarks = $benchmarkGroup->getBenchmarks();
 
             foreach ($benchmarks as $benchmark) {
                 if (isset($newBenchmarkSequences[$benchmark->getId()])) {
-                    $benchmark->setSequence(
-                        $newBenchmarkSequences[$benchmark->getId()]
-                    );
+                    $sequence = $newBenchmarkSequences[$benchmark->getId()];
+
+                    if ($organization == 'report') {
+                        $benchmark->setReportSequence($sequence);
+                    } else {
+                        $benchmark->setSequence($sequence);
+                    }
                 }
             }
 
-            $headings = $benchmarkGroup->getBenchmarkHeadings();
+            $headings = $benchmarkGroup->getBenchmarkHeadings($organization);
             foreach ($headings as $heading) {
                 if (isset($newBenchmarkHeadingSequences[$heading->getId()])) {
                     $heading->setSequence(
@@ -243,6 +256,7 @@ class BenchmarkController extends AbstractActionController
                 }
             }
 
+            //$benchmarkGroupModel->save($benchmarkGroup);
             $em = $this->getServiceLocator()->get('em');
             $em->flush();
         }

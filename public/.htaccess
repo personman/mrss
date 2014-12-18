@@ -64,6 +64,7 @@ RewriteRule wp-content - [G,L]
 RewriteRule editor/filemanager - [G,L]
 RewriteRule myadmin - [G,L]
 RewriteRule fckeditor - [G,L]
+RewriteRule CachedSimilarThe - [G,L]
 
 
 

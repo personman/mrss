@@ -446,6 +446,14 @@ class Module
 
                     return $benchmarkModel;
                 },
+                'model.benchmarkHeading' => function ($sm) {
+                    $model = new Model\BenchmarkHeading();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.benchmarkGroup' => function ($sm) {
                     $benchmarkGroupkModel = new Model\BenchmarkGroup();
                     $em = $sm->get('em');
