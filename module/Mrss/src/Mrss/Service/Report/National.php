@@ -52,7 +52,8 @@ class National extends Report
                     $heading = $benchmark;
                     $groupData['benchmarks'][] = array(
                         'heading' => true,
-                        'name' => $heading->getName()
+                        'name' => $this->getVariableSubstitution()->substitute($heading->getName()),
+                        'description' => $this->getVariableSubstitution()->substitute($heading->getDescription())
                     );
                     continue;
                 }
@@ -77,7 +78,7 @@ class National extends Report
     public function getBenchmarkData(Benchmark $benchmark)
     {
         $benchmarkData = array(
-            'benchmark' => $benchmark->getReportLabel(),
+            'benchmark' => $this->getVariableSubstitution()->substitute($benchmark->getReportLabel()),
         );
 
         $year = $this->getObservation()->getYear();
@@ -156,7 +157,8 @@ class National extends Report
             $this->getObservation()
         );
 
-        $benchmarkData['description'] = $benchmark->getReportDescription(1);
+        $benchmarkData['description'] = $this->getVariableSubstitution()
+            ->substitute($benchmark->getReportDescription(1));
 
 
         if ($benchmarkData['percentile_rank'] === '-') {

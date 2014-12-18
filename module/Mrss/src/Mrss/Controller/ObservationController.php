@@ -809,6 +809,8 @@ class ObservationController extends AbstractActionController
             return $this->observationNotFound();
         }
 
+        $variable = $this->getVariableSubstitutionService();
+
         $submittedValues = array();
 
         // Get the benchmark groups
@@ -826,7 +828,8 @@ class ObservationController extends AbstractActionController
                     $heading = $benchmark;
                     $groupData['benchmarks'][] = array(
                         'heading' => true,
-                        'name' => $heading->getName()
+                        'name' => $variable->substitute($heading->getName()),
+                        'description' => $variable->substitute($heading->getDescription())
                     );
                     continue;
                 }
@@ -857,7 +860,8 @@ class ObservationController extends AbstractActionController
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
-            'submittedValues' => $submittedValues
+            'submittedValues' => $submittedValues,
+            'variable' => $variable
         );
     }
 
@@ -898,6 +902,9 @@ class ObservationController extends AbstractActionController
         return $this->systemAdminSessionContainer;
     }
 
+    /**
+     * @return \Mrss\Service\VariableSubstitution
+     */
     public function getVariableSubstitutionService()
     {
         return $this->getServiceLocator()->get('service.variableSubstitution');

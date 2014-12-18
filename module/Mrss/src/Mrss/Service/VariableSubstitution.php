@@ -8,6 +8,8 @@ class VariableSubstitution
 {
     protected $studyYear;
 
+    protected $variables;
+
     /**
      * The text can include variables like [year_minus_2]
      *
@@ -38,20 +40,25 @@ class VariableSubstitution
 
     public function getVariables()
     {
-        $range = range(-7, 0);
-        $variables = array();
-        foreach ($range as $offset) {
-            $value = $this->getStudyYear() + $offset;
-            if ($offset > 0) {
-                $action = 'plus';
-            } else {
-                $action = 'minus';
-            }
-            $variable = 'year_' . $action . '_' . abs($offset);
+        if (!count($this->variables)) {
+            $range = range(-7, 2);
+            $variables = array('year' => $this->getStudyYear());
+            foreach ($range as $offset) {
+                $value = $this->getStudyYear() + $offset;
+                if ($offset > 0) {
+                    $action = 'plus';
+                } else {
+                    $action = 'minus';
+                }
+                $variable = 'year_' . $action . '_' . abs($offset);
 
-            $variables[$variable] = $value;
+                $variables[$variable] = $value;
+            }
+
+            $this->variables = $variables;
         }
 
-        return $variables;
+
+        return $this->variables;
     }
 }

@@ -47,12 +47,15 @@
         <?php if (!empty($benchmark['heading'])): ?>
             <td colspan="2">
                 <h3><?= $benchmark['name'] ?></h3>
+                <?php if (!empty($benchmark['description'])): ?>
+                    <p><?= $benchmark['description'] ?></p>
+                <?php endif ?>
             </td>
 
         <?php else: ?>
             <?php $b = $benchmark['benchmark'] ?>
             <?php $class = ($b->getComputed()) ? 'computed' : 'submitted' ?>
-            <td class="<?= $class ?>"><?= $b->getName() ?></td>
+            <td class="<?= $class ?>"><?= $variable->substitute($b->getName()) ?></td>
             <td class="value <?= $class ?>"><?= $benchmark['value'] ?></td>
         <?php endif ?>
         </tr>

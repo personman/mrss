@@ -41,6 +41,7 @@ class Factory implements AbstractFactoryInterface
         $report->setSystemModel($sm->get('model.system'));
         $report->setComputedFieldsService($sm->get('computedFields'));
         $report->setMailTransport($sm->get('mail.transport'));
+        $report->setVariableSubstition($sm->get('service.variableSubstitution'));
 
         return $report;
     }

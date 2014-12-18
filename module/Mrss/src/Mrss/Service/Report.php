@@ -39,6 +39,11 @@ class Report
     protected $computedFieldsService;
 
     /**
+     * @var VariableSubstitution
+     */
+    protected $variableSubstitution;
+
+    /**
      * @var \Mrss\Model\Subscription
      */
     protected $subscriptionModel;
@@ -978,6 +983,18 @@ class Report
     public function getCalculator()
     {
         return $this->calculator;
+    }
+
+    public function setVariableSubstition(VariableSubstitution $service)
+    {
+        $this->variableSubstitution = $service;
+
+        return $this;
+    }
+
+    public function getVariableSubstitution()
+    {
+        return $this->variableSubstitution;
     }
 
     public function setMailTransport(Smtp $transport)
