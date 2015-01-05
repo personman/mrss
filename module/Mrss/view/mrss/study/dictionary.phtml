@@ -43,15 +43,15 @@
             }
                 ?>
 
-            <h3><?= $benchmark->getName() ?></h3>
+            <h3><?= $variable->substitute($benchmark->getName()) ?></h3>
         <?php else: ?>
             <div class="row">
                 <div class="col-md-3 benchmarkName">
-                    <?= $benchmark->getName() ?>
+                    <?= $variable->substitute($benchmark->getName()) ?>
                 </div>
 
                 <div class="col-md-9 benchmarkDescription">
-                    <?= $benchmark->getDescription() ?>
+                    <?= $variable->substitute($benchmark->getDescription()) ?>
                 </div>
             </div>
         <?php endif ?>

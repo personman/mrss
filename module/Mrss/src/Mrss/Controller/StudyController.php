@@ -167,7 +167,8 @@ class StudyController extends AbstractActionController
         $study = $this->currentStudy();
 
         return array(
-            'study' => $study
+            'study' => $study,
+            'variable' => $this->getServiceLocator()->get('service.variableSubstitution')
         );
     }
 
