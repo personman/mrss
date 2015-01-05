@@ -11,6 +11,8 @@ use Zend\InputFilter\InputFilter;
 
 class FormBuilder
 {
+    protected $variableSubstitutionService;
+
     /**
      * the buildForm method
      *
@@ -35,6 +37,8 @@ class FormBuilder
             if ($disabled) {
                 $element['attributes']['disabled'] = 'disabled';
             }
+
+            $element = $this->substituteVariables($element);
 
             $form->add($element);
             $inputFilter->add($elementProvider->getFormElementInputFilter());
@@ -81,5 +85,31 @@ class FormBuilder
             $id = new Element\Hidden('id');
             $form->add($id);
         }
+    }
+
+    protected function substituteVariables($element)
+    {
+        if ($service = $this->getVariableSubstitutionService()) {
+            $label = $service->substitute($element['options']['label']);
+            $element['options']['label'] = $label;
+
+            $desc = $service->substitute($element['options']['help-block']);
+            $element['options']['help-block'] = $desc;
+        }
+
+
+        return $element;
+    }
+
+    public function setVariableSubstitutionService($service)
+    {
+        $this->variableSubstitutionService = $service;
+
+        return $this;
+    }
+
+    public function getVariableSubstitutionService()
+    {
+        return $this->variableSubstitutionService;
     }
 }

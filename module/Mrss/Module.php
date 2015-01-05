@@ -568,6 +568,9 @@ class Module
                 'service.formBuilder' => function ($sm) {
                     $service = new Service\FormBuilder;
 
+                        $variable = $sm->get('service.variableSubstitution');
+                        $service->setVariableSubstitutionService($variable);
+
                     return $service;
                 },
                 'service.observationAudit' => function ($sm) {

@@ -285,10 +285,6 @@ class ObservationController extends AbstractActionController
 
         }
 
-
-
-
-
         $oldObservation = clone $observation;
 
         $formService = $this->getServiceLocator()
@@ -360,7 +356,8 @@ class ObservationController extends AbstractActionController
                 'form' => $form,
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
-                'nccbpSubscription' => $nccbpSubscription
+                'nccbpSubscription' => $nccbpSubscription,
+                'variable' => $this->getVariableSubstitutionService()
             )
         );
 
@@ -416,7 +413,7 @@ class ObservationController extends AbstractActionController
         $shortName = $benchmarkGroup->getShortName();
 
         // Do we have a config for the grouped template?
-        if (!empty($config['data-entry']['grouped'][$shortName])) {
+        if (false && !empty($config['data-entry']['grouped'][$shortName])) {
             $groupedConfig = $this->getGroupedConfig($shortName);
             $template = 'grouped.phtml';
             $view->setTemplate('mrss/observation/' . $template);
@@ -810,6 +807,7 @@ class ObservationController extends AbstractActionController
         }
 
         $variable = $this->getVariableSubstitutionService();
+        $variable->setStudyYear($year);
 
         $submittedValues = array();
 

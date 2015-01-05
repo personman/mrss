@@ -16,5 +16,39 @@ $this->headScript()->appendFile(
 </div>
 <?php endif ?>
 
-<?= $this->ztbForm($form->prepare()) ?>
+<?//= $this->ztbForm($form->prepare()) ?>
+
+
+<?php $form->prepare() ?>
+<?= $this->form()->openTag($form) ?>
+
+
+<?php foreach ($benchmarkGroup->getChildren($this->currentStudy()->getCurrentYear(), false) as $benchmark): ?>
+    <?php if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading'): ?>
+
+        <h3><?= $variable->substitute($benchmark->getName()) ?></h3>
+
+        <?php if ($desc = $benchmark->getDescription()): ?>
+            <p>
+                <?= $variable->substitute($desc) ?>
+            </p>
+        <?php endif ?>
+
+    <?php else: ?>
+        <?= $this->ztbFormElement($form->get($benchmark->getDbColumn())) ?>
+    <?php endif ?>
+
+<?php endforeach ?>
+
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+    <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-buttons[submit]">
+            <div class="controls" id="controls-buttons[submit]">
+                <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+            </div>
+        </div>
+    </fieldset>
+<?php endif ?>
+
+<?= $this->form()->closeTag() ?>
 

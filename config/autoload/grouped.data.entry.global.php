@@ -1,9 +1,10 @@
 <?php
 /**
  * This is only needed for NCCBP data entry, so it probably shouldn't be auto loaded
+ * @deprecated: Delete this soon
  */
 
-return array(
+return array(/*
     'data-entry' => array(
         'grouped' => array(
            'form1_subscriber_info' => array(
@@ -760,4 +761,4 @@ Figures should = (total number of full-time staff) + (total part-time, non-cleri
             )
         )
     )
-);
+*/);
