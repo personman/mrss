@@ -23,7 +23,8 @@ class Benchmark extends AbstractForm
                 'name' => 'name',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Data Entry Label'
+                    'label' => 'Data Entry Label',
+                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
                 )
             )
         );
@@ -33,7 +34,8 @@ class Benchmark extends AbstractForm
                 'name' => 'reportLabel',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Report Label'
+                    'label' => 'Report Label',
+                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
                 )
             )
         );
@@ -67,7 +69,8 @@ class Benchmark extends AbstractForm
                 'name' => 'description',
                 'type' => 'Textarea',
                 'options' => array(
-                    'label' => 'Data Entry Description'
+                    'label' => 'Data Entry Description',
+                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
                 ),
                 'attributes' => array(
                     'rows' => 8
@@ -82,7 +85,7 @@ class Benchmark extends AbstractForm
                 'options' => array(
                     'label' => 'Report Description',
                     'help-block' => 'If this field is left blank, the data entry
-                    version will be used in reports.'
+                    version will be used in reports. For dynamic years, use [year], [year_minus_2], etc.'
                 ),
                 'attributes' => array(
                     'rows' => 8

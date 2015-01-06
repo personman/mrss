@@ -34,6 +34,8 @@ class National extends Report
         $this->setObservation($observation);
         $this->setSystem($system);
         $year = $observation->getYear();
+        $this->getVariableSubstitution()->setStudyYear($year);
+
         $reportData = array();
 
         $study = $this->getStudy();

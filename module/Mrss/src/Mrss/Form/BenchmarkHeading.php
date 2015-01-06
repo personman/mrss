@@ -21,7 +21,8 @@ class BenchmarkHeading extends AbstractForm
                 'name' => 'name',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Label'
+                    'label' => 'Label',
+                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
                 )
             )
         );
@@ -31,7 +32,8 @@ class BenchmarkHeading extends AbstractForm
                 'name' => 'description',
                 'type' => 'Textarea',
                 'options' => array(
-                    'label' => 'Description'
+                    'label' => 'Description',
+                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
                 ),
                 'attributes' => array(
                     'rows' => 8
