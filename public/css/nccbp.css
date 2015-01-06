@@ -517,6 +517,18 @@ table.dataTable thead .sorting.heatMapYear {
 }
 
 
+.submittedValues h3 {
+    margin-top: 20px;
+}
+
+form h3 {
+    margin-top: 40px;
+}
+
+#data-dictionary h3 {
+    margin-top: 30px;
+}
+
 /* highlight form */
 .control-group {
     padding: 10px;
