@@ -599,6 +599,40 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
 
         ksort($children, SORT_NUMERIC);
 
+        $children = $this->removeEmptySections($children);
+
+        return $children;
+    }
+
+    /**
+     * If we find two headings in a row, drop the first
+     * @param $children
+     */
+    protected function removeEmptySections($children)
+    {
+        $previousHeading = null;
+
+        foreach ($children as $key => $child) {
+            if (!is_null($previousHeading)) {
+                if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
+                    unset($children[$previousHeading]);
+                }
+            }
+
+            if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
+                $previousHeading = $key;
+            } else {
+                $previousHeading = null;
+            }
+        }
+
+        // Also check to see if the last item is a heading
+        $lastChild = end($children);
+        reset($children);
+        if (get_class($lastChild) == 'Mrss\Entity\BenchmarkHeading') {
+            array_pop($children);
+        }
+
         return $children;
     }
 }
