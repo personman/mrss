@@ -153,6 +153,12 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_net_rev_per_cred_hr;
 
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $best_practices;
+
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $best_practices_desc;
+
 
     // Form 1A (retired)
     /** @ORM\Column(type="float", nullable=true) */
@@ -2955,6 +2961,11 @@ class Observation
         // Convert empty strings to null so they don't end up as 0
         if ($value === '') {
             $value = null;
+        }
+
+        // Convert arrays to string
+        if (is_array($value)) {
+            $value = implode("\n", $value);
         }
 
         $this->$benchmark = $value;

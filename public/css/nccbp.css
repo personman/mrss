@@ -716,8 +716,11 @@ input, textarea {
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
-input {
+input[type=text] {
     height: 34px;
+}
+.controls label {
+    font-weight: normal;
 }
 input:focus, textarea:focus {
     border-color: #66afe9;

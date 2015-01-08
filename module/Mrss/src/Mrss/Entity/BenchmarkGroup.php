@@ -615,7 +615,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         foreach ($children as $key => $child) {
             if (!is_null($previousHeading)) {
                 if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
-                    unset($children[$previousHeading]);
+                    // Exception for just-added headings
+                    $previousChild = $children[$previousHeading];
+                    if ($previousChild->getSequence() > 0) {
+                        unset($children[$previousHeading]);
+                    }
                 }
             }
 

@@ -121,8 +121,10 @@ class Benchmark extends AbstractForm
                         'wholedollars' => 'Whole Dollars',
                         'float' => 'Float',
                         'text' => 'Text',
+                        'textarea' => 'Textarea',
                         'computed' => 'Computed',
-                        'radio' => 'Radio'
+                        'radio' => 'Radio',
+                        'checkboxes' => 'Checkboxes'
                     )
                 )
             )
@@ -155,9 +157,14 @@ class Benchmark extends AbstractForm
         $this->add(
             array(
                 'name' => 'options',
-                'type' => 'Text',
+                'type' => 'Textarea',
                 'options' => array(
-                    'label' => 'Options'
+                    'label' => 'Options',
+                    'help-block' => 'One option per line.'
+                ),
+                'attributes' => array(
+                    'rows' => 8,
+                    'cols' => 80,
                 )
             )
         );

@@ -1103,6 +1103,10 @@ class SubscriptionController extends AbstractActionController
         $message->setFrom('no-reply@jccc.edu');
         $message->addBcc('michelletaylor@jccc.edu');
 
+        if ($subscription->getStudy()->getId() == 2) {
+            $message->addBcc('louguthrie@jccc.edu');
+        }
+
         // Add recipients
         $users = $subscription->getCollege()->getUsersByStudy($study);
         foreach ($users as $user) {

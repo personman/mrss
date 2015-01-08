@@ -305,6 +305,13 @@ class ObservationController extends AbstractActionController
         // bind observation to form, which will populate it with values
         $form->bind($observation);
 
+        // Hard-coded binding of best practices. @todo: make this more elegant
+        if ($form->has('best_practices')) {
+            $bp = $form->get('best_practices');
+            $bp->setValue(explode("\n", $bp->getValue()));
+            //prd($_POST);
+        }
+
         // Handle form submission
         if ($this->getRequest()->isPost()) {
             // Is data entry open?
@@ -333,7 +340,9 @@ class ObservationController extends AbstractActionController
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
 
-                $this->mergeAllSubobservations();
+                if ($benchmarkGroup->getUseSubObservation()) {
+                    $this->mergeAllSubobservations();
+                }
 
                 $this->getServiceLocator()->get('em')->flush();
 

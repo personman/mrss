@@ -95,7 +95,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $yearsAvailable;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $options;
 
@@ -592,10 +592,28 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         if ($this->getInputType() == 'radio') {
             $element['type'] = 'Select';
 
-            $options = explode(',', $this->getOptions());
+            $options = explode("\n", $this->getOptions());
             $options = array_combine($options, $options);
             $element['attributes']['options'] = $options;
             $element['options']['empty_option'] = '---';
+        }
+
+        // Checkboxes type:
+        if ($this->getInputType() == 'checkboxes') {
+            $element['type'] = 'MultiCheckbox';
+
+            $options = $this->getOptions();
+            $options = str_replace("\r", '', $options);
+            $options = explode("\n", $options);
+            $options = array_combine($options, $options);
+            $element['attributes']['options'] = $options;
+            $element['options']['use_hidden_element'] = true;
+            //$element['options']['empty_option'] = '---';
+        }
+
+        // Textarea
+        if ($this->getInputType() == 'textarea') {
+            $element['type'] = 'Textarea';
         }
 
         // Some HTML 5 validation

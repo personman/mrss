@@ -114,6 +114,7 @@ class Benchmark extends AbstractModel
             $max = $this->getMaxSequence();
             $newMax = $max + 1;
             $benchmark->setSequence($newMax);
+            $benchmark->setReportSequence($newMax);
         }
 
         $this->getEntityManager()->persist($benchmark);

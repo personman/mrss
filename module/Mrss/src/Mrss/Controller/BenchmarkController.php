@@ -388,6 +388,9 @@ class BenchmarkController extends AbstractActionController
         return $this;
     }
 
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
     public function getBenchmarkModel()
     {
         if (empty($this->benchmarkModel)) {
