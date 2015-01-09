@@ -15,7 +15,7 @@ $this->headScript()->appendFile(
 
 <?php if ($description = $benchmarkGroup->getDescription()): ?>
 <div class="well">
-    <?= $description ?>
+    <?= $variable->substitute($description) ?>
 </div>
 <?php endif ?>
 
