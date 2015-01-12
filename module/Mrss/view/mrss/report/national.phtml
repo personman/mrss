@@ -63,6 +63,10 @@ $this->headScript()->appendFile(
         <h3 class="benchmarkGroupTitle">
             <span class="small-heading"><?= $formNumber ?></span><br>
             <?= $formTitle ?>
+            <?php if (!empty($benchmarkGroup['timeframe'])): ?>
+                <span class="timeframe">(<?= $benchmarkGroup['timeframe'] ?>)</span>
+            <?php endif ?>
+
         </h3>
 
         <table class="table table-hover table-striped-manual">
@@ -89,14 +93,21 @@ $this->headScript()->appendFile(
                     <?php if (!empty($benchmark['heading'])): ?>
                         <tr class="retportSeparator"></tr>
                         <tr class="reportSubHeading">
-                            <td colspan="10"><?= $benchmark['name'] ?></td>
+                            <td colspan="10">
+                                <?= $benchmark['name'] ?>
+                            </td>
                         </tr>
                         <?php continue ?>
                     <?php endif; ?>
 
                     <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
                     <tr class="<?= $rowClass ?>">
-                        <td class="benchmarkLabel"><?= $benchmark['benchmark'] ?></td>
+                        <td class="benchmarkLabel">
+                            <?= $benchmark['benchmark'] ?>
+                            <?php if (!empty($benchmark['timeframe'])): ?>
+                                <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
+                            <?php endif ?>
+                        </td>
                         <?php if ($benchmark['reported'] !== null): ?>
                         <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
                         <td class="percentileColor">

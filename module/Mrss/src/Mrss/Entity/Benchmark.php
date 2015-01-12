@@ -39,6 +39,13 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $name;
 
     /**
+     * Timeframe
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $timeframe;
+
+    /**
      * @ORM\Column(type="text")
      */
     protected $description;
@@ -186,6 +193,18 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getName()
     {
         return $this->name;
+    }
+
+    public function setTimeframe($timeframe)
+    {
+        $this->timeframe = $timeframe;
+
+        return $this;
+    }
+
+    public function getTimeframe()
+    {
+        return $this->timeframe;
     }
 
     public function setDescription($description)

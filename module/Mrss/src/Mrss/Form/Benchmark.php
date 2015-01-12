@@ -93,6 +93,17 @@ class Benchmark extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'timeframe',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Timeframe',
+                    'help-block' => 'Shown on reports. For dynamic years, use [year], [year_minus_2], etc.'
+                )
+            )
+        );
+
         // @todo: Only show this to sr admins.
         $this->add(
             array(

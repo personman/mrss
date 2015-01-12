@@ -43,6 +43,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     protected $shortName;
 
     /**
+     * Timeframe
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $timeframe;
+
+    /**
      * @ORM\Column(type="string")
      */
     protected $url;
@@ -161,6 +168,18 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     public function getShortName()
     {
         return $this->shortName;
+    }
+
+    public function setTimeframe($timeframe)
+    {
+        $this->timeframe = $timeframe;
+
+        return $this;
+    }
+
+    public function getTimeframe()
+    {
+        return $this->timeframe;
     }
 
     public function setUrl($url)

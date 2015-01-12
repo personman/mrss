@@ -44,6 +44,7 @@ class National extends Report
         foreach ($benchmarkGroups as $benchmarkGroup) {
             $groupData = array(
                 'benchmarkGroup' => $benchmarkGroup->getName(),
+                'timeframe' => $this->getVariableSubstitution()->substitute($benchmarkGroup->getTimeframe()),
                 'benchmarks' => array()
             );
             $benchmarks = $benchmarkGroup->getChildren($year, true, 'report');
@@ -148,6 +149,9 @@ class National extends Report
         $benchmarkData['prefix'] = $prefix;
         $benchmarkData['suffix'] = $suffix;
 
+        // Timeframe
+        $benchmarkData['timeframe'] = $this->getVariableSubstitution()->substitute($benchmark->getTimeframe());
+
         // Chart
         $chartConfig = array(
             'dbColumn' => $benchmark->getDbColumn(),
@@ -199,6 +203,10 @@ class National extends Report
         );
 
         foreach ($reportData as $benchmarkGroup) {
+            if (!empty($benchmarkGroup['timeframe'])) {
+                $benchmarkGroup['benchmarkGroup'] .= ' (' . $benchmarkGroup['timeframe'] . ')';
+            }
+
             // Header
             $headerRow = array(
                 $benchmarkGroup['benchmarkGroup'],
@@ -227,6 +235,11 @@ class National extends Report
                     $row++;
                     continue;
                 }
+
+                if (!empty($benchmark['timeframe'])) {
+                    $benchmark['benchmark'] .= ' (' . $benchmark['timeframe'] . ')';
+                }
+
 
                 if (null !== $benchmark['reported']) {
                     $reported = $benchmark['prefix'] .
