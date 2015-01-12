@@ -43,6 +43,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     protected $shortName;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    protected $url;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $format;
@@ -156,6 +161,18 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     public function getShortName()
     {
         return $this->shortName;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     public function setFormat($format)

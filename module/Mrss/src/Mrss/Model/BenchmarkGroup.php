@@ -29,6 +29,15 @@ class BenchmarkGroup extends AbstractModel
     }
 
     /**
+     * @param $url
+     * @return BenchmarkGroupEntity
+     */
+    public function findOneByUrlAndStudy($url, $study)
+    {
+        return $this->getRepository()->findOneBy(array('url' => $url, 'study' => $study));
+    }
+
+    /**
      * @param $id
      * @return \Mrss\Entity\BenchmarkGroup
      */

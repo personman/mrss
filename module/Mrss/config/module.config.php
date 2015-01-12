@@ -64,9 +64,6 @@ return array(
                         'may_terminate' => true,
                         'options' => array(
                             'route' => '/:benchmarkGroup',
-                            'constraints' => array(
-                                'benchmarkGroup' => '[0-9]+'
-                            ),
                             'defaults' => array(
                                 'action' => 'dataEntry',
                                 'benchmarkGroup' => 0

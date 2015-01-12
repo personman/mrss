@@ -131,7 +131,7 @@ class NavigationFactory extends DefaultNavigationFactory
                         'label' => $bGroup->getName(),
                         'route' => 'data-entry/edit',
                         'params' => array(
-                            'benchmarkGroup' => $bGroup->getId()
+                            'benchmarkGroup' => $bGroup->getUrl()
                         )
                     );
                 }

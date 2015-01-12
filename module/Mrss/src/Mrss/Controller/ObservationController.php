@@ -244,12 +244,12 @@ class ObservationController extends AbstractActionController
     public function dataEntryAction()
     {
         // Fetch the form
-        $benchmarkGroupId = $this->params('benchmarkGroup');
+        $benchmarkGroupUrl = $this->params('benchmarkGroup');
 
         /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
         $benchmarkGroup = $this->getServiceLocator()
             ->get('model.benchmarkGroup')
-            ->find($benchmarkGroupId);
+            ->findOneByUrlAndStudy($benchmarkGroupUrl, $this->currentStudy());
 
         if (empty($benchmarkGroup)) {
             throw new \Exception('Benchmark group not found');
