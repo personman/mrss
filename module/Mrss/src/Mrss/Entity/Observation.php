@@ -159,6 +159,14 @@ class Observation
     /** @ORM\Column(type="text", nullable=true) */
     protected $best_practices_desc;
 
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $on_campus_housing;
+
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $four_year_degrees;
+
+
+
 
     // Form 1A (retired)
     /** @ORM\Column(type="float", nullable=true) */
@@ -1222,6 +1230,11 @@ class Observation
     protected $ft_f_yminus4_degr_cert;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_f_yminus4_degr_and_transf;
+
+    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $ft_perc_comp;
@@ -1252,6 +1265,11 @@ class Observation
     protected $pt_f_yminus4_degr_cert;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $pt_f_yminus4_degr_and_transf;
+
+    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $pt_perc_comp;
@@ -1280,6 +1298,11 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $ft_yminus7_degr;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_yminus7_degr_and_tranf;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -1324,6 +1347,11 @@ class Observation
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
+    protected $pt_yminus7_degr_and_tranf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $pt_percminus7_tran;
 
     /**
@@ -1337,6 +1365,11 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $tot_stud_trans;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $tot_stud_trans_two_year;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)

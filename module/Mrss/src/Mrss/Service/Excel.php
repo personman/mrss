@@ -6,6 +6,7 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
 use Mrss\Entity\Subscription;
 use Mrss\Entity\Benchmark;
+use Mrss\Entity\BenchmarkHeading;
 use Mrss\Model\Benchmark as BenchmarkModel;
 use PHPExcel;
 use PHPExcel_Worksheet;
@@ -16,10 +17,12 @@ use PHPExcel_Cell;
 class Excel
 {
     // Maximum row count
-    protected $rowCount = 160;
+    protected $rowCount = 300;
 
     // Green background for value column
     protected $valueColumnBackground = 'A0F2A3';
+
+    protected $blankBackground = 'FFFFFF';
 
     // The Excel column index that holds the db_column
     protected $dbColumnColumn;
@@ -37,6 +40,8 @@ class Excel
 
     /** @var  \Mrss\Model\Benchmark */
     protected $benchmarkModel;
+
+    protected $variableSubstitution;
 
     /**
      * @deprecated
@@ -166,6 +171,9 @@ class Excel
         $row = 2;
         foreach ($subscription->getStudy()->getBenchmarkGroups() as $benchmarkGroup) {
             $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($year);
+            $this->writeBenchmarkGroupRow($sheet, $row, $benchmarkGroup);
+            $row++;
+
             foreach ($benchmarks as $benchmark) {
                 $this->writeRow($sheet, $row, $benchmark, $subscription);
                 $row++;
@@ -188,12 +196,35 @@ class Excel
         // Loop over each benchmark, adding a row
         $row = 2;
         foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
-            $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($year);
+            $this->writeBenchmarkGroupRow($sheet, $row, $benchmarkGroup);
+            $row++;
+
+            $benchmarks = $benchmarkGroup->getChildren($year, false);
             foreach ($benchmarks as $benchmark) {
-                $this->writeRowSystem($sheet, $row, $benchmark, $subscriptions);
+                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                    $this->writeSubHeading($sheet, $row, $benchmark);
+                } else {
+                    $this->writeRowSystem($sheet, $row, $benchmark, $subscriptions);
+                }
+
                 $row++;
             }
         }
+    }
+
+    public function writeBenchmarkGroupRow(PHPExcel_Worksheet $sheet, $row, $benchmarkGroup)
+    {
+        // Write the label
+        $sheet->setCellValue('A' . $row, $benchmarkGroup->getName());
+
+        $theRow = $sheet->getStyle('A' . $row);
+        $theRow->getFont()->setBold(true);
+
+        $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
+            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+            ->getStartColor()->setARGB($this->blankBackground);
+
+        $sheet->getStyle('A' . $row)->getFont()->setSize(14);
     }
 
     /**
@@ -232,7 +263,8 @@ class Excel
     ) {
 
         // Write the label
-        $sheet->setCellValueByColumnAndRow(0, $row, $benchmark->getName());
+        $label = $this->getVariableSubstitution()->substitute($benchmark->getName());
+        $sheet->setCellValueByColumnAndRow(0, $row, $label);
 
         // A value field for each subscription
         $column = 1;
@@ -247,12 +279,25 @@ class Excel
         $sheet->setCellValueByColumnAndRow(
             $column,
             $row,
-            $benchmark->getDescription()
+            $this->getVariableSubstitution()->substitute(strip_tags($benchmark->getDescription()))
         );
         $column++;
 
         // Write the db column
         $sheet->setCellValueByColumnAndRow($column, $row, $benchmark->getDbColumn());
+    }
+
+    public function writeSubheading(PHPExcel_Worksheet $sheet, $row, BenchmarkHeading $heading)
+    {
+        $subheading = $this->getVariableSubstitution()->substitute($heading->getName());
+        $sheet->setCellValue('A' . $row, $subheading);
+
+        $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
+            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+            ->getStartColor()->setARGB($this->blankBackground);
+
+        $theRow = $sheet->getStyle('A' . $row);
+        $theRow->getFont()->setBold(true);
     }
 
     public function download($spreadsheet)
@@ -915,4 +960,18 @@ class Excel
     {
         return $this->benchmarkModel;
     }
+
+    public function setVariableSubstition(VariableSubstitution $service)
+    {
+        $this->variableSubstitution = $service;
+
+        return $this;
+    }
+
+    public function getVariableSubstitution()
+    {
+        return $this->variableSubstitution;
+    }
+
+
 }

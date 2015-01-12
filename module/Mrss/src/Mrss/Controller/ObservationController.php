@@ -494,6 +494,7 @@ class ObservationController extends AbstractActionController
                     $excelService = new Excel();
                     $excelService->setCurrentStudy($study);
                     $excelService->setCurrentCollege($this->currentCollege());
+                    $excelService->setVariableSubstition($this->getVariableSubstitutionService());
 
                     $allData = $excelService->getObservationDataFromExcel($filename);
                 } catch (\Exception $exception) {
@@ -678,6 +679,7 @@ class ObservationController extends AbstractActionController
             $this->getServiceLocator()->get('model.benchmark')
         );
         $excelService->setCurrentStudy($this->currentStudy());
+        $excelService->setVariableSubstition($this->getVariableSubstitutionService());
         $excelService->getExcelForSubscriptions(array($subscription));
     }
 
@@ -709,6 +711,7 @@ class ObservationController extends AbstractActionController
 
         $excelService = new \Mrss\Service\Excel();
         $excelService->getExcelForSubscriptions($subscriptions);
+        $excelService->setVariableSubstition($this->getVariableSubstitutionService());
     }
 
     /**
