@@ -292,12 +292,12 @@ class ReportController extends AbstractActionController
         //$this->view->headTitle('test');
 
         // Nccbp migration: temporary
-        if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
+        /*if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
             $this->flashMessenger()->addErrorMessage(
                 "Reports prior to 2014 are under review and will be available soon."
             );
             return $this->redirect()->toUrl('/reports/executive/2014');
-        }
+        }*/
 
 
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
@@ -371,14 +371,28 @@ class ReportController extends AbstractActionController
         $year = $this->params()->fromRoute('year');
 
         if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
+            /*$year = $this->currentStudy()->getCurrentYear();
 
             // But if reports aren't open yet, show them last year's by default
-            $college = $this->currentCollege();
+
             $isJCCC = (!empty($college) && $college->getId() == 101);
-            if (/*!$isJCCC && */!$this->currentStudy()->getReportsOpen()) {
+            if (/*!$isJCCC && *//*!$this->currentStudy()->getReportsOpen()) {
                 $year = $year - 1;
+            }*/
+
+
+            // New
+            /** @var \Mrss\Model\Subscription $subModel */
+            $subModel = $this->getServiceLocator()->get('model.subscription');
+            $college = $this->currentCollege();
+            $before = null;
+            if (!$this->currentStudy()->getReportsOpen()) {
+                $before = $this->currentStudy()->getCurrentYear();
             }
+
+            $latestSubscription = $subModel->getLatestSubscription($this->currentStudy(), $college->getId(), $before);
+
+            $year = $latestSubscription->getYear();
         }
 
         return $year;

@@ -105,6 +105,27 @@ class Subscription extends AbstractModel
         return $years;
     }
 
+    public function getLatestSubscription(StudyEntity $study, $collegeId, $before = null)
+    {
+        $studyId = $study->getId();
+
+        $filters = array(
+            'college' => $collegeId,
+            'study' => $studyId
+        );
+
+        if (!is_null($before)) {
+            $filters['year'] = range(2002, $before - 1);
+        }
+
+        return $this->getRepository()->findOneBy(
+            $filters,
+            array(
+                'year' => 'DESC'
+            )
+        );
+    }
+
     public function save(SubscriptionEntity $subscription)
     {
         $this->getEntityManager()->persist($subscription);
