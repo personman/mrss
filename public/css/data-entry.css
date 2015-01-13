@@ -30,7 +30,25 @@ form#system-admin-switch {
 form#system-admin-switch select {
     margin-right: 10px;
 }
+/*
+.controls {
+    clear: both;
+}
+.form-horizontal input, .form-horizontal textarea, .form-horizontal select {
+    float: left;
+}
+.form-horizontal .help-block {
+    margin-bottom: 0;
+    border: 2px solid #CCC;
+    padding: 10px;
+    font-size: 12px;
+    width: 50%;
+    margin-left: 200px;
+}*/
 
+.form-horizontal .controls {
+    width: 200px;
+}
 
 /* Side-by-side fields in instruction form */
 .two-col .control-group {
@@ -41,6 +59,27 @@ form#system-admin-switch select {
 
 #fieldset-buttons {
     clear: both;
+}
+
+.priorYearValue {
+    background: #AAA;
+    color: white;
+    padding: 12px 7px 3px 7px;
+    margin-left: -11px;
+}
+
+/* standard data entry help */
+.form-horizontal .controls {
+    margin-left: 15px;
+    float:left;
+}
+
+.help-block {
+    float: left;
+    width: 40%;
+    border: 2px solid #DDD;
+    background: #DDD;
+    padding: 7px 10px;
 }
 
 /* NCCBP */

@@ -972,6 +972,4 @@ class Excel
     {
         return $this->variableSubstitution;
     }
-
-
 }

@@ -1052,6 +1052,15 @@ return array(
                                 'redirect' => null
                             )
                         )
+                    ),
+                    'definitions' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/definitions',
+                            'defaults' => array(
+                                'action' => 'definitions'
+                            )
+                        )
                     )
                 )
             ),

@@ -10,6 +10,8 @@ use Mrss\Entity\SubObservation;
 use Mrss\Service\Excel;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
+use Zend\Form\Form;
+use Zend\Form\Element;
 
 class ObservationController extends AbstractActionController
 {
@@ -217,6 +219,17 @@ class ObservationController extends AbstractActionController
         return $observation;
     }
 
+    public function getLastYearObservation()
+    {
+        $year = $this->getCurrentStudy()->getCurrentYear();
+        $lastYear = $year - 1;
+        $collegeId = $user = $this->zfcUserAuthentication()->getIdentity()->getCollege()->getId();
+
+        /** @var \Mrss\Model\Observation $model */
+        $model = $this->getServiceLocator()->get('model.observation');
+        return $model->findOne($collegeId, $lastYear);
+    }
+
     public function getCurrentObservationByIpeds($ipeds)
     {
         /** @var \Mrss\Model\College $collegeModel */
@@ -285,10 +298,19 @@ class ObservationController extends AbstractActionController
 
         }
 
+        // Clone the unedited observation for comparison
         $oldObservation = clone $observation;
 
+        /** @var \Mrss\Service\FormBuilder $formService */
         $formService = $this->getServiceLocator()
             ->get('service.formBuilder');
+
+
+        // If they entered data last year, populate it here for the help-block
+        if ($lastYearObservation = $this->getLastYearObservation()) {
+            $formService->setLastYearObservation($lastYearObservation);
+        }
+
         $form = $formService->buildForm(
             $benchmarkGroup,
             $observation->getYear(),
@@ -366,13 +388,43 @@ class ObservationController extends AbstractActionController
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
                 'nccbpSubscription' => $nccbpSubscription,
-                'variable' => $this->getVariableSubstitutionService()
+                'variable' => $this->getVariableSubstitutionService(),
+                'dataDefinitionForm' => $this->getDataDefinitionForm()
             )
         );
 
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    public function getDataDefinitionForm()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $form = new Form('dataDefinitionForm');
+
+        $form->add(
+            array(
+                'name' => 'dataDefinitions',
+                'type' => 'Select',
+                'options' => array(
+                    'label' => 'Help text'
+                ),
+                'attributes' => array(
+                    'id' => 'dataDefinitions',
+                    'options' => array(
+                        'show' => 'Show all data definitions',
+                        'active' => 'Show data definitions for active field',
+                        'hide' => 'Hide all data definitions',
+                    )
+                )
+            )
+        );
+
+        $form->get('dataDefinitions')->setValue($user->getDataDefinitions());
+
+        return $form;
     }
 
     public function mergeAllSubobservations()

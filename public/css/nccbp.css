@@ -763,9 +763,6 @@ input:focus, textarea:focus {
 .form-horizontal .controls:first-child {
     *padding-left: 180px;
 }
-.form-horizontal .help-block {
-    margin-bottom: 0;
-}
 
 
 .control-group.warning .control-label,
@@ -914,6 +911,15 @@ input:focus, textarea:focus {
 
 
 #control-group-UPAY_SITE_ID, #control-group-EXT_TRANS_ID, #control-group-AMT {
+    display: none;
+}
+
+/* Data definition switch */
+#dataDefinitionForm {
+    width: 200px;
+    /*float: right;*/
+}
+#dataDefinitionForm .control-label {
     display: none;
 }
 

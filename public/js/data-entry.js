@@ -1,6 +1,8 @@
 var formErrorMessages = {}
 
 $(function() {
+    setupHelpBlocks()
+
     // Type hints:
     // Dollars
     $('input.input-dollars').addClass('form-control')
@@ -292,5 +294,58 @@ function addWorkForceCustomizations()
 if(typeof String.prototype.trim !== 'function') {
     String.prototype.trim = function() {
         return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+function setupHelpBlocks()
+{
+    // Hide empty help-blocks
+    $('.form-horizontal .help-block').each(function(i, e) {
+        var val = $(this).html()
+        if (!val) {
+            $(this).remove()
+        } else {
+            // Move help-blocks up one level in the dom
+            $(this).appendTo($(this).parent().parent())
+
+            // Change the appearance if there's no definition (just last year's value)
+            var html = $(this).html()
+            if (html.substr(-8) == '</span> ') {
+                $(this).css('background', 'transparent').css('border', 'transparent')
+            }
+
+        }
+    })
+
+    // Help blocks (data definitions)
+    updateHelpBlocks()
+    $('#dataDefinitions').change(function() {
+        updateHelpBlocks()
+
+        // Save the setting for the user
+        var value = $('#dataDefinitions').val()
+        $.post('/account/definitions', {definitions: value}, function(data) {
+            // Nothing to do
+        })
+    })
+}
+
+function updateHelpBlocks()
+{
+    var value = $('#dataDefinitions').val()
+
+    if (value == 'show') {
+        $('.help-block').show()
+    } else if (value == 'hide') {
+        $('.help-block').hide()
+    } else {
+        // Hide, then activate focus
+        $('.help-block').hide()
+
+        $('input, select, textarea').focus(function() {
+            // Hide any previous help text first
+            $('.help-block').hide()
+            $(this).parents('.control-group').find('.help-block').show()
+        })
     }
 }

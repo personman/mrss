@@ -96,12 +96,13 @@ return array(
                 array(
                     'controller' => 'reports',
                     'action' => 'executiveprint',
+
                     'roles' => array('guest')
                 ),
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'users',
-                    'action' => array('account', 'accountedit'),
+                    'action' => array('account', 'accountedit', 'definitions'),
                     'roles' => array('user')
                 ),
                 array(

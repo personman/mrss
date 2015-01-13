@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Mrss\Controller;
 
 use PHPExcel;
@@ -267,6 +266,27 @@ class UserController extends AbstractActionController
         return array(
             'user' => $user
         );
+    }
+
+    /**
+     * Update data definitions user setting via ajax
+     */
+    public function definitionsAction()
+    {
+        $definitions = $this->params()->fromPost('definitions');
+
+        if (empty($definitions)) {
+            $definitions = null;
+        }
+
+        $userModel = $this->getServiceLocator()->get('model.user');
+        $userId = $this->zfcUserAuthentication()->getIdentity()->getId();
+        $user = $userModel->find($userId);
+        $user->setDataDefinitions($definitions);
+        $userModel->save($user);
+        $userModel->getEntityManager()->flush();
+
+        die('ok');
     }
 
     protected function getUserForm($user)

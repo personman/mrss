@@ -121,6 +121,16 @@ class User implements UserInterface, ProviderInterface
      */
     protected $adminBenchmarkSorting;
 
+    /**
+     * User setting for data definition help-blocks in data entry
+     *
+     * 'hide' means hide all, 'show' means show all, NULL means show on hover
+     *
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $dataDefinitions;
+
     public function __construct()
     {
         $this->studies = new ArrayCollection();
@@ -404,6 +414,18 @@ class User implements UserInterface, ProviderInterface
         }
 
         return $this->adminBenchmarkSorting;
+    }
+
+    public function setDataDefinitions($def)
+    {
+        $this->dataDefinitions = $def;
+
+        return $this;
+    }
+
+    public function getDataDefinitions()
+    {
+        return $this->dataDefinitions;
     }
 
     public function getFullName()

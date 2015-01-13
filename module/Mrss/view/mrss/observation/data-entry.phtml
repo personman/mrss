@@ -9,9 +9,19 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
-<h1>
-    <?= $benchmarkGroup->getName() ?>
-</h1>
+
+
+
+<div class="row">
+    <div class="col-md-9">
+        <h1>
+            <?= $benchmarkGroup->getName() ?>
+        </h1>
+    </div>
+    <div class="col-md-3">
+        <?= $this->ztbForm($dataDefinitionForm->prepare()) ?>
+    </div>
+</div>
 
 <?php if ($description = $benchmarkGroup->getDescription()): ?>
 <div class="well">

@@ -13,6 +13,8 @@ class FormBuilder
 {
     protected $variableSubstitutionService;
 
+    protected $lastYearObservation;
+
     /**
      * the buildForm method
      *
@@ -39,6 +41,8 @@ class FormBuilder
             }
 
             $element = $this->substituteVariables($element);
+
+            $element = $this->addPriorYearValue($element);
 
             $form->add($element);
             $inputFilter->add($elementProvider->getFormElementInputFilter());
@@ -101,6 +105,20 @@ class FormBuilder
         return $element;
     }
 
+    protected function addPriorYearValue($element)
+    {
+        if ($lastYearObservation = $this->getLastYearObservation()) {
+            $dbColumn = $element['name'];
+            if ($lastYearObservation->has($dbColumn)) {
+                $value = $lastYearObservation->get($dbColumn);
+                $prior = '<span class="priorYearValue">Last year: ' . $value . '</span> ';
+                $element['options']['help-block'] = $prior . $element['options']['help-block'];
+            }
+        }
+
+        return $element;
+    }
+
     public function setVariableSubstitutionService($service)
     {
         $this->variableSubstitutionService = $service;
@@ -111,5 +129,17 @@ class FormBuilder
     public function getVariableSubstitutionService()
     {
         return $this->variableSubstitutionService;
+    }
+
+    public function setLastYearObservation($obs)
+    {
+        $this->lastYearObservation = $obs;
+
+        return $this;
+    }
+
+    public function getLastYearObservation()
+    {
+        return $this->lastYearObservation;
     }
 }
