@@ -810,11 +810,10 @@ return array(
                     'executive' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/executive[/:ipeds[/:year]]',
+                            'route' => '/executive[/:year]',
                             'defaults' => array(
                                 'action' => 'executive',
                                 'year' => null,
-                                'ipeds' => null
                             )
                         )
                     ),
