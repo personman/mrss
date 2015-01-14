@@ -387,6 +387,22 @@ class College extends AbstractModel
             );
         }
 
+        // Filter by technical credit hours
+        if ($peerGroup->getTechnicalCredit()) {
+            $qb->andWhere(
+                'o.t_c_crh
+                BETWEEN :technical_min AND :technical_max'
+            );
+            $qb->setParameter(
+                'technical_min',
+                $peerGroup->getTechnicalCredit('min')
+            );
+            $qb->setParameter(
+                'technical_max',
+                $peerGroup->getTechnicalCredit('max')
+            );
+        }
+
         // Exclude the current college (they can't be their own peer)
         $qb->andWhere('c.id != :current_college_id');
         $qb->setParameter('current_college_id', $peerGroup->getCollege()->getId());

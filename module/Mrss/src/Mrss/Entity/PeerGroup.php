@@ -83,6 +83,9 @@ class PeerGroup
     /** @ORM\Column(type="string", nullable=true) */
     protected $serviceAreaMedianIncome;
 
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $technicalCredit;
+
     /** @ORM\Column(type="text") */
     protected $benchmarks;
 
@@ -349,6 +352,34 @@ class PeerGroup
         }
 
         return $unemployment;
+    }
+
+    /**
+     * @param $technicalCredit
+     * @return $this
+     */
+    public function setTechnicalCredit($technicalCredit)
+    {
+        $this->technicalCredit = $technicalCredit;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    public function getTechnicalCredit($type = 'range')
+    {
+        $technical = $this->technicalCredit;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($technical);
+
+            $technical = $range[$type];
+        }
+
+        return $technical;
     }
 
     /**
@@ -674,6 +705,7 @@ class PeerGroup
             $this->getServiceAreaPopulation() ||
             $this->getServiceAreaUnemployment() ||
             $this->getServiceAreaMedianIncome() ||
+            $this->getTechnicalCredit() ||
             $this->getFacultyUnionized() ||
             $this->getStaffUnionized() ||
             $this->getInstitutionalControl() ||

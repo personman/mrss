@@ -326,6 +326,21 @@ class PeerComparisonDemographics extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'technicalCredit',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => '% Technical/Career Credit Hours',
+                    'help-block' => 'Specify a range (e.g., "5 - 20",
+                        without quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'serviceAreaMedianIncome',
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset('Continue', true));
 
         $this->setInputFilter($this->getInputFilterSetup());
@@ -424,6 +439,11 @@ class PeerComparisonDemographics extends AbstractForm
         $income->setRequired(false);
         $income->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($income);
+
+        $technical = new Input('technicalCredit');
+        $technical->setRequired(false);
+        $technical->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($technical);
 
         return $filter;
     }
