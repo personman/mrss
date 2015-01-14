@@ -109,10 +109,14 @@ class FormBuilder
     {
         if ($lastYearObservation = $this->getLastYearObservation()) {
             $dbColumn = $element['name'];
+
             if ($lastYearObservation->has($dbColumn)) {
                 $value = $lastYearObservation->get($dbColumn);
-                $prior = '<span class="priorYearValue">Last year: ' . $value . '</span> ';
-                $element['options']['help-block'] = $prior . $element['options']['help-block'];
+
+                if (!is_null($value)) {
+                    $prior = '<span class="priorYearValue">Last year: ' . $value . '</span> ';
+                    $element['options']['help-block'] = $prior . $element['options']['help-block'];
+                }
             }
         }
 
