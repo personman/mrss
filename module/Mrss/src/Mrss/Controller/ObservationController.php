@@ -322,10 +322,10 @@ class ObservationController extends AbstractActionController
 
         $form->setAttribute('class', $class);
 
-
-
         // bind observation to form, which will populate it with values
         $form->bind($observation);
+
+        $form = $this->copyCampusInfoFromLastYear($form);
 
         // Hard-coded binding of best practices. @todo: make this more elegant
         if ($form->has('best_practices')) {
@@ -396,6 +396,39 @@ class ObservationController extends AbstractActionController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    protected function copyCampusInfoFromLastYear($form)
+    {
+        if ($lastYearObservation = $this->getLastYearObservation()) {
+            foreach ($this->getCampusBenchmarksToCopyFromLastYear() as $dbColumn) {
+                if ($form->has($dbColumn)) {
+                    $field = $form->get($dbColumn);
+                    $value = $field->getValue();
+
+                    if (is_null($value)) {
+                        $oldValue = $lastYearObservation->get($dbColumn);
+                        $field->setValue($oldValue);
+                    }
+                }
+            }
+        }
+
+        return $form;
+    }
+
+    protected function getCampusBenchmarksToCopyFromLastYear()
+    {
+        return array(
+            'institutional_type',
+            'institutional_demographics_campus_environment',
+            'institutional_demographics_faculty_unionized',
+            'institutional_demographics_staff_unionized',
+            'institutional_control',
+            'institutional_demographics_calendar',
+            'on_campus_housing',
+            'four_year_degrees'
+        );
     }
 
     public function getDataDefinitionForm()

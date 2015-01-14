@@ -612,6 +612,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $element['type'] = 'Select';
 
             $options = explode("\n", $this->getOptions());
+            $options = array_map('trim', $options);
             $options = array_combine($options, $options);
             $element['attributes']['options'] = $options;
             $element['options']['empty_option'] = '---';
@@ -624,6 +625,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $options = $this->getOptions();
             $options = str_replace("\r", '', $options);
             $options = explode("\n", $options);
+            $options = array_map('trim', $options);
             $options = array_combine($options, $options);
             $element['attributes']['options'] = $options;
             $element['options']['use_hidden_element'] = true;
