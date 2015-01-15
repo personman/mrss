@@ -1,0 +1,67 @@
+<?= $this->headLink()->appendStylesheet('/css/best-performers.css') ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('.show-results').click(function() {
+            var resultDiv = $(this).parent().parent().find('.results')
+
+            // If the results are already loaded, hide them
+            if (resultDiv.html().length) {
+                resultDiv.html('')
+            } else {
+                var url = $(this).attr('href')
+
+                resultDiv.html('Loading...')
+
+                $.get(url, {}, function(data) {
+                    resultDiv.html(data.colleges)
+                })
+            }
+
+
+
+            return false
+        })
+    })
+</script>
+
+
+<h1>Best Performers Report</h1>
+
+<ul class="nav nav-pills report-nav">
+    <?php foreach ($subscriptions as $subscription): ?>
+        <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
+        <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
+            <a href="<?= $this->url('reports/best-performers', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
+        </li>
+    <?php endforeach ?>
+</ul>
+
+
+<p><em>Best performers are institutions reporting data above 85th percentile (or below the 15th percentile for benchmarks like cost where lower values are better). Click a benchmark below to display the best performers. The institutions are presented in a random order.</em></p>
+
+
+<div id="best-performers">
+    <?php foreach ($reportData as $benchmarkGroup): ?>
+        <?php if (empty($benchmarkGroup['benchmarks'])) continue // Skip empty forms ?>
+
+        <h1><?= $benchmarkGroup['name'] ?></h1>
+
+
+        <?php foreach ($benchmarkGroup['benchmarks'] as $benchmarkId => $benchmarkLabel): ?>
+            <div class="best-performers-benchmark-group">
+                <h4>
+                    <a href="/reports/best-performers-result/<?= $year ?>/<?= $benchmarkId ?>" class="show-results">
+                        <?= $benchmarkLabel ?>
+                    </a>
+                </h4>
+
+                <div class="results"></div>
+
+            </div>
+        <?php endforeach ?>
+
+
+    <?php endforeach ?>
+</div>
+

@@ -20,6 +20,7 @@ class Factory implements AbstractFactoryInterface
         $map = $this->getClassMap();
         $class = $map[$name];
 
+        /** @var \Mrss\Service\Report $report */
         $report = new $class(null);
         
         // Pass in the dependencies
@@ -49,6 +50,7 @@ class Factory implements AbstractFactoryInterface
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $map = $this->getClassMap();
+        //pr($name);
 
         return (!empty($map[$name]));
     }
@@ -61,6 +63,7 @@ class Factory implements AbstractFactoryInterface
             'service.report.outliers' => 'Mrss\Service\Report\Outliers',
             'service.report.executive' => 'Mrss\Service\Report\Executive',
             'service.report.peer' => 'Mrss\Service\Report\Peer',
+            'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
         );
     }
 }

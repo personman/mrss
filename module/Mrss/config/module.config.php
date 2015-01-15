@@ -914,6 +914,27 @@ return array(
                                 'action' => 'trend'
                             )
                         )
+                    ),
+                    'best-performers' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/best-performers[/:year]',
+                            'defaults' => array(
+                                'action' => 'bestPerformers',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'best-performers-result' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/best-performers-result/:year/:benchmark',
+                            'defaults' => array(
+                                'action' => 'bestPerformersResult',
+                                'year' => null,
+                                'benchmark' => null
+                            )
+                        )
                     )
                 )
             ),

@@ -4,6 +4,7 @@ namespace Mrss\Model;
 
 use \Mrss\Entity\PercentileRank as PercentileRankEntity;
 use \Mrss\Entity\College as CollegeEntity;
+use \Mrss\Entity\Benchmark as BenchmarkEntity;
 use \Mrss\Entity\Study as StudyEntity;
 
 /**
@@ -123,6 +124,68 @@ class PercentileRank extends AbstractModel
             $ranks[] = $rank;
         }
         $results = $ranks;
+
+        return $results;
+    }
+
+    public function findBestPerformers(StudyEntity $study, BenchmarkEntity $benchmark, $year, $threshold)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        // For some benchmarks, lower is better. Calculate an absolute rank so we can sort by that.
+        $absoluteRank = 'CASE WHEN b.highIsBetter = true THEN p.rank ELSE 100 - p.rank END AS absolute_rank';
+
+        $qb->select(array('c'/*, $absoluteRank*/));
+        $qb->from('\Mrss\Entity\College', 'c');
+
+        // Join subscriptions
+        $qb->innerJoin(
+            '\Mrss\Entity\PercentileRank',
+            'p',
+            'WITH',
+            'p.college = c.id'
+        );
+
+        //$qb->andWhere("b.includeInBestPerformer = TRUE");
+
+        $qb->andWhere("p.benchmark = :benchmark_id");
+        $qb->setParameter('benchmark_id', $benchmark->getId());
+
+        $qb->andWhere("p.study = :study_id");
+        $qb->setParameter('study_id', $study->getId());
+
+        $qb->andWhere("p.year = :year");
+        $qb->setParameter('year', $year);
+
+        $qb->andWhere('p.system IS NULL');
+
+        if ($benchmark->getHighIsBetter()) {
+            $qb->andWhere('p.rank > :threshold');
+            $qb->setParameter('threshold', $threshold);
+        } else {
+            $qb->andWhere('p.rank < :threshold');
+            $invertedThreshold = 100 - $threshold;
+            $qb->setParameter('threshold', $invertedThreshold);
+        }
+
+
+        try {
+            $results = $qb->getQuery()->getResult();
+        } catch (\Exception $e) {
+            prd($e->getMessage());
+            return array();
+        }
+
+        /*// Convert back to array of rank objects
+        $colleges = array();
+        foreach ($results as $row) {
+            $college = $row;
+            pr($college->getName());
+            $colleges[] = $college;
+        }
+
+        $results = $colleges;*/
 
         return $results;
     }

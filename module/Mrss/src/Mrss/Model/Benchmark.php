@@ -70,6 +70,10 @@ class Benchmark extends AbstractModel
         }
     }
 
+    /**
+     * @param $id
+     * @return null|\Mrss\Entity\Benchmark
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);

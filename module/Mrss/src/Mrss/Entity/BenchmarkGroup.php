@@ -606,7 +606,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->inputFilter;
     }
 
-    public function getChildren($year = null, $includeComputed = true, $organization = 'data-entry')
+    public function getChildren($year = null, $includeComputed = true, $organization = 'data-entry', $filterBy = null)
     {
         $children = array();
 
@@ -618,6 +618,14 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         }
 
         foreach ($benchmarks as $benchmark) {
+            if ($filterBy == 'best-performers' && !$benchmark->getIncludeInBestPerformer()) {
+                continue;
+            }
+
+            if ($filterBy == 'report' && !$benchmark->getIncludeInNationalReport()) {
+                continue;
+            }
+
             if ($organization == 'report') {
                 $sequence = $benchmark->getReportSequence();
             } else {

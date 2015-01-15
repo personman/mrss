@@ -365,6 +365,10 @@ function getReportMenu()
             'peer' => array(
                 'label' => 'Peer Comparison',
                 'uri' => '/reports/peer'
+            ),
+            'best-performers' => array(
+                'label' => 'Best Performers Report',
+                'uri' => '/reports/best-performers'
             )
         )
     );

@@ -624,6 +624,47 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function bestPerformersAction()
+    {
+        $report = $this->getServiceLocator()->get('service.report.performers');
+        $year = $this->getYearFromRouteOrStudy();
+
+        $subscriptions = $this->currentCollege()
+            ->getSubscriptionsForStudy($this->currentStudy());
+
+        $subscription = $this->getSubscriptionModel()
+            ->findOne($year, $this->currentCollege(), $this->currentStudy());
+        if (empty($subscription)) {
+            //throw new \Exception('Subscription not found for year ' . $year);
+
+            return $this->observationNotFound();
+        }
+
+
+        return array(
+            'subscriptions' => $subscriptions,
+            'year' => $year,
+            'reportData' => $report->getBenchmarks($year)
+        );
+    }
+
+    public function bestPerformersResultAction()
+    {
+        $report = $this->getServiceLocator()->get('service.report.performers');
+        $year = $this->params()->fromRoute('year');
+        $benchmarkId = $this->params()->fromRoute('benchmark');
+
+        $colleges = $report->getBestPerformers($year, $benchmarkId);
+
+        $view = new JsonModel(
+            array(
+                'colleges' => implode('<br>', $colleges)
+            )
+        );
+
+        return $view;
+    }
+
     /**
      * If reports are not open for the current study, show an error and redirect
      *
