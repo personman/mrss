@@ -538,7 +538,10 @@ form h3 {
     padding: 10px;
     margin-bottom: 10px !important;
 }
-
+.subheading-description {
+    font-style: italic;
+    font-size: 90%;
+}
 
 /* cmsPage */
 .cmsPage {

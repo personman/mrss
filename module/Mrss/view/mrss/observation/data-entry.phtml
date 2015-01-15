@@ -42,7 +42,7 @@ $this->headScript()->appendFile(
         <h3><?= $variable->substitute($benchmark->getName()) ?></h3>
 
         <?php if ($desc = $benchmark->getDescription()): ?>
-            <p>
+            <p class="subheading-description">
                 <?= $variable->substitute($desc) ?>
             </p>
         <?php endif ?>
