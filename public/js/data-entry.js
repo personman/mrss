@@ -343,9 +343,13 @@ function updateHelpBlocks()
         $('.help-block').hide()
 
         $('input, select, textarea').focus(function() {
-            // Hide any previous help text first
-            $('.help-block').hide()
-            $(this).parents('.control-group').find('.help-block').show()
+            // Add the if statement in case the setting changes
+            var value = $('#dataDefinitions').val()
+            if (value == 'active') {
+                // Hide any previous help text first
+                $('.help-block').hide()
+                $(this).parents('.control-group').find('.help-block').show()
+            }
         })
     }
 }
