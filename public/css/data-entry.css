@@ -87,6 +87,11 @@ form#system-admin-switch select {
     width: 137px;
 }
 
+/* improve spacing for best practices question */
+#control-group-best_practices .control-label {
+    margin-right: 20px;
+}
+
 
 /* Workforce Project */
 
