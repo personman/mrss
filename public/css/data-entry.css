@@ -62,10 +62,11 @@ form#system-admin-switch select {
 }
 
 .priorYearValue {
+    display: block;
     background: #AAA;
     color: white;
-    padding: 12px 7px 3px 7px;
-    margin-left: -11px;
+    padding: 8px 7px 5px 7px;
+    margin: -9px -11px 0 -11px;
 }
 
 /* standard data entry help */
@@ -92,6 +93,16 @@ form#system-admin-switch select {
     margin-right: 20px;
 }
 
+/* Form links */
+#content .nav > li > a {
+    padding: 6px 9px;
+}
+.form-nav {
+    margin-bottom: 30px;
+}
+.form-nav .form-nav-head {
+    padding-top: 5px;
+}
 
 /* Workforce Project */
 

@@ -368,8 +368,10 @@ class ObservationController extends AbstractActionController
 
                 $this->getServiceLocator()->get('em')->flush();
 
+                $redirect = $this->params()->fromPost('redirect', '/data-entry');
+
                 $this->flashMessenger()->addSuccessMessage('Data saved.');
-                return $this->redirect()->toRoute('data-entry');
+                return $this->redirect()->toUrl($redirect);
             }
 
         }
@@ -387,6 +389,7 @@ class ObservationController extends AbstractActionController
                 'form' => $form,
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
+                'benchmarkGroups' => $this->getCurrentStudy()->getBenchmarkGroups(),
                 'nccbpSubscription' => $nccbpSubscription,
                 'variable' => $this->getVariableSubstitutionService(),
                 'dataDefinitionForm' => $this->getDataDefinitionForm()
@@ -892,6 +895,7 @@ class ObservationController extends AbstractActionController
         );
 
         // We'll use the report service to determine decimal places
+        /** @var \Mrss\Service\Report $reportService */
         $reportService = $this->getServiceLocator()->get('service.report');
 
         if (empty($observation)) {
@@ -929,22 +933,9 @@ class ObservationController extends AbstractActionController
                     continue;
                 }
 
-                $prefix = $suffix = '';
-                if ($benchmark->isPercent()) {
-                    $suffix = '%';
-                } elseif ($benchmark->isDollars()) {
-                    $prefix = '$';
-                }
-
                 $value = $observation->get($benchmark->getDbColumn());
-                if (!is_null($value) &&
-                    $benchmark->getInputType() != 'radio' &&
-                    $benchmark->getInputType() != 'checkboxes') {
-                    $decimalPlaces = $reportService->getDecimalPlaces($benchmark);
-                    $value = $prefix .
-                        number_format($value, $decimalPlaces) .
-                        $suffix;
-                }
+                $value = $benchmark->format($value);
+
                 $groupData['benchmarks'][] = array(
                     'benchmark' => $benchmark,
                     'value' => $value

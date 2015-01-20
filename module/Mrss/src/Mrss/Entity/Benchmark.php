@@ -823,6 +823,81 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $this->inputFilter;
     }
 
+    public function format($value)
+    {
+        $formatted = null;
+
+        $prefix = $suffix = '';
+        if ($this->isPercent()) {
+            $suffix = '%';
+        } elseif ($this->isDollars()) {
+            $prefix = '$';
+        }
+
+        if (!is_null($value) &&
+            $this->getInputType() != 'radio' &&
+            $this->getInputType() != 'checkboxes') {
+            $decimalPlaces = $this->getDecimalPlaces();
+            $formatted = $prefix .
+                number_format($value, $decimalPlaces) .
+                $suffix;
+        }
+
+        return $formatted;
+    }
+
+    public function getDecimalPlaces()
+    {
+        $dbColumn = $this->getDbColumn();
+
+        $map = array(
+            'enrollment_information_contact_hours_per_student' => 1,
+            'enrollment_information_market_penetration' => 1,
+            'fst_yr_gpa' => 2,
+            'avrg_1y_crh' => 2,
+            'n96_exp' => 1,
+            'n97_ova_exp' => 1,
+            'n98_enr_again' => 1,
+            'ac_adv_coun' => 1,
+            'ac_serv' => 1,
+            'adm_fin_aid' => 1,
+            'camp_clim' => 1,
+            'camp_supp' => 1,
+            'conc_indiv' => 1,
+            'instr_eff' => 1,
+            'reg_eff' => 1,
+            'resp_div_pop' => 1,
+            'safe_sec' => 1,
+            'serv_exc' => 1,
+            'stud_centr' => 1,
+            'act_coll_learn' => 1,
+            'stud_eff' => 1,
+            'acad_chall' => 1,
+            'stud_fac_int' => 1,
+            'sup_learn' => 1,
+            'choo_again' => 1,
+            'ova_impr' => 1,
+            'av_cred_sec_size' => 2,
+            'griev_occ_rate' => 4,
+            'harass_occ_rate' => 4,
+            'stu_fac_ratio' => 2,
+            'stud_inst_serv_ratio' => 2,
+            'empl_inst_serv_ratio' => 2
+        );
+
+        $decimalPlaces = 0;
+        if (isset($map[$dbColumn])) {
+            $decimalPlaces = $map[$dbColumn];
+        } else {
+            //All NCCBP percentages should use 2 decimal places
+            if ($this->getBenchmarkGroup()->getStudy()->getId() == 1 && $this->isPercent()) {
+                $decimalPlaces = 2;
+            }
+        }
+
+        return $decimalPlaces;
+    }
+
     public function getCompletionPercentages()
     {
         if (empty($this->completionPercentages)) {

@@ -409,9 +409,9 @@ function getDataMenu()
     return array(
         'label' => 'Data Entry',
         'route' => 'data-entry',
-        'pages' => array(
+        /*'pages' => array(
 
-        )
+        )*/
     );
 }
 

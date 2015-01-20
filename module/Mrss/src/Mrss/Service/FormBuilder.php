@@ -42,7 +42,7 @@ class FormBuilder
 
             $element = $this->substituteVariables($element);
 
-            $element = $this->addPriorYearValue($element);
+            $element = $this->addPriorYearValue($element, $elementProvider);
 
             $form->add($element);
             $inputFilter->add($elementProvider->getFormElementInputFilter());
@@ -105,7 +105,7 @@ class FormBuilder
         return $element;
     }
 
-    protected function addPriorYearValue($element)
+    protected function addPriorYearValue($element, $benchmark)
     {
         if ($lastYearObservation = $this->getLastYearObservation()) {
             $dbColumn = $element['name'];
@@ -114,6 +114,7 @@ class FormBuilder
                 $value = $lastYearObservation->get($dbColumn);
 
                 if (!is_null($value)) {
+                    $value = $benchmark->format($value);
                     $prior = '<span class="priorYearValue">Last year: ' . $value . '</span><br>';
                     $element['options']['help-block'] = $prior . $element['options']['help-block'];
                 }

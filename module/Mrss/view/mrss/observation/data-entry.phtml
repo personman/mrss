@@ -1,16 +1,31 @@
 <?php /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */ ?>
+<?php /** @var \Mrss\Entity\BenchmarkGroup[] $benchmarkGroups */ ?>
 
 
-<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=2') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=3') ?>
 
 <?php
 $this->headScript()->appendFile(
-    '/js/data-entry.js?v=2',
+    '/js/data-entry.js?v=3',
     'text/javascript'
 ); ?>
 
 
-
+<ul class="nav nav-pills form-nav">
+    <li class="form-nav-head"><h2>Forms:</h2></li>
+    <?php foreach ($benchmarkGroups as $bGroup): ?>
+        <li<? if ($bGroup->getId() == $benchmarkGroup->getId()) echo ' class="active"' ?>>
+            <a href="<?= $this->url(
+                'data-entry/edit',
+                array(
+                    'benchmarkGroup' => $bGroup->getUrl()
+                )
+            ) ?>" title="<?= $bGroup->getName() ?>">
+                <?= $bGroup->getUrl() ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+</ul>
 
 <div class="row">
     <div class="col-md-9">
@@ -22,6 +37,8 @@ $this->headScript()->appendFile(
         <?= $this->ztbForm($dataDefinitionForm->prepare()) ?>
     </div>
 </div>
+
+
 
 <?php if ($description = $benchmarkGroup->getDescription()): ?>
 <div class="well">

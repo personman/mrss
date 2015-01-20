@@ -3,6 +3,8 @@ var formErrorMessages = {}
 $(function() {
     setupHelpBlocks()
 
+    trackFormChanges()
+
     // Type hints:
     // Dollars
     $('input.input-dollars').addClass('form-control')
@@ -352,4 +354,30 @@ function updateHelpBlocks()
             }
         })
     }
+}
+
+
+function trackFormChanges()
+{
+    // Keep track of whether the form has changed
+    $('form.form-horizontal :input').change(function() {
+        $(this).closest('form').data('changed', true)
+    })
+
+    // When the form navigation is clicked, offer to save any changes
+    $('.form-nav a').click(function() {
+        var form = $('form.form-horizontal')
+        if (form.data('changed')) {
+            if (confirm('You have unsaved changes. Would you like to save them before proceeding to the selected form? Select "OK" to save or "Cancel" to discard your changes.')) {
+                // Add the redirect
+                var redirect = $(this).attr('href')
+                $('<input>').attr({type: 'hidden', name: 'redirect', value: redirect}).appendTo(form)
+
+                // Submit the form
+                form.submit()
+
+                return false
+            }
+        }
+    })
 }

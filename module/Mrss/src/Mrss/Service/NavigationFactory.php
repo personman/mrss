@@ -117,6 +117,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
             if (!empty($currentStudy)) {
+                /*
                 $dataEntryPages = array();
 
                 // Add the overview page
@@ -142,6 +143,7 @@ class NavigationFactory extends DefaultNavigationFactory
                 if (!$currentStudy->getDataEntryOpen()) {
                     $pages['data-entry']['label'] = 'Submitted Values';
                 }
+                */
             } else {
                 // If there aren't any forms to show, drop the data entry menu item
                 unset($pages['data-entry']);
