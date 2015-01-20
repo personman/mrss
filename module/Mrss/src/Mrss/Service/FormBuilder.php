@@ -114,7 +114,7 @@ class FormBuilder
                 $value = $lastYearObservation->get($dbColumn);
 
                 if (!is_null($value)) {
-                    $prior = '<span class="priorYearValue">Last year: ' . $value . '</span> ';
+                    $prior = '<span class="priorYearValue">Last year: ' . $value . '</span><br>';
                     $element['options']['help-block'] = $prior . $element['options']['help-block'];
                 }
             }

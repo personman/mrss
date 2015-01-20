@@ -310,7 +310,7 @@ function setupHelpBlocks()
 
             // Change the appearance if there's no definition (just last year's value)
             var html = $(this).html()
-            if (html.substr(-8) == '</span> ') {
+            if (html.substr(-11) == '</span><br>') {
                 $(this).css('background', 'transparent').css('border', 'transparent')
             }
 

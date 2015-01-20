@@ -677,6 +677,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         // Also check to see if the last item is a heading
         $lastChild = end($children);
         reset($children);
+        //prd($lastChild->getName());
         if (get_class($lastChild) == 'Mrss\Entity\BenchmarkHeading') {
             array_pop($children);
         }

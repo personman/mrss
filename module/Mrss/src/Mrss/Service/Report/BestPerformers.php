@@ -52,33 +52,6 @@ class BestPerformers extends Report
         return $reportData;
     }
 
-    /**
-     * Return the college names that had greater than the 85th percentile for this benchmark
-     *
-     * @param $benchmark
-     * @return string
-     */
-    public function getBenchmarkData(Benchmark $benchmark)
-    {
-        $bestPerformers = $this->getPercentileRankModel()
-            ->findBestPerformers($this->getStudy(), $benchmark, $this->year, $this->percentileThreshold);
-
-        $collegeNames = array();
-        foreach ($bestPerformers as $college) {
-            $collegeNames[] = $college->getName() . ' (' . $college->getState() . ')';
-        }
-
-        // Present the colleges in a random order
-        shuffle($collegeNames);
-
-        $benchmarkData = array(
-            'name' => $this->getVariableSubstitution()->substitute($benchmark->getReportLabel()),
-            'bestPerformers' => $collegeNames
-        );
-
-        return $benchmarkData;
-    }
-
     public function getBestPerformers($year, $benchmarkId)
     {
         $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
@@ -91,8 +64,8 @@ class BestPerformers extends Report
             $collegeNames[] = $college->getName() . ' (' . $college->getState() . ')';
         }
 
-        // Present the colleges in a random order
-        shuffle($collegeNames);
+        // Present the colleges in alphabetical
+        sort($collegeNames);
 
         return $collegeNames;
     }

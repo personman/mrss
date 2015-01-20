@@ -47,7 +47,7 @@ class National extends Report
                 'timeframe' => $this->getVariableSubstitution()->substitute($benchmarkGroup->getTimeframe()),
                 'benchmarks' => array()
             );
-            $benchmarks = $benchmarkGroup->getChildren($year, true, 'report');
+            $benchmarks = $benchmarkGroup->getChildren($year, true, 'report', 'report');
 
             foreach ($benchmarks as $benchmark) {
                 if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
