@@ -1049,6 +1049,16 @@ class Observation
     protected $pt_cr_head;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_cr_head_perc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_cr_head_perc;
+
+    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $trans_cred;

@@ -825,7 +825,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
     public function format($value)
     {
-        $formatted = null;
+        $formatted = $value;
 
         $prefix = $suffix = '';
         if ($this->isPercent()) {

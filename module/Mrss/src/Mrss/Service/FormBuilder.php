@@ -7,6 +7,7 @@ use Zend\Form\Element;
 use Zend\Form\Fieldset;
 use Mrss\Entity\FormFieldsetProviderInterface as FieldsetProvider;
 use Mrss\Entity\FormElementProviderInterface as FormElementProvider;
+use Mrss\Entity\Benchmark;
 use Zend\InputFilter\InputFilter;
 
 class FormBuilder
@@ -105,7 +106,7 @@ class FormBuilder
         return $element;
     }
 
-    protected function addPriorYearValue($element, $benchmark)
+    protected function addPriorYearValue($element, Benchmark $benchmark)
     {
         if ($lastYearObservation = $this->getLastYearObservation()) {
             $dbColumn = $element['name'];
@@ -113,7 +114,7 @@ class FormBuilder
             if ($lastYearObservation->has($dbColumn)) {
                 $value = $lastYearObservation->get($dbColumn);
 
-                if (!is_null($value)) {
+                if (!is_null($value) && $value != '') {
                     $value = $benchmark->format($value);
                     $prior = '<span class="priorYearValue">Last year: ' . $value . '</span><br>';
                     $element['options']['help-block'] = $prior . $element['options']['help-block'];
