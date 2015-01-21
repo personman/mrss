@@ -14,6 +14,12 @@ class Subscription extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Subscription';
 
+    /**
+     * @param $year
+     * @param $collegeId
+     * @param $studyId
+     * @return null|\Mrss\Entity\Subscription
+     */
     public function findOne($year, $collegeId, $studyId)
     {
         return $this->getRepository()->findOneBy(

@@ -264,6 +264,9 @@ class ObservationController extends AbstractActionController
             ->get('model.benchmarkGroup')
             ->findOneByUrlAndStudy($benchmarkGroupUrl, $this->currentStudy());
 
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
         if (empty($benchmarkGroup)) {
             throw new \Exception('Benchmark group not found');
         }
@@ -366,6 +369,12 @@ class ObservationController extends AbstractActionController
                     $this->mergeAllSubobservations();
                 }
 
+                // Calculate completion
+                $completion = $this->currentStudy()->getCompletionPercentage($observation);
+                $subscription = $subscriptionModel
+                    ->findOne($observation->getYear(), $observation->getCollege(), $this->currentStudy()->getId());
+                $subscription->setCompletion($completion);
+
                 $this->getServiceLocator()->get('em')->flush();
 
                 $redirect = $this->params()->fromPost('redirect', '/data-entry');
@@ -377,7 +386,6 @@ class ObservationController extends AbstractActionController
         }
 
         // Is the college subscribed to NCCBP for this year
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $nccbpSubscription = $subscriptionModel->findOne(
             $observation->getYear(),
             $observation->getCollege()->getId(),
