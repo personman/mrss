@@ -178,6 +178,8 @@ class StudyController extends AbstractActionController
         $study = $this->currentStudy();
         $computedFields = $this->getServiceLocator()->get('computedFields');
 
+        $variableService = $this->getServiceLocator()->get('service.variableSubstitution');
+
         $year = $study->getCurrentYear();
 
         $keyedBenchmarks = $this->getBenchmarksFromStudy($study);
@@ -185,8 +187,19 @@ class StudyController extends AbstractActionController
         foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
             $computed = array();
 
-            $benchmarks = $benchmarkGroup->getComputedBenchmarksForYear($year);
+            $benchmarks = $benchmarkGroup->getChildren($year, true, 'report', 'computed');
             foreach ($benchmarks as $benchmark) {
+                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                    /** @var \Mrss\Entity\BenchmarkHeading $heading */
+                    $heading = $benchmark;
+                    $computed[] = array(
+                        'heading' => true,
+                        'name' => $variableService->substitute($heading->getName()),
+                        'description' => $variableService->substitute($heading->getDescription())
+                    );
+                    continue;
+                }
+
                 $equation = $benchmark->getEquation();
                 $variables = $computedFields->getVariables($equation);
 

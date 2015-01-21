@@ -626,6 +626,10 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
                 continue;
             }
 
+            if ($filterBy == 'computed' && !$benchmark->getComputed()) {
+                continue;
+            }
+
             if ($organization == 'report') {
                 $sequence = $benchmark->getReportSequence();
             } else {
