@@ -37,3 +37,11 @@ a.best-performers-form:hover .glyphicon {
 .best-performers-benchmark-group {
     clear: both;
 }
+
+a.show-results {
+    text-decoration: none;
+}
+
+a.show-results:hover {
+    text-decoration: underline;
+}
