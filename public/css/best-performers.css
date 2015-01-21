@@ -1,12 +1,39 @@
-#best-performers h1 {
+.best-performers-form {
     margin-top: 30px;
+    display: block;
+}
+#best-performers h1 {
+    margin-top: 0;
+    margin-left: 25px;
     font-size: 20px;
     border-bottom-width: 2px;
 }
-.best-performers-benchmark-group h4 {
+.best-performers-benchmark h4 {
     margin-left: 50px;
 }
 
 #best-performers .results {
     margin-left: 100px;
+}
+
+.best-performers-benchmark-group {
+    display: none;
+    padding: 5px;
+    margin: 5px;
+}
+
+.best-performers-form .glyphicon {
+    width: 20px;
+    float: left;
+    display: block;
+    margin-top: 7px;
+    color: #666666;
+}
+
+a.best-performers-form:hover .glyphicon {
+    color: #00508d;
+}
+
+.best-performers-benchmark-group {
+    clear: both;
 }

@@ -1,7 +1,16 @@
-<?= $this->headLink()->appendStylesheet('/css/best-performers.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/best-performers.css?v=2') ?>
 
 <script type="text/javascript">
     $(function() {
+        // Show/hide benchmarks
+        $('a.best-performers-form').click(function() {
+            $(this).find('.glyphicon-plus').toggle()
+            $(this).find('.glyphicon-minus').toggle()
+            $(this).next().slideToggle()
+            return false
+        })
+
+        // Fetch and show colleges
         $('.show-results').click(function() {
             var resultDiv = $(this).parent().parent().find('.results')
 
@@ -38,18 +47,24 @@
 </ul>
 
 
-<p><em>Best performers are institutions reporting data above 85th percentile (or below the 15th percentile for benchmarks like cost where lower values are better). Click a benchmark below to display the best performers. The institutions are presented in a random order.</em></p>
+<p><em>Best performers are institutions reporting data above 85th percentile (or below the 15th percentile for benchmarks like cost where lower values are better). Click a form name below to see its benchmarks, then click a benchmark to display the best performers. The institutions are presented in a alphabetical order.</em>  <span class="glyphicon glyphicon-minus"></span></p>
 
 
 <div id="best-performers">
     <?php foreach ($reportData as $benchmarkGroup): ?>
         <?php if (empty($benchmarkGroup['benchmarks'])) continue // Skip empty forms ?>
 
-        <h1><?= $benchmarkGroup['name'] ?></h1>
+
+        <a href="#" class="best-performers-form">
+            <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
+            <span class="icon-plus-sign glyphicon glyphicon-minus" style="display:none"></span>
+            <h1><?= $benchmarkGroup['name'] ?></h1>
+        </a>
 
 
+        <div class="best-performers-benchmark-group">
         <?php foreach ($benchmarkGroup['benchmarks'] as $benchmarkId => $benchmarkLabel): ?>
-            <div class="best-performers-benchmark-group">
+            <div class="best-performers-benchmark">
                 <h4>
                     <a href="/reports/best-performers-result/<?= $year ?>/<?= $benchmarkId ?>" class="show-results">
                         <?= $benchmarkLabel ?>
@@ -60,8 +75,10 @@
 
             </div>
         <?php endforeach ?>
+        </div>
 
 
     <?php endforeach ?>
+    <br style="clear:both">
 </div>
 
