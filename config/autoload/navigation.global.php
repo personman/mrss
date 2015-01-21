@@ -366,10 +366,10 @@ function getReportMenu()
                 'label' => 'Peer Comparison',
                 'uri' => '/reports/peer'
             ),
-            /*'best-performers' => array(
+            'best-performers' => array(
                 'label' => 'Best Performers Report',
                 'uri' => '/reports/best-performers'
-            )*/
+            )
         )
     );
 }
