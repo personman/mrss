@@ -69,12 +69,18 @@ $this->headScript()->appendFile(
 
         </h3>
 
+        <?php if (empty($system)) {
+            $heading = 'National Percentiles';
+        } else {
+            $heading = 'Syste Percentiles';
+        }?>
+
         <table class="table table-hover table-striped-manual">
             <thead>
                 <tr class="topHeading">
                     <th></th>
                     <th colspan="2">Your Institution</th>
-                    <th colspan="7" class="nationalPercentiles">National Percentiles</th>
+                    <th colspan="7" class="nationalPercentiles"><?= $heading ?></th>
                 </tr>
                 <tr class="secondHeading">
                     <th></th>
