@@ -1,54 +1,94 @@
 <?php /** @var \Mrss\Entity\ChangeSet[] $changeSets */ ?>
 
-<h2>Recent Data Changes</h2>
+<?php
 
-<div class="observationChanges">
+// Data Tables
+$this->headScript()->appendFile(
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+<script>
+    $(document).ready(function() {
+        $('.observationChanges').dataTable({
+            "order": [[1, "asc"]],
+            // show X entries options
+            "aLengthMenu": [[50, 100, 200, -1], [50, 100, 200, "All"]],
+            'iDisplayLength': 100
+        });
+
+        $('.heatMapYear, .heatmapTd').css('width', '20px')
+    });
+</script>
+
+<h1>Recent Data Changes</h1>
+
+<table class="table observationChanges">
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>College and User</th>
+            <th>Method</th>
+            <th>Fields</th>
+        </tr>
+    </thead>
+    <tbody>
     <?php foreach ($changeSets as $changeSet): ?>
         <?php /** \Mrss\Entity\ChangeSet $changeSet */
             $changes = $changeSet->getChanges();
             $field = (count($changeSet->getChanges()) == 1) ? 'field' : 'fields'; ?>
-        <div class="changeSet">
-            <?php if ($impersonator = $changeSet->getImpersonatingUser()): ?>
-                <strong>
-                    <?= $impersonator->getFullName() ?>, impersonating
-                </strong>
-            <?php endif ?>
+        <tr class="changeSet">
+            <td>
+                <?= $changeSet->getDate()->format('Y-m-d H:i') ?>
+            </td>
+            <td>
 
-            <strong>
                 <?php if ($changeSet->getUser()): ?>
-                    <?= $changeSet->getUser()->getFullName() ?>
-                    (<?= $changeSet->getUser()->getCollege()->getName() ?>)
+                    <?php $college = $changeSet->getUser()->getCollege() ?>
+                    <strong>
+                        <a href="<?= $this->url('colleges/view', array('id' => $college->getId())) ?>">
+                            <?= $college->getName() ?>
+                        </a>
+                    </strong>
+                    <br>
+                    <?php if ($impersonator = $changeSet->getImpersonatingUser()): ?>
+                        <?= $impersonator->getFullName() ?>, impersonating
+                    <?php endif ?>
+                        <?= $changeSet->getUser()->getFullName() ?>
+
                 <?php else: ?>
                     Importer
                 <?php endif ?>
-            </strong> changed
-            <strong><?= count($changeSet->getChanges()) ?></strong>
-            <?= $field ?>
+            </td>
+            <td>
+                <?= $changeSet->getEditTypeLabel() ?>
+                <?php if ($subObservation = $changeSet->getSubObservation()): ?>
+                    in academic unit
+                    <?= $subObservation->getName() ?>
+                <?php endif ?>
+            </td>
 
-            <?php if ($subObservation = $changeSet->getSubObservation()): ?>
-                in academic unit
-                <?= $subObservation->getName() ?>
-            <?php endif ?>
 
-            on
-            <strong><?= $changeSet->getDate()->format('Y-m-d H:i') ?></strong>
-
-            via
-            <?= $changeSet->getEditTypeLabel() ?>
-
+            <td>
             <div class="changes">
                 <?php foreach ($changes as $change): ?>
-                    <div class="change">
-                        <?= $change->getOldValue(true) ?>
-                        => <?= $change->getNewValue(true) ?>
-                        <strong><?= $change->getBenchmark()->getName() ?></strong>
+                    <div class="change row">
+                        <div class="col-md-4">
+                            <?= $change->getOldValue(true) ?>
+                            => <?= $change->getNewValue(true) ?>
+                        </div>
+                        <div class="col-md-8">
+                            <strong><?= $change->getBenchmark()->getName() ?></strong>
+                        </div>
                     </div>
 
                 <?php endforeach ?>
-
             </div>
-        </div>
-
+            </td>
+        </tr>
     <?php endforeach ?>
-</div>
+    </tbody>
+</table>
 
