@@ -80,7 +80,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                             => <?= $change->getNewValue(true) ?>
                         </div>
                         <div class="col-md-8">
-                            <strong class="infotip" title="<?= $change->getBenchmark()->getDescriptiveReportLabel() ?>">
+                            <strong class="infotip" title="<?= $change->getBenchmark()->getDescriptiveReportLabel() ?> (<?= $change->getBenchmark()->getBenchmarkGroup()->getName() ?>)">
                                 <?= $change->getBenchmark()->getName() ?>
                             </strong>
                         </div>
