@@ -403,6 +403,22 @@ class College extends AbstractModel
             );
         }
 
+        // Filter by full-time students percentage
+        if ($peerGroup->getPercentageFullTime()) {
+            $qb->andWhere(
+                'o.ft_cr_head_perc
+                BETWEEN :full_time_min AND :full_time_max'
+            );
+            $qb->setParameter(
+                'full_time_min',
+                $peerGroup->getPercentageFullTime('min')
+            );
+            $qb->setParameter(
+                'full_time_max',
+                $peerGroup->getPercentageFullTime('max')
+            );
+        }
+
         // Exclude the current college (they can't be their own peer)
         $qb->andWhere('c.id != :current_college_id');
         $qb->setParameter('current_college_id', $peerGroup->getCollege()->getId());

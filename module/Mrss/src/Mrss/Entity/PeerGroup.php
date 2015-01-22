@@ -5,7 +5,17 @@ namespace Mrss\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 
-/** @ORM\Entity
+/**
+ * Steps for adding a demographic criteria
+ *
+ * 1) Add property, getter, setter in this file.
+ * 2) Add new getter to the hasCriteria() method in this file.
+ * 3) Generate and run migration to add db column.
+ * 4) Add new field and inputFilter to Form/PeerComparisonDemographics.php.
+ * 5) Add output for the new criteria to peer.phtml.
+ * 6) Add new filter to college model's findByPeerGroup() method.
+ *
+ * @ORM\Entity
  * @ORM\Table(name="peer_groups")
  */
 class PeerGroup
@@ -85,6 +95,9 @@ class PeerGroup
 
     /** @ORM\Column(type="string", nullable=true) */
     protected $technicalCredit;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $percentageFullTime;
 
     /** @ORM\Column(type="text") */
     protected $benchmarks;
@@ -380,6 +393,34 @@ class PeerGroup
         }
 
         return $technical;
+    }
+
+    /**
+     * @param $percentage
+     * @return $this
+     */
+    public function setPercentageFullTime($percentage)
+    {
+        $this->percentageFullTime = $percentage;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    public function getPercentageFullTime($type = 'range')
+    {
+        $percentage = $this->percentageFullTime;
+
+        if (in_array($type, array('min', 'max'))) {
+            $range = $this->parseRange($percentage);
+
+            $percentage = $range[$type];
+        }
+
+        return $percentage;
     }
 
     /**
@@ -706,6 +747,7 @@ class PeerGroup
             $this->getServiceAreaUnemployment() ||
             $this->getServiceAreaMedianIncome() ||
             $this->getTechnicalCredit() ||
+            $this->getPercentageFullTime() ||
             $this->getFacultyUnionized() ||
             $this->getStaffUnionized() ||
             $this->getInstitutionalControl() ||

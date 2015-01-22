@@ -160,6 +160,13 @@ $form->setAttribute('action', $this->url('reports/peer'));
                     <?= $peerGroup->getTechnicalCredit() ?>
                 </p>
             <?php endif ?>
+
+            <?php if ($peerGroup->getPercentageFullTime()): ?>
+                <p>
+                    <strong>% of Full-time Students:</strong>
+                    <?= $peerGroup->getPercentageFullTime() ?>
+                </p>
+            <?php endif ?>
         <?php else: ?>
             <p>None selected</p>
         <?php endif ?>

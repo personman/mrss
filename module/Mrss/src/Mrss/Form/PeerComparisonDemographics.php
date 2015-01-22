@@ -341,6 +341,21 @@ class PeerComparisonDemographics extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'percentageFullTime',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => '% of Full-time Students',
+                    'help-block' => 'Specify a range (e.g., "5 - 20",
+                        without quotes).'
+                ),
+                'attributes' => array(
+                    'id' => 'percentageFullTime',
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset('Continue', true));
 
         $this->setInputFilter($this->getInputFilterSetup());
@@ -444,6 +459,11 @@ class PeerComparisonDemographics extends AbstractForm
         $technical->setRequired(false);
         $technical->getValidatorChain()->attach($this->getRangeValidator());
         $filter->add($technical);
+
+        $fullTime = new Input('percentageFullTime');
+        $fullTime->setRequired(false);
+        $fullTime->getValidatorChain()->attach($this->getRangeValidator());
+        $filter->add($fullTime);
 
         return $filter;
     }
