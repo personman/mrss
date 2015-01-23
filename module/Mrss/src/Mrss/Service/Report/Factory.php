@@ -42,7 +42,7 @@ class Factory implements AbstractFactoryInterface
         $report->setSystemModel($sm->get('model.system'));
         $report->setComputedFieldsService($sm->get('computedFields'));
         $report->setMailTransport($sm->get('mail.transport'));
-        $report->setVariableSubstition($sm->get('service.variableSubstitution'));
+        $report->setVariableSubstitution($sm->get('service.variableSubstitution'));
 
         return $report;
     }
@@ -64,6 +64,7 @@ class Factory implements AbstractFactoryInterface
             'service.report.executive' => 'Mrss\Service\Report\Executive',
             'service.report.peer' => 'Mrss\Service\Report\Peer',
             'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
+            'service.report' => 'Mrss\Service\Report',
         );
     }
 }

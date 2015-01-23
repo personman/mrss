@@ -464,3 +464,13 @@ body #headerLoginForm {
 .adminNavigation {
     margin-bottom: 30px;
 }
+
+html .form-nav .form-nav-head {
+    padding-top: 0;
+}
+.form-nav .form-nav-head h2 {
+    margin-top: 0;
+    margin-right: 10px;
+    font-size: 20px;
+    line-height: 30px;
+}

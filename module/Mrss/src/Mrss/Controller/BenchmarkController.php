@@ -18,7 +18,11 @@ class BenchmarkController extends AbstractActionController
 
     public function indexAction()
     {
-        $studyId = $this->params()->fromRoute('study');
+        $studyId = $this->params()->fromRoute('study', null);
+        if (empty($studyId)) {
+            $studyId = $this->currentStudy()->getId();
+        }
+
         /** @var \Mrss\Model\Study $studyModel */
         $studyModel = $this->getServiceLocator()
             ->get('model.study');

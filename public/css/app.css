@@ -1,0 +1,52 @@
+/* This CSS file should be included on every page and for every study */
+
+
+/** benchmark management backend **/
+.benchmarkGroupControls li, .studyControls li {
+    display: inline;
+    padding-right: 20px;
+}
+.benchmarkGroupSection {
+    margin-top: 70px;
+}
+.studyControls a.active {
+    background: #004f8c;
+    color: white;
+    padding: 2px 5px;
+    text-decoration: none;
+}
+.benchmarkContents li {
+    list-style-type: none;
+}
+
+
+/* BenchmarkGroup progress */
+.benchmarkGroupProgress {
+    width: 150px;
+    float: left;
+    margin-right: 20px;
+    height: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.table > tbody > tr > td.heatmapCell {
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.heatmapCellBlue {
+    background-color: #004f8c;
+}
+
+table.dataTable thead .sorting.heatMapYear {
+    background: none;
+}
+
+.dataTables_filter input {
+    display: inline;
+}
+

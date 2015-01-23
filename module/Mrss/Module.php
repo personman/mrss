@@ -630,7 +630,7 @@ class Module
 
                     return $service;
                 },
-                'service.report' => function ($sm) {
+                /*'service.report' => function ($sm) {
                     $currentStudy = $sm->get('ControllerPluginManager')
                         ->get('currentStudy')->getCurrentStudy();
 
@@ -652,7 +652,7 @@ class Module
                     $service->setMailTransport($sm->get('mail.transport'));
 
                     return $service;
-                },
+                },*/
                 'mail.transport' => function ($sm) {
                     //return new \Zend\Mail\Transport\Sendmail();
                     // @todo: Consider merging this with the GoalioMailService

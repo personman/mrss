@@ -64,7 +64,8 @@ class HeadingController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Heading saved.');
-                return $this->redirect()->toRoute('benchmark');
+                $studyId = $heading->getBenchmarkGroup()->getStudy()->getId();
+                return $this->redirect()->toRoute('benchmark', array('study' => $studyId));
             }
         }
 

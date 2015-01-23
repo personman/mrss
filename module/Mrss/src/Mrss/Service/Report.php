@@ -985,7 +985,7 @@ class Report
         return $this->calculator;
     }
 
-    public function setVariableSubstition(VariableSubstitution $service)
+    public function setVariableSubstitution(VariableSubstitution $service)
     {
         $this->variableSubstitution = $service;
 

@@ -554,7 +554,7 @@ return array(
                     'route' => '/benchmark[/study/:study]',
                     'defaults' => array(
                         'controller' => 'benchmarks',
-                        'study' => 1,
+                        'study' => 0,
                         'action' => 'index'
                     )
                 ),

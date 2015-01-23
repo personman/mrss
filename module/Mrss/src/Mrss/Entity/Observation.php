@@ -2655,7 +2655,7 @@ class Observation
 
 
 
-    // NCCWTP
+    // Workforce form 1
     /** @ORM\Column(type="integer", nullable=true) */
     protected $enrollment_information_duplicated_enrollment;
 
@@ -2672,11 +2672,19 @@ class Observation
     protected $enrollment_information_total_contact_hours;
 
     /** @ORM\Column(type="integer", nullable=true) */
+    protected $enrollment_information_courses_offered;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $enrollment_information_courses_canceled;
+
+    // Workforce form 2
+    /** @ORM\Column(type="integer", nullable=true) */
     protected $retention_returning_organizations;
 
     /** @ORM\Column(type="integer", nullable=true) */
     protected $retention_returning_students;
 
+    // Workforce form 3
     /** @ORM\Column(type="integer", nullable=true) */
     protected $staffing_full_time_instructors;
 
@@ -2692,9 +2700,11 @@ class Observation
     /** @ORM\Column(type="integer", nullable=true) */
     protected $staffing_part_time_support_staff;
 
+    // Workforce form 4
     /** @ORM\Column(type="float", nullable=true) */
     protected $transition_students;
 
+    // Workforce form 5
     /** @ORM\Column(type="float", nullable=true) */
     protected $revenue_federal;
 
@@ -2719,6 +2729,7 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $revenue_total;
 
+    // Workforce form 6
     /** @ORM\Column(type="float", nullable=true) */
     protected $expenditures_salaries;
 
@@ -2749,6 +2760,7 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $expenditures_overhead;
 
+    // Workforce form 7
     /** @ORM\Column(type="string", nullable=true) */
     protected $retained_revenue_contract_training;
 
@@ -2761,12 +2773,14 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $retained_revenue_roi;
 
+    // Workforce form 8
     /** @ORM\Column(type="float", nullable=true) */
     protected $satisfaction_client;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $satisfaction_student;
 
+    // Workforce form 9
     /** @ORM\Column(type="integer", nullable=true) */
     protected $institutional_demographics_credit_enrollment;
 
@@ -2808,6 +2822,15 @@ class Observation
 
     /** @ORM\Column(type="integer", nullable=true) */
     protected $institutional_demographics_credentials_awarded;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_certifications_awarded;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_licenses_awarded;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $institutional_demographics_certificates_awarded;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $enrollment_information_workforce_enrollment_percent;
