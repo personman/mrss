@@ -232,25 +232,6 @@ function addWorkForceCustomizations()
         $('#control-group-revenue_total').before("<h3 class='heading'>Total Gross Revenue</h3>")
     }
 
-
-    // Form 6 expenditures headings
-    if ($('#control-group-expenditures_salaries').length) {
-        $('#control-group-expenditures_salaries').before("<h3 class='heading'>Total Expenditures For</h3>")
-    }
-
-    if ($('#control-group-expenditures_contract_training').length) {
-        $('#control-group-expenditures_contract_training').before("<h3 class='heading'>Expenditures For</h3>")
-    }
-
-    if ($('#control-group-expenditures_total').length) {
-        $('#control-group-expenditures_total').before("<h3 class='heading'>Total Expenditures</h3>")
-    }
-
-    if ($('#control-group-expenditures_overhead').length) {
-        $('#control-group-expenditures_overhead').before("<h3 class='heading'>Overhead</h3>")
-    }
-
-
     // Form 7
     if ($('#control-group-retained_revenue_contract_training').length) {
         $('#control-group-retained_revenue_contract_training').before("<h3 class='heading'>Retained Revenue For</h3>")
