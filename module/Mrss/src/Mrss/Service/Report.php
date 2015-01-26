@@ -15,6 +15,9 @@ use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Alignment;
 use PHPExcel_Shared_Font;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
+use Zend\Log\Formatter\Simple;
 
 class Report
 {
@@ -574,6 +577,14 @@ class Report
         $format = $this->getFormat($benchmark);
 
         // Put the college's data in its place
+        if (count($chartValues) != count($chartXCategories)) {
+            $dbForLog = $benchmark->getDbColumn();
+            $collegeForLog = $this->getObservation()->getCollege()->getName();
+            $logYear = $this->getObservation()->getYear();
+            $this->getErrorLog()->warn(
+                "Mismatched chart labels/data for $dbForLog, college: $collegeForLog, year: $logYear."
+            );
+        }
         $chartValues = array_combine($chartXCategories, $chartValues);
         asort($chartValues);
         $chartXCategories = array_keys($chartValues);
@@ -1099,4 +1110,21 @@ class Report
     {
         return $this->getObservation()->getYear();
     }
+
+    protected function getErrorLog($shortFormat = false)
+    {
+        $formatter = new Simple('%message%' . PHP_EOL);
+
+        $writer = new Stream('error.log');
+
+        if ($shortFormat) {
+            $writer->setFormatter($formatter);
+        }
+
+        $logger = new Logger;
+        $logger->addWriter($writer);
+
+        return $logger;
+    }
+
 }

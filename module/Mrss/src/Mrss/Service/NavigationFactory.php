@@ -215,7 +215,7 @@ class NavigationFactory extends DefaultNavigationFactory
         if ($currentStudy->getId() == 3) {
             // Don't show best performers yet
             unset($pages['reports']['pages']['best-performers']);
-            
+
             // Remove partners page
             unset($pages['about2']['pages']['partners']);
 

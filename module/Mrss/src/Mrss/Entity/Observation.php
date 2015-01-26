@@ -2951,6 +2951,9 @@ class Observation
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\College
+     */
     public function getCollege()
     {
         return $this->college;
