@@ -56,7 +56,7 @@ $this->headScript()->appendFile(
 <?php foreach ($benchmarkGroup->getChildren($this->currentStudy()->getCurrentYear(), false) as $benchmark): ?>
     <?php if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading'): ?>
 
-        <h3><?= $variable->substitute($benchmark->getName()) ?></h3>
+        <h3 class="heading"><?= $variable->substitute($benchmark->getName()) ?></h3>
 
         <?php if ($desc = $benchmark->getDescription()): ?>
             <p class="subheading-description">
