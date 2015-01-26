@@ -232,27 +232,7 @@ function addWorkForceCustomizations()
         $('#control-group-revenue_total').before("<h3 class='heading'>Total Gross Revenue</h3>")
     }
 
-    // Form 7
-    if ($('#control-group-retained_revenue_contract_training').length) {
-        $('#control-group-retained_revenue_contract_training').before("<h3 class='heading'>Retained Revenue For</h3>")
-    }
-    if ($('#control-group-retained_revenue_total').length) {
-        $('#control-group-retained_revenue_total').before("<h3 class='heading'>Total Retained Revenue</h3>")
-    }
-
     // Some special formatting for form 9
-    if ($('#control-group-institutional_demographics_credit_enrollment').length) {
-        $('#control-group-institutional_demographics_credit_enrollment').before("<h3 class='heading'>Campus Characteristics</h3>")
-    }
-
-    if ($('#control-group-institutional_demographics_total_population').length) {
-        $('#control-group-institutional_demographics_total_population').before("<h3 class='heading'>Service Area Characteristics</h3><p class='heading-notes'>Use your institution's legal definition of service area and most recent U.S. Census estimates.</p>")
-    }
-
-    if ($('#control-group-institutional_demographics_credentials_awarded').length) {
-        $('#control-group-institutional_demographics_credentials_awarded').before("<h3 class='heading'>Credentials Awarded</h3>")
-    }
-
     $('#control-group-institutional_demographics_companies_less_than_50').before(
         '<h4 class="subheading">Companies by Employee Size</h4>' +
             '<p class="subheading-notes">Companies by size (Use the US Economic Census, County Business Patterns to obtain these data)</p>'
