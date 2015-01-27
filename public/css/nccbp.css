@@ -869,15 +869,6 @@ input:focus, textarea:focus {
     display: none;
 }
 
-/* Data definition switch */
-#dataDefinitionForm {
-    width: 200px;
-    /*float: right;*/
-}
-#dataDefinitionForm .control-label {
-    display: none;
-}
-
 .nav-tabs {
     margin-bottom: 15px;
 }

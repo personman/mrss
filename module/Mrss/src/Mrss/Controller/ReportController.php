@@ -412,9 +412,6 @@ class ReportController extends AbstractActionController
             array_shift($years);
         }
 
-        // temp close old reports:
-        $years = array(2014);
-
         $s = microtime(1);
         $defaultBenchmarks = $this->getPeerBenchmarks($years[0], true);
         $e = microtime(1) - $s;

@@ -225,6 +225,11 @@ function updateRaceTotal()
 
 function addWorkForceCustomizations()
 {
+    // Workforce revenue heading, form 5
+    if ($('#control-group-revenue_federal').length) {
+        $('#control-group-revenue_federal').before("<h4 class='subheading'>Public Sources</h4>")
+    }
+
     // Some special formatting for form 9
     $('#control-group-institutional_demographics_companies_less_than_50').before(
         '<h4 class="subheading">Companies by Employee Size</h4>' +

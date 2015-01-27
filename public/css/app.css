@@ -50,3 +50,11 @@ table.dataTable thead .sorting.heatMapYear {
     display: inline;
 }
 
+/* Data definition switch */
+#dataDefinitionForm {
+    width: 200px;
+    /*float: right;*/
+}
+#dataDefinitionForm .control-label {
+    display: none;
+}
