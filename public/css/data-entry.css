@@ -110,7 +110,7 @@ form#system-admin-switch select {
 #control-group-revenue_federal,
 #control-group-revenue_state,
 #control-group-revenue_local {
-    margin-left: 150px;
+    margin-left: 65px;
 }
 #control-group-revenue_federal label,
 #control-group-revenue_state label,

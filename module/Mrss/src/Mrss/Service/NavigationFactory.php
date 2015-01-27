@@ -153,6 +153,8 @@ class NavigationFactory extends DefaultNavigationFactory
             if ($this->getCurrentStudy()->getEnrollmentOpen() &&
                 !$this->hasSubscription($user)) {
                 // Show renew
+                // Hide data entry
+                unset($pages['data-entry']);
             } else {
                 // Hide it
                 unset($pages['renew']);
