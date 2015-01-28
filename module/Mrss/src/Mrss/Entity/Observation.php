@@ -2727,6 +2727,12 @@ class Observation
     protected $revenue_continuing_education;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $revenue_other;
+
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $revenue_other_specify;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $revenue_total;
 
     // Workforce form 6
@@ -2749,16 +2755,28 @@ class Observation
     protected $expenditures_travel;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_for_other;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $expenditures_contract_training;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $expenditures_continuing_education;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_other;
+
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $expenditures_other_specify;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $expenditures_total;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $expenditures_overhead;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $expenditures_overhead_costs;
 
     // Workforce form 7
     /** @ORM\Column(type="string", nullable=true) */
@@ -2770,8 +2788,25 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $retained_revenue_total;
 
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $net_revenue_contract_training;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $net_revenue_other;
+
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $net_revenue_other_specify;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $net_revenue_continuing_education;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $net_revenue_total;
+
     /** @ORM\Column(type="float", nullable=true) */
     protected $retained_revenue_roi;
+
+
 
     // Workforce form 8
     /** @ORM\Column(type="float", nullable=true) */
