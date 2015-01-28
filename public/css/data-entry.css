@@ -176,5 +176,6 @@ h3.heading {
     display: block;
 }
 .form-horizontal textarea {
-
+    width: 165px;
+    height: 100px;
 }
