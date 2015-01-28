@@ -1135,6 +1135,11 @@ class Observation
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
+    protected $restricted_o_rev;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $loc_sour;
 
     /**
