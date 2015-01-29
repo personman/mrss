@@ -285,14 +285,14 @@ class Executive extends Report
         );
     }
 
-    public function getStrengths($weaknesses = false)
+    public function getStrengths($weaknesses = false, $limit = 5)
     {
         $college = $this->getObservation()->getCollege();
         $year = $this->getObservation()->getYear();
         $study = $this->getStudy();
 
         $percentileRanks = $this->getPercentileRankModel()
-            ->findStrengths($college, $study, $year, $weaknesses, 1);
+            ->findStrengths($college, $study, $year, $weaknesses, 1, $limit);
 
 
 
@@ -315,8 +315,8 @@ class Executive extends Report
         return $ranks;
     }
 
-    public function getWeaknesses()
+    public function getWeaknesses($limit = 5)
     {
-        return $this->getStrengths(true);
+        return $this->getStrengths(true, $limit);
     }
 }

@@ -43,6 +43,7 @@ class PercentileRank extends AbstractModel
      * @param $year
      * @param bool $weaknesses
      * @param null $benchmarkGroupToExclude
+     * @param int $limit
      * @return PercentileRankEntity[]
      */
     public function findStrengths(
@@ -50,13 +51,9 @@ class PercentileRank extends AbstractModel
         StudyEntity $study,
         $year,
         $weaknesses = false,
-        $benchmarkGroupToExclude = null
+        $benchmarkGroupToExclude = null,
+        $limit = 5
     ) {
-
-        $limit = 5;
-
-
-
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         //$connection->setFetchMode('\Mrss\Entity\PercentileRank');

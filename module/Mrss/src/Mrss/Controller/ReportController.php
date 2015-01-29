@@ -645,6 +645,42 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function strengthsAction()
+    {
+        $limit = 15;
+
+        /** @var \Mrss\Service\Report\Executive $report */
+        $report = $this->getServiceLocator()->get('service.report.executive');
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentCollege()->getObservationForYear($year);
+        $report->setObservation($observation);
+
+
+        $strengths = $report->getStrengths(false, $limit);
+        $weaknesses = $report->getWeaknesses($limit);
+
+        $subscriptions = $this->currentCollege()
+            ->getSubscriptionsForStudy($this->currentStudy());
+
+        $subscription = $this->getSubscriptionModel()
+            ->findOne($year, $this->currentCollege(), $this->currentStudy());
+
+        if (empty($subscription)) {
+            return $this->observationNotFound();
+        }
+
+
+        return array(
+            'subscriptions' => $subscriptions,
+            'year' => $year,
+            'strengths' => $strengths,
+            'weaknesses' => $weaknesses
+        );
+
+    }
+
     public function bestPerformersResultAction()
     {
         $report = $this->getServiceLocator()->get('service.report.performers');
