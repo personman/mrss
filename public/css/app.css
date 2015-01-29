@@ -58,3 +58,10 @@ table.dataTable thead .sorting.heatMapYear {
 #dataDefinitionForm .control-label {
     display: none;
 }
+
+.strengthRank {
+    margin-left: 5px;
+    color: #336699 !important;
+    font-weight: bold;
+
+}

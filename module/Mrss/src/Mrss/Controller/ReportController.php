@@ -647,7 +647,7 @@ class ReportController extends AbstractActionController
 
     public function strengthsAction()
     {
-        $limit = 15;
+        $limit = 10;
 
         /** @var \Mrss\Service\Report\Executive $report */
         $report = $this->getServiceLocator()->get('service.report.executive');
