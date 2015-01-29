@@ -171,7 +171,7 @@ class PeerComparisonDemographics extends AbstractForm
                 'type' => 'Text',
                 'required' => false,
                 'options' => array(
-                    'label' => 'Pell Grant Recipients',
+                    'label' => '% Pell Grant Recipients',
                     'help-block' => 'Specify a range (e.g., "10 - 33", without
                         quotes).'
                 ),
