@@ -935,6 +935,16 @@ return array(
                                 'benchmark' => null
                             )
                         )
+                    ),
+                    'strengths' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/strengths[/:year]',
+                            'defaults' => array(
+                                'action' => 'strengths',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),
