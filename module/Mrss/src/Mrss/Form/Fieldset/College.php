@@ -14,6 +14,16 @@ class College extends Fieldset implements InputFilterProviderInterface
 
         $this->setLabel('Institution');
 
+        $this->addBasicFields();
+
+        if ($includeExec) {
+            $this->addExecutiveFields();
+
+        }
+    }
+
+    protected function addBasicFields()
+    {
         $this->add(
             array(
                 'name' => 'name',
@@ -115,74 +125,74 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'type' => 'Hidden',
             )
         );
+    }
 
-        if ($includeExec) {
+    protected function addExecutiveFields()
+    {
 
-            $this->add(
-                array(
-                    'name' => 'execTitle',
-                    'type' => 'Text',
-                    'required' => true,
+        $this->add(
+            array(
+                'name' => 'execTitle',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Executive Title',
+                    'help-block' => 'For example: President or Chancellor'
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'execSalutation',
+                'type' => 'Select',
+                'options' => array(
+                    'label' => 'Prefix'
+                ),
+                'attributes' => array(
                     'options' => array(
-                        'label' => 'Executive Title',
-                        'help-block' => 'For example: President or Chancellor'
-                    ),
-                )
-            );
-
-            $this->add(
-                array(
-                    'name' => 'execSalutation',
-                    'type' => 'Select',
-                    'options' => array(
-                        'label' => 'Prefix'
-                    ),
-                    'attributes' => array(
-                        'options' => array(
-                            '' => 'Select Prefix',
-                            'Dr.' => 'Dr.',
-                            'Mr.' => 'Mr.',
-                            'Ms.' => 'Ms.'
-                        )
+                        '' => 'Select Prefix',
+                        'Dr.' => 'Dr.',
+                        'Mr.' => 'Mr.',
+                        'Ms.' => 'Ms.'
                     )
                 )
-            );
+            )
+        );
 
 
-            $this->add(
-                array(
-                    'name' => 'execFirstName',
-                    'type' => 'Text',
-                    'required' => true,
-                    'options' => array(
-                        'label' => 'First Name'
-                    ),
-                )
-            );
+        $this->add(
+            array(
+                'name' => 'execFirstName',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'First Name'
+                ),
+            )
+        );
 
-            $this->add(
-                array(
-                    'name' => 'execLastName',
-                    'type' => 'Text',
-                    'required' => true,
-                    'options' => array(
-                        'label' => 'Last Name'
-                    ),
-                )
-            );
+        $this->add(
+            array(
+                'name' => 'execLastName',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Last Name'
+                ),
+            )
+        );
 
-            $this->add(
-                array(
-                    'name' => 'execEmail',
-                    'type' => 'Text',
-                    'required' => true,
-                    'options' => array(
-                        'label' => 'E-Mail Address'
-                    ),
-                )
-            );
-
-        }
+        $this->add(
+            array(
+                'name' => 'execEmail',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'E-Mail Address'
+                ),
+            )
+        );
     }
 
     public function getInputFilterSpecification()

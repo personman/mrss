@@ -10,36 +10,16 @@ class Study extends AbstractForm
     {
         // Call the parent constructor
         parent::__construct('study');
+        $this->addBasicFields();
+        $this->addExtraFields();
+        $this->add($this->getButtonFieldset());
+    }
 
-        $this->add(
-            array(
-                'name' => 'id',
-                'type' => 'Hidden'
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'name',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Name'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'description',
-                'type' => 'Textarea',
-                'options' => array(
-                    'label' => 'Description'
-                ),
-                'attributes' => array(
-                    'rows' => 8
-                )
-            )
-        );
+    protected function addBasicFields()
+    {
+        $this->addId();
+        $this->addName();
+        $this->addDescription();
 
         $this->add(
             array(
@@ -94,7 +74,10 @@ class Study extends AbstractForm
                 )
             )
         );
+    }
 
+    protected function addExtraFields()
+    {
         $this->add(
             array(
                 'name' => 'pilotOpen',
@@ -184,8 +167,6 @@ class Study extends AbstractForm
                 )
             )
         );
-
-        $this->add($this->getButtonFieldset());
     }
 
     public function getYearsAvailable()

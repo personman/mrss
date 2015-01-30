@@ -10,24 +10,15 @@ class Benchmark extends AbstractForm
     {
         // Call the parent constructor
         parent::__construct('benchmark');
+        $this->addBasicFields();
+        $this->addExtraFields();
+        $this->add($this->getButtonFieldset());
+    }
 
-        $this->add(
-            array(
-                'name' => 'id',
-                'type' => 'Hidden'
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'name',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Data Entry Label',
-                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
-                )
-            )
-        );
+    protected function addBasicFields()
+    {
+        $this->addId();
+        $this->addName('Data Entry Label', 'For dynamic years, use [year], [year_minus_2], etc.');
 
         $this->add(
             array(
@@ -63,20 +54,7 @@ class Benchmark extends AbstractForm
         );
 
 
-
-        $this->add(
-            array(
-                'name' => 'description',
-                'type' => 'Textarea',
-                'options' => array(
-                    'label' => 'Data Entry Description',
-                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
-                ),
-                'attributes' => array(
-                    'rows' => 8
-                )
-            )
-        );
+        $this->addDescription('Data Entry Description', 'For dynamic years, use [year], [year_minus_2], etc.');
 
         $this->add(
             array(
@@ -141,8 +119,10 @@ class Benchmark extends AbstractForm
             )
         );
 
+    }
 
-
+    protected function addExtraFields()
+    {
         $this->add(
             array(
                 'name' => 'yearPrefix',
@@ -208,20 +188,7 @@ class Benchmark extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Equation',
-                    'help-block' => '<a href="/benchmark/equation"
-                    data-toggle="modal" data-target="#myModal">
-                        Add a benchmark to the equation
-                    </a>.
-                    <div class="modal fade" id="myModal" tabindex="-1"
-                    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Select a Benchmark</h3>
-      </div>
-      <div class="modal-body">
-        <!-- content will be loaded here -->
-      </div>
-    </div>'
+                    'help-block' => $this->getEquationHelp()
                 ),
                 'attributes' => array(
                     'id' => 'equation'
@@ -310,8 +277,6 @@ class Benchmark extends AbstractForm
                 )
             )
         );
-
-        $this->add($this->getButtonFieldset());
     }
 
     public function getYearsAvailable()
@@ -320,5 +285,23 @@ class Benchmark extends AbstractForm
         $combined = array_combine($range, $range);
 
         return $combined;
+    }
+
+    protected function getEquationHelp()
+    {
+        return '<a href="/benchmark/equation"
+                    data-toggle="modal" data-target="#myModal">
+                        Add a benchmark to the equation
+                    </a>.
+                    <div class="modal fade" id="myModal" tabindex="-1"
+                    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Select a Benchmark</h3>
+      </div>
+      <div class="modal-body">
+        <!-- content will be loaded here -->
+      </div>
+    </div>';
     }
 }

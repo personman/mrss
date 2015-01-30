@@ -88,33 +88,41 @@ class AbstractForm extends Form
         );
     }
 
-    public function addName()
+    public function addName($label = 'Name', $helpBlock = null)
     {
-        $this->add(
-            array(
-                'name' => 'name',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Name'
-                )
+        $field = array(
+            'name' => 'name',
+            'type' => 'Text',
+            'options' => array(
+                'label' => $label
             )
         );
+
+        if (!empty($helpBlock)) {
+            $field['options']['help-block'] = $helpBlock;
+        }
+
+        $this->add($field);
     }
 
-    public function addDescription()
+    public function addDescription($label = 'Description', $helpBlock = null)
     {
-        $this->add(
-            array(
-                'name' => 'description',
-                'type' => 'Textarea',
-                'options' => array(
-                    'label' => 'Description'
-                ),
-                'attributes' => array(
-                    'rows' => 8
-                )
+        $field = array(
+            'name' => 'description',
+            'type' => 'Textarea',
+            'options' => array(
+                'label' => $label
+            ),
+            'attributes' => array(
+                'rows' => 8
             )
         );
+
+        if (!empty($helpBlock)) {
+            $field['options']['help-block'] = $helpBlock;
+        }
+
+        $this->add($field);
     }
 
     public function getStates($includeBlankOption = true)
