@@ -267,13 +267,15 @@ function workforceShowHideOtherSetup()
         // Is the field present?
         var otherField = $('#' + other + ' input');
         if (otherField.length) {
-            console.log('found')
+            var foundField = otherField;
+            var foundSpecifyId = specifyId;
+
             //  Run it on ready
-            workforceShowHideOther(otherField, specifyId);
+            workforceShowHideOther(foundField, specifyId);
 
             // And on keyup
             otherField.keyup(function() {
-                workforceShowHideOther(otherField, specifyId)
+                workforceShowHideOther(foundField, foundSpecifyId)
             })
         }
 
