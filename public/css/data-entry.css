@@ -105,6 +105,9 @@ form#system-admin-switch select {
 }
 
 /* Workforce Project */
+#control-group-institutional_demographics_campus_environment .input-small {
+    width: 120px;
+}
 
 /* Heading on revenue page */
 #control-group-revenue_federal,

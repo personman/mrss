@@ -225,6 +225,8 @@ function updateRaceTotal()
 
 function addWorkForceCustomizations()
 {
+    workforceShowHideOtherSetup()
+
     // Workforce revenue heading, form 5
     if ($('#control-group-revenue_federal').length) {
         $('#control-group-revenue_federal').before("<h4 class='subheading'>Public Sources</h4>")
@@ -233,7 +235,7 @@ function addWorkForceCustomizations()
     // Some special formatting for form 9
     $('#control-group-institutional_demographics_companies_less_than_50').before(
         '<h4 class="subheading">Companies by Employee Size</h4>' +
-            '<p class="subheading-notes">Companies by size (Use the US Economic Census, County Business Patterns to obtain these data)</p>'
+            '<p class="subheading-notes">Companies by size (Use the US Economic Census, County Business Patterns to obtain these data).  Note:  Should add to total service area companies.</p>'
     )
 
     if ($('#control-group-enrollment_information_duplicated_enrollment').length) {
@@ -246,8 +248,66 @@ function addWorkForceCustomizations()
             $(this).html(label)
         })
     }
+}
 
+function workforceShowHideOtherSetup()
+{
 
+    var configs = getWorkForceOtherFields()
+
+    for (i in configs) {
+        var config = configs[i]
+
+        // The id for the whole control group
+        var specifyId = config.specifyId;
+
+        // Id for the controls
+        var other = config.other;
+
+        // Is the field present?
+        var otherField = $('#' + other + ' input');
+        if (otherField.length) {
+            console.log('found')
+            //  Run it on ready
+            workforceShowHideOther(otherField, specifyId);
+
+            // And on keyup
+            otherField.keyup(function() {
+                workforceShowHideOther(otherField, specifyId)
+            })
+        }
+
+    }
+}
+
+function getWorkForceOtherFields()
+{
+    return [
+        {
+            specifyId: 'control-group-revenue_other_specify',
+            other: 'controls-revenue_other'
+        },
+        {
+            specifyId: 'control-group-expenditures_other_specify',
+            other: 'controls-expenditures_other'
+        },
+        {
+            specifyId: 'control-group-net_revenue_other_specify',
+            other: 'controls-net_revenue_other'
+        }
+    ]
+}
+
+function workforceShowHideOther(otherField, specifyId)
+{
+    var val = otherField.val()
+    if (val > 0) {
+        // Show it
+        $('#' + specifyId).show()
+    } else {
+        // hide it
+        $('#' + specifyId).hide()
+    }
 }
 
 
