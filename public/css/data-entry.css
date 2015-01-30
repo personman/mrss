@@ -109,6 +109,12 @@ form#system-admin-switch select {
     width: 120px;
 }
 
+#revTotal {
+    margin-top: 5px;
+    margin-left: 15px;
+    font-weight: bold;
+}
+
 /* Heading on revenue page */
 #control-group-revenue_federal,
 #control-group-revenue_state,

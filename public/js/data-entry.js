@@ -226,7 +226,12 @@ function updateRaceTotal()
 function addWorkForceCustomizations()
 {
     workforceShowHideOtherSetup()
+    workforceRevenueTotal()
+    workforceFormFormatting()
+}
 
+function workforceFormFormatting()
+{
     // Workforce revenue heading, form 5
     if ($('#control-group-revenue_federal').length) {
         $('#control-group-revenue_federal').before("<h4 class='subheading'>Public Sources</h4>")
@@ -248,6 +253,63 @@ function addWorkForceCustomizations()
             $(this).html(label)
         })
     }
+}
+
+function workforceRevenueTotal()
+{
+    var earnedRevGroup = $('#control-group-revenue_earned_revenue');
+
+    if (earnedRevGroup.length) {
+        earnedRevGroup.after('<div class="control-group">' +
+            '<div class="control-label">Total</div>' +
+            '<div class="controls"><div id="revTotal"></div>' +
+            '</div>' +
+            '<p class="help-block" style="display:block">Total should be 100%.</p>' +
+            '</div>')
+
+        workforceUpdateRevenueTotal()
+
+        var selector = workforceGetRevenueSelector();
+        $(selector).keyup(function() {
+            workforceUpdateRevenueTotal()
+        })
+    }
+}
+
+function workforceUpdateRevenueTotal()
+{
+    var total = 0;
+
+    var selector = workforceGetRevenueSelector();
+
+    $(selector).each(function(i, e) {
+        var val = parseFloat($(e).val())
+        if (val) {
+            total = total + val
+        }
+    });
+
+    var color = 'red';
+    if (total == 100) {
+        color = 'green';
+    }
+
+    total = '<span style="color: ' + color + '">' + total + '%</span>'
+
+    $('#revTotal').html(total)
+}
+
+function workforceGetRevenueSelector()
+{
+    var selectors = [];
+    var fields = ['controls-revenue_federal', 'controls-revenue_state', 'controls-revenue_local', 'controls-revenue_grants', 'controls-revenue_earned_revenue'];
+    for (var i in fields) {
+        var field = fields[i];
+
+        selectors.push('#' + field + ' input');
+    }
+
+    return selectors.join(', ')
 }
 
 function workforceShowHideOtherSetup()
