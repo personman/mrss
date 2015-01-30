@@ -59,9 +59,12 @@ table.dataTable thead .sorting.heatMapYear {
     display: none;
 }
 
+#report-strengths h2 {
+    margin-bottom: 12px;
+}
 .strengthRank {
+    margin-bottom: 12px;
     margin-left: 5px;
     color: #336699 !important;
     font-weight: bold;
-
 }
