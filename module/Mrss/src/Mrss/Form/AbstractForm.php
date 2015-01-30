@@ -78,6 +78,45 @@ class AbstractForm extends Form
         }
     }
 
+    public function addId()
+    {
+        $this->add(
+            array(
+                'name' => 'id',
+                'type' => 'Hidden'
+            )
+        );
+    }
+
+    public function addName()
+    {
+        $this->add(
+            array(
+                'name' => 'name',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Name'
+                )
+            )
+        );
+    }
+
+    public function addDescription()
+    {
+        $this->add(
+            array(
+                'name' => 'description',
+                'type' => 'Textarea',
+                'options' => array(
+                    'label' => 'Description'
+                ),
+                'attributes' => array(
+                    'rows' => 8
+                )
+            )
+        );
+    }
+
     public function getStates($includeBlankOption = true)
     {
         $states = array(

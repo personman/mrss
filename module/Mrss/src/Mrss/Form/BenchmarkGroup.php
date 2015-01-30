@@ -10,23 +10,15 @@ class BenchmarkGroup extends AbstractForm
     {
         // Call the parent constructor
         parent::__construct('benchmarkGroup');
+        $this->addBasicFields();
+        $this->addExtraFields();
+    }
 
-        $this->add(
-            array(
-                'name' => 'id',
-                'type' => 'Hidden'
-            )
-        );
+    protected function addBasicFields()
+    {
 
-        $this->add(
-            array(
-                'name' => 'name',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Name'
-                )
-            )
-        );
+        $this->addId();
+        $this->addName();
 
         $this->add(
             array(
@@ -58,6 +50,10 @@ class BenchmarkGroup extends AbstractForm
                 )
             )
         );
+    }
+
+    protected function addExtraFields()
+    {
 
         $this->add(
             array(
@@ -75,18 +71,7 @@ class BenchmarkGroup extends AbstractForm
             )
         );
 
-        $this->add(
-            array(
-                'name' => 'description',
-                'type' => 'Textarea',
-                'options' => array(
-                    'label' => 'Description'
-                ),
-                'attributes' => array(
-                    'rows' => 8
-                )
-            )
-        );
+        $this->addDescription();
 
         $this->add(
             array(
