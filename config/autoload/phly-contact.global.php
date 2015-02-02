@@ -35,7 +35,8 @@ $settings = array(
          */
         'to' => array(
             'dfergu15@jccc.edu',
-            'mtaylo24@jccc.edu'
+            'mtaylo24@jccc.edu',
+            'support@nhebi.zendesk.com'
         ),
 
         'from' => 'dfergu15@jccc.edu'
