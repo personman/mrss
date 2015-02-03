@@ -50,7 +50,7 @@ NhebiSubscriptions
 
             $count = 0;
             foreach ($results as $code => $result) {
-                if ($result->subscribed) {
+                if (!empty($result->subscribed)) {
                     $count++;
                 }
             }

@@ -22,6 +22,9 @@ class Excel
     // Green background for value column
     protected $valueColumnBackground = 'A0F2A3';
 
+    // Grey background for workforce's value column
+    protected $valueColumnBackgroundGrey = 'D9D9D9';
+
     protected $blankBackground = 'FFFFFF';
 
     // The Excel column index that holds the db_column
@@ -42,6 +45,8 @@ class Excel
     protected $benchmarkModel;
 
     protected $variableSubstitution;
+
+    protected $row = 1;
 
     /**
      * @deprecated
@@ -90,7 +95,7 @@ class Excel
         $sheet->setCellValue('A1', 'Label');
         $sheet->setCellValue('B1', 'Value');
         $sheet->setCellValue('C1', 'Data Definition');
-        //$sheet->setCellValue('D1', 'Column');
+        $sheet->setCellValue('D1', 'Column');
 
         // Hide column D
         $sheet->getColumnDimension('D')->setVisible(false);
@@ -154,12 +159,6 @@ class Excel
         // Bold header
         $headerRow = $sheet->getStyle('A1:Z1');
         $headerRow->getFont()->setBold(true);
-
-        // Value columns background
-        $lastValueColumn = $this->num2alpha(count($subscriptions));
-        $sheet->getStyle('B1:' . $lastValueColumn . $this->rowCount)->getFill()
-            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($this->valueColumnBackground);
     }
 
     public function writeBody(PHPExcel $spreadsheet, Subscription $subscription)
@@ -271,6 +270,11 @@ class Excel
         foreach ($subscriptions as $subscription) {
             $value = $subscription->getObservation()->get($benchmark->getDbColumn());
             $sheet->setCellValueByColumnAndRow($column, $row, $value);
+
+            $sheet->getStyleByColumnAndRow($column, $row)->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()->setARGB($this->getValueColumnBackground());
+
 
             $column++;
         }
@@ -557,6 +561,22 @@ class Excel
         PHPExcel $spreadsheet,
         Subscription $subscription
     ) {
+        $sheet = $spreadsheet->getActiveSheet();
+
+
+        // Add introductory text at the top
+        $intro = "Non-credit workforce development refers to courses and other instructional activities that provide individuals with soft skills and/or technical skill-sets for the workplace but carry no institutional credit applicable toward a degree, diploma, or a for-credit certificate. Offerings may be on-campus, off-campus, online, distance learning or at a specific organization/business. The goal is to increase individual opportunity in the labor market to improve participants’ knowledge, skills, and abilities and/or provide specific employee training for the benefit of a given business client.";
+        $intro2 = "Please enter all the data that you have available. If you do not have data for a particular data element, feel free to leave that cell blank. However, the more data that you enter the better you will be able to benchmark your institution";
+
+        $sheet->getColumnDimensionByColumn(0)->setAutoSize(false);
+        $sheet->insertNewRowBefore(1, 2);
+        $sheet->setCellValue('A1', $intro);
+        $sheet->setCellValue('A2', $intro2);
+        $sheet->getStyle('A1:A2')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('A')->setWidth(80);
+
+
+        /*
         // Open the template file
         $filename = 'data/imports/workforce.xlsx';
         $excel = PHPExcel_IOFactory::load($filename);
@@ -579,6 +599,7 @@ class Excel
         $collegeHeader = $college->getName() . " \r("
             . $college->getIpeds() . ')';
         $spreadsheet->getActiveSheet()->setCellValue('B5', $collegeHeader);
+        */
     }
 
     protected function populateWorkforceValues(PHPExcel $spreadsheet, Subscription $subscription)
@@ -971,5 +992,14 @@ class Excel
     public function getVariableSubstitution()
     {
         return $this->variableSubstitution;
+    }
+
+    public function getValueColumnBackground()
+    {
+        if ($this->getCurrentStudy()->getId() == 3) {
+            $this->valueColumnBackground = $this->valueColumnBackgroundGrey;
+        }
+
+        return $this->valueColumnBackground;
     }
 }
