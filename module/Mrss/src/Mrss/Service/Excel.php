@@ -565,8 +565,15 @@ class Excel
 
 
         // Add introductory text at the top
-        $intro = "Non-credit workforce development refers to courses and other instructional activities that provide individuals with soft skills and/or technical skill-sets for the workplace but carry no institutional credit applicable toward a degree, diploma, or a for-credit certificate. Offerings may be on-campus, off-campus, online, distance learning or at a specific organization/business. The goal is to increase individual opportunity in the labor market to improve participants’ knowledge, skills, and abilities and/or provide specific employee training for the benefit of a given business client.";
-        $intro2 = "Please enter all the data that you have available. If you do not have data for a particular data element, feel free to leave that cell blank. However, the more data that you enter the better you will be able to benchmark your institution";
+        $intro = "Non-credit workforce development refers to courses and other instructional activities that provide " .
+            "individuals with soft skills and/or technical skill-sets for the workplace but carry no institutional " .
+            "credit applicable toward a degree, diploma, or a for-credit certificate. Offerings may be on-campus, " .
+            "off-campus, online, distance learning or at a specific organization/business. The goal is to increase " .
+            "individual opportunity in the labor market to improve participants’ knowledge, skills, and abilities " .
+            "and/or provide specific employee training for the benefit of a given business client.";
+        $intro2 = "Please enter all the data that you have available. If you do not have data for a particular data " .
+            "element, feel free to leave that cell blank. However, the more data that you enter the better you will " .
+            "be able to benchmark your institution";
 
         $sheet->getColumnDimensionByColumn(0)->setAutoSize(false);
         $sheet->insertNewRowBefore(1, 2);
