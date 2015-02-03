@@ -552,7 +552,8 @@ class Report
         $chartConfig
     ) {
         if (empty($chartConfig['title'])) {
-            $chartConfig['title'] = $this->getVariableSubstitution()->substitute($benchmark->getReportLabel());
+            $chartConfig['title'] = $this->getVariableSubstitution()
+                ->substitute($benchmark->getDescriptiveReportLabel());
         }
 
         unset($percentileData['N']);

@@ -142,7 +142,7 @@ $this->headScript()->appendFile(
                         <td colspan="9">
                             <?= $this->chart($benchmark['chart']) ?>
 
-                            <?php if (false && !empty($benchmark['description'])): ?>
+                            <?php if (!empty($benchmark['description'])): ?>
                             <p class="nationalDataDefinition">
                                 <?= $benchmark['description'] ?>
                             </p>
