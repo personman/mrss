@@ -215,6 +215,7 @@ body #showcase .features_op1_row .feature .img_box span.circle {
     text-align: left;
     width: 320px;
     font-size: 22px;
+    line-height: 30px;
 }
 
 #responsive h3 {
@@ -229,6 +230,7 @@ body #showcase .features_op1_row .feature .img_box span.circle {
     text-align: left;
     color: black;
     font-size: 22px;
+    line-height: 30px;
 }
 
 .slide#responsive .info {
@@ -251,6 +253,7 @@ body #showcase .features_op1_row .feature .img_box span.circle {
 }
 .slide#benchmarks .info p {
     font-size: 22px;
+    line-height: 30px;
 }
 
 body #footer {
