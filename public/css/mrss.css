@@ -101,6 +101,7 @@ body a:hover {
     /*color: #00697E;*/
     color: #00687f;
     font-weight: 300;
+    line-height: 50px;
 }
 
 body .section_header h3 {
@@ -204,7 +205,7 @@ body #showcase .features_op1_row .feature .img_box span.circle {
 #ideas h3 {
     /* color: #90C019; */
     color: #07677C;
-    font-size: 250%;
+    font-size: 280%;
     width: 300px;
     text-align: left;
     line-height: 36px;
@@ -213,11 +214,12 @@ body #showcase .features_op1_row .feature .img_box span.circle {
 #ideas p {
     text-align: left;
     width: 320px;
+    font-size: 22px;
 }
 
 #responsive h3 {
     color: #1EB2CE;
-    font-size: 230%;
+    font-size: 280%;
     text-align: left;
     line-height: 36px;
 }
@@ -226,11 +228,12 @@ body #showcase .features_op1_row .feature .img_box span.circle {
     width: 400px;
     text-align: left;
     color: black;
+    font-size: 22px;
 }
 
 .slide#responsive .info {
     position: absolute;
-    top: 2%;
+    top: 14%;
     left: 50%;
     width: 40%;
 }
@@ -238,12 +241,16 @@ body #showcase .features_op1_row .feature .img_box span.circle {
 .slide#benchmarks .info {
     width: 400px;
     position: absolute;
-    top: 5%;
+    top: 12%;
     left: 30%;
 }
 
 .slide#benchmarks .info h3 {
     color: #07677C;
+    font-size: 280%
+}
+.slide#benchmarks .info p {
+    font-size: 22px;
 }
 
 body #footer {
