@@ -273,7 +273,13 @@ body #footer .navbar-inverse {
 
 .page-header h2 { color: #00677e; }
 
-p.page-intro { color: #809c00; font-weight: 300;  font-size:  200%; margin-bottom: 5%; line-height: 115%; }
+p.page-intro {
+    color: #809c00;
+    font-weight: 300;
+    font-size:  200%;
+    margin-bottom: 25px;
+    line-height: 115%;
+}
 
 html .sidebar {
     background-color: #13B2CD;
