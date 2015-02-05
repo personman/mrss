@@ -115,6 +115,9 @@ class NavigationFactory extends DefaultNavigationFactory
             $name = $user->getPrefix() . ' ' . $user->getLastName();
             $pages['account']['label'] = $name;
 
+            // Logged in users don't need demos
+            unset($pages['schedule-demo']);
+
 
             if (!empty($currentStudy)) {
                 /*

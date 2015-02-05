@@ -93,6 +93,10 @@ return array(
                         'label' => 'Timeline',
                         'uri' => '/timeline'
                     ),
+                    'schedule-demo' => array(
+                        'label' => 'Schedule a Demo',
+                        'uri' => '/schedule-demo'
+                    ),
                 )
             ),
             'help' => array(
@@ -112,6 +116,10 @@ return array(
                         'uri' => '/contact'
                     ),
                 )
+            ),
+            'schedule-demo' => array(
+                'label' => 'Schedule a Demo',
+                'uri' => '/schedule-demo'
             ),
             'contact' => array(
                 'label' => 'Contact Us',
