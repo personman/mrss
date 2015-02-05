@@ -97,11 +97,9 @@ body a:hover {
 
 /* cms page title */
 #content h3 {
-    font-size: 300%;
     /*color: #00697E;*/
     color: #00687f;
-    font-weight: 300;
-    line-height: 50px;
+    font-weight: 500;
 }
 
 body .section_header h3 {
@@ -299,9 +297,9 @@ ul.symbol-links li.form {
 
 /* Partners Page */
 
-h4 { color: #0097bd; margin:20px 0 5px 0; }
+h4 { color: #0097bd; margin:25px 0 5px 0; }
 
-h5 { color: #666; font-size:  175%; }
+h5 { color: #666;}
 
 ul.benchmarks { margin: 0px 50px 0 0; }
 ul.benchmarks > li { list-style: none; border-bottom: 1px solid #CCC; line-height: 24px; padding: 0 0 5px 0;
