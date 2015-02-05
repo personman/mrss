@@ -647,7 +647,7 @@ class ReportController extends AbstractActionController
 
     public function strengthsAction()
     {
-        $limit = 10;
+        $threshold = 85;
 
         /** @var \Mrss\Service\Report\Executive $report */
         $report = $this->getServiceLocator()->get('service.report.executive');
@@ -658,8 +658,8 @@ class ReportController extends AbstractActionController
         $report->setObservation($observation);
 
 
-        $strengths = $report->getStrengths(false, $limit);
-        $weaknesses = $report->getWeaknesses($limit);
+        $strengths = $report->getStrengths(false, $threshold);
+        $weaknesses = $report->getWeaknesses($threshold);
 
         $subscriptions = $this->currentCollege()
             ->getSubscriptionsForStudy($this->currentStudy());

@@ -43,7 +43,8 @@ class PercentileRank extends AbstractModel
      * @param $year
      * @param bool $weaknesses
      * @param null $benchmarkGroupToExclude
-     * @param int $limit
+     * @param int $threshold
+     * @internal param int $limit
      * @return PercentileRankEntity[]
      */
     public function findStrengths(
@@ -52,7 +53,7 @@ class PercentileRank extends AbstractModel
         $year,
         $weaknesses = false,
         $benchmarkGroupToExclude = null,
-        $limit = 5
+        $threshold = 85
     ) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
@@ -60,7 +61,6 @@ class PercentileRank extends AbstractModel
         $qb = $em->createQueryBuilder();
 
         //->setFetchMode('MyBundle\Entity\User', 'addresses', \Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER)
-
 
         // For some benchmarks, lower is better. Calculate an absolute rank so we can sort by that.
         $absoluteRank = 'CASE WHEN b.highIsBetter = true THEN p.rank ELSE 100 - p.rank END AS absolute_rank';
@@ -89,6 +89,17 @@ class PercentileRank extends AbstractModel
 
         $qb->andWhere('p.system IS NULL');
 
+        // Only fetch results that surpass a threshold
+        if (!empty($threshold)) {
+            if (!$weaknesses) {
+                $qb->having('absolute_rank >= :threshold');
+                $qb->setParameter('threshold', $threshold);
+            } else {
+                $qb->having('absolute_rank <= :threshold');
+                $qb->setParameter('threshold', 100 - $threshold);
+            }
+        }
+
         if (!$weaknesses) {
             $qb->orderBy('absolute_rank', 'DESC');
         } else {
@@ -99,8 +110,6 @@ class PercentileRank extends AbstractModel
             $qb->andWhere('b.benchmarkGroup != :group_id');
             $qb->setParameter('group_id', $benchmarkGroupToExclude);
         }
-
-        $qb->setFirstResult(0)->setMaxResults($limit);
 
 
         try {
