@@ -130,6 +130,9 @@ body .section_header {
 .staff-page .row {
     margin-left: 0;
 }
+#content .row.cmsPage {
+    margin-left: 0;
+}
 .project-partners .row-fluid {
     border-bottom: 3px solid #636766;
     margin-bottom: 80px;
