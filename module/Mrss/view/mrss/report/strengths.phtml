@@ -40,7 +40,9 @@
             <li>
                 <?= $benchmark['name'] ?>
                 <div class="strengthRank">
-                    Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
+                    <a href="/reports/national#form_<?= $benchmark['form_url'] ?>" title="Click for details">
+                        Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
+                    </a>
                 </div>
 
             </li>
