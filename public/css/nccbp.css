@@ -404,8 +404,18 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
 }
 
 /* Hide the heading, forgot password link and errors */
-#headerLoginForm h1, #headerLoginForm a, #headerLoginForm .help-inline {
+#headerLoginForm h1, /*#headerLoginForm a,*/ #headerLoginForm .help-inline {
     display: none;
+}
+
+#headerLoginForm a {
+    font-size: 8px;
+    color: #CCC;
+}
+#headerLoginForm p {
+    line-height: 8px;
+    margin-right: 108px;
+    margin-top: 57px;
 }
 
 #headerLoginForm form {
