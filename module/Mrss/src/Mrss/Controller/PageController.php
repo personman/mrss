@@ -100,6 +100,20 @@ class PageController extends AbstractActionController
             $pageRoute = '';
         }
 
+        // Customize for NCCBP. report-only viewers can't access member home
+        if ($pageRoute == 'members' && $this->currentStudy()->getId() == 1) {
+            $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
+
+            if ($auth->hasIdentity()) {
+                $user = $auth->getIdentity();
+                if ($user->getRole() == 'viewer') {
+                    // Redirect them to the executive report
+                    return $this->redirect()->toUrl('/reports/executive');
+                }
+
+            }
+        }
+
         $pageModel = $this->getServiceLocator()
             ->get('model.page');
         $page = $pageModel->findOneByRouteAndStudy(

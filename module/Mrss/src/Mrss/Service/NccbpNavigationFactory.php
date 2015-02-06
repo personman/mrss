@@ -13,16 +13,20 @@ class NccbpNavigationFactory extends NavigationFactory
 
     public function getPagesArray(ServiceLocatorInterface $serviceLocator)
     {
+        $pages = parent::getPagesArray($serviceLocator);
+
         $auth = $serviceLocator->get('zfcuser_auth_service');
         $user = null;
         $system = null;
         if ($auth->hasIdentity()) {
             $user = $auth->getIdentity();
             $system = $user->getCollege()->getSystem();
-        }
 
-        //$pages = parent::getPages($serviceLocator);
-        $pages = parent::getPagesArray($serviceLocator);
+            // Remove the Home button from nav if user is role: viewer
+            if ($user->getRole() == 'viewer') {
+                unset($pages['home']);
+            }
+        }
 
         // If the user is logged in, hide some stuff
         if ($auth->hasIdentity()) {
