@@ -647,7 +647,7 @@ class ReportController extends AbstractActionController
 
     public function strengthsAction()
     {
-        $threshold = 85;
+        $threshold = 75;
 
         /** @var \Mrss\Service\Report\Executive $report */
         $report = $this->getServiceLocator()->get('service.report.executive');

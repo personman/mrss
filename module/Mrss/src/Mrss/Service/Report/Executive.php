@@ -306,6 +306,8 @@ class Executive extends Report
 
             $ranks[] = array(
                 'name' => $name,
+                'dbColumn' => $pRank->getBenchmark()->getDbColumn(),
+                'form_url' => $pRank->getBenchmark()->getBenchmarkGroup()->getUrl(),
                 'rank' => $this->getOrdinal($pRank->getRank()),
                 'benchmark_id' => $pRank->getBenchmark()->getId(),
                 'append' => $append

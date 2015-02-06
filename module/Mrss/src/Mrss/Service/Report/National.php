@@ -45,6 +45,7 @@ class National extends Report
             $groupData = array(
                 'benchmarkGroup' => $benchmarkGroup->getName(),
                 'timeframe' => $this->getVariableSubstitution()->substitute($benchmarkGroup->getTimeframe()),
+                'url' => $benchmarkGroup->getUrl(),
                 'benchmarks' => array()
             );
             $benchmarks = $benchmarkGroup->getChildren($year, true, 'report', 'report');
@@ -82,6 +83,7 @@ class National extends Report
     {
         $benchmarkData = array(
             'benchmark' => $this->getVariableSubstitution()->substitute($benchmark->getReportLabel()),
+            'dbColumn' => $benchmark->getDbColumn()
         );
 
         $year = $this->getObservation()->getYear();

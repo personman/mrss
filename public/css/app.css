@@ -68,3 +68,6 @@ table.dataTable thead .sorting.heatMapYear {
     color: #336699 !important;
     font-weight: bold;
 }
+.strengthRank a {
+    text-decoration: none;
+}
