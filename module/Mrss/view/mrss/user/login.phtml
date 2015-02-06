@@ -37,7 +37,7 @@ $form->get('submit')->setAttribute('class', 'btn btn-primary');
 
 <?php echo $this->form()->closeTag() ?>
 
-<p><a href="<?php echo $this->url('zfcuser/forgotpassword') ?>">Forgot your password?</a></p>
+<p><a href="/reset-password">Get a new password.</a></p>
 
 <?php if ($this->enableRegistration) : ?>
     <p>Not registered? <a href="<?php echo $this->url('zfcuser/register') . ($this->redirect ? '?redirect='.$this->redirect : '') ?>">Sign up!</a></p>
