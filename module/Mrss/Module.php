@@ -486,6 +486,14 @@ class Module
 
                     return $model;
                 },
+                'model.peerBenchmark' => function ($sm) {
+                    $model = new Model\PeerBenchmark();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.subscription' => function ($sm) {
                     $subscriptionModel = new Model\Subscription();
                     $em = $sm->get('em');

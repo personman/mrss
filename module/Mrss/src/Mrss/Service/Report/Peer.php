@@ -5,7 +5,9 @@ namespace Mrss\Service\Report;
 use Mrss\Service\Report;
 use Mrss\Entity\PeerGroup;
 use Mrss\Entity\College;
+use Mrss\Entity\PeerBenchmark;
 use Mrss\Entity\Benchmark as BenchmarkEntity;
+use Mrss\Model\PeerBenchmark as PeerBenchmarkModel;
 use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
@@ -15,6 +17,8 @@ use PHPExcel_Shared_Font;
 
 class Peer extends Report
 {
+    protected $peerBenchmarkModel;
+
     public function getPeerReport(PeerGroup $peerGroup)
     {
         $minPeers = 5;
@@ -53,6 +57,7 @@ class Peer extends Report
         foreach ($benchmarks as $benchmarkId) {
             /** @var \Mrss\Entity\Benchmark $benchmark */
             $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+            $this->logPeerBenchmark($benchmark, $peerGroup->getCollege());
 
             // Build the report data
             $data = array();
@@ -102,6 +107,7 @@ class Peer extends Report
             $report['sections'][] = $reportSection;
         }
 
+        $this->getPeerBenchmarkModel()->getEntityManager()->flush();
 
         return $report;
     }
@@ -340,5 +346,30 @@ class Peer extends Report
 
         }
         return $filteredColleges;
+    }
+
+    public function logPeerBenchmark(BenchmarkEntity $benchmark, College $college)
+    {
+        $peerBenchmark = new PeerBenchmark();
+        $peerBenchmark->setBenchmark($benchmark);
+        $peerBenchmark->setCollege($college);
+        $peerBenchmark->setStudy($benchmark->getBenchmarkGroup()->getStudy());
+
+        // Save it
+        $this->getPeerBenchmarkModel()->save($peerBenchmark);
+    }
+
+    public function setPeerBenchmarkModel(PeerBenchmarkModel $peerBenchmarkModel)
+    {
+        $this->peerBenchmarkModel = $peerBenchmarkModel;
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\PeerBenchmark
+     */
+    public function getPeerBenchmarkModel()
+    {
+        return $this->peerBenchmarkModel;
     }
 }

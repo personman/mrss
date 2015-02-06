@@ -44,6 +44,8 @@ class Factory implements AbstractFactoryInterface
         $report->setMailTransport($sm->get('mail.transport'));
         $report->setVariableSubstitution($sm->get('service.variableSubstitution'));
 
+        $report = $this->addExtraDependencies($report, $name, $sm);
+
         return $report;
     }
 
@@ -66,5 +68,14 @@ class Factory implements AbstractFactoryInterface
             'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
             'service.report' => 'Mrss\Service\Report',
         );
+    }
+
+    protected function addExtraDependencies($report, $name, $sm)
+    {
+        if ($name == 'service.report.peer') {
+            $report->setPeerBenchmarkModel($sm->get('model.peerBenchmark'));
+        }
+
+        return $report;
     }
 }
