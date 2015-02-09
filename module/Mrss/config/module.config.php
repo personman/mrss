@@ -935,6 +935,16 @@ return array(
                                 'benchmark' => null
                             )
                         )
+                    ),
+                    'instructional-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/instructional-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'instructionalCosts',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),

@@ -392,7 +392,9 @@ class ReportController extends AbstractActionController
 
             $latestSubscription = $subModel->getLatestSubscription($this->currentStudy(), $college->getId(), $before);
 
-            $year = $latestSubscription->getYear();
+            if (!empty($latestSubscription)) {
+                $year = $latestSubscription->getYear();
+            }
         }
 
         return $year;
@@ -660,6 +662,19 @@ class ReportController extends AbstractActionController
         );
 
         return $view;
+    }
+
+    public function instructionalCostsAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        return array(
+            'college' => $this->currentCollege(),
+            'observation' => $observation
+        );
     }
 
     /**

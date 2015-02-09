@@ -19,7 +19,7 @@ class SubObservation
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=99, nullable=true)
      */
     protected $name;
 
