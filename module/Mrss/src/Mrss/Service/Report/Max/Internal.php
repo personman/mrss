@@ -22,8 +22,15 @@ class Internal extends Report
 
         // Now the subobservations (academic units)
         foreach ($observation->getSubObservations() as $subObservation) {
+            $dbColumn = 'inst_cost_per_fte_student';
             $label = $subObservation->getName() . ' Total Cost Per FTE Student';
-            $value = '';
+            $benchmark = $this->getBenchmark($dbColumn);
+            $value = $benchmark->format($observation->get($dbColumn));
+
+            $data[] = array(
+                'label' => $label,
+                'value' => $value
+            );
         }
 
         return $data;

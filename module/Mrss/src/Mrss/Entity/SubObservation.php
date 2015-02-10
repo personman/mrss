@@ -104,6 +104,9 @@ class SubObservation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_part_prof_dev;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student;
+
 
 
 

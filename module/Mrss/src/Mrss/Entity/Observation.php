@@ -388,6 +388,9 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_total_per_cred_hr_prof_dev;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student;
+
     // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_total_program_dev;
