@@ -123,5 +123,4 @@ class PeerBenchmark
     {
         return $this->study;
     }
-
 }
