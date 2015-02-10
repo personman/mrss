@@ -4,13 +4,13 @@
     <?php foreach ($subscriptions as $subscription): ?>
         <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
         <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
-            <a href="<?= $this->url('reports/strengths', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
+            <a href="<?= $this->url('reports/high-low', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
         </li>
     <?php endforeach ?>
 </ul>
 
 
-<p><em>Report description goes here.</em></p>
+<p><em>Your institution reported values for the benchmarks below that are above the 75th percentile or below the 25th percentile. Click the blue text for details.</em></p>
 
 
 <div id="report-strengths" class="row">

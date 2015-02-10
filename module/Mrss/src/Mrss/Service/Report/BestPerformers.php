@@ -7,7 +7,7 @@ use Mrss\Entity\Benchmark;
 
 class BestPerformers extends Report
 {
-    protected $percentileThreshold = 85;
+    protected $percentileThreshold = 90;
 
     protected $year;
 

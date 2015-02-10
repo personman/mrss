@@ -936,10 +936,10 @@ return array(
                             )
                         )
                     ),
-                    'strengths' => array(
+                    'high-low' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/strengths[/:year]',
+                            'route' => '/high-low[/:year]',
                             'defaults' => array(
                                 'action' => 'strengths',
                                 'year' => null

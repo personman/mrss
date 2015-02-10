@@ -370,9 +370,9 @@ function getReportMenu()
                 'label' => 'Best Performers Report',
                 'uri' => '/reports/best-performers'
             ),
-            'strengths' => array(
-                'label' => 'Strengths Report',
-                'uri' => '/reports/strengths'
+            'high-low' => array(
+                'label' => 'High/Low Report',
+                'uri' => '/reports/high-low'
             )
         )
     );
