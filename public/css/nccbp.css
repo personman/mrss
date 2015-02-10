@@ -324,6 +324,20 @@ p.sec-intro{ border-bottom: 1px solid #999;font-family: 'Fira Sans', sans-serif;
     width: 74%;
 }
 /*	REPORTS */
+
+@media print {
+    .nationalReportChart {
+        display: none;
+        visibility: hidden;
+    }
+    .nationalReportChart.chartVisible {
+        display: table-row;
+        visibility: visible;
+    }
+
+
+}
+
 .reports-body { margin-top: 25px; margin-bottom: 75px; }
 
 .highcharts-contextmenu hr {

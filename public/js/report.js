@@ -22,17 +22,19 @@ $(function() {
 
     // Toggle charts on national report
     $('.openChart').click(function() {
-        $(this).parent().parent().next().toggle()
+        var row = $(this).parent().parent().next()
+        row.toggle()
+        row.toggleClass('chartVisible')
         return false
     })
 
     // Show all charts
     $('.showAllCharts').click(function() {
         if ($(this).attr('title').search('Hide') == -1) {
-            $('.nationalReportChart').show()
+            $('.nationalReportChart').show().addClass('chartVisible')
             $(this).attr('title', 'Hide all charts')
         } else {
-            $('.nationalReportChart').hide()
+            $('.nationalReportChart').hide().removeClass('chartVisible')
             $(this).attr('title', 'Show all charts')
         }
 
