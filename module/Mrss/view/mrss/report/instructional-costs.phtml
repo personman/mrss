@@ -2,6 +2,27 @@
 
 <h1><?= $college->getName() ?> Instructional Costs</h1>
 
-Observation id: <?= $observation->getId() ?>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Benchmark</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($reportData as $datum): ?>
 
 
+        <tr>
+            <td><?= $datum['label'] ?></td>
+            <td><?= $datum['value'] ?></td>
+        </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+
+<?php foreach ($observation->getSubobservations() as $subOb): ?>
+    <h3><?= $subOb->getName() ?></h3>
+<?php endforeach ?>

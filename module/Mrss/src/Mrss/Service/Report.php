@@ -1127,4 +1127,9 @@ class Report
 
         return $logger;
     }
+
+    protected function getBenchmark($dbColumn)
+    {
+        return $this->getBenchmarkModel()->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
+    }
 }
