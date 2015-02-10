@@ -60,7 +60,7 @@ $this->headScript()->appendFile(
             <?php $formNumber = array_shift($nameParts) ?>
             <?php $formTitle = implode(': ', $nameParts) ?>
         <?php endif ?>
-        <h3 class="benchmarkGroupTitle">
+        <h3 class="benchmarkGroupTitle" id="form_<?= $benchmarkGroup['url'] ?>">
             <span class="small-heading"><?= $formNumber ?></span><br>
             <?= $formTitle ?>
             <?php if (!empty($benchmarkGroup['timeframe'])): ?>
@@ -137,7 +137,7 @@ $this->headScript()->appendFile(
                         <?php endforeach ?>
                         <td><a href="#" class="btn btn-default openChart" title="Display chart"><i class="icon-signal glyphicon glyphicon-signal"></i></a></td>
                     </tr>
-                    <tr class="nationalReportChart <?= $rowClass ?>">
+                    <tr class="nationalReportChart <?= $rowClass ?>" id="benchmark_<?= $benchmark['dbColumn'] ?>">
                         <td></td>
                         <td colspan="9">
                             <?= $this->chart($benchmark['chart']) ?>
@@ -162,7 +162,7 @@ $this->headScript()->appendFile(
     <?php endforeach ?>
 
 
-    <p class="footnote">
+    <p class="footnote" id="bottom">
         - = % Rank cannot be reported on a zero.
     </p>
 </div>

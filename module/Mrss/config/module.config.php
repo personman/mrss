@@ -935,6 +935,16 @@ return array(
                                 'benchmark' => null
                             )
                         )
+                    ),
+                    'high-low' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/high-low[/:year]',
+                            'defaults' => array(
+                                'action' => 'strengths',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),

@@ -1,0 +1,52 @@
+<h1>High/Low Report</h1>
+
+<ul class="nav nav-pills report-nav">
+    <?php foreach ($subscriptions as $subscription): ?>
+        <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
+        <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
+            <a href="<?= $this->url('reports/high-low', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
+        </li>
+    <?php endforeach ?>
+</ul>
+
+
+<p><em>Your institution reported values for the benchmarks below that are above the 75th percentile or below the 25th percentile. Click the blue text for details.</em></p>
+
+
+<div id="report-strengths" class="row">
+    <div class="col-md-6">
+        <h2>Strengths</h2>
+
+        <ol>
+        <?php foreach ($strengths as $benchmark): ?>
+            <li>
+                <?= $benchmark['name'] ?>
+                <div class="strengthRank">
+                    <a href="/reports/national#form_<?= $benchmark['form_url'] ?>" title="Click for details">
+                    Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
+                    </a>
+                </div>
+
+            </li>
+        <?php endforeach ?>
+        </ol>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Opportunities for Improvement</h2>
+
+        <ol>
+        <?php foreach ($weaknesses as $benchmark): ?>
+            <li>
+                <?= $benchmark['name'] ?>
+                <div class="strengthRank">
+                    <a href="/reports/national#form_<?= $benchmark['form_url'] ?>" title="Click for details">
+                        Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
+                    </a>
+                </div>
+
+            </li>
+        <?php endforeach ?>
+        </ol>
+    </div>
+</div>

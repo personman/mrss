@@ -192,6 +192,7 @@ class NavigationFactory extends DefaultNavigationFactory
         if ($currentStudy->getId() == 2) {
             // Don't show best performers yet
             unset($pages['reports']['pages']['best-performers']);
+            unset($pages['reports']['pages']['high-low']);
 
             // Don't show the glossary for MRSS yet
             unset($pages['help']['pages']['glossary']);
@@ -220,6 +221,7 @@ class NavigationFactory extends DefaultNavigationFactory
         if ($currentStudy->getId() == 3) {
             // Don't show best performers yet
             unset($pages['reports']['pages']['best-performers']);
+            unset($pages['reports']['pages']['high-low']);
 
             // Remove partners page
             unset($pages['about2']['pages']['partners']);

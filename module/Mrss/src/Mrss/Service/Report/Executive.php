@@ -285,14 +285,14 @@ class Executive extends Report
         );
     }
 
-    public function getStrengths($weaknesses = false)
+    public function getStrengths($weaknesses = false, $threshold = 85)
     {
         $college = $this->getObservation()->getCollege();
         $year = $this->getObservation()->getYear();
         $study = $this->getStudy();
 
         $percentileRanks = $this->getPercentileRankModel()
-            ->findStrengths($college, $study, $year, $weaknesses, 1);
+            ->findStrengths($college, $study, $year, $weaknesses, 1, $threshold);
 
 
 
@@ -306,6 +306,8 @@ class Executive extends Report
 
             $ranks[] = array(
                 'name' => $name,
+                'dbColumn' => $pRank->getBenchmark()->getDbColumn(),
+                'form_url' => $pRank->getBenchmark()->getBenchmarkGroup()->getUrl(),
                 'rank' => $this->getOrdinal($pRank->getRank()),
                 'benchmark_id' => $pRank->getBenchmark()->getId(),
                 'append' => $append
@@ -315,8 +317,8 @@ class Executive extends Report
         return $ranks;
     }
 
-    public function getWeaknesses()
+    public function getWeaknesses($threshold = 85)
     {
-        return $this->getStrengths(true);
+        return $this->getStrengths(true, $threshold);
     }
 }
