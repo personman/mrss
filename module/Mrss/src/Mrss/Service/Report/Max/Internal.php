@@ -25,7 +25,7 @@ class Internal extends Report
             $dbColumn = 'inst_cost_per_fte_student';
             $label = $subObservation->getName() . ' Total Cost Per FTE Student';
             $benchmark = $this->getBenchmark($dbColumn);
-            $value = $benchmark->format($observation->get($dbColumn));
+            $value = $benchmark->format($subObservation->get($dbColumn));
 
             $data[] = array(
                 'label' => $label,

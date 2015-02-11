@@ -3,10 +3,13 @@
 namespace Mrss\Service;
 
 use Mrss\Entity\Benchmark;
+use Mrss\Entity\BenchmarkGroup;
 use Mrss\Entity\Observation;
+use Mrss\Entity\SubObservation;
 use Mrss\Entity\Study;
 use Mrss\Model\Benchmark as BenchmarkModel;
 use Mrss\Model\Observation as ObservationkModel;
+use Mrss\Model\SubObservation as SubObservationkModel;
 use exprlib\Parser as MathParser;
 
 class ComputedFields
@@ -22,6 +25,11 @@ class ComputedFields
     protected $observationModel;
 
     /**
+     * @var SubObservationkModel
+     */
+    protected $subObservationModel;
+
+    /**
      * @var Benchmark[]
      */
     protected $computedBenchmarks;
@@ -35,8 +43,12 @@ class ComputedFields
 
     protected $error;
 
-    public function calculate(Benchmark $benchmark, Observation $observation, $flush = true)
-    {
+    public function calculate(
+        Benchmark $benchmark,
+        Observation $observation,
+        $flush = true,
+        SubObservation $subObservation = null
+    ) {
 
         if ($this->debug) {
             $start = microtime(1);
@@ -58,7 +70,7 @@ class ComputedFields
                     $observation->getYear()
                 );
 
-            $equation = $this->prepareEquation($equationWithVariables, $observation);
+            $equation = $this->prepareEquation($equationWithVariables, $observation, $subObservation);
 
             if (empty($equation)) {
                 $result = null;
@@ -84,8 +96,13 @@ class ComputedFields
         }
 
         // Save the computed value
-        $observation->set($benchmarkColumn, $result);
-        $this->getObservationModel()->save($observation);
+        if (!empty($subObservation)) {
+            $subObservation->set($benchmarkColumn, $result);
+            $this->getSubObservationModel()->save($subObservation);
+        } else {
+            $observation->set($benchmarkColumn, $result);
+            $this->getObservationModel()->save($observation);
+        }
 
         if ($flush) {
             $this->getObservationModel()->getEntityManager()->flush();
@@ -174,10 +191,11 @@ class ComputedFields
     /**
      * @param $equation
      * @param Observation $observation
-     * @return MathParser
+     * @param \Mrss\Entity\SubObservation $subObservation
      * @throws \Exception
+     * @return MathParser
      */
-    public function prepareEquation($equation, Observation $observation)
+    public function prepareEquation($equation, Observation $observation, SubObservation $subObservation = null)
     {
         $variables = $this->getVariables($equation);
 
@@ -187,7 +205,11 @@ class ComputedFields
 
         $vars = array();
         foreach ($variables as $variable) {
-            $value = $observation->get($variable);
+            if (!empty($subObservation)) {
+                $value = $subObservation->get($variable);
+            } else {
+                $value = $observation->get($variable);
+            }
 
             // If any of the variables are null or '', bail out
             if ($value === null || $value === '') {
@@ -285,6 +307,22 @@ class ComputedFields
         }
     }
 
+    public function calculateAllForSubObservation(SubObservation $subObservation, BenchmarkGroup $benchmarkGroup)
+    {
+        $observation = $subObservation->getObservation();
+        $year = $observation->getYear();
+        $benchmarks = $benchmarkGroup->getComputedBenchmarksForYear($year);
+
+        foreach ($benchmarks as $benchmark) {
+            try {
+                $this->calculate($benchmark, $observation, false, $subObservation);
+            } catch (\Exception $e) {
+                pr($e->getMessage());
+                echo 'Benchmark: ' . $benchmark->getDbColumn() . ', equation: ' . $benchmark->getEquation();
+            }
+        }
+    }
+
     public function setBenchmarkModel(BenchmarkModel $benchmarkModel)
     {
         $this->benchmarkModel = $benchmarkModel;
@@ -297,9 +335,9 @@ class ComputedFields
         return $this->benchmarkModel;
     }
 
-    public function setObservationModel(ObservationkModel $observationModel)
+    public function setObservationModel(ObservationkModel $model)
     {
-        $this->observationModel = $observationModel;
+        $this->observationModel = $model;
 
         return $this;
     }
@@ -307,6 +345,18 @@ class ComputedFields
     public function getObservationModel()
     {
         return $this->observationModel;
+    }
+
+    public function setSubObservationModel(SubObservationkModel $model)
+    {
+        $this->subObservationModel = $model;
+
+        return $this;
+    }
+
+    public function getSubObservationModel()
+    {
+        return $this->subObservationModel;
     }
 
     public function setStudy(Study $study)
