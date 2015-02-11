@@ -34,7 +34,7 @@ class ContactController extends PhlyController
         $study = $currentStudy->getName();
 
         $from    = $data['from'];
-        $subject = "[Contact Form: $study] " . $data['subject'];
+        $subject = $data['subject'] . ', ' . $from . " [$study]";
         $body    = "From: $from\n\n" . $data['body'];
 
         $this->message->addFrom($from)
