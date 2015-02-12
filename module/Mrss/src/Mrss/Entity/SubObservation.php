@@ -218,6 +218,12 @@ class SubObservation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_part_expend_assessment;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc;
+
 
     public function setId($id)
     {

@@ -391,6 +391,12 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_per_fte_student;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc;
+
     // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_total_program_dev;

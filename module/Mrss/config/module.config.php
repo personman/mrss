@@ -956,6 +956,16 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+                    'unit-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/unit-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'unitCosts',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),

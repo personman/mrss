@@ -221,4 +221,79 @@ class Internal extends Report
             'Faculty Advising'
         );
     }
+
+    public function getActivities()
+    {
+        return array(
+            'program_dev' => 'Program Dev.',
+            'course_dev' => 'Course Dev.',
+            'teaching' => 'Teaching',
+            'tutoring' => 'Faculty Tutoring',
+            'advising' => 'Faculty Advising',
+            'ac_service' => 'Academic Services',
+            //'assessment' => 'Assessment', // @todo: add inst_cost_full_per_cred_hr_assessment
+            'prof_dev' => 'Professional Development'
+        );
+    }
+
+    /**
+     * Academic Unit Instructional Costs
+     *
+     * User selects an activity, then gets a table showing costs for the activity for each unit
+     *
+     * @param Observation $observation
+     * @return array
+     */
+    public function getUnitCosts(Observation $observation)
+    {
+        $reportData = array();
+
+        foreach ($this->getActivities() as $activity => $label) {
+            $activityData = array(
+                'name' => $label,
+                'units' => array()
+            );
+
+            foreach ($observation->getSubObservations() as $subObservation) {
+                $unitData = array();
+
+                foreach ($this->getUnitCostFields() as $field) {
+                    $dbColumn = $field;
+                    if (substr($field, -1) == '_') {
+                        $dbColumn .= $activity;
+                    }
+
+                    $value = $subObservation->get($dbColumn);
+                    $benchmark = $this->getBenchmark($dbColumn);
+                    $formatted = $benchmark->format($value);
+                    $unitData[$dbColumn] = $formatted;
+                }
+
+                $activityData['units'][$subObservation->getName()] = $unitData;
+            }
+
+
+
+            $reportData[$activity] = $activityData;
+        }
+
+        pr($reportData);
+
+        return array($reportData);
+    }
+
+    /**
+     * These will get the activity key from getActivities() appended
+     * @return array
+     */
+    protected function getUnitCostFields()
+    {
+        return array(
+            'inst_cost_full_perc',
+            'inst_cost_full_per_cred_hr_',
+            'inst_cost_part_perc',
+            'inst_cost_part_per_cred_hr_',
+            'inst_cost_total_per_cred_hr_',
+        );
+    }
 }
