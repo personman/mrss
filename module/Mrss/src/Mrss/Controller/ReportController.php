@@ -673,14 +673,34 @@ class ReportController extends AbstractActionController
 
         /** @var \Mrss\Service\Report\Max\Internal $report */
         $report = $this->getServiceLocator()->get('service.report.max.internal');
-        $reportData = $report->getInstructionalCosts($observation);
-
+        list($reportData, $chart) = $report->getInstructionalCosts($observation);
 
         return array(
             'college' => $this->currentCollege(),
             'observation' => $observation,
-            'reportData' => $reportData
+            'reportData' => $reportData,
+            'chart' => $chart
         );
+    }
+
+    public function instructionalActivityCostsAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $chart) = $report->getInstructionalActivityCosts($observation);
+
+        return array(
+            //'college' => $this->currentCollege(),
+            //'observation' => $observation,
+            'reportData' => $reportData,
+            'chart' => $chart
+        );
+
     }
 
     /**

@@ -936,12 +936,23 @@ return array(
                             )
                         )
                     ),
+                    // The next routes are for Max's internal reports
                     'instructional-costs' => array(
                         'type' => 'segment',
                         'options' => array(
                             'route' => '/instructional-costs[/:year]',
                             'defaults' => array(
                                 'action' => 'instructionalCosts',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'instructional-activity-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/instructional-activity-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'instructionalActivityCosts',
                                 'year' => null
                             )
                         )

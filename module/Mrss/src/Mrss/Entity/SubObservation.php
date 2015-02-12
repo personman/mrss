@@ -212,6 +212,12 @@ class SubObservation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_total_per_cred_hr_course_dev;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_assessment;
+
 
     public function setId($id)
     {
