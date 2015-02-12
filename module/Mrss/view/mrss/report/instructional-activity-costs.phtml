@@ -24,3 +24,9 @@
         <?php endforeach ?>
     </tbody>
 </table>
+
+
+<?php foreach ($charts as $chart): ?>
+    <?= $this->chart($chart) ?>
+
+<?php endforeach ?>
