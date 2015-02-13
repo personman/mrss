@@ -251,8 +251,10 @@ class Internal extends Report
         foreach ($this->getActivities() as $activity => $label) {
             $activityData = array(
                 'name' => $label,
-                'units' => array()
+                'units' => array(),
             );
+            $chartXCategories = array();
+            $series = array();
 
             foreach ($observation->getSubObservations() as $subObservation) {
                 $unitData = array();
@@ -261,23 +263,44 @@ class Internal extends Report
                     $dbColumn = $field;
                     if (substr($field, -1) == '_') {
                         $dbColumn .= $activity;
+
+                        if (empty($series[$field])) {
+                            $series[$field] = array(
+                                'name' => $this->extractEmployeeTypeFromDbColumn($dbColumn),
+                                'data' => array()
+                            );
+                        }
                     }
 
                     $value = $subObservation->get($dbColumn);
                     $benchmark = $this->getBenchmark($dbColumn);
                     $formatted = $benchmark->format($value);
                     $unitData[$dbColumn] = $formatted;
+
+                    // Chart values
+                    if (isset($series[$field]['data'])) {
+                        $series[$field]['data'][] = $value;
+                    }
                 }
 
                 $activityData['units'][$subObservation->getName()] = $unitData;
+                $chartXCategories[] = $subObservation->getName();
             }
 
 
+            // Chart for this activity
+            $series = array_values($series);
+            $activityData['chart'] = $this->getBarChart(
+                $benchmark,
+                $chartXCategories,
+                $series,
+                $label . ' Academic Unit Instructional Costs',
+                'chart_' . $activity
+            );
+            $activityData['chart']['legend']['enabled'] = true;
 
             $reportData[$activity] = $activityData;
         }
-
-        pr($reportData);
 
         return array($reportData);
     }
@@ -295,5 +318,22 @@ class Internal extends Report
             'inst_cost_part_per_cred_hr_',
             'inst_cost_total_per_cred_hr_',
         );
+    }
+
+    protected function extractEmployeeTypeFromDbColumn($dbColumn)
+    {
+        $label = 'Unknown employee type';
+
+        if (stristr($dbColumn, 'full')) {
+            $label = 'Full-time';
+        }
+        if (stristr($dbColumn, 'part')) {
+            $label = 'Part-time';
+        }
+        if (stristr($dbColumn, 'total')) {
+            $label = 'All Faculty';
+        }
+
+        return $label;
     }
 }
