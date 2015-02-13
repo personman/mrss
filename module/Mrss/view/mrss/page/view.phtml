@@ -1,3 +1,8 @@
+<?php
+$this->headScript()->appendFile(
+    '/js/page.js?v=1',
+    'text/javascript'
+); ?>
 
 <?php if ($this->isAllowed('adminMenu', 'view')): ?>
     <a href="<?= $this->url(
