@@ -966,6 +966,16 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+                    'unit-demographics' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/unit-demographics[/:year]',
+                            'defaults' => array(
+                                'action' => 'unitDemographics',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),

@@ -224,6 +224,22 @@ class SubObservation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_part_perc;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_per_fte_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_per_fte_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_expend_per_fte_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_fte_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_fte_students_per_fte_faculty;
+
+
 
     public function setId($id)
     {

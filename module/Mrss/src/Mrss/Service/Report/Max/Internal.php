@@ -336,4 +336,39 @@ class Internal extends Report
 
         return $label;
     }
+
+    public function getUnitDemographics(Observation $observation)
+    {
+        $reportData = array();
+
+        foreach ($observation->getSubObservations() as $subObservation) {
+            $unitData = array();
+
+            foreach ($this->getUnitDemographicsFields() as $field => $label) {
+                $benchmark = $this->getBenchmark($field);
+                $value = $subObservation->get($field);
+                $formatted = $benchmark->format($value);
+
+                $unitData[] = $formatted;
+            }
+
+            $reportData[] = array(
+                'unit' => $subObservation->getName(),
+                'data' => $unitData
+            );
+        }
+
+        return $reportData;
+    }
+
+    public function getUnitDemographicsFields()
+    {
+        return array(
+            'inst_cost_full_expend_per_fte_faculty' => 'Salary and Benefits Per FT Faculty Person',
+            'inst_cost_part_expend_per_fte_faculty' => 'Salary and Benefits Per PT Faculty Person',
+            'inst_cost_total_expend_per_fte_faculty' => 'Salary and Benefits Per Faculty Person',
+            'inst_cost_fte_students' => 'Number of FTE Students',
+            'inst_cost_fte_students_per_fte_faculty' => 'FTE Students Per FTE Faculty'
+        );
+    }
 }

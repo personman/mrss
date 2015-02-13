@@ -893,6 +893,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             if ($this->getBenchmarkGroup()->getStudy()->getId() == 1 && $this->isPercent()) {
                 $decimalPlaces = 2;
             }
+
+            // Floats should get 2
+            if ($this->getInputType() == 'float') {
+                $decimalPlaces = 2;
+            }
         }
 
         return $decimalPlaces;
