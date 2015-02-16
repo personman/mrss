@@ -55,10 +55,10 @@ return array(
                         'label' => 'Benchmarks',
                         'uri' => '/Benchmarks',
                     ),
-                    'nccet' => array(
+                    /*'nccet' => array(
                         'label' => 'NCCET',
                         'uri' => '/Collaboration-National-Council-for-Continuing-Education-and-Training-NCCET'
-                    ),
+                    ),*/
                     /*array(
                         'label' => 'Testimonials',
                         'uri' => '/testimonials'
