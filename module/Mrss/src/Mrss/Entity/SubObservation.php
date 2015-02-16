@@ -192,6 +192,15 @@ class SubObservation
     protected $inst_cost_total_per_cred_hr_ac_service;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_full_per_cred_hr_prof_dev;
 
     /** @ORM\Column(type="float", nullable=true) */

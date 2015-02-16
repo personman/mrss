@@ -231,7 +231,7 @@ class Internal extends Report
             'tutoring' => 'Faculty Tutoring',
             'advising' => 'Faculty Advising',
             'ac_service' => 'Academic Services',
-            //'assessment' => 'Assessment', // @todo: add inst_cost_full_per_cred_hr_assessment
+            'assessment' => 'Assessment', // @todo: add inst_cost_full_per_cred_hr_assessment
             'prof_dev' => 'Professional Development'
         );
     }
@@ -340,9 +340,12 @@ class Internal extends Report
     public function getUnitDemographics(Observation $observation)
     {
         $reportData = array();
+        $charts = array();
+        $chartXCategories = array();
 
         foreach ($observation->getSubObservations() as $subObservation) {
             $unitData = array();
+            $chartXCategories[] = $subObservation->getName();
 
             foreach ($this->getUnitDemographicsFields() as $field => $label) {
                 $benchmark = $this->getBenchmark($field);
@@ -350,6 +353,16 @@ class Internal extends Report
                 $formatted = $benchmark->format($value);
 
                 $unitData[] = $formatted;
+
+                // Charts
+                if (!isset($charts[$field])) {
+                    $charts[$field] = array(
+                        'title' => $label,
+                        'benchmark' => $benchmark,
+                        'data' => array()
+                    );
+                }
+                $charts[$field]['data'][] = $value;
             }
 
             $reportData[] = array(
@@ -358,7 +371,10 @@ class Internal extends Report
             );
         }
 
-        return $reportData;
+        $charts = $this->getUnitDemographicsCharts($charts, $chartXCategories);
+        //pr($charts);
+
+        return array($reportData, $charts);
     }
 
     public function getUnitDemographicsFields()
@@ -370,5 +386,27 @@ class Internal extends Report
             'inst_cost_fte_students' => 'Number of FTE Students',
             'inst_cost_fte_students_per_fte_faculty' => 'FTE Students Per FTE Faculty'
         );
+    }
+
+    protected function getUnitDemographicsCharts($charts, $chartXCategories)
+    {
+        $preparedCharts = array();
+        foreach ($charts as $field => $chart) {
+            $series = array(
+                array(
+                    'data' => $chart['data']
+                )
+            );
+
+            $preparedChart = $this->getBarChart(
+                $chart['benchmark'],
+                $chartXCategories,
+                $series
+            );
+
+            $preparedCharts[] = $preparedChart;
+        }
+
+        return $preparedCharts;
     }
 }

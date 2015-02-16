@@ -976,6 +976,16 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+                    'student-services-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/student-services-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'studentServicesCosts',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),
