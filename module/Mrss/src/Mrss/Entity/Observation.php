@@ -878,6 +878,30 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_students_per_fte_emp;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_cost_per_contact;
+
 
 
 

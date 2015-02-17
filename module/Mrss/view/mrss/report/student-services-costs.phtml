@@ -1,1 +1,28 @@
 <h1>Student Services Costs</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td></td>
+            <th>Cost per FTE Student</th>
+            <th>Cost per Student Contact</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($reportData as $row): ?>
+        <tr>
+            <?php foreach ($row as $key => $item): ?>
+                <?php if ($key == 'name'): ?>
+                    <th><?= $item ?></th>
+                <?php else: ?>
+                    <td><?= $item ?></td>
+                <?php endif ?>
+            <?php endforeach ?>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
+
+<?php foreach ($charts as $chart): ?>
+    <?= $this->chart($chart) ?>
+<?php endforeach ?>

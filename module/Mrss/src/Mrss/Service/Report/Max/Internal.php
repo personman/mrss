@@ -409,4 +409,82 @@ class Internal extends Report
 
         return $preparedCharts;
     }
+
+    public function getStudentServicesCosts(Observation $observation)
+    {
+        $reportData = array();
+        $chartData = array();
+
+        foreach ($this->getStudentServicesCostsFields() as $label => $columns) {
+            $activityData = array('name' => $label);
+
+            $i = 0;
+            foreach ($columns as $dbColumn) {
+                $benchmark = $this->getBenchmark($dbColumn);
+                $value = $observation->get($dbColumn);
+                $formatted = $benchmark->format($value);
+                $activityData[$dbColumn] = $formatted;
+
+                $chartData[$i][$label] = $value;
+                $i++;
+            }
+
+            // Pad the array to 3
+            if (count($activityData) == 2) {
+                $activityData[] = 'N/A';
+            }
+
+            $reportData[] = $activityData;
+        }
+
+        $charts = $this->getStudentServicesCostsCharts($chartData, $benchmark);
+
+        return array($reportData, $charts);
+    }
+
+    protected function getStudentServicesCostsFields()
+    {
+        return array(
+            'Admissions' => array('ss_admissions_cost_per_fte_student'),
+            'Recruitment' => array('ss_recruitment_cost_per_fte_student'),
+            'Advising' => array('ss_advising_cost_per_fte_student', 'ss_advising_cost_per_contact'),
+            'Counseling' => array('ss_counseling_cost_per_fte_student', 'ss_counseling_cost_per_contact'),
+            'Career Services' => array('ss_career_cost_per_fte_student', 'ss_career_cost_per_contact'),
+            'Financial Aid' => array('ss_financial_aid_cost_per_fte_student', 'ss_financial_aid_cost_per_contact'),
+            'Registrar / Student Records' => array('ss_registrar_cost_per_fte_student'),
+            'Tutoring' => array('ss_tutoring_cost_per_fte_student', 'ss_tutoring_cost_per_contact'),
+            'Testing Services' => array('ss_testing_cost_per_fte_student', 'ss_testing_cost_per_contact'),
+            'Co-curricular Activities' => array('ss_cocurricular_cost_per_fte_student'),
+            'Disability Services' => array('ss_disabserv_cost_per_fte_student', 'ss_disabserv_cost_per_contact'),
+            'Veterans Services' => array('ss_vetserv_cost_per_fte_student', 'ss_vetserv_cost_per_contact')
+        );
+    }
+
+    protected function getStudentServicesCostsCharts($chartData, $anyDollarBenchmark)
+    {
+        $charts = array();
+        $titles = array('Cost per FTE Student', 'Cost per Student Contact');
+
+        $i = 0;
+        foreach ($chartData as $data) {
+            $series = array(
+                array(
+                    'data' => array_values($data)
+                )
+            );
+
+            $chart = $this->getBarChart(
+                $anyDollarBenchmark,
+                array_keys($data),
+                $series,
+                $titles[$i],
+                'student_services_' . $i
+            );
+
+            $charts[] = $chart;
+            $i++;
+        }
+
+        return $charts;
+    }
 }
