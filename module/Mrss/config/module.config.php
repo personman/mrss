@@ -986,6 +986,16 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+                    'academic-support' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/academic-support[/:year]',
+                            'defaults' => array(
+                                'action' => 'academicSupport',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),

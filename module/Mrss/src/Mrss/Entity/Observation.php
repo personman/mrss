@@ -1017,6 +1017,20 @@ class Observation
     /** @ORM\Column(type="string", nullable=true) */
     protected $as_fte_students_per_experiential_fte_emp;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_students_per_tech_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_students_per_library_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_students_per_experiential_emp;
 
 
 

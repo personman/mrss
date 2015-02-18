@@ -8,6 +8,8 @@ use Mrss\Entity\Benchmark;
 
 class Internal extends Report
 {
+    protected $naPlaceholder = 'N/A';
+
     public function getInstructionalCosts(Observation $observation)
     {
         $data = array();
@@ -431,7 +433,7 @@ class Internal extends Report
 
             // Pad the array to 3
             if (count($activityData) == 2) {
-                $activityData[] = 'N/A';
+                $activityData[] = $this->naPlaceholder;
             }
 
             $reportData[] = $activityData;
@@ -486,5 +488,53 @@ class Internal extends Report
         }
 
         return $charts;
+    }
+
+    public function getAcademicSupport(Observation $observation)
+    {
+        $reportData = array();
+
+        foreach ($this->getAcademicSupportCategories() as $label => $fields) {
+            $categoryData = array();
+
+            foreach ($fields as $dbColumn) {
+                if ($observation->has($dbColumn)) {
+                    $benchmark = $this->getBenchmark($dbColumn);
+                    $value = $observation->get($dbColumn);
+                    $formatted = $benchmark->format($value);
+                    $categoryData[$dbColumn] = $formatted;
+                } else {
+                    $categoryData[] = $this->naPlaceholder;
+                }
+            }
+
+            $reportData[] = array(
+                'name' => $label,
+                'data' => $categoryData
+            );
+        }
+
+        return array($reportData);
+    }
+
+    protected function getAcademicSupportCategories()
+    {
+        return array(
+            'Instructional Technology Support' => array(
+                'as_tech_cost_per_fte_student',
+                'as_tech_cost_per_contact',
+                'as_students_per_tech_emp'
+            ),
+            'Library Services' => array(
+                'as_library_cost_per_fte_student',
+                null,
+                'as_students_per_library_emp'
+            ),
+            'Experiential Education' => array(
+                'as_experiential_cost_per_fte_student',
+                'as_experiential_cost_per_contact',
+                'as_students_per_experiential_emp'
+            )
+        );
     }
 }

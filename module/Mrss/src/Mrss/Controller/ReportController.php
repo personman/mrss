@@ -753,6 +753,24 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function academicSupportAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $charts) = $report->getAcademicSupport($observation);
+
+        return array(
+            'reportData' => $reportData,
+            'charts' => $charts,
+            'headings' => $report->getUnitDemographicsFields()
+        );
+    }
+
     /**
      * If reports are not open for the current study, show an error and redirect
      *
