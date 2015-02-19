@@ -255,6 +255,11 @@ class ComputedFields
                 $insideBenchmark = $computed[$variable];
                 $insideEquation = $insideBenchmark->getEquation();
 
+                // Multiply by 100 for percentages
+                if ($insideBenchmark->isPercent()) {
+                    $insideEquation = "($insideEquation * 100)";
+                }
+
                 // Recurse in case the inside equation contains other computed ones
                 $insideEquation = $this->nestComputedEquations($insideEquation, $year);
 
