@@ -84,6 +84,7 @@ class Internal extends Report
                     'series' => $seriesWithDataLabels,
                 )
             ),*/
+            'colors' => $this->getColors(),
             'title' => array(
                 'text' => $title,
             ),
@@ -152,7 +153,10 @@ class Internal extends Report
             'inst_cost_total_per_cred_hr_course_dev',
             'inst_cost_total_per_cred_hr_teaching',
             'inst_cost_total_per_cred_hr_tutoring',
-            'inst_cost_total_per_cred_hr_advising'
+            'inst_cost_total_per_cred_hr_advising',
+            'inst_cost_total_per_cred_hr_ac_service',
+            'inst_cost_full_per_cred_hr_assessment',
+            'inst_cost_total_per_cred_hr_prof_dev',
         );
 
         foreach ($observation->getSubObservations() as $subObservation) {
@@ -182,7 +186,7 @@ class Internal extends Report
             $reportData[] = $unitData;
 
             // Build the chart
-            $title = $subObservation->getName() . ' Instructional Activity Costs';
+            $title = $subObservation->getName() . ' Instructional Activity Cost per FTE Student';
             $series = array(
                 array(
                     'data' => $unitRawData
@@ -203,7 +207,7 @@ class Internal extends Report
             $benchmark,
             $unitNames,
             $combinedSeries,
-            'Instructional Activity Costs',
+            'Instructional Activity Cost per FTE Student',
             'instructional_activities_combined'
         );
         $chart['plotOptions']['series']['stacking'] = 'normal';
@@ -215,13 +219,9 @@ class Internal extends Report
 
     public function getInstructionActivityCategories()
     {
-        return array(
-            'Program Dev.',
-            'Course Dev.',
-            'Teaching',
-            'Faculty Tutoring',
-            'Faculty Advising'
-        );
+        $activities = $this->getActivities();
+
+        return array_values($activities);
     }
 
     public function getActivities()
@@ -535,6 +535,20 @@ class Internal extends Report
                 'as_experiential_cost_per_contact',
                 'as_students_per_experiential_emp'
             )
+        );
+    }
+
+    protected function getColors()
+    {
+        return array(
+            '#13B2CD',
+            '#F5D60E',
+            '#9BBE3C',
+            '#00687C',
+            '#FF8612',
+            '#264FD5',
+            '#606463',
+            '#8F1AD4'
         );
     }
 }

@@ -696,7 +696,8 @@ class ReportController extends AbstractActionController
 
         return array(
             'reportData' => $reportData,
-            'charts' => $charts
+            'charts' => $charts,
+            'headings' => $report->getActivities()
         );
     }
 

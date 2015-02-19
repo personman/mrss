@@ -1,25 +1,21 @@
 <h1>Instructional Activity Costs</h1>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th></th>
-            <th>Program Dev.</th>
-            <th>Course Dev.</th>
-            <th>Teaching</th>
-            <th>Faculty Tutoring</th>
-            <th>Faculty Advising</th>
+            <?php foreach ($headings as $heading): ?>
+            <th class="numberCell"><?= $heading ?></th>
+            <?php endforeach ?>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($reportData as $reportRow): ?>
             <tr>
-                <th><?= $reportRow[0] ?></th>
-                <td><?= $reportRow[1] ?></td>
-                <td><?= $reportRow[2] ?></td>
-                <td><?= $reportRow[3] ?></td>
-                <td><?= $reportRow[4] ?></td>
-                <td><?= $reportRow[5] ?></td>
+                <th><?= array_shift($reportRow) ?></th>
+                <?php foreach ($reportRow as $value): ?>
+                <td class="numberCell"><?= $value ?></td>
+                <?php endforeach ?>
             </tr>
         <?php endforeach ?>
     </tbody>

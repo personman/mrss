@@ -8,22 +8,22 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>% Full-time Faculty</th>
-                    <th>FT $/FTE Students</th>
-                    <th>% Part-time Faculty</th>
-                    <th>PT $/FTE Students</th>
-                    <th>Total $/FTE Students</th>
+                    <th class="numberCell">% Full-time Faculty</th>
+                    <th class="numberCell">FT Faculty<br>Salary and Benefits<br>per FTE Student</th>
+                    <th class="numberCell">% Part-time Faculty</th>
+                    <th class="numberCell">PT Faculty<br>Salary and Benefits<br>per FTE Student</th>
+                    <th class="numberCell">Total $/FTE Students</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($activity['units'] as $unitName => $unitData): ?>
                     <tr>
                         <th><?= $unitName ?></th>
-                        <td><?= $unitData['inst_cost_full_perc'] ?></td>
-                        <td><?= $unitData['inst_cost_full_per_cred_hr_' . $activityKey] ?></td>
-                        <td><?= $unitData['inst_cost_part_perc'] ?></td>
-                        <td><?= $unitData['inst_cost_part_per_cred_hr_' . $activityKey] ?></td>
-                        <td><?= $unitData['inst_cost_total_per_cred_hr_' . $activityKey] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_full_perc'] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_full_per_cred_hr_' . $activityKey] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_part_perc'] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_part_per_cred_hr_' . $activityKey] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_total_per_cred_hr_' . $activityKey] ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>

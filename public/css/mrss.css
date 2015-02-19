@@ -385,3 +385,9 @@ a.hover-highlight {
 a.hover-highlight:hover {
     border: 3px solid #809c00;
 }
+
+/** Institutional reports */
+.chartWrapper {
+    margin-top: 30px;
+    margin-bottom: 80px;
+}

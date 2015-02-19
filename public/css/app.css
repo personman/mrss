@@ -58,3 +58,7 @@ table.dataTable thead .sorting.heatMapYear {
 #dataDefinitionForm .control-label {
     display: none;
 }
+
+.table td.numberCell, .table th.numberCell {
+    text-align: right;
+}
