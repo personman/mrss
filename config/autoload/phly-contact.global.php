@@ -64,7 +64,7 @@ $settings = array(
 );
 
 // Study-specific email settings
-if (!empty($_SERVER['HTTP_HOST'])) {
+/*if (!empty($_SERVER['HTTP_HOST'])) {
     if ($_SERVER['HTTP_HOST'] == 'workforceproject.org') {
         $settings['message']['to'][] = 'td-ticket-nccwts@jccc.edu';
     } elseif (strpos($_SERVER['HTTP_HOST'], 'maximizingresources.org') !== false) {
@@ -72,7 +72,7 @@ if (!empty($_SERVER['HTTP_HOST'])) {
     } elseif (strpos($_SERVER['HTTP_HOST'], 'nccbp.org') !== false) {
         $settings['message']['to'][] = 'td-ticket-nccbp@jccc.edu';
     }
-}
+}*/
 
 return array(
     'phly_contact' => $settings
