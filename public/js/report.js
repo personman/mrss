@@ -42,6 +42,7 @@ $(function() {
     })
 })
 
+
 function loadChart(event, chart)
 {
     // Enable data labels when exporting
@@ -56,6 +57,46 @@ function loadChart(event, chart)
         chart.series[0].setData(dataWithLabels)
         chart.redraw()
 
-    }
 
+        // Add data definition when exporting
+        // Get the chart size
+        var width = chart.chartWidth
+        var totalPadding = 50
+        width = width - totalPadding
+
+        var dataDef = chart.options.dataDefinition
+
+        var add = Math.ceil(dataDef.length / 106) * 35 // 106 = line width, 35 = line height
+
+        if (dataDef) {
+            var definition = chart.renderer.label(dataDef)
+                .css({
+                    width: width + 'px',
+                    color: '#BBB',
+                    fontSize: '10px'
+                })
+                .attr({
+                    'padding': 10
+                })
+                .add();
+
+            var newY = add - 15
+
+            definition.align(Highcharts.extend(definition.getBBox(), {
+                x: 10,
+                y: newY,
+                align: 'left',
+                verticalAlign: 'bottom'
+            }), null, 'spacingBox')
+
+
+             // Add some height
+             var height = chart.chartHeight
+             var width = chart.chartWidth
+             height = height + add
+             chart.setSize(width, height)
+
+             // add some spacingBottom: done in Report.php
+        }
+    }
 }

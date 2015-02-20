@@ -646,7 +646,10 @@ class Report
 
 
         $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
+        $dataDefinition = $this->getVariableSubstitution()
+            ->substitute($benchmark->getReportDescription(1));
 
+        $dataDefinition .= ' [' . $this->getYear() . ' ' . $this->getStudy()->getName() . ']';
 
         $chart = array(
             'id' => 'chart_' . $benchmark->getDbColumn(),
@@ -659,7 +662,10 @@ class Report
             'exporting' => array(
                 'chartOptions' => array(
                     'series' => $seriesWithDataLabels,
-                )
+                    'chart' => array(
+                        'spacingBottom' => ceil(strlen($dataDefinition) / 106) * 35,
+                    )
+                ),
             ),
             'title' => array(
                 'text' => $chartConfig['title'],
@@ -695,7 +701,8 @@ class Report
                 'series' => array(
                     'animation' => false
                 )
-            )
+            ),
+            'dataDefinition' => $dataDefinition,
         );
 
         if ($benchmark->isPercent()) {
@@ -704,6 +711,11 @@ class Report
             $chart['yAxis']['labels'] = array(
                 'format' => '{value}%'
             );
+        }
+
+        // Noel-Levitz max value is 6
+        if ($this->isNoelLevitz($benchmark->getDbColumn())) {
+            $chart['yAxis']['max'] = 6;
         }
 
         if ($benchmark->isDollars()) {
@@ -715,6 +727,28 @@ class Report
         //var_dump($chartConfig);
         //var_dump($chart);
         return $chart;
+    }
+
+    protected function isNoelLevitz($dbColumn)
+    {
+        $NLFields = array(
+            'n96_exp',
+            'n97_ova_exp',
+            'ac_adv_coun',
+            'ac_serv',
+            'adm_fin_aid',
+            'camp_clim',
+            'camp_supp',
+            'conc_indiv',
+            'instr_eff',
+            'reg_eff',
+            'resp_div_pop',
+            'safe_sec',
+            'serv_exc',
+            'serv_exc'
+        );
+
+        return in_array($dbColumn, $NLFields);
     }
 
     public function forceDataLabelsInSeries($series)
