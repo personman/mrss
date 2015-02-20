@@ -646,10 +646,7 @@ class Report
 
 
         $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
-        $dataDefinition = $this->getVariableSubstitution()
-            ->substitute($benchmark->getReportDescription(1));
-
-        $dataDefinition .= ' [' . $this->getYear() . ' ' . $this->getStudy()->getName() . ']';
+        $dataDefinition = $this->getChartFooter($benchmark);
 
         $chart = array(
             'id' => 'chart_' . $benchmark->getDbColumn(),
@@ -1160,5 +1157,15 @@ class Report
         $logger->addWriter($writer);
 
         return $logger;
+    }
+
+    protected function getChartFooter(Benchmark $benchmark)
+    {
+        $dataDefinition = $this->getVariableSubstitution()
+            ->substitute($benchmark->getReportDescription(1));
+
+        $dataDefinition .= ' [' . $this->getYear() . ' ' . $this->getStudy()->getName() . ']';
+
+        return $dataDefinition;
     }
 }

@@ -1,4 +1,9 @@
 <?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
+<?php
+$this->headScript()->appendFile(
+    '/js/report.js?v=4',
+    'text/javascript'
+); ?>
 
 
 <h1>Peer Comparison Report</h1>

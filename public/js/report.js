@@ -80,7 +80,7 @@ function loadChart(event, chart)
                 })
                 .add();
 
-            var newY = add - 15
+            var newY = add - getChartDefinitionOffset(chart)
 
             definition.align(Highcharts.extend(definition.getBBox(), {
                 x: 10,
@@ -98,5 +98,16 @@ function loadChart(event, chart)
 
              // add some spacingBottom: done in Report.php
         }
+    }
+
+    function getChartDefinitionOffset(chart)
+    {
+        var offset = 15
+
+        if (chart.options.peerComparison) {
+            offset = -10
+        }
+
+        return offset
     }
 }

@@ -50,6 +50,8 @@ class Peer extends Report
 
             if ($college->getId() != $peerGroup->getCollege()->getId()) {
                 $report['colleges'][] = $college->getName();
+            } else {
+                $this->setObservation($observations[$collegeId]);
             }
         }
 
@@ -250,12 +252,28 @@ class Peer extends Report
             )
         );
 
+        $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
+        $dataDefinition = $this->getChartFooter($benchmark);
+        //$dataDefinition = 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, ';
 
         $chart = array(
             'id' => 'chart_' . $benchmark->getDbColumn(),
             'chart' => array(
-                'type' => 'bar'
+                'type' => 'bar',
+                'events' => array(
+                    'load' => 'loadChart'
+                ),
+
             ),
+            'exporting' => array(
+                'chartOptions' => array(
+                    'series' => $seriesWithDataLabels,
+                    'chart' => array(
+                        'spacingBottom' => ceil(strlen($dataDefinition) / 106) * 35 + 30,
+                    )
+                ),
+            ),
+
             'title' => array(
                 'text' => $title,
             ),
@@ -298,6 +316,8 @@ class Peer extends Report
                     'animation' => false
                 )
             ),
+            'dataDefinition' => $dataDefinition,
+            'peerComparison' => true
 
         );
 
