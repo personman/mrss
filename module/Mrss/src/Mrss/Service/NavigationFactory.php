@@ -217,7 +217,6 @@ class NavigationFactory extends DefaultNavigationFactory
             $newReports = array($pages['reports']['pages']['institutional']);
             $pages['reports']['pages'] = $newReports;
             //unset($pages['reports']);
-            pr($pages);
         }
 
         // Workforce
