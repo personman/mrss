@@ -44,6 +44,9 @@ class NccbpNavigationFactory extends NavigationFactory
         // Hide the summary report
         unset($pages['reports']['pages']['summary']);
 
+        // Hide the institutional report
+        unset($pages['reports']['pages']['institutional']);
+
         // Hide submitted values as NCCBP handles them under data documentation
         if (!empty($pages['data-entry'])) {
             if ($pages['data-entry']['label'] == 'Submitted Values') {

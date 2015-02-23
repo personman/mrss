@@ -391,3 +391,16 @@ a.hover-highlight:hover {
     margin-top: 30px;
     margin-bottom: 80px;
 }
+.unit-cost-activity {
+    margin-top: 80px;
+    margin-bottom: 60px;
+    border-bottom: 1px solid #CCC;
+}
+table.unit-demographics, table.studentServices {
+    margin-top: 35px;
+    margin-bottom: 70px;
+}
+.internalChart {
+    margin-top: 70px;
+}
+

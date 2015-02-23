@@ -102,7 +102,8 @@ class Internal extends Report
                 'title' => false,
                 'gridLineWidth' => 0,
                 'labels' => array(
-                    'format' => str_replace('y', 'value', $format)
+                    // Y Axis label should never have 2 decimal places
+                    'format' => str_replace('y', 'value', str_replace('2f', '0f', $format))
                     //'${value:,.0f}'
                 )
             ),
@@ -422,24 +423,30 @@ class Internal extends Report
 
             $i = 0;
             foreach ($columns as $dbColumn) {
-                $benchmark = $this->getBenchmark($dbColumn);
-                $value = $observation->get($dbColumn);
-                $formatted = $benchmark->format($value);
-                $activityData[$dbColumn] = $formatted;
+                if (!is_null($dbColumn)) {
+                    $benchmark = $this->getBenchmark($dbColumn);
+                    $value = $observation->get($dbColumn);
+                    $formatted = $benchmark->format($value);
+                    $activityData[$dbColumn] = $formatted;
 
-                $chartData[$i][$label] = $value;
+                    $chartData[$i][$label] = $value;
+
+                    // Hold on to a couple of benchmarks for formatting
+                    if ($benchmark->isDollars()) {
+                        $dollarBenchmark = $benchmark;
+                    } elseif ($benchmark->getInputType() == 'float') {
+                        $floatBenchmark = $benchmark;
+                    }
+                } else {
+                    $activityData[] = $this->naPlaceholder;
+                }
                 $i++;
-            }
-
-            // Pad the array to 3
-            if (count($activityData) == 2) {
-                $activityData[] = $this->naPlaceholder;
             }
 
             $reportData[] = $activityData;
         }
 
-        $charts = $this->getStudentServicesCostsCharts($chartData, $benchmark);
+        $charts = $this->getStudentServicesCostsCharts($chartData, $dollarBenchmark, $floatBenchmark);
 
         return array($reportData, $charts);
     }
@@ -447,25 +454,81 @@ class Internal extends Report
     protected function getStudentServicesCostsFields()
     {
         return array(
-            'Admissions' => array('ss_admissions_cost_per_fte_student'),
-            'Recruitment' => array('ss_recruitment_cost_per_fte_student'),
-            'Advising' => array('ss_advising_cost_per_fte_student', 'ss_advising_cost_per_contact'),
-            'Counseling' => array('ss_counseling_cost_per_fte_student', 'ss_counseling_cost_per_contact'),
-            'Career Services' => array('ss_career_cost_per_fte_student', 'ss_career_cost_per_contact'),
-            'Financial Aid' => array('ss_financial_aid_cost_per_fte_student', 'ss_financial_aid_cost_per_contact'),
-            'Registrar / Student Records' => array('ss_registrar_cost_per_fte_student'),
-            'Tutoring' => array('ss_tutoring_cost_per_fte_student', 'ss_tutoring_cost_per_contact'),
-            'Testing Services' => array('ss_testing_cost_per_fte_student', 'ss_testing_cost_per_contact'),
-            'Co-curricular Activities' => array('ss_cocurricular_cost_per_fte_student'),
-            'Disability Services' => array('ss_disabserv_cost_per_fte_student', 'ss_disabserv_cost_per_contact'),
-            'Veterans Services' => array('ss_vetserv_cost_per_fte_student', 'ss_vetserv_cost_per_contact')
+            'Admissions' => array(
+                'ss_admissions_cost_per_fte_student',
+                null,
+                'ss_admissions_students_per_fte_emp'
+            ),
+            'Recruitment' => array(
+                'ss_recruitment_cost_per_fte_student',
+                null, 'ss_recruitment_students_per_fte_emp'
+            ),
+            'Advising' => array(
+                'ss_advising_cost_per_fte_student',
+                'ss_advising_cost_per_contact',
+                'ss_advising_students_per_fte_emp'
+            ),
+            'Counseling' => array(
+                'ss_counseling_cost_per_fte_student',
+                'ss_counseling_cost_per_contact',
+                'ss_counseling_students_per_fte_emp'
+            ),
+            'Career Services' => array(
+                'ss_career_cost_per_fte_student',
+                'ss_career_cost_per_contact',
+                'ss_career_students_per_fte_emp'
+            ),
+            'Financial Aid' => array(
+                'ss_financial_aid_cost_per_fte_student',
+                'ss_financial_aid_cost_per_contact',
+                'ss_financial_aid_students_per_fte_emp'
+            ),
+            'Registrar / Student Records' => array(
+                'ss_registrar_cost_per_fte_student',
+                null,
+                'ss_registrar_students_per_fte_emp'
+            ),
+            'Tutoring' => array(
+                'ss_tutoring_cost_per_fte_student',
+                'ss_tutoring_cost_per_contact',
+                'ss_tutoring_students_per_fte_emp'
+            ),
+            'Testing Services' => array(
+                'ss_testing_cost_per_fte_student',
+                'ss_testing_cost_per_contact',
+                'ss_testing_students_per_fte_emp'
+            ),
+            'Co-curricular Activities' => array(
+                'ss_cocurricular_cost_per_fte_student',
+                null,
+                'ss_cocurricular_students_per_fte_emp'
+            ),
+            'Disability Services' => array(
+                'ss_disabserv_cost_per_fte_student',
+                'ss_disabserv_cost_per_contact',
+                'ss_disabserv_students_per_fte_emp'
+            ),
+            'Veterans Services' => array(
+                'ss_vetserv_cost_per_fte_student',
+                'ss_vetserv_cost_per_contact',
+                'ss_vetserv_students_per_fte_emp'
+            )
         );
     }
 
-    protected function getStudentServicesCostsCharts($chartData, $anyDollarBenchmark)
+    protected function getStudentServicesCostsCharts($chartData, $anyDollarBenchmark, $anyFloatBenchmark)
     {
+        // Rearrange data
+        ksort($chartData);
+
         $charts = array();
-        $titles = array('Cost per FTE Student', 'Cost per Student Contact');
+        $titles = array('Cost per FTE Student', 'Cost per Student Contact', 'FTE Students per Employee');
+
+        $benchmarks = array(
+            $anyDollarBenchmark,
+            $anyDollarBenchmark,
+            $anyFloatBenchmark
+        );
 
         $i = 0;
         foreach ($chartData as $data) {
@@ -476,7 +539,7 @@ class Internal extends Report
             );
 
             $chart = $this->getBarChart(
-                $anyDollarBenchmark,
+                $benchmarks[$i],
                 array_keys($data),
                 $series,
                 $titles[$i],
@@ -493,19 +556,33 @@ class Internal extends Report
     public function getAcademicSupport(Observation $observation)
     {
         $reportData = array();
+        $chartData = array();
 
         foreach ($this->getAcademicSupportCategories() as $label => $fields) {
             $categoryData = array();
 
+            $i = 0;
             foreach ($fields as $dbColumn) {
                 if ($observation->has($dbColumn)) {
                     $benchmark = $this->getBenchmark($dbColumn);
                     $value = $observation->get($dbColumn);
                     $formatted = $benchmark->format($value);
                     $categoryData[$dbColumn] = $formatted;
+
+                    $chartData[$i][$label] = $value;
                 } else {
                     $categoryData[] = $this->naPlaceholder;
                 }
+
+                // Hold on to a couple of benchmarks for formatting
+                if ($benchmark->isDollars()) {
+                    $dollarBenchmark = $benchmark;
+                } elseif ($benchmark->getInputType() == 'float') {
+                    $floatBenchmark = $benchmark;
+                }
+
+
+                $i++;
             }
 
             $reportData[] = array(
@@ -514,8 +591,11 @@ class Internal extends Report
             );
         }
 
-        return array($reportData);
+        $charts = $this->getStudentServicesCostsCharts($chartData, $dollarBenchmark, $floatBenchmark);
+
+        return array($reportData, $charts);
     }
+
 
     protected function getAcademicSupportCategories()
     {

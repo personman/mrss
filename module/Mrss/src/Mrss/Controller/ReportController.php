@@ -664,6 +664,11 @@ class ReportController extends AbstractActionController
         return $view;
     }
 
+    public function institutionalAction()
+    {
+        return array();
+    }
+
     public function instructionalCostsAction()
     {
         $year = $this->getYearFromRouteOrStudy();

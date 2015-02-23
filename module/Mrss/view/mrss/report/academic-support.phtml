@@ -4,9 +4,9 @@
     <thead>
     <tr>
         <td></td>
-        <th>Cost per FTE Student</th>
-        <th>Cost per Student Contact</th>
-        <th>FTE Students per Employee</th>
+        <th class="numberCell">Cost per FTE Student</th>
+        <th class="numberCell">Cost per Student Contact</th>
+        <th class="numberCell">FTE Students per Employee</th>
     </tr>
     </thead>
     <tbody>
@@ -14,10 +14,17 @@
             <tr>
                 <th><?= $row['name'] ?></th>
                 <?php foreach ($row['data'] as $value): ?>
-                    <td><?= $value ?></td>
+                    <td class="numberCell"><?= $value ?></td>
                 <?php endforeach ?>
             </tr>
         <?php endforeach ?>
     </tbody>
 
 </table>
+
+
+<?php foreach ($charts as $chart): ?>
+    <div class="internalChart">
+        <?= $this->chart($chart) ?>
+    </div>
+<?php endforeach ?>

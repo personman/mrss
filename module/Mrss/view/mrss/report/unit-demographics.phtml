@@ -1,11 +1,11 @@
 <h1>Academic Unit Demographics</h1>
 
-<table class="table table-striped">
+<table class="table table-striped unit-demographics">
     <thead>
     <tr>
         <th></th>
         <?php foreach ($headings as $heading): ?>
-            <th><?= $heading ?></th>
+            <th class="numberCell"><?= $heading ?></th>
         <?php endforeach ?>
     </tr>
     </thead>
@@ -14,7 +14,7 @@
         <tr>
             <th><?= $unit['unit'] ?></th>
             <?php foreach ($unit['data'] as $datum): ?>
-                <td><?= $datum ?></td>
+                <td class="numberCell"><?= $datum ?></td>
             <?php endforeach ?>
         </tr>
     <?php endforeach ?>

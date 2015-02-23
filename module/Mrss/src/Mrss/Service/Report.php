@@ -277,6 +277,8 @@ class Report
         $decimalPlaces = 0;
         if (isset($map[$dbColumn])) {
             $decimalPlaces = $map[$dbColumn];
+        } elseif ($benchmark->getInputType() == 'float') {
+            $decimalPlaces = 2;
         } else {
             //All NCCBP percentages should use 2 decimal places
             if ($this->getStudy()->getId() == 1 && $benchmark->isPercent()) {

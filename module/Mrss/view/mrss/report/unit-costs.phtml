@@ -1,7 +1,7 @@
 <h1>Academic Unit Instructional Costs</h1>
 
 <?php foreach ($reportData as $activityKey => $activity): ?>
-    <div id="actvity_<?= $activityKey ?>">
+    <div class="unit-cost-activity" id="actvity_<?= $activityKey ?>">
         <h2><?= $activity['name'] ?></h2>
 
         <table class="table table-striped">
@@ -12,7 +12,7 @@
                     <th class="numberCell">FT Faculty<br>Salary and Benefits<br>per FTE Student</th>
                     <th class="numberCell">% Part-time Faculty</th>
                     <th class="numberCell">PT Faculty<br>Salary and Benefits<br>per FTE Student</th>
-                    <th class="numberCell">Total $/FTE Students</th>
+                    <th class="numberCell">Total Faculty<br>Salary and Benefits<br>per FTE Student</th>
                 </tr>
             </thead>
             <tbody>

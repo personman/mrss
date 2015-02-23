@@ -937,6 +937,15 @@ return array(
                         )
                     ),
                     // The next routes are for Max's internal reports
+                    'institutional' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/institutional',
+                            'defaults' => array(
+                                'action' => 'institutional'
+                            )
+                        )
+                    ),
                     'instructional-costs' => array(
                         'type' => 'segment',
                         'options' => array(
