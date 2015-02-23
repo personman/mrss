@@ -350,10 +350,10 @@ function getReportMenu()
         'label' => 'Reports',
         'uri' => '/reports',
         'pages' => array(
-            'institutional' => array(
+            /*'institutional' => array(
                 'label' => 'Institutional Reports',
                 'uri' => '/reports/institutional'
-            ),
+            ),*/
             'outlier' => array(
                 'label' => 'Outlier Report',
                 'uri' => '/reports/outlier'
