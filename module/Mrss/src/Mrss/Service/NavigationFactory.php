@@ -214,8 +214,8 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['reports']['pages']['executive']);
 
             // Hide all max reports (except institutional)
-            $newReports = array($pages['reports']['pages']['institutional']);
-            $pages['reports']['pages'] = $newReports;
+            //$newReports = array($pages['reports']['pages']['institutional']);
+            //$pages['reports']['pages'] = $newReports;
             //unset($pages['reports']);
         }
 
