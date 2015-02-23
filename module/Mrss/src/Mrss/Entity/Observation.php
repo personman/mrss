@@ -380,6 +380,15 @@ class Observation
     protected $inst_cost_total_per_cred_hr_ac_service;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_per_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_full_per_cred_hr_prof_dev;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -387,6 +396,30 @@ class Observation
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_total_per_cred_hr_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_expend_per_fte_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_expend_per_fte_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_total_expend_per_fte_faculty;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_fte_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_fte_students_per_fte_faculty;
 
     // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */
@@ -845,6 +878,30 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_students_per_fte_emp;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_advising_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_counseling_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_career_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_financial_aid_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_tutoring_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_testing_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_disabserv_cost_per_contact;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_vetserv_cost_per_contact;
+
 
 
 
@@ -960,6 +1017,20 @@ class Observation
     /** @ORM\Column(type="string", nullable=true) */
     protected $as_fte_students_per_experiential_fte_emp;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_tech_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_experiential_cost_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_students_per_tech_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_students_per_library_emp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_students_per_experiential_emp;
 
 
 

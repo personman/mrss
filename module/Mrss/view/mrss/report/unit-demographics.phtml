@@ -1,0 +1,26 @@
+<h1>Academic Unit Demographics</h1>
+
+<table class="table table-striped unit-demographics">
+    <thead>
+    <tr>
+        <th></th>
+        <?php foreach ($headings as $heading): ?>
+            <th class="numberCell"><?= $heading ?></th>
+        <?php endforeach ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($reportData as $unit): ?>
+        <tr>
+            <th><?= $unit['unit'] ?></th>
+            <?php foreach ($unit['data'] as $datum): ?>
+                <td class="numberCell"><?= $datum ?></td>
+            <?php endforeach ?>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
+
+<?php foreach ($charts as $chart): ?>
+    <?= $this->chart($chart) ?>
+<?php endforeach ?>

@@ -1,0 +1,30 @@
+<h1>Academic Support Activities</h1>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td></td>
+        <th class="numberCell">Cost per FTE Student</th>
+        <th class="numberCell">Cost per Student Contact</th>
+        <th class="numberCell">FTE Students per Employee</th>
+    </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($reportData as $row): ?>
+            <tr>
+                <th><?= $row['name'] ?></th>
+                <?php foreach ($row['data'] as $value): ?>
+                    <td class="numberCell"><?= $value ?></td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+
+</table>
+
+
+<?php foreach ($charts as $chart): ?>
+    <div class="internalChart">
+        <?= $this->chart($chart) ?>
+    </div>
+<?php endforeach ?>

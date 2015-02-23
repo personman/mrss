@@ -392,7 +392,9 @@ class ReportController extends AbstractActionController
 
             $latestSubscription = $subModel->getLatestSubscription($this->currentStudy(), $college->getId(), $before);
 
-            $year = $latestSubscription->getYear();
+            if (!empty($latestSubscription)) {
+                $year = $latestSubscription->getYear();
+            }
         }
 
         return $year;
@@ -696,6 +698,119 @@ class ReportController extends AbstractActionController
         );
 
         return $view;
+    }
+
+    public function institutionalAction()
+    {
+        return array();
+    }
+
+    public function instructionalCostsAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $chart) = $report->getInstructionalCosts($observation);
+
+        return array(
+            'college' => $this->currentCollege(),
+            'observation' => $observation,
+            'reportData' => $reportData,
+            'chart' => $chart
+        );
+    }
+
+    public function instructionalActivityCostsAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $charts) = $report->getInstructionalActivityCosts($observation);
+
+        return array(
+            'reportData' => $reportData,
+            'charts' => $charts,
+            'headings' => $report->getActivities()
+        );
+    }
+
+    public function unitCostsAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $charts) = $report->getUnitCosts($observation);
+
+        return array(
+            'reportData' => $reportData,
+            'charts' => $charts
+        );
+    }
+
+    public function unitDemographicsAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $charts) = $report->getUnitDemographics($observation);
+
+        return array(
+            'reportData' => $reportData,
+            'charts' => $charts,
+            'headings' => $report->getUnitDemographicsFields()
+        );
+    }
+
+    public function studentServicesCostsAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $charts) = $report->getStudentServicesCosts($observation);
+
+        return array(
+            'reportData' => $reportData,
+            'charts' => $charts,
+            'headings' => $report->getUnitDemographicsFields()
+        );
+    }
+
+    public function academicSupportAction()
+    {
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        /** @var \Mrss\Service\Report\Max\Internal $report */
+        $report = $this->getServiceLocator()->get('service.report.max.internal');
+        list($reportData, $charts) = $report->getAcademicSupport($observation);
+
+        return array(
+            'reportData' => $reportData,
+            'charts' => $charts,
+            'headings' => $report->getUnitDemographicsFields()
+        );
     }
 
     /**

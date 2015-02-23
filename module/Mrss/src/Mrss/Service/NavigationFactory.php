@@ -213,8 +213,10 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['executive']);
             unset($pages['reports']['pages']['executive']);
 
-            // Hide all max reports
-            unset($pages['reports']);
+            // Hide all max reports (except institutional)
+            $newReports = array($pages['reports']['pages']['institutional']);
+            $pages['reports']['pages'] = $newReports;
+            //unset($pages['reports']);
         }
 
         // Workforce
@@ -222,6 +224,9 @@ class NavigationFactory extends DefaultNavigationFactory
             // Don't show best performers yet
             unset($pages['reports']['pages']['best-performers']);
             unset($pages['reports']['pages']['high-low']);
+
+            // Institutional report is for MRSS only
+            unset($pages['reports']['institutional']);
 
             // Remove partners page
             unset($pages['about2']['pages']['partners']);

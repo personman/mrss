@@ -1,0 +1,26 @@
+<? /** @var \Mrss\Entity\College $college */ ?>
+
+<h1><?= $college->getName() ?> Instructional Costs</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Benchmark</th>
+            <th class="numberCell">Cost per FTE Student</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($reportData as $datum): ?>
+
+
+        <tr>
+            <td><?= $datum['label'] ?></td>
+            <td class="numberCell"><?= $datum['value'] ?></td>
+        </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+
+<?= $this->chart($chart) ?>

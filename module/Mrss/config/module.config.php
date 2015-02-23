@@ -945,6 +945,76 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+                    // The next routes are for Max's internal reports
+                    'institutional' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/institutional',
+                            'defaults' => array(
+                                'action' => 'institutional'
+                            )
+                        )
+                    ),
+                    'instructional-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/instructional-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'instructionalCosts',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'instructional-activity-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/instructional-activity-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'instructionalActivityCosts',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'unit-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/unit-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'unitCosts',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'unit-demographics' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/unit-demographics[/:year]',
+                            'defaults' => array(
+                                'action' => 'unitDemographics',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'student-services-costs' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/student-services-costs[/:year]',
+                            'defaults' => array(
+                                'action' => 'studentServicesCosts',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'academic-support' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/academic-support[/:year]',
+                            'defaults' => array(
+                                'action' => 'academicSupport',
+                                'year' => null
+                            )
+                        )
                     )
                 )
             ),

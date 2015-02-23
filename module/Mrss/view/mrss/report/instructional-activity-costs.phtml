@@ -1,0 +1,28 @@
+<h1>Instructional Activity Costs</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <?php foreach ($headings as $heading): ?>
+            <th class="numberCell"><?= $heading ?></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($reportData as $reportRow): ?>
+            <tr>
+                <th><?= array_shift($reportRow) ?></th>
+                <?php foreach ($reportRow as $value): ?>
+                <td class="numberCell"><?= $value ?></td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+
+<?php foreach ($charts as $chart): ?>
+    <?= $this->chart($chart) ?>
+
+<?php endforeach ?>

@@ -71,3 +71,7 @@ table.dataTable thead .sorting.heatMapYear {
 .strengthRank a {
     text-decoration: none;
 }
+
+.table td.numberCell, .table th.numberCell {
+    text-align: right;
+}

@@ -385,3 +385,22 @@ a.hover-highlight {
 a.hover-highlight:hover {
     border: 3px solid #809c00;
 }
+
+/** Institutional reports */
+.chartWrapper {
+    margin-top: 30px;
+    margin-bottom: 80px;
+}
+.unit-cost-activity {
+    margin-top: 80px;
+    margin-bottom: 60px;
+    border-bottom: 1px solid #CCC;
+}
+table.unit-demographics, table.studentServices {
+    margin-top: 35px;
+    margin-bottom: 70px;
+}
+.internalChart {
+    margin-top: 70px;
+}
+

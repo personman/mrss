@@ -1,0 +1,37 @@
+<h1>Academic Unit Instructional Costs</h1>
+
+<?php foreach ($reportData as $activityKey => $activity): ?>
+    <div class="unit-cost-activity" id="actvity_<?= $activityKey ?>">
+        <h2><?= $activity['name'] ?></h2>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="numberCell">% Full-time Faculty</th>
+                    <th class="numberCell">FT Faculty<br>Salary and Benefits<br>per FTE Student</th>
+                    <th class="numberCell">% Part-time Faculty</th>
+                    <th class="numberCell">PT Faculty<br>Salary and Benefits<br>per FTE Student</th>
+                    <th class="numberCell">Total Faculty<br>Salary and Benefits<br>per FTE Student</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($activity['units'] as $unitName => $unitData): ?>
+                    <tr>
+                        <th><?= $unitName ?></th>
+                        <td class="numberCell"><?= $unitData['inst_cost_full_perc'] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_full_per_cred_hr_' . $activityKey] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_part_perc'] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_part_per_cred_hr_' . $activityKey] ?></td>
+                        <td class="numberCell"><?= $unitData['inst_cost_total_per_cred_hr_' . $activityKey] ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+
+        <?= $this->chart($activity['chart']) ?>
+
+    </div>
+
+<?php endforeach ?>
+
