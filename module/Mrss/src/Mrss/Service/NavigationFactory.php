@@ -206,7 +206,7 @@ class NavigationFactory extends DefaultNavigationFactory
             // The rest of the studies retain the links for prior years
             if ((empty($user) || $user->getCollege()->getId() != 101)
                 && !$impersonationService->isImpersonated()) {
-                //unset($pages['reports']);
+                unset($pages['reports']);
             }
 
             // Hide the executive report
