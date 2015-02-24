@@ -314,7 +314,7 @@ class Report
     public function getSummaryReportData(Observation $observation)
     {
         $this->setObservation($observation);
-        
+
         $config = $this->getSummaryReportConfig();
         $reportData = array();
 

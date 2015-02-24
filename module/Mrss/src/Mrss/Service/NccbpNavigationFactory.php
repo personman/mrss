@@ -24,7 +24,7 @@ class NccbpNavigationFactory extends NavigationFactory
 
             // Remove the Home button from nav if user is role: viewer
             if ($user->getRole() == 'viewer') {
-                unset($pages['home']);
+                $pages['home']['uri'] = '/reports/executive';
             }
         }
 
