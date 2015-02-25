@@ -205,7 +205,7 @@ class NavigationFactory extends DefaultNavigationFactory
             // Hide reports for MRSS since it's never had them open
             // The rest of the studies retain the links for prior years
             if ((empty($user) || $user->getCollege()->getId() != 101)
-                && !$impersonationService->isImpersonated()) {
+                /*&& !$impersonationService->isImpersonated()*/) {
                 unset($pages['reports']);
             }
 
