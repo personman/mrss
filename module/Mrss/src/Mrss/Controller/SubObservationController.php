@@ -154,7 +154,7 @@ class SubObservationController extends AbstractActionController
         $this->getSubObservationModel()->delete($subObservation);
 
         // Redirect and show a message
-        $this->flashMessenger()->addSuccessMessage('Academic unit deleted.');
+        $this->flashMessenger()->addSuccessMessage('Academic division deleted.');
         return $this->redirect()->toRoute(
             'data-entry/edit',
             array(

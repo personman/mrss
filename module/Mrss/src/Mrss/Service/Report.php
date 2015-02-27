@@ -381,30 +381,29 @@ class Report
         return $chart;
     }
 
-    public function getPieChart($chartConfig, Observation $observation)
+    public function getPieChart($chartConfig, Observation $observation, $usePercentage = false)
     {
+
+        if ($usePercentage) {
+            $total = 0;
+            foreach ($chartConfig['benchmarks'] as $i => $benchmark) {
+                $total += $this->getPieChartValue($benchmark, $observation);
+            }
+        }
+
         $colors = $this->getPieChartColors();
         $data = array();
         foreach ($chartConfig['benchmarks'] as $i => $benchmark) {
-            // Nationl median or college's reported value?
-            if (!empty($benchmark['median'])) {
-                $benchmarkEntity = $this->getBenchmarkModel()->findOneByDbColumn(
-                    $benchmark['dbColumn']
-                );
-
-                $value = $this->getPercentileModel()
-                    ->findByBenchmarkYearAndPercentile(
-                        $benchmarkEntity->getId(),
-                        $observation->getYear(),
-                        50
-                    )->getValue();
-            } else {
-                $value = $observation->get($benchmark['dbColumn']);
-            }
+            // National median or college's reported value?
+            $value = $this->getPieChartValue($benchmark, $observation);
 
             // Skip zero values
             if (empty($value)) {
                 continue;
+            }
+
+            if ($usePercentage) {
+                $value = round($value / $total * 100, 1);
             }
 
             $title = $benchmark['title'];
@@ -412,7 +411,7 @@ class Report
             $data[] = array(
                 'name' => $title,
                 'y' => $value,
-                'color' => $colors[$i]
+                'color' => $colors[$i],
             );
         }
 
@@ -438,7 +437,33 @@ class Report
             ),
         );
 
+        if ($usePercentage) {
+            $chart['tooltip'] = array('valueSuffix' => '%');
+        }
+
         return $chart;
+    }
+
+    public function getPieChartValue($benchmarkInfo, Observation $observation)
+    {
+        $value = null;
+
+        if (!empty($benchmarkInfo['median'])) {
+            $benchmarkEntity = $this->getBenchmarkModel()->findOneByDbColumn(
+                $benchmarkInfo['dbColumn']
+            );
+
+            $value = $this->getPercentileModel()
+                ->findByBenchmarkYearAndPercentile(
+                    $benchmarkEntity->getId(),
+                    $observation->getYear(),
+                    50
+                )->getValue();
+        } else {
+            $value = $observation->get($benchmarkInfo['dbColumn']);
+        }
+
+        return $value;
     }
 
     public function getBubbleChart($x, $y, $size, $title)

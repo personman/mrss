@@ -1,7 +1,15 @@
-<h1>Academic Unit Instructional Costs</h1>
+<h1>Academic Division Costs: Comparing Divisions by Activity</h1>
+
+<ul>
+    <?php foreach ($reportData as $activityKey => $activity): ?>
+        <li>
+            <a href="#activity_<?= $activityKey ?>"><?= $activity['name'] ?></a>
+        </li>
+    <?php endforeach ?>
+</ul>
 
 <?php foreach ($reportData as $activityKey => $activity): ?>
-    <div class="unit-cost-activity" id="actvity_<?= $activityKey ?>">
+    <div class="unit-cost-activity" id="activity_<?= $activityKey ?>">
         <h2><?= $activity['name'] ?></h2>
 
         <table class="table table-striped">

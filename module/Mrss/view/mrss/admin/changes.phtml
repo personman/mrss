@@ -65,7 +65,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             <td>
                 <?= $changeSet->getEditTypeLabel() ?>
                 <?php if ($subObservation = $changeSet->getSubObservation()): ?>
-                    in academic unit
+                    in academic division
                     <?= $subObservation->getName() ?>
                 <?php endif ?>
             </td>

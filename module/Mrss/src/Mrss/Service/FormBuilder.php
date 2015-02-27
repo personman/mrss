@@ -83,7 +83,7 @@ class FormBuilder
     {
         if ($provider->getUseSubObservation()) {
             $name = new Element\Text('name');
-            $name->setLabel('Academic Unit Name');
+            $name->setLabel('Academic Division Name');
             $form->add($name);
 
             // Add the id, too

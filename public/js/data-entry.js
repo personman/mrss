@@ -108,8 +108,8 @@ $(function() {
     // Alert when deleting a subobservation
     $('.academicUnits .deleteLink').click(function() {
         return confirm(
-            'Are you sure you want to delete this academic unit? Your data for' +
-                ' the academic unit will be permanently deleted.'
+            'Are you sure you want to delete this academic division? Your data for' +
+                ' the academic division will be permanently deleted.'
         )
     })
 

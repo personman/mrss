@@ -387,6 +387,12 @@ a.hover-highlight:hover {
 }
 
 /** Institutional reports */
+#content .institutionalReports h3 {
+    color: #666;
+}
+.institutionalReports h4 {
+    margin: 10px 0 18px 40px;
+}
 .chartWrapper {
     margin-top: 30px;
     margin-bottom: 80px;

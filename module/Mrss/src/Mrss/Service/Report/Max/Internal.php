@@ -10,6 +10,53 @@ class Internal extends Report
 {
     protected $naPlaceholder = 'N/A';
 
+    public function getInstitutionCosts(Observation $observation)
+    {
+        $pie = $this->getInstitutionCostsPieChart($observation);
+
+        $charts = array($pie);
+
+        return $charts;
+    }
+
+    public function getInstitutionCostsPieChart(Observation $observation)
+    {
+        $chartConfig = array(
+            'title' => 'Institution Costs',
+            'benchmarks' => array(
+                array(
+                    'dbColumn' => 'inst_full_expend',
+                    'title' => 'Full-time Faculty'
+                ),
+                array(
+                    'dbColumn' => 'inst_part_expend',
+                    'title' => 'Part-time Faculty'
+                ),
+                array(
+                    'dbColumn' => 'inst_exec_expend',
+                    'title' => 'Executive Staff'
+                ),
+                array(
+                    'dbColumn' => 'inst_admin_expend',
+                    'title' => 'Clerical and Other Professional Staff'
+                ),
+                array(
+                    'dbColumn' => 'inst_o_cost',
+                    'title' => 'Non-Labor Operating Costs'
+                ),
+            )
+        );
+
+        $chart = $this->getPieChart($chartConfig, $observation, true);
+
+        return $chart;
+    }
+
+    public function getPieChartColors()
+    {
+        return $this->getColors();
+    }
+
     public function getInstructionalCosts(Observation $observation)
     {
         $data = array();
@@ -23,7 +70,7 @@ class Internal extends Report
         $value = $benchmark->format($rawValue);
 
         $data[] = array(
-            'label' => 'Total Costs Per FTE Student',
+            'label' => 'Institution',
             'value' => $value
         );
 
@@ -31,10 +78,10 @@ class Internal extends Report
         $chartXCategories[] = $collegeName;
         $chartData[] = $rawValue;
 
-        // Now the subobservations (academic units)
+        // Now the subobservations (academic divisions)
         foreach ($observation->getSubObservations() as $subObservation) {
             $dbColumn = 'inst_cost_per_fte_student';
-            $label = $subObservation->getName() . ' Total Cost Per FTE Student';
+            $label = $subObservation->getName();
             $benchmark = $this->getBenchmark($dbColumn);
             $rawValue = $subObservation->get($dbColumn);
             $value = $benchmark->format($rawValue);
@@ -54,7 +101,8 @@ class Internal extends Report
             )
         );
 
-        $chart = $this->getBarChart($benchmark, $chartXCategories, $series);
+        $title = 'Faculty Salary and Benefit Costs per FTE Student';
+        $chart = $this->getBarChart($benchmark, $chartXCategories, $series, $title);
         //pr($chart);
         return array($data, $chart);
     }
@@ -228,8 +276,8 @@ class Internal extends Report
     public function getActivities()
     {
         return array(
-            'program_dev' => 'Program Dev.',
-            'course_dev' => 'Course Dev.',
+            'program_dev' => 'Program Development',
+            'course_dev' => 'Course Development',
             'teaching' => 'Teaching',
             'tutoring' => 'Faculty Tutoring',
             'advising' => 'Faculty Advising',
@@ -240,7 +288,7 @@ class Internal extends Report
     }
 
     /**
-     * Academic Unit Instructional Costs
+     * Academic Division Instructional Costs
      *
      * User selects an activity, then gets a table showing costs for the activity for each unit
      *
@@ -297,7 +345,7 @@ class Internal extends Report
                 $benchmark,
                 $chartXCategories,
                 $series,
-                $label . ' Academic Unit Instructional Costs',
+                $label . ' Academic Division Instructional Costs',
                 'chart_' . $activity
             );
             $activityData['chart']['legend']['enabled'] = true;

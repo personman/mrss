@@ -1,13 +1,11 @@
-<? /** @var \Mrss\Entity\College $college */ ?>
-
-<h1><?= $college->getName() ?> Instructional Costs</h1>
+<h1>Academic Division Costs: Division Summaries</h1>
 
 
 <table class="table">
     <thead>
         <tr>
-            <th>Benchmark</th>
-            <th class="numberCell">Cost per FTE Student</th>
+            <th></th>
+            <th class="numberCell">Faculty Salary and Benefit Costs per FTE Student</th>
         </tr>
     </thead>
     <tbody>
@@ -15,7 +13,7 @@
 
 
         <tr>
-            <td><?= $datum['label'] ?></td>
+            <th><?= $datum['label'] ?></th>
             <td class="numberCell"><?= $datum['value'] ?></td>
         </tr>
         <?php endforeach ?>
