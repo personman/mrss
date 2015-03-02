@@ -410,3 +410,11 @@ table.unit-demographics, table.studentServices {
     margin-top: 70px;
 }
 
+/** Member homepage */
+#membertime .row-fluid {
+    margin-top: 20px;
+}
+#membertime h3 {
+    text-align: right;
+    margin-top: 0;
+}
