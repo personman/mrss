@@ -1373,6 +1373,17 @@ return array(
                             )
                         )
                     ),
+                    'copy-data' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/copy-data/:from/:to',
+                            'defaults' => array(
+                                'action' => 'copyData',
+                                'from' => null,
+                                'to' => null
+                            )
+                        )
+                    ),
                     'exec-addresses' => array(
                         'type' => 'segment',
                         'options' => array(

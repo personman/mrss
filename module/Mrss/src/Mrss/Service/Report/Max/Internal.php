@@ -12,9 +12,12 @@ class Internal extends Report
 
     public function getInstitutionCosts(Observation $observation)
     {
-        $pie = $this->getInstitutionCostsPieChart($observation);
+        $this->setObservation($observation);
 
-        $charts = array($pie);
+        $pie = $this->getInstitutionCostsPieChart($observation);
+        $bar = $this->getInstitutionCostsBarChart($observation);
+
+        $charts = array($pie, $bar);
 
         return $charts;
     }
@@ -52,6 +55,43 @@ class Internal extends Report
         return $chart;
     }
 
+    public function getInstitutionCostsBarChart(Observation $observation)
+    {
+        $fields = array(
+            'inst_total_expend_per_fte_student' => 'All Costs',
+            'inst_full_expend_per_fte_student' => 'Full-time Faculty',
+            'inst_part_expend_per_fte_student' => 'Part-time Faculty',
+            'inst_exec_expend_per_fte_student' => 'Executive Staff',
+            'inst_admin_expend_per_fte_student' => 'Clerical Staff',
+            'inst_o_cost_per_fte_student' => 'Non-Labor Operating Costs'
+        );
+
+        $chartData = array();
+        $chartXCategories = array();
+
+        foreach ($fields as $dbColumn => $label) {
+            if ($observation->has($dbColumn)) {
+                $benchmark = $this->getBenchmark($dbColumn);
+                $value = $observation->get($dbColumn);
+                //$formatted = $benchmark->format($value);
+                $chartData[] = $value;
+                $chartXCategories[] = $label;
+
+            } else {
+                pr($dbColumn);
+            }
+        }
+
+        $series = array(
+            array(
+                'data' => $chartData
+            )
+        );
+
+        $title = 'Costs per FTE Student';
+        return $this->getBarChart($benchmark, $chartXCategories, $series, $title);
+    }
+
     public function getPieChartColors()
     {
         return $this->getColors();
@@ -59,12 +99,14 @@ class Internal extends Report
 
     public function getInstructionalCosts(Observation $observation)
     {
+        $this->setObservation($observation);
+
         $data = array();
         $chartXCategories = array();
         $chartData = array();
 
         // The institution-wide value
-        $dbColumn = 'inst_total_expend_per_fte_student';
+        $dbColumn = 'inst_expend_per_fte_student';
         $benchmark = $this->getBenchmark($dbColumn);
         $rawValue = $observation->get($dbColumn);
         $value = $benchmark->format($rawValue);
@@ -110,6 +152,8 @@ class Internal extends Report
     public function getBarChart(Benchmark $benchmark, $chartXCategories, $series, $title = null, $id = null)
     {
         $format = $this->getFormat($benchmark);
+        $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
+        $dataDefinition = $this->getYear() . ' ' . $this->getStudy()->getName();
 
         if (is_null($title)) {
             $title = $benchmark->getDescriptiveReportLabel();
@@ -127,11 +171,22 @@ class Internal extends Report
                     'load' => 'loadChart'
                 ),
             ),
-            /*'exporting' => array(
+            'exporting' => array(
                 'chartOptions' => array(
                     'series' => $seriesWithDataLabels,
-                )
-            ),*/
+                    'chart' => array(
+                        'spacingBottom' => ceil(strlen($dataDefinition) / 106) * 35,
+                    ),
+                    'plotOptions' => array(
+                        'column' => array(
+                            'dataLabels' => array(
+                                'enabled' => true
+                            )
+                        )
+                    )
+
+                ),
+            ),
             'colors' => $this->getColors(),
             'title' => array(
                 'text' => $title,
@@ -168,8 +223,16 @@ class Internal extends Report
             'plotOptions' => array(
                 'series' => array(
                     'animation' => false
-                )
-            )
+                ),
+                /*'column' => array(
+                    'dataLabels' => array(
+                        'enabled' => true,
+                        'format' => $format
+                    )
+                )*/
+            ),
+            'dataDefinition' => $dataDefinition,
+            'maximizingResources' => true
         );
 
         /*if ($benchmark->isPercent()) {
@@ -191,6 +254,8 @@ class Internal extends Report
 
     public function getInstructionalActivityCosts(Observation $observation)
     {
+        $this->setObservation($observation);
+
         $reportData = array();
         $charts = array();
         $unitNames = array();
@@ -297,6 +362,8 @@ class Internal extends Report
      */
     public function getUnitCosts(Observation $observation)
     {
+        $this->setObservation($observation);
+
         $reportData = array();
 
         foreach ($this->getActivities() as $activity => $label) {
@@ -390,6 +457,8 @@ class Internal extends Report
 
     public function getUnitDemographics(Observation $observation)
     {
+        $this->setObservation($observation);
+
         $reportData = array();
         $charts = array();
         $chartXCategories = array();
@@ -463,6 +532,8 @@ class Internal extends Report
 
     public function getStudentServicesCosts(Observation $observation)
     {
+        $this->setObservation($observation);
+
         $reportData = array();
         $chartData = array();
 
@@ -603,6 +674,8 @@ class Internal extends Report
 
     public function getAcademicSupport(Observation $observation)
     {
+        $this->setObservation($observation);
+
         $reportData = array();
         $chartData = array();
 

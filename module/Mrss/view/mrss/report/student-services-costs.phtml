@@ -1,3 +1,9 @@
+<?php
+$this->headScript()->appendFile(
+    '/js/report.js?v=3',
+    'text/javascript'
+); ?>
+
 <h1>Student Services Costs</h1>
 
 <table class="table table-striped studentServices">
@@ -16,6 +22,7 @@
                 <?php if ($key == 'name' && $item != 'N/A'): ?>
                     <th><?= $item ?></th>
                 <?php else: ?>
+
                     <td class="numberCell"><?= $item ?></td>
                 <?php endif ?>
             <?php endforeach ?>

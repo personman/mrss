@@ -42,7 +42,7 @@ class Observation extends AbstractModel
      * @param $collegeId
      * @param $year
      * @param int $cipCode
-     * @return null|object
+     * @return ObservationEntity
      */
     public function findOne($collegeId, $year, $cipCode = 0)
     {

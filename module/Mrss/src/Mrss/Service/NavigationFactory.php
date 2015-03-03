@@ -232,7 +232,7 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['about2']['pages']['partners']);
 
             // Don't show the faq for workforce yet
-            unset($pages['help']['pages']['faq']);
+            unset($pages['data-documentation']['pages']['faq']);
 
             // Hide the executive report
             unset($pages['executive']);

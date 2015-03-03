@@ -75,3 +75,7 @@ table.dataTable thead .sorting.heatMapYear {
 .table td.numberCell, .table th.numberCell {
     text-align: right;
 }
+
+.highcharts-contextmenu hr {
+    margin: 0;
+}

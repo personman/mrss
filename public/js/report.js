@@ -42,31 +42,57 @@ $(function() {
     })
 })
 
-
+var testChart
 function loadChart(event, chart)
 {
+    testChart = chart
     // Enable data labels when exporting
     if (chart.options.chart.forExport) {
         var data = chart.series[0].data
         var dataWithLabels = []
+        var replaceData = true
+
+        // Don't force labels for pie charts
+        if (chart.options.chart.type == 'pie') {
+            replaceData = false
+        }
+
+        // Also don't force labels if there are multiple series
+        if (chart.series.length > 1) {
+            replaceData = false
+        }
+
         for (i in data) {
             var point = data[i]
+            if (typeof point.dataLabels == 'undefined') {
+                var labelConfig = {
+                    enabled: true,
+                    format: chart.options.tooltip.pointFormat.replace('point.y', 'y')
+                }
+
+                point.dataLabels = labelConfig
+            }
+
             point.dataLabels.enabled = true
             dataWithLabels.push(point)
         }
-        chart.series[0].setData(dataWithLabels)
-        chart.redraw()
+
+        if (replaceData) {
+            chart.series[0].setData(dataWithLabels)
+            chart.redraw()
+        }
 
 
         // Add data definition when exporting
         // Get the chart size
         var width = chart.chartWidth
         var totalPadding = 50
+        var lineHeight = 35 //35
         width = width - totalPadding
 
         var dataDef = chart.options.dataDefinition
 
-        var add = Math.ceil(dataDef.length / 106) * 35 // 106 = line width, 35 = line height
+        var add = Math.ceil(dataDef.length / 106) * lineHeight // 106 = line width, 35 = line height
 
         if (dataDef) {
             var definition = chart.renderer.label(dataDef)
@@ -81,6 +107,11 @@ function loadChart(event, chart)
                 .add();
 
             var newY = add - getChartDefinitionOffset(chart)
+
+            // Push the definition down for max charts
+            if (chart.options.maximizingResources) {
+                newY = newY + 10
+            }
 
             definition.align(Highcharts.extend(definition.getBBox(), {
                 x: 10,

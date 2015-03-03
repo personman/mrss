@@ -99,7 +99,7 @@ return array(
                     ),
                 )
             ),
-            'help' => array(
+            /*'help' => array(
                 'label' => 'Help',
                 'uri' => '#',
                 'pages' => array(
@@ -116,6 +116,27 @@ return array(
                         'uri' => '/contact'
                     ),
                 )
+            ),*/
+            'data-documentation' => array(
+                'label' => 'Data Documentation',
+                'uri' => '#',
+                'pages' => array(
+                    'submitted-values' => array(
+                        'label' => 'Submitted Values',
+                        'uri' => '/submitted-values'
+                    ),
+                    'contact' => array(
+                        'label' => 'Data Dictionary',
+                        'uri' => '/data-dictionary'
+                    ),
+                    'calculations' => array(
+                        'label' => 'Benchmark Calculations',
+                        'uri' => '/calculations'
+                    ),
+                    'faq' => array(
+                        'label' => 'FAQ',
+                        'uri' => '/faq'
+                    ),                )
             ),
             'schedule-demo' => array(
                 'label' => 'Schedule a Demo',

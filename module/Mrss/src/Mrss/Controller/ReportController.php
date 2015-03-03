@@ -771,11 +771,11 @@ class ReportController extends AbstractActionController
 
         /** @var \Mrss\Service\Report\Max\Internal $report */
         $report = $this->getServiceLocator()->get('service.report.max.internal');
-        list($reportData, $charts) = $report->getUnitCosts($observation);
+        list($reportData/*, $charts*/) = $report->getUnitCosts($observation);
 
         return array(
             'reportData' => $reportData,
-            'charts' => $charts
+            //'charts' => $charts
         );
     }
 

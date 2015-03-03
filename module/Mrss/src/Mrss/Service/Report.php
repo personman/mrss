@@ -422,11 +422,24 @@ class Report
             )
         );
 
+        $dataDefinition = $this->getYear() . ' ' . $this->getStudy()->getName();
 
         $chart = array(
             'id' => 'chart_' . uniqid(),
             'chart' => array(
-                'type' => 'pie'
+                'type' => 'pie',
+                'events' => array(
+                    'load' => 'loadChart'
+                ),
+
+            ),
+            'exporting' => array(
+                'chartOptions' => array(
+                    //'series' => $seriesWithDataLabels,
+                    'chart' => array(
+                        'spacingBottom' => ceil(strlen($dataDefinition) / 106) * 35,
+                    ),
+                ),
             ),
             'title' => array(
                 'text' => $chartConfig['title'],
@@ -435,6 +448,7 @@ class Report
             'credits' => array(
                 'enabled' => false
             ),
+            'dataDefinition' => $dataDefinition
         );
 
         if ($usePercentage) {
@@ -674,7 +688,7 @@ class Report
         );
 
 
-        $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
+        //$seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
         $dataDefinition = $this->getChartFooter($benchmark);
 
         $chart = array(
@@ -687,10 +701,10 @@ class Report
             ),
             'exporting' => array(
                 'chartOptions' => array(
-                    'series' => $seriesWithDataLabels,
+                    //'series' => $seriesWithDataLabels,
                     'chart' => array(
                         'spacingBottom' => ceil(strlen($dataDefinition) / 106) * 35,
-                    )
+                    ),
                 ),
             ),
             'title' => array(

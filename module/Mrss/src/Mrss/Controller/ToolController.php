@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\Observation;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Exceldiff;
 use PHPExcel;
@@ -382,6 +383,80 @@ class ToolController extends AbstractActionController
         $objWriter->save('php://output');
 
         die;
+    }
+
+    public function copyDataAction()
+    {
+        // Copy one year's data for the study to another. dangerous
+        $from = $this->params()->fromRoute('from');
+        $to = $this->params()->fromRoute('to');
+
+        /** @var \Mrss\Model\Observation $observationModel */
+        $observationModel = $this->getServiceLocator()->get('model.observation');
+
+        /** @var \Mrss\Model\SubObservation $subObservationModel */
+        $subObservationModel = $this->getServiceLocator()->get('model.subObservation');
+
+        // This assumes we've already moved the subscriptions to the new correct year.
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptions = $subscriptionModel->findByStudyAndYear($this->currentStudy()->getId(), $to);
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+
+        $count = 0;
+        foreach ($subscriptions as $subscription) {
+            $college = $subscription->getCollege();
+            $newObservation = $observationModel->findOne($college->getId(), $to);
+
+            if (!$newObservation) {
+                $newObservation = new Observation();
+                $newObservation->setYear($to);
+                $newObservation->setCollege($college);
+                $subscription->setObservation($newObservation);
+            }
+
+            $oldObservation = $observationModel->findOne($college->getId(), $from);
+
+            foreach ($study->getBenchmarkGroups() as $bGroup) {
+                foreach ($bGroup->getBenchmarks() as $benchmark) {
+                    $dbColumn = $benchmark->getDbColumn();
+                    if ($oldObservation->has($dbColumn)) {
+                        $value = $oldObservation->get($dbColumn);
+
+                        if (!is_null($value)) {
+                            $newObservation->set($dbColumn, $value);
+                            $count++;
+
+                            if ($college->getId() == 101) {
+                                //pr($oldObservation->getId() . ' -> ' . $newObservation->getId());
+                                //pr($dbColumn . ': ' . $value);
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Just move any subobservations
+            foreach ($oldObservation->getSubObservations() as $subOb) {
+                $subOb->setObservation($newObservation);
+                $subObservationModel->save($subOb);
+            }
+
+            $observationModel->save($newObservation);
+            $observationModel->getEntityManager()->flush();
+        }
+
+
+
+        //prd("$count values copied from $from to $to.");
+        $this->flashMessenger()->addSuccessMessage("$count values copied from $from to $to.");
+
+        return $this->redirect()->toUrl('/tools');
+
     }
 
     protected function longRunningScript()

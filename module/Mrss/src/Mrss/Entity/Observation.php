@@ -165,6 +165,11 @@ class Observation
     /** @ORM\Column(type="text", nullable=true) */
     protected $four_year_degrees;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_admin_expend_per_fte_student;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_o_cost_per_fte_student;
 
 
 
