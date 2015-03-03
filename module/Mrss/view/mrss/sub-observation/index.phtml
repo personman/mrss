@@ -16,11 +16,11 @@ $this->headScript()->appendFile(
 <div class="well">
     <h4>2012-2013 Fiscal Year</h4>
     <br>
-    Report this information at the credit instructional academic unit level (such as division) that fits your organization.<br>
+    Report this information at the credit instructional academic division.<br>
     <br>
-    Leaders (typically deans) of each academic unit may provide this information. <a href="/data-entry/import">The download Excel file</a> has sheets that can be distributed to the heads of your academic units.<br>
+    Leaders (typically deans) of each academic division may provide this information. <a href="/data-entry/import">The download Excel file</a> has sheets that can be distributed to the heads of your academic divisions.<br>
     <br>
-    You may report up to ten academic units. Use the Add an Academic Unit button to generate a page to report for another academic unit. If you are unable to report by academic unit, you should report for your entire institution.
+    You may report up to ten academic divisions. Use the Add an Academic Division button to generate a page to report for another academic division. If you are unable to report by academic division, you should report for your entire institution.
 </div>
 
 <p>
@@ -31,11 +31,11 @@ $this->headScript()->appendFile(
         array('benchmarkGroup' => $benchmarkGroup->getId())
     ) ?>" class="btn btn-default">
         <span class="icon-plus-sign"></span>
-        Add an Academic Unit
+        Add an Academic Division
     </a>
 
     <?php else: ?>
-            You have reached your maximum of <?= $maxAcademicUnits ?> academic units.
+            You have reached your maximum of <?= $maxAcademicUnits ?> academic divisions.
             <a href="/contact">Contact us</a> if you have any questions.
     <?php endif ?>
 <?php endif ?>
@@ -55,7 +55,7 @@ $this->headScript()->appendFile(
 
 </p>
 
-<h5>Academic Units</h5>
+<h5>Academic Divisions</h5>
 
 <?php $subobs = $observation->getSubObservations() ?>
 <?php if (count($subobs)): ?>
@@ -85,6 +85,6 @@ $this->headScript()->appendFile(
     <?php endforeach ?>
 </ul>
 <?php else: ?>
-    <p>You do not have any academic units yet. Create one using the button above.</p>
+    <p>You do not have any academic divisions yet. Create one using the button above.</p>
 <?php endif ?>
 
