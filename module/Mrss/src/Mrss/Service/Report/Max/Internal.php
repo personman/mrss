@@ -161,6 +161,9 @@ class Internal extends Report
 
         if (is_null($id)) {
             $id = $benchmark->getDbColumn();
+        } else {
+            // No spaces or specials
+            $id = preg_replace("/[^A-Za-z0-9]/", '', $id);
         }
 
         $chart = array(
@@ -311,7 +314,7 @@ class Internal extends Report
                 $this->getInstructionActivityCategories(),
                 $series,
                 $title,
-                str_replace(array(' ', "'"), array('_', ''), $subObservation->getName())
+                $subObservation->getName()
             );
         }
 
