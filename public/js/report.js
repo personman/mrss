@@ -40,12 +40,19 @@ $(function() {
 
         return false
     })
+
+    // Make tables sortable if they have the class sortable
+    $('table.sortable').dataTable({
+        'bPaginate': false,
+        'bLengthChange': false,
+        'bFilter': false,
+        'bInfo': false
+    });
 })
 
-var testChart
+
 function loadChart(event, chart)
 {
-    testChart = chart
     // Enable data labels when exporting
     if (chart.options.chart.forExport) {
         var data = chart.series[0].data

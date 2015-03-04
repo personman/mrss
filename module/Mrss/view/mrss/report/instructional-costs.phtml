@@ -1,13 +1,20 @@
 <?php
 $this->headScript()->appendFile(
-    '/js/report.js?v=3',
+    '/js/report.js?v=4',
     'text/javascript'
-); ?>
+);
+// Data Tables
+$this->headScript()->appendFile(
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
 
 <h1>Academic Division Costs: Division Summaries</h1>
 
 
-<table class="table">
+<table class="table sortable">
     <thead>
         <tr>
             <th></th>
