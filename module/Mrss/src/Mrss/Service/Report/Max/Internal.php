@@ -528,7 +528,7 @@ class Internal extends Report
             );
 
             $preparedCharts[] = $preparedChart;
-        }
+        }table-striped
 
         return $preparedCharts;
     }
