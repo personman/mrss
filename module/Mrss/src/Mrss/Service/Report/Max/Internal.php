@@ -120,7 +120,7 @@ class Internal extends Report
         $chartXCategories[] = $collegeName;
         $chartData[] = $rawValue;
 
-        // Now the subobservations (academic divisions)
+        // Now the subobservations (isionisions)
         foreach ($observation->getSubObservations() as $subObservation) {
             $dbColumn = 'inst_cost_per_fte_student';
             $label = $subObservation->getName();
@@ -415,7 +415,7 @@ class Internal extends Report
                 $benchmark,
                 $chartXCategories,
                 $series,
-                $label . ' Academic Division Instructional Costs',
+                $label . ': Academic Division Instructional Costs',
                 'chart_' . $activity
             );
             $activityData['chart']['legend']['enabled'] = true;
