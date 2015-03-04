@@ -1,12 +1,19 @@
 <?php
+// Data Tables
 $this->headScript()->appendFile(
-    '/js/report.js?v=3',
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+
+$this->headScript()->appendFile(
+    '/js/report.js?v=4',
     'text/javascript'
 ); ?>
 
 <h1>Student Services Costs</h1>
 
-<table class="table table-striped studentServices">
+<table class="table table-striped studentServices sortable">
     <thead>
         <tr>
             <td></td>

@@ -42,12 +42,14 @@ $(function() {
     })
 
     // Make tables sortable if they have the class sortable
-    $('table.sortable').dataTable({
-        'bPaginate': false,
-        'bLengthChange': false,
-        'bFilter': false,
-        'bInfo': false
-    });
+    if ($('table.sortable').length) {
+        $('table.sortable').dataTable({
+            'bPaginate': false,
+            'bLengthChange': false,
+            'bFilter': false,
+            'bInfo': false
+        });
+    }
 })
 
 

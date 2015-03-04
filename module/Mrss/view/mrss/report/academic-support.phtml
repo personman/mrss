@@ -1,13 +1,20 @@
 <?php
+// Data Tables
 $this->headScript()->appendFile(
-    '/js/report.js?v=3',
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+
+$this->headScript()->appendFile(
+    '/js/report.js?v=4',
     'text/javascript'
 ); ?>
 
 
 <h1>Academic Support Activities</h1>
 
-<table class="table table-striped">
+<table class="table table-striped sortable">
     <thead>
     <tr>
         <td></td>
