@@ -8,6 +8,7 @@ use Mrss\Entity\Study;
 use Mrss\Entity\User;
 use Mrss\Model\Subscription as SubscriptionModel;
 use BjyAuthorize\Service\Authorize;
+use Zend\Session\Container;
 
 /**
  * Class NavigationFactory
@@ -334,10 +335,23 @@ class NavigationFactory extends DefaultNavigationFactory
         $subModel = $this->getSubscriptionModel();
         $study = $this->getCurrentStudy();
         $year = $study->getCurrentYear();
-        $college = $user->getCollege();
 
-        $subscription = $subModel->findOne($year, $college->getId(), $study->getId());
+        if (!$collegeId = $this->getSystemCollegeId()) {
+            $collegeId = $user->getCollege()->getId();
+        }
+
+
+        $subscription = $subModel->findOne($year, $collegeId, $study->getId());
 
         return (!empty($subscription));
+    }
+
+    protected function getSystemCollegeId()
+    {
+        $container = new Container('system_admin');
+
+        if (!empty($container->college)) {
+            return $container->college;
+        }
     }
 }
