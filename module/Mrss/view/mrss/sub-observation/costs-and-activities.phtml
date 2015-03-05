@@ -86,12 +86,12 @@ $this->headScript()->appendFile(
     <thead>
         <tr>
             <th></th>
-            <th>FY <?= $this->currentStudy()->getCurrentYearMinus(2) ?>-<?= $this->currentStudy()->getCurrentYearMinus(1) ?><br>Salaries and Benefits</th>
+            <th>FY <?= $this->currentStudy()->getCurrentYearMinus(3) ?>-<?= $this->currentStudy()->getCurrentYearMinus(2) ?><br>Salaries and Benefits</th>
             <th>
-                Number of Academic Year <?= $this->currentStudy()->getCurrentYearMinus(1) ?><br>FTE Faculty
+                Number of Academic Year <?= $this->currentStudy()->getCurrentYearMinus(2) ?><br>FTE Faculty
                 <span class="icon-info-sign infotip" title="FTE: Full-time equivalent"></span>
             </th>
-            <th>Number of Academic Year <?= $this->currentStudy()->getCurrentYearMinus(1) ?><br>Student Credit Hours</th>
+            <th>Number of Academic Year <?= $this->currentStudy()->getCurrentYearMinus(2) ?><br>Student Credit Hours</th>
         </tr>
     </thead>
     <tbody>

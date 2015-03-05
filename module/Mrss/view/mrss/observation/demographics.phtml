@@ -31,7 +31,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Instructional Modality</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data.</p>
 
     <?= $this->ztbFormElement($form->get('instruction_online')) ?>
     <?= $this->ztbFormElement($form->get('instruction_face_to_face')) ?>
@@ -43,7 +43,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Please contact your research office for these data.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data. Please contact your research office for these data.</p>
 
     <?= $this->ztbFormElement($form->get('ipeds_enr')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('ft_cr_head')->setAttribute('disabled', $disabled)) ?>
@@ -64,7 +64,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group" id="race-ethnicity">
     <h3 class="heading">Race/Ethnicity</h3>
-    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. Percentages should be IPEDS Fall Enrollment figures and total 100%.</p>
+    <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data. Percentages should be IPEDS Fall Enrollment figures and total 100%.</p>
 
     <?php /*
     $tableConfig = array(
@@ -181,7 +181,7 @@ $this->headScript()->appendFile(
 
 <div class="demo-group">
     <h3 class="heading">Operating Revenue Sources</h3>
-    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(2) ?>-<?= $this->currentStudy()->getCurrentYearMinus(1) ?> data. May not add up to 100%.</p>
+    <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(3) ?>-<?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. May not add up to 100%.</p>
 
     <?= $this->ztbFormElement($form->get('loc_sour')->setAttribute('disabled', $disabled)) ?>
     <?= $this->ztbFormElement($form->get('state_sour')->setAttribute('disabled', $disabled)) ?>
