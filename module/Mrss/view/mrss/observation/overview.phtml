@@ -8,17 +8,8 @@
     <?php endif ?>
 </div>
 
-<?php if ($this->currentStudy()->getId() == 3): ?>
-    <p>Non-credit workforce development refers to courses and other instructional activities that provide individuals with soft skills and/or technical skill-sets for the workplace but carry no institutional credit applicable toward a degree, diploma, or a credit certificate.  Offerings may be on-campus, off-campus, online, distance learning or at a specific organization/business.   The goal is to increase individual opportunity in the labor market to improve participants’ knowledge, skills, and abilities and/or provide specific employee training for the benefit of a given business client.</p>
-
-    <p>Please enter all the data that you have available. If you do not have data for a particular data element, feel free to leave that cell blank. However, the more data you provide, the better you will be able to benchmark your institution.</p>
-
-    <p>To navigate you can either click on the blue title or click the Data Entry link at the top of the page.</p>
-
-    <p><strong>If  you prefer to upload your data in an Excel  spreadsheet please use the <a href="<?= $this->url('data-entry/import') ?>">Excel Spreadsheet</a>.</strong></p>
-    <br>
-
-
+<?php if ($this->currentStudy()->getId() == 1): ?>
+    <p>If you would like to print all forms, download the <a href="/files/nccbp-workbook-2015.pdf">print workbook (PDF)</a>.</p>
 <?php endif ?>
 
 <?php if ($this->currentStudy()->getId() == 2): ?>
@@ -32,6 +23,19 @@
 
     <p>Please use the <a href="<?= $this->url('data-entry/import') ?>">Excel Spreadsheet</a>.</p>
 
+    <br>
+
+
+<?php endif ?>
+
+<?php if ($this->currentStudy()->getId() == 3): ?>
+    <p>Non-credit workforce development refers to courses and other instructional activities that provide individuals with soft skills and/or technical skill-sets for the workplace but carry no institutional credit applicable toward a degree, diploma, or a credit certificate.  Offerings may be on-campus, off-campus, online, distance learning or at a specific organization/business.   The goal is to increase individual opportunity in the labor market to improve participants’ knowledge, skills, and abilities and/or provide specific employee training for the benefit of a given business client.</p>
+
+    <p>Please enter all the data that you have available. If you do not have data for a particular data element, feel free to leave that cell blank. However, the more data you provide, the better you will be able to benchmark your institution.</p>
+
+    <p>To navigate you can either click on the blue title or click the Data Entry link at the top of the page.</p>
+
+    <p><strong>If  you prefer to upload your data in an Excel  spreadsheet please use the <a href="<?= $this->url('data-entry/import') ?>">Excel Spreadsheet</a>.</strong></p>
     <br>
 
 

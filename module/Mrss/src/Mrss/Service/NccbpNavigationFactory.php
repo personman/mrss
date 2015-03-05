@@ -37,6 +37,13 @@ class NccbpNavigationFactory extends NavigationFactory
             unset($pages['contact']['pages']);
             unset($pages['about']);
             unset($pages['help']);
+
+            // Add the print workbook to data documentation
+            $workbook = array(
+                'label' => 'Print Workbook',
+                'uri' => '/files/nccbp-workbook-2015.pdf',
+            );
+            array_unshift($pages['data-documentation']['pages'], $workbook);
         } else {
             unset($pages['help']);
         }
