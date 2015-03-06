@@ -9,6 +9,9 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\AbstractForm;
 use Mrss\Form\Fieldset\User as UserForm;
 use Zend\Session\Container;
+use Zend\Mail\Message;
+use Zend\Mime\Part as MimePart;
+use Zend\Mime\Message as MimeMessage;
 
 class UserController extends AbstractActionController
 {
@@ -109,6 +112,7 @@ class UserController extends AbstractActionController
                     }
                 }
 
+                $sendWelcomeEmail = false;
                 // Check to see if a user with this email already exists
                 if ($user->getId() == 'add') {
                     $existingUser = $userModel->findOneByEmail($user->getEmail());
@@ -122,6 +126,7 @@ class UserController extends AbstractActionController
                     } else {
                         // Assign the user to this study
                         $user->addStudy($this->currentStudy());
+                        $sendWelcomeEmail = true;
                     }
 
                 }
@@ -129,6 +134,10 @@ class UserController extends AbstractActionController
                 // Save
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
+
+                if ($sendWelcomeEmail) {
+                    $this->sendWelcomeEmail($user);
+                }
 
                 $this->flashMessenger()->addSuccessMessage('User saved.');
 
@@ -148,6 +157,48 @@ class UserController extends AbstractActionController
             'form' => $form,
             'passwordReset' => $passwordReset
         );
+    }
+
+    /**
+     * Let the newly created user know about their account and provide a link to set a password.
+     * @param UserEntity $user
+     */
+    protected function sendWelcomeEmail(UserEntity $user)
+    {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $mailer = $this->getServiceLocator()->get('mail.transport');
+        $renderer = $this->getServiceLocator()->get('ViewRenderer');
+
+        $params = array(
+            'study' => $study,
+            'key' => $this->getPasswordResetKey($user->getId()),
+            'userId' => $user->getId()
+        );
+
+        $content = $renderer->render('mrss/email/added-user', $params);
+
+        $message = new Message();
+        $message->setTo($user->getEmail());
+        $message->setSubject("Welcome to " . $study->getName());
+        $message->setFrom('no-reply@jccc.edu');
+        //$message->addBcc('michelletaylor@jccc.edu');
+        $message->addBcc('dfergu15@jccc.edu');
+
+        // make a header as html
+        $html = new MimePart($content);
+        $html->type = "text/html";
+        $text = new MimePart(strip_tags($content));
+        $text->type = "text/plain";
+        $body = new MimeMessage();
+        $body->setParts(array($text, $html));
+
+        $message->setBody($body);
+        $message->getHeaders()->get('content-type')->setType('multipart/alternative');
+
+        $mailer->send($message);
+
     }
 
     /**
@@ -399,10 +450,6 @@ class UserController extends AbstractActionController
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
 
-        /** @var \GoalioForgotPassword\Service\Password $passwordService */
-        $passwordService = $this->getServiceLocator()
-            ->get('goalioforgotpassword_password_service');
-
         // Get all users with NCCBP subscriptions who have never logged in
         $users = $this->getAllNewNCCBPUsers();
 
@@ -413,16 +460,7 @@ class UserController extends AbstractActionController
         foreach ($users as $user) {
             $userId = $user->getId();
 
-            $passwordService->cleanPriorForgotRequests($userId);
-            $class = $passwordService->getOptions()->getPasswordEntityClass();
 
-            /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
-            $model = new $class;
-
-            $model->setUserId($userId);
-            $model->setRequestTime(new \DateTime('now'));
-            $model->generateRequestKey();
-            $passwordService->getPasswordMapper()->persist($model);
 
             $serverUrl = $this->getServiceLocator()
                 ->get('viewhelpermanager')->get('serverUrl');
@@ -431,7 +469,8 @@ class UserController extends AbstractActionController
                 ->get('viewhelpermanager')->get('url');
 
             // Build the one-time login url
-            $key = $model->getRequestKey();
+            $key = $this->getPasswordResetKey($userId);
+
             $url = $serverUrl->__invoke(
                 $urlHelper->__invoke(
                     'zfcuser/resetpassword',
@@ -470,6 +509,28 @@ class UserController extends AbstractActionController
         $objWriter->save('php://output');
 
         die;
+    }
+
+    protected function getPasswordResetKey($userId)
+    {
+        /** @var \GoalioForgotPassword\Service\Password $passwordService */
+        $passwordService = $this->getServiceLocator()
+            ->get('goalioforgotpassword_password_service');
+
+        $passwordService->cleanPriorForgotRequests($userId);
+        $class = $passwordService->getOptions()->getPasswordEntityClass();
+
+        /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
+        $model = new $class;
+
+        $model->setUserId($userId);
+        $model->setRequestTime(new \DateTime('now'));
+        $model->generateRequestKey();
+        $passwordService->getPasswordMapper()->persist($model);
+
+        $key = $model->getRequestKey();
+
+        return $key;
     }
 
     /**

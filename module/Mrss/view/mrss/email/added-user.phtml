@@ -1,0 +1,10 @@
+Welcome to <?= $this->currentStudy()->getDescription() ?>!<br>
+<br>
+A new user account has been created for you. In order to activate your account, please click the link below and then set your password:<br>
+<br>
+<?php echo $this->serverUrl($this->url('zfcuser/resetpassword', array('userId' => $userId, 'token' => $key))); ?>
+<br>
+<br>
+Sincerely,<br>
+<br>
+The staff of the National Higher Education Benchmarking Institute
