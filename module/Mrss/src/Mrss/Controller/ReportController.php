@@ -368,23 +368,22 @@ class ReportController extends AbstractActionController
 
     public function getYearFromRouteOrStudy()
     {
+        $college = $this->currentCollege();
         $year = $this->params()->fromRoute('year');
 
         if (empty($year)) {
-            /*$year = $this->currentStudy()->getCurrentYear();
+            $year = $this->currentStudy()->getCurrentYear();
 
             // But if reports aren't open yet, show them last year's by default
-
             $isJCCC = (!empty($college) && $college->getId() == 101);
-            if (/*!$isJCCC && *//*!$this->currentStudy()->getReportsOpen()) {
+            if (!$isJCCC && !$this->currentStudy()->getReportsOpen()) {
                 $year = $year - 1;
-            }*/
-
+            }
 
             // New
             /** @var \Mrss\Model\Subscription $subModel */
             $subModel = $this->getServiceLocator()->get('model.subscription');
-            $college = $this->currentCollege();
+
             $before = null;
             if (!$this->currentStudy()->getReportsOpen()) {
                 $before = $this->currentStudy()->getCurrentYear();
