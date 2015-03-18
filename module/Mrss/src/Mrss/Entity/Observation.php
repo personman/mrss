@@ -53,19 +53,19 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_full_expend;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_full_num;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_full_cred_hrs;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_part_expend;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_part_num;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_part_cred_hrs;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -77,13 +77,13 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_exec_expend;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_exec_num;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_admin_expend;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_admin_num;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -426,6 +426,274 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_fte_students_per_fte_faculty;
 
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_cred_hr_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_cred_hr_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_cred_hr_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_perc_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_perc_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_full_per_fte_student_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_part_per_fte_student_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_fte_student_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_full_fte_faculty_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_per_part_fte_faculty_prof_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_program_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_course_dev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_teaching;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_ac_service;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_assessment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_expend_prof_dev;
+
+
+
+
     // MRSS Form 3
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_total_program_dev;
@@ -514,79 +782,79 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_admis_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_admiss_emp;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_recruitment_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_recruitment_emp;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_advising_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_advising_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_advising_student;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_counseling_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_counseling_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_counseling_student;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_career_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_career_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_career_student;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_financial_aid_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_financial_aid_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_financial_aid_student;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_registrar_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_registrar_emp;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_tutoring_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_tutoring_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_tutoring_students;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_testing_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_testing_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_testing_student;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_cocurricular_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_cocurricular_emp;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -595,10 +863,10 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_disabserv_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_disabserv_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_disabserv_o_students;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -610,10 +878,10 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_o_students;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -914,25 +1182,25 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_tech_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $as_tech_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $as_tech_student;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_library_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $as_library_emp;
 
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_experiential_o_cost;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $as_experiential_emp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $as_experiential_student;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -1053,10 +1321,10 @@ class Observation
     /** @ORM\Column(type="string", nullable=true) */
     protected $institutional_type;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $part_time_credit_hours;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $full_time_credit_hours;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -1080,25 +1348,25 @@ class Observation
     /** @ORM\Column(type="string", nullable=true) */
     protected $Instructional_support;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_inst;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_student_services;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_acad_supp;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_inst_support;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_research;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_pub_serv;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_oper_n_maint;
 
 
@@ -1321,7 +1589,7 @@ class Observation
     protected $ft_f_yminus4_degr_cert;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_f_yminus4_degr_and_transf;
 
@@ -1356,7 +1624,7 @@ class Observation
     protected $pt_f_yminus4_degr_cert;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $pt_f_yminus4_degr_and_transf;
 
@@ -1888,7 +2156,7 @@ class Observation
      */
     protected $tot_resp_empl;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $empl_satis_prep;
 
     /**
@@ -3200,6 +3468,8 @@ class Observation
      */
     public function mergeSubobservations()
     {
+        $this->sumSubobservations();
+
         $prefix = 'inst_cost_';
         $facultyTypes = array('full', 'part');
         $activities = array(
@@ -3269,6 +3539,29 @@ class Observation
 
                 $this->set($percentageField, $average);*/
             }
+        }
+    }
+
+    public function sumSubobservations()
+    {
+        $values = array(
+            'inst_cost_full_cred_hr' => 0,
+            'inst_cost_part_cred_hr' => 0,
+            'inst_cost_full_expend' => 0,
+            'inst_cost_part_expend' => 0,
+            'inst_cost_full_num' => 0,
+            'inst_cost_part_num' => 0
+        );
+
+        foreach ($this->getSubObservations() as $subObservation) {
+            foreach ($values as $key => $value) {
+                $values[$key] += $subObservation->get($key);
+            }
+        }
+
+        // Save them
+        foreach ($values as $key => $value) {
+            $this->set($key, $value);
         }
     }
 }
