@@ -212,6 +212,4 @@ class National extends Max
             }
         }
     }
-
-
 }
