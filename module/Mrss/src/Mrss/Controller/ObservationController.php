@@ -869,16 +869,22 @@ class ObservationController extends AbstractActionController
         );
     }
 
-    public function getYearFromRouteOrStudy()
+    public function getYearFromRouteOrStudy($checkReportOpen = true)
     {
         $year = $this->params()->fromRoute('year');
 
         if (empty($year)) {
             $year = $this->currentStudy()->getCurrentYear();
 
+            // Are we checking for reports or data entry being open?
+            $open = $this->currentStudy()->getReportsOpen();
+            if (!$checkReportOpen) {
+                $open = $this->currentStudy()->getDataEntryOpen();
+            }
+
             // Submitted values are for last year's data, until reports open
             $college = $this->currentCollege();
-            if (!$this->currentStudy()->getReportsOpen()) {
+            if (!$open) {
                 $year = $year - 1;
             }
         }
@@ -888,7 +894,7 @@ class ObservationController extends AbstractActionController
 
     public function submittedValuesAction()
     {
-        $year = $this->getYearFromRouteOrStudy();
+        $year = $this->getYearFromRouteOrStudy(false);
 
         // Get their subscriptions
         $subscriptions = $this->currentCollege()

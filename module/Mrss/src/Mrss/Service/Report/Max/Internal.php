@@ -2,11 +2,11 @@
 
 namespace Mrss\Service\Report\Max;
 
-use Mrss\Service\Report;
+use Mrss\Service\Report\Max;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Benchmark;
 
-class Internal extends Report
+class Internal extends Max
 {
     protected $naPlaceholder = 'N/A';
 
@@ -309,6 +309,7 @@ class Internal extends Report
                     'data' => $unitRawData
                 )
             );
+
             $charts[$subObservation->getName()] = $this->getBarChart(
                 $benchmark,
                 $this->getInstructionActivityCategories(),
@@ -318,18 +319,21 @@ class Internal extends Report
             );
         }
 
-        // Get combined stacked bar chart
-        $combinedSeries = array_values($combinedSeries);
-        $chart = $this->getBarChart(
-            $benchmark,
-            $unitNames,
-            $combinedSeries,
-            'Instructional Activity Cost per FTE Student',
-            'instructional_activities_combined'
-        );
-        $chart['plotOptions']['series']['stacking'] = 'normal';
-        $chart['legend']['enabled'] = true;
-        $charts[] = $chart;
+        if ($benchmark) {
+            // Get combined stacked bar chart
+            $combinedSeries = array_values($combinedSeries);
+            $chart = $this->getBarChart(
+                $benchmark,
+                $unitNames,
+                $combinedSeries,
+                'Instructional Activity Cost per FTE Student',
+                'instructional_activities_combined'
+            );
+            $chart['plotOptions']['series']['stacking'] = 'normal';
+            $chart['legend']['enabled'] = true;
+            $charts[] = $chart;
+        }
+
 
         return array($reportData, $charts);
     }
@@ -339,20 +343,6 @@ class Internal extends Report
         $activities = $this->getActivities();
 
         return array_values($activities);
-    }
-
-    public function getActivities()
-    {
-        return array(
-            'program_dev' => 'Program Development',
-            'course_dev' => 'Course Development',
-            'teaching' => 'Teaching',
-            'tutoring' => 'Faculty Tutoring',
-            'advising' => 'Faculty Advising',
-            'ac_service' => 'Academic Services',
-            'assessment' => 'Assessment', // @todo: add inst_cost_full_per_cred_hr_assessment
-            'prof_dev' => 'Professional Development'
-        );
     }
 
     /**
@@ -409,18 +399,20 @@ class Internal extends Report
             }
 
 
-            // Chart for this activity
-            $series = array_values($series);
-            $activityData['chart'] = $this->getBarChart(
-                $benchmark,
-                $chartXCategories,
-                $series,
-                $label . ': Academic Division Instructional Costs',
-                'chart_' . $activity
-            );
-            $activityData['chart']['legend']['enabled'] = true;
+            if (!empty($benchmark)) {
+                // Chart for this activity
+                $series = array_values($series);
+                $activityData['chart'] = $this->getBarChart(
+                    $benchmark,
+                    $chartXCategories,
+                    $series,
+                    $label . ': Academic Division Instructional Costs',
+                    'chart_' . $activity
+                );
+                $activityData['chart']['legend']['enabled'] = true;
 
-            $reportData[$activity] = $activityData;
+                $reportData[$activity] = $activityData;
+            }
         }
 
         return array($reportData);
@@ -528,7 +520,7 @@ class Internal extends Report
             );
 
             $preparedCharts[] = $preparedChart;
-        }table-striped
+        }
 
         return $preparedCharts;
     }
@@ -571,71 +563,6 @@ class Internal extends Report
         $charts = $this->getStudentServicesCostsCharts($chartData, $dollarBenchmark, $floatBenchmark);
 
         return array($reportData, $charts);
-    }
-
-    protected function getStudentServicesCostsFields()
-    {
-        return array(
-            'Admissions' => array(
-                'ss_admissions_cost_per_fte_student',
-                null,
-                'ss_admissions_students_per_fte_emp'
-            ),
-            'Recruitment' => array(
-                'ss_recruitment_cost_per_fte_student',
-                null, 'ss_recruitment_students_per_fte_emp'
-            ),
-            'Advising' => array(
-                'ss_advising_cost_per_fte_student',
-                'ss_advising_cost_per_contact',
-                'ss_advising_students_per_fte_emp'
-            ),
-            'Counseling' => array(
-                'ss_counseling_cost_per_fte_student',
-                'ss_counseling_cost_per_contact',
-                'ss_counseling_students_per_fte_emp'
-            ),
-            'Career Services' => array(
-                'ss_career_cost_per_fte_student',
-                'ss_career_cost_per_contact',
-                'ss_career_students_per_fte_emp'
-            ),
-            'Financial Aid' => array(
-                'ss_financial_aid_cost_per_fte_student',
-                'ss_financial_aid_cost_per_contact',
-                'ss_financial_aid_students_per_fte_emp'
-            ),
-            'Registrar / Student Records' => array(
-                'ss_registrar_cost_per_fte_student',
-                null,
-                'ss_registrar_students_per_fte_emp'
-            ),
-            'Tutoring' => array(
-                'ss_tutoring_cost_per_fte_student',
-                'ss_tutoring_cost_per_contact',
-                'ss_tutoring_students_per_fte_emp'
-            ),
-            'Testing Services' => array(
-                'ss_testing_cost_per_fte_student',
-                'ss_testing_cost_per_contact',
-                'ss_testing_students_per_fte_emp'
-            ),
-            'Co-curricular Activities' => array(
-                'ss_cocurricular_cost_per_fte_student',
-                null,
-                'ss_cocurricular_students_per_fte_emp'
-            ),
-            'Disability Services' => array(
-                'ss_disabserv_cost_per_fte_student',
-                'ss_disabserv_cost_per_contact',
-                'ss_disabserv_students_per_fte_emp'
-            ),
-            'Veterans Services' => array(
-                'ss_vetserv_cost_per_fte_student',
-                'ss_vetserv_cost_per_contact',
-                'ss_vetserv_students_per_fte_emp'
-            )
-        );
     }
 
     protected function getStudentServicesCostsCharts($chartData, $anyDollarBenchmark, $anyFloatBenchmark)

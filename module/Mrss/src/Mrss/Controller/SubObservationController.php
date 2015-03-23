@@ -12,6 +12,8 @@ class SubObservationController extends AbstractActionController
 {
     protected $subObservationModel;
 
+    protected $observationModel;
+
     /**
      * @return \Mrss\Model\SubObservation
      */
@@ -23,6 +25,20 @@ class SubObservationController extends AbstractActionController
         }
 
         return $this->subObservationModel;
+    }
+
+    /**
+     * @return \Mrss\Model\Observation
+     */
+    public function getObservationModel()
+    {
+        if (empty($this->observationModel)) {
+            $this->observationModel = $this->getServiceLocator()
+                ->get('model.observation');
+        }
+
+        return $this->observationModel;
+
     }
 
     public function editAction()
@@ -103,6 +119,8 @@ class SubObservationController extends AbstractActionController
                 $observation = $subObservation->getObservation();
                 $oldObservation = clone $observation;
                 $observation->mergeSubobservations();
+                $this->getObservationModel()->save($observation);
+
                 $observationAudit->logChanges(
                     $oldObservation,
                     $observation,

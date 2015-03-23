@@ -56,3 +56,8 @@ $this->headScript()->appendFile(
 
 <?php endforeach ?>
 
+<?php if (empty($reportData)): ?>
+
+    <p>There is no data available for this report. Please enter data in form 2.</p>
+<?php endif ?>
+

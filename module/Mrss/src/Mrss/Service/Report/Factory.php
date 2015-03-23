@@ -67,6 +67,7 @@ class Factory implements AbstractFactoryInterface
             'service.report.peer' => 'Mrss\Service\Report\Peer',
             'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
             'service.report.max.internal' => 'Mrss\Service\Report\Max\Internal',
+            'service.report.max.national' => 'Mrss\Service\Report\Max\National',
             'service.report' => 'Mrss\Service\Report',
         );
     }

@@ -176,6 +176,10 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
+        if ($this->currentStudy()->getId() == 2) {
+            return $this->maxNationalAction();
+        }
+
         // Is this a system report?
         $systemVersion = $this->params()->fromRoute('system');
         $system = null;
@@ -830,6 +834,39 @@ class ReportController extends AbstractActionController
             'charts' => $charts,
             'headings' => $report->getUnitDemographicsFields()
         );
+    }
+
+    public function maxNationalAction()
+    {
+        /** @var \Mrss\Service\Report\Max\National $report */
+        $report = $this->getServiceLocator()->get('service.report.max.national');
+
+        $year = $this->getYearFromRouteOrStudy();
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $this->currentObservation($year);
+
+        $reportData = $report->getData($observation);
+
+        $view = new ViewModel(
+            array(/*
+                'reportData' => $reportData,
+                'year' => $year,
+                'subscriptions' => $subscriptions,
+                'college' => $college,
+                'open' => $open,
+                'media' => $media
+            */
+                'heading' => 'National Percentiles',
+                'reportData' => $reportData,
+                'breakpoints' => $this->getReportService()
+                        ->getPercentileBreakPointLabels(),
+
+            )
+        );
+        $view->setTemplate('mrss/report/max-national.phtml');
+
+        return $view;
     }
 
     /**

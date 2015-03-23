@@ -50,6 +50,9 @@ $(function() {
             'bInfo': false
         });
     }
+
+    // Max national report detail expander
+    setUpDetailExpander();
 })
 
 
@@ -150,4 +153,14 @@ function loadChart(event, chart)
 
         return offset
     }
+}
+
+
+function setUpDetailExpander()
+{
+    $('a.detailExpander').click(function() {
+        $(this).parent().parent().nextUntil('tr.topLevelBenchmark', 'tr.reportDetailRow').toggle()
+    })
+
+
 }

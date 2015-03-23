@@ -118,3 +118,13 @@ tr.topHeading th.nationalPercentiles {
 .retportSeparator {
     height: 20px;
 }
+
+
+
+/* Max national report */
+tr.reportDetailRow {
+    display: none;
+}
+.table td.detailName {
+    padding-left: 40px;
+}
