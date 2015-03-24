@@ -263,7 +263,6 @@ class ToolController extends AbstractActionController
 
         $subscriptionModel->getEntityManager()->flush();
 
-
         $elapsed = round(microtime(1) - $start, 3);
         $this->flashMessenger()
             ->addSuccessMessage("$subscriptions processed in $elapsed seconds.");
@@ -415,8 +414,9 @@ class ToolController extends AbstractActionController
                 $newObservation = new Observation();
                 $newObservation->setYear($to);
                 $newObservation->setCollege($college);
-                $subscription->setObservation($newObservation);
             }
+
+            $subscription->setObservation($newObservation);
 
             $oldObservation = $observationModel->findOne($college->getId(), $from);
 

@@ -176,6 +176,34 @@ class Percentile extends Report
             //die('blkajsdls');
         }
         //die('calculated');
+
+        $this->calculateAllSubObservations($year);
+    }
+
+    public function calculateAllSubObservations($year)
+    {
+        $subObForms = array();
+
+        // Look for forms that use sub-observations
+        foreach ($this->getStudy()->getBenchmarkGroups() as $benchmarkGroup) {
+            if ($benchmarkGroup->getUseSubObservation()) {
+                $subObForms[] = $benchmarkGroup;
+            }
+        }
+
+        if (count($subObForms)) {
+            $subs = $this->getSubscriptions($year);
+
+            foreach ($subs as $sub) {
+                $observation = $sub->getObservation();
+                foreach ($observation->getSubObservations() as $subObservation) {
+                    foreach ($subObForms as $benchmarkGroup) {
+                        $this->getComputedFieldsService()
+                            ->calculateAllForSubObservation($subObservation, $benchmarkGroup);
+                    }
+                }
+            }
+        }
     }
 
     public function calculateSystems($year)

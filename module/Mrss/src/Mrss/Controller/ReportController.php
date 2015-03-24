@@ -27,6 +27,7 @@ class ReportController extends AbstractActionController
 
     public function calculateAction()
     {
+        /** @var \Mrss\Service\Report\Percentile $percentileService */
         $percentileService = $this->getServiceLocator()->get('service.report.percentile');
         $this->longRunningScript();
         $start = microtime(true);
@@ -379,8 +380,13 @@ class ReportController extends AbstractActionController
             $year = $this->currentStudy()->getCurrentYear();
 
             // But if reports aren't open yet, show them last year's by default
-            $isJCCC = (!empty($college) && $college->getId() == 101);
-            if (!$isJCCC && !$this->currentStudy()->getReportsOpen()) {
+            $impersonationService = $this->getServiceLocator()
+                ->get('zfcuserimpersonate_user_service');
+            $isJCCC = (!empty($college) && ($college->getId() == 101) || $impersonationService->isImpersonated());
+            $isMax = $this->currentStudy()->getId() == 2;
+
+            // Allow access to Max reports for user feedback
+            if (!$isMax && !$isJCCC && !$this->currentStudy()->getReportsOpen()) {
                 $year = $year - 1;
             }
 

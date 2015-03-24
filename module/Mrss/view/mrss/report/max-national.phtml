@@ -44,50 +44,8 @@ $this->headScript()->appendFile(
         <?php endif; */ ?>
 
         <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
-        <tr class="<?= $rowClass ?> topLevelBenchmark">
-            <td class="benchmarkLabel">
-                <a href="#" class="detailExpander">
-                    <?= $benchmark['benchmark'] ?>
-                </a>
-                <?php if (!empty($benchmark['timeframe'])): ?>
-                    <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
-                <?php endif ?>
-            </td>
-            <?php if ($benchmark['reported'] !== null): ?>
-                <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
-                <td class="percentileColor">
-                    <?php if (!empty($benchmark['do_not_format_rank'])): ?>
-                        <?= $benchmark['percentile_rank'] ?>
-                    <?php else: ?>
-                        <?= round($benchmark['percentile_rank']) ?>%
-                    <?php endif ?>
-                </td>
-            <?php else: ?>
-                <td>-</td>
-                <td>-</td>
-            <?php endif ?>
-            <td><?= $benchmark['N'] ?></td>
-            <?php foreach ($benchmark['percentiles'] as $percentile): ?>
-                <td>
-                    <?php if (!is_null($percentile)): ?>
-                        <?= $benchmark['prefix'] . number_format($percentile, $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?>
-                    <?php endif ?>
-                </td>
-            <?php endforeach ?>
-            <td><a href="#" class="btn btn-default openChart" title="Display chart"><i class="icon-signal glyphicon glyphicon-signal"></i></a></td>
-        </tr>
-        <tr class="nationalReportChart <?= $rowClass ?>" id="benchmark_<?= $benchmark['dbColumn'] ?>">
-            <td></td>
-            <td colspan="9">
-                <?= $this->chart($benchmark['chart']) ?>
+        <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => $rowClass, 'benchmark' => $benchmark)) ?>
 
-                <?php if (!empty($benchmark['description'])): ?>
-                    <p class="nationalDataDefinition">
-                        <?= $benchmark['description'] ?>
-                    </p>
-                <?php endif ?>
-            </td>
-        </tr>
 
         <?php foreach ($benchmark['details'] as $detailBenchmark): ?>
         <tr class="reportDetailRow">
