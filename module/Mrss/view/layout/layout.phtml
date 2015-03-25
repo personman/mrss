@@ -14,7 +14,7 @@
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/lib/animate.css" media="screen, projection">
 
-    <link rel="stylesheet" type="text/css" href="/css/index.css?v=2">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=3">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
 
     <?php if ($this->currentStudy()->getId() == 3): ?>
@@ -23,7 +23,7 @@
     <?php endif ?>
 
     <?php if ($this->currentStudy()->getId() == 2): ?>
-    <link rel="stylesheet" type="text/css" href="/css/mrss.css?v=9">
+    <link rel="stylesheet" type="text/css" href="/css/mrss.css?v=10">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <?php endif ?>
@@ -85,7 +85,7 @@
             <?php endif ?>
 
 
-            <div class="nav-collapse collapse">
+            <div class="nav-collapse collapse<?php if($this->zfcUserIdentity()): ?> logged-in<?php endif ?>">
                 <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
                 <?php $partial = array('mrss/menu/navigation.phtml', 'default') ?>
                 <?php $navigation = 'navigation' ?>
