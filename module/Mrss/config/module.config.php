@@ -1408,6 +1408,19 @@ return array(
                     )
                 )
             ),
+            'webinar' => array(
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/webinar',
+                    'defaults' => array(
+                        'controller' => 'PhlyContact\Controller\Contact',
+                        'action' => 'index',
+                        'subject' => 'Free Webinar',
+                        'body' => "Your institution:\n\n\nPreferred time and dates:\n\n\nWho will join the demo:"
+                    )
+                )
+            ),
             // CMS:
             'cmsPage' => array(
                 'type' => 'segment',

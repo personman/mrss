@@ -123,6 +123,29 @@ ul.navbar-nav > li {
 
 #homepage-slides {
 }
+#conference {
+    height: 481px;
+}
+#conference img {
+    margin: 0px auto;
+}
+
+#homepage-slides #conference .carousel-caption {
+    top: 8%;
+    right: 3%;
+    bottom: auto;
+    left: auto;
+    background-color: rgba(155, 155, 155, .85);
+    width: 375px;
+}
+#homepage-slide-container #conference h1 {
+    font-size: 14px;
+    line-height: 14px;
+}
+#homepage-slide-container #conference p {
+    font-size: 11px;
+    line-height: 12px;
+}
 
 .carousel .item {
     /*height: 494px;

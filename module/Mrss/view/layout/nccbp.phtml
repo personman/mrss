@@ -75,9 +75,10 @@
                     <div id="headerButtons">
                         <a href="#" class="btn login-btn" role="button" id="loginButton">SIGN IN</a>
 
-                        <?php if(!$this->zfcUserIdentity()): ?>
+                        <?php if (false && !$this->zfcUserIdentity()): ?>
                             <a href="/schedule-demo" class="btn schedule-btn" role="button" id="schedule-demo">SCHEDULE DEMO</a>
                         <?php endif ?>
+                        <a href="/webinar" class="btn schedule-btn" role="button" id="schedule-demo">FREE WEBINAR</a>
 
                         </div>
 
@@ -87,6 +88,10 @@
                         $form->get('credential')->setAttribute('placeHolder', 'Password');
                         ?>
                         <?= $this->zfcUserLoginWidget() ?>
+                    </div>
+                <?php else: ?>
+                <div id="headerButtons">
+                        <a href="/webinar" class="btn schedule-btn" role="button" id="schedule-demo">FREE WEBINAR</a>
                     </div>
                 <?php endif ?>
 
