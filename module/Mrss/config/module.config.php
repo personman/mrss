@@ -1417,7 +1417,7 @@ return array(
                         'controller' => 'PhlyContact\Controller\Contact',
                         'action' => 'index',
                         'subject' => 'Free Webinar',
-                        'body' => "Your institution:\n\n\nPreferred time and dates:\n\n\nWho will join the demo:"
+                        'body' => "Your institution:\n\n\nWho will join the demo (please include name, title, and email for each person):\n\n\nThe webinar will be April 22 at 2:00 PM EDT (1:00PM CDT; 11:00 AM PDT)."
                     )
                 )
             ),

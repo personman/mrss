@@ -131,11 +131,11 @@ ul.navbar-nav > li {
 }
 
 #homepage-slides #conference .carousel-caption {
-    top: 8%;
-    right: 3%;
+    top: 15%;
+    right: 10%;
     bottom: auto;
     left: auto;
-    background-color: rgba(155, 155, 155, .85);
+    /*background-color: rgba(155, 155, 155, .85);*
     width: 375px;
 }
 #homepage-slide-container #conference h1 {
@@ -423,7 +423,7 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
 #headerButtons {
     position: absolute;
     right: 10px;
-    width: 300px;
+    width: 500px;
 }
 
 #headerLoginForm {

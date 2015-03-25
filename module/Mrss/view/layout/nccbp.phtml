@@ -15,7 +15,7 @@
     <link href="/css/bootstrap3.css" rel="stylesheet">
     <link href="/css/bootstrap3-theme.css" rel="stylesheet">
     <link href="/css/content.css" rel="stylesheet" type="text/css" />
-    <link href="/css/nccbp.css?v=<?= 9 ?>" rel="stylesheet" type="text/css" />
+    <link href="/css/nccbp.css?v=<?= 10 ?>" rel="stylesheet" type="text/css" />
 
     <!-- Google Fonts -->
     <? //<link href='http://fonts.googleapis.com/css?family=Fira+Sans:500,700,300italic|Cabin:400,400italic,500,700' rel='stylesheet' type='text/css'> ?>
@@ -75,10 +75,14 @@
                     <div id="headerButtons">
                         <a href="#" class="btn login-btn" role="button" id="loginButton">SIGN IN</a>
 
-                        <?php if (false && !$this->zfcUserIdentity()): ?>
+                        <?php if (!$this->zfcUserIdentity()): ?>
                             <a href="/schedule-demo" class="btn schedule-btn" role="button" id="schedule-demo">SCHEDULE DEMO</a>
                         <?php endif ?>
+
+                        <?php $webinar = time() > strtotime('2015-04-01') ?>
+                        <?php if ($webinar): ?>
                         <a href="/webinar" class="btn schedule-btn" role="button" id="schedule-demo">FREE WEBINAR</a>
+                        <?php endif ?>
 
                         </div>
 
@@ -91,7 +95,9 @@
                     </div>
                 <?php else: ?>
                 <div id="headerButtons">
+                    <?php if ($webinar): ?>
                         <a href="/webinar" class="btn schedule-btn" role="button" id="schedule-demo">FREE WEBINAR</a>
+                    <?php endif ?>
                     </div>
                 <?php endif ?>
 
@@ -110,13 +116,28 @@
 
         <?php if(!$this->zfcUserIdentity()): ?>
         <div class="row" id="actionItems">
-            <div class="col-xs-6">
-                <a href="/schedule-demo" class="btn schedule-btn" role="button">SCHEDULE DEMO</a>
-            </div>
+            <?php if ($webinar): ?>
+                <div class="col-xs-4">
+                    <a href="/webinar" class="btn schedule-btn" role="button">FREE WEBINAR</a>
+                </div>
+                <div class="col-xs-5">
+                    <a href="/schedule-demo" class="btn schedule-btn" role="button">SCHEDULE DEMO</a>
+                </div>
 
-            <div class="col-xs-6">
-                <a href="/user/login" class="btn login-btn" role="button">SIGN IN</a>
-            </div>
+                <div class="col-xs-3">
+                    <a href="/user/login" class="btn login-btn" role="button">SIGN IN</a>
+                </div>
+            <?php else: ?>
+                <div class="col-xs-6">
+                    <a href="/schedule-demo" class="btn schedule-btn" role="button">SCHEDULE DEMO</a>
+                </div>
+
+                <div class="col-xs-6">
+                    <a href="/user/login" class="btn login-btn" role="button">SIGN IN</a>
+                </div>
+
+            <?php endif ?>
+
         </div>
         <?php endif ?>
 

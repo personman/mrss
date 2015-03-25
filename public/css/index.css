@@ -510,6 +510,17 @@
 /* Responsive
 -------------------------------------------------- */
 
+/* When nav is long, let it float below the site logo */
+@media (max-width: 1330px) and (min-width: 979px) {
+    #wrapper .navbar ul.nav.pull-right {
+        margin-top: 0px !important;
+    }
+    #wrapper .navbar .brand img {
+        margin-bottom: 3px !important;
+    }
+}
+
+
 /* Large desktop */
 @media (min-width: 1200px) {
 
