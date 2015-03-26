@@ -144,7 +144,7 @@ function updateGridTotals()
         totalTd.html(total + '%')
 
         // Handle errors
-        if (total != 100) {
+        if (total != 100 && total != 0) {
             totalTd.addClass('error')
             totalTd.html(totalTd.html() + "<br>Total should be<br> 100%.")
             formErrorMessages['percent' + column] = 'Total of percentages should be 100%'
