@@ -447,8 +447,11 @@ class SubscriptionController extends AbstractActionController
 
             $service->setCurrentStudyCode($currentStudyCode);
 
-            $discount = $service->checkForDiscount($year, $ipeds);
-            $amount = $amount - $discount;
+            // For now, only discount the price for NCCBP
+            if ($currentStudyCode == 'nccbp') {
+                $discount = $service->checkForDiscount($year, $ipeds);
+                $amount = $amount - $discount;
+            }
         }
 
         // Calculate the validation key for uPay/TouchNet
