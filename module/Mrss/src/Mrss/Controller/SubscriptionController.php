@@ -471,6 +471,7 @@ class SubscriptionController extends AbstractActionController
             $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
             $year = $this->getCurrentYear();
 
+            $this->getLog()->info("About to fetch ipeds from getPaymentAmount().");
             $ipeds = $this->getIpeds();
             $this->getLog()->info("Fetched ipeds within getPaymentAmount: $ipeds.");
 
@@ -1392,6 +1393,8 @@ class SubscriptionController extends AbstractActionController
     public function getIpeds($data = null)
     {
         if (empty($this->ipeds)) {
+            $this->getLog()->info("Ipeds property not set. Generating it.");
+
             if (!empty($this->getSessionContainer()->ipeds)) {
                 $ipeds = $this->getSessionContainer()->ipeds;
             } elseif (!empty($data['institution']['ipeds'])) {
@@ -1399,17 +1402,21 @@ class SubscriptionController extends AbstractActionController
             } elseif ($college = $this->currentCollege()) {
                 $ipeds = $college->getIpeds();
             } elseif ($draft = $this->getDraftSubscription()) {
+                $this->getLog()->info("About to check draft sub for ipeds.");
+                
                 if (!$ipeds = $draft->getIpeds()) {
                     if ($collegeId = $draft->getCollegeId()) {
+                        $this->getLog()->info("About to fetch ipeds from college: $collegeId.");
                         /** @var \Mrss\Model\College $collegeModel */
                         $collegeModel = $this->getServiceLocator()->get('model.college');
                         $college = $collegeModel->findOneByIpeds($ipeds);
+
+                        $this->getLog()->info("Found college: " . $college->getName());
+
                         $ipeds = $college->getIpeds();
                     }
                 }
             }
-
-            $this->getLog()->alert("Ipeds = $ipeds.");
 
             if (empty($ipeds)) {
                 throw new \Exception('Cannot save draft subscription without ipeds.');
@@ -1417,6 +1424,8 @@ class SubscriptionController extends AbstractActionController
 
             $this->ipeds = $ipeds;
         }
+
+        $this->getLog()->alert("Ipeds = {$this->ipeds}.");
 
         return $this->ipeds;
     }
