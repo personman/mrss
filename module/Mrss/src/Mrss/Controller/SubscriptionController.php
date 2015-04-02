@@ -46,6 +46,8 @@ class SubscriptionController extends AbstractActionController
 
     protected $draftSubscription;
 
+    protected $ipeds;
+
     /**
      * @var \Mrss\Entity\Study
      */
@@ -342,7 +344,7 @@ class SubscriptionController extends AbstractActionController
                 . print_r($this->getDraftSubscription(), true)
             );
             $this->completeSubscription(
-                $this->getDraftSubscription($transId),
+                $this->getDraftSubscription(),
                 array('paymentType' => 'creditCard'),
                 false
             );
@@ -1342,19 +1344,39 @@ class SubscriptionController extends AbstractActionController
         $this->getSessionContainer()->ipeds = $this->getIpeds($data);
     }
 
+    public function setIpeds($ipeds)
+    {
+        $this->ipeds = $ipeds;
+
+        return $this;
+    }
+
     public function getIpeds($data = null)
     {
-        if (!empty($this->getSessionContainer()->ipeds)) {
-            $ipeds = $this->getSessionContainer()->ipeds;
-        } elseif (!empty($data['institution']['ipeds'])) {
-            $ipeds = $data['institution']['ipeds'];
-        } elseif ($college = $this->currentCollege()) {
-            $ipeds = $college->getIpeds();
-        } else {
-            throw new \Exception('Cannot save draft subscription without ipeds.');
+        if (empty($this->ipeds)) {
+            if (!empty($this->getSessionContainer()->ipeds)) {
+                $ipeds = $this->getSessionContainer()->ipeds;
+            } elseif (!empty($data['institution']['ipeds'])) {
+                $ipeds = $data['institution']['ipeds'];
+            } elseif ($college = $this->currentCollege()) {
+                $ipeds = $college->getIpeds();
+            } elseif ($draft = $this->getDraftSubscription()) {
+                if (!$ipeds = $draft->getIpeds()) {
+                    if ($collegeId = $draft->getCollegeId()) {
+                        /** @var \Mrss\Model\College $collegeModel */
+                        $collegeModel = $this->getServiceLocator()->get('model.college');
+                        $college = $collegeModel->findOneByIpeds($ipeds);
+                        $ipeds = $college->getIpeds();
+                    }
+                }
+            } else {
+                throw new \Exception('Cannot save draft subscription without ipeds.');
+            }
+
+            $this->ipeds = $ipeds;
         }
 
-        return $ipeds;
+        return $this->ipeds;
     }
 
     public function setDraftSubscription(SubscriptionDraft $draft)

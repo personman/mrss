@@ -105,4 +105,24 @@ class SubscriptionDraft
     {
         return $this->ip;
     }
+
+    public function getIpeds()
+    {
+        $formData = $this->getFormData();
+        $formData = json_decode($formData);
+
+        if (!empty($formData['institution']['ipeds'])) {
+            return $formData['institution']['ipeds'];
+        }
+    }
+
+    public function getCollegeId()
+    {
+        $formData = $this->getFormData();
+        $formData = json_decode($formData);
+
+        if (!empty($formData['college_id'])) {
+            return $formData['college_id'];
+        }
+    }
 }
