@@ -657,6 +657,8 @@ class SubscriptionController extends AbstractActionController
         $sendInvoice = false,
         $redirect = true
     ) {
+        $this->getLog()->info("Begin method completeSubscription().");
+
         $subscriptionForm = json_decode($subscriptionDraft->getFormData(), true);
 
         // Create or fetch the college
@@ -671,6 +673,7 @@ class SubscriptionController extends AbstractActionController
                 ->get('model.college')->find($collegeId);
         }
 
+        $this->getLog()->info("College: " . $college->getId());
 
         // Create the observation
         $observation = $this->createOrUpdateObservation($college);
