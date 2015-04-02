@@ -109,20 +109,30 @@ class SubscriptionDraft
     public function getIpeds()
     {
         $formData = $this->getFormData();
-        $formData = json_decode($formData);
 
-        if (!empty($formData['institution']['ipeds'])) {
-            return $formData['institution']['ipeds'];
+        if ($formData) {
+            $formData = json_decode($formData);
+
+            if (!empty($formData['institution']['ipeds'])) {
+                return $formData['institution']['ipeds'];
+            }
         }
+
+        return false;
     }
 
     public function getCollegeId()
     {
         $formData = $this->getFormData();
-        $formData = json_decode($formData);
 
-        if (!empty($formData['college_id'])) {
-            return $formData['college_id'];
+        if ($formData) {
+            $formData = json_decode($formData);
+
+            if (!empty($formData['college_id'])) {
+                return $formData['college_id'];
+            }
         }
+
+        return false;
     }
 }

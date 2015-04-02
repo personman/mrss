@@ -1403,15 +1403,16 @@ class SubscriptionController extends AbstractActionController
                 $ipeds = $college->getIpeds();
             } elseif ($draft = $this->getDraftSubscription()) {
                 $this->getLog()->info("About to check draft sub for ipeds.");
+
+                // Debugging
+                $formData = $draft->getFormData();
+                $formData = json_decode($formData);
+                $this->getLog()->info("Form data from draft: " . print_r($formData, 1));
+
                 $ipeds = $draft->getIpeds();
 
                 if (empty($ipeds)) {
-                    // Debugging
                     $this->getLog()->info("Didn't find ipeds in draft. Must be a renewal.");
-                    $formData = $draft->getFormData();
-                    $formData = json_decode($formData);
-                    $this->getLog()->info("Form data from draft: " . print_r($formData, 1));
-
 
                     if ($collegeId = $draft->getCollegeId()) {
                         $this->getLog()->info("About to fetch ipeds from college: $collegeId.");
