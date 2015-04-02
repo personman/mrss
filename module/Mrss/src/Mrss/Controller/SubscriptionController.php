@@ -647,6 +647,7 @@ class SubscriptionController extends AbstractActionController
      * @param $paymentForm
      * @param bool $sendInvoice
      * @param bool $redirect
+     * @throws \Exception
      * @return \Zend\Http\Response
      * @internal param $subscriptionForm
      */
@@ -683,6 +684,8 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($subscription)) {
             throw new \Exception("Unable to create subscription: " . print_r($paymentForm, 1));
+        } else {
+            $this->getLog()->info("Subscription saved with id: " . $subscription->getId());
         }
 
         // Create the users, if needed
@@ -705,7 +708,9 @@ class SubscriptionController extends AbstractActionController
 
 
         // Save it all to the db
+        $this->getLog()->info("About to save sub to db (flush).");
         $this->getServiceLocator()->get('em')->flush();
+        $this->getLog()->info("Saved sub to db (flush). Id = " . $subscription->getId());
 
         // Send invoice, if needed
         if ($sendInvoice) {
