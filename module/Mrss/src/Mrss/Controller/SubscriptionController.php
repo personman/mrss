@@ -439,6 +439,8 @@ class SubscriptionController extends AbstractActionController
 
         $isRenewal = $this->isRenewal();
 
+        $this->getLog()->info("isRenewal: $isRenewal.");
+
         if ($isRenewal) {
             $amount = $this->getStudy()->getRenewalPrice();
         }
@@ -450,13 +452,18 @@ class SubscriptionController extends AbstractActionController
         );
         $skipOtherDiscounts = false;
         if (!empty($agreement['offerCode'])) {
-            if ($this->getStudy()->checkOfferCode($agreement['offerCode'])) {
+            $offerCode = $agreement['offerCode'];
+
+            if ($this->getStudy()->checkOfferCode($offerCode)) {
+                $this->getLog()->info("Checking offer code: $offerCode")
                 $amount = $this->getStudy()
-                    ->getOfferCodePrice($agreement['offerCode']);
+                    ->getOfferCodePrice($offerCode);
                 $skipOtherDiscounts = $this->getStudy()
                     ->getOfferCode($agreement['offerCode'])->getSkipOtherDiscounts();
             }
         }
+
+        $this->getLog()->info("Amount after offer code (if any): $amount.");
 
         // Check other studies for subscriptions and give a discount
         if (!$skipOtherDiscounts) {
@@ -464,6 +471,7 @@ class SubscriptionController extends AbstractActionController
             $year = $this->getCurrentYear();
 
             $ipeds = $this->getIpeds();
+            $this->getLog()->info("Fetched ipeds within getPaymentAmount: $ipeds.");
 
             $studyId = $this->getStudy()->getId();
             if ($studyId == 2) {
@@ -480,10 +488,14 @@ class SubscriptionController extends AbstractActionController
 
             // For now, only discount the price for NCCBP
             if ($currentStudyCode == 'nccbp') {
+                $this->getLog()->info("About to check discount for year: $year, ipeds: $ipeds");
+
                 $discount = $service->checkForDiscount($year, $ipeds);
                 $amount = $amount - $discount;
             }
         }
+
+        $this->getLog()->info("Final amount: $amount.");
 
         return $amount;
     }
@@ -928,7 +940,7 @@ class SubscriptionController extends AbstractActionController
         $agreement = json_decode($draftSubscription->getAgreementData(), true);
 
         $this->getLog()->info("About to fetch amount.");
-        $amount = $this->getPaymentAmount($draftSubscription);
+        $amount = $this->getPaymentAmount();
         $this->getLog()->info("Amount = $amount.");
 
         /*$amount = $this->getStudy()->getCurrentPrice();
