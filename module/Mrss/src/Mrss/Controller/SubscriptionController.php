@@ -342,7 +342,7 @@ class SubscriptionController extends AbstractActionController
                 . print_r($this->getDraftSubscription(), true)
             );
             $this->completeSubscription(
-                $this->getDraftSubscription(),
+                $this->getDraftSubscription($transId),
                 array('paymentType' => 'creditCard'),
                 false
             );
