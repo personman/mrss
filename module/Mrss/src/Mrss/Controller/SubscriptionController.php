@@ -1416,9 +1416,10 @@ class SubscriptionController extends AbstractActionController
 
                     if ($collegeId = $draft->getCollegeId()) {
                         $this->getLog()->info("About to fetch ipeds from college: $collegeId.");
+
                         /** @var \Mrss\Model\College $collegeModel */
                         $collegeModel = $this->getServiceLocator()->get('model.college');
-                        $college = $collegeModel->findOneByIpeds($ipeds);
+                        $college = $collegeModel->find($collegeId);
 
                         $this->getLog()->info("Found college: " . $college->getName());
 
