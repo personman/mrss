@@ -79,3 +79,7 @@ table.dataTable thead .sorting.heatMapYear {
 .highcharts-contextmenu hr {
     margin: 0;
 }
+
+#renew.form-horizontal .controls {
+    margin-left: 10px;
+}

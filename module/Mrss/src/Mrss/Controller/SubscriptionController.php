@@ -399,6 +399,37 @@ class SubscriptionController extends AbstractActionController
         $uPaySiteId = $this->getStudy()->getUPaySiteId();
         $uPayUrl = $this->getStudy()->getUPayUrl();
 
+        $amount = $this->getPaymentAmount();
+
+        // Calculate the validation key for uPay/TouchNet
+        $transId = $this->getTransIdFromSession();
+        // @todo: put this in the db, too:
+        $val = 'kdifvn3e9oskndfk';
+        $validation_key = $val . $transId . $amount;
+        $validation_key = md5($validation_key);
+        $val = base64_encode(pack('H*', $validation_key));
+
+        $ccForm = new PaymentForm($uPaySiteId, $uPayUrl, $amount, $transId, $val);
+
+        $invoiceForm = new SubscriptionInvoice();
+        $invoiceForm->setAttribute('action', '/subscribe/invoice');
+
+        $systemForm = new SubscriptionSystem();
+        $systemForm->setAttribute('action', '/subscribe/system');
+
+        $pilotForm = new SubscriptionPilot();
+        $pilotForm->setAttribute('action', '/subscribe/invoice');
+
+        return array(
+            'ccForm' => $ccForm,
+            'invoiceForm' => $invoiceForm,
+            'systemForm' => $systemForm,
+            'pilotForm' => $pilotForm
+        );
+    }
+
+    public function getPaymentAmount()
+    {
         // Get this dynamically based on study and date
         $amount = $this->getStudy()->getCurrentPrice();
 
@@ -427,10 +458,6 @@ class SubscriptionController extends AbstractActionController
         if (!$skipOtherDiscounts) {
             $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
             $year = $this->getCurrentYear();
-            $subscription = json_decode(
-                $this->getDraftSubscription()->getFormData(),
-                true
-            );
 
             $ipeds = $this->getIpeds();
 
@@ -454,31 +481,7 @@ class SubscriptionController extends AbstractActionController
             }
         }
 
-        // Calculate the validation key for uPay/TouchNet
-        $transId = $this->getTransIdFromSession();
-        // @todo: put this in the db, too:
-        $val = 'kdifvn3e9oskndfk';
-        $validation_key = $val . $transId . $amount;
-        $validation_key = md5($validation_key);
-        $val = base64_encode(pack('H*', $validation_key));
-
-        $ccForm = new PaymentForm($uPaySiteId, $uPayUrl, $amount, $transId, $val);
-
-        $invoiceForm = new SubscriptionInvoice();
-        $invoiceForm->setAttribute('action', '/subscribe/invoice');
-
-        $systemForm = new SubscriptionSystem();
-        $systemForm->setAttribute('action', '/subscribe/system');
-
-        $pilotForm = new SubscriptionPilot();
-        $pilotForm->setAttribute('action', '/subscribe/invoice');
-
-        return array(
-            'ccForm' => $ccForm,
-            'invoiceForm' => $invoiceForm,
-            'systemForm' => $systemForm,
-            'pilotForm' => $pilotForm
-        );
+        return $amount;
     }
 
     public function systemAction()
@@ -900,7 +903,10 @@ class SubscriptionController extends AbstractActionController
         // Get the agreement data from the session
         $draftSubscription = $this->getDraftSubscription();
         $agreement = json_decode($draftSubscription->getAgreementData(), true);
-        $amount = $this->getStudy()->getCurrentPrice();
+
+        $amount = $this->getPaymentAmount($draftSubscription);
+
+        /*$amount = $this->getStudy()->getCurrentPrice();
         //prd($draftSubscription->getFormData());
 
         $isRenewal = $this->isRenewal();
@@ -909,7 +915,6 @@ class SubscriptionController extends AbstractActionController
             $amount = $this->getStudy()->getRenewalPrice();
         }
 
-
         // Check for offer code
         if (!empty($agreement['offerCode'])) {
             if ($this->getStudy()->checkOfferCode($agreement['offerCode'])) {
@@ -917,6 +922,7 @@ class SubscriptionController extends AbstractActionController
                     ->getOfferCodePrice($agreement['offerCode']);
             }
         }
+        */
 
         $subscription->setYear($this->getCurrentYear());
         $subscription->setStatus($status);
