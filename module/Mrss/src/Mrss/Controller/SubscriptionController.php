@@ -1403,7 +1403,7 @@ class SubscriptionController extends AbstractActionController
                 $ipeds = $college->getIpeds();
             } elseif ($draft = $this->getDraftSubscription()) {
                 $this->getLog()->info("About to check draft sub for ipeds.");
-                
+
                 if (!$ipeds = $draft->getIpeds()) {
                     if ($collegeId = $draft->getCollegeId()) {
                         $this->getLog()->info("About to fetch ipeds from college: $collegeId.");
