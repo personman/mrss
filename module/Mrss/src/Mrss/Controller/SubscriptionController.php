@@ -348,6 +348,8 @@ class SubscriptionController extends AbstractActionController
                 array('paymentType' => 'creditCard'),
                 false
             );
+
+            $this->getLog()->info("Subscription completed.");
         }
 
         die('ok');
@@ -678,6 +680,10 @@ class SubscriptionController extends AbstractActionController
             $college,
             $observation
         );
+
+        if (empty($subscription)) {
+            throw new \Exception("Unable to create subscription: " . print_r($paymentForm, 1));
+        }
 
         // Create the users, if needed
 
@@ -1369,7 +1375,11 @@ class SubscriptionController extends AbstractActionController
                         $ipeds = $college->getIpeds();
                     }
                 }
-            } else {
+            }
+
+            $this->getLog()->alert("Ipeds = $ipeds.");
+
+            if (empty($ipeds)) {
                 throw new \Exception('Cannot save draft subscription without ipeds.');
             }
 
