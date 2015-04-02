@@ -111,7 +111,7 @@ class SubscriptionDraft
         $formData = $this->getFormData();
 
         if ($formData) {
-            $formData = json_decode($formData);
+            $formData = json_decode($formData, true);
 
             if (!empty($formData['institution']['ipeds'])) {
                 return $formData['institution']['ipeds'];
@@ -126,7 +126,7 @@ class SubscriptionDraft
         $formData = $this->getFormData();
 
         if ($formData) {
-            $formData = json_decode($formData);
+            $formData = json_decode($formData, true);
 
             if (!empty($formData['college_id'])) {
                 return $formData['college_id'];

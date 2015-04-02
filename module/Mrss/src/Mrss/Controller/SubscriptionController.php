@@ -1406,7 +1406,7 @@ class SubscriptionController extends AbstractActionController
 
                 // Debugging
                 $formData = $draft->getFormData();
-                $formData = json_decode($formData);
+                $formData = json_decode($formData, true);
                 $this->getLog()->info("Form data from draft: " . print_r($formData, 1));
 
                 $ipeds = $draft->getIpeds();
