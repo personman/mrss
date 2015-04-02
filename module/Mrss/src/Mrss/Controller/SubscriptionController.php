@@ -439,8 +439,6 @@ class SubscriptionController extends AbstractActionController
 
         $isRenewal = $this->isRenewal();
 
-        $this->getLog()->info("isRenewal: $isRenewal.");
-
         if ($isRenewal) {
             $amount = $this->getStudy()->getRenewalPrice();
         }
@@ -455,7 +453,6 @@ class SubscriptionController extends AbstractActionController
             $offerCode = $agreement['offerCode'];
 
             if ($this->getStudy()->checkOfferCode($offerCode)) {
-                $this->getLog()->info("Checking offer code: $offerCode.");
 
                 $amount = $this->getStudy()
                     ->getOfferCodePrice($offerCode);
@@ -464,16 +461,12 @@ class SubscriptionController extends AbstractActionController
             }
         }
 
-        $this->getLog()->info("Amount after offer code (if any): $amount.");
-
         // Check other studies for subscriptions and give a discount
         if (!$skipOtherDiscounts) {
             $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
             $year = $this->getCurrentYear();
 
-            $this->getLog()->info("About to fetch ipeds from getPaymentAmount().");
             $ipeds = $this->getIpeds();
-            $this->getLog()->info("Fetched ipeds within getPaymentAmount: $ipeds.");
 
             $studyId = $this->getStudy()->getId();
             if ($studyId == 2) {
@@ -490,14 +483,11 @@ class SubscriptionController extends AbstractActionController
 
             // For now, only discount the price for NCCBP
             if ($currentStudyCode == 'nccbp') {
-                $this->getLog()->info("About to check discount for year: $year, ipeds: $ipeds");
 
                 $discount = $service->checkForDiscount($year, $ipeds);
                 $amount = $amount - $discount;
             }
         }
-
-        $this->getLog()->info("Final amount: $amount.");
 
         return $amount;
     }
@@ -671,8 +661,6 @@ class SubscriptionController extends AbstractActionController
         $sendInvoice = false,
         $redirect = true
     ) {
-        $this->getLog()->info("Begin method completeSubscription().");
-
         $subscriptionForm = json_decode($subscriptionDraft->getFormData(), true);
 
         // Create or fetch the college
@@ -687,12 +675,8 @@ class SubscriptionController extends AbstractActionController
                 ->get('model.college')->find($collegeId);
         }
 
-        $this->getLog()->info("College: " . $college->getId());
-
         // Create the observation
         $observation = $this->createOrUpdateObservation($college);
-
-        $this->getLog()->info("Observation: " . $observation->getId());
 
         // Create the subscription record with payment info
         $subscription = $this->createOrUpdateSubscription(
@@ -703,8 +687,6 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($subscription)) {
             throw new \Exception("Unable to create subscription: " . print_r($paymentForm, 1));
-        } else {
-            $this->getLog()->info("Subscription saved with id: " . $subscription->getId());
         }
 
         // Create the users, if needed
@@ -727,9 +709,7 @@ class SubscriptionController extends AbstractActionController
 
 
         // Save it all to the db
-        $this->getLog()->info("About to save sub to db (flush).");
         $this->getServiceLocator()->get('em')->flush();
-        $this->getLog()->info("Saved sub to db (flush). Id = " . $subscription->getId());
 
         // Send invoice, if needed
         if ($sendInvoice) {
@@ -903,8 +883,6 @@ class SubscriptionController extends AbstractActionController
         College $college,
         Observation $observation
     ) {
-        $this->getLog()->info('Starting method createOrUpdateSubscription().');
-
         // Payment method
         $method = $paymentForm['paymentType'];
 
@@ -920,9 +898,6 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($subscription)) {
             $subscription = new Subscription();
-            $this->getLog()->info('Creating new subscription.');
-        } else {
-            $this->getLog()->info('Existing subscription found: ' . $subscription->getId());
         }
 
         // Status: cc = complete, invoice or system = pending
@@ -941,27 +916,7 @@ class SubscriptionController extends AbstractActionController
         $draftSubscription = $this->getDraftSubscription();
         $agreement = json_decode($draftSubscription->getAgreementData(), true);
 
-        $this->getLog()->info("About to fetch amount.");
         $amount = $this->getPaymentAmount();
-        $this->getLog()->info("Amount = $amount.");
-
-        /*$amount = $this->getStudy()->getCurrentPrice();
-        //prd($draftSubscription->getFormData());
-
-        $isRenewal = $this->isRenewal();
-
-        if ($isRenewal) {
-            $amount = $this->getStudy()->getRenewalPrice();
-        }
-
-        // Check for offer code
-        if (!empty($agreement['offerCode'])) {
-            if ($this->getStudy()->checkOfferCode($agreement['offerCode'])) {
-                $amount = $this->getStudy()
-                    ->getOfferCodePrice($agreement['offerCode']);
-            }
-        }
-        */
 
         $subscription->setYear($this->getCurrentYear());
         $subscription->setStatus($status);
@@ -972,8 +927,6 @@ class SubscriptionController extends AbstractActionController
         $subscription->setDigitalSignature($agreement['signature']);
         $subscription->setDigitalSignatureTitle($agreement['title']);
         $subscription->setPaymentAmount($amount);
-
-        $this->getLog()->info("About to save subscription.");
 
         $subscriptionModel->save($subscription);
 
@@ -1402,12 +1355,6 @@ class SubscriptionController extends AbstractActionController
             } elseif ($college = $this->currentCollege()) {
                 $ipeds = $college->getIpeds();
             } elseif ($draft = $this->getDraftSubscription()) {
-                $this->getLog()->info("About to check draft sub for ipeds.");
-
-                // Debugging
-                $formData = $draft->getFormData();
-                $formData = json_decode($formData, true);
-                $this->getLog()->info("Form data from draft: " . print_r($formData, 1));
 
                 $ipeds = $draft->getIpeds();
 
@@ -1421,8 +1368,6 @@ class SubscriptionController extends AbstractActionController
                         $collegeModel = $this->getServiceLocator()->get('model.college');
                         $college = $collegeModel->find($collegeId);
 
-                        $this->getLog()->info("Found college: " . $college->getName());
-
                         $ipeds = $college->getIpeds();
                     }
                 }
@@ -1434,8 +1379,6 @@ class SubscriptionController extends AbstractActionController
 
             $this->ipeds = $ipeds;
         }
-
-        $this->getLog()->alert("Ipeds = {$this->ipeds}.");
 
         return $this->ipeds;
     }
