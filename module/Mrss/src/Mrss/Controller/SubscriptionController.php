@@ -455,7 +455,8 @@ class SubscriptionController extends AbstractActionController
             $offerCode = $agreement['offerCode'];
 
             if ($this->getStudy()->checkOfferCode($offerCode)) {
-                $this->getLog()->info("Checking offer code: $offerCode")
+                $this->getLog()->info("Checking offer code: $offerCode.");
+
                 $amount = $this->getStudy()
                     ->getOfferCodePrice($offerCode);
                 $skipOtherDiscounts = $this->getStudy()
