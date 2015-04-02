@@ -678,6 +678,8 @@ class SubscriptionController extends AbstractActionController
         // Create the observation
         $observation = $this->createOrUpdateObservation($college);
 
+        $this->getLog()->info("Observation: " . $observation->getId());
+
         // Create the subscription record with payment info
         $subscription = $this->createOrUpdateSubscription(
             $paymentForm,
@@ -887,6 +889,8 @@ class SubscriptionController extends AbstractActionController
         College $college,
         Observation $observation
     ) {
+        $this->getLog()->info('Starting method createOrUpdateSubscription().');
+
         // Payment method
         $method = $paymentForm['paymentType'];
 
@@ -902,6 +906,9 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($subscription)) {
             $subscription = new Subscription();
+            $this->getLog()->info('Creating new subscription.');
+        } else {
+            $this->getLog()->info('Existing subscription found: ' . $subscription->getId());
         }
 
         // Status: cc = complete, invoice or system = pending
@@ -920,7 +927,9 @@ class SubscriptionController extends AbstractActionController
         $draftSubscription = $this->getDraftSubscription();
         $agreement = json_decode($draftSubscription->getAgreementData(), true);
 
+        $this->getLog()->info("About to fetch amount.");
         $amount = $this->getPaymentAmount($draftSubscription);
+        $this->getLog()->info("Amount = $amount.");
 
         /*$amount = $this->getStudy()->getCurrentPrice();
         //prd($draftSubscription->getFormData());
@@ -949,6 +958,8 @@ class SubscriptionController extends AbstractActionController
         $subscription->setDigitalSignature($agreement['signature']);
         $subscription->setDigitalSignatureTitle($agreement['title']);
         $subscription->setPaymentAmount($amount);
+
+        $this->getLog()->info("About to save subscription.");
 
         $subscriptionModel->save($subscription);
 
