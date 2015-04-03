@@ -1392,6 +1392,15 @@ return array(
                                 'action' => 'execAddresses'
                             )
                         )
+                    ),
+                    'separate' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/separate',
+                            'defaults' => array(
+                                'action' => 'separate'
+                            )
+                        )
                     )
                 )
             ),

@@ -1369,6 +1369,208 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $op_exp_oper_n_maint;
 
+    // MRSS forms 5 and 6 de-duplicated with NCCBP
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_institutional_demographics_unemployment_rate;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_institutional_demographics_median_household_income;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $max_res_institutional_demographics_faculty_unionized;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $max_res_institutional_demographics_staff_unionized;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $max_res_institutional_demographics_campus_environment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ipeds_enr;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_cr_head;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_cr_head;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_hs_stud_hdct;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_hs_stud_crh;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pell_grant_rec;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_male_cred_stud;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_fem_cred_stud;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_first_gen_students;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_trans_cred;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_t_c_crh;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_dev_crh;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_crd_stud_minc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_non_res_alien_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_hisp_anyrace_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ind_alaska_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_asian_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_blk_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_haw_pacific_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_white_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_two_or_more;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_race_eth_unk_2012;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_tuition_fees;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_unre_o_rev;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_loc_sour;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_state_sour;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_tuition_fees_sour;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $max_res_institutional_control;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $max_res_institutional_type;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_tot_fy_stud_crh;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_enrollment_information_duplicated_enrollment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_tot_stud_crhrs_tght;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_tot_stud_crhrs_tght;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_ft_f_yminus4_headc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_op_exp_inst;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_ft_f_yminus4_degr_cert;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_op_exp_student_services;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_ft_f_yminus4_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_op_exp_acad_supp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_pt_f_yminus4_headc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_op_exp_inst_support;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_pt_f_yminus4_degr_cert;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_op_exp_research;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_pt_f_yminus4_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_op_exp_pub_serv;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_f_yminus7_headc;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_op_exp_oper_n_maint;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_ft_yminus7_degr;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_ft_yminus7_transf;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_pt_fminus7_headc;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_pt_yminus7_degr;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_pt_yminus7_transf;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_tot_grad_abcpdfw;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_tot_grad_abcpdf;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_tot_grad_abcp;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_tot_cr_st;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_grad_bef_spr;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_enr_bef_spr;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_grad_bef_fall;
+
+    /** @ORM\Column(type="integer", nullable=true) */
+    protected $max_res_enr_fall;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_fall_fall_pers;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_next_term_pers;
+
 
 
     // NCCBP form 1:

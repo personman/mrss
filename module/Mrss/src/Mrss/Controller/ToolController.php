@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\Benchmark;
 use Mrss\Entity\Observation;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Exceldiff;
@@ -458,6 +459,134 @@ class ToolController extends AbstractActionController
         return $this->redirect()->toUrl('/tools');
 
     }
+
+    /**
+     * Max and NCCBP originally shared some fields on Max forms 5 and 6. Break them apart.
+     */
+    protected function separateAction()
+    {
+        $partTwo = true;
+
+        $formIds = array(40, 42);
+        $exclude = array(
+            'instruction_online',
+            'instruction_face_to_face',
+            'instruction_hybrid'
+        );
+
+        $inputTypes = array();
+        $properties = array();
+        $fieldsToCopy = array();
+
+        /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
+        $benchmarkGroupModel = $this->getServiceLocator()->get('model.benchmarkGroup');
+
+        /** @var \Mrss\Model\Benchmark $benchmarkModel */
+        $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
+
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        /** @var \Mrss\Model\Observation $observationModel */
+        $observationModel = $this->getServiceLocator()->get('model.observation');
+
+        foreach ($formIds as $formId) {
+            $benchmarkGroup = $benchmarkGroupModel->find($formId);
+
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                // Skip fields already unique to Max
+                if (in_array($benchmark->getDbColumn(), $exclude)) {
+                    continue;
+                }
+
+                // Skip if we've already processed:
+                if (stristr($benchmark->getDbColumn(), $this->getSeparationPrefix())) {
+                    continue;
+                }
+
+                $inputType = $benchmark->getInputType();
+
+                if (!in_array($inputType, $inputTypes)) {
+                    $inputTypes[] = $inputType;
+                }
+
+                $properties[] = $this->getObservationPropertyCode($benchmark);
+
+                // Part 2
+                if ($partTwo) {
+                    $oldDbColumn = $benchmark->getDbColumn();
+                    $newDbColumn = $this->getSeparationPrefix() . $oldDbColumn;
+
+                    $benchmark->setDbColumn($newDbColumn);
+                    $benchmarkModel->save($benchmark);
+
+                    $fieldsToCopy[$oldDbColumn] = $newDbColumn;
+                }
+
+                //pr($benchmark->getDbColumn());
+            }
+        }
+
+        // Copy data to new observation properties
+        if ($partTwo) {
+            foreach ($subscriptionModel->findByStudyAndYear(2, 2015) as $subscription) {
+                $observation = $subscription->getObservation();
+
+                foreach ($fieldsToCopy as $oldDbColumn => $newDbColumn) {
+                    $value = $observation->get($oldDbColumn);
+                    $observation->set($newDbColumn, $value);
+
+                    pr("Copying $value from $oldDbColumn to $newDbColumn.");
+                }
+
+                $observationModel->save($observation);
+            }
+
+
+            $benchmarkModel->getEntityManager()->flush();
+        }
+
+        // Part 1
+        if (!$partTwo) {
+            echo '<pre>' . implode("\n", $properties) . '</pre>';
+        }
+
+        pr($inputTypes);
+
+        die('separation script complete');
+    }
+
+    protected function getObservationPropertyCode(Benchmark $benchmark)
+    {
+        $oldDbColumn = $benchmark->getDbColumn();
+        $newDbColumn = $this->getSeparationPrefix() . $oldDbColumn;
+
+        $colType = $this->getColumnType($benchmark->getInputType());
+
+        $property = '/** @ORM\Column(type="' . $colType . '", nullable=true) */' . "\n";
+        $property .= "protected \${$newDbColumn};\n";
+
+        return $property;
+    }
+
+    protected function getSeparationPrefix()
+    {
+        return 'max_res_';
+    }
+
+    protected function getColumnType($inputType)
+    {
+        $colType = 'float';
+
+        if ($inputType == 'radio') {
+            $colType = 'string';
+        } elseif ($inputType == 'number') {
+            $colType = 'integer';
+        }
+
+        return $colType;
+    }
+
 
     protected function longRunningScript()
     {

@@ -38,27 +38,27 @@ $this->headScript()->appendFile(
     <?= $this->ztbFormElement($form->get('instruction_hybrid')) ?>
 </div>
 
-<?php $disabled = (!empty($nccbpSubscription)); ?>
+<?php $disabled = false;//(!empty($nccbpSubscription)); ?>
 
 
 <div class="demo-group">
     <h3 class="heading">Enrollment Information</h3>
     <p class="heading-notes">Use Fall <?= $this->currentStudy()->getCurrentYearMinus(3) ?> data. Please contact your research office for these data.</p>
 
-    <?= $this->ztbFormElement($form->get('ipeds_enr')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('ft_cr_head')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('pt_cr_head')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('hs_stud_hdct')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('hs_stud_crh')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('pell_grant_rec')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('fem_cred_stud')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('first_gen_students')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('trans_cred')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('t_c_crh')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('dev_crh')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('crd_stud_minc')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('ft_tot_stud_crhrs_tght')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('pt_tot_stud_crhrs_tght')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_ipeds_enr')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_ft_cr_head')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_pt_cr_head')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_hs_stud_hdct')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_hs_stud_crh')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_pell_grant_rec')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_fem_cred_stud')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_first_gen_students')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_trans_cred')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_t_c_crh')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_dev_crh')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_crd_stud_minc')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_ft_tot_stud_crhrs_tght')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_pt_tot_stud_crhrs_tght')->setAttribute('disabled', $disabled)) ?>
 
 </div>
 
@@ -148,15 +148,15 @@ $this->headScript()->appendFile(
     </table>
     */ ?>
 
-    <?= $this->ztbFormElement($form->get('non_res_alien_2012')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('hisp_anyrace_2012')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('ind_alaska_2012')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('asian_2012')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('blk_2012')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('haw_pacific_2012')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('white_2012')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('two_or_more')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('race_eth_unk_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_non_res_alien_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_hisp_anyrace_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_ind_alaska_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_asian_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_blk_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_haw_pacific_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_white_2012')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_two_or_more')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_race_eth_unk_2012')->setAttribute('disabled', $disabled)) ?>
 
     <div class="control-group" id="control-group-race_eth_unk_2012">
         <label class="control-label" for="race_eth_unk_2012">Total</label>
@@ -174,8 +174,8 @@ $this->headScript()->appendFile(
 <div class="demo-group">
     <h3 class="heading">Fiscal Information</h3>
 
-    <?= $this->ztbFormElement($form->get('tuition_fees')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('unre_o_rev')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_tuition_fees')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_unre_o_rev')->setAttribute('disabled', $disabled)) ?>
 
 </div>
 
@@ -183,20 +183,20 @@ $this->headScript()->appendFile(
     <h3 class="heading">Operating Revenue Sources</h3>
     <p class="heading-notes">Use fiscal year <?= $this->currentStudy()->getCurrentYearMinus(3) ?>-<?= $this->currentStudy()->getCurrentYearMinus(2) ?> data. May not add up to 100%.</p>
 
-    <?= $this->ztbFormElement($form->get('loc_sour')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('state_sour')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('tuition_fees_sour')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_loc_sour')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_state_sour')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_tuition_fees_sour')->setAttribute('disabled', $disabled)) ?>
 
 </div>
 
 <div class="demo-group">
     <h3 class="heading">Campus Environment</h3>
 
-    <?= $this->ztbFormElement($form->get('institutional_demographics_faculty_unionized')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('institutional_demographics_staff_unionized')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('institutional_demographics_campus_environment')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('institutional_control')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('institutional_type')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_institutional_demographics_faculty_unionized')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_institutional_demographics_staff_unionized')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_institutional_demographics_campus_environment')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_institutional_control')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_institutional_type')->setAttribute('disabled', $disabled)) ?>
 
 </div>
 
@@ -204,8 +204,8 @@ $this->headScript()->appendFile(
     <h3 class="heading">Service Area</h3>
     <p class="heading-notes">Use the legal definition of service area as defined by your State Higher Education Executive Officer (SHEEO) and most recent census estimates.</p>
 
-    <?= $this->ztbFormElement($form->get('institutional_demographics_unemployment_rate')->setAttribute('disabled', $disabled)) ?>
-    <?= $this->ztbFormElement($form->get('institutional_demographics_median_household_income')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_institutional_demographics_unemployment_rate')->setAttribute('disabled', $disabled)) ?>
+    <?= $this->ztbFormElement($form->get('max_res_institutional_demographics_median_household_income')->setAttribute('disabled', $disabled)) ?>
 
 </div>
 
