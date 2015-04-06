@@ -283,6 +283,11 @@ class Internal extends Max
 
             foreach ($fields as $field) {
                 $value = $subObservation->get($field);
+
+                // Convert per credit hour to per fte student (temp)
+                $value = $value * 15;
+
+
                 $benchmark = $this->getBenchmark($field);
                 $formatted = $benchmark->format($value);
                 $unitData[] = $formatted;
@@ -540,7 +545,15 @@ class Internal extends Max
                 if (!is_null($dbColumn)) {
                     $benchmark = $this->getBenchmark($dbColumn);
                     $value = $observation->get($dbColumn);
-                    $formatted = $benchmark->format($value);
+
+                    // Round per employee (last column)
+                    $decimalPlaces = null;
+                    if (stristr($dbColumn, 'per_fte_emp')) {
+                        $decimalPlaces = 0;
+                    }
+
+                    $formatted = $benchmark->format($value, $decimalPlaces);
+
                     $activityData[$dbColumn] = $formatted;
 
                     $chartData[$i][$label] = $value;

@@ -823,7 +823,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $this->inputFilter;
     }
 
-    public function format($value)
+    public function format($value, $decimalPlaces = null)
     {
         $formatted = $value;
 
@@ -837,7 +837,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         if (!is_null($value) &&
             $this->getInputType() != 'radio' &&
             $this->getInputType() != 'checkboxes') {
-            $decimalPlaces = $this->getDecimalPlaces();
+
+            if (null === $decimalPlaces) {
+                $decimalPlaces = $this->getDecimalPlaces();
+            }
+
             $formatted = $prefix .
                 number_format($value, $decimalPlaces) .
                 $suffix;
