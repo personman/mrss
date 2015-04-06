@@ -96,6 +96,9 @@ class SubscriptionController extends AbstractActionController
         $icon = ":nccbp:",
         $username = "NCCBP-bot"
     ) {
+        // Encode message
+        $message = urlencode($message);
+
         $room = ($room) ? $room : "engineering";
         $username = ($username) ? $username : 'NCCBP-bot';
 
