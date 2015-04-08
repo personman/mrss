@@ -59,6 +59,10 @@ class SubscriptionController extends AbstractActionController
      */
     public function viewAction()
     {
+        if (!empty($_GET['slack'])) {
+            $this->slack('slack test.');
+        }
+
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $study = $this->currentStudy();
 
@@ -719,15 +723,15 @@ class SubscriptionController extends AbstractActionController
             $this->sendInvoice($subscription, $adminUser, $dataUser);
         }
 
+        // Send a notification to slack
+        $this->sendSlackNotification($subscription);
+
         // Send welcome email
         $this->sendWelcomeEmail($subscription);
 
         // Now clear out the draft subscription
         $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
         $this->getServiceLocator()->get('em')->flush();
-
-        // Send a notification to slack
-        $this->sendSlackNotification($subscription);
 
         // Redirect
         if ($redirect) {
