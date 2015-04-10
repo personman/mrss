@@ -97,6 +97,17 @@ class Internal extends Max
         return $this->getColors();
     }
 
+    public function getInstructionalCostFields()
+    {
+        return array(
+            'inst_cost_full_perc' => 'Percent of Full-time Faculty',
+            'inst_cost_part_perc' => 'Percent of Part-time Faculty',
+            'inst_cost_perc_taught_by_ft' => 'Percent of FTE Students Taught by Full-time',
+            'inst_cost_perc_taught_by_pt' => 'Percent of FTE Students Taught by Part-time',
+            'inst_cost_per_fte_student' => 'Faculty Salary and Benefit Costs per FTE Student',
+        );
+    }
+
     public function getInstructionalCosts(Observation $observation)
     {
         $this->setObservation($observation);
@@ -105,16 +116,20 @@ class Internal extends Max
         $chartXCategories = array();
         $chartData = array();
 
-        // The institution-wide value
-        $dbColumn = 'inst_expend_per_fte_student';
-        $benchmark = $this->getBenchmark($dbColumn);
-        $rawValue = $observation->get($dbColumn);
-        $value = $benchmark->format($rawValue);
 
-        $data[] = array(
+        // The institution-wide value
+        //$dbColumn = 'inst_expend_per_fte_student';
+        $institutionData = array(
             'label' => 'Institution',
-            'value' => $value
         );
+        foreach ($this->getInstructionalCostFields() as $dbColumn => $header) {
+            $benchmark = $this->getBenchmark($dbColumn);
+            $rawValue = $observation->get($dbColumn);
+            $value = $benchmark->format($rawValue);
+
+            $institutionData[$dbColumn] = $value;
+        }
+        $data[] = $institutionData;
 
         $collegeName = $observation->getCollege()->getName();
         $chartXCategories[] = $collegeName;
@@ -122,19 +137,26 @@ class Internal extends Max
 
         // Now the subobservations (isionisions)
         foreach ($observation->getSubObservations() as $subObservation) {
-            $dbColumn = 'inst_cost_per_fte_student';
             $label = $subObservation->getName();
-            $benchmark = $this->getBenchmark($dbColumn);
-            $rawValue = $subObservation->get($dbColumn);
-            $value = $benchmark->format($rawValue);
-
-            $data[] = array(
-                'label' => $label,
-                'value' => $value
-            );
-
             $chartXCategories[] = $subObservation->getName();
-            $chartData[] = $rawValue;
+
+            $subObData = array(
+                'label' => $label
+            );
+            $rawValues = array();
+
+            foreach ($this->getInstructionalCostFields() as $dbColumn => $header) {
+                $benchmark = $this->getBenchmark($dbColumn);
+                $rawValue = $subObservation->get($dbColumn);
+                $value = $benchmark->format($rawValue);
+
+                $subObData[$dbColumn] = $value;
+
+                $rawValues[$dbColumn] = $rawValue;
+            }
+
+            $data[] = $subObData;
+            $chartData[] = $rawValues['inst_cost_per_fte_student'];
         }
 
         $series = array(
@@ -389,6 +411,12 @@ class Internal extends Max
                     }
 
                     $value = $subObservation->get($dbColumn);
+
+                    // Temp fix convert cred hr to fte
+                    if (stristr($field, 'cred_hr')) {
+                        $value = $value * 15;
+                    }
+
                     $benchmark = $this->getBenchmark($dbColumn);
                     $formatted = $benchmark->format($value);
                     $unitData[$dbColumn] = $formatted;

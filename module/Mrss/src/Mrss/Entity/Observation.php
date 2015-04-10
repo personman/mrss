@@ -283,6 +283,12 @@ class Observation
     //protected $inst_cost_full_cred_hr_program_dev;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_perc_taught_by_ft;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_perc_taught_by_pt;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_full_expend_program_dev;
 
     /** @ORM\Column(type="float", nullable=true) */

@@ -160,6 +160,8 @@ function setUpDetailExpander()
 {
     $('a.detailExpander').click(function() {
         $(this).parent().parent().nextUntil('tr.topLevelBenchmark', 'tr.reportDetailRow').toggle()
+
+        return false
     })
 
 

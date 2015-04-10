@@ -52,7 +52,7 @@ class National extends Max
 
             $benchmarkData = $this->getBenchmarkData($benchmark);
             $benchmarkData['benchmark'] = $label;
-            $benchmarkData['details'] = $this->getDetails($fields[0]);
+            $benchmarkData['details'] = $this->getDetails($costPerFteField);
 
             $studentServicesData[] = $benchmarkData;
         }
@@ -178,14 +178,16 @@ class National extends Max
         $dbColumn = "ss_{$activity}_cost_per_fte_emp";
         $benchmark = $this->getBenchmark($dbColumn);
 
+        $details = array();
+
         if ($benchmark) {
-            $benchmarkData = $this->getBenchmarkData($benchmark);
+            $details[] = $this->getBenchmarkData($benchmark);
         } else {
-            $benchmarkData = array();
+            echo "<p>Unable to find benchmark for $dbColumn.</p>";
         }
 
 
-        return array($benchmarkData);
+        return $details;
     }
 
 

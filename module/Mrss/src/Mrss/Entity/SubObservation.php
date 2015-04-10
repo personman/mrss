@@ -512,6 +512,11 @@ class SubObservation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_cost_expend_prof_dev;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_perc_taught_by_ft;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_cost_perc_taught_by_pt;
 
 
     public function setId($id)

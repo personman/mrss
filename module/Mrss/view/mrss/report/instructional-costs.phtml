@@ -18,7 +18,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     <thead>
         <tr>
             <th></th>
-            <th class="numberCell">Faculty Salary and Benefit Costs per FTE Student</th>
+            <?php foreach ($fields as $dbColumn => $label): ?>
+            <th class="numberCell"><?= $label ?></th>
+            <?php endforeach ?>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +29,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
         <tr>
             <th><?= $datum['label'] ?></th>
-            <td class="numberCell"><?= $datum['value'] ?></td>
+            <?php foreach ($fields as $dbColumn => $label): ?>
+                <td class="numberCell"><?= $datum[$dbColumn] ?></td>
+            <?php endforeach ?>
         </tr>
         <?php endforeach ?>
     </tbody>

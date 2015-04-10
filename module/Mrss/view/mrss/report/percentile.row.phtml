@@ -1,4 +1,4 @@
-<tr class="<?= $rowClass ?> topLevelBenchmark">
+<tr class="<?= $rowClass ?><?php if (!empty($topLevel)) echo ' topLevelBenchmark' ?>">
     <td class="benchmarkLabel">
         <a href="#" class="detailExpander">
             <?= $benchmark['benchmark'] ?>
@@ -6,6 +6,9 @@
         <?php if (!empty($benchmark['timeframe'])): ?>
             <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
         <?php endif ?>
+
+            <?php //pr($benchmark) ?>
+
     </td>
     <?php if ($benchmark['reported'] !== null): ?>
         <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>

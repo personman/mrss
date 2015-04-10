@@ -44,24 +44,11 @@ $this->headScript()->appendFile(
         <?php endif; */ ?>
 
         <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
-        <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => $rowClass, 'benchmark' => $benchmark)) ?>
+        <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => $rowClass, 'benchmark' => $benchmark, 'topLevel' => true)) ?>
 
 
         <?php foreach ($benchmark['details'] as $detailBenchmark): ?>
-        <tr class="reportDetailRow">
-            <td class="detailName">
-                Detail: <?pr($detailBenchmark) ?>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+            <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => 'reportDetailRow', 'benchmark' => $detailBenchmark)) ?>
         <?php endforeach ?>
 
     <?php endforeach ?>

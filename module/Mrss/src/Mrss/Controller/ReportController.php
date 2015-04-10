@@ -749,7 +749,8 @@ class ReportController extends AbstractActionController
             'college' => $this->currentCollege(),
             'observation' => $observation,
             'reportData' => $reportData,
-            'chart' => $chart
+            'chart' => $chart,
+            'fields' => $report->getInstructionalCostFields()
         );
     }
 
