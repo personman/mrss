@@ -1785,6 +1785,42 @@ class Observation
 
 
     // NCCBP form 2
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_f_yminus3_headc;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_f_yminus3_degr_cert;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_f_yminus3_degr_and_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_yminus3_perc_comp;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_f_yminus3_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_yminus3_perc_transf;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $ft_yminus3_perc_comp_transf;
+
+
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
