@@ -383,8 +383,8 @@ class ObservationController extends AbstractActionController
                 $this->getServiceLocator()->get('service.observationAudit')
                     ->logChanges($oldObservation, $observation, 'dataEntry');
 
-                //$this->getServiceLocator()->get('computedFields')
-                //    ->calculateAllForObservation($observation);
+                $this->getServiceLocator()->get('computedFields')
+                    ->calculateAllForObservation($observation);
 
                 if ($benchmarkGroup->getUseSubObservation()) {
                     $this->mergeAllSubobservations();
