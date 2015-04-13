@@ -385,8 +385,8 @@ class ObservationController extends AbstractActionController
                     ->logChanges($oldObservation, $observation, 'dataEntry');
 
                 $this->df('About to compute fields');
-                $this->getServiceLocator()->get('computedFields')
-                    ->calculateAllForObservation($observation);
+                //$this->getServiceLocator()->get('computedFields')
+                //    ->calculateAllForObservation($observation);
                 $this->df('just computed.');
 
                 if ($benchmarkGroup->getUseSubObservation()) {
