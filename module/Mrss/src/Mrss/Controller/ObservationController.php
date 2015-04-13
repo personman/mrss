@@ -254,6 +254,18 @@ class ObservationController extends AbstractActionController
         return $observation;
     }
 
+    protected function df($var)
+    {
+        if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
+            if ($var == 'die') {
+                die('End of debugging.');
+            }
+
+            pr($var);
+        }
+    }
+
+
     public function dataEntryAction()
     {
         // Fetch the form
@@ -336,6 +348,11 @@ class ObservationController extends AbstractActionController
             $bp->setValue(explode("\n", $bp->getValue()));
             //prd($_POST);
         }
+
+        $this->df($this->getRequest()->isPost());
+        $this->df($this->params()->fromPost());
+        $this->df($_POST);
+        $this->df('die');
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
