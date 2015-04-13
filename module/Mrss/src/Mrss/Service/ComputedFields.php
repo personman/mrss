@@ -308,7 +308,13 @@ class ComputedFields
                 pr($benchmark->getName());
             }
 
-            $this->calculate($benchmark, $observation, false);
+            try {
+                $this->calculate($benchmark, $observation, false);
+            } catch(\Exception $e) {
+                pr($e->getMessage());
+                prd($e);
+            }
+
         }
     }
 
