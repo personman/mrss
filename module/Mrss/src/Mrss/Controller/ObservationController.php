@@ -349,7 +349,9 @@ class ObservationController extends AbstractActionController
             //prd($_POST);
         }
 
+        $this->df($benchmarkGroupUrl);
         $this->df($observation->getId());
+        $this->df($dataEntryOpen);
         $this->df($this->getRequest()->isPost());
         $this->df($this->params()->fromPost());
         $this->df($_POST);
