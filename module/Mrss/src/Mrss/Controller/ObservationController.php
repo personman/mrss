@@ -361,6 +361,7 @@ class ObservationController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
+            $this->df('die');
             // Is data entry open?
             if (!$dataEntryOpen) {
                 $this->flashMessenger()->addErrorMessage('Data entry is closed.');
