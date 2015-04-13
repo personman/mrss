@@ -353,6 +353,8 @@ class ObservationController extends AbstractActionController
         $this->df($this->getRequest()->isPost());
         $this->df($this->params()->fromPost());
         $this->df($_POST);
+        $this->df($_REQUEST);
+        $this->df($_SERVER);
         $this->df('die');
 
         // Handle form submission
