@@ -361,7 +361,6 @@ class ObservationController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-            //$this->df('die');
             // Is data entry open?
             if (!$dataEntryOpen) {
                 $this->flashMessenger()->addErrorMessage('Data entry is closed.');
@@ -373,7 +372,9 @@ class ObservationController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             //var_dump($form->getElements()); die;
+            $this->df('checking form.');
             if ($form->isValid()) {
+                $this->df('form is valid');
                 // This may take a minute
                 ini_set('memory_limit', '512M');
                 set_time_limit(3600);
