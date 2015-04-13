@@ -384,19 +384,16 @@ class ObservationController extends AbstractActionController
                 $this->getServiceLocator()->get('service.observationAudit')
                     ->logChanges($oldObservation, $observation, 'dataEntry');
 
-                $this->df('About to compute fields');
                 //$this->getServiceLocator()->get('computedFields')
                 //    ->calculateAllForObservation($observation);
-                $this->df('just computed.');
 
                 if ($benchmarkGroup->getUseSubObservation()) {
                     $this->mergeAllSubobservations();
                 }
 
                 // Calculate completion
-                $this->df('about to calculate completion.');
                 $completion = $this->currentStudy()->getCompletionPercentage($observation);
-                $this->df($completion);
+
                 $subscription = $subscriptionModel
                     ->findOne($observation->getYear(), $observation->getCollege(), $this->currentStudy()->getId());
                 $subscription->setCompletion($completion);
