@@ -402,11 +402,15 @@ class Internal extends Max
                     if (substr($field, -1) == '_') {
                         $dbColumn .= $activity;
 
-                        if (empty($series[$field])) {
-                            $series[$field] = array(
-                                'name' => $this->extractEmployeeTypeFromDbColumn($dbColumn),
-                                'data' => array()
-                            );
+                        // Don't chart the percentages
+                        if (!in_array($field, array('inst_cost_full_', 'inst_cost_part_'))) {
+                            if (empty($series[$field])) {
+                                $series[$field] = array(
+                                    'name' => $this->extractEmployeeTypeFromDbColumn($dbColumn),
+                                    'data' => array()
+                                );
+                            }
+
                         }
                     }
 
@@ -458,9 +462,9 @@ class Internal extends Max
     protected function getUnitCostFields()
     {
         return array(
-            'inst_cost_full_perc',
+            'inst_cost_full_',
             'inst_cost_full_per_cred_hr_',
-            'inst_cost_part_perc',
+            'inst_cost_part_',
             'inst_cost_part_per_cred_hr_',
             'inst_cost_total_per_cred_hr_',
         );
