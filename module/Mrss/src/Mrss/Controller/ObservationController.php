@@ -372,9 +372,7 @@ class ObservationController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             //var_dump($form->getElements()); die;
-            $this->df('checking form.');
             if ($form->isValid()) {
-                $this->df('form is valid');
                 // This may take a minute
                 ini_set('memory_limit', '512M');
                 set_time_limit(3600);
@@ -394,7 +392,9 @@ class ObservationController extends AbstractActionController
                 }
 
                 // Calculate completion
+                $this->df('about to calculate completion.');
                 $completion = $this->currentStudy()->getCompletionPercentage($observation);
+                $this->df($completion);
                 $subscription = $subscriptionModel
                     ->findOne($observation->getYear(), $observation->getCollege(), $this->currentStudy()->getId());
                 $subscription->setCompletion($completion);
