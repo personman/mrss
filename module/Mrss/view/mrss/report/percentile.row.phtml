@@ -1,8 +1,13 @@
 <tr class="<?= $rowClass ?><?php if (!empty($topLevel)) echo ' topLevelBenchmark' ?>">
     <td class="benchmarkLabel">
-        <a href="#" class="detailExpander">
+        <?php if (!empty($topLevel)): ?>
+            <a href="#" class="detailExpander">
+                <?= $benchmark['benchmark'] ?>
+            </a>
+        <?php else: ?>
             <?= $benchmark['benchmark'] ?>
-        </a>
+        <?php endif ?>
+
         <?php if (!empty($benchmark['timeframe'])): ?>
             <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
         <?php endif ?>

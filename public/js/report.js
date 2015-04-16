@@ -159,7 +159,10 @@ function loadChart(event, chart)
 function setUpDetailExpander()
 {
     $('a.detailExpander').click(function() {
-        $(this).parent().parent().nextUntil('tr.topLevelBenchmark', 'tr.reportDetailRow').toggle()
+        $(this).parent().parent()
+            .nextUntil('tr.topLevelBenchmark', 'tr.reportDetailRow')
+            .not('.nationalReportChart')
+            .toggle()
 
         return false
     })

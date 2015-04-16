@@ -175,19 +175,38 @@ class National extends Max
     {
         $activity = $this->extractBaseActivityFromDbColumn($topLevelDbColumn);
 
-        $dbColumn = "ss_{$activity}_cost_per_fte_emp";
-        $benchmark = $this->getBenchmark($dbColumn);
-
+        $dbColumns = $this->getDetailColumnsForActivity($activity);
         $details = array();
 
-        if ($benchmark) {
-            $details[] = $this->getBenchmarkData($benchmark);
-        } else {
-            echo "<p>Unable to find benchmark for $dbColumn.</p>";
+        foreach ($dbColumns as $dbColumn => $label) {
+            $benchmark = $this->getBenchmark($dbColumn);
+
+            if ($benchmark) {
+                $benchmarkData = $this->getBenchmarkData($benchmark);
+
+                // Set the label
+                $benchmarkData['benchmark'] = $label;
+
+                $details[] = $benchmarkData;
+            } else {
+                echo "<p>Unable to find benchmark for $dbColumn " .
+                    "(top level: $topLevelDbColumn).</p>";
+            }
+
         }
 
 
         return $details;
+    }
+
+    protected function getDetailColumnsForActivity($activity)
+    {
+        $fields = array(
+            "ss_{$activity}_cost_per_fte_emp" => "Average Salary and Benefits",
+            "ss_{$activity}_students_per_fte_emp" => "FTE Students per Staff Person"
+        );
+
+        return $fields;
     }
 
 
@@ -205,7 +224,7 @@ class National extends Max
             'testing',
             'cocurricular',
             'disabserv',
-            'vetserve'
+            'vetserv'
         );
 
         foreach ($activities as $activity) {

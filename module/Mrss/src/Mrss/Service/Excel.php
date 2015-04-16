@@ -692,7 +692,7 @@ class Excel
                             $dbColumn,
                             $this->getCurrentStudy()->getId()
                         );
-
+                    
                     if ($benchmark->getInputType() == 'wholedollars') {
                         $sheet->getStyle($valueColumn . $rowIndex)->getNumberFormat()
                             ->setFormatCode(

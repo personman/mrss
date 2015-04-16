@@ -417,7 +417,7 @@ function setupHelpBlocks()
 
 function updateHelpBlocks()
 {
-    var value = $('#dataDefinitions').val()
+    var value = getDataDefinitionSetting()
 
     if (value == 'show') {
         $('.help-block').show()
@@ -429,7 +429,7 @@ function updateHelpBlocks()
 
         $('input, select, textarea').focus(function() {
             // Add the if statement in case the setting changes
-            var value = $('#dataDefinitions').val()
+            var value = getDataDefinitionSetting()
             if (value == 'active') {
                 // Hide any previous help text first
                 $('.help-block').hide()
@@ -437,6 +437,17 @@ function updateHelpBlocks()
             }
         })
     }
+}
+
+function getDataDefinitionSetting()
+{
+    var value = $('#dataDefinitions').val()
+
+    if (!value) {
+        value = 'active'
+    }
+
+    return value
 }
 
 

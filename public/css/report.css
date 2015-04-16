@@ -125,6 +125,10 @@ tr.topHeading th.nationalPercentiles {
 tr.reportDetailRow {
     display: none;
 }
+tr.reportDetailRow td:first-of-type {
+    padding-left: 30px;
+}
+
 .table td.detailName {
     padding-left: 40px;
 }
