@@ -36,6 +36,8 @@ class Report
      */
     protected $calculator;
 
+    protected $serviceManager;
+
     /**
      * @var ComputedFields
      */
@@ -954,6 +956,22 @@ class Report
     public function getComputedFieldsService()
     {
         return $this->computedFieldsService;
+    }
+
+    /**
+     * @param $serviceManager
+     * @return $this
+     */
+    public function setServiceManager($serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+
+        return $this;
+    }
+
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
     }
 
     public function setSubscriptionModel($model)

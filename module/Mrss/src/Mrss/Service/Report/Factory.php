@@ -44,6 +44,9 @@ class Factory implements AbstractFactoryInterface
         $report->setMailTransport($sm->get('mail.transport'));
         $report->setVariableSubstitution($sm->get('service.variableSubstitution'));
 
+        // So the report can create other reports:
+        $report->setServiceManager($sm);
+
         $report = $this->addExtraDependencies($report, $name, $sm);
 
         return $report;
@@ -68,6 +71,12 @@ class Factory implements AbstractFactoryInterface
             'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
             'service.report.max.internal' => 'Mrss\Service\Report\Max\Internal',
             'service.report.max.national' => 'Mrss\Service\Report\Max\National',
+            'service.report.max.activity.instructional' =>
+                'Mrss\Service\Report\Max\ActivityReport\Instructional',
+            'service.report.max.activity.ss' =>
+                'Mrss\Service\Report\Max\ActivityReport\StudentServices',
+            'service.report.max.activity.as' =>
+                'Mrss\Service\Report\Max\ActivityReport\AcademicSupport',
             'service.report' => 'Mrss\Service\Report',
         );
     }
