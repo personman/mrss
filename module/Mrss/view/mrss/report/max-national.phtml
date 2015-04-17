@@ -10,6 +10,21 @@ $this->headScript()->appendFile(
 <h1>Report of National Aggregate Data</h1>
 
 
+<h3>Institutional Costs</h3>
+
+<hr>
+
+
+
+
+
+<h3>Instructional Activity Costs</h3>
+
+<hr>
+
+
+
+
 <h3>Student Services Costs</h3>
 
 <table class="table table-hover table-striped-manual">
@@ -62,6 +77,63 @@ $this->headScript()->appendFile(
 <hr>
 
 
+<h3>Academic Support Activities</h3>
+
+<table class="table table-hover table-striped-manual">
+    <thead>
+    <tr class="topHeading">
+        <th></th>
+        <th colspan="2">Your Institution</th>
+        <th colspan="7" class="nationalPercentiles"><?= $heading ?></th>
+    </tr>
+    <tr class="secondHeading">
+        <th></th>
+        <th>$/FTE Student<br>(Calculated Values)</th>
+        <th>% Rank</th>
+        <th>N</th>
+        <?php foreach ($breakpoints as $breakpoint): ?>
+            <th><?= $breakpoint ?></th>
+        <?php endforeach ?>
+        <th><a href="#" class="btn btn-default showAllCharts" title="Display all charts"><i class="icon-signal glyphicon glyphicon-signal"></i></a></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach ($reportData['academicSupport'] as $benchmark): ?>
+        <?php /*if (!empty($benchmark['heading'])): ?>
+            <tr class="retportSeparator"></tr>
+            <tr class="reportSubHeading">
+                <td colspan="10">
+                    <?= $benchmark['name'] ?>
+                </td>
+            </tr>
+            <?php continue ?>
+        <?php endif; */ ?>
+
+        <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
+        <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => $rowClass, 'benchmark' => $benchmark, 'topLevel' => true)) ?>
+
+
+        <?php foreach ($benchmark['details'] as $detailBenchmark): ?>
+            <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => 'reportDetailRow', 'benchmark' => $detailBenchmark)) ?>
+        <?php endforeach  ?>
+
+    <?php endforeach ?>
+    </tbody>
+    <thead>
+    <tr class="spacerRow">
+        <td colspan="9"></td>
+    </tr>
+    </thead>
+</table>
+<hr>
+
+
+
+<h3>Student Success</h3>
+
+
+<hr>
 
 <p class="footnote" id="bottom">
     - = % Rank cannot be reported on a zero.

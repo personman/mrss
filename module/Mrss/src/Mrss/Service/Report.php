@@ -1214,6 +1214,12 @@ class Report
 
     protected function getBenchmark($dbColumn)
     {
-        return $this->getBenchmarkModel()->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
+        $benchmark = $this->getBenchmarkModel()->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
+
+        if (!is_object($benchmark)) {
+            echo "Unable to find benchmark with dbColumn $dbColumn. ";
+        }
+
+        return $benchmark;
     }
 }

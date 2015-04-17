@@ -16,6 +16,7 @@ class National extends Max
 
         $reportData['instructional'] = $this->getInstructionalActivityCosts();
         $reportData['studentServices'] = $this->getStudentServicesCosts();
+        $reportData['academicSupport'] = $this->getAcademicSupport();
 
         //pr($reportData);
         return $reportData;
@@ -41,15 +42,6 @@ class National extends Max
 
             $benchmark = $this->getBenchmark($costPerFteField);
 
-            //$value = $this->getObservation()->get($costPerFteField);
-
-            /*$benchmarkData = array(
-                'label' => $label,
-                'reported' => $value
-            );*/
-
-
-
             $benchmarkData = $this->getBenchmarkData($benchmark);
             $benchmarkData['benchmark'] = $label;
             $benchmarkData['details'] = $this->getDetails($costPerFteField);
@@ -58,6 +50,28 @@ class National extends Max
         }
 
         return $studentServicesData;
+    }
+
+    public function getAcademicSupport()
+    {
+        $academicSupportData = array();
+
+        $activities = $this->getAcademicSupportActivities();
+
+        foreach ($activities as $activity => $label) {
+            $field = "as_{$activity}_cost_per_fte_student";
+
+            $benchmark = $this->getBenchmark($field);
+
+            $benchmarkData = $this->getBenchmarkData($benchmark);
+            $benchmarkData['benchmark'] = $label;
+            $benchmarkData['details'] = $this->getDetails($activity);
+
+            $academicSupportData[] = $benchmarkData;
+        }
+
+        //pr($academicSupportData);
+        return $academicSupportData;
     }
 
     // @todo: move this up to base report class
@@ -181,7 +195,7 @@ class National extends Max
         foreach ($dbColumns as $dbColumn => $label) {
             $benchmark = $this->getBenchmark($dbColumn);
 
-            if ($benchmark) {
+            if (is_object($benchmark)) {
                 $benchmarkData = $this->getBenchmarkData($benchmark);
 
                 // Set the label
@@ -201,16 +215,46 @@ class National extends Max
 
     protected function getDetailColumnsForActivity($activity)
     {
-        $fields = array(
-            "ss_{$activity}_cost_per_fte_emp" => "Average Salary and Benefits",
-            "ss_{$activity}_students_per_fte_emp" => "FTE Students per Staff Person"
-        );
+        $academicSupportActivities = array_keys($this->getAcademicSupportActivities());
+
+        if (in_array($activity, $this->getStudentServicesActivities())) {
+            $fields = array(
+                "ss_{$activity}_cost_per_fte_emp" => "Average Salary and Benefits",
+                "ss_{$activity}_students_per_fte_emp" => "FTE Students per Staff Person",
+                "ss_{$activity}_percent_salaries" => "% of Costs for Salaries and Benefits",
+                "ss_{$activity}_percent_o_cost" => "% of Costs for Non-labor Operating Costs"
+                // @todo: confirm equations are right and add benchmarks for contract costs
+            );
+        } elseif (in_array($activity, $academicSupportActivities)) {
+            $fields = array(
+                "as_{$activity}_cost_per_fte_emp" => "Average Salary and Benefits",
+                "as_fte_students_per_{$activity}_fte_emp" => "FTE Students per Staff Person",
+                "as_{$activity}_percent_salaries" => "% of Costs for Salaries and Benefits",
+                "as_{$activity}_percent_o_cost" => "% of Costs for Non-labor Operating Costs"
+                // @todo: confirm equations are right and add benchmarks for contract costs
+            );
+        } else {
+            $fields = array();
+        }
 
         return $fields;
     }
 
 
     protected function extractBaseActivityFromDbColumn($dbColumn)
+    {
+        $activities = $this->getStudentServicesActivities();
+        $asActivities = array_keys($this->getAcademicSupportActivities());
+        $activities = array_merge($activities, $asActivities);
+
+        foreach ($activities as $activity) {
+            if (strstr($dbColumn, $activity)) {
+                return $activity;
+            }
+        }
+    }
+
+    protected function getStudentServicesActivities()
     {
         $activities = array(
             'admissions',
@@ -227,10 +271,15 @@ class National extends Max
             'vetserv'
         );
 
-        foreach ($activities as $activity) {
-            if (strstr($dbColumn, $activity)) {
-                return $activity;
-            }
-        }
+        return $activities;
+    }
+
+    protected function getAcademicSupportActivities()
+    {
+        return array(
+            'tech' => 'Instructional Technology',
+            'library' => 'Library Services',
+            'experiential' => 'Experiential Education'
+        );
     }
 }

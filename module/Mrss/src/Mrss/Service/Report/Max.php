@@ -85,4 +85,13 @@ class Max extends Report
             )
         );
     }
+
+    protected function getAcademicSupportActivities()
+    {
+        return array(
+            'as_tech_cost_per_fte_student' => 'Instructional Technology Support',
+            'as_library_cost_per_fte_student' => 'Library Services',
+            'as_experiential_cost_per_fte_student' => 'Experiential Education'
+        );
+    }
 }
