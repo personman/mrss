@@ -118,6 +118,20 @@ class Explore extends AbstractForm
 
 
 
-        $this->add($this->getButtonFieldset('Go'));
+        $this->add($this->getButtons());
+    }
+
+    protected function getButtons()
+    {
+        $buttons = $this->getButtonFieldset('Save');
+
+        // Add the delete button
+        $preview = new Element\Submit('preview');
+        $preview->setValue('Preview');
+        $preview->setAttribute('class', 'btn');
+        $preview->setAttribute('id', 'previewButton');
+        $buttons->add($preview);
+
+        return $buttons;
     }
 }

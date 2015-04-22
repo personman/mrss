@@ -42,6 +42,15 @@ $form->setAttribute('action', $this->url('reports/explore'));
 <div class="explore row row-fluid">
     <div class="span4 col-md-4">
         <?= $this->ztbForm($this->form->prepare()) ?>
+
+        <ul class="savedCharts">
+        <?php foreach ($charts as $savedChart): ?>
+            <li><a href="#" onclick="return postChart(<?= $savedChart->getId() ?>)"><?= $savedChart->getName() ?></a></li>
+            <script>
+                savedCharts[<?= $savedChart->getId() ?>] = '<?= $savedChart->getConfig(0) ?>'
+            </script>
+        <?php endforeach ?>
+        </ul>
     </div>
 
     <div class="span8 col-md-8">

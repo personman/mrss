@@ -561,6 +561,14 @@ class Module
 
                     return $paymentModel;
                 },
+                'model.chart' => function ($sm) {
+                    $model = new Model\Chart;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'service.routeCache' => function ($sm) {
                     $routeCacheService = new Service\RouteCache;
 

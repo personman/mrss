@@ -41,5 +41,4 @@ class StudentServices extends ActivityReport
 
         return $fields;
     }
-
 }

@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\Chart;
 use Mrss\Form\Explore;
 use Mrss\Form\PeerComparisonDemographics;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -609,23 +610,81 @@ class ReportController extends AbstractActionController
 
         $chart = null;
         if ($this->getRequest()->isPost()) {
-            $form->setData($this->params()->fromPost());
+            $post = $this->params()->fromPost();
+
+            if (!empty($post['id'])) {
+                $post = $this->getChartModel()->find($post['id'])->getConfig();
+                $post['buttons']['submit'] = null;
+            }
+
+            $form->setData($post);
 
             if ($form->isValid()) {
                 $data = $form->getData();
                 $year = $year = $this->getYearFromRouteOrStudy();
 
                 $chart = $this->getReportService()->getChart($data, $year);
+
+                // Save it, if requested
+                if (!empty($data['buttons']['submit'])) {
+                    $this->saveChart($data);
+                    $this->flashMessenger()->addSuccessMessage("Saved.");
+                }
             }
+
+            // Restore the button labels
+            $post['buttons']['submit'] = 'Save';
+            $post['buttons']['preview'] = 'Preview';
+            $form->setData($post);
         }
-
-
 
         return array(
             'form' => $form,
-            'chart' => $chart
+            'chart' => $chart,
+            'charts' => $this->getChartModel()
+                    ->findByStudyAndCollege($this->currentStudy(),$this->currentCollege())
         );
     }
+
+    protected function saveChart($config)
+    {
+        $chartModel = $this->getChartModel();
+        $study = $this->currentStudy();
+        $college = $this->currentCollege();
+        $name = $config['title'];
+        $type = $config['presentation'];
+        $description = $config['content'];
+
+
+        // First, see if we're updating a chart with the same name
+        $chart = $chartModel->findByStudyCollegeAndName($study, $college, $name);
+
+        // If not, create a chart entity
+        if (empty($chart)) {
+            $chart = new Chart();
+            $chart->setStudy($study);
+            $chart->setCollege($college);
+            $chart->setName($name);
+        }
+
+        // Apply the updates
+        $chart->setType($type);
+        $chart->setConfig($config);
+        $chart->setDescription($description);
+
+        // Save it and flush
+        $chartModel->save($chart);
+        $chartModel->getEntityManager()->flush();
+    }
+
+    /**
+     * @return \Mrss\Model\Chart
+     */
+    protected function getChartModel()
+    {
+        return $this->getServiceLocator()->get('model.chart');
+    }
+
 
     public function bestPerformersAction()
     {

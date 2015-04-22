@@ -5,6 +5,7 @@ namespace Mrss\Model;
 use Mrss\Entity\Outlier as OutlierEntity;
 use Mrss\Entity\Study as StudyEntity;
 use Mrss\Entity\College as CollegeEntity;
+use Mrss\Entity\Benchmark as BenchmarkEntity;
 use Zend\Debug\Debug;
 
 /**
@@ -67,6 +68,22 @@ class Outlier extends AbstractModel
                 'college' => $college,
                 'study' => $study,
                 'year' => $year
+            )
+        );
+    }
+
+    public function findByCollegeStudyBenchmarkAndYear(
+        CollegeEntity $college,
+        StudyEntity $study,
+        BenchmarkEntity $benchmark,
+        $year
+    ) {
+        return $this->getRepository()->findBy(
+            array(
+                'college' => $college,
+                'study' => $study,
+                'year' => $year,
+                'benchmark' => $benchmark
             )
         );
     }

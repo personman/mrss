@@ -150,62 +150,6 @@ class Percentile extends Report
         return $stats;
     }
 
-    /**
-     * Calculate all computed fields for the current study and the given year
-     *
-     * @param $year
-     */
-    public function calculateAllComputedFields($year)
-    {
-        $subs = $this->getSubscriptions($year);
-        $start = microtime(1);
-
-        foreach ($subs as $sub) {
-            $observation = $sub->getObservation();
-            if ($observation) {
-                $this->getComputedFieldsService()
-                    ->calculateAllForObservation($observation);
-            } else {
-                //echo "Observation missing for " . $sub->getCollege()->getName() .
-                //    " " . $sub->getYear();
-                //die;
-            }
-            $el = microtime(1) - $start;
-            //pr(round($el, 3));
-            unset($observation);
-            //die('blkajsdls');
-        }
-        //die('calculated');
-
-        $this->calculateAllSubObservations($year);
-    }
-
-    public function calculateAllSubObservations($year)
-    {
-        $subObForms = array();
-
-        // Look for forms that use sub-observations
-        foreach ($this->getStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-            if ($benchmarkGroup->getUseSubObservation()) {
-                $subObForms[] = $benchmarkGroup;
-            }
-        }
-
-        if (count($subObForms)) {
-            $subs = $this->getSubscriptions($year);
-
-            foreach ($subs as $sub) {
-                $observation = $sub->getObservation();
-                foreach ($observation->getSubObservations() as $subObservation) {
-                    foreach ($subObForms as $benchmarkGroup) {
-                        $this->getComputedFieldsService()
-                            ->calculateAllForSubObservation($subObservation, $benchmarkGroup);
-                    }
-                }
-            }
-        }
-    }
-
     public function calculateSystems($year)
     {
         $statTotals = array(

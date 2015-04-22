@@ -6,6 +6,7 @@ use Mrss\Entity\Study;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
+use Mrss\Entity\Subscription;
 use Mrss\Service\Report\Calculator;
 use Mrss\Service\ComputedFields;
 use Zend\Mail\Transport\Smtp;
@@ -503,18 +504,28 @@ class Report
 
     public function getScatterPlot($benchmark1, $benchmark2, $title, $year)
     {
-        return $this->getBubbleChart($benchmark1,$benchmark2, null, $title, $year);
+        return $this->getBubbleChart($benchmark1, $benchmark2, null, $title, $year);
     }
 
     public function getBubbleChart($x, $y, $size, $title, $year)
     {
+        $excludeOutliers = true;
+
         $study = $this->getStudy();
         $subscriptions = $this->getSubscriptionModel()
             ->findByStudyAndYear($study->getId(), $year);
 
+        $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
+        $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);
+
         $data = array();
         foreach ($subscriptions as $subscription) {
             $observation = $subscription->getObservation();
+
+            // Skip subscription if it includes an outlier
+            if ($excludeOutliers && $this->hasOutlier($subscription, $xBenchmark, $yBenchmark)) {
+                continue;
+            }
 
             $xVal = $observation->get($x);
             $yVal = $observation->get($y);
@@ -535,8 +546,8 @@ class Report
             }
         }
 
-        $xLabel = $this->getBenchmarkModel()->findOneByDbColumn($x)->getName();
-        $yLabel = $this->getBenchmarkModel()->findOneByDbColumn($y)->getName();
+        $xLabel = $xBenchmark->getName();
+        $yLabel = $yBenchmark->getName();
 
 
         $series = array(
@@ -587,6 +598,25 @@ class Report
 
         return $chart;
 
+    }
+
+    public function hasOutlier(Subscription $subscription, $xBenchmark, $yBenchmark)
+    {
+        $xOutlier = $this->getOutlierModel()->findByCollegeStudyBenchmarkAndYear(
+            $subscription->getCollege(),
+            $subscription->getStudy(),
+            $xBenchmark,
+            $subscription->getYear()
+        );
+
+        $yOutlier = $this->getOutlierModel()->findByCollegeStudyBenchmarkAndYear(
+            $subscription->getCollege(),
+            $subscription->getStudy(),
+            $yBenchmark,
+            $subscription->getYear()
+        );
+
+        return (!empty($xOutlier) || !empty($yOutlier));
     }
 
     public function getPieChartColors()
@@ -1273,4 +1303,62 @@ class Report
 
         return $benchmark;
     }
+
+    /**
+     * Calculate all computed fields for the current study and the given year
+     *
+     * @param $year
+     */
+    public function calculateAllComputedFields($year)
+    {
+        $subs = $this->getSubscriptions($year);
+        $start = microtime(1);
+
+        foreach ($subs as $sub) {
+            $observation = $sub->getObservation();
+            if ($observation) {
+                $this->getComputedFieldsService()
+                    ->calculateAllForObservation($observation);
+            } else {
+                //echo "Observation missing for " . $sub->getCollege()->getName() .
+                //    " " . $sub->getYear();
+                //die;
+            }
+            $el = microtime(1) - $start;
+            //pr(round($el, 3));
+            unset($observation);
+            //die('blkajsdls');
+        }
+        //die('calculated');
+
+        $this->calculateAllSubObservations($year);
+    }
+
+    public function calculateAllSubObservations($year)
+    {
+        $subObForms = array();
+
+        // Look for forms that use sub-observations
+        foreach ($this->getStudy()->getBenchmarkGroups() as $benchmarkGroup) {
+            if ($benchmarkGroup->getUseSubObservation()) {
+                $subObForms[] = $benchmarkGroup;
+            }
+        }
+
+        if (count($subObForms)) {
+            $subs = $this->getSubscriptions($year);
+
+            foreach ($subs as $sub) {
+                $observation = $sub->getObservation();
+                foreach ($observation->getSubObservations() as $subObservation) {
+                    foreach ($subObForms as $benchmarkGroup) {
+                        $this->getComputedFieldsService()
+                            ->calculateAllForSubObservation($subObservation, $benchmarkGroup);
+                    }
+                }
+            }
+        }
+    }
+
+
 }
