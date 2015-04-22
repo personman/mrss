@@ -40,6 +40,7 @@ class Explore extends AbstractForm
                 'attributes' => array(
                     'id' => 'inputType',
                     'options' => array(
+                        'scatter' => 'Scatter Plot',
                         'bubble' => 'Bubble Plot',
                     )
                 )
@@ -55,7 +56,8 @@ class Explore extends AbstractForm
                     'label' => 'X Axis'
                 ),
                 'attributes' => array(
-                    'options' => $benchmarks
+                    'options' => $benchmarks,
+                    'id' => 'benchmark1'
                 )
             )
         );
@@ -68,7 +70,8 @@ class Explore extends AbstractForm
                     'label' => 'Y Axis'
                 ),
                 'attributes' => array(
-                    'options' => $benchmarks
+                    'options' => $benchmarks,
+                    'id' => 'benchmark2'
                 )
             )
         );
@@ -81,7 +84,8 @@ class Explore extends AbstractForm
                     'label' => 'Bubble Size'
                 ),
                 'attributes' => array(
-                    'options' => $benchmarks
+                    'options' => $benchmarks,
+                    'id' => 'benchmark3'
                 )
             )
         );

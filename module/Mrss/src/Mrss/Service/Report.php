@@ -482,12 +482,35 @@ class Report
         return $value;
     }
 
-    public function getBubbleChart($x, $y, $size, $title)
+    public function getChart($config, $year = null)
+    {
+        $benchmark1 = $config['benchmark1'];
+        $benchmark2 = $config['benchmark2'];
+        $size = $config['benchmark3'];
+        $title = $config['title'];
+
+        switch ($config['presentation']) {
+            case 'scatter':
+                $chart = $this->getScatterPlot($benchmark1, $benchmark2, $title, $year);
+                break;
+            case 'bubble':
+                $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year);
+                break;
+        }
+
+        return $chart;
+    }
+
+    public function getScatterPlot($benchmark1, $benchmark2, $title, $year)
+    {
+        return $this->getBubbleChart($benchmark1,$benchmark2, null, $title, $year);
+    }
+
+    public function getBubbleChart($x, $y, $size, $title, $year)
     {
         $study = $this->getStudy();
-
         $subscriptions = $this->getSubscriptionModel()
-            ->findByStudyAndYear($study->getId(), $study->getCurrentYear() - 1);
+            ->findByStudyAndYear($study->getId(), $year);
 
         $data = array();
         foreach ($subscriptions as $subscription) {
@@ -495,7 +518,13 @@ class Report
 
             $xVal = $observation->get($x);
             $yVal = $observation->get($y);
-            $sizeVal = $observation->get($size);
+
+            if ($size) {
+                $sizeVal = $observation->get($size);
+            } else {
+                $sizeVal = 1;
+            }
+
 
             if ($xVal && $yVal && $sizeVal) {
                 $data[] = array(
@@ -521,11 +550,15 @@ class Report
             $title = 'Test Chart';
         }
 
+        $type = 'bubble';
+        if ($size === null) {
+            $type = 'scatter';
+        }
 
         $chart = array(
             'id' => 'chart_' . uniqid(),
             'chart' => array(
-                'type' => 'bubble',
+                'type' => $type,
                 'zoomType' => 'xy'
             ),
             'title' => array(

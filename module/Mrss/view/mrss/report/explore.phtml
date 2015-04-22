@@ -16,6 +16,21 @@
     }
 </style>
 
+<?php
+$this->headLink()->appendStylesheet('/css/chosen.min.css');
+
+$this->headScript()->appendFile(
+    '/js/chosen.jquery.min.js?v=1',
+    'text/javascript'
+);
+
+$this->headScript()->appendFile(
+    '/js/explore.js?v=1',
+    'text/javascript'
+);
+
+?>
+
 <h2>Explore the Data</h2>
 
 <?php

@@ -613,14 +613,9 @@ class ReportController extends AbstractActionController
 
             if ($form->isValid()) {
                 $data = $form->getData();
+                $year = $year = $this->getYearFromRouteOrStudy();
 
-                $benchmark1 = $data['benchmark1'];
-                $benchmark2 = $data['benchmark2'];
-                $size = $data['benchmark3'];
-                $title = $data['title'];
-
-                $chart = $this->getReportService()
-                    ->getBubbleChart($benchmark1, $benchmark2, $size, $title);
+                $chart = $this->getReportService()->getChart($data, $year);
             }
         }
 

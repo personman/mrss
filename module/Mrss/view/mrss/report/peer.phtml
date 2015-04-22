@@ -3,10 +3,19 @@
 <?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
 
 <?php
+$this->headLink()->appendStylesheet('/css/chosen.min.css');
+
+$this->headScript()->appendFile(
+    '/js/chosen.jquery.min.js?v=1',
+    'text/javascript'
+);
+
 $this->headScript()->appendFile(
     '/js/peer-comparison.js?v=2',
     'text/javascript'
-); ?>
+);
+
+?>
 
 <script type="text/javascript">
     var peerGroups = <?= $peerGroups ?>

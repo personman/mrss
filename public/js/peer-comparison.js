@@ -14,6 +14,8 @@ $(function() {
     $('select#benchmarks').change(function() {
         updateColleges();
     })
+
+    //$('#benchmarks, #peers').chosen()
 })
 
 function updateColleges()
