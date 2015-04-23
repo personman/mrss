@@ -627,8 +627,13 @@ class ReportController extends AbstractActionController
 
                 // Save it, if requested
                 if (!empty($data['buttons']['submit'])) {
-                    $this->saveChart($data);
-                    $this->flashMessenger()->addSuccessMessage("Saved.");
+                    if (!empty($data['title'])) {
+                        $this->saveChart($data);
+                        $this->flashMessenger()->addSuccessMessage("Saved.");
+                    } else {
+                        $this->flashMessenger()
+                            ->addErrorMessage("You must enter a title to save.");
+                    }
                 }
             }
 
@@ -641,8 +646,9 @@ class ReportController extends AbstractActionController
         return array(
             'form' => $form,
             'chart' => $chart,
+            'year' => $year,
             'charts' => $this->getChartModel()
-                    ->findByStudyAndCollege($this->currentStudy(),$this->currentCollege())
+                    ->findByStudyAndCollege($this->currentStudy(), $this->currentCollege())
         );
     }
 

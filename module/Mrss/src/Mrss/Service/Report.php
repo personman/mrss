@@ -1359,6 +1359,4 @@ class Report
             }
         }
     }
-
-
 }
