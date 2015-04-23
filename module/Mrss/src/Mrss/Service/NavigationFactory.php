@@ -205,10 +205,15 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Hide reports for MRSS since it's never had them open
             // The rest of the studies retain the links for prior years
-            if ((empty($user) || $user->getCollege()->getId() != 101)
-                /*&& !$impersonationService->isImpersonated()*/) {
-                unset($pages['reports']);
-            }
+            //if ((empty($user) || $user->getCollege()->getId() != 101)
+            //    /*&& !$impersonationService->isImpersonated()*/) {
+            //    unset($pages['reports']);
+            //}
+
+            // Hide the reports that MRSS doesn't yet use
+            unset($pages['reports']['pages']['national']);
+            unset($pages['reports']['pages']['peer']);
+            unset($pages['reports']['pages']['summary']);
 
             // Hide the executive report
             unset($pages['executive']);
@@ -218,6 +223,9 @@ class NavigationFactory extends DefaultNavigationFactory
             //$newReports = array($pages['reports']['pages']['institutional']);
             //$pages['reports']['pages'] = $newReports;
             //unset($pages['reports']);
+        } else {
+            // The institutional report is Max only. Hide it from the others
+            unset($pages['reports']['pages']['institutional']);
         }
 
         // Workforce

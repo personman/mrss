@@ -956,49 +956,49 @@ return array(
                             )
                         )
                     ),
-                    'institution-costs' => array(
+                    'instructional-costs' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/institution-costs',
+                            'route' => '/instructional-costs',
                             'defaults' => array(
                                 'action' => 'institutionCosts'
                             )
                         )
                     ),
-                    'instructional-costs' => array(
+                    'division-summaries' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/instructional-costs[/:year]',
+                            'route' => '/division-summaries[/:year]',
                             'defaults' => array(
                                 'action' => 'instructionalCosts',
                                 'year' => null
                             )
                         )
                     ),
-                    'instructional-activity-costs' => array(
+                    'activities-within-division' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/instructional-activity-costs[/:year]',
+                            'route' => '/activities-within-division[/:year]',
                             'defaults' => array(
                                 'action' => 'instructionalActivityCosts',
                                 'year' => null
                             )
                         )
                     ),
-                    'unit-costs' => array(
+                    'divisions-by-activity' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/unit-costs[/:year]',
+                            'route' => '/divisions-by-activity[/:year]',
                             'defaults' => array(
                                 'action' => 'unitCosts',
                                 'year' => null
                             )
                         )
                     ),
-                    'unit-demographics' => array(
+                    'division-salaries' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/unit-demographics[/:year]',
+                            'route' => '/division-salaries[/:year]',
                             'defaults' => array(
                                 'action' => 'unitDemographics',
                                 'year' => null
