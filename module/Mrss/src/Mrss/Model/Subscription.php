@@ -49,32 +49,24 @@ class Subscription extends AbstractModel
      */
     public function findByStudyAndYear($studyId, $year, $eagerObservation = false)
     {
-        //return $this->test($studyId, $year);
-        /*return $this->getRepository()->findBy(
-            array(
-                'study' => $studyId,
-                'year' => $year
-            )
-        );*/
-
         if ($eagerObservation) {
             $query = $this->getEntityManager()->createQuery(
                 "SELECT s, o
-            FROM Mrss\Entity\Subscription s
-            JOIN s.college c
-            JOIN s.observation o
-            WHERE s.study = $studyId
-            AND s.year = $year
-            ORDER BY c.name ASC"
+                FROM Mrss\Entity\Subscription s
+                JOIN s.college c
+                JOIN s.observation o
+                WHERE s.study = $studyId
+                AND s.year = $year
+                ORDER BY c.name ASC"
             );
         } else {
             $query = $this->getEntityManager()->createQuery(
-            "SELECT s
-            FROM Mrss\Entity\Subscription s
-            JOIN s.college c
-            WHERE s.study = $studyId
-            AND s.year = $year
-            ORDER BY c.name ASC"
+                "SELECT s
+                FROM Mrss\Entity\Subscription s
+                JOIN s.college c
+                WHERE s.study = $studyId
+                AND s.year = $year
+                ORDER BY c.name ASC"
             );
         }
 

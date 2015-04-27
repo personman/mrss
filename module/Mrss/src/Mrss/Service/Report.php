@@ -501,13 +501,37 @@ class Report
         return $chart;
     }
 
-    public function getScatterPlot($benchmark1, $benchmark2, $title, $year, $collegeId = null, $showMedians = false, $showRegression = false)
-    {
-        return $this->getBubbleChart($benchmark1, $benchmark2, null, $title, $year, $collegeId, $showMedians, $showRegression);
+    public function getScatterPlot(
+        $benchmark1,
+        $benchmark2,
+        $title,
+        $year,
+        $collegeId = null,
+        $showMedians = false,
+        $showRegression = false
+    ) {
+        return $this->getBubbleChart(
+            $benchmark1,
+            $benchmark2,
+            null,
+            $title,
+            $year,
+            $collegeId,
+            $showMedians,
+            $showRegression
+        );
     }
 
-    public function getBubbleChart($x, $y, $size, $title, $year, $collegeId = null, $showMedians = false, $showRegression = false)
-    {
+    public function getBubbleChart(
+        $x,
+        $y,
+        $size,
+        $title,
+        $year,
+        $collegeId = null,
+        $showMedians = false,
+        $showRegression = false
+    ) {
         $type = 'bubble';
         if ($size === null) {
             $type = 'scatter';
@@ -722,49 +746,13 @@ class Report
         return $chart;
     }
 
-    protected /**
-     * linear regression function
-     * @param $x array x-coords
-     * @param $y array y-coords
-     * @returns array() m=>slope, b=>intercept
+    /**
+     * @deprecated
+     * @param Subscription $subscription
+     * @param $xBenchmark
+     * @param $yBenchmark
+     * @return bool
      */
-    function linearRegression($x, $y) {
-
-        // calculate number points
-        $n = count($x);
-
-        // ensure both arrays of points are the same size
-        if ($n != count($y)) {
-
-            trigger_error("linear_regression(): Number of elements in coordinate arrays do not match.", E_USER_ERROR);
-
-        }
-
-        // calculate sums
-        $x_sum = array_sum($x);
-        $y_sum = array_sum($y);
-
-        $xx_sum = 0;
-        $xy_sum = 0;
-
-        for($i = 0; $i < $n; $i++) {
-
-            $xy_sum+=($x[$i]*$y[$i]);
-            $xx_sum+=($x[$i]*$x[$i]);
-
-        }
-
-        // calculate slope
-        $m = (($n * $xy_sum) - ($x_sum * $y_sum)) / (($n * $xx_sum) - ($x_sum * $x_sum));
-
-        // calculate intercept
-        $b = ($y_sum - ($m * $x_sum)) / $n;
-
-        // return result
-        return array("m"=>$m, "b"=>$b);
-
-    }
-
     public function hasOutlier(Subscription $subscription, $xBenchmark, $yBenchmark)
     {
         $xOutlier = $this->getOutlierModel()->findByCollegeStudyBenchmarkAndYear(

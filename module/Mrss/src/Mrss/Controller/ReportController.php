@@ -772,15 +772,6 @@ class ReportController extends AbstractActionController
 
     public function institutionalAction()
     {
-        $this->longRunningScript();
-
-        $subs = $this->getSubscriptionModel()->findForScatterPlot($this->currentStudy(), 2014, 'total_pop');
-
-        foreach ($subs as $sub) {
-            pr(get_class($sub));
-            //pr($sub->getPaymentAmount());
-        }
-
         return array(
             'college' => $this->currentCollege(),
         );
