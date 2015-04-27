@@ -55,7 +55,6 @@ class Factory implements AbstractFactoryInterface
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $map = $this->getClassMap();
-        //pr($name);
 
         return (!empty($map[$name]));
     }
@@ -75,6 +74,8 @@ class Factory implements AbstractFactoryInterface
                 'Mrss\Service\Report\Max\ActivityReport\Instructional',
             'service.report.max.activity.ss' =>
                 'Mrss\Service\Report\Max\ActivityReport\StudentServices',
+            'service.report.max.activity.ss.perc' =>
+                'Mrss\Service\Report\Max\ActivityReport\StudentServicesPercentages',
             'service.report.max.activity.as' =>
                 'Mrss\Service\Report\Max\ActivityReport\AcademicSupport',
             'service.report' => 'Mrss\Service\Report',

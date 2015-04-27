@@ -777,6 +777,29 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function allInstitutionalAction()
+    {
+
+        $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+
+        $reports = '';
+        $reports .= $viewRender->render(
+            'mrss/report/institution-costs.phtml',
+            $this->institutionCostsAction()
+        );
+
+        $reports .= $viewRender->render(
+            'mrss/report/instructional-costs.phtml',
+            $this->instructionalCostsAction()
+        );
+
+
+        return array(
+            'reports' => $reports,
+            'college' => $this->currentCollege(),
+        );
+    }
+
     public function institutionCostsAction()
     {
         $year = $this->getYearFromRouteOrStudy();

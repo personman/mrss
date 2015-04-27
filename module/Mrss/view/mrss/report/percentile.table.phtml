@@ -1,0 +1,61 @@
+<?php
+/**
+ * @var $valueColumnLabel
+ * @var $heading
+ * @var array $breakpoints
+ * @var array $reportData
+ */
+?>
+<table class="table table-hover table-striped-manual">
+    <thead>
+    <tr class="topHeading">
+        <th></th>
+        <th colspan="2">Your Institution</th>
+        <th colspan="7" class="nationalPercentiles"><?= $heading ?></th>
+    </tr>
+    <tr class="secondHeading">
+        <th></th>
+        <th><?= $valueColumnLabel ?></th>
+        <th>% Rank</th>
+        <th>N</th>
+        <?php foreach ($breakpoints as $breakpoint): ?>
+            <th><?= $breakpoint ?></th>
+        <?php endforeach ?>
+        <th><a href="#" class="btn btn-default showAllCharts" title="Display all charts"><i class="icon-signal glyphicon glyphicon-signal"></i></a></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach ($reportData as $benchmark): ?>
+
+        <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
+        <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => $rowClass, 'benchmark' => $benchmark, 'topLevel' => count($benchmark['details']))) ?>
+
+
+        <?php if (!empty($benchmark['details'])): ?>
+
+        <tr class="reportDetailRow detailHeading">
+            <th></th>
+            <th>Reported Value</th>
+            <th>% Rank</th>
+            <th>N</th>
+            <?php foreach ($breakpoints as $breakpoint): ?>
+                <th><?= $breakpoint ?></th>
+            <?php endforeach ?>
+            <th></th>
+        </tr>
+
+        <?php foreach ($benchmark['details'] as $detailBenchmark): ?>
+            <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => 'reportDetailRow', 'benchmark' => $detailBenchmark)) ?>
+        <?php endforeach ?>
+
+        <?php endif ?>
+
+    <?php endforeach ?>
+    </tbody>
+    <thead>
+    <tr class="spacerRow">
+        <td colspan="9"></td>
+    </tr>
+    </thead>
+</table>

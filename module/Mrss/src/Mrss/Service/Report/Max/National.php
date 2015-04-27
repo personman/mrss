@@ -16,6 +16,7 @@ class National extends Max
 
         $reportData['instructional'] = $this->getInstructionalActivityCosts();
         $reportData['studentServices'] = $this->getStudentServicesCosts();
+        $reportData['studentServicesPercentages'] = $this->getStudentServicesPercentages();
         $reportData['academicSupport'] = $this->getAcademicSupport();
 
         //pr($reportData);
@@ -33,6 +34,13 @@ class National extends Max
     {
         /** @var ActivityReport\StudentServices $report */
         $report = $this->getServiceManager()->get('service.report.max.activity.ss');
+        return $report->getData($this->getObservation());
+    }
+
+    public function getStudentServicesPercentages()
+    {
+        /** @var ActivityReport\StudentServices $report */
+        $report = $this->getServiceManager()->get('service.report.max.activity.ss.perc');
         return $report->getData($this->getObservation());
     }
 

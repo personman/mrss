@@ -1,0 +1,48 @@
+.nav, .adminNavigation, .footer, #headerButtons, #headerLogin, #headerLogin button, .navbar-default {
+    display: none;
+}
+
+.navbar-toggle {
+    border-color: transparent !important;
+}
+.navbar-toggle .icon-bar {
+    background-color: transparent;
+}
+#actionItems {
+    display: none;
+}
+
+
+.navbar {
+    display: none;
+}
+
+
+.nationalReportChart {
+    display: none;
+}
+
+.nationalReportChart.chartVisible {
+    display: table-row;
+}
+
+.reportDetailRow {
+    display: none;
+}
+
+.reportDetailRow.detailVisible {
+    display: table-row;
+}
+
+tr.reportDetailRow td.benchmarkLabel {
+    padding-left: 45px;
+}
+
+.report .btn {
+    display: none;
+}
+
+a[href]:after {
+    content: ""
+}
+

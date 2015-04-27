@@ -956,6 +956,15 @@ return array(
                             )
                         )
                     ),
+                    'all-institutional' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/all-institutional',
+                            'defaults' => array(
+                                'action' => 'allInstitutional'
+                            )
+                        )
+                    ),
                     'instructional-costs' => array(
                         'type' => 'segment',
                         'options' => array(

@@ -1419,6 +1419,33 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $as_students_per_experiential_emp;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_salaries_perc_of_tech;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_o_cost_perc_of_tech;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_contract_perc_of_tech;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_salaries_perc_of_library;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_o_cost_perc_of_library;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_contract_perc_of_library;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_salaries_perc_of_experiential;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_o_cost_perc_of_experiential;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $as_contract_perc_of_experiential;
+
 
 
 

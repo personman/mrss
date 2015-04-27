@@ -125,7 +125,7 @@ tr.topHeading th.nationalPercentiles {
 tr.reportDetailRow {
     display: none;
 }
-tr.reportDetailRow td:first-of-type {
+tr.reportDetailRow td.benchmarkLabel {
     padding-left: 30px;
 }
 

@@ -32,9 +32,11 @@ $(function() {
     $('.showAllCharts').click(function() {
         if ($(this).attr('title').search('Hide') == -1) {
             $('.nationalReportChart').show().addClass('chartVisible')
+            $('.reportDetailRow').show().addClass('detailVisible')
             $(this).attr('title', 'Hide all charts')
         } else {
             $('.nationalReportChart').hide().removeClass('chartVisible')
+            $('.reportDetailRow').hide().removeClass('detailVisible')
             $(this).attr('title', 'Show all charts')
         }
 
@@ -163,6 +165,7 @@ function setUpDetailExpander()
             .nextUntil('tr.topLevelBenchmark', 'tr.reportDetailRow')
             .not('.nationalReportChart')
             .toggle()
+            .toggleClass('detailVisible')
 
         return false
     })
