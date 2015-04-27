@@ -623,7 +623,8 @@ class ReportController extends AbstractActionController
                 $data = $form->getData();
                 $year = $year = $this->getYearFromRouteOrStudy();
 
-                $chart = $this->getReportService()->getChart($data, $year);
+                $chart = $this->getReportService()
+                    ->setObservation($this->currentObservation())->getChart($data, $year);
 
                 // Save it, if requested
                 if (!empty($data['buttons']['submit'])) {
@@ -771,6 +772,15 @@ class ReportController extends AbstractActionController
 
     public function institutionalAction()
     {
+        $this->longRunningScript();
+
+        $subs = $this->getSubscriptionModel()->findForScatterPlot($this->currentStudy(), 2014, 'total_pop');
+
+        foreach ($subs as $sub) {
+            pr(get_class($sub));
+            //pr($sub->getPaymentAmount());
+        }
+
         return array(
             'college' => $this->currentCollege(),
         );

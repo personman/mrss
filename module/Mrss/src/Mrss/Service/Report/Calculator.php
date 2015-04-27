@@ -6,6 +6,11 @@ class Calculator
 {
     protected $data;
 
+    public function __construct($data = null)
+    {
+        $this->setData($data);
+    }
+
     public function setData($data)
     {
         $this->data = $data;
@@ -136,6 +141,16 @@ class Calculator
     public function getMedian()
     {
         return $this->getValueForPercentile(50);
+    }
+
+    public function getMin()
+    {
+        return min($this->getData());
+    }
+
+    public function getMax()
+    {
+        return max($this->getData());
     }
 
     public function getCount()

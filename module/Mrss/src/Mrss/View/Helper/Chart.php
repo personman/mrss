@@ -105,6 +105,12 @@ class Chart extends AbstractHelper
                 'text/javascript'
             );*/
 
+            $this->getView()->headScript()->appendFile(
+                '/js/highcharts-regression.js?v=1',
+                'text/javascript'
+            );
+
+
             $this->javascriptPlaced = true;
         }
     }

@@ -1181,6 +1181,114 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $ss_vetserv_cost_per_contact;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_admissions;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_admissions;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_admissions;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_recruitment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_recruitment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_recruitment;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_advising;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_counseling;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_counseling;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_counseling;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_career;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_career;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_career;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_financial_aid;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_financial_aid;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_financial_aid;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_registrar;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_registrar;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_registrar;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_tutoring;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_testing;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_testing;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_testing;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_cocurricular;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_cocurricular;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_cocurricular;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_disabserv;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_disabserv;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_disabserv;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_salaries_perc_of_vetserv;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_o_cost_perc_of_vetserv;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $ss_contract_perc_of_vetserv;
+
 
 
 

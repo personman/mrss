@@ -4,6 +4,7 @@ namespace Mrss\Model;
 
 use \Mrss\Entity\Subscription as SubscriptionEntity;
 use \Mrss\Entity\Study as StudyEntity;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * Class Subscription
@@ -43,10 +44,12 @@ class Subscription extends AbstractModel
     /**
      * @param $studyId
      * @param $year
+     * @param bool $eagerObservation
      * @return SubscriptionEntity[]
      */
-    public function findByStudyAndYear($studyId, $year)
+    public function findByStudyAndYear($studyId, $year, $eagerObservation = false)
     {
+        //return $this->test($studyId, $year);
         /*return $this->getRepository()->findBy(
             array(
                 'study' => $studyId,
@@ -54,18 +57,98 @@ class Subscription extends AbstractModel
             )
         );*/
 
-        $query = $this->getEntityManager()->createQuery(
-            "SELECT s
+        if ($eagerObservation) {
+            $query = $this->getEntityManager()->createQuery(
+                "SELECT s, o
             FROM Mrss\Entity\Subscription s
-            INNER JOIN Mrss\Entity\College c
-            WHERE s.college = c.id
-            AND s.study = $studyId
+            JOIN s.college c
+            JOIN s.observation o
+            WHERE s.study = $studyId
             AND s.year = $year
             ORDER BY c.name ASC"
-        );
+            );
+        } else {
+            $query = $this->getEntityManager()->createQuery(
+            "SELECT s
+            FROM Mrss\Entity\Subscription s
+            JOIN s.college c
+            WHERE s.study = $studyId
+            AND s.year = $year
+            ORDER BY c.name ASC"
+            );
+        }
 
         return $query->getResult();
+    }
 
+    /**
+     * Return a list of subscriptions with an eagerly fetched partial observation.
+     *
+     * This is useful when we want to compare the value for one benchmark across all subscriptions for a
+     * year and we don't want to load every single value for every observation. The $benchmarks array
+     * specifies a subset of benchmarks to fetch. We can also optionally exclude outliers.
+     *
+     * @param $study
+     * @param $year
+     * @param array $benchmarks
+     * @param boolean $excludeOutliers
+     * @return SubscriptionEntity[]
+     */
+    public function findWithPartialObservations($study, $year, $benchmarks, $excludeOutliers = true)
+    {
+        $rsm = new ResultSetMapping;
+
+        $rsm->addEntityResult('Mrss\Entity\Subscription', 's');
+        $rsm->addFieldResult('s', 'id', 'id');
+        $rsm->addFieldResult('s', 'paymentAmount', 'paymentAmount');
+
+        $rsm->addJoinedEntityResult('Mrss\Entity\College', 'c', 's', 'college');
+        $rsm->addFieldResult('c', 'college_id', 'id');
+        $rsm->addFieldResult('c', 'name', 'name');
+
+        $rsm->addJoinedEntityResult('Mrss\Entity\Observation', 'o', 's', 'observation');
+        $rsm->addFieldResult('o', 'o_id', 'id');
+
+        $subQueries = array();
+        foreach ($benchmarks as $benchmark) {
+            $rsm->addFieldResult('o', $benchmark, $benchmark);
+            $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
+        }
+
+        $benchmarks = implode(', ', $benchmarks);
+        $subQueries = implode("\n", $subQueries);
+        if (!$excludeOutliers) {
+            $subQueries = '';
+        }
+
+        $sql = "SELECT s.id, c.id college_id, c.name, o.id o_id, $benchmarks
+        FROM subscriptions s
+        INNER JOIN colleges c ON s.college_id = c.id
+        INNER JOIN observations o ON s.observation_id = o.id
+        WHERE s.year = :year
+        AND s.study_id = :study_id
+        $subQueries
+        ";
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameter('year', $year);
+        $query->setParameter('study_id', $study->getId());
+
+        $result = $query->getResult();
+
+        return $result;
+    }
+
+    protected function getOutlierExclusionSubquery($dbColumn)
+    {
+        return "AND NOT EXISTS (
+            SELECT l.id
+            FROM outliers l
+            INNER JOIN benchmarks b2 ON l.benchmark_id = b2.id
+            WHERE year = :year
+            AND b2.dbColumn = '$dbColumn'
+            AND l.college_id = c.id
+        )";
     }
 
     /**

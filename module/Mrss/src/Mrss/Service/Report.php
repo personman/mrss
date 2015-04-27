@@ -466,9 +466,7 @@ class Report
         $value = null;
 
         if (!empty($benchmarkInfo['median'])) {
-            $benchmarkEntity = $this->getBenchmarkModel()->findOneByDbColumn(
-                $benchmarkInfo['dbColumn']
-            );
+            $benchmarkEntity = $this->getBenchmark($benchmarkInfo['dbColumn']);
 
             $value = $this->getPercentileModel()
                 ->findByBenchmarkYearAndPercentile(
@@ -489,43 +487,74 @@ class Report
         $benchmark2 = $config['benchmark2'];
         $size = $config['benchmark3'];
         $title = $config['title'];
+        $regression = $config['regression'];
 
         switch ($config['presentation']) {
             case 'scatter':
-                $chart = $this->getScatterPlot($benchmark1, $benchmark2, $title, $year);
+                $chart = $this->getScatterPlot($benchmark1, $benchmark2, $title, $year, null, true, $regression);
                 break;
             case 'bubble':
-                $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year);
+                $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year, null, true, $regression);
                 break;
         }
 
         return $chart;
     }
 
-    public function getScatterPlot($benchmark1, $benchmark2, $title, $year)
+    public function getScatterPlot($benchmark1, $benchmark2, $title, $year, $collegeId = null, $showMedians = false, $showRegression = false)
     {
-        return $this->getBubbleChart($benchmark1, $benchmark2, null, $title, $year);
+        return $this->getBubbleChart($benchmark1, $benchmark2, null, $title, $year, $collegeId, $showMedians, $showRegression);
     }
 
-    public function getBubbleChart($x, $y, $size, $title, $year)
+    public function getBubbleChart($x, $y, $size, $title, $year, $collegeId = null, $showMedians = false, $showRegression = false)
     {
+        $type = 'bubble';
+        if ($size === null) {
+            $type = 'scatter';
+        }
+
         $excludeOutliers = true;
+        if ($excludeOutliers) {
+            // Preload them
+            //$this->getOutlierModel()->findByStudy($this->getStudy(), $year);
+        }
 
         $study = $this->getStudy();
+        $dbColumns = array($x, $y);
+        if (!empty($size)) {
+            $dbColumns[] = $size;
+        }
+
         $subscriptions = $this->getSubscriptionModel()
-            ->findByStudyAndYear($study->getId(), $year);
+            ->findWithPartialObservations($study, $year, $dbColumns);
 
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);
 
+        $xFormat = $this->getFormat($xBenchmark);
+        $yFormat = $this->getFormat($yBenchmark);
+
+        if (!$collegeId) {
+            $collegeId = $this->getCollege()->getId();
+        }
+
         $data = array();
+        $yourCollege = array();
+        $xvals = array();
+        $yVals = array();
+
+        /** @var \Mrss\Model\Observation $oM */
+        /*$oM = $this->getServiceManager()->get('model.observation');
+        $data2 = $oM->findForScatterPlot($this->getStudy(), $year, $x);
+        pr($data2);*/
+
         foreach ($subscriptions as $subscription) {
             $observation = $subscription->getObservation();
 
             // Skip subscription if it includes an outlier
-            if ($excludeOutliers && $this->hasOutlier($subscription, $xBenchmark, $yBenchmark)) {
+            /*if ($excludeOutliers && $this->hasOutlier($subscription, $xBenchmark, $yBenchmark)) {
                 continue;
-            }
+            }*/
 
             $xVal = $observation->get($x);
             $yVal = $observation->get($y);
@@ -538,33 +567,128 @@ class Report
 
 
             if ($xVal && $yVal && $sizeVal) {
-                $data[] = array(
+
+                $datum = array(
                     floatval($xVal),
                     floatval($yVal),
                     floatval($sizeVal)
                 );
+
+                // Highlight the college?
+                if ($subscription->getCollege()->getId() == $collegeId) {
+                    $yourCollege[] = $datum;
+                } else {
+                    $data[] = $datum;
+                }
+
+                // Save 'em for the median
+                $xvals[] = $xVal;
+                $yVals[] = $yVal;
             }
         }
 
         $xLabel = $xBenchmark->getName();
         $yLabel = $yBenchmark->getName();
 
+        if (empty($showRegression)) {
+            $showRegression = false;
+        }
+
 
         $series = array(
             array(
+                'type' => $type,
                 'name' => 'Institutions',
-                'data' => $data
+                'color' => '#0065A1',
+                'data' => $data,
+                'regression' => $showRegression,
+                'regressionSettings' => array(
+                    'name' => 'Regression Line (r<sup>2</sup> = %r2)',
+                    'tooltip' => array(
+                        'enabled' => false
+                    ),
+                    //'type' => 'polynomial'
+                )
             )
         );
+
+        // Regression line
+
+        // Highlight a college?
+        if (count($yourCollege)) {
+            $series[] = array(
+                'name' => $this->getCollege()->getName(),
+                'type' => $type,
+                'color' => '#9CBF3D',
+                'data' => $yourCollege,
+                'marker' => array(
+                    'radius' => 8
+                )
+            );
+        }
+
+        $xAxis = array(
+            'title' => array(
+                'enabled' => true,
+                'text' => $xLabel
+            ),
+            'labels' => array(
+                'format' => str_replace(array('y', '.2f', '.4f'), array('value', '.0f', '.2f'), $xFormat)
+            )
+        );
+
+        //    'tooltip' => array(
+        //'pointFormat' => $format
+        //'pointFormat' => str_replace('y', 'point.y', $format)
+
+        $yAxis = array(
+            'title' => array(
+                'enabled' => true,
+                'text' => $yLabel
+            ),
+            'labels' => array(
+                'format' => str_replace(array('y', '.2f', '.4f'), array('value', '.0f', '.2f'), $yFormat)
+            )
+        );
+
+        // Show median lines?
+        if (true || $showMedians) {
+            $calculatorX = new Calculator($xvals);
+            $calculatorY = new Calculator($yVals);
+
+            $xMedian = $calculatorX->getMedian();
+            $yMedian = $calculatorY->getMedian();
+
+
+            $xAxis['plotLines'] = array(
+                array(
+                    'color' => '#CCC',
+                    'value' => $xMedian,
+                    'width' => 1
+                )
+            );
+            $xAxis['gridLineWidth'] = 0;
+
+            $yAxis['plotLines'] = array(
+                array(
+                    'color' => '#CCC',
+                    'value' => $yMedian,
+                    'width' => 1
+                )
+            );
+            $yAxis['gridLineWidth'] = 0;
+
+
+        }
 
         if (empty($title)) {
             $title = 'Test Chart';
         }
 
-        $type = 'bubble';
-        if ($size === null) {
-            $type = 'scatter';
-        }
+        $pointFormat = "<strong>$xLabel:</strong> {point.x}<br> <strong>$yLabel</strong>: {point.y}";
+        $pointFormat = str_replace('{point.x}', str_replace('y', 'point.x', $xFormat), $pointFormat);
+        $pointFormat = str_replace('{point.y}', str_replace('y', 'point.y', $yFormat), $pointFormat);
+
 
         $chart = array(
             'id' => 'chart_' . uniqid(),
@@ -575,28 +699,69 @@ class Report
             'title' => array(
                 'text' => $title,
             ),
-            'xAxis' => array(
-                'title' => array(
-                    'enabled' => true,
-                    'text' => $xLabel
-                )
-            ),
-            'yAxis' => array(
-                'title' => array(
-                    'enabled' => true,
-                    'text' => $yLabel
-                )
-            ),
+            'xAxis' => $xAxis,
+            'yAxis' => $yAxis,
             'exporting' => array(
                 'enabled' => true
             ),
             'credits' => array(
                 'enabled' => false
             ),
+            'plotOptions' => array(
+                'scatter' => array(
+                    'tooltip' => array(
+                        'valueDecimals' => 0,
+                        'pointFormat' => $pointFormat
+                    )
+                )
+            )
+            ,
             'series' => $series
         );
 
         return $chart;
+    }
+
+    protected /**
+     * linear regression function
+     * @param $x array x-coords
+     * @param $y array y-coords
+     * @returns array() m=>slope, b=>intercept
+     */
+    function linearRegression($x, $y) {
+
+        // calculate number points
+        $n = count($x);
+
+        // ensure both arrays of points are the same size
+        if ($n != count($y)) {
+
+            trigger_error("linear_regression(): Number of elements in coordinate arrays do not match.", E_USER_ERROR);
+
+        }
+
+        // calculate sums
+        $x_sum = array_sum($x);
+        $y_sum = array_sum($y);
+
+        $xx_sum = 0;
+        $xy_sum = 0;
+
+        for($i = 0; $i < $n; $i++) {
+
+            $xy_sum+=($x[$i]*$y[$i]);
+            $xx_sum+=($x[$i]*$x[$i]);
+
+        }
+
+        // calculate slope
+        $m = (($n * $xy_sum) - ($x_sum * $y_sum)) / (($n * $xx_sum) - ($x_sum * $x_sum));
+
+        // calculate intercept
+        $b = ($y_sum - ($m * $x_sum)) / $n;
+
+        // return result
+        return array("m"=>$m, "b"=>$b);
 
     }
 
@@ -1265,6 +1430,13 @@ class Report
     public function getYear()
     {
         return $this->getObservation()->getYear();
+    }
+
+    public function getCollege()
+    {
+        if ($ob = $this->getObservation()) {
+            return $ob->getCollege();
+        }
     }
 
     protected function getErrorLog($shortFormat = false)

@@ -17,7 +17,8 @@ class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
-        $eventManager        = $e->getApplication()->getEventManager();
+        $eventManager = $e->getApplication()->getEventManager();
+        $sm = $e->getApplication()->getServiceManager();
 
         $this->bootstrapSession($e);
 
@@ -34,6 +35,8 @@ class Module
         );
         Logger::registerErrorHandler($this->getErrorLog());
 
+        // Touch the sql logger, so it works
+        $collector = $sm->get('doctrine.sql_logger_collector.orm_default');
 
 
         // Set the timezone
@@ -44,7 +47,6 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
         // Set up model injector
-        $sm = $e->getApplication()->getServiceManager();
         $sm->get('doctrine.entitymanager.orm_default')
             ->getEventManager()
             ->addEventListener(
@@ -231,6 +233,7 @@ class Module
             ),
             'aliases' => array(
                 'em' => 'doctrine.entitymanager.orm_default',
+                //'doctrine.entity_manager.orm_default' => 'doctrine.entitymanager.orm_default',
             ),
             'invokables' => array(),
             'services' => array(),
@@ -383,6 +386,10 @@ class Module
 
                     return $validator;
                 },
+                /*'doctrine.entity_manager.orm_default' => function ($sm) {
+                    return $sm->get('doctrine.entitymanager.orm_default');
+                },*/
+
                 // Perhaps there should be a generic model factory
                 // That injects the em
                 'model.user' => function ($sm) {

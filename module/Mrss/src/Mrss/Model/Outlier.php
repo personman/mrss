@@ -39,11 +39,15 @@ class Outlier extends AbstractModel
      *
      * @deprecated
      * @param StudyEntity $study
+     * @param null $year
      * @return array
      */
-    public function findByStudy(StudyEntity $study)
+    public function findByStudy(StudyEntity $study, $year = null)
     {
-        $year = $study->getCurrentYear();
+        if (!$year) {
+            $year = $study->getCurrentYear();
+        }
+
         $studyId = $study->getId();
 
         $query = $this->getEntityManager()->createQuery(

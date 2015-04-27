@@ -1635,8 +1635,11 @@ return array(
         'configuration' => array(
           'orm_default' => array(
               //'metadata_cache' => 'my_memcache',
-              //'query_cache' => 'filesystem'
+              'query_cache' => 'filesystem'
           )
+        ),
+        'sql_logger_collector' => array(
+            'orm_default' => array()
         ),
         'driver' => array(
             // defines an annotation driver with two paths, and names it `my_annotation_driver`

@@ -90,6 +90,20 @@ class Explore extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'regression',
+                'type' => 'Zend\Form\Element\Checkbox',
+                'options' => array(
+                    'label' => 'Show Regression Line'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks,
+                    'id' => 'regression'
+                )
+            )
+        );
+
         /*$this->add(
             array(
                 'name' => 'highlightedCollege',

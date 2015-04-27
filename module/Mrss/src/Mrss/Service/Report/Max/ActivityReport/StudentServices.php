@@ -34,9 +34,9 @@ class StudentServices extends ActivityReport
         $fields = array(
             "ss_{$activity}_cost_per_fte_emp" => "Average Salary and Benefits",
             "ss_{$activity}_students_per_fte_emp" => "FTE Students per Staff Person",
-            "ss_{$activity}_percent_salaries" => "% of Costs for Salaries and Benefits",
-            "ss_{$activity}_percent_o_cost" => "% of Costs for Non-labor Operating Costs"
-            // @todo: confirm equations are right and add benchmarks for contract costs
+            "ss_salaries_perc_of_{$activity}" => "% of Costs for Salaries and Benefits",
+            "ss_o_cost_perc_of_{$activity}" => "% of Costs for Non-labor Operating Costs",
+            "ss_contract_perc_of_{$activity}" => "% of Costs for Contract Services"
         );
 
         return $fields;
