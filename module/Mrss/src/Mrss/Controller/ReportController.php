@@ -793,6 +793,31 @@ class ReportController extends AbstractActionController
             $this->instructionalCostsAction()
         );
 
+        $reports .= $viewRender->render(
+            'mrss/report/instructional-activity-costs.phtml',
+            $this->instructionalActivityCostsAction()
+        );
+
+        $reports .= $viewRender->render(
+            'mrss/report/unit-costs.phtml',
+            $this->unitCostsAction()
+        );
+
+        $reports .= $viewRender->render(
+            'mrss/report/unit-demographics.phtml',
+            $this->unitDemographicsAction()
+        );
+
+        $reports .= $viewRender->render(
+            'mrss/report/student-services-costs.phtml',
+            $this->studentServicesCostsAction()
+        );
+
+        $reports .= $viewRender->render(
+            'mrss/report/academic-support.phtml',
+            $this->academicSupportAction()
+        );
+
 
         return array(
             'reports' => $reports,
@@ -940,19 +965,11 @@ class ReportController extends AbstractActionController
         $reportData = $report->getData($observation);
 
         $view = new ViewModel(
-            array(/*
-                'reportData' => $reportData,
-                'year' => $year,
-                'subscriptions' => $subscriptions,
-                'college' => $college,
-                'open' => $open,
-                'media' => $media
-            */
+            array(
                 'heading' => 'National Percentiles',
                 'reportData' => $reportData,
                 'breakpoints' => $this->getReportService()
                         ->getPercentileBreakPointLabels(),
-
             )
         );
         $view->setTemplate('mrss/report/max-national.phtml');

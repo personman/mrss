@@ -623,11 +623,12 @@ class Report
             array(
                 'type' => $type,
                 'name' => 'Institutions',
-                'color' => '#0065A1',
+                'color' => $this->getBarChartBarColor(),
                 'data' => $data,
                 'regression' => $showRegression,
                 'regressionSettings' => array(
                     'name' => 'Regression Line (r<sup>2</sup> = %r2)',
+                    'color' => '#666',
                     'tooltip' => array(
                         'enabled' => false
                     ),
@@ -677,6 +678,9 @@ class Report
 
         // Show median lines?
         if (true || $showMedians) {
+            $medianLineColor = '#CCC';
+            $medianLineColor = '#F5D60E';
+            
             $calculatorX = new Calculator($xvals);
             $calculatorY = new Calculator($yVals);
 
@@ -686,7 +690,7 @@ class Report
 
             $xAxis['plotLines'] = array(
                 array(
-                    'color' => '#CCC',
+                    'color' => $medianLineColor,
                     'value' => $xMedian,
                     'width' => 1
                 )
@@ -695,7 +699,7 @@ class Report
 
             $yAxis['plotLines'] = array(
                 array(
-                    'color' => '#CCC',
+                    'color' => $medianLineColor,
                     'value' => $yMedian,
                     'width' => 1
                 )
@@ -879,10 +883,10 @@ class Report
             // Your college
             if ($i === $this->getYourCollegeLabel()) {
                 $dataLabelEnabled = true;
-                $color = '#002C57';
+                $color = $this->getBarChartHighlightColor();
             } else {
                 $dataLabelEnabled = false;
-                $color = '#0065A1';
+                $color = $this->getBarChartBarColor();
             }
 
             $chartData[] = array(
@@ -986,6 +990,27 @@ class Report
         //var_dump($chart);
         return $chart;
     }
+
+    protected function getBarChartBarColor()
+    {
+        // Default
+        $color = '#0065A1';
+
+        // Override for Max
+        if ($this->getStudy()->getId() == 2) {
+            $color = '#0097BB';
+        }
+
+        return $color;
+    }
+
+    protected function getBarChartHighlightColor()
+    {
+        $color = '#002C57';
+
+        return $color;
+    }
+
 
     protected function isNoelLevitz($dbColumn)
     {

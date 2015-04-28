@@ -24,4 +24,28 @@ class Instructional extends ActivityReport
 
         return $fields;
     }
+
+    /**
+     * Add the top level cost as the first row
+     *
+     * @param $data
+     * @return mixed
+     */
+    protected function customizeReportData($data)
+    {
+        array_unshift($data, $this->getTopLevelCost());
+
+        return $data;
+    }
+
+    protected function getTopLevelCost()
+    {
+        $benchmarkKey = 'inst_total_expend_per_fte_student';
+        $benchmark = $this->getBenchmark($benchmarkKey);
+        $benchmarkData = $this->getBenchmarkData($benchmark);
+        $benchmarkData['details'] = array();
+        $benchmarkData['benchmark'] = 'Institution';
+
+        return $benchmarkData;
+    }
 }

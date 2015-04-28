@@ -47,48 +47,7 @@ class Explore extends AbstractForm
             )
         );
 
-
-        $this->add(
-            array(
-                'name' => 'benchmark1',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'X Axis'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'benchmark1'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'benchmark2',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'Y Axis'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'benchmark2'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'benchmark3',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'Bubble Size'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'benchmark3'
-                )
-            )
-        );
+        $this->addBenchmarkSelects($benchmarks);
 
         $this->add(
             array(
@@ -133,6 +92,52 @@ class Explore extends AbstractForm
 
 
         $this->add($this->getButtons());
+    }
+
+    protected function addBenchmarkSelects($benchmarks)
+    {
+        $this->add(
+            array(
+                'name' => 'benchmark1',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'X Axis'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks,
+                    'id' => 'benchmark1'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'benchmark2',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'Y Axis'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks,
+                    'id' => 'benchmark2'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'benchmark3',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'Bubble Size'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks,
+                    'id' => 'benchmark3'
+                )
+            )
+        );
+
     }
 
     protected function getButtons()

@@ -427,6 +427,11 @@ tr.detailHeading {
     background-color: #DCE6F1;
 }
 
+.report .table > thead > tr.topHeading th {
+    background: #0097BB;
+}
+
+
 /** Member homepage */
 #membertime .row-fluid {
     margin-top: 20px;

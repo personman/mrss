@@ -610,8 +610,12 @@ class Internal extends Max
         return array($reportData, $charts);
     }
 
-    protected function getStudentServicesCostsCharts($chartData, $anyDollarBenchmark, $anyFloatBenchmark)
-    {
+    protected function getStudentServicesCostsCharts(
+        $chartData,
+        $dollarBenchmark,
+        $floatBenchmark,
+        $id = 'student_services_'
+    ) {
         // Rearrange data
         ksort($chartData);
 
@@ -619,9 +623,9 @@ class Internal extends Max
         $titles = array('Cost per FTE Student', 'Cost per Student Contact', 'FTE Students per Employee');
 
         $benchmarks = array(
-            $anyDollarBenchmark,
-            $anyDollarBenchmark,
-            $anyFloatBenchmark
+            $dollarBenchmark,
+            $dollarBenchmark,
+            $floatBenchmark
         );
 
         $i = 0;
@@ -637,7 +641,7 @@ class Internal extends Max
                 array_keys($data),
                 $series,
                 $titles[$i],
-                'student_services_' . $i
+                $id . $i
             );
 
             $charts[] = $chart;
@@ -687,7 +691,12 @@ class Internal extends Max
             );
         }
 
-        $charts = $this->getStudentServicesCostsCharts($chartData, $dollarBenchmark, $floatBenchmark);
+        $charts = $this->getStudentServicesCostsCharts(
+            $chartData,
+            $dollarBenchmark,
+            $floatBenchmark,
+            'academic_support_'
+        );
 
         return array($reportData, $charts);
     }

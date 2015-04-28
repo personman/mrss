@@ -28,6 +28,14 @@ abstract class ActivityReport extends National
             $data[] = $benchmarkData;
         }
 
+        $data = $this->customizeReportData($data);
+
+        return $data;
+    }
+
+    protected function customizeReportData($data)
+    {
+        // By default, no customization. Override this method to customize
         return $data;
     }
 

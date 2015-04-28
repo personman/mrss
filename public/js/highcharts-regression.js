@@ -64,8 +64,12 @@
                 extraSerie.data = regression.points ;
                 extraSerie.name = extraSerie.name.replace("%r2",regression.rSquared);
                 extraSerie.name = extraSerie.name.replace("%r",regression.rValue);
-                extraSerie.name = extraSerie.name.replace("%eq",regression.string);               
-                
+                extraSerie.name = extraSerie.name.replace("%eq",regression.string);
+
+                // Don't react to hover (modded by dferguson)
+                extraSerie['marker'] = {enabled: false}
+                extraSerie['enableMouseTracking'] = false
+
                 extraSerie.regressionOutputs = regression ;
                 extraSeries.push(extraSerie) ;
                 arguments[1].series[i].rendered = true;                           
