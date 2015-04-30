@@ -60,7 +60,9 @@ class SubscriptionController extends AbstractActionController
     public function viewAction()
     {
         if (!empty($_GET['slack'])) {
-            $this->slack('slack test.');
+            //$this->slack('slack test.');
+            $this->slack("New NCCBP membership for Johnson County Community College (KS). Cost: $1,000 (Invoice).
+235 members, $293,602." , 'nccbp-website', ':nccbp:', 'NCCBP-bot');
         }
 
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
