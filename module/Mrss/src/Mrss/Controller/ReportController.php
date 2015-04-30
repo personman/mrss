@@ -1010,6 +1010,9 @@ class ReportController extends AbstractActionController
      */
     protected function checkReportAccess()
     {
+        // Temporarily open them up no matter what.
+        return true;
+
         // Reports are always open for JCCC
         $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
         $impersonationService = $this->getServiceLocator()
