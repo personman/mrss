@@ -61,7 +61,7 @@ class SubscriptionController extends AbstractActionController
     {
         if (!empty($_GET['slack'])) {
             //$this->slack('slack test.');
-            $this->slack("New NCCBP membership for Johnson County Community College (KS). Cost: $1,000 (Invoice). 235 members, $293,602." , 'nccbp-website', ':nccbp:', 'NCCBP-bot');
+            $this->slack("Test: New NCCBP membership for Johnson County Community College (KS). Cost: $1,000 (Invoice). 235 members, $293,602." , 'nccbp-website', ':nccbp:', 'NCCBP-bot');
         }
 
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
@@ -787,8 +787,8 @@ class SubscriptionController extends AbstractActionController
         $count = count($subscriptions);
         $total = number_format($total);
 
-        $message .= "\n";
-        $message .= "$count members, $$total. ";
+        //$message .= "\n";
+        $message .= " $count members, $$total. ";
 
         $this->getLog()->info("Slack message prepared: $message");
 
