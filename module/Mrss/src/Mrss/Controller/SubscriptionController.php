@@ -60,8 +60,7 @@ class SubscriptionController extends AbstractActionController
     public function viewAction()
     {
         if (!empty($_GET['slack'])) {
-            //$this->slack('slack test.');
-            $this->slack("Test: New NCCBP membership for Johnson County Community College (KS). Cost: $1,000 (Invoice). 235 members, $293,602." , 'nccbp-website', ':nccbp:', 'NCCBP-bot');
+            $this->slack('slack test.');
         }
 
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
@@ -86,14 +85,6 @@ class SubscriptionController extends AbstractActionController
             'subscription' => $subscription,
         );
     }
-
-    /*public function testSlack()
-    {
-
-        $this->slack('hello from the NCCBP app', 'development', ':nccbp:');
-
-        die('slack test');
-    }*/
 
     public function slack(
         $message,
@@ -719,8 +710,6 @@ class SubscriptionController extends AbstractActionController
         // Save it all to the db
         $this->getServiceLocator()->get('em')->flush();
 
-        $this->getLog()->info("DB flushed, about to email invoice.");
-
         // Send invoice, if needed
         if ($sendInvoice) {
             $this->sendInvoice($subscription, $adminUser, $dataUser);
@@ -756,8 +745,6 @@ class SubscriptionController extends AbstractActionController
 
     protected function sendSlackNotification(Subscription $subscription)
     {
-        $this->getLog()->info('Preparing to send slack notification.');
-
         $college = $subscription->getCollege()->getName();
         $state = $subscription->getCollege()->getState();
         $college .= " ($state)";
@@ -790,8 +777,6 @@ class SubscriptionController extends AbstractActionController
         //$message .= "\n";
         $message .= " $count members, $$total. ";
 
-        $this->getLog()->info("Slack message prepared: $message");
-
         // Configure channel, etc
         $map = array(
             1 => array('nccbp-website', ':nccbp:', 'NCCBP-bot'),
@@ -803,7 +788,6 @@ class SubscriptionController extends AbstractActionController
             list($channel, $icon, $username) = $map[$studyId];
 
             $this->slack($message, $channel, $icon, $username);
-            $this->getLog()->info("Slack message sent: $message, $channel, $icon, $username");
         }
     }
 
