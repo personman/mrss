@@ -141,7 +141,7 @@ class SubscriptionController extends AbstractActionController
             die('sent');
         }
 
-        // Are they signed in? If so, reirect them to renew
+        // Are they signed in? If so, redirect them to renew
         $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
         if ($auth->hasIdentity()) {
             return $this->redirect()->toRoute('renew');
@@ -718,6 +718,8 @@ class SubscriptionController extends AbstractActionController
         // Save it all to the db
         $this->getServiceLocator()->get('em')->flush();
 
+        $this->getLog()->info("DB flushed, about to email invoice.");
+
         // Send invoice, if needed
         if ($sendInvoice) {
             $this->sendInvoice($subscription, $adminUser, $dataUser);
@@ -753,6 +755,8 @@ class SubscriptionController extends AbstractActionController
 
     protected function sendSlackNotification(Subscription $subscription)
     {
+        $this->getLog()->info('Preparing to send slack notification.');
+
         $college = $subscription->getCollege()->getName();
         $state = $subscription->getCollege()->getState();
         $college .= " ($state)";
@@ -785,6 +789,8 @@ class SubscriptionController extends AbstractActionController
         $message .= "\n";
         $message .= "$count members, $$total. ";
 
+        $this->getLog()->info("Slack message prepared: $message");
+
         // Configure channel, etc
         $map = array(
             1 => array('nccbp-website', ':nccbp:', 'NCCBP-bot'),
@@ -796,6 +802,7 @@ class SubscriptionController extends AbstractActionController
             list($channel, $icon, $username) = $map[$studyId];
 
             $this->slack($message, $channel, $icon, $username);
+            $this->getLog()->info("Slack message sent: $message, $channel, $icon, $username");
         }
     }
 
