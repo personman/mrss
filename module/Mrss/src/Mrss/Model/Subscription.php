@@ -186,6 +186,20 @@ class Subscription extends AbstractModel
         return $years;
     }
 
+    public function getYearsWithReports(StudyEntity $study, $currentYearOpen)
+    {
+        $years = $this->getYearsWithSubscriptions($study);
+
+        // Skip the current year if reports aren't open yet
+        foreach ($years as $key => $year) {
+            if ($year == $study->getCurrentYear() && !$currentYearOpen) {
+                unset($years[$key]);
+            }
+        }
+
+        return $years;
+    }
+
     public function getLatestSubscription(StudyEntity $study, $collegeId, $before = null)
     {
         $studyId = $study->getId();

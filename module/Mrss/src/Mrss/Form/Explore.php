@@ -8,10 +8,12 @@ use Zend\Form\Fieldset;
 class Explore extends AbstractForm
 {
 
-    public function __construct($benchmarks, $colleges)
+    public function __construct($benchmarks, $colleges, $years)
     {
         // Call the parent constructor
         parent::__construct('explore');
+
+        $years = array_combine($years, $years);
 
         $this->add(
             array(
@@ -26,6 +28,20 @@ class Explore extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Title'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'year',
+                'type' => 'Select',
+                'options' => array(
+                    'label' => 'Year'
+                ),
+                'attributes' => array(
+                    'id' => 'years',
+                    'options' => $years
                 )
             )
         );

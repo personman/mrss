@@ -597,7 +597,11 @@ class ReportController extends AbstractActionController
             );
 
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
-                $group['options'][$benchmark->getDbColumn()] = $benchmark->getName();
+                // Skip non-report benchmarks
+                if (!$benchmark->getIncludeInNationalReport()) {
+                    continue;
+                }
+                $group['options'][$benchmark->getDbColumn()] = $benchmark->getDescriptiveReportLabel();
             }
 
             $benchmarks[$benchmarkGroup->getId()] = $group;
@@ -606,7 +610,9 @@ class ReportController extends AbstractActionController
 
         $colleges = array();
 
-        $form = new Explore($benchmarks, $colleges);
+        $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->checkReportAccess());
+
+        $form = new Explore($benchmarks, $colleges, $years);
 
         $chart = null;
         if ($this->getRequest()->isPost()) {
@@ -621,7 +627,7 @@ class ReportController extends AbstractActionController
 
             if ($form->isValid()) {
                 $data = $form->getData();
-                $year = $year = $this->getYearFromRouteOrStudy();
+                $year = $data['year'];
 
                 $chart = $this->getReportService()
                     ->setObservation($this->currentObservation())->getChart($data, $year);
@@ -984,7 +990,26 @@ class ReportController extends AbstractActionController
      */
     public function checkReportsAreOpen()
     {
+        $open = $this->checkReportAccess();
+
+        if (!$open) {
+            $this->flashMessenger()->addErrorMessage(
+                'Reports are not currently open. Check back later.'
+            );
+
+            return $this->redirect()->toUrl('/members');
+        }
+
         return null;
+    }
+
+    /**
+     * Return true if they can access reports for the current year
+     *
+     * @return boolean
+     */
+    protected function checkReportAccess()
+    {
         // Reports are always open for JCCC
         $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
         $impersonationService = $this->getServiceLocator()
@@ -994,28 +1019,19 @@ class ReportController extends AbstractActionController
             $user = $auth->getIdentity();
 
             if ($user->getCollege()->getId() == 101) {
-                return null;
+                return true;
             }
 
             // If an admin is impersonating another user, let them through
             if ($impersonationService->isImpersonated()) {
-                return null;
+                return true;
             }
         }
 
         // Check the current study's report setting
         if (!$this->currentStudy()->getReportsOpen()) {
-            $this->flashMessenger()->addErrorMessage(
-                'Reports are not currently open. Check back later.'
-            );
-
-            return $this->redirect()->toUrl('/members');
+            return false;
         }
-    }
-
-    protected function checkReportAccess()
-    {
-
     }
 
     /**

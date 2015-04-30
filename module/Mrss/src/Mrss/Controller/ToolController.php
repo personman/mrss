@@ -465,9 +465,9 @@ class ToolController extends AbstractActionController
      */
     protected function separateAction()
     {
-        $partTwo = true;
+        $partTwo = false;
 
-        $formIds = array(40, 42);
+        $formIds = array(42);
         $exclude = array(
             'instruction_online',
             'instruction_face_to_face',

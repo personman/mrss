@@ -611,8 +611,8 @@ class Report
             }
         }
 
-        $xLabel = $xBenchmark->getName();
-        $yLabel = $yBenchmark->getName();
+        $xLabel = $xBenchmark->getDescriptiveReportLabel();
+        $yLabel = $yBenchmark->getDescriptiveReportLabel();
 
         if (empty($showRegression)) {
             $showRegression = false;
@@ -679,8 +679,7 @@ class Report
         // Show median lines?
         if (true || $showMedians) {
             $medianLineColor = '#CCC';
-            $medianLineColor = '#F5D60E';
-            
+
             $calculatorX = new Calculator($xvals);
             $calculatorY = new Calculator($yVals);
 

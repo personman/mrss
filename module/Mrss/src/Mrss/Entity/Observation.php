@@ -1712,6 +1712,61 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $max_res_next_term_pers;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_perc_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_perc_comp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_perc_comp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_perc_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_perc_comp_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_perc_comp_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_minus7perc_comp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_percminus7_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_percminus7_comtran;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_perminus7_comp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_percminus7_tran;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_pminus7_comtran;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_yminus3_perc_comp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_yminus3_perc_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ft_yminus3_perc_comp_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_ret_rate;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_enr_succ;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_comp_succ;
+
+
 
 
     // NCCBP form 1:
