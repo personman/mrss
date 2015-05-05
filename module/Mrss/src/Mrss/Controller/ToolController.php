@@ -24,6 +24,7 @@ class ToolController extends AbstractActionController
             'gc_lifetime' => ini_get('session.gc_maxlifetime'),
             'cookie_lifetime' => ini_get('session.cookie_lifetime'),
             'remember_me_seconds' => ini_get('session.remember_me_seconds'),
+            'session_save_path' => session_save_path(),
             'baseTime' => $baseTime,
             'collegesWithNoExec' => $this->getMembersWithNoExec()
         );
