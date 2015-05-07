@@ -41,7 +41,8 @@
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*",
         "behat/mink-zombie-driver": "*",
-        "symfony/http-kernel": "*",
+        "symfony/http-kernel": "2.*",
+        "symfony/debug": "2.*",
         "phpmd/phpmd": "*",
         "psr/log": "1.0.0",
         "codeclimate/php-test-reporter": "dev-master"
