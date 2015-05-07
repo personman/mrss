@@ -1758,6 +1758,15 @@ class Observation
     protected $max_res_ft_yminus3_perc_comp_transf;
 
     /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_yminus3_perc_comp;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_yminus3_perc_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $max_res_pt_yminus3_perc_comp_transf;
+
+    /** @ORM\Column(type="float", nullable=true) */
     protected $max_res_ret_rate;
 
     /** @ORM\Column(type="float", nullable=true) */
