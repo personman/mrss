@@ -75,11 +75,20 @@ $this->headScript()->appendFile(
 
 
 
-<? /*<h3>Student Success</h3>
+<h3>Student Success</h3>
 
+<?= $this->partial(
+    'mrss/report/percentile.table.phtml',
+    array(
+        'heading' => $heading,
+        'breakpoints' => $breakpoints,
+        'reportData' => $reportData['studentSuccess'],
+        'valueColumnLabel' => 'Reported Value'
+    )
+) ?>
 
 <hr>
-*/ ?>
+
 
 <p class="footnote" id="bottom">
     - = % Rank cannot be reported on a zero.

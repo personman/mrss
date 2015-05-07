@@ -980,6 +980,7 @@ class ReportController extends AbstractActionController
         );
         $view->setTemplate('mrss/report/max-national.phtml');
 
+
         return $view;
     }
 

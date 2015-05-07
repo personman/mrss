@@ -27,9 +27,21 @@
 
     <tbody>
     <?php foreach ($reportData as $benchmark): ?>
+        <?php $topLevel = !empty($benchmark['details']) && count($benchmark['details']); ?>
 
-        <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
-        <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => $rowClass, 'benchmark' => $benchmark, 'topLevel' => count($benchmark['details']))) ?>
+        <?php if (!empty($benchmark['heading'])): ?>
+            <tr class="retportSeparator"></tr>
+            <tr class="reportSubHeading">
+                <td colspan="10">
+                    <?= $benchmark['name'] ?>
+                </td>
+            </tr>
+            <?php continue ?>
+        <?php endif ?>
+
+
+    <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
+        <?= $this->partial('mrss/report/percentile.row.phtml', array('rowClass' => $rowClass, 'benchmark' => $benchmark, 'topLevel' => $topLevel)) ?>
 
 
         <?php if (!empty($benchmark['details'])): ?>

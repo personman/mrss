@@ -26,6 +26,10 @@ class Percentile extends AbstractModel
      */
     public function findByBenchmarkAndYear($benchmark, $year, $system = null)
     {
+        if (empty($system)) {
+            $system = null;
+        }
+
         return $this->getRepository()->findBy(
             array(
                 'benchmark' => $benchmark,
