@@ -30,6 +30,8 @@
         "goalio/goalio-forgotpassword": "1.0.2",
         "goalio/goalio-forgotpassword-doctrine-orm": "*",
         "rezzza/exprlib": "*",
+        "symfony/http-kernel": "2.*",
+        "symfony/debug": "2.*",
         "guzzle/guzzle": "3.5.*"
     },
     "require-dev": {
@@ -41,8 +43,6 @@
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*",
         "behat/mink-zombie-driver": "*",
-        "symfony/http-kernel": "2.*",
-        "symfony/debug": "2.*",
         "phpmd/phpmd": "*",
         "psr/log": "1.0.0",
         "codeclimate/php-test-reporter": "dev-master"
