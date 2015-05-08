@@ -607,6 +607,15 @@ return array(
                             )
                         )
                     ),
+                    'on-report' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/on-report/:id/:value',
+                            'defaults' => array(
+                                'action' => 'onReport'
+                            )
+                        )
+                    ),
                     'equations' => array(
                         'type' => 'segment',
                         'options' => array(

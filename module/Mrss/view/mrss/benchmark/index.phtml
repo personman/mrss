@@ -1,58 +1,7 @@
 <? /** @var \Mrss\Entity\BenchmarkGroup[] $benchmarkGroups */ ?>
 <link rel="stylesheet" href="/css/benchmarks.css"/>
 <script type="text/javascript" src="/js/jquery.sparkline.min.js"></script>
-<script type="text/javascript">
-    $(function() {
-        // Make benchmrks sortable
-        $('tbody.sortable').sortable({
-            handle: '.sortHandle',
-            update: function(event, ui) {
-                parent = ui.item.parent()
-
-
-                var benchmarkGroupId = parent.attr('id').split('_').pop()
-
-                var benchmarkIds = [];
-                var headingIds = [];
-                var i = 1;
-                parent.find('tr').each(function() {
-                    var idParts = $(this).attr('id').split('_')
-                    var id = parseInt(idParts.pop())
-
-                    if (idParts.pop() == 'heading') {
-                        headingIds[i] = id
-                    } else {
-                        benchmarkIds[i] = id
-                    }
-
-                    i = i + 1
-                })
-
-                data = {
-                    benchmarkGroupId: benchmarkGroupId,
-                    benchmarks: benchmarkIds,
-                    headings: headingIds
-                }
-
-                console.log(data)
-
-                $.post('/benchmark/reorder', data, function(result) {
-                    //console.log(result)
-                    if (result != 'ok') {
-                        alert('There was a problem saving your sequence. ');
-                        console.log(result)
-                    }
-                })
-            }
-        })
-
-        // Add sparklines
-        $.fn.sparkline.defaults.line.minSpotColor = false;
-        $.fn.sparkline.defaults.line.maxSpotColor = false;
-        $.fn.sparkline.defaults.line.spotColor = false;
-        $('.inlinesparkline').sparkline();
-    })
-</script>
+<script type="text/javascript" src="/js/benchmark.js"></script>
 
 <h2><?= $study->getName() ?> Benchmarks</h2>
 
@@ -149,7 +98,7 @@
                 <th>Variable Name</th>
                 <th>Input<br>Type</th>
                 <th>Computed</th>
-                <th>On<br>Report</th>
+                <th>On <a href="#" class="onReport"><i class="icon-pencil glyphicon glyphicon-pencil" title="Choose which benchmarks are used in reporting."></i></a><br>Report</th>
                 <th>Name</th>
                 <th>Trends</th>
 
@@ -184,8 +133,11 @@
 
                     <td style="text-align:center">
                         <?php if ($benchmark->getIncludeInNationalReport()): ?>
-                            <i class="icon-ok glyphicon glyphicon-ok"></i>
+                            <i class="icon-ok glyphicon glyphicon-ok onReportIcon"></i>
                         <?php endif ?>
+                        <div class="onReportEditable">
+                            <input class="onReportCheckbox" type="checkbox" name="benchmark[<?= $benchmark->getId() ?>]" id="b<?= $benchmark->getId() ?>" <?php if ($benchmark->getIncludeInNationalReport()) echo 'checked="checked"'; ?> />
+                        </div>
                     </td>
 
                     <td>

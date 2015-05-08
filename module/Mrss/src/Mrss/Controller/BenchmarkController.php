@@ -215,6 +215,24 @@ class BenchmarkController extends AbstractActionController
         return $viewModel;
     }
 
+    public function onReportAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        $onReport = $this->params()->fromRoute('value');
+
+        if ($id) {
+            $benchmark = $this->getBenchmarkModel()->find($id);
+
+            $benchmark->setIncludeInNationalReport($onReport);
+            $this->getBenchmarkModel()->save($benchmark);
+            $this->getBenchmarkModel()->getEntityManager()->flush();
+        }
+
+
+        $response = $this->getResponse()->setContent('ok');
+        return $response;
+    }
+
     public function reorderAction()
     {
         $benchmarkGroupId = $this->params()->fromPost('benchmarkGroupId');

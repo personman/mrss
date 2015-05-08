@@ -24,3 +24,7 @@ ol.example li.placeholder:before {
     position: absolute;
     /** Define arrowhead **/
 }
+
+.onReportEditable {
+    display: none;
+}
