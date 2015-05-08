@@ -51,7 +51,7 @@ class StudyController extends AbstractActionController
         $colleges = $collegeModel->findAll();
 
         // Years
-        $years = range(2007, date('Y'));
+        $years = range(2014, date('Y'));
 
         return array(
             'study' => $study,

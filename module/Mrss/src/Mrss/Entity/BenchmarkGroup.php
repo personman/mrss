@@ -366,9 +366,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     public function getBenchmarkCount(Observation $observation)
     {
         if ($this->getUseSubObservation()) {
-            return $this->getSubObservationBenchmarkCount(
+            $count = $this->getSubObservationBenchmarkCount(
                 $observation
             );
+
+            if ($count) {
+                return $count;
+            }
         }
 
         $benchmarks = $this->getBenchmarksForCompletionCalculationForYear(
