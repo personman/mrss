@@ -92,7 +92,7 @@ class ComputedFields
         }
 
         if ($this->debug) {
-            echo "about to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
+            echo "Result = $result. About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
         }
 
         // Save the computed value
@@ -227,6 +227,8 @@ class ComputedFields
 
 
         if ($this->debug) {
+            pr($observation->getId());
+            pr($variables);
             pr($errors);
             pr($vars);
             echo 'Observation id:';
@@ -318,8 +320,9 @@ class ComputedFields
                 //pr($e->getMessage());
                 //prd($e);
             }
-
         }
+
+        $this->getObservationModel()->getEntityManager()->flush();
     }
 
     public function calculateAllForSubObservation(SubObservation $subObservation, BenchmarkGroup $benchmarkGroup)

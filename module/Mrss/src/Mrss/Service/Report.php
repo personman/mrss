@@ -1626,6 +1626,8 @@ class Report
         //die('calculated');
 
         $this->calculateAllSubObservations($year);
+
+        $this->getSubscriptionModel()->getEntityManager()->flush();
     }
 
     public function calculateAllSubObservations($year)
