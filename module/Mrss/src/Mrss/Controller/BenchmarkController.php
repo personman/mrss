@@ -40,12 +40,21 @@ class BenchmarkController extends AbstractActionController
         // Sparklines
         $observationModel = $this->getServiceLocator()->get('model.observation');
         $sparklines = array();
+        $counts = array('benchmarks' => 0, 'collected' => 0, 'computed' => 0);
         foreach ($benchmarkGroups as $benchmarkGroup) {
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
                 $data = $observationModel
                     ->getSparkline($benchmark, $this->currentCollege());
                 $asString = implode(',', $data);
                 $sparklines[$benchmark->getId()] = $asString;
+
+                // Counts
+                $counts['benchmarks']++;
+                if ($benchmark->getComputed()) {
+                    $counts['computed']++;
+                } else {
+                    $counts['collected']++;
+                }
             }
         }
 
@@ -56,7 +65,8 @@ class BenchmarkController extends AbstractActionController
             'yearsToShow' => $years,
             'sparklines' => $sparklines,
             'activeCollege' => $this->currentCollege(),
-            'organization' => $organization
+            'organization' => $organization,
+            'counts' => $counts
         );
     }
 
