@@ -28,13 +28,6 @@ class ReportController extends AbstractActionController
 
     public function calculateAction()
     {
-        // Turn off query logging
-        $this->getServiceLocator()
-            ->get('em')
-            ->getConnection()
-            ->getConfiguration()
-            ->setSQLLogger(null);
-
         /** @var \Mrss\Service\Report\Percentile $percentileService */
         $percentileService = $this->getServiceLocator()->get('service.report.percentile');
         $this->longRunningScript();
@@ -177,7 +170,14 @@ class ReportController extends AbstractActionController
     protected function longRunningScript()
     {
         ini_set('memory_limit', '512M');
-        set_time_limit(3600);
+        set_time_limit(5600);
+
+        // Turn off query logging
+        $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
     }
 
     public function nationalAction()
