@@ -22,6 +22,8 @@ class Percentile extends Report
             $this->debugTimer('Just computed fields');
         }
 
+        $computeElapsed = microtime(1) - $start;
+
         $study = $this->getStudy();
 
         $calculator = $this->getCalculator();
@@ -40,7 +42,8 @@ class Percentile extends Report
             'benchmarks' => 0,
             'percentiles' => 0,
             'percentileRanks' => 0,
-            'noData' => 0
+            'noData' => 0,
+            'computeElapsed' => $computeElapsed
         );
 
         // Loop over benchmarks

@@ -300,10 +300,6 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation)
     {
-        if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
-            //$this->debug = true;
-        }
-
         if (empty($observation)) {
             die('empty');
         }

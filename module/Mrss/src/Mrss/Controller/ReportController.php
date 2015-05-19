@@ -28,6 +28,13 @@ class ReportController extends AbstractActionController
 
     public function calculateAction()
     {
+        // Turn off query logging
+        $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
+
         /** @var \Mrss\Service\Report\Percentile $percentileService */
         $percentileService = $this->getServiceLocator()->get('service.report.percentile');
         $this->longRunningScript();
@@ -45,13 +52,14 @@ class ReportController extends AbstractActionController
             $percentiles = $stats['percentiles'];
             $percentileRanks = $stats['percentileRanks'];
             $noData = $stats['noData'];
+            $compute = $stats['computeElapsed'];
 
             $elapsed = round(microtime(true) - $start, 1);
 
             $this->flashMessenger()->addSuccessMessage(
                 "Report prepared for $yearToPrepare. Benchmarks: $benchmarks. Percentiles: $percentiles.
                 Percentile ranks: $percentileRanks. Benchmarks without data: $noData.
-                Elapsed time: $elapsed seconds."
+                Total elapsed time: $elapsed seconds. Time on computed benchmarks: $compute seconds."
             );
 
             return $this->redirect()->toRoute('reports/calculate');
