@@ -23,7 +23,7 @@ class Percentile extends Report
         }
 
         $computeElapsed = microtime(1) - $start;
-
+/*
         $study = $this->getStudy();
 
         $calculator = $this->getCalculator();
@@ -36,7 +36,7 @@ class Percentile extends Report
         $percentileModel->deleteByStudyAndYear($study->getId(), $year, $system);
         $percentileRankModel->deleteByStudyAndYear($study->getId(), $year, $system);
         $this->debugTimer('cleared values');
-
+*/
         // Take note of some stats
         $stats = array(
             'benchmarks' => 0,
