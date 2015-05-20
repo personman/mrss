@@ -43,6 +43,8 @@ class ComputedFields
 
     protected $error;
 
+    protected $keyedBenchmarks = array();
+
     public function calculate(
         Benchmark $benchmark,
         Observation $observation,
@@ -334,6 +336,86 @@ class ComputedFields
                 pr($e->getMessage());
                 echo 'Benchmark: ' . $benchmark->getDbColumn() . ', equation: ' . $benchmark->getEquation();
             }
+        }
+    }
+
+    public function getEquationWithLabels(Benchmark $benchmark, $nested = true)
+    {
+        $equation = $benchmark->getEquation();
+
+        if ($nested) {
+            $equation = $this->nestComputedEquations($equation, $this->getStudy()->getCurrentYear());
+        }
+
+        $variables = $this->getVariables($equation);
+
+        foreach ($variables as $variable) {
+            if ($benchmarkToInsert = $this->getBenchmarkByDbColumn($variable)) {
+                /** @var \Mrss\Entity\Benchmark $benchmarkToInsert */
+                //$benchmarkToInsert = $keyedBenchmarks[$variable];
+
+                $fieldName = $benchmarkToInsert->getDescriptiveReportLabel();
+                $fieldName = "<span class='fieldName'>$fieldName</span>";
+
+                // Replace the dbColumn in the equation with a field name
+                $variableWithBraces = '{{' . $variable . '}}';
+                $equation = str_replace(
+                    $variableWithBraces,
+                    $fieldName,
+                    $equation
+                );
+            }
+        }
+
+        return $equation;
+    }
+
+    public function getEquationWithNumbers(Benchmark $benchmark, Observation $observation, $nested = true)
+    {
+        $equation = $benchmark->getEquation();
+
+        if ($nested) {
+            $equation = $this->nestComputedEquations($equation, $this->getStudy()->getCurrentYear());
+        }
+
+        $variables = $this->getVariables($equation);
+
+        foreach ($variables as $variable) {
+            //$fieldName = $benchmarkToInsert->getDescriptiveReportLabel();
+            //$fieldName = "<span class='fieldName'>$fieldName</span>";
+            $value = $observation->get($variable);
+            if ($value === null) {
+                $value = 'null';
+            }
+
+            // Replace the dbColumn in the equation with a value
+            $variableWithBraces = '{{' . $variable . '}}';
+            $equation = str_replace(
+                $variableWithBraces,
+                $value,
+                $equation
+            );
+        }
+
+        return $equation;
+
+    }
+
+    protected function getBenchmarkByDbColumn($dbColumn)
+    {
+        if (empty($this->keyedBenchmarks)) {
+            $year = $this->getStudy()->getCurrentYear();
+            $benchmarks = array();
+
+            foreach ($this->getStudy()->getBenchmarksForYear($year) as $benchmark) {
+                $benchmarks[$benchmark->getDbColumn()] = $benchmark;
+            }
+
+            $this->keyedBenchmarks = $benchmarks;
+        }
+
+        if (!empty($this->keyedBenchmarks[$dbColumn])) {
+            return $this->keyedBenchmarks[$dbColumn];
         }
     }
 

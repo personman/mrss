@@ -83,3 +83,8 @@ table.dataTable thead .sorting.heatMapYear {
 #renew.form-horizontal .controls {
     margin-left: 10px;
 }
+
+span.fieldName {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+}

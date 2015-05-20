@@ -114,7 +114,7 @@ class Outliers extends Report
     /**
      * Get the outliers for the study/year, grouped by college
      */
-    public function getAdminOutlierReport($includeComputed = true)
+    public function getAdminOutlierReport($excludeNonReported = true)
     {
         $report = array();
         $study = $this->getStudy();
@@ -127,17 +127,17 @@ class Outliers extends Report
         );
 
         foreach ($colleges as $college) {
-            // @todo: remove this hard-code for leaving Wake Tech and Grayson out
-            if (in_array($college->getId(), array(296, 441))) {
-                continue;
-            }
-
             $outliers = $this->getOutlierModel()
                 ->findByCollegeStudyAndYear($college, $study, $year);
 
-            if (!$includeComputed) {
-                $outliers = $this->removeComputedOutliers($outliers);
+            if ($excludeNonReported) {
+                $outliers = $this->removeNonReportedOutliers($outliers);
             }
+
+            $observation = $this->getSubscriptionModel()->findOne($year, $college->getId(), $study)->getObservation();
+            $this->setObservation($observation);
+
+            $outliers = $this->prepareOutlierRows($outliers);
 
             $report[] = array(
                 'college' => $college,
@@ -165,17 +165,84 @@ class Outliers extends Report
         return $newList;
     }
 
+    /**
+     * @param Outlier[] $outliers
+     * @return array
+     */
+    protected function prepareOutlierRows($outliers)
+    {
+        $newOutliers = array();
+        foreach ($outliers as $outlier) {
+            $benchmark = $outlier->getBenchmark();
+
+            $value = $outlier->getValue();
+            if ($value !== null) {
+                $value = $benchmark->getPrefix() . number_format($value) . $benchmark->getSuffix();
+            }
+
+            $newOutliers[] = array(
+                'benchmark' => $benchmark->getDescriptiveReportLabel(),
+                'computed' => $benchmark->getComputed(),
+                'value' => $value,
+                'problem' => $outlier->getProblem(),
+                'benchmarkGroupId' => $benchmark->getBenchmarkGroup()->getId(),
+                'dbColumn' => $benchmark->getDbColumn(),
+                'equation' => $this->getEquation($benchmark)
+            );
+        }
+
+        return $newOutliers;
+    }
+
+    /**
+     * @param Outlier[] $outliers
+     * @return Outlier[]
+     */
+    public function removeNonReportedOutliers($outliers)
+    {
+        $newList = array();
+
+        foreach ($outliers as $outlier) {
+            if ($outlier->getBenchmark()->getIncludeInNationalReport()) {
+                $newList[] = $outlier;
+            }
+        }
+
+        return $newList;
+    }
+
+    public function getEquation(Benchmark $benchmark)
+    {
+        $nested = true;
+
+        $equation = null;
+        if ($benchmark->getComputed()) {
+            $equation = $this->getComputedFieldsService()->getEquationWithLabels($benchmark, $nested);
+
+            if ($observation = $this->getObservation()) {
+                $equation .= '<br>' . $this->getComputedFieldsService()
+                        ->getEquationWithNumbers($benchmark, $this->getObservation(),  $nested);
+            }
+        }
+
+        return $equation;
+    }
+
     public function getOutlierReport(College $college)
     {
         $report = array();
         $study = $this->getStudy();
         $year = $study->getCurrentYear();
 
+        $observation = $this->getSubscriptionModel()->findOne($year, $college->getId(), $study)->getObservation();
+        $this->setObservation($observation);
+
+
         $outliers = $this->getOutlierModel()
             ->findByCollegeStudyAndYear($college, $study, $year);
         $report[] = array(
             'college' => $college,
-            'outliers' => $outliers
+            'outliers' => $this->prepareOutlierRows($outliers)
         );
 
         return $report;
@@ -183,7 +250,7 @@ class Outliers extends Report
 
     public function emailOutliers(RendererInterface $renderer, $reallySend = true)
     {
-        $reports = $this->getAdminOutlierReport(false);
+        $reports = $this->getAdminOutlierReport();
         $stats = array('emails' => 0, 'preview' => '');
 
         // Loop over the admin report in order to send an email to each college

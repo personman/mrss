@@ -6,6 +6,7 @@
         <thead>
             <tr>
                 <th>Benchmark</th>
+                <th>Equation</th>
                 <th>Value</th>
                 <th>Problem</th>
                 <?php if (empty($admin)): ?>
@@ -16,36 +17,36 @@
         <tbody>
 
         <?php foreach ($outliers as $outlier): ?>
-            <?php // Don't show computed benchmarks in college outlier report ?>
-            <?php if (empty($admin) && $outlier->getBenchmark()->getComputed()) continue ?>
-
             <tr>
                 <td>
-                    <?= $outlier->getBenchmark()->getName() ?>
-                </td>
-                <td class="text-right">
-                    <?php $value = ($outlier->getValue() !== null) ? number_format($outlier->getValue()) : null ?>
-                    <?= $outlier->getBenchmark()->getPrefix() ?><?= $value ?><?= $outlier->getBenchmark()->getSuffix() ?>
+                    <?= $outlier['benchmark'] ?>
                 </td>
                 <td>
-                    <?= $outlier->getProblem() ?>
+                    <?= $outlier['equation'] ?>
+                </td>
+                <td class="text-right">
+                    <?= $outlier['value'] ?>
+                </td>
+                <td>
+                    <?= $outlier['problem'] ?>
                 </td>
 
                 <?php if (empty($admin)): ?>
                     <td>
+                        <?php if (!$outlier['computed']): ?>
                         <?php
                             $url = $this->url(
                                 'data-entry/edit',
                                 array(
-                                    'benchmarkGroup' => $outlier->getBenchmark()
-                                            ->getBenchmarkGroup()->getId()
+                                    'benchmarkGroup' => $outlier['benchmarkGroupId']
                                 ),
                                 array('force_canonical' => true)
                             );
 
-                            $url .= '#' . $outlier->getBenchmark()->getDbColumn();
+                            $url .= '#' . $outlier['dbColumn'];
                         ?>
                         <a href="<?= $url ?>">Edit</a>
+                        <?php endif ?>
                     </td>
                 <?php endif ?>
             </tr>

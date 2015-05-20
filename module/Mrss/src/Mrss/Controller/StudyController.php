@@ -176,6 +176,8 @@ class StudyController extends AbstractActionController
     {
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
+
+        /** @var \Mrss\Service\ComputedFields $computedFields */
         $computedFields = $this->getServiceLocator()->get('computedFields');
 
         $variableService = $this->getServiceLocator()->get('service.variableSubstitution');
@@ -200,25 +202,7 @@ class StudyController extends AbstractActionController
                     continue;
                 }
 
-                $equation = $benchmark->getEquation();
-                $variables = $computedFields->getVariables($equation);
-
-                foreach ($variables as $variable) {
-                    if (!empty($keyedBenchmarks[$variable])) {
-                        /** @var \Mrss\Entity\Benchmark $benchmarkToInsert */
-                        $benchmarkToInsert = $keyedBenchmarks[$variable];
-                        $fieldName = $benchmarkToInsert->getReportLabel();
-                        $fieldName = "<span class='fieldName'>$fieldName</span>";
-
-                        // Replace the dbColumn in the equation with a field name
-                        $variableWithBraces = '{{' . $variable . '}}';
-                        $equation = str_replace(
-                            $variableWithBraces,
-                            $fieldName,
-                            $equation
-                        );
-                    }
-                }
+                $equation = $computedFields->getEquationWithLabels($benchmark, false);
 
                 $computed[] = array(
                     'benchmark' => $benchmark->getReportLabel(),

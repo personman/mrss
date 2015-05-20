@@ -1303,6 +1303,9 @@ class Report
         return $this;
     }
 
+    /**
+     * @return ComputedFields
+     */
     public function getComputedFieldsService()
     {
         return $this->computedFieldsService;
