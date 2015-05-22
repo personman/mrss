@@ -204,6 +204,11 @@ class Outliers extends Report
         $newList = array();
 
         foreach ($outliers as $outlier) {
+            // Exclude max demographics
+            if ($outlier->getBenchmark()->getBenchmarkGroup()->getId() == 40) {
+                continue;
+            }
+            
             if ($outlier->getBenchmark()->getIncludeInNationalReport()) {
                 $newList[] = $outlier;
             }
