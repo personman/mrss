@@ -6,7 +6,16 @@ $this->headScript()->appendFile(
 
 <h2>Outlier Report</h2>
 
-<? //pr($report) ?>
+<p>
+    As a final check of <?= $year ?> <?= $studyName ?> data, we have identified values to the data elements listed below that are unusually large or small relative to mean values in the data set.  We have defined these outliers fairly conservatively and have included values that are more than two standard deviations above or below aggregate means.<br>
+</p>
+
+<p>
+    Some data elements are collected in the data entry form and others are calculated from other elements. For calculated benchmarks, you will find a list of base benchmarks from which they are derived, including the value you entered and a link to edit that value. Click "Show equation" to see how the value is calculated.
+</p>
+<p>
+    We understand that the reported values may be correct, but we would appreciate it if you would either confirm the values or provide corrected raw data. Additionally, you may revise any data even if it is not flagged as an outlier or add additional data during the data verification process.
+</p>
 
 <?php foreach ($report as $collegeInfo): ?>
     <?php

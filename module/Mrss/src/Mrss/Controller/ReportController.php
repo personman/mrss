@@ -140,7 +140,9 @@ class ReportController extends AbstractActionController
             ->getOutlierReport($college);
 
         return array(
-            'report' => $outlierReport
+            'report' => $outlierReport,
+            'studyName' => $this->currentStudy()->getName(),
+            'year' => $this->currentStudy()->getCurrentYear()
         );
     }
 

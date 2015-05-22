@@ -4,9 +4,11 @@ As a final check of <?= $year ?> <?= $studyName ?> data, we have identified valu
 <br>
 We understand that the reported values may be correct, but we would appreciate it if you would either confirm the values or provide corrected raw data. Additionally, you may revise any data even if it is not flagged as an outlier or add additional data during the data verification process.<br>
 <br>
+Some data elements are collected in the data entry form and others are calculated from other elements. For calculated benchmarks, you will find a list of base benchmarks from which they are derived, including the value you entered and a link to edit that value. Click "Show equation" to see how the value is calculated.<br>
+<br>
 To make a correction, please enter the updated data online at the website, <?= $url ?>.  Please email <?= $replyTo ?> before <?= $deadline ?>, to let me know that your data is final even if you make no changes. Please note that you will not be able to correct values past this deadline.<br>
 <br>
-Please let me know if I can clarify this process or assist you in any way.  Thank you for helping us assure that Workforce Training Benchmark Project data are as accurate as possible.<br>
+Please let me know if I can clarify this process or assist you in any way.  Thank you for helping us assure that <?= $studyName ?> data are as accurate as possible.<br>
 <br>
 <?= $this->partial(
     'mrss/report/outliers.partial.phtml',
