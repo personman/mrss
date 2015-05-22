@@ -132,7 +132,7 @@ class SubObservationController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('Data saved.');
                 return $this->redirect()->toRoute(
                     'data-entry/edit',
-                    array('benchmarkGroup' => $benchmarkGroup->getId())
+                    array('benchmarkGroup' => $benchmarkGroup->getUrl())
                 );
             }
 

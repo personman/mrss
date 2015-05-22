@@ -208,7 +208,7 @@ class Outliers extends Report
             if ($outlier->getBenchmark()->getBenchmarkGroup()->getId() == 40) {
                 continue;
             }
-            
+
             if ($outlier->getBenchmark()->getIncludeInNationalReport()) {
                 $newList[] = $outlier;
             }
