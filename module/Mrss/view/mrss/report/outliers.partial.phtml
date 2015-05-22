@@ -19,10 +19,44 @@
         <?php foreach ($outliers as $outlier): ?>
             <tr>
                 <td>
-                    <?= $outlier['benchmark'] ?>
+                    <strong><?= $outlier['benchmark'] ?></strong>
                 </td>
                 <td>
-                    <?= $outlier['equation'] ?>
+                    <?php if ($outlier['computed']): ?>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <?php foreach ($outlier['baseBenchmarks'] as $baseBenchmark): ?>
+                                <tr>
+                                    <td><?= $baseBenchmark['benchmark'] ?></td>
+                                    <td style="text-align:right"><?= $baseBenchmark['value'] ?></td>
+
+                                    <?php if (empty($admin)): ?>
+                                        <?php
+                                        $url = $this->url(
+                                            'data-entry/edit',
+                                            array(
+                                                'benchmarkGroup' => $baseBenchmark['benchmarkGroup']
+                                            ),
+                                            array('force_canonical' => true)
+                                        );
+
+                                        $url .= '#' . $baseBenchmark['dbColumn'];
+                                        ?>
+
+                                        <td><a href="<?= $url ?>">Edit</a></td>
+
+                                    <?php endif ?>
+                                </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+
+                        <a href="#" class="showOutlierEquation" style="display:none">Show equation</a>
+                        <div class="outlierEquation">
+                            <?= $outlier['equation'] ?>
+                        </div>
+
+                    <?php endif ?>
                 </td>
                 <td class="text-right">
                     <?= $outlier['value'] ?>

@@ -8,12 +8,13 @@ abstract class AbstractChart
 {
     protected $config = array();
 
-    /**
-     * Benchmarks are used to derive axis labels and formats
-     *
-     * @var Benchmark[] $benchmarks
-     */
-    protected $benchmarks = array();
+    protected $formats = array();
+
+    protected $labels = array();
+
+    protected $xKey = 0;
+
+    protected $yKey = 1;
 
     public function __construct()
     {
@@ -72,26 +73,99 @@ abstract class AbstractChart
     public function setTitle($title)
     {
         $this->config['title']['text'] = $title;
+
+        return $this;
     }
 
     public function setSeries($series)
     {
         $this->config['series'] = $series;
-    }
-
-    public function setBenchmarks($benchmarks)
-    {
-        $this->benchmarks = $benchmarks;
 
         return $this;
     }
 
-    public function getBenchmarks()
+    public function getFormat($key = 0)
     {
-        return $this->benchmarks;
+        if (!empty($this->formats[$key])) {
+            return $this->formats[$key];
+        }
     }
 
-    public function getFormat($key = 0)
+    public function setFormat($format, $key = 0)
+    {
+        $this->formats[$key] = $format;
+        $this->updateAllFormats();
+
+        return $this;
+    }
+
+    public function getLabel($key = 0)
+    {
+        if (!empty($this->labels[$key])) {
+            return $this->labels[$key];
+        }
+    }
+
+    public function setLabel($label, $key = 0)
+    {
+        $this->labels[$key] = $label;
+        $this->updateAllFormats();
+        $this->updateAllLabels();
+
+        return $this;
+    }
+
+    public function setXFormat($format)
+    {
+        return $this->setFormat($format, $this->xKey);
+    }
+
+    public function getXFormat()
+    {
+        return $this->getFormat($this->xKey);
+    }
+
+    public function setYFormat($format)
+    {
+        return $this->setFormat($format, $this->yKey);
+    }
+
+    public function getYFormat()
+    {
+        return $this->getFormat($this->yKey);
+    }
+
+    public function setXLabel($label)
+    {
+        return $this->setLabel($label, $this->xKey);
+    }
+
+    public function getXLabel()
+    {
+        return $this->getLabel($this->xKey);
+    }
+
+    public function setYLabel($label)
+    {
+        return $this->setLabel($label, $this->yKey);
+    }
+
+    public function getYLabel()
+    {
+        return $this->getLabel($this->yKey);
+    }
+
+    public function convertFormatForAxisLabel($format)
+    {
+        return str_replace(array('y', '.2f', '.4f'), array('value', '.0f', '.2f'), $format);
+    }
+
+    public function updateAllFormats()
+    {
+
+    }
+
+    public function updateAllLabels()
     {
 
     }

@@ -533,14 +533,8 @@ class Report
         $showRegression = false
     ) {
         $type = 'bubble';
-        if ($size === null) {
+        if ($size == null) {
             $type = 'scatter';
-        }
-
-        $excludeOutliers = true;
-        if ($excludeOutliers) {
-            // Preload them
-            //$this->getOutlierModel()->findByStudy($this->getStudy(), $year);
         }
 
         $study = $this->getStudy();
@@ -567,18 +561,8 @@ class Report
         $xvals = array();
         $yVals = array();
 
-        /** @var \Mrss\Model\Observation $oM */
-        /*$oM = $this->getServiceManager()->get('model.observation');
-        $data2 = $oM->findForScatterPlot($this->getStudy(), $year, $x);
-        pr($data2);*/
-
         foreach ($subscriptions as $subscription) {
             $observation = $subscription->getObservation();
-
-            // Skip subscription if it includes an outlier
-            /*if ($excludeOutliers && $this->hasOutlier($subscription, $xBenchmark, $yBenchmark)) {
-                continue;
-            }*/
 
             $xVal = $observation->get($x);
             $yVal = $observation->get($y);
@@ -614,10 +598,6 @@ class Report
         $xLabel = $xBenchmark->getDescriptiveReportLabel();
         $yLabel = $yBenchmark->getDescriptiveReportLabel();
 
-        if (empty($showRegression)) {
-            $showRegression = false;
-        }
-
 
         $series = array(
             array(
@@ -625,19 +605,8 @@ class Report
                 'name' => 'Institutions',
                 'color' => $this->getBarChartBarColor(),
                 'data' => $data,
-                'regression' => $showRegression,
-                'regressionSettings' => array(
-                    'name' => 'Regression Line (r<sup>2</sup> = %r2)',
-                    'color' => '#666',
-                    'tooltip' => array(
-                        'enabled' => false
-                    ),
-                    //'type' => 'polynomial'
-                )
             )
         );
-
-        // Regression line
 
         // Highlight a college?
         if (count($yourCollege)) {
@@ -652,99 +621,33 @@ class Report
             );
         }
 
-        $xAxis = array(
-            'title' => array(
-                'enabled' => true,
-                'text' => $xLabel
-            ),
-            'labels' => array(
-                'format' => str_replace(array('y', '.2f', '.4f'), array('value', '.0f', '.2f'), $xFormat)
-            )
-        );
+        // Show median lines
+        $calculatorX = new Calculator($xvals);
+        $calculatorY = new Calculator($yVals);
 
-        //    'tooltip' => array(
-        //'pointFormat' => $format
-        //'pointFormat' => str_replace('y', 'point.y', $format)
-
-        $yAxis = array(
-            'title' => array(
-                'enabled' => true,
-                'text' => $yLabel
-            ),
-            'labels' => array(
-                'format' => str_replace(array('y', '.2f', '.4f'), array('value', '.0f', '.2f'), $yFormat)
-            )
-        );
-
-        // Show median lines?
-        if (true || $showMedians) {
-            $medianLineColor = '#CCC';
-
-            $calculatorX = new Calculator($xvals);
-            $calculatorY = new Calculator($yVals);
-
-            $xMedian = $calculatorX->getMedian();
-            $yMedian = $calculatorY->getMedian();
-
-
-            $xAxis['plotLines'] = array(
-                array(
-                    'color' => $medianLineColor,
-                    'value' => $xMedian,
-                    'width' => 1
-                )
-            );
-            $xAxis['gridLineWidth'] = 0;
-
-            $yAxis['plotLines'] = array(
-                array(
-                    'color' => $medianLineColor,
-                    'value' => $yMedian,
-                    'width' => 1
-                )
-            );
-            $yAxis['gridLineWidth'] = 0;
-
-
-        }
+        $xMedian = $calculatorX->getMedian();
+        $yMedian = $calculatorY->getMedian();
 
         if (empty($title)) {
             $title = 'Test Chart';
         }
 
-        $pointFormat = "<strong>$xLabel:</strong> {point.x}<br> <strong>$yLabel</strong>: {point.y}";
-        $pointFormat = str_replace('{point.x}', str_replace('y', 'point.x', $xFormat), $pointFormat);
-        $pointFormat = str_replace('{point.y}', str_replace('y', 'point.y', $yFormat), $pointFormat);
+        // Now build the chart the new way
+        if ($size == null) {
+            $bubbleChart = new Report\Chart\ScatterPlot;
+        } else {
+            $bubbleChart = new Report\Chart\Bubble;
+        }
 
+        $bubbleChart->setTitle($title)
+            ->setSeries($series)
+            ->setXFormat($xFormat)
+            ->setYFormat($yFormat)
+            ->setXLabel($xLabel)
+            ->setYLabel($yLabel)
+            ->addMedianLines($xMedian, $yMedian);
 
-        $chart = array(
-            'id' => 'chart_' . uniqid(),
-            'chart' => array(
-                'type' => $type,
-                'zoomType' => 'xy'
-            ),
-            'title' => array(
-                'text' => $title,
-            ),
-            'xAxis' => $xAxis,
-            'yAxis' => $yAxis,
-            'exporting' => array(
-                'enabled' => true
-            ),
-            'credits' => array(
-                'enabled' => false
-            ),
-            'plotOptions' => array(
-                'scatter' => array(
-                    'tooltip' => array(
-                        'valueDecimals' => 0,
-                        'pointFormat' => $pointFormat
-                    )
-                )
-            )
-            ,
-            'series' => $series
-        );
+        $chart = $bubbleChart->getConfig();
 
         return $chart;
     }

@@ -403,9 +403,9 @@ function getReportMenu()
                 'label' => 'Best Performers Report',
                 'uri' => '/reports/best-performers'
             ),
-            'high-low' => array(
-                'label' => 'High/Low Report',
-                'uri' => '/reports/high-low'
+            'strengths' => array(
+                'label' => 'Strengths/Opportunities Report',
+                'uri' => '/reports/strengths'
             )
         )
     );

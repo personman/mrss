@@ -187,7 +187,8 @@ class Outliers extends Report
                 'problem' => $outlier->getProblem(),
                 'benchmarkGroupId' => $benchmark->getBenchmarkGroup()->getId(),
                 'dbColumn' => $benchmark->getDbColumn(),
-                'equation' => $this->getEquation($benchmark)
+                'equation' => $this->getEquation($benchmark),
+                'baseBenchmarks' => $this->getBaseBenchmarks($benchmark)
             );
         }
 
@@ -211,16 +212,44 @@ class Outliers extends Report
         return $newList;
     }
 
+    public function getBaseBenchmarks(Benchmark $benchmark)
+    {
+        $benchmarks = array();
+        if ($benchmark->getComputed() && $equation = $benchmark->getEquation()) {
+            // Expand the equation
+            $year = $this->getStudy()->getCurrentYear();
+            $equation = $this->getComputedFieldsService()->nestComputedEquations($equation, $year);
+            $variables = $this->getComputedFieldsService()->getVariables($equation);
+
+            foreach ($variables as $dbColumn) {
+                $baseBenchmark = $this->getBenchmark($dbColumn);
+
+                $value = null;
+                if ($this->getObservation()) {
+                    $value = $baseBenchmark->format($this->getObservation()->get($dbColumn));
+                }
+                $benchmarks[] = array(
+                    'dbColumn' => $dbColumn,
+                    'benchmark' => $baseBenchmark->getDescriptiveReportLabel(),
+                    'benchmarkGroup' => $baseBenchmark->getBenchmarkGroup()->getUrl(),
+                    'value' => $value
+                );
+            }
+        }
+
+        return $benchmarks;
+    }
+
     public function getEquation(Benchmark $benchmark)
     {
         $nested = true;
 
         $equation = null;
         if ($benchmark->getComputed()) {
-            $equation = $this->getComputedFieldsService()->getEquationWithLabels($benchmark, $nested);
+            //$equation = $this->getComputedFieldsService()->getEquationWithLabels($benchmark, $nested);
 
             if ($observation = $this->getObservation()) {
-                $equation .= '<br>' . $this->getComputedFieldsService()
+                $equation = $this->getComputedFieldsService()
                         ->getEquationWithNumbers($benchmark, $this->getObservation(),  $nested);
             }
         }
@@ -265,10 +294,12 @@ class Outliers extends Report
             $collegeName = $college->getName();
             $year = $this->getStudy()->getCurrentYear();
 
-            $url = "www.workforceproject.org";
-            $deadline = "July 18, " . date('Y');
-            $replyTo = "michelletaylor@jccc.edu";
-            $replyToName = "Michelle Taylor";
+            $url = "maximizingresources.org";
+            $deadline = "July 10, " . date('Y');
+            //$replyTo = "michelletaylor@jccc.edu";
+            //$replyToName = "Michelle Taylor";
+            $replyTo = "louguthrie@jccc.edu";
+            $replyToName = "Lou Guthrie";
             $replyToPhone = "(913) 469-3831";
 
             $viewParams = array(
