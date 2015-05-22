@@ -75,7 +75,7 @@ $this->headScript()->appendFile(
             <a href="<?= $this->url(
                 'data-entry/edit/subob/delete',
                 array(
-                    'benchmarkGroup' => $benchmarkGroup->getId(),
+                    'benchmarkGroup' => $benchmarkGroup->getUrl(),
                     'subId' => $subob->getId()
                 )
             ) ?>" class="deleteLink">
