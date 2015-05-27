@@ -20,7 +20,7 @@ function updateFormForChartType()
 {
     var chartType = $('#inputType').val()
     var sizeField = $('#control-group-benchmark3')
-    var benchmark2 = $('#control-group-benchmark2')
+    var benchmark2 = $('#control-group-benchmark1')
     var yearField = $('#control-group-years')
 
     if (chartType == 'bubble') {

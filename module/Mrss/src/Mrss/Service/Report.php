@@ -497,7 +497,7 @@ class Report
                 $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year, null, true, $regression);
                 break;
             case 'line':
-                $chart = $this->getLineChart($benchmark1, $title);
+                $chart = $this->getLineChart($benchmark2, $title);
                 break;
         }
 
@@ -549,6 +549,7 @@ class Report
         $chart = new Report\Chart\Line;
         $chart->setTitle($title)
             ->setYLabel($benchmark->getDescriptiveReportLabel())
+            ->setYFormat($this->getFormat($benchmark))
             ->setCategories(array_keys($data))
             ->setSeries($series);
 
