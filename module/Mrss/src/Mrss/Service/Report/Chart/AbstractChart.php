@@ -169,4 +169,18 @@ abstract class AbstractChart
     {
 
     }
+
+    public function getAxis()
+    {
+        $axis = array(
+            'title' => array(
+                'enabled' => true,
+                //'text' => $xLabel
+            ),
+            'labels' => array(),
+            'plotLines' => array()
+        );
+
+        return $axis;
+    }
 }

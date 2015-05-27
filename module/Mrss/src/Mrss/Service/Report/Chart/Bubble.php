@@ -25,20 +25,6 @@ class Bubble extends AbstractChart
         $this->setConfig($config);
     }
 
-    public function getAxis()
-    {
-        $axis = array(
-            'title' => array(
-                'enabled' => true,
-                //'text' => $xLabel
-            ),
-            'labels' => array(),
-            'plotLines' => array()
-        );
-
-        return $axis;
-    }
-
     public function getPointFormat()
     {
         $xLabel = $this->getXLabel();

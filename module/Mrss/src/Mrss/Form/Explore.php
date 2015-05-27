@@ -58,6 +58,7 @@ class Explore extends AbstractForm
                     'options' => array(
                         'scatter' => 'Scatter Plot',
                         'bubble' => 'Bubble Plot',
+                        'line' => 'Line'
                     )
                 )
             )
