@@ -488,6 +488,7 @@ class Report
         $size = $config['benchmark3'];
         $title = $config['title'];
         $regression = $config['regression'];
+        $peerGroup = $config['peerGroup'];
 
         switch ($config['presentation']) {
             case 'scatter':
@@ -496,9 +497,138 @@ class Report
             case 'bubble':
                 $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year, null, true, $regression);
                 break;
+            case 'line':
+                $chart = $this->getLineChart($benchmark2, $title, $peerGroup);
+                break;
         }
 
         return $chart;
+    }
+
+    public function getLineChart($dbColumn, $title, $peerGroup = null)
+    {
+        $benchmark = $this->getBenchmark($dbColumn);
+
+        if (empty($title)) {
+            $title = $benchmark->getDescriptiveReportLabel();
+        }
+
+        // Get the college's reported data
+        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy());
+        $data = array();
+        foreach ($subscriptions as $subscription) {
+            $data[$subscription->getYear()] = floatval($subscription->getObservation()->get($dbColumn));
+        }
+        ksort($data);
+
+
+        // Get the median
+        $percentile = 50;
+        $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile);
+
+        $medianData = array();
+        foreach ($medians as $percentile) {
+            $medianData[$percentile->getYear()] = floatval($percentile->getValue());
+        }
+        ksort($medianData);
+
+        list($data, $medianData) = $this->syncArrays($data, $medianData);
+
+
+        // Peer group median
+        if ($peerGroup) {
+            $peerGroupModel = $this->getServiceManager()->get('model.peerGroup');
+            $peerGroup = $peerGroupModel->find($peerGroup);
+
+            $peerMedians = array();
+            foreach ($medianData as $year => $median) {
+                $peerMedians[$year] = $this->getPeerMedian($peerGroup, $dbColumn, $year);
+            }
+        }
+
+
+
+
+        // Build the series
+        $series = array();
+        $series[] = array(
+            'name' => $this->getCollege()->getName(),
+            'data' => array_values($data)
+        );
+
+        $series[] = array(
+            'name' => 'National Median',
+            'data' => array_values($medianData)
+        );
+
+        if (!empty($peerMedians)) {
+            $series[] = array(
+                'name' => $peerGroup->getName() . ' Median',
+                'data' => array_values($peerMedians)
+            );
+        }
+
+        $chart = new Report\Chart\Line;
+        $chart->setTitle($title)
+            ->setYLabel($benchmark->getDescriptiveReportLabel())
+            ->setYFormat($this->getFormat($benchmark))
+            ->setCategories(array_keys($data))
+            ->setSeries($series);
+
+        return $chart->getConfig();
+    }
+
+    /**
+     * @param \Mrss\Entity\PeerGroup $peerGroup
+     * @param $dbColumn
+     * @param $year
+     * @param int $breakpoint
+     * @return float
+     */
+    protected function getPeerMedian($peerGroup, $dbColumn, $year, $breakpoint = 50)
+    {
+        $data = array();
+        foreach ($peerGroup->getPeers() as $collegeId) {
+            $college = $this->getCollegeModel()->find($collegeId);
+
+            if ($ob = $college->getObservationForYear($year)) {
+                $datum = $ob->get($dbColumn);
+                if (null !== $datum) {
+                    $data[] = floatval($datum);
+                }
+            }
+        }
+
+        $calculator = new Calculator;
+        $calculator->setData($data);
+
+        $result = $calculator->getValueForPercentile($breakpoint);
+
+        return $result;
+    }
+
+    protected function syncArrays($array1, $array2)
+    {
+        $keys = array_unique(array_merge(array_keys($array1), array_keys($array2)));
+        ksort($keys);
+        
+        $new1 = array();
+        $new2 = array();
+        foreach ($keys as $key) {
+            if (!empty($array1[$key])) {
+                $new1[$key] = $array1[$key];
+            } else {
+                $new1[$key] = null;
+            }
+
+            if (!empty($array2[$key])) {
+                $new2[$key] = $array2[$key];
+            } else {
+                $new2[$key] = null;
+            }
+        }
+
+        return array($new1, $new2);
     }
 
     public function getScatterPlot(

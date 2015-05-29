@@ -175,6 +175,10 @@ class Outliers extends Report
         foreach ($outliers as $outlier) {
             $benchmark = $outlier->getBenchmark();
 
+            if (!$benchmark->getIncludeInNationalReport()) {
+                continue;
+            }
+
             $value = $outlier->getValue();
             if ($value !== null) {
                 $value = $benchmark->getPrefix() . number_format($value) . $benchmark->getSuffix();

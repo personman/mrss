@@ -8,7 +8,7 @@ use Zend\Form\Fieldset;
 class Explore extends AbstractForm
 {
 
-    public function __construct($benchmarks, $colleges, $years)
+    public function __construct($benchmarks, $colleges, $years, $peerGroups)
     {
         // Call the parent constructor
         parent::__construct('explore');
@@ -64,6 +64,8 @@ class Explore extends AbstractForm
         );
 
         $this->addBenchmarkSelects($benchmarks);
+
+        $this->addPeerGroupDropdown($peerGroups);
 
         $this->add(
             array(
@@ -156,6 +158,27 @@ class Explore extends AbstractForm
 
     }
 
+    protected function addPeerGroupDropdown($peerGroups)
+    {
+        $this->add(
+            array(
+                'name' => 'peerGroup',
+                'type' => 'Zend\Form\Element\Select',
+                'allow_empty' => true,
+                'required' => false,
+                'options' => array(
+                    'label' => 'Peer Group',
+                    'empty_option' => 'None'
+                ),
+                'attributes' => array(
+                    'options' => $peerGroups,
+                    'id' => 'peerGroup'
+                )
+            )
+        );
+
+    }
+
     protected function getButtons()
     {
         $buttons = $this->getButtonFieldset('Save');
@@ -168,5 +191,14 @@ class Explore extends AbstractForm
         $buttons->add($preview);
 
         return $buttons;
+    }
+
+    public function getInputFilter()
+    {
+        $filter = parent::getInputFilter();
+        $filter->get('peerGroup')->setRequired(false);
+
+        //pr($filter);
+        return $filter;
     }
 }

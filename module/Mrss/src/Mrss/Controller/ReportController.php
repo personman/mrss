@@ -596,6 +596,8 @@ class ReportController extends AbstractActionController
 
     public function exploreAction()
     {
+        $this->longRunningScript();
+
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
@@ -622,7 +624,15 @@ class ReportController extends AbstractActionController
 
         $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->checkReportAccess());
 
-        $form = new Explore($benchmarks, $colleges, $years);
+        $peerGroups = array();
+        foreach ($this->currentCollege()->getPeerGroups() as $group) {
+            $count = count($group->getPeers());
+            $name = $group->getName();
+            $peerGroups[$group->getId()] = "$name ($count)";
+        }
+
+
+        $form = new Explore($benchmarks, $colleges, $years, $peerGroups);
 
         $chart = null;
         if ($this->getRequest()->isPost()) {

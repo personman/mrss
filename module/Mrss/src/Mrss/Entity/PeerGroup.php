@@ -713,6 +713,9 @@ class PeerGroup
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\College[]
+     */
     public function getPeers()
     {
         if ($this->peers) {
