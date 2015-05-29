@@ -546,9 +546,6 @@ class Report
             }
         }
 
-
-
-
         // Build the series
         $series = array();
         $series[] = array(

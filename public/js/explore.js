@@ -20,11 +20,21 @@ function updateFormForChartType()
 {
     var chartType = $('#inputType').val()
     var sizeField = $('#control-group-benchmark3')
+    var benchmark2 = $('#control-group-benchmark1')
+    var yearField = $('#control-group-years')
 
     if (chartType == 'bubble') {
         sizeField.slideDown()
     } else {
         sizeField.slideUp();
+    }
+
+    if (chartType == 'line') {
+        yearField.slideUp()
+        benchmark2.slideUp()
+    } else {
+        yearField.slideDown()
+        benchmark2.slideDown()
     }
 }
 
