@@ -923,12 +923,12 @@ class ObservationController extends AbstractActionController
             ->getSubscriptionsForStudy($this->getCurrentStudy());
 
         // Get the observation
-        /** @var \Mrss\Model\Observation $ObservationModel */
-        $ObservationModel = $this->getServiceLocator()->get('model.observation');
-        $observation = $ObservationModel->findOne(
-            $this->currentCollege(),
-            $year
-        );
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscription = $subscriptionModel
+            ->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
+
+        $observation = $subscription->getObservation();
 
         // We'll use the report service to determine decimal places
         /** @var \Mrss\Service\Report $reportService */
@@ -985,7 +985,8 @@ class ObservationController extends AbstractActionController
             'subscriptions' => $subscriptions,
             'year' => $year,
             'submittedValues' => $submittedValues,
-            'variable' => $variable
+            'variable' => $variable,
+            'completionPercentage' => round($subscription->getCompletion(), 1)
         );
     }
 

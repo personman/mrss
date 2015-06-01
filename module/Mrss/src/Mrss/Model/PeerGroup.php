@@ -18,6 +18,10 @@ class PeerGroup extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\PeerGroup';
 
+    /**
+     * @param $id
+     * @return null|\Mrss\Entity\PeerGroup
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);

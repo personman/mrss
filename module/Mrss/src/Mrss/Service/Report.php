@@ -492,10 +492,10 @@ class Report
 
         switch ($config['presentation']) {
             case 'scatter':
-                $chart = $this->getScatterPlot($benchmark1, $benchmark2, $title, $year, null, true, $regression);
+                $chart = $this->getScatterPlot($benchmark1, $benchmark2, $title, $year, null, true, $regression, $peerGroup);
                 break;
             case 'bubble':
-                $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year, null, true, $regression);
+                $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year, null, true, $regression, $peerGroup);
                 break;
             case 'line':
                 $chart = $this->getLineChart($benchmark2, $title, $peerGroup);
@@ -537,7 +537,7 @@ class Report
 
         // Peer group median
         if ($peerGroup) {
-            $peerGroupModel = $this->getServiceManager()->get('model.peerGroup');
+            $peerGroupModel = $this->getPeerGroupModel();
             $peerGroup = $peerGroupModel->find($peerGroup);
 
             $peerMedians = array();
@@ -573,6 +573,14 @@ class Report
             ->setSeries($series);
 
         return $chart->getConfig();
+    }
+
+    /**
+     * @return \Mrss\Model\PeerGroup
+     */
+    protected function getPeerGroupModel()
+    {
+        return $this->getServiceManager()->get('model.peerGroup');
     }
 
     /**
@@ -635,7 +643,8 @@ class Report
         $year,
         $collegeId = null,
         $showMedians = false,
-        $showRegression = false
+        $showRegression = false,
+        $peerGroup = null
     ) {
         return $this->getBubbleChart(
             $benchmark1,
@@ -645,7 +654,8 @@ class Report
             $year,
             $collegeId,
             $showMedians,
-            $showRegression
+            $showRegression,
+            $peerGroup
         );
     }
 
@@ -657,7 +667,8 @@ class Report
         $year,
         $collegeId = null,
         $showMedians = false,
-        $showRegression = false
+        $showRegression = false,
+        $peerGroup = null
     ) {
         $type = 'bubble';
         if ($size == null) {
@@ -685,8 +696,16 @@ class Report
 
         $data = array();
         $yourCollege = array();
+        $peerData = array();
         $xvals = array();
         $yVals = array();
+
+        if ($peerGroup) {
+            $peerGroup = $this->getPeerGroupModel()->find($peerGroup);
+            if ($peerGroup) {
+                $peerIds = $peerGroup->getPeers();
+            }
+        }
 
         foreach ($subscriptions as $subscription) {
             $observation = $subscription->getObservation();
@@ -712,6 +731,8 @@ class Report
                 // Highlight the college?
                 if ($subscription->getCollege()->getId() == $collegeId) {
                     $yourCollege[] = $datum;
+                } elseif (!empty($peerIds) && in_array($subscription->getCollege()->getId(), $peerIds)) {
+                    $peerData[] = $datum;
                 } else {
                     $data[] = $datum;
                 }
@@ -745,6 +766,15 @@ class Report
                 'marker' => array(
                     'radius' => 8
                 )
+            );
+        }
+
+        if (count($peerData)) {
+            $series[] = array(
+                'name' => $peerGroup->getName(),
+                'type' => $type,
+                'color' => '#FEE44B',
+                'data' => $peerData,
             );
         }
 

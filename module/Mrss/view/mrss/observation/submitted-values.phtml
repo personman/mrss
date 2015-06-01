@@ -1,3 +1,6 @@
+<?php
+    /** @var \Mrss\Entity\Subscription $subscription */
+?>
 <style type="text/css">
     html table.table.submittedValues {
         width: 50%;
@@ -30,6 +33,29 @@
 <p>
     <strong>Please note:</strong> The website has created the values in grey italics based on the data you entered.
 </p>
+<div class="row row-fluid">
+    <div class="span2 col-md-2">
+        <strong>Data Entry Progress:</strong>
+    </div>
+
+    <div class="span3 col-md-3">
+        <div class="progress">
+            <div class="bar progress-bar"
+                 role="progressbar"
+                 aria-valuenow="<?= $completionPercentage ?>"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 style="width: <?= $completionPercentage ?>%;"></div>
+        </div>
+    </div>
+
+    <div class="span2 col-md-2">
+        <strong>
+            <?= $completionPercentage ?>%
+        </strong>
+    </div>
+
+</div>
 
 <table class="table submittedValues">
 <?php foreach ($submittedValues as $benchmarkGroup): ?>
