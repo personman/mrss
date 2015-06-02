@@ -309,7 +309,8 @@ class Outliers extends Report
             //$replyToName = "Michelle Taylor";
             $replyTo = "louguthrie@jccc.edu";
             $replyToName = "Lou Guthrie";
-            $replyToPhone = "(913) 469-3831";
+            //$replyToPhone = "(913) 469-3831";
+            $replyToPhone = "(913) 469-8500 x4019";
 
             $viewParams = array(
                 'year' => $year,
