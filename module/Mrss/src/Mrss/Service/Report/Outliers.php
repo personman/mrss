@@ -304,7 +304,8 @@ class Outliers extends Report
             $year = $this->getStudy()->getCurrentYear();
 
             $url = "maximizingresources.org";
-            $deadline = "July 10, " . date('Y');
+            //$deadline = "July 10, " . date('Y');
+            $deadline = "June 23, " . date('Y');
             //$replyTo = "michelletaylor@jccc.edu";
             //$replyToName = "Michelle Taylor";
             $replyTo = "louguthrie@jccc.edu";
