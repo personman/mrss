@@ -357,7 +357,9 @@ class ComputedFields
                 //$benchmarkToInsert = $keyedBenchmarks[$variable];
 
                 $fieldName = $benchmarkToInsert->getDescriptiveReportLabel();
-                //$fieldName = "<span class='fieldName'>$fieldName <a href='#'><span class='glyphicon glyphicon-edit icon-edit'></span></a></span> ";
+                /*$fieldName = "<span class='fieldName'>
+                    $fieldName <a href='#'><span class='glyphicon glyphicon-edit icon-edit'></span></a>
+                </span> "; */
 
                 // Replace the dbColumn in the equation with a field name
                 $variableWithBraces = '{{' . $variable . '}}';

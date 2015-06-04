@@ -492,10 +492,30 @@ class Report
 
         switch ($config['presentation']) {
             case 'scatter':
-                $chart = $this->getScatterPlot($benchmark1, $benchmark2, $title, $year, null, true, $regression, $peerGroup);
+                $chart = $this
+                    ->getScatterPlot(
+                        $benchmark1,
+                        $benchmark2,
+                        $title,
+                        $year,
+                        null,
+                        true,
+                        $regression,
+                        $peerGroup
+                    );
                 break;
             case 'bubble':
-                $chart = $this->getBubbleChart($benchmark1, $benchmark2, $size, $title, $year, null, true, $regression, $peerGroup);
+                $chart = $this->getBubbleChart(
+                    $benchmark1,
+                    $benchmark2,
+                    $size,
+                    $title,
+                    $year,
+                    null,
+                    true,
+                    $regression,
+                    $peerGroup
+                );
                 break;
             case 'line':
                 $chart = $this->getLineChart($benchmark2, $title, $peerGroup);

@@ -259,7 +259,7 @@ class Outliers extends Report
 
             if ($observation = $this->getObservation()) {
                 $equation = $this->getComputedFieldsService()
-                        ->getEquationWithNumbers($benchmark, $this->getObservation(),  $nested);
+                        ->getEquationWithNumbers($benchmark, $this->getObservation(), $nested);
             }
         }
 
