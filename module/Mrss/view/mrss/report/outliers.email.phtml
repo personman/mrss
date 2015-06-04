@@ -10,6 +10,10 @@ To make a correction, please enter the updated data online at the website, <?= $
 <br>
 Please let me know if I can clarify this process or assist you in any way.  Thank you for helping us assure that <?= $studyName ?> data are as accurate as possible.<br>
 <br>
+You can also find this report on the web at <a href="<?= $this->serverUrl('/reports/outlier') ?>"><?= $this->serverUrl('/reports/outlier') ?></a>
+<br>
+<br>
+
 <?= $this->partial(
     'mrss/report/outliers.partial.phtml',
     array(

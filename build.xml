@@ -200,6 +200,9 @@
         <exec command="mysql -u root -proot mrss_test &lt; /tmp/mrss.production.sql" passthru="true" />
         <echo>Done.</echo>
     </target>
+
+    <target name="sync" depends="sync-from-production-db"/>
+
     <target name="deploy" depends="ssh-git-deploy,slack-deploy-message" />
 
     <target name="code-climate">

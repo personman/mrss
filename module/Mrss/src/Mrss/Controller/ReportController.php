@@ -45,7 +45,7 @@ class ReportController extends AbstractActionController
             $percentiles = $stats['percentiles'];
             $percentileRanks = $stats['percentileRanks'];
             $noData = $stats['noData'];
-            $compute = $stats['computeElapsed'];
+            $compute = round($stats['computeElapsed'], 1);
 
             $elapsed = round(microtime(true) - $start, 1);
 
@@ -148,8 +148,12 @@ class ReportController extends AbstractActionController
 
     public function emailOutliersAction()
     {
+        $this->longRunningScript();
+
         $renderer = $this->getServiceLocator()
             ->get('Zend\View\Renderer\RendererInterface');
+
+        /** @var \Mrss\Service\Report\Outliers $outliersService */
         $outliersService = $this->getServiceLocator()->get('service.report.outliers');
 
         $task = $this->params()->fromRoute('task');

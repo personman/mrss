@@ -1,16 +1,21 @@
 <?php /** @var \Mrss\Entity\Outlier[] $outliers */ ?>
 <?php /** @var boolean $admin */ ?>
+<?php
+    $tdStyle = "padding: 5px; border: 1px solid #DDD; ";
+    $thStyle = "$tdStyle background: #DDD; color: #000";
+    $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
+?>
 
 <?php if (count($outliers)): ?>
-    <table class="table table-bordered outliers">
+    <table class="00table 00table-bordered outliers" style="<?= $tStyle ?>">
         <thead>
             <tr>
-                <th>Benchmark</th>
-                <th>Source Benchmarks</th>
-                <th>Value</th>
-                <th>Problem</th>
+                <th style="<?= $thStyle ?>">Benchmark</th>
+                <th style="<?= $thStyle ?>">Source Benchmarks</th>
+                <th style="<?= $thStyle ?>">Value</th>
+                <th style="<?= $thStyle ?>">Problem</th>
                 <?php if (empty($admin)): ?>
-                <th>Action</th>
+                <th style="<?= $thStyle ?>">Action</th>
                 <?php endif ?>
             </tr>
         </thead>
@@ -18,17 +23,17 @@
 
         <?php foreach ($outliers as $outlier): ?>
             <tr>
-                <td>
+                <td style="<?= $tdStyle ?>">
                     <strong><?= $outlier['benchmark'] ?></strong>
                 </td>
-                <td>
+                <td style="<?= $tdStyle ?>">
                     <?php if ($outlier['computed']): ?>
-                        <table class="table table-bordered">
+                        <table class="00table 00table-bordered" style="<?= $tStyle ?>">
                             <tbody>
                                 <?php foreach ($outlier['baseBenchmarks'] as $baseBenchmark): ?>
                                 <tr>
-                                    <td><?= $baseBenchmark['benchmark'] ?></td>
-                                    <td style="text-align:right"><?= $baseBenchmark['value'] ?></td>
+                                    <td style="<?= $tdStyle ?>"><?= $baseBenchmark['benchmark'] ?></td>
+                                    <td style="<?= $tdStyle ?> text-align:right"><?= $baseBenchmark['value'] ?></td>
 
                                     <?php if (empty($admin)): ?>
                                         <?php
@@ -43,7 +48,7 @@
                                         $url .= '#' . $baseBenchmark['dbColumn'];
                                         ?>
 
-                                        <td><a href="<?= $url ?>">Edit</a></td>
+                                        <td style="<?= $tdStyle ?>"><a href="<?= $url ?>">Edit</a></td>
 
                                     <?php endif ?>
                                 </tr>
@@ -58,15 +63,15 @@
 
                     <?php endif ?>
                 </td>
-                <td class="text-right">
+                <td class="text-right" style="<?= $tdStyle ?> text-align: right">
                     <?= $outlier['value'] ?>
                 </td>
-                <td>
+                <td style="<?= $tdStyle ?>">
                     <?= $outlier['problem'] ?>
                 </td>
 
                 <?php if (empty($admin)): ?>
-                    <td>
+                    <td style="<?= $tdStyle ?>">
                         <?php if (!$outlier['computed']): ?>
                         <?php
                             $url = $this->url(

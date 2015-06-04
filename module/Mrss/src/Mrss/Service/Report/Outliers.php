@@ -288,6 +288,10 @@ class Outliers extends Report
 
     public function emailOutliers(RendererInterface $renderer, $reallySend = true)
     {
+        // For debugging:
+        $devOnly = false;
+
+
         $reports = $this->getAdminOutlierReport();
         $stats = array('emails' => 0, 'preview' => '');
 
@@ -299,19 +303,28 @@ class Outliers extends Report
             /** @var \Mrss\Entity\Outlier[] $outliers */
             $outliers = $report['outliers'];
 
+            if ($devOnly && empty($outliers[0]['baseBenchmarks'])) {
+                continue;
+            }
+
             $studyName = $this->getStudy()->getDescription();
             $collegeName = $college->getName();
             $year = $this->getStudy()->getCurrentYear();
 
-            $url = "maximizingresources.org";
+
+
+            $deadline = "July 1, " . date('Y');
+            $replyTo = "michelletaylor@jccc.edu";
+            $replyToName = "Michelle Taylor";
+            $replyToPhone = "(913) 469-3831";
+            $url = "nccbp.org";
+
+            //$replyTo = "louguthrie@jccc.edu";
+            //$replyTo = "dfergu15@jccc.edu";
+            //$replyToName = "Lou Guthrie";
+            //$replyToPhone = "(913) 469-8500 x4019";
             //$deadline = "July 10, " . date('Y');
-            $deadline = "June 23, " . date('Y');
-            //$replyTo = "michelletaylor@jccc.edu";
-            //$replyToName = "Michelle Taylor";
-            $replyTo = "louguthrie@jccc.edu";
-            $replyToName = "Lou Guthrie";
-            //$replyToPhone = "(913) 469-3831";
-            $replyToPhone = "(913) 469-8500 x4019";
+            //$url = "maximizingresources.org";
 
             $viewParams = array(
                 'year' => $year,
@@ -358,19 +371,26 @@ class Outliers extends Report
                 $message->addBcc($replyTo);
 
                 // Get recipients
-                foreach ($college->getUsers() as $user) {
-                    // @todo: make this more dynamic
-                    if ($college->getIpeds() == '155210'
-                        && $user->getEmail() != 'jhoyer@jccc.edu') {
-                        continue;
+                if (!$devOnly) {
+                    foreach ($college->getUsersByStudy($this->getStudy()) as $user) {
+                        // @todo: make this more dynamic
+                        if ($college->getIpeds() == '155210'
+                            && $user->getEmail() != 'jhoyer@jccc.edu') {
+                            continue;
+                        }
+
+
+                        $message->addTo($user->getEmail(), $user->getFullName());
                     }
-
-
-                    $message->addTo($user->getEmail(), $user->getFullName());
                 }
+
 
                 // Send it:
                 $this->getMailTransport()->send($message);
+
+                if ($devOnly) {
+                    break;
+                }
             } else {
                 $to = array();
                 foreach ($college->getUsers() as $user) {
@@ -380,7 +400,7 @@ class Outliers extends Report
                         continue;
                     }
 
-                    $to[] = $user->getEmail() . '<' . $user->getFullName() . '>';
+                    $to[] = $user->getEmail();// . '<' . $user->getFullName() . '>';
                 }
                 $to = implode(', ', $to);
 
