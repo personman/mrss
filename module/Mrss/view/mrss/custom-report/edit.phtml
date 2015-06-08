@@ -1,0 +1,9 @@
+<h1>Edit Report</h1>
+
+<?php
+// Add an action to the form
+$form->setAttribute('action', $this->url('reports/custom/edit'));
+
+?>
+
+<?= $this->ztbForm($this->form->prepare()) ?>

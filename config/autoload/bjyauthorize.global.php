@@ -121,6 +121,10 @@ return array(
                     'controller' => 'reports',
                     'roles' => array('viewer')
                 ),
+                array(
+                    'controller' => 'customReports',
+                    'roles' => array('viewer')
+                ),
                 // Membership coordinators (contact):
                 array(
                     'controller' => 'subscription',

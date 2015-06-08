@@ -1,0 +1,33 @@
+<?php
+/** @var \Mrss\Entity\Report[] $reports */
+?>
+
+<h1>Custom Reports</h1>
+
+<p>
+
+    <a href="<?= $this->url('reports/custom/add') ?>" class="btn btn-default"><span class="glyphicon glyphicon-plus icon icon-plus"></span> Add a Report</a>
+</p>
+
+
+<div class="customReportList">
+<?php foreach ($reports as $report): ?>
+    <div class="btn-group" role="group">
+        <a href="<?= $this->url('reports/custom/edit', array('id' => $report->getId())) ?>" class="btn btn-default" title="Edit basic report details like title and description">
+            <span class="glyphicon glyphicon-edit"></span>
+            Edit
+        </a>
+        <a href="<?= $this->url('reports/custom/build', array('id' => $report->getId())) ?>" class="btn btn-default" title="Build report by adding items.">
+            <span class="glyphicon glyphicon-wrench"></span>
+            Build
+        </a>
+    </div>
+
+    <a href="#">
+        <h2><?= $this->escapeHtml($report->getName()) ?></h2>
+    </a>
+
+    <p><?= $report->getDescription() ?></p>
+
+<?php endforeach ?>
+</div>

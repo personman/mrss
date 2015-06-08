@@ -528,6 +528,14 @@ class Module
 
                     return $settingModel;
                 },
+                'model.report' => function ($sm) {
+                    $model = new Model\Report();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.page' => function ($sm) {
                     $pageModel = new Model\Page;
                     $em = $sm->get('doctrine.entitymanager.orm_default');

@@ -1,0 +1,114 @@
+<?php
+
+namespace Mrss\Controller;
+
+use Zend\Mvc\Controller\AbstractActionController;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Mrss\Form\Report as ReportForm;
+use Mrss\Entity\Report;
+
+class CustomReportController extends AbstractActionController
+{
+    /**
+     * List a college's reports
+     *
+     * @return array
+     */
+    public function indexAction()
+    {
+        return array(
+            'reports' => $this->getReportModel()
+                    ->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy())
+        );
+    }
+
+    public function addAction()
+    {
+        $form = new ReportForm;
+
+        $form->setHydrator(
+            new DoctrineHydrator(
+                $this->getServiceLocator()->get('em'),
+                'Mrss\Entity\Report'
+            )
+        );
+
+        $id = $this->params('id');
+        if (empty($id) && $this->getRequest()->isPost()) {
+            $id = $this->params()->fromPost('id');
+        }
+        $report = $this->getReport($id);
+
+        $form->bind($report);
+
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $this->getReportModel()->save($report);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Report saved.');
+                return $this->redirect()->toRoute(
+                    'reports/custom'
+                );
+            }
+
+        }
+
+
+        return array(
+            'form' => $form
+        );
+    }
+
+    public function editAction()
+    {
+        return $this->addAction();
+    }
+
+    public function buildAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        $report = $this->getReport($id);
+
+        return array(
+            'report' => $report
+        );
+    }
+
+    /**
+     * @return \Mrss\Model\Report
+     */
+    protected function getReportModel()
+    {
+        return $this->getServiceLocator()->get('model.report');
+    }
+
+    /**
+     * @param $id
+     * @throws \Exception
+     * @return Report
+     */
+    public function getReport($id)
+    {
+        if (!empty($id)) {
+            $report = $this->getReportModel()->find($id);
+
+            if ($report->getCollege()->getId() != $this->currentCollege()->getId()) {
+                throw new \Exception('You cannot edit reports that do not belong to your college.');
+            }
+        }
+
+        if (empty($report)) {
+            $report = new Report;
+            $report->setCollege($this->currentCollege());
+            $report->setStudy($this->currentStudy());
+        }
+
+        return $report;
+    }
+
+}

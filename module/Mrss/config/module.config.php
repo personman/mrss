@@ -1042,6 +1042,50 @@ return array(
                                 'year' => null
                             )
                         )
+                    ),
+
+                    // Custom reports
+                    'custom' => array(
+                        'type' => 'segment',
+                        'may_terminate' => true,
+                        'options' => array(
+                            'route' => '/custom',
+                            'defaults' => array(
+                                'controller' => 'customReports',
+                                'action' => 'index'
+                            )
+                        ),
+                        'child_routes' => array(
+                            'add' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/add',
+                                    'defaults' => array(
+                                        'action' => 'add'
+                                    )
+                                )
+                            ),
+                            'edit' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/edit/:id',
+                                    'defaults' => array(
+                                        'action' => 'edit',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
+                            'build' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/build/:id',
+                                    'defaults' => array(
+                                        'action' => 'build',
+                                        'id' => 0
+                                    )
+                                )
+                            )
+                        )
                     )
                 )
             ),
@@ -1594,6 +1638,7 @@ return array(
             'settings' => 'Mrss\Controller\SettingController',
             'pages' => 'Mrss\Controller\PageController',
             'reports' => 'Mrss\Controller\ReportController',
+            'customReports' => 'Mrss\Controller\CustomReportController',
             'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),
