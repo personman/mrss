@@ -56,11 +56,11 @@ class Report extends AbstractModel
     /**
      * Save it with Doctrine
      *
-     * @param ReportEntity $study
+     * @param ReportEntity $report
      */
-    public function save(ReportEntity $study)
+    public function save(ReportEntity $report)
     {
-        $this->getEntityManager()->persist($study);
+        $this->getEntityManager()->persist($report);
 
         $this->getEntityManager()->flush();
     }

@@ -1,2 +1,16 @@
+<?php /** @var \Mrss\Entity\Report $report */ ?>
+
+<p><a href="/reports/custom">Back to Custom Reports</a></p>
+
 <h1>Build Custom Report</h1>
 
+<h2><?= $report->getName() ?></h2>
+
+<p><?= $report->getDescription() ?></p>
+
+<p>
+    <a href="<?= $this->url('reports/custom/addItem', array('id' => $report->getId())) ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus icon icon-plus"></span>
+        Add an Item
+    </a>
+</p>

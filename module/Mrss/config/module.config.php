@@ -1084,7 +1084,18 @@ return array(
                                         'id' => 0
                                     )
                                 )
-                            )
+                            ),
+                            'addItem' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/:id/add',
+                                    'defaults' => array(
+                                        'controller' => 'reportItems',
+                                        'action' => 'add',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
                         )
                     )
                 )
@@ -1639,6 +1650,7 @@ return array(
             'pages' => 'Mrss\Controller\PageController',
             'reports' => 'Mrss\Controller\ReportController',
             'customReports' => 'Mrss\Controller\CustomReportController',
+            'reportItems' => 'Mrss\Controller\ReportItemController',
             'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),

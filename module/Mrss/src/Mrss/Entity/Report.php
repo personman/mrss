@@ -48,6 +48,12 @@ class Report
     protected $description;
 
     /**
+     * @ORM\OneToMany(targetEntity="ReportItem", mappedBy="report")
+     * @ORM\OrderBy({"sequence" = "ASC"})
+     */
+    protected $items;
+
+    /**
      * @param mixed $college
      */
     public function setCollege($college)
@@ -125,5 +131,17 @@ class Report
     public function getStudy()
     {
         return $this->study;
+    }
+
+    public function setItems($items)
+    {
+        $this->items = $items;
+
+        return $this;
+    }
+
+    public function getItems()
+    {
+        return $this->items;
     }
 }
