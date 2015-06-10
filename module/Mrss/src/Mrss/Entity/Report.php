@@ -140,6 +140,9 @@ class Report
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\ReportItem[]|array
+     */
     public function getItems()
     {
         return $this->items;

@@ -380,6 +380,9 @@ class College
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\Subscription[]
+     */
     public function getSubscriptions()
     {
         return $this->subscriptions;
@@ -405,6 +408,9 @@ class College
     {
         $subscriptions = array();
         foreach ($this->getSubscriptions() as $sub) {
+            $subStudy = $sub->getStudy()->getId();
+            $study->getId();
+
             if ($sub->getStudy()->getId() == $study->getId()) {
                 $subscriptions[$sub->getYear()] = $sub;
             }

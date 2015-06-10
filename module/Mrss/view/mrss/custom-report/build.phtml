@@ -1,5 +1,9 @@
 <?php /** @var \Mrss\Entity\Report $report */ ?>
 
+<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=5', 'screen,print') ?>
+<?//= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=5', $media) ?>
+<?= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
+
 <p><a href="/reports/custom">Back to Custom Reports</a></p>
 
 <h1>Build Custom Report</h1>
@@ -14,3 +18,14 @@
         Add an Item
     </a>
 </p>
+
+
+<div class="reportItems">
+    <?php foreach ($report->getItems() as $item): ?>
+        <div class="complete-chart-box">
+            <?= $this->chart($item->getCache(true)) ?>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<div style="clear: both; margin-bottom: 30px"></div>

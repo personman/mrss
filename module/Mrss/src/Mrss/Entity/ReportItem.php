@@ -288,14 +288,23 @@ class ReportItem
 
     public function setCache($cache)
     {
+        if (is_array($cache)) {
+            $cache = json_encode($cache);
+        }
+
         $this->cache = $cache;
 
         return $this;
     }
 
-    public function getCache()
+    public function getCache($decode = false)
     {
-        return $this->cache;
+        $cache = $this->cache;
+        if ($decode) {
+            $cache = json_decode($cache, true);
+        }
+
+        return $cache;
     }
 
     public function setSequence($sequence)

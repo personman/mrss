@@ -703,6 +703,10 @@ class Report
 
         $subscriptions = $this->getSubscriptionModel()
             ->findWithPartialObservations($study, $year, $dbColumns);
+        pr($study->getId());
+        pr($year);
+        pr($dbColumns);
+        pr(count($subscriptions));
 
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);
@@ -806,7 +810,7 @@ class Report
         $yMedian = $calculatorY->getMedian();
 
         if (empty($title)) {
-            $title = 'Test Chart';
+            $title = '';
         }
 
         // Now build the chart the new way

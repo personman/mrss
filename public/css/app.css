@@ -114,3 +114,8 @@ span.fieldName {
     float: right;
 }
 
+/** Fix bug in bootstrap */
+.progress-bar[aria-valuenow="0"] {
+    min-width: 0 !important;
+}
+

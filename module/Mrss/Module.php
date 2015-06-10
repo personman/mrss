@@ -536,6 +536,14 @@ class Module
 
                     return $model;
                 },
+                'model.reportItem' => function ($sm) {
+                    $model = new Model\ReportItem();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.page' => function ($sm) {
                     $pageModel = new Model\Page;
                     $em = $sm->get('doctrine.entitymanager.orm_default');

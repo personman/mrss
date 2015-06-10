@@ -1,1 +1,73 @@
 <h1>Add Item to Report</h1>
+
+
+<style type="text/css">
+    body .explore .form-horizontal .control-label {
+        text-align: left;
+    }
+    body .form-horizontal .controls {
+        margin-left: 5px;
+    }
+    .explore form input, .explore form textarea {
+        width: 90%
+    }
+
+    .explore .form-horizontal .control-label {
+        width: 90%;
+        text-align: center;
+    }
+
+    .explore .controls {
+        /*clear: both;*/
+    }
+    select {
+        width: 80%;
+    }
+
+    #control-group-submitButton, #control-group-previewButton {
+        width: 37%;
+        float: right;
+        margin-left: 5px;
+    }
+
+    #control-group-regression {
+        display: none;
+    }
+</style>
+
+<?php
+$this->headLink()->appendStylesheet('/css/chosen.min.css');
+
+$this->headScript()->appendFile(
+    '/js/chosen.jquery.min.js?v=1',
+    'text/javascript'
+);
+
+$this->headScript()->appendFile(
+    '/js/explore.js?v=1',
+    'text/javascript'
+);
+
+
+?>
+
+<?//= $year ?>
+<?php
+// Add an action and submit button to the form
+$form->setAttribute('action', $this->url('reports/custom/addItem', array('id' => $report->getId())));
+?>
+
+<div class="explore row row-fluid">
+    <div class="span4 col-md-4">
+        <?= $this->ztbForm($this->form->prepare()) ?>
+    </div>
+
+    <div class="span8 col-md-8">
+        <div id="chart">
+            <?php if ($chart): ?>
+                <?= $this->chart($chart) ?>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
+

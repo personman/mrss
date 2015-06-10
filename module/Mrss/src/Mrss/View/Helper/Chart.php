@@ -20,6 +20,8 @@ class Chart extends AbstractHelper
 
     protected $exportingJsUri = '/js/highcharts-exporting.js';
 
+    protected $exportingCsvJsUri = '/js/highcharts-exporting-csv.js';
+
     protected $moreJsUri = '/js/highcharts-more.js';
 
     protected $chartSupportJsUri = '/js/chart-support.js';
@@ -96,6 +98,11 @@ class Chart extends AbstractHelper
 
             $this->getView()->headScript()->appendFile(
                 $this->exportingJsUri,
+                'text/javascript'
+            );
+
+            $this->getView()->headScript()->appendFile(
+                $this->exportingCsvJsUri,
                 'text/javascript'
             );
 

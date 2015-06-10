@@ -7,7 +7,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
 use Mrss\Entity\Report;
 
-class CustomReportController extends AbstractActionController
+class CustomReportController extends ReportController
 {
     /**
      * List a college's reports
@@ -73,10 +73,33 @@ class CustomReportController extends AbstractActionController
     {
         $id = $this->params()->fromRoute('id');
         $report = $this->getReport($id);
+        $this->populateCache($report);
 
         return array(
             'report' => $report
         );
+    }
+
+    public function populateCache(Report $report)
+    {
+        $changed = false;
+        foreach ($report->getItems() as $item) {
+            if (null == $item->getCache()) {
+                $this->longRunningScript();
+
+                $chart = $this->getReportService()
+                    ->setObservation($this->currentObservation())
+                    ->getChart($item->getConfig(), $item->getYear());
+
+                $item->setCache($chart);
+                $this->getReportItemModel()->save($item);
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            $this->getReportItemModel()->getEntityManager()->flush();
+        }
     }
 
     /**
@@ -86,6 +109,15 @@ class CustomReportController extends AbstractActionController
     {
         return $this->getServiceLocator()->get('model.report');
     }
+
+    /**
+     * @return \Mrss\Model\ReportItem
+     */
+    protected function getReportItemModel()
+    {
+        return $this->getServiceLocator()->get('model.reportItem');
+    }
+
 
     /**
      * @param $id
