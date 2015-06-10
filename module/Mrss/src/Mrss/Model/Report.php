@@ -64,4 +64,10 @@ class Report extends AbstractModel
 
         $this->getEntityManager()->flush();
     }
+
+    public function delete(ReportEntity $report)
+    {
+        $this->getEntityManager()->remove($report);
+        $this->getEntityManager()->flush();
+    }
 }

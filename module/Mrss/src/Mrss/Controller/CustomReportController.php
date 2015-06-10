@@ -51,8 +51,10 @@ class CustomReportController extends ReportController
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Report saved.');
+
                 return $this->redirect()->toRoute(
-                    'reports/custom'
+                    'reports/custom/build',
+                    array('id' => $report->getId())
                 );
             }
 
@@ -78,6 +80,19 @@ class CustomReportController extends ReportController
         return array(
             'report' => $report
         );
+    }
+
+    public function deleteAction()
+    {
+        $id = $this->params('id');
+        $report = $this->getReport($id);
+
+        $name = $report->getName();
+
+        $this->getReportModel()->delete($report);
+
+        $this->flashMessenger()->addSuccessMessage('Report deleted:' . $name);
+        return $this->redirect()->toRoute('reports/custom');
     }
 
     public function populateCache(Report $report)

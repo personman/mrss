@@ -333,7 +333,7 @@ class ObservationController extends AbstractActionController
         );
 
 
-        $class = 'form-horizontal ' . $benchmarkGroup->getFormat();
+        $class = 'data-entry-form form-horizontal ' . $benchmarkGroup->getFormat();
 
         $form->setAttribute('class', $class);
 

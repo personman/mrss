@@ -98,7 +98,7 @@ span.fieldName {
     display: block !important; /* We don't want it visible in emails */
 }
 
-.controls input[type="text"], .controls textarea {
+form:not(.data-entry-form) .controls input[type="text"], .controls textarea {
     width: 60%;
 }
 

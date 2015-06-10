@@ -2,6 +2,14 @@
 /** @var \Mrss\Entity\Report[] $reports */
 ?>
 
+<script type="text/javascript">
+    $(function() {
+        $('.delete-confirm').click(function() {
+            return confirm('Are you sure you want to delete this?')
+        })
+    })
+</script>
+
 <h1>Custom Reports</h1>
 
 <p>
@@ -20,6 +28,10 @@
         <a href="<?= $this->url('reports/custom/build', array('id' => $report->getId())) ?>" class="btn btn-default" title="Build report by adding charts and text.">
             <span class="glyphicon glyphicon-wrench"></span>
             Build
+        </a>
+        <a href="<?= $this->url('reports/custom/delete', array('id' => $report->getId())) ?>" class="btn btn-default delete-confirm" title="Permanently delete the report.">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
         </a>
     </div>
 

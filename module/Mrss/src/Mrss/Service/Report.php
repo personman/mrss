@@ -703,10 +703,6 @@ class Report
 
         $subscriptions = $this->getSubscriptionModel()
             ->findWithPartialObservations($study, $year, $dbColumns);
-        pr($study->getId());
-        pr($year);
-        pr($dbColumns);
-        pr(count($subscriptions));
 
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);

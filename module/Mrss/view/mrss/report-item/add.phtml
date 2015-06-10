@@ -1,4 +1,10 @@
-<h1>Add Item to Report</h1>
+<?php if ($edit): ?>
+    <h1>Edit Report Item</h1>
+<?php else : ?>
+    <h1>Add Item to Report</h1>
+<?php endif ?>
+
+
 
 
 <style type="text/css">
@@ -54,7 +60,7 @@ $this->headScript()->appendFile(
 <?//= $year ?>
 <?php
 // Add an action and submit button to the form
-$form->setAttribute('action', $this->url('reports/custom/addItem', array('id' => $report->getId())));
+//$form->setAttribute('action', $this->url('reports/custom/addItem', array('id' => $report->getId())));
 ?>
 
 <div class="explore row row-fluid">

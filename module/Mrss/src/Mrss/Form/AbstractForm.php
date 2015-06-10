@@ -88,11 +88,12 @@ class AbstractForm extends Form
         );
     }
 
-    public function addName($label = 'Name', $helpBlock = null)
+    public function addName($label = 'Name', $helpBlock = null, $required = false)
     {
         $field = array(
             'name' => 'name',
             'type' => 'Text',
+            'required' => $required,
             'options' => array(
                 'label' => $label
             )

@@ -1,0 +1,11 @@
+.complete-chart-box {
+    margin: 0px 20px 20px 20px;
+    width: 44%;
+    height: 440px;
+    padding:  10px 0;
+    float: left;
+}
+
+.btn-group {
+    float: right;
+}

@@ -1,8 +1,27 @@
 <?php /** @var \Mrss\Entity\Report $report */ ?>
 
-<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=5', 'screen,print') ?>
+<?= $this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print') ?>
 <?//= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=5', $media) ?>
-<?= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
+<?//= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
+
+<script type="text/javascript">
+    $(function() {
+        var url = '/reports/custom/<?= $report->getId() ?>/reorder'
+
+        $('.reportItems').sortable({
+            //handle: '.handle',
+            update: function(event, ui) {
+                var data = $('.reportItems').sortable('serialize')
+
+                $.post(url, data, function(result) {})
+            }
+        })
+
+        $('.delete-confirm').click(function() {
+            return confirm('Are you sure you want to delete this?')
+        })
+    })
+</script>
 
 <p><a href="/reports/custom">Back to Custom Reports</a></p>
 
@@ -22,8 +41,25 @@
 
 <div class="reportItems">
     <?php foreach ($report->getItems() as $item): ?>
-        <div class="complete-chart-box">
+        <div class="complete-chart-box" id="item_<?= $item->getId() ?>">
             <?= $this->chart($item->getCache(true)) ?>
+
+            <div class="btn-group btn-group-sm" role="group">
+                <?php /*<a href="#" class="btn btn-default handle" title="Edit report item">
+                    <span class="glyphicon glyphicon-move"></span>
+                    Move
+                </a> */ ?>
+
+                <a href="<?= $this->url('reports/custom/edit-item', array('id' => $report->getId(), 'item_id' => $item->getId())) ?>" class="btn btn-default" title="Edit report item">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    Edit
+                </a>
+
+                <a href="<?= $this->url('reports/custom/delete-item', array('id' => $report->getId(), 'item_id' => $item->getId())) ?>" class="btn btn-default delete-confirm" title="Permanently delete the report item.">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Delete
+                </a>
+            </div>
         </div>
     <?php endforeach ?>
 </div>

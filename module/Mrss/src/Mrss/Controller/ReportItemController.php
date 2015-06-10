@@ -21,6 +21,8 @@ class ReportItemController extends CustomReportController
         $report = $this->getReport($id);
         $this->report = $report;
 
+        $edit = false;
+
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
         $benchmarks = $this->getBenchmarks();
@@ -32,14 +34,32 @@ class ReportItemController extends CustomReportController
         
         $form = new Explore($benchmarks, $colleges, $years, $peerGroups);
 
+        // Are we editing an existing report item?
+        $item = null;
+        $item_id = $this->params()->fromRoute('item_id');
+        if ($item_id) {
+            $item = $this->getReportItemModel()->find($item_id);
+            if ($item) {
+                $data = $item->getConfig(true);
+                $data['buttons']['submit'] = 'Save';
+                $data['buttons']['preview'] = 'Preview';
+
+                $form->setData($data);
+
+                $year = $data['year'];
+                $edit = true;
+            }
+        }
+
+
         $chart = null;
         if ($this->getRequest()->isPost()) {
             $post = $this->params()->fromPost();
 
-            if (!empty($post['id'])) {
+            /*if (!empty($post['id'])) {
                 $post = $this->getChartModel()->find($post['id'])->getConfig();
                 $post['buttons']['submit'] = null;
-            }
+            }*/
 
             $form->setData($post);
 
@@ -54,7 +74,7 @@ class ReportItemController extends CustomReportController
                 // Save it, if requested
                 if (!empty($data['buttons']['submit'])) {
                     if (!empty($data['title'])) {
-                        $this->saveItem($data, $chart);
+                        $this->saveItem($data, $chart, $item);
                         $this->flashMessenger()->addSuccessMessage("Saved.");
                         return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
                     } else {
@@ -68,6 +88,13 @@ class ReportItemController extends CustomReportController
             $post['buttons']['submit'] = 'Save';
             $post['buttons']['preview'] = 'Preview';
             $form->setData($post);
+        } else {
+            if (!empty($data)) {
+                $year = $data['year'];
+                $chart = $this->getReportService()
+                    ->setObservation($this->currentObservation())
+                    ->getChart($data, $year);
+            }
         }
 
         return array(
@@ -75,12 +102,50 @@ class ReportItemController extends CustomReportController
             'chart' => $chart,
             'year' => $year,
             'report' => $report,
-            'charts' => $this->getChartModel()
-                    ->findByStudyAndCollege($this->currentStudy(), $this->currentCollege())
+            'edit' => $edit
         );
     }
 
-    protected function saveItem($config, $chart)
+    /*public function editAction()
+    {
+        return $this->addAction();
+    }*/
+
+    public function reorderAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        $data = array_flip($this->params()->fromPost('item'));
+
+        $report = $this->getReport($id);
+        foreach ($report->getItems() as $item) {
+            if (isset($data[$item->getId()])) {
+                $item->setSequence($data[$item->getId()]);
+                $this->getReportItemModel()->save($item);
+            }
+        }
+
+        $this->getReportItemModel()->getEntityManager()->flush();
+        die('ok');
+    }
+
+    public function deleteAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        $item_id = $this->params()->fromRoute('item_id');
+
+        $report = $this->getReport($id);
+
+        foreach ($report->getItems() as $item) {
+            if ($item->getId() == $item_id) {
+                $this->getReportItemModel()->delete($item);
+                $this->flashMessenger()->addSuccessMessage('Item deleted.');
+            }
+        }
+
+        return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
+    }
+
+    protected function saveItem($config, $chart, $item = null)
     {
         $model = $this->getReportItemModel();
         $name = $config['title'];

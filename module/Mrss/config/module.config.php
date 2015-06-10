@@ -1085,6 +1085,16 @@ return array(
                                     )
                                 )
                             ),
+                            'delete' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/delete/:id',
+                                    'defaults' => array(
+                                        'action' => 'delete',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
                             'addItem' => array(
                                 'type' => 'segment',
                                 'options' => array(
@@ -1096,6 +1106,41 @@ return array(
                                     )
                                 )
                             ),
+                            'reorderItems' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/:id/reorder',
+                                    'defaults' => array(
+                                        'controller' => 'reportItems',
+                                        'action' => 'reorder',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
+                            'delete-item' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/:id/delete/:item_id',
+                                    'defaults' => array(
+                                        'controller' => 'reportItems',
+                                        'action' => 'delete',
+                                        'id' => 0,
+                                        'item_id' => 0
+                                    )
+                                )
+                            ),
+                            'edit-item' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/:id/edit/:item_id',
+                                    'defaults' => array(
+                                        'controller' => 'reportItems',
+                                        'action' => 'add',
+                                        'id' => 0,
+                                        'item_id' => 0
+                                    )
+                                )
+                            )
                         )
                     )
                 )

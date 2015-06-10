@@ -2,6 +2,9 @@
 
 namespace Mrss\Form;
 
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\Input;
+
 class Report extends AbstractForm
 {
     public function __construct()
@@ -15,7 +18,18 @@ class Report extends AbstractForm
     protected function addBasicFields()
     {
         $this->addId();
-        $this->addName();
+        $this->addName('Name', null, true);
         $this->addDescription();
+    }
+
+    public function getInputFilter()
+    {
+        $inputFilter = new InputFilter();
+
+        $input = new Input('name');
+        $input->setRequired(true);
+        $inputFilter->add($input);
+
+        return $inputFilter;
     }
 }
