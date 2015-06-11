@@ -3052,7 +3052,7 @@ class Observation
 
 
     // Form 16B
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $tot_fte_fac;
 
     /**
