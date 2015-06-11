@@ -1056,6 +1056,16 @@ return array(
                             )
                         ),
                         'child_routes' => array(
+                            'view' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/:id',
+                                    'defaults' => array(
+                                        'action' => 'view',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
                             'add' => array(
                                 'type' => 'segment',
                                 'options' => array(

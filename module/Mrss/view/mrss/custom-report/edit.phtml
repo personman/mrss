@@ -1,3 +1,11 @@
+<?= $this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print') ?>
+<p><a href="/reports/custom">Back to Custom Reports</a></p>
+
+<?= $this->partial(
+    'mrss/custom-report/report-controls.partial.phtml',
+    array('report' => $report, 'active' => 'edit')
+) ?>
+
 <h1>Edit Report</h1>
 
 <?php

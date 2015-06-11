@@ -25,42 +25,32 @@
 
 <p><a href="/reports/custom">Back to Custom Reports</a></p>
 
-<h1>Build Custom Report</h1>
+<?= $this->partial(
+    'mrss/custom-report/report-controls.partial.phtml',
+    array('report' => $report, 'active' => 'build')
+) ?>
 
-<h2><?= $report->getName() ?></h2>
 
-<p><?= $report->getDescription() ?></p>
+<h1><?= $report->getName() ?></h1>
+
+<p class="reportDescription"><?= $report->getDescription() ?></p>
 
 <p>
     <a href="<?= $this->url('reports/custom/addItem', array('id' => $report->getId())) ?>" class="btn btn-default">
         <span class="glyphicon glyphicon-plus icon icon-plus"></span>
         Add an Item
     </a>
+
+    <span class="smallNote">Drag and drop to reorder.</span>
 </p>
 
 
 <div class="reportItems">
     <?php foreach ($report->getItems() as $item): ?>
-        <div class="complete-chart-box" id="item_<?= $item->getId() ?>">
-            <?= $this->chart($item->getCache(true)) ?>
-
-            <div class="btn-group btn-group-sm" role="group">
-                <?php /*<a href="#" class="btn btn-default handle" title="Edit report item">
-                    <span class="glyphicon glyphicon-move"></span>
-                    Move
-                </a> */ ?>
-
-                <a href="<?= $this->url('reports/custom/edit-item', array('id' => $report->getId(), 'item_id' => $item->getId())) ?>" class="btn btn-default" title="Edit report item">
-                    <span class="glyphicon glyphicon-edit"></span>
-                    Edit
-                </a>
-
-                <a href="<?= $this->url('reports/custom/delete-item', array('id' => $report->getId(), 'item_id' => $item->getId())) ?>" class="btn btn-default delete-confirm" title="Permanently delete the report item.">
-                    <span class="glyphicon glyphicon-trash"></span>
-                    Delete
-                </a>
-            </div>
-        </div>
+        <?= $this->partial(
+            'mrss/custom-report/report-item.partial.phtml',
+            array('item' => $item, 'buttons' => true)
+        ) ?>
     <?php endforeach ?>
 </div>
 

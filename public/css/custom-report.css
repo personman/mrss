@@ -9,3 +9,24 @@
 .btn-group {
     float: right;
 }
+
+/* Custom reports */
+h1 {
+    margin-top: 20px;
+}
+.customReport p.reportDescription {
+    margin-left: 20px;
+    font-style: italic;
+}
+.customReportList h2 {
+    margin: 20px 20px 15px 0;
+}
+.customReportList .btn-group {
+    float: right;
+}
+
+span.smallNote {
+    padding-left: 20px;
+    color: #AAA;
+    font-size: 80%;
+}

@@ -102,18 +102,6 @@ form:not(.data-entry-form) .controls input[type="text"], .controls textarea {
     width: 60%;
 }
 
-/* Custom reports */
-.customReportList p {
-    margin-left: 20px;
-    font-style: italic;
-}
-.customReportList h2 {
-    margin: 20px 20px 15px 0;
-}
-.customReportList .btn-group {
-    float: right;
-}
-
 /** Fix bug in bootstrap */
 .progress-bar[aria-valuenow="0"] {
     min-width: 0 !important;

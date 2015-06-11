@@ -1,0 +1,23 @@
+<?php /** @var \Mrss\Entity\ReportItem $item */ ?>
+<div class="complete-chart-box" id="item_<?= $item->getId() ?>">
+    <?= $this->chart($item->getCache(true)) ?>
+
+    <?php if (!empty($buttons)): ?>
+    <div class="btn-group btn-group-sm" role="group">
+        <?php /*<a href="#" class="btn btn-default handle" title="Edit report item">
+                    <span class="glyphicon glyphicon-move"></span>
+                    Move
+                </a> */ ?>
+
+        <a href="<?= $this->url('reports/custom/edit-item', array('id' => $item->getReport()->getId(), 'item_id' => $item->getId())) ?>" class="btn btn-default" title="Edit report item">
+            <span class="glyphicon glyphicon-edit"></span>
+            Edit
+        </a>
+
+        <a href="<?= $this->url('reports/custom/delete-item', array('id' => $item->getReport()->getId(), 'item_id' => $item->getId())) ?>" class="btn btn-default delete-confirm" title="Permanently delete the report item.">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </a>
+    </div>
+    <?php endif ?>
+</div>

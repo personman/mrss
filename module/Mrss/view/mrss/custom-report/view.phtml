@@ -1,0 +1,28 @@
+<?php /** @var \Mrss\Entity\Report $report */ ?>
+<? $this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print') ?>
+
+<div class="customReport">
+    <p><a href="/reports/custom">Back to Custom Reports</a></p>
+
+    <?= $this->partial(
+        'mrss/custom-report/report-controls.partial.phtml',
+        array('report' => $report, 'active' => 'view')
+    ) ?>
+
+    <h1><?= $this->escapeHtml($report->getName()) ?></h1>
+
+    <p class="reportDescription"><?= $report->getDescription() ?></p>
+
+    <div class="reportItems">
+        <?php foreach ($report->getItems() as $item): ?>
+            <?= $this->partial(
+                'mrss/custom-report/report-item.partial.phtml',
+                array('item' => $item, 'buttons' => false)
+            ) ?>
+        <?php endforeach ?>
+    </div>
+
+    <div style="clear: both; margin-bottom: 30px"></div>
+
+
+</div>

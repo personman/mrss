@@ -1,0 +1,27 @@
+<?php /** @var \Mrss\Entity\Report $report */ ?>
+<div class="btn-group" role="group">
+    <a href="<?= $this->url('reports/custom/view', array('id' => $report->getId())) ?>"
+       class="btn btn-default<?php if ($active == 'view') echo ' active' ?>"
+       title="View the report.">
+        <span class="glyphicon glyphicon-eye-open"></span>
+        View
+    </a>
+    <a href="<?= $this->url('reports/custom/edit', array('id' => $report->getId())) ?>"
+       class="btn btn-default<?php if ($active == 'edit') echo ' active' ?>"
+       title="Edit basic report details like title and description.">
+        <span class="glyphicon glyphicon-edit"></span>
+        Edit
+    </a>
+    <a href="<?= $this->url('reports/custom/build', array('id' => $report->getId())) ?>"
+       class="btn btn-default<?php if ($active == 'build') echo ' active' ?>"
+       title="Build report by adding charts and text.">
+        <span class="glyphicon glyphicon-wrench"></span>
+        Build
+    </a>
+    <a href="<?= $this->url('reports/custom/delete', array('id' => $report->getId())) ?>"
+       class="btn btn-default delete-confirm"
+       title="Permanently delete the report.">
+        <span class="glyphicon glyphicon-trash"></span>
+        Delete
+    </a>
+</div>

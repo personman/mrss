@@ -1,5 +1,6 @@
 <?php
 /** @var \Mrss\Entity\Report[] $reports */
+$this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print')
 ?>
 
 <script type="text/javascript">
@@ -20,26 +21,17 @@
 
 <div class="customReportList">
 <?php foreach ($reports as $report): ?>
-    <div class="btn-group" role="group">
-        <a href="<?= $this->url('reports/custom/edit', array('id' => $report->getId())) ?>" class="btn btn-default" title="Edit basic report details like title and description">
-            <span class="glyphicon glyphicon-edit"></span>
-            Edit
+    <div class="customReport">
+        <?= $this->partial(
+            'mrss/custom-report/report-controls.partial.phtml',
+            array('report' => $report)
+        ) ?>
+
+        <a href="<?= $this->url('reports/custom/view', array('id' => $report->getId())) ?>">
+            <h2><?= $this->escapeHtml($report->getName()) ?></h2>
         </a>
-        <a href="<?= $this->url('reports/custom/build', array('id' => $report->getId())) ?>" class="btn btn-default" title="Build report by adding charts and text.">
-            <span class="glyphicon glyphicon-wrench"></span>
-            Build
-        </a>
-        <a href="<?= $this->url('reports/custom/delete', array('id' => $report->getId())) ?>" class="btn btn-default delete-confirm" title="Permanently delete the report.">
-            <span class="glyphicon glyphicon-trash"></span>
-            Delete
-        </a>
+
+        <p class="reportDescription"><?= $report->getDescription() ?></p>
     </div>
-
-    <a href="#">
-        <h2><?= $this->escapeHtml($report->getName()) ?></h2>
-    </a>
-
-    <p><?= $report->getDescription() ?></p>
-
 <?php endforeach ?>
 </div>

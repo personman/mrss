@@ -34,20 +34,6 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
-                'name' => 'year',
-                'type' => 'Select',
-                'options' => array(
-                    'label' => 'Year'
-                ),
-                'attributes' => array(
-                    'id' => 'years',
-                    'options' => $years
-                )
-            )
-        );
-
-        $this->add(
-            array(
                 'name' => 'presentation',
                 'type' => 'Select',
                 'options' => array(
@@ -60,6 +46,20 @@ class Explore extends AbstractForm
                         'bubble' => 'Bubble Plot',
                         'line' => 'Line'
                     )
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'year',
+                'type' => 'Select',
+                'options' => array(
+                    'label' => 'Year'
+                ),
+                'attributes' => array(
+                    'id' => 'years',
+                    'options' => $years
                 )
             )
         );

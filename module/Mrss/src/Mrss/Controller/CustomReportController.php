@@ -62,7 +62,8 @@ class CustomReportController extends ReportController
 
 
         return array(
-            'form' => $form
+            'form' => $form,
+            'report' => $report
         );
     }
 
@@ -72,6 +73,17 @@ class CustomReportController extends ReportController
     }
 
     public function buildAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        $report = $this->getReport($id);
+        $this->populateCache($report);
+
+        return array(
+            'report' => $report
+        );
+    }
+
+    public function viewAction()
     {
         $id = $this->params()->fromRoute('id');
         $report = $this->getReport($id);
@@ -157,5 +169,4 @@ class CustomReportController extends ReportController
 
         return $report;
     }
-
 }
