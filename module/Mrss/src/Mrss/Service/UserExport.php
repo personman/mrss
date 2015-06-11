@@ -93,9 +93,10 @@ class UserExport
         $sheet = $this->excel->getActiveSheet();
 
         $row = 2;
-        foreach ($subscriptions as /** @var Subscription $subscription */ $subscription) {
+        foreach ($subscriptions as $subscription) {
+            /** @var \Mrss\Entity\Subscription $subscription */
             $college = $subscription->getCollege();
-            $users = $college->getUsers();
+            $users = $college->getUsersByStudy($this->getStudy());
 
             foreach ($users as $user) {
                 // College data
