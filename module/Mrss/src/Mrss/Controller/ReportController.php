@@ -430,13 +430,7 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
-        $peerService = $this->getServiceLocator()->get('service.report.peer');
-        $years = $peerService->getYearsWithSubscriptions();
-
-        // If reports are closed, remove the last year
-        if (!$this->currentStudy()->getReportsOpen()) {
-            array_shift($years);
-        }
+        $years = $this->currentCollege()->getYearsWithSubscriptions($this->currentStudy());
 
         $s = microtime(1);
         $defaultBenchmarks = $this->getPeerBenchmarks($years[0], true);

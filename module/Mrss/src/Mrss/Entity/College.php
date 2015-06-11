@@ -458,6 +458,24 @@ class College
         return $subscriptionsForYear;
     }
 
+    public function getYearsWithSubscriptions(Study $study, $skipCurrentYearIfReportsClosed = true)
+    {
+        $years = array();
+        foreach ($this->getSubscriptionsForStudy($study) as $sub) {
+            if ($skipCurrentYearIfReportsClosed) {
+                if ($sub->getYear() == $study->getCurrentYear() && !$study->getReportsOpen()) {
+                    continue;
+                }
+            }
+
+            $years[] = $sub->getYear();
+        }
+
+        rsort($years);
+
+        return $years;
+    }
+
     public function getObservationForYear($year)
     {
         $observations = $this->getObservations();
