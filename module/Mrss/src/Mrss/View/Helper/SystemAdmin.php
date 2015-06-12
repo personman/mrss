@@ -49,7 +49,12 @@ class SystemAdmin extends AbstractHelper
                 $collegeSelected = false;
             }
 
+
             $collegeName = $activeCollege->getName();
+            if (!$activeCollege->getSystem()) {
+                return "$collegeName does not belong to a system, but has a system admin user.";
+            }
+
             $systemName = $activeCollege->getSystem()->getName();
 
             $form = $this->getSwitchForm();
@@ -101,6 +106,9 @@ class SystemAdmin extends AbstractHelper
             array(
                 'name' => 'college_id',
                 'type' => 'Select',
+                'options' => array(
+                    'empty_option' => '== Choose an institution. ==',
+                ),
                 'attributes' => array(
                     'value' => $value,
                     'options' => $colleges
