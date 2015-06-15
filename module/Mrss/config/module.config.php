@@ -1529,6 +1529,16 @@ return array(
                                 'action' => 'separate'
                             )
                         )
+                    ),
+                    'offsets' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/offsets[/:all]',
+                            'defaults' => array(
+                                'action' => 'offsets',
+                                'all' => null
+                            )
+                        )
                     )
                 )
             ),

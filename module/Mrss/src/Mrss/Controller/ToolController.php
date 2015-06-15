@@ -557,6 +557,53 @@ class ToolController extends AbstractActionController
         die('separation script complete');
     }
 
+    /**
+     * For populating the yearOffset field in benchmarks that don't have it set up yet
+     */
+    public function offsetsAction()
+    {
+        $benchmarks = array();
+        $showAll = $this->params()->fromRoute('all');
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                if (!$showAll) {
+                    if (!is_null($benchmark->getYearOffset())) {
+                        continue;
+                    }
+                }
+                if ($benchmark->getIncludeInNationalReport()) {
+                    $benchmarks[$benchmark->getId()] = $benchmark;
+                }
+            }
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
+
+            foreach ($_POST['benchmarks'] as $id => $yearOffset) {
+                if (!empty($benchmarks[$id])) {
+                    $benchmark = $benchmarks[$id];
+
+                    $benchmark->setYearOffset($yearOffset);
+                    $benchmarkModel->save($benchmark);
+                }
+            }
+
+            $benchmarkModel->getEntityManager()->flush();
+            $this->flashMessenger()->addSuccessMessage("Saved.");
+            return $this->redirect()->toRoute('tools/offsets');
+        }
+
+        return array(
+            'benchmarks' => $benchmarks,
+            'showAll' => $showAll
+        );
+    }
+
     protected function getObservationPropertyCode(Benchmark $benchmark)
     {
         $oldDbColumn = $benchmark->getDbColumn();

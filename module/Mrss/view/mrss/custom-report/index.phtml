@@ -24,7 +24,7 @@ $this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print'
     <div class="customReport">
         <?= $this->partial(
             'mrss/custom-report/report-controls.partial.phtml',
-            array('report' => $report)
+            array('report' => $report, 'active' => null)
         ) ?>
 
         <a href="<?= $this->url('reports/custom/view', array('id' => $report->getId())) ?>">

@@ -348,7 +348,6 @@ class NavigationFactory extends DefaultNavigationFactory
             $collegeId = $user->getCollege()->getId();
         }
 
-
         $subscription = $subModel->findOne($year, $collegeId, $study->getId());
 
         return (!empty($subscription));

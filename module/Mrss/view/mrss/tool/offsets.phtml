@@ -1,0 +1,31 @@
+<?php /** @var \Mrss\Entity\Benchmark $benchmark */ ?>
+
+<h1>Benchmark Year Offsets</h1>
+
+<p>
+    <?= count($benchmarks) ?> benchmarks need their yearOffset populated.
+    <?php if ($showAll): ?>
+        <a href="/tools/offsets">Show only benchmarks without a yearOffset.</a>
+    <?php else: ?>
+        <a href="/tools/offsets/all">Show benchmarks with and without a yearOffset.</a>
+    <?php endif ?>
+</p>
+<?//= $this->ztbForm($this->form->prepare()) ?>
+
+<form method="post">
+<table class="table table-striped table-bordered">
+    <?php foreach ($benchmarks as $benchmark): ?>
+        <tr>
+            <td><?= $benchmark->getName() ?></td>
+            <td><?= $this->escapeHtml($benchmark->getDescription()) ?></td>
+            <td><?= $benchmark->getTimeframe() ?></td>
+            <td><?= $benchmark->getEquation() ?></td>
+            <td>
+                <input type="text" name="benchmarks[<?= $benchmark->getId() ?>]" value="<?= $benchmark->getYearOffset() ?>"/>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>
+
+    <input type="submit" value="Save" />
+</form>
