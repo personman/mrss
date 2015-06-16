@@ -408,8 +408,8 @@ class College
     {
         $subscriptions = array();
         foreach ($this->getSubscriptions() as $sub) {
-            $subStudy = $sub->getStudy()->getId();
-            $study->getId();
+            //$subStudy = $sub->getStudy()->getId();
+            //$study->getId();
 
             if ($sub->getStudy()->getId() == $study->getId()) {
                 $subscriptions[$sub->getYear()] = $sub;
@@ -458,6 +458,12 @@ class College
         return $subscriptionsForYear;
     }
 
+    /**
+     * @param Study $study
+     * @param bool $skipCurrentYearIfReportsClosed
+     * @return array
+     * @deprecated This method was causing errors in peer comparison
+     */
     public function getYearsWithSubscriptions(Study $study, $skipCurrentYearIfReportsClosed = true)
     {
         $years = array();

@@ -430,7 +430,25 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
-        $years = $this->currentCollege()->getYearsWithSubscriptions($this->currentStudy());
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        // This was causing errors, namely the year not being saved with the peer group. No idea why,
+        // but the replacement code below works better.
+        //$years = $this->currentCollege()->getYearsWithSubscriptions($this->currentStudy());
+
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subs = $subscriptionModel
+            ->findByCollegeAndStudy($this->currentCollege()->getId(), $study->getId());
+        $years = array();
+        foreach ($subs as $sub) {
+            if (!$study->getReportsOpen() && $sub->getYear() == $study->getCurrentYear()) {
+                continue;
+            }
+            $years[] = $sub->getYear();
+        }
+        rsort($years);
 
         $s = microtime(1);
         $defaultBenchmarks = $this->getPeerBenchmarks($years[0], true);

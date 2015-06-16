@@ -32,6 +32,16 @@ class Subscription extends AbstractModel
         );
     }
 
+    public function findByCollegeAndStudy($collegeId, $studyId)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'college' => $collegeId,
+                'study' => $studyId
+            )
+        );
+    }
+
     /**
      * @param $id
      * @return null|\Mrss\Entity\Subscription
