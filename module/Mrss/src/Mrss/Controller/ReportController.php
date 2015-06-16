@@ -449,7 +449,6 @@ class ReportController extends AbstractActionController
 
             if ($form->isValid()) {
                 $data = $form->getData();
-
                 $peerGroup->setYear($data['reportingPeriod']);
                 $peerGroup->setBenchmarks($data['benchmarks']);
                 $peerGroup->setPeers($data['peers']);
