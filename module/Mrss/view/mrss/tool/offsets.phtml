@@ -16,7 +16,7 @@
 <table class="table table-striped table-bordered">
     <?php foreach ($benchmarks as $benchmark): ?>
         <tr>
-            <td><?= $benchmark->getName() ?></td>
+            <td><?= $benchmark->getName() ?> (Form <?= $benchmark->getBenchmarkGroup()->getUrl() ?>)</td>
             <td><?= $this->escapeHtml($benchmark->getDescription()) ?></td>
             <td><?= $benchmark->getTimeframe() ?></td>
             <td><?= $benchmark->getEquation() ?></td>
