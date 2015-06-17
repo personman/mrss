@@ -571,7 +571,7 @@ class ToolController extends AbstractActionController
         foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
                 if (!$showAll) {
-                    if (!is_null($benchmark->getYearOffset()) && $benchmark->getYearOffset() != '') {
+                    if (!is_null($benchmark->getYearOffset()) && $benchmark->getYearOffset() !== '') {
                         continue;
                     }
                 }
