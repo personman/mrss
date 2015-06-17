@@ -13,6 +13,8 @@ class Report extends AbstractForm
         parent::__construct('report');
         $this->addBasicFields();
         $this->add($this->getButtonFieldset());
+
+        $this->setInputFilter($this->getInputFilterSetup());
     }
 
     protected function addBasicFields()
@@ -22,12 +24,15 @@ class Report extends AbstractForm
         $this->addDescription();
     }
 
-    public function getInputFilter()
+    public function getInputFilterSetup()
     {
         $inputFilter = new InputFilter();
 
         $input = new Input('name');
         $input->setRequired(true);
+        $inputFilter->add($input);
+
+        $input = new Input('description');
         $inputFilter->add($input);
 
         return $inputFilter;

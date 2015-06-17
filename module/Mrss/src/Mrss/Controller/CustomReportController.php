@@ -42,7 +42,6 @@ class CustomReportController extends ReportController
         $form->bind($report);
 
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
