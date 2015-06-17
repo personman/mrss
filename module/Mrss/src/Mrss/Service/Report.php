@@ -566,6 +566,16 @@ class Report
             }
         }
 
+        // Don't show the current year if reports aren't open yet
+        if (!$this->getStudy()->getReportsOpen()) {
+            $year = $this->getStudy()->getCurrentYear();
+            unset($data[$year]);
+            unset($medianData[$year]);
+            if (!empty($peerMedians)) {
+                unset($peerMedians[$year]);
+            }
+        }
+
         // Build the series
         $series = array();
         $series[] = array(
@@ -597,7 +607,8 @@ class Report
         return $chart->getConfig();
     }
 
-    protected function offsetYears($years, $offset) {
+    protected function offsetYears($years, $offset)
+    {
         $new = array();
         foreach ($years as $year) {
             $new[] = $year - $offset;
