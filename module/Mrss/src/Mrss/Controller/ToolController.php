@@ -571,7 +571,7 @@ class ToolController extends AbstractActionController
         foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
                 if (!$showAll) {
-                    if (!is_null($benchmark->getYearOffset())) {
+                    if (!is_null($benchmark->getYearOffset()) && $benchmark->getYearOffset() != '') {
                         continue;
                     }
                 }
@@ -588,7 +588,9 @@ class ToolController extends AbstractActionController
                 if (!empty($benchmarks[$id])) {
                     $benchmark = $benchmarks[$id];
 
-                    $benchmark->setYearOffset($yearOffset);
+                    if (!is_null($yearOffset) && $yearOffset !== '') {
+                        $benchmark->setYearOffset($yearOffset);
+                    }
                     $benchmarkModel->save($benchmark);
                 }
             }
