@@ -585,14 +585,25 @@ class Report
             );
         }
 
+        $xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
+
         $chart = new Report\Chart\Line;
         $chart->setTitle($title)
             ->setYLabel($benchmark->getDescriptiveReportLabel())
             ->setYFormat($this->getFormat($benchmark))
-            ->setCategories(array_keys($data))
+            ->setCategories($xCategories)
             ->setSeries($series);
 
         return $chart->getConfig();
+    }
+
+    protected function offsetYears($years, $offset) {
+        $new = array();
+        foreach ($years as $year) {
+            $new[] = $year - $offset;
+        }
+
+        return $new;
     }
 
     /**
