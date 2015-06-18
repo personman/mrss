@@ -33,6 +33,7 @@ class Report extends AbstractForm
         $inputFilter->add($input);
 
         $input = new Input('description');
+        $input->setRequired(false);
         $inputFilter->add($input);
 
         return $inputFilter;

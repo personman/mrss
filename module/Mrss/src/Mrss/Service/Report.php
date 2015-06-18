@@ -554,26 +554,19 @@ class Report
 
         list($data, $medianData) = $this->syncArrays($data, $medianData);
 
+        // Don't show the current year if reports aren't open yet
+        if (!$this->getStudy()->getReportsOpen()) {
+            $year = $this->getStudy()->getCurrentYear();
+            unset($data[$year]);
+            unset($medianData[$year]);
+        }
 
         // Peer group median
         if ($peerGroup) {
             $peerGroupModel = $this->getPeerGroupModel();
             $peerGroup = $peerGroupModel->find($peerGroup);
 
-            $peerMedians = array();
-            foreach ($medianData as $year => $median) {
-                $peerMedians[$year] = $this->getPeerMedian($peerGroup, $dbColumn, $year);
-            }
-        }
-
-        // Don't show the current year if reports aren't open yet
-        if (!$this->getStudy()->getReportsOpen()) {
-            $year = $this->getStudy()->getCurrentYear();
-            unset($data[$year]);
-            unset($medianData[$year]);
-            if (!empty($peerMedians)) {
-                unset($peerMedians[$year]);
-            }
+            $peerMedians = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
         }
 
         // Build the series
@@ -623,6 +616,47 @@ class Report
     protected function getPeerGroupModel()
     {
         return $this->getServiceManager()->get('model.peerGroup');
+    }
+
+    protected function getPeerMedians($peerGroup, $dbColumn, $years)
+    {
+        $peersData = array();
+
+        $peerMedians = array();
+        $counts = array();
+        $firstRow = true;
+        foreach ($years as $year) {
+            $peersData[$year] = $this->getPeerData($peerGroup, $dbColumn, $year);
+            if ($firstRow) {
+                //$
+            }
+            $peerMedians[$year] = $this->getPeerMedian($peerGroup, $dbColumn, $year);
+            $counts[$year] = count($peersData[$year]);
+        }
+
+        // @todo: remove data from colleges that don't have it for all years
+        // (don't include current year if reports are closed)
+        pr($peersData);
+        pr($counts);
+
+        return $peerMedians;
+    }
+
+    public function getPeerData($peerGroup, $dbColumn, $year)
+    {
+        $data = array();
+        foreach ($peerGroup->getPeers() as $collegeId) {
+            $college = $this->getCollegeModel()->find($collegeId);
+
+            if ($ob = $college->getObservationForYear($year)) {
+                $datum = $ob->get($dbColumn);
+                if (null !== $datum) {
+                    $data[$college->getId()] = floatval($datum);
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**
