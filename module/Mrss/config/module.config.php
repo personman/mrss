@@ -1539,7 +1539,16 @@ return array(
                                 'all' => null
                             )
                         )
-                    )
+                    ),
+                    'zeros' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/zeros',
+                            'defaults' => array(
+                                'action' => 'zeros',
+                            )
+                        )
+                    ),
                 )
             ),
             'schedule-demo' => array(

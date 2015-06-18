@@ -606,6 +606,66 @@ class ToolController extends AbstractActionController
         );
     }
 
+    public function zerosAction()
+    {
+        $this->longRunningScript();
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+        $year = $study->getCurrentYear();
+
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subs = $subscriptionModel->findByStudyAndYear($study->getId(), $year);
+
+        // Get all the collected benchmark keys
+        $dbColumns = array();
+        foreach ($study->getBenchmarkGroups() as $bGroup) {
+            foreach ($bGroup->getNonComputedBenchmarksForYear($year) as $benchmark) {
+                $dbColumns[] = $benchmark->getDbColumn();
+            }
+        }
+
+        // Now loop over the subscriptions
+        $report = array();
+        foreach ($subs as $subscription) {
+            $observation = $subscription->getObservation();
+
+            $zeros = 0;
+            foreach ($dbColumns as $dbColumn) {
+                $value = $observation->get($dbColumn);
+
+                if ($value === 0) {
+                    $zeros++;
+                }
+            }
+
+            if (!$zeros) {
+                continue;
+            }
+
+            $emails = array();
+            foreach ($subscription->getCollege()->getUsersByStudy($study) as $user) {
+                if ($user->getRole() == 'viewer') {
+                    continue;
+                }
+                
+                $emails[] = $user->getEmail();
+            }
+
+            $reportRow = array(
+                'college' => $subscription->getCollege()->getName(),
+                'emails' => implode(', ', $emails),
+                'zeros' => $zeros
+            );
+            $report[] = $reportRow;
+        }
+
+        return array(
+            'report' => $report
+        );
+    }
+
     protected function getObservationPropertyCode(Benchmark $benchmark)
     {
         $oldDbColumn = $benchmark->getDbColumn();
