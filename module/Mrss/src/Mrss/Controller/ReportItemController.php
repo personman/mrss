@@ -97,6 +97,10 @@ class ReportItemController extends CustomReportController
             }
         }
 
+        if (empty($year)) {
+            $year = $data['year'];
+        }
+
         return array(
             'form' => $form,
             'chart' => $chart,
