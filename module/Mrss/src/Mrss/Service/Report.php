@@ -636,8 +636,8 @@ class Report
 
         // @todo: remove data from colleges that don't have it for all years
         // (don't include current year if reports are closed)
-        pr($peersData);
-        pr($counts);
+        //pr($peersData);
+        //pr($counts);
 
         return $peerMedians;
     }

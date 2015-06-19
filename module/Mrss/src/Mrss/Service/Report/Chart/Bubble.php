@@ -22,6 +22,11 @@ class Bubble extends AbstractChart
         $config['xAxis'] = $this->getAxis();
         $config['yAxis'] = $this->getAxis();
 
+        //$config['yAxis']['useHTML'] = true;
+        $config['yAxis']['title']['style'] = array(
+            'width' => '300px',
+        );
+
         $this->setConfig($config);
     }
 
@@ -67,6 +72,8 @@ class Bubble extends AbstractChart
         $config['yAxis']['title']['text'] = $this->getYLabel();
 
         $this->setConfig($config);
+
+        $this->wrapYAxisTitle();
     }
 
     public function addMedianLines($xMedian, $yMedian)

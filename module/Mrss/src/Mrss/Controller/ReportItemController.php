@@ -7,6 +7,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Entity\Chart;
 use Mrss\Form\Explore;
+use Zend\View\Model\ViewModel;
 
 class ReportItemController extends CustomReportController
 {
@@ -101,13 +102,16 @@ class ReportItemController extends CustomReportController
             $year = $data['year'];
         }
 
-        return array(
+        $viewModel = new ViewModel(array(
             'form' => $form,
             'chart' => $chart,
             'year' => $year,
             'report' => $report,
             'edit' => $edit
-        );
+        ));
+        //$viewModel->setTerminal(true);
+
+        return $viewModel;
     }
 
     /*public function editAction()

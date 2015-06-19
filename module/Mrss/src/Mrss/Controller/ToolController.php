@@ -649,7 +649,7 @@ class ToolController extends AbstractActionController
                 if ($user->getRole() == 'viewer') {
                     continue;
                 }
-                
+
                 $emails[] = $user->getEmail();
             }
 

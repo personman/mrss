@@ -14,7 +14,11 @@ class Line extends AbstractChart
 
         //$config['xAxis'] = array();
         $config['yAxis'] = array(
-            'title' => array()
+            'title' => array(
+                'style' => array(
+                    'width' => '350px'
+                ),
+            )
         );
 
         $config['plotOptions'] = array(
@@ -45,6 +49,8 @@ class Line extends AbstractChart
         $config['yAxis']['title']['text'] = $this->getYLabel();
 
         $this->setConfig($config);
+
+        $this->wrapYAxisTitle();
     }
 
     public function setCategories($categories)

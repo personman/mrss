@@ -107,3 +107,9 @@ form:not(.data-entry-form) .controls input[type="text"], .controls textarea {
     min-width: 0 !important;
 }
 
+
+/*.highcharts-yaxis-title tspan {
+    width: 100px;
+    height: 100px;
+    color: red;
+}*/

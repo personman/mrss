@@ -152,7 +152,9 @@ abstract class AbstractChart
 
     public function getYLabel()
     {
-        return $this->getLabel($this->yKey);
+        $label = $this->getLabel($this->yKey);
+
+        return $label;
     }
 
     public function convertFormatForAxisLabel($format)
@@ -175,12 +177,32 @@ abstract class AbstractChart
         $axis = array(
             'title' => array(
                 'enabled' => true,
-                //'text' => $xLabel
+                'style' => array('width' => '350px'),
             ),
             'labels' => array(),
             'plotLines' => array()
         );
 
         return $axis;
+    }
+
+    /**
+     * If the Y axis title is long enough, add some padding/offset
+     */
+    protected function wrapYAxisTitle()
+    {
+        $length = strlen($this->getYLabel());
+
+        $offsetPerLine = 60;
+        $charactersPerLine = 60;
+
+        $offset = (ceil($length / $charactersPerLine) - 1) * $offsetPerLine;
+        if ($offset > 0) {
+            $config = $this->getConfig();
+            $config['yAxis']['title']['offset'] = $offset;
+
+            $this->setConfig($config);
+        }
+
     }
 }
