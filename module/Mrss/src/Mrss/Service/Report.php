@@ -566,8 +566,10 @@ class Report
             $peerGroupModel = $this->getPeerGroupModel();
             $peerGroup = $peerGroupModel->find($peerGroup);
 
-            $peerMedians = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
+            list($peerMedians, $peerIds) = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
         }
+
+        // @todo: add footnote listing peers using $peerIds
 
         // Build the series
         $series = array();
@@ -621,25 +623,88 @@ class Report
     protected function getPeerMedians($peerGroup, $dbColumn, $years)
     {
         $peersData = array();
+        $breakpoint = 50; // Median: 50
 
-        $peerMedians = array();
-        $counts = array();
-        $firstRow = true;
         foreach ($years as $year) {
             $peersData[$year] = $this->getPeerData($peerGroup, $dbColumn, $year);
-            if ($firstRow) {
-                //$
-            }
-            $peerMedians[$year] = $this->getPeerMedian($peerGroup, $dbColumn, $year);
-            $counts[$year] = count($peersData[$year]);
         }
 
-        // @todo: remove data from colleges that don't have it for all years
-        // (don't include current year if reports are closed)
-        //pr($peersData);
-        //pr($counts);
+        list($peersData, $collegeIds) = $this->makePeerCohort($peersData);
 
-        return $peerMedians;
+        $peerMedians = array();
+        foreach ($years as $year) {
+            if (empty($peersData[$year])) {
+                $peerMedians[$year] = null;
+            } else {
+                $dataForYear = array();
+                foreach ($peersData[$year] as $value) {
+                    $dataForYear[] = floatval($value);
+                }
+
+                $calculator = new Calculator;
+                $calculator->setData($dataForYear);
+
+                $result = $calculator->getValueForPercentile($breakpoint);
+
+                $peerMedians[$year] = $result;
+            }
+        }
+
+        return array($peerMedians, $collegeIds);
+    }
+
+    public function makePeerCohort($peersData)
+    {
+        $minPeers = 5;
+
+        // Step one: sort the array to start at the most recent year
+        krsort($peersData);
+
+        $cohort = null;
+        $updatedCohort = array();
+        $firstYear = null;
+        foreach ($peersData as $year => $yearData) {
+            // Step two: grab the most recent year and use that as the starting cohort
+            if ($cohort === null) {
+                $cohort = array_keys($yearData);
+            }
+
+            // Step three: loop over peer data and reduce the cohort
+            $updatedCohort = array();
+            foreach ($cohort as $collegeId) {
+                if (isset($yearData[$collegeId])) {
+                    $updatedCohort[] = $collegeId;
+                }
+            }
+
+            if (count($updatedCohort) < $minPeers) {
+                $firstYear = $year + 1;
+                break;
+            } else {
+                $cohort = $updatedCohort;
+                $firstYear = $year;
+            }
+        }
+
+        // Step four: rebuild the data using only the cohort colleges
+        $newPeerData = array();
+        foreach ($peersData as $year => $yearData) {
+            if ($year < $firstYear) {
+                continue;
+            }
+
+            $newYearData = array();
+            foreach ($cohort as $collegeId) {
+                $newYearData[$collegeId] = $yearData[$collegeId];
+            }
+
+            $newPeerData[$year] = $newYearData;
+        }
+
+        // Step five: flip the array back around so it starts with the lowest year
+        ksort($newPeerData);
+
+        return array($newPeerData, $cohort);
     }
 
     public function getPeerData($peerGroup, $dbColumn, $year)
