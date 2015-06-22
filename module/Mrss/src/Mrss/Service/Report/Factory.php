@@ -28,6 +28,9 @@ class Factory implements AbstractFactoryInterface
         $currentStudy = $sm->get('ControllerPluginManager')
             ->get('currentStudy')->getCurrentStudy();
 
+        $currentCollege = $sm->get('ControllerPluginManager')
+            ->get('currentCollege')->getCurrentCollege();
+
         $report->setSubscriptionModel($sm->get('model.subscription'));
         $report->setStudy($currentStudy);
         $report->setCalculator($sm->get('service.report.calculator'));
@@ -43,6 +46,7 @@ class Factory implements AbstractFactoryInterface
         $report->setComputedFieldsService($sm->get('computedFields'));
         $report->setMailTransport($sm->get('mail.transport'));
         $report->setVariableSubstitution($sm->get('service.variableSubstitution'));
+        $report->setCollege($currentCollege);
 
         // So the report can create other reports:
         $report->setServiceManager($sm);
@@ -59,6 +63,11 @@ class Factory implements AbstractFactoryInterface
         return (!empty($map[$name]));
     }
 
+    /**
+     * Don't use capital letters in the keys of this array.
+     *
+     * @return array
+     */
     protected function getClassMap()
     {
         return array(
@@ -70,6 +79,10 @@ class Factory implements AbstractFactoryInterface
             'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
             'service.report.max.internal' => 'Mrss\Service\Report\Max\Internal',
             'service.report.max.national' => 'Mrss\Service\Report\Max\National',
+            'builder.bubble' =>
+                'Mrss\Service\Report\ChartBuilder\BubbleBuilder',
+            'builder.line' =>
+                'Mrss\Service\Report\ChartBuilder\LineBuilder',
             'service.report.max.activity.instructional' =>
                 'Mrss\Service\Report\Max\ActivityReport\Instructional',
             'service.report.max.activity.ss' =>

@@ -102,6 +102,8 @@ class Report
     protected $debug = false;
     
     protected $start;
+
+    protected $college;
     
     public function __construct()
     {
@@ -492,114 +494,32 @@ class Report
 
         switch ($config['presentation']) {
             case 'scatter':
-                $chart = $this
-                    ->getScatterPlot(
-                        $benchmark1,
-                        $benchmark2,
-                        $title,
-                        $year,
-                        null,
-                        true,
-                        $regression,
-                        $peerGroup
-                    );
+                /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
+                $builder = $this->getServiceManager()->get('builder.bubble');
+
+                $builder->setYear($year);
+
+                $chart = $builder->getChart($config);
+
                 break;
             case 'bubble':
-                $chart = $this->getBubbleChart(
-                    $benchmark1,
-                    $benchmark2,
-                    $size,
-                    $title,
-                    $year,
-                    null,
-                    true,
-                    $regression,
-                    $peerGroup
-                );
+                /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
+                $builder = $this->getServiceManager()->get('builder.bubble');
+                $builder->setYear($year);
+
+                $chart = $builder->getChart($config);
                 break;
             case 'line':
-                $chart = $this->getLineChart($benchmark2, $title, $peerGroup);
+                /** @var \Mrss\Service\Report\ChartBuilder\LineBuilder $builder */
+                $builder = $this->getServiceManager()->get('builder.line');
+                $builder->setYear($year);
+                $chart = $builder->getChart($config);
+
+                //$chart = $this->getLineChart($benchmark2, $title, $peerGroup);
                 break;
         }
 
         return $chart;
-    }
-
-    public function getLineChart($dbColumn, $title, $peerGroup = null)
-    {
-        $benchmark = $this->getBenchmark($dbColumn);
-
-        if (empty($title)) {
-            $title = $benchmark->getDescriptiveReportLabel();
-        }
-
-        // Get the college's reported data
-        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy());
-        $data = array();
-        foreach ($subscriptions as $subscription) {
-            $data[$subscription->getYear()] = floatval($subscription->getObservation()->get($dbColumn));
-        }
-        ksort($data);
-
-
-        // Get the median
-        $percentile = 50;
-        $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile);
-
-        $medianData = array();
-        foreach ($medians as $percentile) {
-            $medianData[$percentile->getYear()] = floatval($percentile->getValue());
-        }
-        ksort($medianData);
-
-        list($data, $medianData) = $this->syncArrays($data, $medianData);
-
-        // Don't show the current year if reports aren't open yet
-        if (!$this->getStudy()->getReportsOpen()) {
-            $year = $this->getStudy()->getCurrentYear();
-            unset($data[$year]);
-            unset($medianData[$year]);
-        }
-
-        // Peer group median
-        if ($peerGroup) {
-            $peerGroupModel = $this->getPeerGroupModel();
-            $peerGroup = $peerGroupModel->find($peerGroup);
-
-            list($peerMedians, $peerIds) = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
-        }
-
-        // @todo: add footnote listing peers using $peerIds
-
-        // Build the series
-        $series = array();
-        $series[] = array(
-            'name' => $this->getCollege()->getName(),
-            'data' => array_values($data)
-        );
-
-        $series[] = array(
-            'name' => 'National Median',
-            'data' => array_values($medianData)
-        );
-
-        if (!empty($peerMedians)) {
-            $series[] = array(
-                'name' => $peerGroup->getName() . ' Median',
-                'data' => array_values($peerMedians)
-            );
-        }
-
-        $xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
-
-        $chart = new Report\Chart\Line;
-        $chart->setTitle($title)
-            ->setYLabel($benchmark->getDescriptiveReportLabel())
-            ->setYFormat($this->getFormat($benchmark))
-            ->setCategories($xCategories)
-            ->setSeries($series);
-
-        return $chart->getConfig();
     }
 
     protected function offsetYears($years, $offset)
@@ -751,229 +671,6 @@ class Report
         $result = $calculator->getValueForPercentile($breakpoint);
 
         return $result;
-    }
-
-    protected function syncArrays($array1, $array2)
-    {
-        $keys = array_unique(array_merge(array_keys($array1), array_keys($array2)));
-        ksort($keys);
-        
-        $new1 = array();
-        $new2 = array();
-        foreach ($keys as $key) {
-            if (!empty($array1[$key])) {
-                $new1[$key] = $array1[$key];
-            } else {
-                $new1[$key] = null;
-            }
-
-            if (!empty($array2[$key])) {
-                $new2[$key] = $array2[$key];
-            } else {
-                $new2[$key] = null;
-            }
-        }
-
-        return array($new1, $new2);
-    }
-
-    public function getScatterPlot(
-        $benchmark1,
-        $benchmark2,
-        $title,
-        $year,
-        $collegeId = null,
-        $showMedians = false,
-        $showRegression = false,
-        $peerGroup = null
-    ) {
-        return $this->getBubbleChart(
-            $benchmark1,
-            $benchmark2,
-            null,
-            $title,
-            $year,
-            $collegeId,
-            $showMedians,
-            $showRegression,
-            $peerGroup
-        );
-    }
-
-    public function getBubbleChart(
-        $x,
-        $y,
-        $size,
-        $title,
-        $year,
-        $collegeId = null,
-        $showMedians = false,
-        $showRegression = false,
-        $peerGroup = null
-    ) {
-        $type = 'bubble';
-        if ($size == null) {
-            $type = 'scatter';
-        }
-
-        $study = $this->getStudy();
-        $dbColumns = array($x, $y);
-        if (!empty($size)) {
-            $dbColumns[] = $size;
-        }
-
-        $subscriptions = $this->getSubscriptionModel()
-            ->findWithPartialObservations($study, $year, $dbColumns);
-
-        $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
-        $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);
-
-        $xFormat = $this->getFormat($xBenchmark);
-        $yFormat = $this->getFormat($yBenchmark);
-
-        if (!$collegeId) {
-            $collegeId = $this->getCollege()->getId();
-        }
-
-        $data = array();
-        $yourCollege = array();
-        $peerData = array();
-        $xvals = array();
-        $yVals = array();
-
-        if ($peerGroup) {
-            $peerGroup = $this->getPeerGroupModel()->find($peerGroup);
-            if ($peerGroup) {
-                $peerIds = $peerGroup->getPeers();
-            }
-        }
-
-        foreach ($subscriptions as $subscription) {
-            $observation = $subscription->getObservation();
-
-            $xVal = $observation->get($x);
-            $yVal = $observation->get($y);
-
-            if ($size) {
-                $sizeVal = $observation->get($size);
-            } else {
-                $sizeVal = 1;
-            }
-
-
-            if ($xVal && $yVal && $sizeVal) {
-
-                $datum = array(
-                    floatval($xVal),
-                    floatval($yVal),
-                    floatval($sizeVal)
-                );
-
-                // Highlight the college?
-                if ($subscription->getCollege()->getId() == $collegeId) {
-                    $yourCollege[] = $datum;
-                } elseif (!empty($peerIds) && in_array($subscription->getCollege()->getId(), $peerIds)) {
-                    $peerData[] = $datum;
-                } else {
-                    $data[] = $datum;
-                }
-
-                // Save 'em for the median
-                $xvals[] = $xVal;
-                $yVals[] = $yVal;
-            }
-        }
-
-        $xLabel = $xBenchmark->getDescriptiveReportLabel();
-        $yLabel = $yBenchmark->getDescriptiveReportLabel();
-
-
-        $series = array(
-            array(
-                'type' => $type,
-                'name' => 'Institutions',
-                'color' => $this->getBarChartBarColor(),
-                'data' => $data,
-            )
-        );
-
-        // Highlight a college?
-        if (count($yourCollege)) {
-            $series[] = array(
-                'name' => $this->getCollege()->getName(),
-                'type' => $type,
-                'color' => '#9CBF3D',
-                'data' => $yourCollege,
-                'marker' => array(
-                    'radius' => 8
-                )
-            );
-        }
-
-        if (count($peerData)) {
-            $series[] = array(
-                'name' => $peerGroup->getName(),
-                'type' => $type,
-                'color' => '#FEE44B',
-                'data' => $peerData,
-            );
-        }
-
-        // Show median lines
-        $calculatorX = new Calculator($xvals);
-        $calculatorY = new Calculator($yVals);
-
-        $xMedian = $calculatorX->getMedian();
-        $yMedian = $calculatorY->getMedian();
-
-        if (empty($title)) {
-            $title = '';
-        }
-
-        // Now build the chart the new way
-        if ($size == null) {
-            $bubbleChart = new Report\Chart\ScatterPlot;
-        } else {
-            $bubbleChart = new Report\Chart\Bubble;
-        }
-
-        $bubbleChart->setTitle($title)
-            ->setSeries($series)
-            ->setXFormat($xFormat)
-            ->setYFormat($yFormat)
-            ->setXLabel($xLabel)
-            ->setYLabel($yLabel)
-            ->addMedianLines($xMedian, $yMedian);
-
-        $chart = $bubbleChart->getConfig();
-
-        return $chart;
-    }
-
-    /**
-     * @deprecated
-     * @param Subscription $subscription
-     * @param $xBenchmark
-     * @param $yBenchmark
-     * @return bool
-     */
-    public function hasOutlier(Subscription $subscription, $xBenchmark, $yBenchmark)
-    {
-        $xOutlier = $this->getOutlierModel()->findByCollegeStudyBenchmarkAndYear(
-            $subscription->getCollege(),
-            $subscription->getStudy(),
-            $xBenchmark,
-            $subscription->getYear()
-        );
-
-        $yOutlier = $this->getOutlierModel()->findByCollegeStudyBenchmarkAndYear(
-            $subscription->getCollege(),
-            $subscription->getStudy(),
-            $yBenchmark,
-            $subscription->getYear()
-        );
-
-        return (!empty($xOutlier) || !empty($yOutlier));
     }
 
     public function getPieChartColors()
@@ -1762,11 +1459,20 @@ class Report
         return $this->getObservation()->getYear();
     }
 
+    public function setCollege($college)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
     public function getCollege()
     {
-        if ($ob = $this->getObservation()) {
-            return $ob->getCollege();
+        if (empty($this->college) && $ob = $this->getObservation()) {
+            $this->college = $ob->getCollege();
         }
+
+        return $this->college;
     }
 
     protected function getErrorLog($shortFormat = false)
