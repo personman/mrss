@@ -26,6 +26,7 @@ class BubbleBuilder extends ChartBuilder
         $type = 'bubble';
         if ($config['presentation'] == 'scatter') {
             $type = 'scatter';
+            $size = null;
         }
 
         $study = $this->getStudy();
@@ -61,6 +62,9 @@ class BubbleBuilder extends ChartBuilder
         }
 
         foreach ($subscriptions as $subscription) {
+            //pr($subscription->getCollege()->getId());
+            //pr($collegeId);
+
             $observation = $subscription->getObservation();
 
             $xVal = $observation->get($x);

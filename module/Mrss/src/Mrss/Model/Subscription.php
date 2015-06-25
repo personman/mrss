@@ -4,6 +4,7 @@ namespace Mrss\Model;
 
 use \Mrss\Entity\Subscription as SubscriptionEntity;
 use \Mrss\Entity\Study as StudyEntity;
+use \Mrss\Entity\College as CollegeEntity;
 use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
@@ -32,6 +33,11 @@ class Subscription extends AbstractModel
         );
     }
 
+    /**
+     * @param $collegeId
+     * @param $studyId
+     * @return Subscription[]
+     */
     public function findByCollegeAndStudy($collegeId, $studyId)
     {
         return $this->getRepository()->findBy(
@@ -196,14 +202,18 @@ class Subscription extends AbstractModel
         return $years;
     }
 
-    public function getYearsWithReports(StudyEntity $study, $currentYearOpen)
+    public function getYearsWithReports(StudyEntity $study, CollegeEntity $college)
     {
-        $years = $this->getYearsWithSubscriptions($study);
+        $subs = $this->findByCollegeAndStudy($college->getId(), $study->getId());
 
         // Skip the current year if reports aren't open yet
-        foreach ($years as $key => $year) {
-            if ($year == $study->getCurrentYear() && !$currentYearOpen) {
-                unset($years[$key]);
+        $years = array();
+        foreach ($subs as $key => $subscription) {
+            $year = $subscription->getYear();
+            if ($year == $study->getCurrentYear() && !$study->getReportsOpen()) {
+                //unset($years[$key]);
+            } else {
+                $years[] = $year;
             }
         }
 

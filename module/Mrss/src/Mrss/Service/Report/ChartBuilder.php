@@ -10,6 +10,10 @@ class ChartBuilder extends Report
 
     protected $year;
 
+    protected $peers;
+
+    protected $minimumPeers = 5;
+
     public function setConfig($config)
     {
         $this->config = $config;
@@ -32,5 +36,15 @@ class ChartBuilder extends Report
     public function getYear()
     {
         return $this->year;
+    }
+
+    public function setPeers($peers)
+    {
+        $this->peers = $peers;
+    }
+
+    public function getPeers()
+    {
+        return $this->peers;
     }
 }

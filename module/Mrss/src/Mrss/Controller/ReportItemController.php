@@ -30,7 +30,7 @@ class ReportItemController extends CustomReportController
 
         $colleges = array();
 
-        $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->checkReportAccess());
+        $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
         $peerGroups = $this->getPeerGroups();
         
         $form = new Explore($benchmarks, $colleges, $years, $peerGroups);
@@ -69,7 +69,6 @@ class ReportItemController extends CustomReportController
                 $year = $data['year'];
 
                 $chart = $this->getReportService()
-                    ->setObservation($this->currentObservation())
                     ->getChart($data, $year);
 
                 // Save it, if requested
@@ -217,7 +216,7 @@ class ReportItemController extends CustomReportController
                 'options' => array()
             );
 
-            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+            foreach ($benchmarkGroup->getBenchmarksForYear($study->getCurrentYear()) as $benchmark) {
                 // Skip non-report benchmarks
                 if (!$benchmark->getIncludeInNationalReport()) {
                     continue;
