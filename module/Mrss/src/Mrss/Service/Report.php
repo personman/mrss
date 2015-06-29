@@ -483,12 +483,13 @@ class Report
         return $value;
     }
 
-    public function getChart($config, $year = null)
+    public function getChart($config)
     {
         $benchmark1 = $config['benchmark1'];
         $benchmark2 = $config['benchmark2'];
         $size = $config['benchmark3'];
         $title = $config['title'];
+        $year = $config['year'];
         $regression = $config['regression'];
         $peerGroup = $config['peerGroup'];
 

@@ -89,12 +89,7 @@ class ReportItemController extends CustomReportController
             $post['buttons']['preview'] = 'Preview';
             $form->setData($post);
         } else {
-            if (!empty($data)) {
-                /*$year = $data['year'];
-                $chart = $this->getReportService()
-                    ->setObservation($this->currentObservation())
-                    ->getChart($data, $year);*/
-
+            if (isset($data)) {
                 /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
                 $builder = $this->getServiceLocator()->get('builder.bubble');
                 $builder->setYear($year);
@@ -104,14 +99,9 @@ class ReportItemController extends CustomReportController
             }
         }
 
-        if (empty($year)) {
-            $year = $data['year'];
-        }
-
         $viewModel = new ViewModel(array(
             'form' => $form,
             'chart' => $chart,
-            'year' => $year,
             'report' => $report,
             'edit' => $edit
         ));
