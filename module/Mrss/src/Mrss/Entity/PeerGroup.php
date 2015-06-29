@@ -27,7 +27,7 @@ class PeerGroup
      */
     protected $id;
 
-    /** @ORM\Column(type="integer") */
+    /** @ORM\Column(type="integer", nullable=true) */
     protected $year;
 
     /**
@@ -99,10 +99,10 @@ class PeerGroup
     /** @ORM\Column(type="string", nullable=true) */
     protected $percentageFullTime;
 
-    /** @ORM\Column(type="text") */
+    /** @ORM\Column(type="text", nullable=true) */
     protected $benchmarks;
 
-    /** @ORM\Column(type="text") */
+    /** @ORM\Column(type="text", nullable=true) */
     protected $peers;
 
     /**
@@ -725,6 +725,24 @@ class PeerGroup
         }
 
         return $peers;
+    }
+
+    public function removePeer($collegeId)
+    {
+        $peers = $this->getPeers();
+        $newPeers = array();
+        foreach ($peers as $peerId) {
+            if ($peerId != $collegeId) {
+                $newPeers[] = $peerId;
+            }
+        }
+
+        $this->setPeers($newPeers);
+    }
+
+    public function getPeerCount()
+    {
+        return count($this->getPeers());
     }
 
     public function parseRange($range)

@@ -1,0 +1,47 @@
+<script>
+    $(function() {
+        $('.delete-confirm').click(function() {
+            return confirm('Are you sure you want to delete this?')
+        })
+    })
+</script>
+
+<p>
+    <a href="/peer-groups">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Back to Peer Groups
+    </a>
+</p>
+
+<h1>Edit Peer Group</h1>
+
+<?= $this->ztbForm($this->form->prepare()) ?>
+
+<h2>Peers</h2>
+
+<div class="btn-group" role="group">
+    <a href="<?= $this->url('peer-groups/add-peer', array('id' => $peerGroup->getId())) ?>"
+       class="btn btn-default"
+       title="Add an institution to this peer group.">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add an Individual Peer
+    </a>
+</div>
+
+<?php foreach ($colleges as $college): ?>
+    <div class="row row-fluid">
+        <div class="span1 col-md-1"></div>
+
+        <div class="span6 col-md-6">
+            <h4><?= $college->getName() ?></h4>
+        </div>
+
+        <div class="span2 col-md-2">
+            <a href="<?= $this->url('peer-groups/delete-peer', array('id' => $peerGroup->getId(), 'peer' => $college->getId())) ?>" class="btn btn-default delete-confirm" title="Remove this institution from the peer group.">
+                <span class="glyphicon glyphicon-trash"></span>
+                Delete
+            </a>
+        </div>
+    </div>
+
+<?php endforeach ?>

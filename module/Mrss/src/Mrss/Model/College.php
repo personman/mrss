@@ -49,6 +49,18 @@ class College extends AbstractModel
     }
 
     /**
+     * @param array $ids
+     * @return \Mrss\Entity\College[]
+     */
+    public function findByIds($ids)
+    {
+        return $this->getRepository()->findBy(
+            array('id' => $ids),
+            array('name' => 'ASC')
+        );
+    }
+
+    /**
      * @param StudyEntity $study
      * @param $year
      * @return \Mrss\Entity\College[]

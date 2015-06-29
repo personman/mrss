@@ -129,6 +129,10 @@ return array(
                     'controller' => 'reportItems',
                     'roles' => array('viewer')
                 ),
+                array(
+                    'controller' => 'peerGroups',
+                    'roles' => array('viewer')
+                ),
                 // Membership coordinators (contact):
                 array(
                     'controller' => 'subscription',

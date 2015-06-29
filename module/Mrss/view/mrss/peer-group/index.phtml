@@ -1,0 +1,43 @@
+<?php /** @var \Mrss\Entity\PeerGroup[] $peerGroups */ ?>
+
+<div class="btn-group heading-btns">
+    <a href="<?= $this->url('peer-groups/add') ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add a Peer Group
+    </a>
+</div>
+
+<h1>Manage Peer Groups</h1>
+
+<?php foreach ($peerGroups as $peerGroup): ?>
+    <div class="row row-fluid peerGroup">
+        <div class="span8 col-md-8">
+            <h2><?= $peerGroup->getName() ?> (<?= $peerGroup->getPeerCount() ?>)</h2>
+            <p>
+                <?= join('<br>', $collegeNames[$peerGroup->getId()]) ?>
+            </p>
+        </div>
+        <div class="span4 col-md-4">
+            <div class="btn-group" role="group" style="float: right">
+                <a href="<?= $this->url('peer-groups/edit', array('id' => $peerGroup->getId())) ?>"
+                   class="btn btn-default"
+                   title="Add and remove institutions from the peer group.">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    Edit
+                </a>
+                <a href="<?= $this->url('peer-groups/delete', array('id' => $peerGroup->getId())) ?>"
+                   class="btn btn-default delete-confirm"
+                   title="Permanently delete the peer group.">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Delete
+                </a>
+
+            </div>
+
+            <?php /** Would be neat to show a map of the peers (plus home college highlighted). */ ?>
+
+        </div>
+
+    </div>
+<?php endforeach ?>
+

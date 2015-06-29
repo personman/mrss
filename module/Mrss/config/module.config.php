@@ -1551,6 +1551,71 @@ return array(
                     ),
                 )
             ),
+            'peer-groups' => array(
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/peer-groups',
+                    'defaults' => array(
+                        'controller' => 'peerGroups',
+                        'action' => 'index',
+                    )
+                ),
+                'child_routes' => array(
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add',
+                            'defaults' => array(
+                                'action' => 'add',
+                            )
+                        )
+                    ),
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'delete' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/delete/:id',
+                            'defaults' => array(
+                                'action' => 'delete',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'add-peer' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add-peer/:id',
+                            'defaults' => array(
+                                'action' => 'addPeer',
+                                'id' => 0,
+                            )
+                        )
+
+                    ),
+                    'delete-peer' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/delete-peer/:id/:peer',
+                            'defaults' => array(
+                                'action' => 'deletePeer',
+                                'id' => 0,
+                                'peer' => 0
+                            )
+                        )
+
+                    )
+                )
+            ),
             'schedule-demo' => array(
                 'type' => 'Segment',
                 'may_terminate' => true,
@@ -1724,6 +1789,7 @@ return array(
             'pages' => 'Mrss\Controller\PageController',
             'reports' => 'Mrss\Controller\ReportController',
             'customReports' => 'Mrss\Controller\CustomReportController',
+            'peerGroups' => 'Mrss\Controller\PeerGroupController',
             'reportItems' => 'Mrss\Controller\ReportItemController',
             'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'
