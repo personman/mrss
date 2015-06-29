@@ -82,6 +82,19 @@ class Explore extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'hideMine',
+                'type' => 'Zend\Form\Element\Checkbox',
+                'options' => array(
+                    'label' => 'Hide My Data'
+                ),
+                'attributes' => array(
+                    'id' => 'hideMine'
+                )
+            )
+        );
+
         /*$this->add(
             array(
                 'name' => 'highlightedCollege',
@@ -198,6 +211,7 @@ class Explore extends AbstractForm
     {
         $filter = parent::getInputFilter();
         $filter->get('peerGroup')->setRequired(false);
+        $filter->get('hideMine')->setRequired(false);
 
         //pr($filter);
         return $filter;

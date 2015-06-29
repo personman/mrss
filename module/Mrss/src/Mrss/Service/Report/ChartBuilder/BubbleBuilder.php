@@ -86,7 +86,8 @@ class BubbleBuilder extends ChartBuilder
                 );
 
                 // Highlight the college?
-                if ($subscription->getCollege()->getId() == $collegeId) {
+                $hideMine = !empty($config['hideMine']);
+                if (!$hideMine && $subscription->getCollege()->getId() == $collegeId) {
                     $yourCollege[] = $datum;
                 } elseif (!empty($peerIds) && in_array($subscription->getCollege()->getId(), $peerIds)) {
                     $peerData[] = $datum;
