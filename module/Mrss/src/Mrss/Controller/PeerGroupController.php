@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Form\PeerCollege;
 use Mrss\Form\PeerGroup as PeerGroupForm;
 use Mrss\Entity\PeerGroup;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -170,5 +171,16 @@ class PeerGroupController extends ReportController
 
         $this->flashMessenger()->addSuccessMessage('Peer removed from group.');
         return $this->redirect()->toRoute('peer-groups/edit', array('id' => $peerGroup->getId()));
+    }
+
+    public function addPeerAction()
+    {
+        $colleges = $this->getCollegeModel()->findAll();
+
+        $form = new PeerCollege($colleges);
+
+        return array(
+            'form' => $form
+        );
     }
 }

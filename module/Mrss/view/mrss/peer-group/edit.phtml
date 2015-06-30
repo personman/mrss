@@ -6,20 +6,19 @@
     })
 </script>
 
-<p>
+<div class="back">
     <a href="/peer-groups">
         <span class="glyphicon glyphicon-arrow-left"></span>
         Back to Peer Groups
     </a>
-</p>
+</div>
 
 <h1>Edit Peer Group</h1>
 
 <?= $this->ztbForm($this->form->prepare()) ?>
 
-<h2>Peers</h2>
 
-<div class="btn-group" role="group">
+<div class="btn-group heading-btns" role="group">
     <a href="<?= $this->url('peer-groups/add-peer', array('id' => $peerGroup->getId())) ?>"
        class="btn btn-default"
        title="Add an institution to this peer group.">
@@ -27,6 +26,8 @@
         Add an Individual Peer
     </a>
 </div>
+
+<h2>Peers</h2>
 
 <?php foreach ($colleges as $college): ?>
     <div class="row row-fluid">
