@@ -67,19 +67,21 @@ class LineBuilder extends ChartBuilder
         // @todo: add footnote listing peers using $peerIds
 
         // Build the series
+        $series = array();
 
         if (empty($config['hideMine'])) {
-            $series = array();
             $series[] = array(
                 'name' => $this->getCollege()->getName(),
                 'data' => array_values($data)
             );
         }
 
-        $series[] = array(
-            'name' => 'National Median',
-            'data' => array_values($medianData)
-        );
+        if (empty($config['hideNational'])) {
+            $series[] = array(
+                'name' => 'National Median',
+                'data' => array_values($medianData)
+            );
+        }
 
         if (!empty($peerMedians)) {
             $series[] = array(

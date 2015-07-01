@@ -94,6 +94,20 @@ class Explore extends AbstractForm
                 )
             )
         );
+
+        $this->add(
+            array(
+                'name' => 'hideNational',
+                'type' => 'Zend\Form\Element\Checkbox',
+                'options' => array(
+                    'label' => 'Hide National Data'
+                ),
+                'attributes' => array(
+                    'id' => 'hideNational'
+                )
+            )
+        );
+
         /*$this->add(
             array(
                 'name' => 'highlightedCollege',

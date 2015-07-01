@@ -105,14 +105,16 @@ class BubbleBuilder extends ChartBuilder
         $yLabel = $yBenchmark->getDescriptiveReportLabel();
 
 
-        $series = array(
-            array(
+        $series = array();
+
+        if (empty($config['hideNational'])) {
+            $series[] = array(
                 'type' => $type,
                 'name' => 'Institutions',
                 'color' => $this->getBarChartBarColor(),
                 'data' => $data,
-            )
-        );
+            );
+        }
 
         // Highlight a college?
         if (count($yourCollege)) {
