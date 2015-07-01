@@ -339,6 +339,8 @@ class ComputedFields
                 echo 'Benchmark: ' . $benchmark->getDbColumn() . ', equation: ' . $benchmark->getEquation();
             }
         }
+
+        return $this;
     }
 
     public function getEquationWithLabels(Benchmark $benchmark, $nested = true)

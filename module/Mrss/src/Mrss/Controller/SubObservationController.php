@@ -101,9 +101,10 @@ class SubObservationController extends AbstractActionController
                 $subObservation->setObservation($observation);
                 $this->getSubObservationModel()->save($subObservation);
 
-                // Calculate sub-ob computed fields
+                // Calculate sub-ob computed fields and all other computed fields
                 $this->getServiceLocator()->get('computedFields')
-                    ->calculateAllForSubObservation($subObservation, $benchmarkGroup);
+                    ->calculateAllForSubObservation($subObservation, $benchmarkGroup)
+                    ->calculateAllForObservation($subObservation->getObservation());
 
                 // Log changes
                 /** @var \Mrss\Service\ObservationAudit $observationAudit */
