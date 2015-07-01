@@ -826,14 +826,14 @@ class Report
                     'load' => 'loadChart'
                 ),
             ),
-            'exporting' => array(
+            /*'exporting' => array(
                 'chartOptions' => array(
                     //'series' => $seriesWithDataLabels,
                     'chart' => array(
                         'spacingBottom' => ceil(strlen($dataDefinition) / 106) * 35,
                     ),
                 ),
-            ),
+            ),*/
             'title' => array(
                 'text' => $chartConfig['title'],
             ),
@@ -868,7 +868,15 @@ class Report
             ),
             'plotOptions' => array(
                 'series' => array(
-                    'animation' => false
+                    'animation' => false,
+                    'dataLabels' => array(
+                        'style' => array(
+                            // Workaround for bug in export server:
+                            // https://github.com/highslide-software/highcharts.com/issues/3649
+                            'textShadow' => ''
+                        )
+                    )
+
                 )
             ),
             'dataDefinition' => $dataDefinition,

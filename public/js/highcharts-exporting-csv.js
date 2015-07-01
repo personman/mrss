@@ -3,7 +3,7 @@
  *
  * Author:   Torstein Honsi
  * Licence:  MIT
- * Version:  1.3.2
+ * Version:  1.3.3
  */
 /*global Highcharts, window, document, Blob */
 (function (Highcharts) {
@@ -12,6 +12,13 @@
 
     var each = Highcharts.each,
         downloadAttrSupported = document.createElement('a').download !== undefined;
+
+    Highcharts.setOptions({
+        lang: {
+            downloadCSV: 'Download CSV',
+            downloadXLS: 'Download XLS'
+        }
+    });
 
 
     /**
@@ -27,15 +34,22 @@
             i,
             x,
 
-            // Options
+        // Options
             dateFormat = options.dateFormat || '%Y-%m-%d %H:%M:%S';
 
         // Loop the series and index values
         i = 0;
         each(this.series, function (series) {
-            if (series.options.includeInCSVExport !== false) {
+            var keys = series.options.keys,
+                pointArrayMap = keys || series.pointArrayMap || ['y'],
+                valueCount = pointArrayMap.length,
+                j;
+
+            if (series.options.includeInCSVExport !== false && series.visible !== false) { // #55
                 names.push(series.name);
+
                 each(series.points, function (point) {
+                    j = 0;
                     if (!rows[point.x]) {
                         rows[point.x] = [];
                     }
@@ -46,9 +60,13 @@
                         rows[point.x].name = point.name;
                     }
 
-                    rows[point.x][i] = point.y;
+                    while (j < valueCount) {
+                        rows[point.x][i + j] = point[pointArrayMap[j]];
+                        j = j + 1;
+                    }
+
                 });
-                i += 1;
+                i = j;
             }
         });
 
@@ -69,8 +87,19 @@
         // Transform the rows to CSV
         each(rowArr, function (row) {
 
+            var category = row.name;
+            if (!category) {
+                if (xAxis.isDatetimeAxis) {
+                    category = Highcharts.dateFormat(dateFormat, row.x);
+                } else if (xAxis.categories) {
+                    category = Highcharts.pick(xAxis.names[row.x], xAxis.categories[row.x], row.x)
+                } else {
+                    category = row.x;
+                }
+            }
+
             // Add the X/date/category
-            row.unshift(row.name || (xAxis.isDatetimeAxis ? Highcharts.dateFormat(dateFormat, row.x) : xAxis.categories ? Highcharts.pick(xAxis.categories[row.x], row.x) : row.x));
+            row.unshift(category);
             dataRows.push(row);
         });
 
@@ -130,7 +159,7 @@
                 n = useLocalDecimalPoint ? (1.1).toLocaleString()[1] : '.';
 
             html += '<tr>';
-            for (j = 0; j < row.length; j++) {
+            for (j = 0; j < row.length; j = j + 1) {
                 val = row[j];
                 // Add the cell
                 if (typeof val === 'number') {
@@ -210,7 +239,9 @@
                 '</head><body>' +
                 this.getTable(true) +
                 '</body></html>',
-            base64 = function (s) { return window.btoa(decodeURIComponent(encodeURIComponent(s))); };
+            base64 = function (s) {
+                return window.btoa(unescape(encodeURIComponent(s))); // #50
+            };
         getContent(
             this,
             uri + base64(template),
@@ -226,10 +257,10 @@
     // https://raw.github.com/highslide-software/highcharts.com/master/studies/csv-export/csv.php
     if (Highcharts.getOptions().exporting) {
         Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push({
-            text: Highcharts.getOptions().lang.downloadCSV || 'Download CSV',
+            textKey: 'downloadCSV',
             onclick: function () { this.downloadCSV(); }
         }, {
-            text: Highcharts.getOptions().lang.downloadXLS || 'Download XLS',
+            textKey: 'downloadXLS',
             onclick: function () { this.downloadXLS(); }
         });
     }

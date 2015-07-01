@@ -91,7 +91,8 @@ function loadChart(event, chart)
             dataWithLabels.push(point)
         }
 
-        if (replaceData) {
+        // This works without running setData and breaks now when setData is run. odd.
+        if (false && replaceData) {
             chart.series[0].setData(dataWithLabels)
             chart.redraw()
         }
