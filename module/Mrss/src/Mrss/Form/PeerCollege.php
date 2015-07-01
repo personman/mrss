@@ -42,7 +42,7 @@ class PeerCollege extends AbstractForm
     {
         $options = array();
         foreach ($colleges as $college) {
-            $options[$college->getId()] = $college->getName() . '(' . $college->getState() . ')';
+            $options[$college->getId()] = $college->getName() . ' (' . $college->getState() . ')';
         }
 
         return $options;

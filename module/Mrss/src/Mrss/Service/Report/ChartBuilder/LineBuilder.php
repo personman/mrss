@@ -17,6 +17,8 @@ class LineBuilder extends ChartBuilder
 
         $benchmark = $this->getBenchmark($dbColumn);
 
+        $title = $config['title'];
+
         if (empty($title)) {
             $title = $benchmark->getDescriptiveReportLabel();
         }

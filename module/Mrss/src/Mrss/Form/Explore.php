@@ -94,7 +94,6 @@ class Explore extends AbstractForm
                 )
             )
         );
-
         /*$this->add(
             array(
                 'name' => 'highlightedCollege',

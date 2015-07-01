@@ -1,3 +1,11 @@
+<?php
+$this->headLink()->appendStylesheet('/css/chosen.min.css');
+
+$this->headScript()->appendFile(
+'/js/chosen.jquery.min.js?v=1',
+'text/javascript'
+);
+?>
 <script>
     $(function() {
         $('#college').chosen({search_contains: true})
