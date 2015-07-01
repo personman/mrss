@@ -117,6 +117,8 @@ class Chart extends AbstractHelper
                 'text/javascript'
             );*/
 
+            $this->getView()->headScript()->appendScript($this->getSetupOptions());
+
 
             $this->javascriptPlaced = true;
         }
@@ -125,5 +127,17 @@ class Chart extends AbstractHelper
     public function getChartJsUri()
     {
         return $this->chartJsUri;
+    }
+
+    /**
+     * Set thousands separator
+     * 
+     * @return string
+     */
+    protected function getSetupOptions()
+    {
+        return "$(function() {
+            Highcharts.setOptions({lang: {thousandsSep: ','}})
+        })";
     }
 }
