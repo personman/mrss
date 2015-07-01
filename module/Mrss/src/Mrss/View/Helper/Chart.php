@@ -131,7 +131,7 @@ class Chart extends AbstractHelper
 
     /**
      * Set thousands separator
-     * 
+     *
      * @return string
      */
     protected function getSetupOptions()

@@ -214,6 +214,7 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['reports']['pages']['national']);
             unset($pages['reports']['pages']['peer']);
             unset($pages['reports']['pages']['summary']);
+            unset($pages['reports']['pages']['strengths']);
 
             // Hide the executive report
             unset($pages['executive']);
