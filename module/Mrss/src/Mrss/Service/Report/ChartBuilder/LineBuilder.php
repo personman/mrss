@@ -72,21 +72,24 @@ class LineBuilder extends ChartBuilder
         if (empty($config['hideMine'])) {
             $series[] = array(
                 'name' => $this->getCollege()->getName(),
-                'data' => array_values($data)
+                'data' => array_values($data),
+                'color' => $this->getYourColor()
             );
         }
 
         if (empty($config['hideNational'])) {
             $series[] = array(
                 'name' => 'National Median',
-                'data' => array_values($medianData)
+                'data' => array_values($medianData),
+                'color' => $this->getNationalColor()
             );
         }
 
         if (!empty($peerMedians)) {
             $series[] = array(
                 'name' => $peerGroup->getName() . ' Median',
-                'data' => array_values($peerMedians)
+                'data' => array_values($peerMedians),
+                'color' => $this->getPeerColor()
             );
         }
 

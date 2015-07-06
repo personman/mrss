@@ -47,4 +47,20 @@ class ChartBuilder extends Report
     {
         return $this->peers;
     }
+
+    public function getNationalColor()
+    {
+        return '#0065A1';
+    }
+
+    public function getYourColor()
+    {
+        return '#9CBF3D';
+    }
+
+    public function getPeerColor()
+    {
+        //return '#422D68';
+        return '#75609B';
+    }
 }

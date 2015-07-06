@@ -111,7 +111,7 @@ class BubbleBuilder extends ChartBuilder
             $series[] = array(
                 'type' => $type,
                 'name' => 'Institutions',
-                'color' => $this->getBarChartBarColor(),
+                'color' => $this->getNationalColor(),
                 'data' => $data,
             );
         }
@@ -121,7 +121,7 @@ class BubbleBuilder extends ChartBuilder
             $series[] = array(
                 'name' => $this->getCollege()->getName(),
                 'type' => $type,
-                'color' => '#9CBF3D',
+                'color' => $this->getYourColor(),
                 'data' => $yourCollege,
                 'marker' => array(
                     'radius' => 8
@@ -133,7 +133,7 @@ class BubbleBuilder extends ChartBuilder
             $series[] = array(
                 'name' => $peerGroup->getName(),
                 'type' => $type,
-                'color' => '#FEE44B',
+                'color' => $this->getPeerColor(),
                 'data' => $peerData,
             );
         }
