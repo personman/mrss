@@ -127,6 +127,11 @@ class Outliers extends Report
         );
 
         foreach ($colleges as $college) {
+            // Skip
+            if (in_array($college->getId(), $this->getExcludedCollegeIds())) {
+                continue;
+            }
+
             $outliers = $this->getOutlierModel()
                 ->findByCollegeStudyAndYear($college, $study, $year);
 
