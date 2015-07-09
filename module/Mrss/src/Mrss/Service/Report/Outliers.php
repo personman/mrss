@@ -300,6 +300,11 @@ class Outliers extends Report
             /** @var \Mrss\Entity\College $college */
             $college = $report['college'];
 
+            // Skip
+            if (in_array($college->getId(), $this->getExcludedCollegeIds())) {
+                continue;
+            }
+
             /** @var \Mrss\Entity\Outlier[] $outliers */
             $outliers = $report['outliers'];
 
@@ -313,7 +318,7 @@ class Outliers extends Report
 
 
 
-            $deadline = "July 1, " . date('Y');
+            $deadline = "July 29, " . date('Y');
             $replyTo = "michelletaylor@jccc.edu";
             $replyToName = "Michelle Taylor";
             $replyToPhone = "(913) 469-3831";
@@ -411,5 +416,15 @@ class Outliers extends Report
         }
 
         return $stats;
+    }
+
+    public function getExcludedCollegeIds()
+    {
+        // Don't email these colleges outlier reports (applies to NCCBP 2015)
+        return array(
+            1121, // Henry Ford
+            437, // Wyoming CCC
+            1116, // Vance-Granville
+        );
     }
 }
