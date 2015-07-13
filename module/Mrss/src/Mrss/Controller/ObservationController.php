@@ -519,7 +519,7 @@ class ObservationController extends AbstractActionController
             array(
                 'benchmarkGroup' => $benchmarkGroup,
                 'observation' => $observation,
-                'maxAcademicUnits' => 10
+                'maxAcademicUnits' => 20
             )
         );
 
