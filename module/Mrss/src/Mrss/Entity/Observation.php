@@ -4007,4 +4007,9 @@ class Observation
             $this->set($key, $value);
         }
     }
+
+    public function __toString()
+    {
+        return "Observation id: {$this->getId()}";
+    }
 }

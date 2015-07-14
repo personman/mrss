@@ -79,6 +79,7 @@ class Factory implements AbstractFactoryInterface
             'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
             'service.report.max.internal' => 'Mrss\Service\Report\Max\Internal',
             'service.report.max.national' => 'Mrss\Service\Report\Max\National',
+            'service.report.builder' => 'Mrss\Service\Report\CustomReportBuilder',
             'builder.bubble' =>
                 'Mrss\Service\Report\ChartBuilder\BubbleBuilder',
             'builder.line' =>

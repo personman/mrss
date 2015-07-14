@@ -483,44 +483,41 @@ class Report
         return $value;
     }
 
-    public function getChart($config)
+    public function getChart()
     {
-        $benchmark1 = $config['benchmark1'];
-        $benchmark2 = $config['benchmark2'];
-        $size = $config['benchmark3'];
-        $title = $config['title'];
-        $year = $config['year'];
-        $regression = $config['regression'];
-        $peerGroup = $config['peerGroup'];
 
+        throw new \Exception('deprecated');
+
+        $builder = $this->getChartBuilder($config);
+
+        $chart = $builder->getChart();
+
+        return $chart;
+    }
+
+    public function getChartBuilder($config)
+    {
+        $year = $config['year'];
         switch ($config['presentation']) {
             case 'scatter':
                 /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
                 $builder = $this->getServiceManager()->get('builder.bubble');
-
-                $builder->setYear($year);
-
-                $chart = $builder->getChart($config);
-
                 break;
+
             case 'bubble':
                 /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
                 $builder = $this->getServiceManager()->get('builder.bubble');
-                $builder->setYear($year);
-
-                $chart = $builder->getChart($config);
                 break;
             case 'line':
                 /** @var \Mrss\Service\Report\ChartBuilder\LineBuilder $builder */
                 $builder = $this->getServiceManager()->get('builder.line');
-                $builder->setYear($year);
-                $chart = $builder->getChart($config);
-
-                //$chart = $this->getLineChart($benchmark2, $title, $peerGroup);
                 break;
         }
 
-        return $chart;
+        $builder->setYear($year);
+        $builder->setConfig($config);
+
+        return $builder;
     }
 
     protected function offsetYears($years, $offset)

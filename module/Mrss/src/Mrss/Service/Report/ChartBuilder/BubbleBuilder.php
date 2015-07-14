@@ -9,11 +9,14 @@ use Mrss\Service\Report\Calculator;
 
 class BubbleBuilder extends ChartBuilder
 {
-    public function getChart($config)
+    public function getChart()
     {
-        $this->setConfig($config);
+        $config = $this->getConfig();
+
+        //$this->setConfig($config);
 
         $year = $this->getYear();
+        //pr($year);
         $benchmark1 = $x = $config['benchmark1'];
         $benchmark2 = $y = $config['benchmark2'];
         $size = $config['benchmark3'];
@@ -53,6 +56,7 @@ class BubbleBuilder extends ChartBuilder
         $peerData = array();
         $xvals = array();
         $yVals = array();
+        $includedPeers = array();
 
         if ($peerGroup) {
             $peerGroup = $this->getPeerGroupModel()->find($peerGroup);
@@ -61,14 +65,20 @@ class BubbleBuilder extends ChartBuilder
             }
         }
 
+        $subCount = 0;
         foreach ($subscriptions as $subscription) {
             //pr($subscription->getCollege()->getId());
             //pr($collegeId);
 
             $observation = $subscription->getObservation();
+            $college = $subscription->getCollege();
+            //unset($subscription);
 
             $xVal = $observation->get($x);
             $yVal = $observation->get($y);
+
+            $test = array($xVal, $yVal);
+            //pr($test);
 
             if ($size) {
                 $sizeVal = $observation->get($size);
@@ -78,6 +88,7 @@ class BubbleBuilder extends ChartBuilder
 
 
             if ($xVal && $yVal && $sizeVal) {
+                $subCount++;
 
                 $datum = array(
                     floatval($xVal),
@@ -87,9 +98,10 @@ class BubbleBuilder extends ChartBuilder
 
                 // Highlight the college?
                 $hideMine = !empty($config['hideMine']);
-                if (!$hideMine && $subscription->getCollege()->getId() == $collegeId) {
+                if (!$hideMine && $college->getId() == $collegeId) {
                     $yourCollege[] = $datum;
-                } elseif (!empty($peerIds) && in_array($subscription->getCollege()->getId(), $peerIds)) {
+                } elseif (!empty($peerIds) && in_array($college->getId(), $peerIds)) {
+                    $includedPeers[] = $college->getName();
                     $peerData[] = $datum;
                 } else {
                     $data[] = $datum;
@@ -99,10 +111,25 @@ class BubbleBuilder extends ChartBuilder
                 $xvals[] = $xVal;
                 $yVals[] = $yVal;
             }
+
+            //$this->getSubscriptionModel()->getEntityManager()->clear();
+            //$this->getSubscriptionModel()->getEntityManager()->clear('Mrss\Entity\Subscription');
+            //$this->getSubscriptionModel()->getEntityManager()->clear('Mrss\Entity\Observation');
+            //$this->getSubscriptionModel()->getEntityManager()->detach($observation);
+            //$this->getSubscriptionModel()->getEntityManager()->detach($subscription);
+
+            // !!!!!!!!!
+            //$this->getSubscriptionModel()->getEntityManager()->clear();
+            //unset($subscription);
+            unset($observation);
+
         }
 
         $xLabel = $xBenchmark->getDescriptiveReportLabel();
         $yLabel = $yBenchmark->getDescriptiveReportLabel();
+
+        $this->addFootnote("$xLabel: " . $xBenchmark->getReportDescription(true));
+        $this->addFootnote("$yLabel: " . $yBenchmark->getReportDescription(true));
 
 
         $series = array();
@@ -130,12 +157,18 @@ class BubbleBuilder extends ChartBuilder
         }
 
         if (count($peerData)) {
+            $peerGroupName = $peerGroup->getName();
+
             $series[] = array(
-                'name' => $peerGroup->getName(),
+                'name' => $peerGroupName,
                 'type' => $type,
                 'color' => $this->getPeerColor(),
                 'data' => $peerData,
             );
+
+            sort($includedPeers);
+            $peerNames = implode(', ', $includedPeers);
+            $this->addFootnote("$peerGroupName: $peerNames.");
         }
 
         // Show median lines

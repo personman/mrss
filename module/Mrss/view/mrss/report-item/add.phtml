@@ -69,10 +69,26 @@ $this->headScript()->appendFile(
     </div>
 
     <div class="span8 col-md-8">
-        <div id="chart">
-            <?php if ($chart): ?>
-                <?= $this->chart($chart) ?>
-            <?php endif ?>
+        <div class="row row-fluid">
+            <div id="chart">
+                <?php if ($chart): ?>
+                    <?= $this->chart($chart) ?>
+                <?php endif ?>
+            </div>
         </div>
+
+        <?php if (!empty($footnotes)): ?>
+            <div class="row row-fluid custom-report-footnotes">
+                <h3>Footnotes</h3>
+
+                <?php foreach ($footnotes as $footnote): ?>
+                    <p>
+                        <?= $footnote ?>
+                    </p>
+                <?php endforeach ?>
+            </div>
+        <?php endif ?>
+
     </div>
+
 </div>

@@ -313,4 +313,9 @@ class Subscription
     {
         return $this->completion;
     }
+
+    public function __toString()
+    {
+        return "Subscription id: {$this->getId()}";
+    }
 }

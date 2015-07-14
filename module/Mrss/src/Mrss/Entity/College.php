@@ -408,8 +408,17 @@ class College
     {
         $subscriptions = array();
         foreach ($this->getSubscriptions() as $sub) {
-            //$subStudy = $sub->getStudy()->getId();
-            //$study->getId();
+            if (!$s = $sub->getStudy()) {
+                $m = "Subscription ({$sub->getId()}) missing study";
+                //pr($m);
+                continue;
+
+                //var_dump($s);
+                //throw new \Exception($m);
+            }
+
+            $subStudy = $sub->getStudy()->getId();
+            $study->getId();
 
             if ($sub->getStudy()->getId() == $study->getId()) {
                 $subscriptions[$sub->getYear()] = $sub;

@@ -8,14 +8,16 @@ use Mrss\Service\Report\Calculator;
 
 class LineBuilder extends ChartBuilder
 {
-    public function getChart($config)
+    public function getChart()
     {
-        $this->setConfig($config);
+        $config = $this->getConfig();
 
         $dbColumn = $config['benchmark2'];
         $peerGroup = $config['peerGroup'];
 
         $benchmark = $this->getBenchmark($dbColumn);
+
+        $this->addFootnote($benchmark->getDescriptiveReportLabel() . ': ' . $benchmark->getReportDescription(true));
 
         $title = $config['title'];
 
@@ -62,9 +64,14 @@ class LineBuilder extends ChartBuilder
 
             list($peerMedians, $peerIds) = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
             $this->setPeers($peerIds);
-        }
 
-        // @todo: add footnote listing peers using $peerIds
+            $includedPeers = $this->getCollegeModel()->findByIds($peerIds);
+            $peerNames = array();
+            foreach ($includedPeers as $peer) {
+                $peerNames[] = $peer->getNAme();
+            }
+            $this->addFootnote($peerGroup->getName() . ': ' . implode(', ', $peerNames));
+        }
 
         // Build the series
         $series = array();

@@ -108,16 +108,31 @@ class CustomReportController extends ReportController
 
     public function populateCache(Report $report)
     {
+        $this->longRunningScript();
+
+        /** @var \Mrss\Service\Report\CustomReportBuilder $reportBuilder */
+        $reportBuilder = $this->getServiceLocator()->get('service.report.builder');
+
+        $reportBuilder->build($report);
+
+        /*
         $changed = false;
         foreach ($report->getItems() as $item) {
             if (null == $item->getCache()) {
                 $this->longRunningScript();
 
-                $chart = $this->getReportService()
+                $builder = $this->getReportService()
                     ->setObservation($this->currentObservation())
-                    ->getChart($item->getConfig(), $item->getYear());
+                    ->getChartBuilder($item->getConfig());
 
-                $item->setCache($chart);
+                $chart = $builder->getChart();
+                $footnotes = $builder->getFootnotes();
+                $cache = array(
+                    'chart' => $chart,
+                    'footnotes' => $footnotes
+                );
+
+                $item->setCache($cache);
                 $this->getReportItemModel()->save($item);
                 $changed = true;
             }
@@ -126,6 +141,7 @@ class CustomReportController extends ReportController
         if ($changed) {
             $this->getReportItemModel()->getEntityManager()->flush();
         }
+        */
     }
 
     /**

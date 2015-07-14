@@ -66,15 +66,17 @@ class ReportItemController extends CustomReportController
 
             if ($form->isValid()) {
                 $data = $form->getData();
-                $year = $data['year'];
 
-                $chart = $this->getReportService()
-                    ->getChart($data, $year);
+                $chartBuilder = $this->getReportService()
+                    ->getChartBuilder($data);
+
+                $chart = $chartBuilder->getChart();
+                $footnotes = $chartBuilder->getFootnotes();
 
                 // Save it, if requested
                 if (!empty($data['buttons']['submit'])) {
                     if (!empty($data['title'])) {
-                        $this->saveItem($data, $chart, $item);
+                        $this->saveItem($data, $chart, $footnotes, $item);
                         $this->flashMessenger()->addSuccessMessage("Saved.");
                         return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
                     } else {
@@ -90,18 +92,27 @@ class ReportItemController extends CustomReportController
             $form->setData($post);
         } else {
             if (isset($data)) {
-                /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
-                $builder = $this->getServiceLocator()->get('builder.bubble');
-                $builder->setYear($year);
+                /** @var \Mrss\Service\Report\ChartBuilder $builder */
+                $builder = $this->getReportService()->getChartBuilder($data);
 
-                $chart = $builder->getChart($data);
+                $chart = $builder->getChart();
 
+                $footnotes = $builder->getFootnotes();
             }
         }
+
+        // Substitute variables (years)
+        $substitution = $this->getReportService()->getVariableSubstitution()->setStudyYear($year);
+        $finalFootnotes = array();
+        foreach ($footnotes as $key => $footnote) {
+            $finalFootnotes[$key] = $substitution->substitute($footnote);
+        }
+        $footnotes = $finalFootnotes;
 
         $viewModel = new ViewModel(array(
             'form' => $form,
             'chart' => $chart,
+            'footnotes' => $footnotes,
             'report' => $report,
             'edit' => $edit
         ));
@@ -109,11 +120,6 @@ class ReportItemController extends CustomReportController
 
         return $viewModel;
     }
-
-    /*public function editAction()
-    {
-        return $this->addAction();
-    }*/
 
     public function reorderAction()
     {
@@ -149,7 +155,7 @@ class ReportItemController extends CustomReportController
         return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
     }
 
-    protected function saveItem($config, $chart, $item = null)
+    protected function saveItem($config, $chart, $footnotes, $item = null)
     {
         $model = $this->getReportItemModel();
         $name = $config['title'];
@@ -172,7 +178,12 @@ class ReportItemController extends CustomReportController
         $item->setType($type);
         $item->setConfig($config);
         $item->setDescription($description);
-        $item->setCache(json_encode($chart));
+
+        $cache = array(
+            'chart' => $chart,
+            'footnotes' => $footnotes
+        );
+        $item->setCache($cache);
         if (!empty($config['year'])) {
             $item->setYear($config['year']);
         }

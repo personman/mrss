@@ -6,6 +6,7 @@ use \Mrss\Entity\Subscription as SubscriptionEntity;
 use \Mrss\Entity\Study as StudyEntity;
 use \Mrss\Entity\College as CollegeEntity;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query;
 
 /**
  * Class Subscription
@@ -118,29 +119,34 @@ class Subscription extends AbstractModel
         $rsm->addFieldResult('o', 'o_id', 'id');
 
         $subQueries = array();
+        $notNulls = array();
         foreach ($benchmarks as $benchmark) {
             $rsm->addFieldResult('o', $benchmark, $benchmark);
             $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
+            $notNulls[] = " AND $benchmark IS NOT NULL ";
         }
+        $notNulls = implode(' ', $notNulls);
 
-        $benchmarks = implode(', ', $benchmarks);
+        $benchmarkList = implode(', ', $benchmarks);
         $subQueries = implode("\n", $subQueries);
         if (!$excludeOutliers) {
             $subQueries = '';
         }
 
-        $sql = "SELECT s.id, c.id college_id, c.name, o.id o_id, $benchmarks
+        $sql = "SELECT s.id, c.id college_id, c.name, o.id o_id, $benchmarkList
         FROM subscriptions s
         INNER JOIN colleges c ON s.college_id = c.id
         INNER JOIN observations o ON s.observation_id = o.id
         WHERE s.year = :year
         AND s.study_id = :study_id
+        $notNulls
         $subQueries
         ";
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('year', $year);
         $query->setParameter('study_id', $study->getId());
+        $query->setHint(Query::HINT_REFRESH, true);
 
         $result = $query->getResult();
 

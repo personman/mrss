@@ -88,7 +88,7 @@ class ReportItem
     protected $year;
 
     /**
-     * A JSON array caching the chart config
+     * A JSON array caching the chart config and footnotes
      * @ORM\Column(type="text", nullable=true)
      */
     protected $cache;
@@ -317,5 +317,27 @@ class ReportItem
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    public function getCacheChart()
+    {
+        $cache = $this->getCache(true);
+        $chart = null;
+        if (!empty($cache['chart'])) {
+            $chart = $cache['chart'];
+        }
+
+        return $chart;
+    }
+
+    public function getCacheFootnotes()
+    {
+        $cache = $this->getCache(true);
+        $footnotes = null;
+        if (!empty($cache['footnotes'])) {
+            $footnotes = $cache['footnotes'];
+        }
+
+        return $footnotes;
     }
 }

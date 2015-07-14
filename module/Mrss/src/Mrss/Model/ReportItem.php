@@ -35,7 +35,7 @@ class ReportItem extends AbstractModel
     {
         $this->getEntityManager()->persist($reportItem);
 
-        $this->getEntityManager()->flush();
+        //$this->getEntityManager()->flush();
     }
 
     public function delete(ReportItemEntity $item)

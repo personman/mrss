@@ -14,6 +14,8 @@ class ChartBuilder extends Report
 
     protected $minimumPeers = 5;
 
+    protected $footnotes = array();
+
     public function setConfig($config)
     {
         $this->config = $config;
@@ -61,6 +63,21 @@ class ChartBuilder extends Report
     public function getPeerColor()
     {
         //return '#422D68';
-        return '#75609B';
+        return '#8F7AB5';
+    }
+
+    public function getFootnotes()
+    {
+        return $this->footnotes;
+    }
+
+    public function setFootnotes($footnotes)
+    {
+        $this->footnotes = $footnotes;
+    }
+
+    public function addFootnote($footnote)
+    {
+        $this->footnotes[] = $footnote;
     }
 }
