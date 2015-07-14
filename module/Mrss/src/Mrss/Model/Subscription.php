@@ -146,6 +146,8 @@ class Subscription extends AbstractModel
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('year', $year);
         $query->setParameter('study_id', $study->getId());
+
+        // Force refresh so it doesn't serve stale entities (when multiple charts are built on one page)
         $query->setHint(Query::HINT_REFRESH, true);
 
         $result = $query->getResult();

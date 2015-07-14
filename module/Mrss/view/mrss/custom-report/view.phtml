@@ -24,10 +24,31 @@
                 'mrss/custom-report/report-item.partial.phtml',
                 array('item' => $item, 'buttons' => false)
             ) ?>
+            <?php
+            if ($itemFootnotes = $item->getCacheFootnotes()) {
+                $footnotes[] = array(
+                    'name' => $item->getName(),
+                    'footnotes' => $itemFootnotes
+                );
+            }
+
+            ?>
         <?php endforeach ?>
     </div>
 
     <div style="clear: both; margin-bottom: 30px"></div>
 
+    <?php if (!empty($footnotes)): ?>
+
+        <h2>Footnotes</h2>
+
+        <?= $this->partial(
+            'mrss/custom-report/footnotes.partial.phtml',
+            array('footnotes' => $footnotes)
+        ) ?>
+
+    <?php endif ?>
 
 </div>
+
+

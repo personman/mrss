@@ -14,46 +14,34 @@ use Mrss\Entity\Report as ReportEntity;
  */
 class CustomReportBuilder extends Report
 {
-
     public function build(ReportEntity $report)
     {
         $changed = false;
         $items = $report->getItems();
 
-        //unset($report);
-        //$this->getReportItemModel()->getEntityManager()->clear();
-        //$this->getReportItemModel()->getEntityManager()->flush();
-
-
         foreach ($items as $item) {
             if (null == $item->getCache()) {
 
                 $builder = $this
-                    //->setObservation($this->currentObservation())
                     ->getChartBuilder($item->getConfig());
 
                 $chart = $builder->getChart();
                 $footnotes = $builder->getFootnotes();
+                $footnotes = $this->footnoteSubstitutions($footnotes, $item->getYear());
+
                 $cache = array(
                     'chart' => $chart,
                     'footnotes' => $footnotes
                 );
 
-                //$this->getReportItemModel()->getEntityManager()->clear('Mrss\Entity\Subscription');
-
                 $item->setCache($cache);
                 $this->getReportItemModel()->save($item);
                 $changed = true;
-
-
-                //$this->getReportItemModel()->getEntityManager()->merge($report);
-                $this->getReportItemModel()->getEntityManager()->flush();
-                //$this->getReportItemModel()->getEntityManager()->clear();
             }
         }
 
         if ($changed) {
-            //$this->getReportItemModel()->getEntityManager()->flush();
+            $this->getReportItemModel()->getEntityManager()->flush();
         }
     }
 
@@ -83,6 +71,18 @@ class CustomReportBuilder extends Report
         $builder->setConfig($config);
 
         return $builder;
+    }
+
+    protected function footnoteSubstitutions($footnotes, $year)
+    {
+        $sub = $this->getVariableSubstitution()->setStudyYear($year);
+
+        $newFootnotes = array();
+        foreach ($footnotes as $footnote) {
+            $newFootnotes[] = $sub->substitute($footnote);
+        }
+
+        return $newFootnotes;
     }
 
     /**

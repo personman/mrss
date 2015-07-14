@@ -1,0 +1,9 @@
+<?php foreach ($footnotes as $footnoteDetails): ?>
+    <h4><?= $footnoteDetails['name'] ?></h4>
+
+    <?php foreach ($footnoteDetails['footnotes'] as $note): ?>
+        <?= $note ?>
+        <br>
+    <?php endforeach ?>
+
+<?php endforeach ?>

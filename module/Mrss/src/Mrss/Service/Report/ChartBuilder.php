@@ -18,6 +18,7 @@ class ChartBuilder extends Report
 
     public function setConfig($config)
     {
+        $this->setFootnotes(array());
         $this->config = $config;
 
         return $this;

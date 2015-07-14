@@ -1256,6 +1256,9 @@ class Report
         return $this;
     }
 
+    /**
+     * @return VariableSubstitution
+     */
     public function getVariableSubstitution()
     {
         return $this->variableSubstitution;
