@@ -2162,6 +2162,29 @@ class Observation
     protected $pt_pminus7_comtran;
 
 
+    // 2015 changes to NCCBP form 2
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_minus4_perc_completed;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_minus4_perc_transferred;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_minus4_perc_comp_or_transf;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_minus4_perc_comp_and_transf;
+
+
+
     // NCCBP form 3
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
