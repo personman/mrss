@@ -17,7 +17,7 @@ class Percentile extends Report
 
 
         // Update any computed fields
-        if (false && !$system) {
+        if (!$system) {
             $this->calculateAllComputedFields($year);
             $this->debugTimer('Just computed fields');
 
