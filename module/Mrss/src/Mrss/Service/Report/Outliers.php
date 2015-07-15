@@ -194,7 +194,7 @@ class Outliers extends Report
                 'computed' => $benchmark->getComputed(),
                 'value' => $value,
                 'problem' => $outlier->getProblem(),
-                'benchmarkGroupId' => $benchmark->getBenchmarkGroup()->getId(),
+                'benchmarkGroupId' => $benchmark->getBenchmarkGroup()->getUrl(),
                 'dbColumn' => $benchmark->getDbColumn(),
                 'equation' => $this->getEquation($benchmark),
                 'baseBenchmarks' => $this->getBaseBenchmarks($benchmark)
