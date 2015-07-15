@@ -1,9 +1,9 @@
-<h2>Calculate Reports</h2>
+<h1>Calculate Reports</h1>
 
 <?php foreach ($years as $year => $calculationDates): ?>
-    <h3><?= $year ?></h3>
+    <h2><?= $year ?></h2>
 
-    <h4>Outlier Report</h4>
+    <h3>Outlier Report</h3>
     <div class="row-fluid row">
         <div class="span6 col-md-6">
             <p>
@@ -30,7 +30,27 @@
         </div>
     </div>
 
-    <h4>National Report</h4>
+    <h3>Compute Benchmarks</h3>
+    <div class="row-fluid row">
+        <div class="span6 col-md-6">
+            <p>
+                Run equations for computed benchmarks and store results.
+            </p>
+
+        </div>
+        <div class="span6 col-md-6">
+            <a class="btn btn-default" href="/reports/compute/<?= $year ?>">Compute Benchmarks</a>
+            <br>
+            <?php if (!empty($calculationDates['report'])): ?>
+                Prepared on <?= $calculationDates['report'] ?>
+            <?php else: ?>
+                Not yet prepared.
+            <?php endif ?>
+
+        </div>
+    </div>
+
+    <h3>National Report</h3>
     <div class="row-fluid row">
         <div class="span6 col-md-6">
             <p>
@@ -53,7 +73,7 @@
         </div>
     </div>
 
-    <h4>System Reports</h4>
+    <h3>System Reports</h3>
     <div class="row-fluid row">
         <div class="span6 col-md-6">
             <p>

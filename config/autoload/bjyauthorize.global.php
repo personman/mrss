@@ -269,7 +269,7 @@ return array(
                 ),
                 array(
                     'controller' => 'reports',
-                    'action' => array('emailOutliers', 'explore', 'calculate', 'executiveList'),
+                    'action' => array('emailOutliers', 'explore', 'calculate', 'executiveList', 'compute'),
                     'roles' => array('admin')
                 ),
                 // Since the background action is fired by console, lift guard

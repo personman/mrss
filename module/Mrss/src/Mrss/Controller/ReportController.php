@@ -26,12 +26,22 @@ class ReportController extends AbstractActionController
 
     protected $observations;
 
+    /**
+     * @return Report\Percentile
+     */
+    protected function getPercentileService()
+    {
+        $percentileService = $this->getServiceLocator()->get('service.report.percentile');
+
+        return $percentileService;
+    }
+
     public function calculateAction()
     {
-        /** @var \Mrss\Service\Report\Percentile $percentileService */
-        $percentileService = $this->getServiceLocator()->get('service.report.percentile');
         $this->longRunningScript();
         $start = microtime(true);
+
+        $percentileService = $this->getPercentileService();
 
         $years = $percentileService->getCalculationInfo();
         $yearToPrepare = $this->params()->fromRoute('year');
@@ -61,6 +71,24 @@ class ReportController extends AbstractActionController
         return array(
             'years' => $years
         );
+    }
+
+    public function computeAction()
+    {
+        $yearToPrepare = $this->params()->fromRoute('year');
+
+        if (!empty($yearToPrepare)) {
+            $this->longRunningScript();
+            $start = microtime(true);
+
+            $percentileService = $this->getPercentileService();
+            $percentileService->calculateAllComputedFields($yearToPrepare);
+            $elapsed = round(microtime(true) - $start);
+
+            $this->flashMessenger()->addSuccessMessage("Benchmarks calculated for $yearToPrepare. It took $elapsed seconds.");
+
+            return $this->redirect()->toRoute('reports/calculate');
+        }
     }
 
     public function calculateSystemsAction()

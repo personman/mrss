@@ -733,6 +733,16 @@ return array(
                     )
                 ),
                 'child_routes' => array(
+                    'compute' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/compute/:year',
+                            'defaults' => array(
+                                'action' => 'compute',
+                                'year' => null
+                            )
+                        )
+                    ),
                     'calculate' => array(
                         'type' => 'segment',
                         'options' => array(

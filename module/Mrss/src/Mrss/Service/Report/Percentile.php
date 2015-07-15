@@ -16,12 +16,12 @@ class Percentile extends Report
         $this->debug($year);
 
 
-        // Update any computed fields
-        if (!$system) {
+        // Update any computed fields. Done in a separate step now. It took too long
+        if (false && !$system) {
             $this->calculateAllComputedFields($year);
             $this->debugTimer('Just computed fields');
 
-            //return array();
+            return array();
         }
 
         $computeElapsed = microtime(1) - $start;
