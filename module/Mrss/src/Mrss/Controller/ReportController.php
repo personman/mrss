@@ -85,7 +85,8 @@ class ReportController extends AbstractActionController
             $percentileService->calculateAllComputedFields($yearToPrepare);
             $elapsed = round(microtime(true) - $start);
 
-            $this->flashMessenger()->addSuccessMessage("Benchmarks calculated for $yearToPrepare. It took $elapsed seconds.");
+            $this->flashMessenger()
+                ->addSuccessMessage("Benchmarks calculated for $yearToPrepare. It took $elapsed seconds.");
 
             return $this->redirect()->toRoute('reports/calculate');
         }

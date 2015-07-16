@@ -2171,17 +2171,60 @@ class Observation
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    protected $ft_minus4_perc_transferred;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
     protected $ft_minus4_perc_comp_or_transf;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_minus4_perc_comp_and_transf;
+
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_minus4_perc_completed;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_minus4_perc_comp_or_transf;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_minus4_perc_comp_and_transf;
+
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_minus7_perc_completed;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_minus7_perc_comp_or_transf;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_minus7_perc_comp_and_transf;
+
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_minus7_perc_completed;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_minus7_perc_comp_or_transf;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_minus7_perc_comp_and_transf;
 
 
 
