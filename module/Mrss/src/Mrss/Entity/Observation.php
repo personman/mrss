@@ -2206,7 +2206,7 @@ class Observation
     protected $ft_minus7_perc_comp_or_transf;
 
 
-    
+
     /**
      * @ORM\Column(type="float", nullable=true)
      */
