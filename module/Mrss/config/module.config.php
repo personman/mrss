@@ -1160,7 +1160,25 @@ return array(
                                         'item_id' => 0
                                     )
                                 )
-                            )
+                            ),
+                            'clear-cache' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/clear-cache',
+                                    'defaults' => array(
+                                        'action' => 'clearCache',
+                                    )
+                                )
+                            ),
+                            'admin' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/admin',
+                                    'defaults' => array(
+                                        'action' => 'admin',
+                                    )
+                                )
+                            ),
                         )
                     )
                 )

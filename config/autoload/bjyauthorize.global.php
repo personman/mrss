@@ -272,6 +272,11 @@ return array(
                     'action' => array('emailOutliers', 'explore', 'calculate', 'executiveList', 'compute'),
                     'roles' => array('admin')
                 ),
+                array(
+                    'controller' => 'customReports',
+                    'action' => array('clearCache'),
+                    'roles' => array('viewer')
+                ),
                 // Since the background action is fired by console, lift guard
                 array(
                     'controller' => 'import',

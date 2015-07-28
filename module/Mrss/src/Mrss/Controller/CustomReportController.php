@@ -184,4 +184,33 @@ class CustomReportController extends ReportController
 
         return $report;
     }
+
+    public function clearCacheAction()
+    {
+        $studyId = $this->currentStudy()->getId();
+        $this->getReportItemModel()->clearCache($studyId);
+        $this->getSettingModel()->setValueForIdentifier('custom_report_cache_' . $studyId, date('c'));
+
+        $this->flashMessenger()->addSuccessMessage("Cache cleared.");
+        return $this->redirect()->toRoute('reports/custom/admin');
+    }
+
+    public function adminAction()
+    {
+        $studyId = $this->currentStudy()->getId();
+
+        $cacheClearDate = $this->getSettingModel()->getValueForIdentifier('custom_report_cache_' . $studyId);
+
+        return array(
+            'cacheClearDate' => $cacheClearDate
+        );
+    }
+
+    /**
+     * @return \Mrss\Model\Setting
+     */
+    public function getSettingModel()
+    {
+        return $this->getServiceLocator()->get('model.setting');
+    }
 }

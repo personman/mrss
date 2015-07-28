@@ -327,7 +327,7 @@ class Outliers extends Report
             $replyTo = "michelletaylor@jccc.edu";
             $replyToName = "Michelle Taylor";
             $replyToPhone = "(913) 469-3831";
-            $url = "nccbp.org";
+            $url = "workforceproject.org";
 
             //$replyTo = "louguthrie@jccc.edu";
             //$replyTo = "dfergu15@jccc.edu";

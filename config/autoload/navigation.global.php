@@ -479,8 +479,12 @@ function getAdminMenu()
         'route' => 'reports/explore'
     ),
     'reports' => array(
-        'label' => 'Reports',
+        'label' => 'Report Calculations',
         'route' => 'reports/calculate'
+    ),
+    'custom-reports' => array(
+        'label' => 'Custom Report Admin',
+        'route' => 'reports/custom/admin'
     ),
     array(
         'label' => 'Colleges',

@@ -26,6 +26,17 @@ class ReportItem extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function clearCache($studyId)
+    {
+        $sql = "UPDATE report_items i
+        JOIN reports r ON i.report_id = r.id
+        SET cache = NULL
+        WHERE r.study_id = :study_id";
+
+        $query = $this->getEntityManager()->getConnection()->prepare($sql);
+        $query->execute(array('study_id' => $studyId));
+    }
+
     /**
      * Save it with Doctrine
      *
