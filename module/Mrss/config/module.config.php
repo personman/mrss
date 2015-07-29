@@ -1170,6 +1170,16 @@ return array(
                                     )
                                 )
                             ),
+                            'rebuild-cache' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/rebuild-cache/:id',
+                                    'defaults' => array(
+                                        'action' => 'rebuildCache',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
                             'admin' => array(
                                 'type' => 'segment',
                                 'options' => array(

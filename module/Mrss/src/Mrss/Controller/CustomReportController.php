@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
 use Mrss\Entity\Report;
+use Zend\View\Model\ViewModel;
 
 class CustomReportController extends ReportController
 {
@@ -180,6 +181,20 @@ class CustomReportController extends ReportController
             'cacheClearDate' => $cacheClearDate,
             'reportsNeedingCache' => $reportsNeedingCache
         );
+    }
+
+    public function rebuildCacheAction()
+    {
+        if ($id = $this->params()->fromRoute('id')) {
+            $report = $this->getReport($id);
+            $this->populateCache($report);
+        }
+
+        // Send back a simple response (no view file, no layout)
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->setContent('ok');
+        return $response;
     }
 
     /**
