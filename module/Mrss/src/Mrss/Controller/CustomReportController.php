@@ -114,34 +114,6 @@ class CustomReportController extends ReportController
         $reportBuilder = $this->getServiceLocator()->get('service.report.builder');
 
         $reportBuilder->build($report);
-
-        /*
-        $changed = false;
-        foreach ($report->getItems() as $item) {
-            if (null == $item->getCache()) {
-                $this->longRunningScript();
-
-                $builder = $this->getReportService()
-                    ->setObservation($this->currentObservation())
-                    ->getChartBuilder($item->getConfig());
-
-                $chart = $builder->getChart();
-                $footnotes = $builder->getFootnotes();
-                $cache = array(
-                    'chart' => $chart,
-                    'footnotes' => $footnotes
-                );
-
-                $item->setCache($cache);
-                $this->getReportItemModel()->save($item);
-                $changed = true;
-            }
-        }
-
-        if ($changed) {
-            $this->getReportItemModel()->getEntityManager()->flush();
-        }
-        */
     }
 
     /**
@@ -190,6 +162,7 @@ class CustomReportController extends ReportController
         $studyId = $this->currentStudy()->getId();
         $this->getReportItemModel()->clearCache($studyId);
         $this->getSettingModel()->setValueForIdentifier('custom_report_cache_' . $studyId, date('c'));
+        $this->getSettingModel()->getEntityManager()->flush();
 
         $this->flashMessenger()->addSuccessMessage("Cache cleared.");
         return $this->redirect()->toRoute('reports/custom/admin');
@@ -201,8 +174,11 @@ class CustomReportController extends ReportController
 
         $cacheClearDate = $this->getSettingModel()->getValueForIdentifier('custom_report_cache_' . $studyId);
 
+        $reportsNeedingCache = $this->getReportModel()->findByEmptyCache($studyId);
+
         return array(
-            'cacheClearDate' => $cacheClearDate
+            'cacheClearDate' => $cacheClearDate,
+            'reportsNeedingCache' => $reportsNeedingCache
         );
     }
 

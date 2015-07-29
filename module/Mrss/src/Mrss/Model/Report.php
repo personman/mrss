@@ -53,6 +53,22 @@ class Report extends AbstractModel
         );
     }
 
+    public function findByEmptyCache($studyId)
+    {
+        $sql = "SELECT r.id, r.name, c.name AS college
+        FROM reports r
+        INNER JOIN colleges c ON r.college_id = c.id
+        WHERE EXISTS (SELECT i.id FROM report_items i WHERE i.cache IS NULL AND i.report_id = r.id)
+        AND r.study_id = :study_id;";
+
+        $query = $this->getEntityManager()->getConnection()->prepare($sql);
+        $query->execute(array('study_id' => $studyId));
+
+        $results = $query->fetchAll();
+
+        return $results;
+    }
+
     /**
      * Save it with Doctrine
      *

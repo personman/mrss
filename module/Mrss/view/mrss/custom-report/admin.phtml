@@ -6,4 +6,88 @@
 
 <p>
     <a href="/reports/custom/clear-cache" class="btn btn-default">Clear Cache</a>
+    <?php if (!empty($cacheClearDate)): ?>
+        <br>
+        Cache cleared on <?= $cacheClearDate ?>
+    <?php endif ?>
 </p>
+
+
+<p>After clearing the cache, rebuild it here.</p>
+
+<p>
+    <a class="btn btn-default" id="rebuild-cache">Rebuild Cache</a>
+</p>
+
+<div class="cache-progress" style="display: none">
+    <div class="progress">
+        <div id="cache-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+        </div>
+    </div>
+
+    <p id="cache-progress-message"></p>
+</div>
+
+
+<?
+/**
+ * Get a list of reports that need cache built, or report items.
+ * A button starts sending the list to the server, (5) at a time.
+ * When each response comes back, move the progress bar and send the next.
+ */
+?>
+
+<script>
+    var reportsNeedingCache = <?= json_encode($reportsNeedingCache) ?>;
+    var currentNumber = 1;
+    var count = 0;
+    var start;
+
+    $(function() {
+        $('#rebuild-cache').click(function() {
+            // Show the progress bar
+            $('.cache-progress').show();
+            $('#rebuild-cache').hide();
+
+            // Start the timer
+            start = new Date().getTime();
+            count = reportsNeedingCache.length;
+
+            // Recursive function
+            buildNextCache();
+
+            return false
+        })
+    })
+
+    function buildNextCache()
+    {
+        var report = reportsNeedingCache.shift();
+        var message = "Building report " + currentNumber + " of " + count + ". " + report.name + " - " + report.college + ".";
+        $('#cache-progress-message').html(message)
+
+        $.get('/reports/calculate', function() {
+            updateProgress();
+            
+            if (reportsNeedingCache.length) {
+                currentNumber = currentNumber + 1;
+                buildNextCache();
+            } else {
+                cacheComplete()
+            }
+        })
+    }
+
+    function cacheComplete()
+    {
+        var end = new Date().getTime();
+        var elapsed = Math.round((end - start)) / 1000;
+        $('#cache-progress-message').html("Complete. " + count + " reports processed. " + elapsed + " seconds.");
+    }
+
+    function updateProgress()
+    {
+        var percentage = currentNumber / count * 100;
+        $('#cache-progress').css('width', percentage + '%');
+    }
+</script>
