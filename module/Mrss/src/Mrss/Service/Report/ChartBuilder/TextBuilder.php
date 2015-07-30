@@ -9,7 +9,7 @@ class TextBuilder extends ChartBuilder
     public function getChart()
     {
         $config = $this->getConfig();
-        prd($config);
+
         // Just return the content
         return $config['content'];
     }

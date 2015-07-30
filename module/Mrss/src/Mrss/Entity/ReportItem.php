@@ -340,4 +340,19 @@ class ReportItem
 
         return $footnotes;
     }
+
+    public function isText()
+    {
+        $config = $this->getConfig();
+        $isText = ($config['presentation'] == 'text');
+
+        return $isText;
+    }
+
+    public function getText()
+    {
+        $config = $this->getConfig();
+
+        return $config['content'];
+    }
 }

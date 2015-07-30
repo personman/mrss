@@ -1,6 +1,13 @@
 <?php /** @var \Mrss\Entity\ReportItem $item */ ?>
 <div class="complete-chart-box" id="item_<?= $item->getId() ?>">
-    <?= $this->chart($item->getCacheChart()) ?>
+
+    <?php if ($item->isText()): ?>
+        <div class="custom-report-text">
+            <?= $item->getText() ?>
+        </div>
+    <?php else: ?>
+        <?= $this->chart($item->getCacheChart()) ?>
+    <?php endif ?>
 
     <?php if (!empty($buttons)): ?>
     <div class="btn-group btn-group-sm" role="group">

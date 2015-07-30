@@ -28,7 +28,9 @@ function setUpTextarea()
         'report-item-text-editor',
         {
             allowedContent: true,
-            'contentCss': '/css/index.css'
+            contentCss: '/css/index.css',
+            // Simplify:
+            removeButtons: 'Anchor,Subscript,Superscript,Strike,Table,Maximize,HorizontalRule,Styles'
         }
     )
 }
@@ -47,6 +49,7 @@ function updateFormForChartType()
     var footnotes = $('.custom-report-footnotes')
     var hideMine = $('#control-group-hideMine')
     var hideNational = $('#control-group-hideNational')
+    var previewButton = $('#previewButton')
 
     // Hide all by default
     $('#explore .control-group').hide()
@@ -57,10 +60,13 @@ function updateFormForChartType()
         textEditor.slideDown()
         chart.slideUp()
         footnotes.slideUp()
+        title.show()
+        previewButton.hide()
     } else {
         textEditor.slideUp()
         chart.slideDown()
         footnotes.slideDown()
+        previewButton.show()
     }
 
     // Buble
