@@ -84,6 +84,8 @@ class Factory implements AbstractFactoryInterface
                 'Mrss\Service\Report\ChartBuilder\BubbleBuilder',
             'builder.line' =>
                 'Mrss\Service\Report\ChartBuilder\LineBuilder',
+            'builder.text' =>
+                'Mrss\Service\Report\ChartBuilder\TextBuilder',
             'service.report.max.activity.instructional' =>
                 'Mrss\Service\Report\Max\ActivityReport\Instructional',
             'service.report.max.activity.ss' =>

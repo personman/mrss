@@ -512,6 +512,10 @@ class Report
                 /** @var \Mrss\Service\Report\ChartBuilder\LineBuilder $builder */
                 $builder = $this->getServiceManager()->get('builder.line');
                 break;
+            case 'text':
+                /** @var \Mrss\Service\Report\ChartBuilder\TextBuilder $builder */
+                $builder = $this->getServiceManager()->get('builder.text');
+                break;
         }
 
         $builder->setYear($year);

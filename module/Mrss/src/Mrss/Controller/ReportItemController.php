@@ -27,11 +27,17 @@ class ReportItemController extends CustomReportController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
         $benchmarks = $this->getBenchmarks();
+        $footnotes = array();
 
         $colleges = array();
 
         $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
         $peerGroups = $this->getPeerGroups();
+
+        // Quick hack until Max has a year open for reports
+        if ($this->currentStudy()->getId() == 2) {
+            $years = array(2015);
+        }
         
         $form = new Explore($benchmarks, $colleges, $years, $peerGroups);
 

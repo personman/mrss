@@ -54,6 +54,11 @@ $this->headScript()->appendFile(
     'text/javascript'
 );
 
+$this->headScript()->appendFile(
+    '/ckeditor/ckeditor.js?v=1',
+    'text/javascript'
+);
+
 
 ?>
 
@@ -74,6 +79,12 @@ $this->headScript()->appendFile(
                 <?php if ($chart): ?>
                     <?= $this->chart($chart) ?>
                 <?php endif ?>
+            </div>
+            
+            <div id="text-editor" style="display: none">
+                <form action="#">
+                    <textarea name="report-item-text-editor" id="report-item-text-editor" cols="30" rows="10"></textarea>
+                </form>
             </div>
         </div>
 

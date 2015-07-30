@@ -1,13 +1,19 @@
 var savedCharts = {}
+var editor
 
 $(function() {
 
-    setUpSelects()
+    setUpSelects();
+    setUpTextarea();
 
     // Chart type
     updateFormForChartType()
     $('#inputType').change(function() {
         updateFormForChartType()
+    })
+
+    $('#explore').submit(function() {
+        return exploreFormSubmit()
     })
 })
 
@@ -16,36 +22,96 @@ function setUpSelects()
     $('#benchmark1, #benchmark2, #benchmark3').chosen({search_contains: true})
 }
 
+function setUpTextarea()
+{
+    editor = CKEDITOR.replace(
+        'report-item-text-editor',
+        {
+            allowedContent: true,
+            'contentCss': '/css/index.css'
+        }
+    )
+}
+
 function updateFormForChartType()
 {
     var chartType = $('#inputType').val()
+    var title = $('#control-group-title')
     var sizeField = $('#control-group-benchmark3')
-    var benchmark2 = $('#control-group-benchmark1')
+    var benchmark1 = $('#control-group-benchmark1')
+    var benchmark2 = $('#control-group-benchmark2')
     var yearField = $('#control-group-years')
+    var peerGroup = $('#control-group-peerGroup')
+    var textEditor = $('#text-editor')
+    var chart = $('#chart')
+    var footnotes = $('.custom-report-footnotes')
+    var hideMine = $('#control-group-hideMine')
+    var hideNational = $('#control-group-hideNational')
 
+    // Hide all by default
+    $('#explore .control-group').hide()
+    $('#control-group-inputType, #control-group-submitButton, #control-group-previewButton').show()
+
+    // Text
+    if (chartType == 'text') {
+        textEditor.slideDown()
+        chart.slideUp()
+        footnotes.slideUp()
+    } else {
+        textEditor.slideUp()
+        chart.slideDown()
+        footnotes.slideDown()
+    }
+
+    // Buble
     if (chartType == 'bubble') {
-        sizeField.slideDown()
-    } else {
-        sizeField.slideUp();
+        title.show()
+        benchmark1.show()
+        benchmark2.show()
+        sizeField.show()
+        yearField.show()
+        peerGroup.show()
+        hideMine.show()
+        hideNational.show()
     }
 
-    if (chartType == 'line') {
-        yearField.slideUp()
-        benchmark2.slideUp()
-    } else {
-        yearField.slideDown()
-        benchmark2.slideDown()
+    // Scatter
+    if (chartType == 'scatter') {
+        title.show()
+        benchmark1.show()
+        benchmark2.show()
+        yearField.show()
+        peerGroup.show()
+        hideMine.show()
+        hideNational.show()
     }
+
+    // Line
+    if (chartType == 'line') {
+        title.show()
+        benchmark2.show()
+        peerGroup.show()
+        hideMine.show()
+        hideNational.show()
+    }
+
+}
+
+function exploreFormSubmit()
+{
+    // If type is text, copy text from ckeditor to main form
+    if ($('#inputType').val() == 'text') {
+        var text = editor.getData()
+
+        $('#text-content').html(text)
+    }
+
+    return true
 }
 
 function postChart(id)
 {
     if (savedCharts[id]) {
-        //config = $.parseJSON(savedCharts[id])
-        //config['buttons'] = null
-        //console.log(config)
-        //return false
-        //postToURL('/reports/explore', config)
         post_to_url('/reports/explore', {'id': id})
     }
 

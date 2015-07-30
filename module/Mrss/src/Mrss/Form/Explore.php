@@ -24,16 +24,6 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
-                'name' => 'title',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Title'
-                )
-            )
-        );
-
-        $this->add(
-            array(
                 'name' => 'presentation',
                 'type' => 'Select',
                 'options' => array(
@@ -44,8 +34,19 @@ class Explore extends AbstractForm
                     'options' => array(
                         'scatter' => 'Scatter Plot',
                         'bubble' => 'Bubble Plot',
-                        'line' => 'Trend Line'
+                        'line' => 'Trend Line',
+                        'text' => 'Text'
                     )
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'title',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Title'
                 )
             )
         );
@@ -130,6 +131,7 @@ class Explore extends AbstractForm
                 ),
                 'attributes' => array(
                     'rows' => 4,
+                    'id' => 'text-content'
                 )
             )
         );
