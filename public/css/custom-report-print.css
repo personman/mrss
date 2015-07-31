@@ -1,11 +1,30 @@
-.back, .heading-btns, .footer-nav, .socialButtons, .footer-logo, .headerLogin {
+body {
+    background: white;
+    margin: 0;
+}
+
+a[href]:after {
+    content: none;
+}
+
+#content {
+    width: 940px;
+    margin-bottom: 20px;
+}
+
+.back, .heading-btns, .footer-nav, .socialButtons, .footer-logo, .headerLogin, .btn-group-sm, .addItemButton, .navbar {
     display: none !important;
 }
 
 .complete-chart-box {
-    width: 40%;
+    width: 400px !important;
 }
 
 .footer {
     height: 50px;
 }
+
+.highcharts-button {
+    display: none;
+}
+

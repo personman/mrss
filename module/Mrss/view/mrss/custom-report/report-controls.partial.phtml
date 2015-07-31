@@ -18,6 +18,12 @@
         <span class="glyphicon glyphicon-wrench"></span>
         Build
     </a>
+    <a href="<?= $this->url('reports/custom/print', array('id' => $report->getId())) ?>"
+       class="btn btn-default<?php if ($active == 'print') echo ' active' ?>"
+       title="Print the report to paper or PDF.">
+        <span class="glyphicon glyphicon-print"></span>
+        Print
+    </a>
     <a href="<?= $this->url('reports/custom/delete', array('id' => $report->getId())) ?>"
        class="btn btn-default delete-confirm"
        title="Permanently delete the report.">

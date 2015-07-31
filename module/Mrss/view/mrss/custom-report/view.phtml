@@ -1,6 +1,16 @@
 <?php /** @var \Mrss\Entity\Report $report */ ?>
 <? $this->headLink()->appendStylesheet('/css/custom-report.css?v=2', 'screen,print') ?>
-<? $this->headLink()->appendStylesheet('/css/custom-report-print.css?v=2', 'print') ?>
+<? $this->headLink()->appendStylesheet('/css/custom-report-print.css?v=2', $printMedia) ?>
+
+<?php if ($print): ?>
+    <script>
+        $(function() {
+            setTimeout(function() {window.print()}, 2000);
+        });
+    </script>
+
+
+<?php endif ?>
 
 <div class="customReport">
     <div class="back">

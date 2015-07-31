@@ -1072,7 +1072,19 @@ return array(
                                     'route' => '/:id',
                                     'defaults' => array(
                                         'action' => 'view',
-                                        'id' => 0
+                                        'id' => 0,
+                                        'print' => false
+                                    )
+                                )
+                            ),
+                            'print' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/print/:id',
+                                    'defaults' => array(
+                                        'action' => 'view',
+                                        'id' => 0,
+                                        'print' => true
                                     )
                                 )
                             ),

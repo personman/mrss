@@ -86,11 +86,19 @@ class CustomReportController extends ReportController
     public function viewAction()
     {
         $id = $this->params()->fromRoute('id');
+        $print = $this->params()->fromRoute('print');
         $report = $this->getReport($id);
         $this->populateCache($report);
 
+        $printMedia = 'print';
+        if ($print) {
+            $printMedia .= ',screen';
+        }
+
         return array(
-            'report' => $report
+            'report' => $report,
+            'print' => $print,
+            'printMedia' => $printMedia
         );
     }
 
