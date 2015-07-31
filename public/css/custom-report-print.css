@@ -1,0 +1,11 @@
+.back, .heading-btns, .footer-nav, .socialButtons, .footer-logo, .headerLogin {
+    display: none !important;
+}
+
+.complete-chart-box {
+    width: 40%;
+}
+
+.footer {
+    height: 50px;
+}
