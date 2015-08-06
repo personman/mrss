@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
 use Mrss\Entity\Report;
+use Mrss\Entity\ReportItem;
 use Zend\View\Model\ViewModel;
 
 class CustomReportController extends ReportController
@@ -17,6 +18,7 @@ class CustomReportController extends ReportController
      */
     public function indexAction()
     {
+        //$isAdmin = $this->
         return array(
             'reports' => $this->getReportModel()
                     ->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy())
@@ -152,7 +154,8 @@ class CustomReportController extends ReportController
         if (!empty($id)) {
             $report = $this->getReportModel()->find($id);
 
-            if ($report->getCollege()->getId() != $this->currentCollege()->getId()) {
+            $admin = $this->isAllowed('adminMenu', 'view');
+            if (!$admin && $report->getCollege()->getId() != $this->currentCollege()->getId()) {
                 throw new \Exception('You cannot edit reports that do not belong to your college.');
             }
         }
@@ -203,6 +206,76 @@ class CustomReportController extends ReportController
         $response->setStatusCode(200);
         $response->setContent('ok');
         return $response;
+    }
+
+    public function copyAction()
+    {
+        $this->longRunningScript();
+        $start = microtime(true);
+
+        $id = $this->params()->fromRoute('id');
+        $report = $this->getReport($id);
+
+        foreach ($this->getAllColleges() as $college) {
+            $this->copyCustomReport($report, $college);
+        }
+
+        $elapsed = round(microtime(true) - $start);
+        $this->flashMessenger()->addSuccessMessage(
+            "Report copied to all institutions in $elapsed seconds.
+            Now <a href='/reports/custom/admin'>rebuild cache</a>."
+        );
+        return $this->redirect()->toRoute('reports/custom');
+    }
+
+    protected function copyCustomReport(Report $sourceReport, $college)
+    {
+        $report = new Report;
+        $report->setCollege($college);
+        $report->setStudy($this->currentStudy());
+        $report->setName($sourceReport->getName());
+        $report->setDescription($sourceReport->getDescription());
+        $report->setSourceReportId($sourceReport->getId());
+
+        $this->getReportModel()->save($report);
+
+        foreach ($sourceReport->getItems() as $reportItem) {
+            $this->copyItem($reportItem, $report);
+        }
+
+        $this->getReportModel()->getEntityManager()->flush();
+    }
+
+    protected function getAllColleges()
+    {
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        return $collegeModel->findByStudy($this->currentStudy());
+    }
+
+    /**
+     * Strip out anything that shouldn't be copied.
+     *
+     * @param $sourceItem
+     * @param $newReport
+     */
+    protected function copyItem(ReportItem $sourceItem, Report $newReport)
+    {
+        $config = $sourceItem->getConfig();
+        $config['peerGroup'] = null;
+
+        $item = new ReportItem();
+        $item->setReport($newReport);
+        $item->setName($sourceItem->getName());
+        $item->setSequence($sourceItem->getSequence());
+        $item->setType($sourceItem->getType());
+        $item->setDescription($sourceItem->getDescription());
+        $item->setYear($sourceItem->getYear());
+        $item->setConfig($config);
+        $item->setHighlightedCollege($sourceItem->getReport()->getCollege());
+
+        $this->getReportItemModel()->save($item);
     }
 
     /**

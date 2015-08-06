@@ -1117,6 +1117,16 @@ return array(
                                     )
                                 )
                             ),
+                            'copy' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/copy/:id',
+                                    'defaults' => array(
+                                        'action' => 'copy',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
                             'delete' => array(
                                 'type' => 'segment',
                                 'options' => array(

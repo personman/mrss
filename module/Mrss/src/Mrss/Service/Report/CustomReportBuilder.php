@@ -45,33 +45,7 @@ class CustomReportBuilder extends Report
         }
     }
 
-    public function getChartBuilder($config)
-    {
-        $year = $config['year'];
-        switch ($config['presentation']) {
-            case 'scatter':
-                /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
-                $builder = $this->getServiceManager()->get('builder.bubble');
-                break;
 
-            case 'bubble':
-                /** @var \Mrss\Service\Report\ChartBuilder\BubbleBuilder $builder */
-                $builder = $this->getServiceManager()->get('builder.bubble');
-                break;
-            case 'line':
-                /** @var \Mrss\Service\Report\ChartBuilder\LineBuilder $builder */
-                $builder = $this->getServiceManager()->get('builder.line');
-                break;
-            default:
-                throw new \Exception('Unknown chart type.');
-                break;
-        }
-
-        $builder->setYear($year);
-        $builder->setConfig($config);
-
-        return $builder;
-    }
 
     protected function footnoteSubstitutions($footnotes, $year)
     {

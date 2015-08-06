@@ -54,6 +54,11 @@ class Report
     protected $items;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $sourceReportId;
+
+    /**
      * @param mixed $college
      */
     public function setCollege($college)
@@ -146,5 +151,17 @@ class Report
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function setSourceReportId($id)
+    {
+        $this->sourceReportId = $id;
+
+        return $this;
+    }
+
+    public function getSourceReportId()
+    {
+        return $this->sourceReportId;
     }
 }

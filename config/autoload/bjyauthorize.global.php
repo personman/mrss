@@ -274,7 +274,7 @@ return array(
                 ),
                 array(
                     'controller' => 'customReports',
-                    'action' => array('clearCache', 'rebuildCache'),
+                    'action' => array('clearCache', 'rebuildCache', 'copy'),
                     'roles' => array('viewer')
                 ),
                 // Since the background action is fired by console, lift guard
