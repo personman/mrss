@@ -612,7 +612,10 @@ class ToolController extends AbstractActionController
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
-        $year = $study->getCurrentYear();
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $study->getCurrentYear();
+        }
 
         /** @var \Mrss\Model\Subscription $subscriptionModel */
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
@@ -661,8 +664,16 @@ class ToolController extends AbstractActionController
             $report[] = $reportRow;
         }
 
+        // Years for tabs
+        $years = $this->getServiceLocator()->get('model.subscription')
+            ->getYearsWithSubscriptions($this->currentStudy());
+        rsort($years);
+
+
         return array(
-            'report' => $report
+            'report' => $report,
+            'years' => $years,
+            'year' => $year
         );
     }
 

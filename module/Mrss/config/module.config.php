@@ -1603,9 +1603,10 @@ return array(
                     'zeros' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/zeros',
+                            'route' => '/zeros[/:year]',
                             'defaults' => array(
                                 'action' => 'zeros',
+                                'year' => 0
                             )
                         )
                     ),

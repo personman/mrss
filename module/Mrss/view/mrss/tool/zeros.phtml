@@ -18,6 +18,15 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         });
     })
 </script>
+
+<ul class="nav nav-pills report-nav">
+    <?php foreach ($years as $navYear): ?>
+        <li<? if ($year == $navYear) echo ' class="active"' ?>>
+            <a href="<?= $this->url('tools/zeros', array('year' => $navYear)) ?>"><?= $navYear ?></a>
+        </li>
+    <?php endforeach ?>
+</ul>
+
 <h1>Zeros in the Data</h1>
 
 
