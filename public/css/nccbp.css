@@ -75,7 +75,9 @@ ul.navbar-nav:after {width: 100%; display: inline-block; content: ""; visibility
 .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
     color: #333;
 }
-
+.navbar-nav > li > a {
+    padding: 10px 15px;
+}
 .dropdown-menu { background: #5081b2;}
 .dropdown-menu > li > a { color: #fff; }
 

@@ -25,6 +25,12 @@
         <span class="glyphicon glyphicon-plus"></span>
         Add an Individual Peer
     </a>
+    <a href="<?= $this->url('peer-groups/add-demographic', array('id' => $peerGroup->getId())) ?>"
+       class="btn btn-default"
+       title="Multiple institution to this peer group based on demographic criteria.">
+        <span class="glyphicon glyphicon-filter"></span>
+        Add by Demographics
+    </a>
 </div>
 
 <h2>Peers</h2>
@@ -34,7 +40,7 @@
         <div class="span1 col-md-1"></div>
 
         <div class="span6 col-md-6">
-            <h4><?= $college->getName() ?></h4>
+            <h4><?= $college->getName() ?> (<?= $college->getState() ?>)</h4>
         </div>
 
         <div class="span2 col-md-2">

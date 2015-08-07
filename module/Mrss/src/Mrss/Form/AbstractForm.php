@@ -46,6 +46,7 @@ class AbstractForm extends Form
             $reset->setValue('Clear');
             $reset->setLabel('Clear');
             $reset->setAttribute('class', 'btn btn-danger formClearButton');
+            $reset->setAttribute('id', 'resetButton');
             $buttons->add($reset);
         }
 

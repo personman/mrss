@@ -740,6 +740,16 @@ class PeerGroup
         $this->setPeers($newPeers);
     }
 
+    public function addPeer($collegeId)
+    {
+        $peers = $this->getPeers();
+        if (!in_array($collegeId, $peers)) {
+            $peers[] = $collegeId;
+        }
+
+        $this->setPeers($peers);
+    }
+
     public function getPeerCount()
     {
         return count($this->getPeers());

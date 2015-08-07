@@ -1661,7 +1661,16 @@ return array(
                                 'id' => 0,
                             )
                         )
-
+                    ),
+                    'add-demographic' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add-demographic/:id',
+                            'defaults' => array(
+                                'action' => 'addDemographic',
+                                'id' => 0,
+                            )
+                        )
                     ),
                     'delete-peer' => array(
                         'type' => 'segment',

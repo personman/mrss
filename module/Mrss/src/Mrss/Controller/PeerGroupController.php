@@ -7,6 +7,7 @@ use Mrss\Form\PeerGroup as PeerGroupForm;
 use Mrss\Entity\PeerGroup;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Mrss\Form\PeerComparisonDemographics;
 
 class PeerGroupController extends ReportController
 {
@@ -179,8 +180,106 @@ class PeerGroupController extends ReportController
 
         $form = new PeerCollege($colleges);
 
+        $id = $this->params()->fromRoute('id');
+        $peerGroup = $this->getPeerGroup($id);
+
+        // Process form submission, if any
+        if ($this->getRequest()->isPost()) {
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $collegeId = $data['college'];
+                $peerGroup->addPeer($collegeId);
+
+                $this->getPeerGroupModel()->save($peerGroup);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Peer added.');
+
+                return $this->redirect()->toRoute(
+                    'peer-groups/edit',
+                    array('id' => $id)
+                );
+            }
+        }
+
+
         return array(
             'form' => $form
         );
     }
+
+
+    public function addDemographicAction()
+    {
+        $form = new PeerComparisonDemographics($this->currentStudy()->getId());
+
+        $id = $this->params()->fromRoute('id');
+        $peerGroup = $this->getPeerGroup($id);
+
+        // Bind an empty peer group just to serve as the container for these criteria
+        $emptyPeerGroup = new PeerGroup();
+        $emptyPeerGroup->setCollege($this->currentCollege());
+        $emptyPeerGroup->setYear($this->currentStudy()->getCurrentYear());
+        $em = $this->getServiceLocator()->get('em');
+        $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\PeerGroup'));
+        $form->bind($emptyPeerGroup);
+
+
+        if ($this->getRequest()->isPost()) {
+            $postData = $this->params()->fromPost();
+
+            // Handle empty multiselects
+            $multiselects = array(
+                'states',
+                'environments',
+                'facultyUnionized',
+                'staffUnionized',
+                'institutionalType',
+                'institutionalControl'
+            );
+
+            foreach ($multiselects as $multiselect) {
+                if (empty($postData[$multiselect])) {
+                    $postData[$multiselect] = array();
+                }
+            }
+
+            $form->setData($postData);
+
+            if ($form->isValid()) {
+                //$this->getPeerGroupModel()->save($peerGroup);
+
+                /** @var \Mrss\Model\College $collegeModel */
+                $collegeModel = $this->getServiceLocator()->get('model.college');
+
+                $colleges = $collegeModel->findByPeerGroup(
+                    $emptyPeerGroup,
+                    $this->currentStudy()
+                );
+
+                foreach ($colleges as $college) {
+                    $peerGroup->addPeer($college->getId());
+                }
+
+                $count = count($colleges);
+
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage($count . ' peers added.');
+
+                return $this->redirect()->toRoute(
+                    'peer-groups/edit',
+                    array('id' => $id)
+                );
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
 }
