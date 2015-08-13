@@ -162,6 +162,11 @@ abstract class AbstractChart
         return str_replace(array('y', '.2f', '.4f'), array('value', '.0f', '.2f'), $format);
     }
 
+    public function convertFormatForTooltip($format)
+    {
+        return str_replace('y', 'point.y', $format);
+    }
+
     public function updateAllFormats()
     {
 
@@ -191,9 +196,10 @@ abstract class AbstractChart
      */
     protected function wrapYAxisTitle()
     {
+        //return false;
         $length = strlen($this->getYLabel());
 
-        $offsetPerLine = 60;
+        $offsetPerLine = 100;
         $charactersPerLine = 60;
 
         $offset = (ceil($length / $charactersPerLine) - 1) * $offsetPerLine;
@@ -203,6 +209,16 @@ abstract class AbstractChart
 
             $this->setConfig($config);
         }
+    }
 
+    public function setCategories($categories)
+    {
+        $config = $this->getConfig();
+
+        $config['xAxis']['categories'] = $categories;
+
+        $this->setConfig($config);
+
+        return $this;
     }
 }

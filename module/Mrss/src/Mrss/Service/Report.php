@@ -95,6 +95,11 @@ class Report
     protected $observation;
 
     /**
+     * @var \Mrss\Model\Observation
+     */
+    protected $observationModel;
+
+    /**
      * @var Smtp
      */
     protected $mailTransport;
@@ -511,6 +516,10 @@ class Report
             case 'line':
                 /** @var \Mrss\Service\Report\ChartBuilder\LineBuilder $builder */
                 $builder = $this->getServiceManager()->get('builder.line');
+                break;
+            case 'bar':
+                /** @var \Mrss\Service\Report\ChartBuilder\BarBuilder $builder */
+                $builder = $this->getServiceManager()->get('builder.bar');
                 break;
             case 'text':
                 /** @var \Mrss\Service\Report\ChartBuilder\TextBuilder $builder */
@@ -1364,6 +1373,18 @@ class Report
     public function getObservation()
     {
         return $this->observation;
+    }
+
+    public function setObservationModel($model)
+    {
+        $this->observationModel = $model;
+
+        return $this;
+    }
+
+    public function getObservationModel()
+    {
+        return $this->observationModel;
     }
 
     public function getYear()

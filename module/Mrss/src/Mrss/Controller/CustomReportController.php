@@ -217,6 +217,11 @@ class CustomReportController extends ReportController
         $report = $this->getReport($id);
 
         foreach ($this->getAllColleges() as $college) {
+            // Skip the current college to prevent dupes
+            if ($college->getId() == $this->currentCollege()->getId()) {
+                continue;
+            }
+
             $this->copyCustomReport($report, $college);
         }
 

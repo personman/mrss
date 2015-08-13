@@ -39,6 +39,9 @@ class Line extends AbstractChart
         // Y axis
         $config['yAxis']['labels']['format'] = $this->convertFormatForAxisLabel($this->getYFormat());
 
+        // Tooltip
+        $config['tooltip'] = array('pointFormat' => $this->convertFormatForTooltip($this->getYFormat()));
+
         $this->setConfig($config);
     }
 
@@ -51,16 +54,5 @@ class Line extends AbstractChart
         $this->setConfig($config);
 
         $this->wrapYAxisTitle();
-    }
-
-    public function setCategories($categories)
-    {
-        $config = $this->getConfig();
-
-        $config['xAxis']['categories'] = $categories;
-
-        $this->setConfig($config);
-
-        return $this;
     }
 }

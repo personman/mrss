@@ -40,6 +40,7 @@ class Factory implements AbstractFactoryInterface
         );
         $report->setBenchmarkModel($sm->get('model.benchmark'));
         $report->setCollegeModel($sm->get('model.college'));
+        $report->setObservationModel($sm->get('model.observation'));
         $report->setSettingModel($sm->get('model.setting'));
         $report->setOutlierModel($sm->get('model.outlier'));
         $report->setSystemModel($sm->get('model.system'));
@@ -84,6 +85,8 @@ class Factory implements AbstractFactoryInterface
                 'Mrss\Service\Report\ChartBuilder\BubbleBuilder',
             'builder.line' =>
                 'Mrss\Service\Report\ChartBuilder\LineBuilder',
+            'builder.bar' =>
+                'Mrss\Service\Report\ChartBuilder\BarBuilder',
             'builder.text' =>
                 'Mrss\Service\Report\ChartBuilder\TextBuilder',
             'service.report.max.activity.instructional' =>

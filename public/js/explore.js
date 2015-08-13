@@ -101,6 +101,12 @@ function updateFormForChartType()
         hideNational.show()
     }
 
+    // Percentile bar
+    if (chartType == 'bar') {
+        title.show()
+        benchmark1.show()
+        yearField.show()
+    }
 }
 
 function exploreFormSubmit()

@@ -35,6 +35,7 @@ class Explore extends AbstractForm
                         'scatter' => 'Scatter Plot',
                         'bubble' => 'Bubble Plot',
                         'line' => 'Trend Line',
+                        'bar' => 'Percentile Bar Chart',
                         'text' => 'Text'
                     )
                 )
