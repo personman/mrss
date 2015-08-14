@@ -27,7 +27,6 @@ class CustomReportBuilder extends Report
 
                 $chart = $builder->getChart();
                 $footnotes = $builder->getFootnotes();
-                $footnotes = $this->footnoteSubstitutions($footnotes, $item->getYear());
 
                 $cache = array(
                     'chart' => $chart,
@@ -43,20 +42,6 @@ class CustomReportBuilder extends Report
         if ($changed) {
             $this->getReportItemModel()->getEntityManager()->flush();
         }
-    }
-
-
-
-    protected function footnoteSubstitutions($footnotes, $year)
-    {
-        $sub = $this->getVariableSubstitution()->setStudyYear($year);
-
-        $newFootnotes = array();
-        foreach ($footnotes as $footnote) {
-            $newFootnotes[] = $sub->substitute($footnote);
-        }
-
-        return $newFootnotes;
     }
 
     /**

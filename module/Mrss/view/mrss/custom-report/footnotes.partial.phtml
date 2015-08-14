@@ -1,9 +1,10 @@
+<div class="custom-report-footnotes">
 <?php foreach ($footnotes as $footnoteDetails): ?>
     <h4><?= $footnoteDetails['name'] ?></h4>
 
     <?php foreach ($footnoteDetails['footnotes'] as $note): ?>
-        <?= $note ?>
-        <br>
+        <p><?= $note ?></p>
     <?php endforeach ?>
 
 <?php endforeach ?>
+</div>

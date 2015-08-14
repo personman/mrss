@@ -69,6 +69,8 @@ class ChartBuilder extends Report
 
     public function getFootnotes()
     {
+        $this->substituteVariablesInFootnotes();
+
         return $this->footnotes;
     }
 
@@ -80,5 +82,16 @@ class ChartBuilder extends Report
     public function addFootnote($footnote)
     {
         $this->footnotes[] = $footnote;
+    }
+
+    public function substituteVariablesInFootnotes()
+    {
+        $subbedFootnotes = array();
+        foreach ($this->footnotes as $footnote) {
+            $subbedFootnotes[] = $this->getVariableSubstitution()
+                ->setStudyYear($this->getYear())->substitute($footnote);
+        }
+
+        $this->footnotes = $subbedFootnotes;
     }
 }

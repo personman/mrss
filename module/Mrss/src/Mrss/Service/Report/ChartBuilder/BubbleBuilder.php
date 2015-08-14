@@ -112,17 +112,7 @@ class BubbleBuilder extends ChartBuilder
                 $yVals[] = $yVal;
             }
 
-            //$this->getSubscriptionModel()->getEntityManager()->clear();
-            //$this->getSubscriptionModel()->getEntityManager()->clear('Mrss\Entity\Subscription');
-            //$this->getSubscriptionModel()->getEntityManager()->clear('Mrss\Entity\Observation');
-            //$this->getSubscriptionModel()->getEntityManager()->detach($observation);
-            //$this->getSubscriptionModel()->getEntityManager()->detach($subscription);
-
-            // !!!!!!!!!
-            //$this->getSubscriptionModel()->getEntityManager()->clear();
-            //unset($subscription);
             unset($observation);
-
         }
 
         $xLabel = $xBenchmark->getDescriptiveReportLabel();

@@ -36,3 +36,14 @@ span.smallNote {
 .custom-report-text {
     padding-left: 30px;
 }
+
+.custom-report-footnotes h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.custom-report-footnotes p {
+    font-size: 92%;
+    margin: 0 0 5px 0;
+}
+
