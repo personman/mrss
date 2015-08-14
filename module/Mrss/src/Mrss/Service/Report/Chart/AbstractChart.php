@@ -36,6 +36,11 @@ abstract class AbstractChart
             'series' => array()
         );
 
+        // Use this load function for all charts unless they override
+        $config['chart']['events'] = array(
+            'load' => 'loadChart'
+        );
+
         $this->setConfig($config);
     }
 

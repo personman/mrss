@@ -1,15 +1,17 @@
 <div class="custom-report-footnotes">
-<?php foreach ($footnotes as $footnoteDetails): ?>
-    <h4><?= $footnoteDetails['name'] ?></h4>
+    <h2>Footnotes</h2>
 
-    <?php foreach ($footnoteDetails['footnotes'] as $note): ?>
-        <?php
-            $noteParts = explode(':', $note);
-            $title = array_shift($noteParts);
-            $note = "<strong>$title:</strong>" . implode(':', $noteParts);
-        ?>
-        <p><?= $note ?></p>
+    <?php foreach ($footnotes as $footnoteDetails): ?>
+        <h4><?= $footnoteDetails['name'] ?></h4>
+
+        <?php foreach ($footnoteDetails['footnotes'] as $note): ?>
+            <?php
+                $noteParts = explode(':', $note);
+                $title = array_shift($noteParts);
+                $note = "<strong>$title:</strong>" . implode(':', $noteParts);
+            ?>
+            <p><?= $note ?></p>
+        <?php endforeach ?>
+
     <?php endforeach ?>
-
-<?php endforeach ?>
 </div>

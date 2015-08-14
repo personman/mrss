@@ -15,11 +15,6 @@ class Bar extends AbstractChart
         $config['plotOptions']['series'] = array('animation' => false);
         $config['legend'] = array('enabled' => false);
 
-        $config['events'] = array(
-            'load' => 'loadChart'
-        );
-
-
         $config['yAxis'] = array(
             'title' => false,
             'gridLineWidth' => 0,

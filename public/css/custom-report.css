@@ -37,6 +37,10 @@ span.smallNote {
     padding-left: 30px;
 }
 
+.custom-report-footnotes h2 {
+    margin-top: 15px;
+}
+
 .custom-report-footnotes h4 {
     margin-top: 15px;
     margin-bottom: 5px;

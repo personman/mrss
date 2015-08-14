@@ -46,6 +46,10 @@ $this->headLink()->appendStylesheet('/css/custom-report.css');
 $this->headLink()->appendStylesheet('/css/chosen.min.css');
 
 $this->headScript()->appendFile(
+    '/js/report.js?v=1',
+    'text/javascript'
+);
+$this->headScript()->appendFile(
     '/js/chosen.jquery.min.js?v=1',
     'text/javascript'
 );
@@ -91,17 +95,25 @@ $this->headScript()->appendFile(
             </div>
         </div>
 
+        <div class="row row-fluid">
         <?php if (!empty($footnotes)): ?>
-            <div class="row row-fluid custom-report-footnotes">
-                <h3>Footnotes</h3>
+            <?php
+            $footnotes = array(
+                array(
+                    'name' => '',
+                    'footnotes' => $footnotes
+                )
+            );
 
-                <?php foreach ($footnotes as $footnote): ?>
-                    <p>
-                        <?= $footnote ?>
-                    </p>
-                <?php endforeach ?>
-            </div>
+            echo $this->partial(
+                    'mrss/custom-report/footnotes.partial.phtml',
+                    array('footnotes' => $footnotes)
+                )
+            ?>
+
+
         <?php endif ?>
+        </div>
 
     </div>
 

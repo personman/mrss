@@ -60,6 +60,8 @@ $(function() {
 
 function loadChart(event, chart)
 {
+    preventNegativeScale(chart);
+
     // Enable data labels when exporting
     if (chart.options.chart.forExport) {
         var data = chart.series[0].data
@@ -155,6 +157,15 @@ function loadChart(event, chart)
         }
 
         return offset
+    }
+}
+
+function preventNegativeScale(chart)
+{
+    var extremes = chart.yAxis[0].getExtremes();
+
+    if (extremes.min < 0 && extremes.dataMin >= 0) {
+        chart.yAxis[0].setExtremes(0)
     }
 }
 
