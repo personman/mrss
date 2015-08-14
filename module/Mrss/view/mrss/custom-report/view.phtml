@@ -1,6 +1,13 @@
 <?php /** @var \Mrss\Entity\Report $report */ ?>
 <? $this->headLink()->appendStylesheet('/css/custom-report.css?v=2', 'screen,print') ?>
 <? $this->headLink()->appendStylesheet('/css/custom-report-print.css?v=2', $printMedia) ?>
+<?php
+$this->headScript()->appendFile(
+    '/js/report.js?v=1',
+    'text/javascript'
+);
+?>
+
 
 <?php if ($print): ?>
     <script>

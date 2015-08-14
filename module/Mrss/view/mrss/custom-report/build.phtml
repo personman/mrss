@@ -5,6 +5,14 @@
 <?//= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=5', $media) ?>
 <?//= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
 
+<?php
+    $this->headScript()->appendFile(
+    '/js/report.js?v=1',
+    'text/javascript'
+    );
+?>
+
+
 <script type="text/javascript">
     $(function() {
         var url = '/reports/custom/<?= $report->getId() ?>/reorder'
