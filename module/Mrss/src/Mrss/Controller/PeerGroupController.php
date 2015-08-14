@@ -281,5 +281,4 @@ class PeerGroupController extends ReportController
             'form' => $form
         );
     }
-
 }
