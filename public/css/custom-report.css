@@ -44,6 +44,8 @@ span.smallNote {
 
 .custom-report-footnotes p {
     font-size: 92%;
-    margin: 0 0 5px 0;
+    margin: 0 0 8px 0;
+    line-height: 124%;
+    color: #666;
 }
 

@@ -3,6 +3,11 @@
     <h4><?= $footnoteDetails['name'] ?></h4>
 
     <?php foreach ($footnoteDetails['footnotes'] as $note): ?>
+        <?php
+            $noteParts = explode(':', $note);
+            $title = array_shift($noteParts);
+            $note = "<strong>$title:</strong>" . implode(':', $noteParts);
+        ?>
         <p><?= $note ?></p>
     <?php endforeach ?>
 
