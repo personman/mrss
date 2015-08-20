@@ -246,11 +246,11 @@ $configs = array(
             'name' => 'Retained Revenue',
             'charts' => array(
                 array(
-                    'dbColumn' => 'retained_revenue_contract_training',
+                    'dbColumn' => 'net_revenue_contract_training',
                     'description' => "Total non-credit workforce training retained revenues from contract training for the $fiscalYear fiscal year."
                 ),
                 array(
-                    'dbColumn' => 'retained_revenue_total',
+                    'dbColumn' => 'net_revenue_total',
                     'description' => "Total non-credit workforce training retained revenues for the $fiscalYear fiscal year."
                 ),
                 array(
