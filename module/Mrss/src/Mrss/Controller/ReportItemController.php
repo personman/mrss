@@ -73,6 +73,11 @@ class ReportItemController extends CustomReportController
             if ($form->isValid()) {
                 $data = $form->getData();
 
+                // Handle cancel
+                if (!empty($data['buttons']['cancel'])) {
+                    return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
+                }
+
                 $chartBuilder = $this->getReportService()
                     ->getChartBuilder($data);
 

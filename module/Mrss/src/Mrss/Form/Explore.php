@@ -213,12 +213,19 @@ class Explore extends AbstractForm
     {
         $buttons = $this->getButtonFieldset('Save');
 
-        // Add the delete button
+        // Add the preview button
         $preview = new Element\Submit('preview');
         $preview->setValue('Preview');
         $preview->setAttribute('class', 'btn');
         $preview->setAttribute('id', 'previewButton');
         $buttons->add($preview);
+
+        // Add the cancel button
+        $cancel = new Element\Submit('cancel');
+        $cancel->setValue('Cancel');
+        $cancel->setAttribute('class', 'btn btn-danger');
+        $cancel->setAttribute('id', 'cancelButton');
+        $buttons->add($cancel);
 
         return $buttons;
     }

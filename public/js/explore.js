@@ -53,7 +53,7 @@ function updateFormForChartType()
 
     // Hide all by default
     $('#explore .control-group').hide()
-    $('#control-group-inputType, #control-group-submitButton, #control-group-previewButton').show()
+    $('#control-group-inputType, #control-group-submitButton, #control-group-previewButton, #control-group-cancelButton').show()
 
     // Text
     if (chartType == 'text') {
