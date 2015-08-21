@@ -246,6 +246,9 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Hide the executive report
             unset($pages['executive']);
+
+            // No strengths report for WF
+            unset($pages['reports']['pages']['strengths']);
         }
 
         // If the help section is empty, drop it from the menu

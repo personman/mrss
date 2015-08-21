@@ -22,7 +22,8 @@ $configs = array(
                 ),
                 array(
                     'dbColumn' => 'enrollment_information_market_penetration',
-                    'description' => "The percentage of organizations served by the workforce training department of the total number of organizations in the college's service area."
+                    'description' => "The percentage of organizations served by the workforce training department of the total number of organizations in the college's service area.",
+                    'yAxisMax' => 25
                 ),
             )
         ),

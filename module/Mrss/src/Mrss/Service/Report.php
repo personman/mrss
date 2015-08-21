@@ -900,6 +900,12 @@ class Report
             );
         }
 
+        if (!empty($chartConfig['yAxisMax'])) {
+            $chart['yAxis']['max'] = $chartConfig['yAxisMax'];
+        }
+
+
+
         // Noel-Levitz max value is 6
         if ($this->isNoelLevitz($benchmark->getDbColumn())) {
             $chart['yAxis']['max'] = 6;
