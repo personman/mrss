@@ -3542,6 +3542,9 @@ class Observation
     /** @ORM\Column(type="integer", nullable=true) */
     protected $enrollment_information_courses_canceled;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $enrollment_information_cancellation_rate;
+
     // Workforce form 2
     /** @ORM\Column(type="integer", nullable=true) */
     protected $retention_returning_organizations;
