@@ -114,6 +114,7 @@ class Subscription extends AbstractModel
         $rsm->addJoinedEntityResult('Mrss\Entity\College', 'c', 's', 'college');
         $rsm->addFieldResult('c', 'college_id', 'id');
         $rsm->addFieldResult('c', 'name', 'name');
+        $rsm->addFieldResult('c', 'state', 'state');
 
         $rsm->addJoinedEntityResult('Mrss\Entity\Observation', 'o', 's', 'observation');
         $rsm->addFieldResult('o', 'o_id', 'id');

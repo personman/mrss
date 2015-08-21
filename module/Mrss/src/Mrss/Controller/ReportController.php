@@ -1112,6 +1112,7 @@ class ReportController extends AbstractActionController
     {
         $year = $this->params()->fromRoute('year');
         $benchmarks = $this->params()->fromQuery('benchmarks');
+        /** @var \Mrss\Service\Report\Peer $peerService */
         $peerService = $this->getServiceLocator()->get('service.report.peer');
 
         if (!empty($year)) {
