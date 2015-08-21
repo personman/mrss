@@ -302,7 +302,9 @@ class Peer extends Report
             'credits' => array(
                 'enabled' => false
             ),
-            'legend' => false,
+            'legend' => array(
+                'enabled' => false
+            ),
             'plotOptions' => array(
                 'column' => array(
                     'animation' => false,
@@ -369,7 +371,7 @@ class Peer extends Report
                 }
             }
         }
-        
+
         return $filteredColleges;
     }
 

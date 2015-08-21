@@ -555,6 +555,7 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
+        /** @var \Mrss\Service\Report\Peer $peerService */
         $peerService = $this->getServiceLocator()->get('service.report.peer');
 
         $format = $this->params()->fromRoute('format');
