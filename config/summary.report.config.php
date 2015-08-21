@@ -264,8 +264,16 @@ $configs = array(
             'name' => 'Credentials Awarded',
             'charts' => array(
                 array(
-                    'dbColumn' => 'institutional_demographics_credentials_awarded',
-                    'description' => "The number of state, national or industry recognized credentials earned by non-credit workforce training students in the $fiscalYear fiscal year."
+                    'dbColumn' => 'institutional_demographics_certifications_awarded',
+                    'description' => "The number of certifications including credentials awarded by a certification body (not a school or government agency) to non-credit workforce training students in the $fiscalYear fiscal year."
+                ),
+                array(
+                    'dbColumn' => 'institutional_demographics_licenses_awarded',
+                    'description' => "The number of licenses awarded by a government licensing agency) to non-credit workforce training students in the $fiscalYear fiscal year."
+                ),
+                array(
+                    'dbColumn' => 'institutional_demographics_certificates_awarded',
+                    'description' => "The number of certificates awarded by a training providers or educational institution for completing all requirements for a program to non-credit workforce training students in the $fiscalYear fiscal year."
                 )
             )
         ),
