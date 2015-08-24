@@ -244,7 +244,9 @@ class Internal extends Max
             'credits' => array(
                 'enabled' => false
             ),
-            'legend' => false,
+            'legend' => array(
+                'enabled' => false
+            ),
             'plotOptions' => array(
                 'series' => array(
                     'animation' => false
