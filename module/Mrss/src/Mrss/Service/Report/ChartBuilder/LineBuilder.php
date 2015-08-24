@@ -58,20 +58,29 @@ class LineBuilder extends ChartBuilder
         }
 
         // Peer group median
+        $peerMedians = array();
         if ($peerGroup) {
             $peerGroupModel = $this->getPeerGroupModel();
             $peerGroup = $peerGroupModel->find($peerGroup);
 
             list($peerMedians, $peerIds) = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
-            $this->setPeers($peerIds);
 
-            $includedPeers = $this->getCollegeModel()->findByIds($peerIds);
-            $peerNames = array();
-            foreach ($includedPeers as $peer) {
-                $peerNames[] = $peer->getNAme();
+            $peerFootnote = "(Select a peer group with at least {$this->minimumPeers} data points.)";
+            if (count($peerIds) >= $this->minimumPeers) {
+                $this->setPeers($peerIds);
+
+                $includedPeers = $this->getCollegeModel()->findByIds($peerIds);
+                $peerNames = array();
+                foreach ($includedPeers as $peer) {
+                    $peerNames[] = $peer->getNAme();
+                }
+                $peerFootnote = implode(', ', $peerNames);
             }
-            $this->addFootnote($peerGroup->getName() . ': ' . implode(', ', $peerNames));
+
+            $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
         }
+
+        list($data, $medianData, $peerMedians) = $this->fillInGaps($data, $medianData, $peerMedians);
 
         // Build the series
         $series = array();
@@ -92,7 +101,7 @@ class LineBuilder extends ChartBuilder
             );
         }
 
-        if (!empty($peerMedians)) {
+        if (!empty($peerGroup) && count($peerIds) >= $this->minimumPeers) {
             $series[] = array(
                 'name' => $peerGroup->getName() . ' Median',
                 'data' => array_values($peerMedians),
@@ -134,6 +143,39 @@ class LineBuilder extends ChartBuilder
         }
 
         return array($new1, $new2);
+    }
+
+    protected function fillInGaps($data, $medianData, $peerMedians)
+    {
+        reset($data);
+        $start = key($data);
+        end($data);
+        $end = key($data);
+
+        $years = range($start, $end);
+
+        $newData = $newMedians = $newPeerMedians = array();
+        foreach ($years as $year) {
+            if (isset($data[$year])) {
+                $newData[$year] = $data[$year];
+            } else {
+                $newData[$year] = null;
+            }
+
+            if (isset($medianData[$year])) {
+                $newMedians[$year] = $medianData[$year];
+            } else {
+                $newMedians[$year] = null;
+            }
+
+            if (isset($peerMedians[$year])) {
+                $newPeerMedians[$year] = $peerMedians[$year];
+            } else {
+                $newPeerMedians[$year] = null;
+            }
+        }
+
+        return array($newData, $newMedians, $newPeerMedians);
     }
 
     protected function getPeerMedians($peerGroup, $dbColumn, $years)

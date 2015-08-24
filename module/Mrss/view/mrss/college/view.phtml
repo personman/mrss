@@ -73,9 +73,8 @@
                         <a href="<?= $this->url(
                             'users/edit',
                             array('id' => $user->getId())
-                        ) ?>">
-                            <?= $user->getFullName() ?>
-                        </a>
+                        ) ?>"><?= $user->getFullName() ?></a>
+                        (<?= $user->getRole() ?>)
                     </li>
                 <?php endforeach ?>
             </ul>
