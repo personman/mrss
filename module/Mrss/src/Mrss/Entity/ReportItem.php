@@ -27,6 +27,11 @@ class ReportItem
     protected $name;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    protected $subtitle;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Report")
      * @ORM\JoinColumn(
      * name="report_id",
@@ -252,6 +257,22 @@ class ReportItem
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param mixed $subtitle
+     */
+    public function setSubtitle($subtitle)
+    {
+        $this->subtitle = $subtitle;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubtitle()
+    {
+        return $this->subtitle;
     }
 
     /**

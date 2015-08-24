@@ -54,6 +54,16 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'subtitle',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Subtitle'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'year',
                 'type' => 'Select',
                 'options' => array(

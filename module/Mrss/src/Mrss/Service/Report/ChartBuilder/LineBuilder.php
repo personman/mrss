@@ -20,6 +20,7 @@ class LineBuilder extends ChartBuilder
         $this->addFootnote($benchmark->getDescriptiveReportLabel() . ': ' . $benchmark->getReportDescription(true));
 
         $title = $config['title'];
+        $subtitle = $config['subtitle'];
 
         if (empty($title)) {
             $title = $benchmark->getDescriptiveReportLabel();
@@ -113,6 +114,7 @@ class LineBuilder extends ChartBuilder
 
         $chart = new Line;
         $chart->setTitle($title)
+            ->setSubtitle($subtitle)
             ->setYLabel($benchmark->getDescriptiveReportLabel())
             ->setYFormat($this->getFormat($benchmark))
             ->setCategories($xCategories)

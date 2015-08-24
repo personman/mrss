@@ -39,6 +39,7 @@ function updateFormForChartType()
 {
     var chartType = $('#inputType').val()
     var title = $('#control-group-title')
+    var subtitle = $('#control-group-subtitle')
     var sizeField = $('#control-group-benchmark3')
     var benchmark1 = $('#control-group-benchmark1')
     var benchmark2 = $('#control-group-benchmark2')
@@ -72,6 +73,7 @@ function updateFormForChartType()
     // Buble
     if (chartType == 'bubble') {
         title.show()
+        subtitle.show()
         benchmark1.show()
         benchmark2.show()
         sizeField.show()
@@ -84,6 +86,7 @@ function updateFormForChartType()
     // Scatter
     if (chartType == 'scatter') {
         title.show()
+        subtitle.show()
         benchmark1.show()
         benchmark2.show()
         yearField.show()
@@ -95,6 +98,7 @@ function updateFormForChartType()
     // Line
     if (chartType == 'line') {
         title.show()
+        subtitle.show()
         //yearField.show()
         benchmark2.show()
         peerGroup.show()
@@ -105,6 +109,7 @@ function updateFormForChartType()
     // Percentile bar
     if (chartType == 'bar') {
         title.show()
+        subtitle.show()
         benchmark1.show()
         yearField.show()
     }

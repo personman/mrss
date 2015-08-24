@@ -26,6 +26,9 @@ abstract class AbstractChart
             'title' => array(
                 'text' => '',
             ),
+            'subtitle' => array(
+                'text' => '',
+            ),
             'exporting' => array(
                 'enabled' => true
             ),
@@ -78,6 +81,13 @@ abstract class AbstractChart
     public function setTitle($title)
     {
         $this->config['title']['text'] = $title;
+
+        return $this;
+    }
+
+    public function setSubtitle($subtitle)
+    {
+        $this->config['subtitle']['text'] = $subtitle;
 
         return $this;
     }
