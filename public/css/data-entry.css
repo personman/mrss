@@ -188,3 +188,15 @@ h3.heading {
     width: 165px;
     height: 100px;
 }
+
+
+.form-horizontal #fieldset-buttons .controls {
+    width: 50px !important;
+}
+#control-group-buttons[save-edit] {
+    float: left;
+}
+
+.well .control-group {
+    float: left;
+}

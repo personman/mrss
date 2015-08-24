@@ -58,9 +58,18 @@ class FormBuilder
             $save = new Element\Submit('submit');
             $save->setValue('Save');
             $save->setAttribute('class', 'btn btn-primary');
+            $save->setAttribute('id', 'save-button');
             $buttons->add($save);
 
+            // Save and continue editing button
+            $saveEdit = new Element\Submit('save-edit');
+            $saveEdit->setValue('Save and Continue Editing');
+            $saveEdit->setAttribute('class', 'btn btn-default');
+            $saveEdit->setAttribute('id', 'save-edit-button');
+            $buttons->add($saveEdit);
+
             $form->add($buttons);
+
         }
 
         //echo '<pre>'; print_r($inputFilter);

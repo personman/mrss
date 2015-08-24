@@ -401,6 +401,12 @@ class ObservationController extends AbstractActionController
 
                 $redirect = $this->params()->fromPost('redirect', '/data-entry');
 
+                // Save and edit button?
+                $data = $this->params()->fromPost();
+                if (!empty($data['buttons']['save-edit'])) {
+                    $redirect = '/data-entry/' . $benchmarkGroup->getUrl();
+                }
+
                 $this->flashMessenger()->addSuccessMessage('Data saved.');
                 return $this->redirect()->toUrl($redirect);
             }
