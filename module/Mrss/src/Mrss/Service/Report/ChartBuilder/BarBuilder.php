@@ -61,7 +61,6 @@ class BarBuilder extends ChartBuilder
             ->setXLabel($xLabel)
             ->setCategories($chartXCategories);
 
-        //pr($barChart->getConfig());
         return $barChart->getConfig();
     }
 
@@ -77,7 +76,7 @@ class BarBuilder extends ChartBuilder
 
     public function buildSeries($chartValues, $benchmark)
     {
-        $roundTo = 0;
+        $roundTo = $this->getDecimalPlaces($benchmark);
         $format = $this->getFormat($benchmark);
 
         $chartData = array();

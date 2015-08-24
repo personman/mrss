@@ -95,6 +95,7 @@ function updateFormForChartType()
     // Line
     if (chartType == 'line') {
         title.show()
+        //yearField.show()
         benchmark2.show()
         peerGroup.show()
         hideMine.show()
