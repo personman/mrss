@@ -355,7 +355,7 @@ class Internal extends Max
                 $benchmark,
                 $unitNames,
                 $combinedSeries,
-                'Instructional Activity Cost per FTE Student',
+                'Division Instructional Activity Cost per FTE Student',
                 'instructional_activities_combined'
             );
             $chart['plotOptions']['series']['stacking'] = 'normal';
