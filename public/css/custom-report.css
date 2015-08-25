@@ -53,3 +53,7 @@ span.smallNote {
     color: #666;
 }
 
+.help-block {
+    font-size: 70%;
+    margin-left: 5px;
+}

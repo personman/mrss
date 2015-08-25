@@ -27,7 +27,7 @@ class ReportItem
     protected $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $subtitle;
 

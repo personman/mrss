@@ -208,7 +208,8 @@ class Explore extends AbstractForm
                 'required' => false,
                 'options' => array(
                     'label' => 'Peer Group',
-                    'empty_option' => 'None'
+                    'empty_option' => 'None',
+                    'help-block' => '<a href="/peer-groups" target="_blank">Create and manage peer groups</a>'
                 ),
                 'attributes' => array(
                     'options' => $peerGroups,
