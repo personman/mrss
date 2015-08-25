@@ -32,10 +32,10 @@ class Explore extends AbstractForm
                 'attributes' => array(
                     'id' => 'inputType',
                     'options' => array(
-                        'scatter' => 'Scatter Plot',
-                        'bubble' => 'Bubble Plot',
                         'line' => 'Trend Line',
                         'bar' => 'Percentile Bar Chart',
+                        'scatter' => 'Scatter Plot',
+                        'bubble' => 'Bubble Plot',
                         'text' => 'Text'
                     )
                 )

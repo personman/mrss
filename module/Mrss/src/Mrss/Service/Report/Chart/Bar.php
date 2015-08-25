@@ -23,6 +23,8 @@ class Bar extends AbstractChart
             )
         );
 
+        $config['exporting']['buttons']['printButon']['enabled'] = false;
+
         $config['tooltip'] = array(
             'pointFormat' => ''
         );

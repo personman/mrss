@@ -28,3 +28,8 @@ a[href]:after {
     display: none;
 }
 
+@page {
+    size: auto;
+    margin: 10mm 10mm 10mm 10mm;
+}
+

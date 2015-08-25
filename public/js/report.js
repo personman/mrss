@@ -109,7 +109,10 @@ function loadChart(event, chart)
 
         var dataDef = chart.options.dataDefinition
 
-        var add = Math.ceil(dataDef.length / 106) * lineHeight // 106 = line width, 35 = line height
+        var add = 0
+        if (dataDef) {
+            add = Math.ceil(dataDef.length / 106) * lineHeight // 106 = line width, 35 = line height
+        }
 
         if (dataDef) {
             var definition = chart.renderer.label(dataDef)
