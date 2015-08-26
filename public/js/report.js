@@ -55,6 +55,12 @@ $(function() {
 
     // Max national report detail expander
     setUpDetailExpander();
+
+    // Add spinner for report item submits
+    setUpExploreSpinner()
+
+    // Not sure how this value is getting cleared.
+    $('#cancelButton').attr('value', 'Cancel')
 })
 
 
@@ -184,6 +190,14 @@ function setUpDetailExpander()
 
         return false
     })
+}
 
+function setUpExploreSpinner()
+{
+    $('form#explore').submit(function() {
+        $('#fieldset-buttons input').hide()
+        $('#fieldset-buttons').html('<div class="loading"><img src="/img/loading.gif" /></div>')
 
+        return true
+    })
 }
