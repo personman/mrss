@@ -1161,3 +1161,7 @@ span.rollover {
     background: -webkit-linear-gradient(#005799, #00508d);
     background: linear-gradient(#005799, #00508d);
 }
+
+#control-group-submitButton, #control-group-previewButton, #control-group-cancelButton {
+    width: 32% !important;
+}

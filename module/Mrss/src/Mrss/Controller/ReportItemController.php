@@ -50,6 +50,7 @@ class ReportItemController extends CustomReportController
                 $data = $item->getConfig(true);
                 $data['buttons']['submit'] = 'Save';
                 $data['buttons']['preview'] = 'Preview';
+                $data['buttons']['cancel'] = 'Cancel';
 
                 $form->setData($data);
 
@@ -62,19 +63,21 @@ class ReportItemController extends CustomReportController
         $chart = null;
         if ($this->getRequest()->isPost()) {
             $post = $this->params()->fromPost();
-
-            /*if (!empty($post['id'])) {
-                $post = $this->getChartModel()->find($post['id'])->getConfig();
-                $post['buttons']['submit'] = null;
-            }*/
-
             $form->setData($post);
 
             if ($form->isValid()) {
                 $data = $form->getData();
 
+                // What type of button was pressed?
+                $buttonPressed = 'save';
+                if (!empty($data['isCancel'])) {
+                    $buttonPressed = 'cancel';
+                } elseif (!empty($data['isPreview'])) {
+                    $buttonPressed = 'preview';
+                }
+
                 // Handle cancel
-                if (!empty($data['buttons']['cancel'])) {
+                if ($buttonPressed == 'cancel') {
                     return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
                 }
 
@@ -85,7 +88,7 @@ class ReportItemController extends CustomReportController
                 $footnotes = $chartBuilder->getFootnotes();
 
                 // Save it, if requested
-                if (!empty($data['buttons']['submit'])) {
+                if ($buttonPressed == 'save') {
                     if (!empty($data['title'])) {
                         $this->saveItem($data, $chart, $footnotes, $item);
                         $this->flashMessenger()->addSuccessMessage("Saved.");
@@ -100,6 +103,7 @@ class ReportItemController extends CustomReportController
             // Restore the button labels
             $post['buttons']['submit'] = 'Save';
             $post['buttons']['preview'] = 'Preview';
+            $post['buttons']['cancel'] = 'Cancel';
             $form->setData($post);
         } else {
             if (isset($data)) {
@@ -111,6 +115,14 @@ class ReportItemController extends CustomReportController
                 $footnotes = $builder->getFootnotes();
             }
         }
+
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        // Reset button proxy hidden fields
+        $form->get('isCancel')->setValue(false);
+        $form->get('isPreview')->setValue(false);
 
         // Substitute variables (years)
         $substitution = $this->getReportService()->getVariableSubstitution()->setStudyYear($year);

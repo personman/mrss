@@ -12,12 +12,18 @@ a[href]:after {
     margin-bottom: 20px;
 }
 
+
 .back, .heading-btns, .footer-nav, .socialButtons, .footer-logo, .headerLogin, .btn-group-sm, .addItemButton, .navbar {
     display: none !important;
 }
 
+.reportItems {
+    /*width: 750px;*/
+}
+
 .complete-chart-box {
     width: 400px !important;
+    /*width: 300px !important;*/
 }
 
 .footer {

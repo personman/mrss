@@ -57,3 +57,45 @@ span.smallNote {
     font-size: 70%;
     margin-left: 5px;
 }
+
+
+
+body .explore .form-horizontal .control-label {
+    text-align: left;
+}
+body .form-horizontal .controls {
+    margin-left: 5px;
+}
+.explore form input, .explore form textarea {
+    width: 90%
+}
+
+.explore .form-horizontal .control-label {
+    width: 90%;
+    text-align: center;
+}
+
+.explore .controls {
+    /*clear: both;*/
+}
+select {
+    width: 80%;
+}
+
+#control-group-submitButton, #control-group-previewButton, #control-group-cancelButton {
+    width: 27%;
+    float: right;
+    margin-left: 1px;
+}
+
+#control-group-cancelButton label {
+    display: none;
+}
+
+#control-group-regression, #control-group-content {
+    display: none;
+}
+
+.report-item-preview {
+    padding-left: 20px;
+}

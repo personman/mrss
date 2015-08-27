@@ -59,8 +59,7 @@ $(function() {
     // Add spinner for report item submits
     setUpExploreSpinner()
 
-    // Not sure how this value is getting cleared.
-    $('#cancelButton').attr('value', 'Cancel')
+    setUpCancelAndPreview();
 })
 
 
@@ -198,6 +197,18 @@ function setUpExploreSpinner()
         $('#fieldset-buttons input').hide()
         $('#fieldset-buttons').html('<div class="loading"><img src="/img/loading.gif" /></div>')
 
+        return true
+    })
+}
+
+function setUpCancelAndPreview()
+{
+    $('#cancelButton').click(function() {
+        $('#isCancel').val(1)
+        return true
+    })
+    $('#previewButton').click(function() {
+        $('#isPreview').val(1)
         return true
     })
 }

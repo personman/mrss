@@ -8,41 +8,7 @@
 
 
 <style type="text/css">
-    body .explore .form-horizontal .control-label {
-        text-align: left;
-    }
-    body .form-horizontal .controls {
-        margin-left: 5px;
-    }
-    .explore form input, .explore form textarea {
-        width: 90%
-    }
 
-    .explore .form-horizontal .control-label {
-        width: 90%;
-        text-align: center;
-    }
-
-    .explore .controls {
-        /*clear: both;*/
-    }
-    select {
-        width: 80%;
-    }
-
-    #control-group-submitButton, #control-group-previewButton, #control-group-cancelButton {
-        width: 33%;
-        float: right;
-        margin-left: 1px;
-    }
-
-    #control-group-cancelButton label {
-        display: none;
-    }
-
-    #control-group-regression, #control-group-content {
-        display: none;
-    }
 </style>
 
 <?php
@@ -78,11 +44,11 @@ $this->headScript()->appendFile(
 ?>
 
 <div class="explore row row-fluid">
-    <div class="span4 col-md-4">
+    <div class="span5 col-md-4">
         <?= $this->ztbForm($this->form->prepare()) ?>
     </div>
 
-    <div class="span8 col-md-8">
+    <div class="span7 col-md-8 report-item-preview">
         <div class="row row-fluid">
             <div id="chart">
                 <?php if ($chart): ?>

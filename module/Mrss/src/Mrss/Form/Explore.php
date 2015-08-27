@@ -24,6 +24,26 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'isCancel',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'id' => 'isCancel'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'isPreview',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'id' => 'isPreview'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'presentation',
                 'type' => 'Select',
                 'options' => array(
