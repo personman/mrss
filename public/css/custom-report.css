@@ -99,3 +99,6 @@ select {
 .report-item-preview {
     padding-left: 20px;
 }
+.reportItems {
+    width: 1140px;
+}
