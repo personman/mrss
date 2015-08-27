@@ -31,13 +31,7 @@ class Explore extends AbstractForm
                 ),
                 'attributes' => array(
                     'id' => 'inputType',
-                    'options' => array(
-                        'line' => 'Trend Line',
-                        'bar' => 'Percentile Bar Chart',
-                        'scatter' => 'Scatter Plot',
-                        'bubble' => 'Bubble Plot',
-                        'text' => 'Text'
-                    )
+                    'options' => $this->getPresentationOptions($years)
                 )
             )
         );
@@ -249,5 +243,25 @@ class Explore extends AbstractForm
 
         //pr($filter);
         return $filter;
+    }
+
+    protected function getPresentationOptions($years)
+    {
+        $minYears = 3;
+
+        $options = array(
+            'line' => 'Trend Line',
+            'bar' => 'Percentile Bar Chart',
+            'scatter' => 'Scatter Plot',
+            'bubble' => 'Bubble Plot',
+            'text' => 'Text'
+        );
+
+        // Remove trend option if there's not enough data
+        if (count($years) < $minYears) {
+            unset($options['line']);
+        }
+
+        return $options;
     }
 }
