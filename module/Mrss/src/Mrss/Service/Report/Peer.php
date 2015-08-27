@@ -354,6 +354,11 @@ class Peer extends Report
             $benchmarkCols[] = $benchmark->getDbColumn();
         }
 
+        $collegeIds = array();
+        foreach ($colleges as $college) {
+            $collegeIds[] = $college->getId();
+        }
+
 
         $subscriptions = $this->getSubscriptionModel()
             ->findWithPartialObservations($this->getStudy(), $year, $benchmarkCols, false);
@@ -365,9 +370,12 @@ class Peer extends Report
             foreach ($benchmarkCols as $benchmarkCol) {
                 $value = $observation->get($benchmarkCol);
                 if ($value !== null) {
+                    $college = $subscription->getCollege();
 
-                    $filteredColleges[] = $subscription->getCollege();
-                    continue 2;
+                    if (in_array($college->getId(), $collegeIds)) {
+                        $filteredColleges[] = $college;
+                        continue 2;
+                    }
                 }
             }
         }
