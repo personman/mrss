@@ -23,6 +23,10 @@ class Line extends AbstractChart
 
         $config['plotOptions'] = array(
             'line' => array(
+                'dataLabels' => array(
+                    'enabled' => false,
+                    'format' => "{y}"
+                ),
                 'marker' => array(
                     'enabled' => true
                 )
@@ -41,6 +45,9 @@ class Line extends AbstractChart
 
         // Tooltip
         $config['tooltip'] = array('pointFormat' => $this->convertFormatForTooltip($this->getYFormat()));
+
+        // Data label
+        $config['plotOptions']['line']['dataLabels']['format'] = $this->getYFormat();
 
         $this->setConfig($config);
     }

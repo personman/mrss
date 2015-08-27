@@ -351,6 +351,15 @@ class ReportItem
         return $chart;
     }
 
+    public function setCacheChart($chart)
+    {
+        $cache = $this->getCache(true);
+        $cache['chart'] = $chart;
+        $this->setCache($cache);
+
+        return $this;
+    }
+
     public function getCacheFootnotes()
     {
         $cache = $this->getCache(true);

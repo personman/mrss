@@ -95,6 +95,9 @@ class CustomReportController extends ReportController
         $printMedia = 'print';
         if ($print) {
             $printMedia .= ',screen';
+
+            // For the print version, show all labels
+            $this->showAllLabels($report);
         }
 
         return array(
@@ -102,6 +105,33 @@ class CustomReportController extends ReportController
             'print' => $print,
             'printMedia' => $printMedia
         );
+    }
+
+    protected function showAllLabels(Report $report)
+    {
+        foreach ($report->getItems() as &$item)
+        {
+            $chart = $item->getCacheChart();
+
+            if ($chart['chart']['type'] == 'column') {
+                foreach ($chart['series'] as $key => &$series) {
+                    foreach ($series['data'] as $dataKey => &$dataPoint) {
+                        if (isset($dataPoint['dataLabels'])) {
+                            $dataPoint['dataLabels']['enabled'] = true;
+                        }
+                    }
+                }
+
+            }
+
+            if ($chart['chart']['type'] == 'line') {
+                $chart['plotOptions']['line']['dataLabels']['enabled'] = true;
+            }
+
+            $item->setCacheChart($chart);
+
+            //prd($chart['series']);
+        }
     }
 
     public function deleteAction()
