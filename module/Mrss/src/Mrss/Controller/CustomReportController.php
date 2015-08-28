@@ -2,11 +2,13 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\PeerGroup;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
 use Mrss\Entity\Report;
 use Mrss\Entity\ReportItem;
+use Mrss\Entity\College;
 use Zend\View\Model\ViewModel;
 
 class CustomReportController extends ReportController
@@ -109,7 +111,7 @@ class CustomReportController extends ReportController
 
     protected function showAllLabels(Report $report)
     {
-        foreach ($report->getItems() as &$item)
+        foreach ($report->getItems() as $item)
         {
             $chart = $item->getCacheChart();
 
@@ -265,6 +267,9 @@ class CustomReportController extends ReportController
 
     protected function copyCustomReport(Report $sourceReport, $college)
     {
+        $peerGroupIdToCopy = 149;
+        $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $college);
+
         $report = new Report;
         $report->setCollege($college);
         $report->setStudy($this->currentStudy());
@@ -275,7 +280,7 @@ class CustomReportController extends ReportController
         $this->getReportModel()->save($report);
 
         foreach ($sourceReport->getItems() as $reportItem) {
-            $this->copyItem($reportItem, $report);
+            $this->copyItem($reportItem, $report, $peerGroupId);
         }
 
         $this->getReportModel()->getEntityManager()->flush();
@@ -290,15 +295,47 @@ class CustomReportController extends ReportController
     }
 
     /**
+     * @param $peerGroupIdToCopy
+     * @param College $college
+     * @return null
+     */
+    protected function copyPeerGroup($peerGroupIdToCopy, College $college)
+    {
+        $newPeerGroupId = null;
+        if (!empty($peerGroupIdToCopy)) {
+            $sampleGroup = $this->getPeerGroupModel()->find($peerGroupIdToCopy);
+            $peers = $sampleGroup->getPeers();
+
+            // Remove the owning college from the peer group
+            if (($key = array_search($college->getId(), $peers)) !== false) {
+                unset($peers[$key]);
+            }
+
+            // Create the new peer group
+            $newPeerGroup = new PeerGroup();
+            $newPeerGroup->setName($sampleGroup->getName());
+            $newPeerGroup->setCollege($college);
+            $newPeerGroup->setPeers($peers);
+
+            $this->getPeerGroupModel()->save($newPeerGroup);
+
+            $newPeerGroupId = $newPeerGroup->getId();
+        }
+
+        return $newPeerGroupId;
+    }
+
+    /**
      * Strip out anything that shouldn't be copied.
      *
      * @param $sourceItem
      * @param $newReport
+     * @param $peerGroupId
      */
-    protected function copyItem(ReportItem $sourceItem, Report $newReport)
+    protected function copyItem(ReportItem $sourceItem, Report $newReport, $peerGroupId = null)
     {
         $config = $sourceItem->getConfig();
-        $config['peerGroup'] = null;
+        $config['peerGroup'] = $peerGroupId;
 
         $item = new ReportItem();
         $item->setReport($newReport);
