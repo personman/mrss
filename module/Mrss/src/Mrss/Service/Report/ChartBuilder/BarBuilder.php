@@ -17,7 +17,11 @@ class BarBuilder extends ChartBuilder
         $xLabel = $xBenchmark->getDescriptiveReportLabel();
 
         $title = $config['title'];
-        $subtitle = $config['subtitle'];
+        $subtitle = null;
+        if (!empty($config['subtitle'])) {
+            $subtitle = $config['subtitle'];
+        }
+
         $collegeId = $this->getCollege()->getId();
 
         $chartXCategories =$this->getPercentileBreakPointLabels();

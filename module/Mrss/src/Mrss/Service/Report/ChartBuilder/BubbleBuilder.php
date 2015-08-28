@@ -21,7 +21,12 @@ class BubbleBuilder extends ChartBuilder
         $benchmark2 = $y = $config['benchmark2'];
         $size = $config['benchmark3'];
         $title = $config['title'];
-        $subtitle = $config['subtitle'];
+
+        $subtitle = null;
+        if (!empty($config['subtitle'])) {
+            $subtitle = $config['subtitle'];
+        }
+
         //$regression = $config['regression'];
         $peerGroup = $config['peerGroup'];
         $collegeId = $this->getCollege()->getId();
