@@ -259,14 +259,14 @@ class CustomReportController extends ReportController
         $elapsed = round(microtime(true) - $start);
         $this->flashMessenger()->addSuccessMessage(
             "Report copied to all institutions in $elapsed seconds.
-            Now <a href='/reports/custom/admin'>rebuild cache</a>."
+            Now <a href='/reports/custom/admin'>rebuild the cache</a>."
         );
         return $this->redirect()->toRoute('reports/custom');
     }
 
     protected function copyCustomReport(Report $sourceReport, $college)
     {
-        $peerGroupIdToCopy = 149;
+        $peerGroupIdToCopy = 225; // Peer group for sample reports
         $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $college);
 
         $report = new Report;
