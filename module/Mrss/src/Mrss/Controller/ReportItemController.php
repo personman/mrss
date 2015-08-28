@@ -181,6 +181,7 @@ class ReportItemController extends CustomReportController
     protected function saveItem($config, $chart, $footnotes, $item = null)
     {
         $model = $this->getReportItemModel();
+
         $name = $config['title'];
         $type = $config['presentation'];
         $description = $config['content'];
@@ -193,11 +194,11 @@ class ReportItemController extends CustomReportController
         if (empty($item)) {
             $item = new ReportItem();
             $item->setReport($this->report);
-            $item->setName($name);
             $item->setSequence($this->getNextSequence());
         }
 
         // Apply the updates
+        $item->setName($name);
         $item->setType($type);
         $item->setConfig($config);
         $item->setDescription($description);
