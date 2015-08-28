@@ -13,6 +13,8 @@ class Explore extends AbstractForm
         // Call the parent constructor
         parent::__construct('explore');
 
+        rsort($years);
+
         $years = array_combine($years, $years);
 
         $this->add(
