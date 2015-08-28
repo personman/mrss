@@ -111,8 +111,7 @@ class CustomReportController extends ReportController
 
     protected function showAllLabels(Report $report)
     {
-        foreach ($report->getItems() as $item)
-        {
+        foreach ($report->getItems() as $item) {
             $chart = $item->getCacheChart();
 
             if ($chart['chart']['type'] == 'column') {
