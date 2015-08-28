@@ -73,7 +73,12 @@ class BarBuilder extends ChartBuilder
             $this->getYear()
         );
 
-        return $observation->get($dbColumn);
+        $value = null;
+        if ($observation) {
+            $value = $observation->get($dbColumn);
+        }
+
+        return $value;
     }
 
     public function buildSeries($chartValues, $benchmark)
