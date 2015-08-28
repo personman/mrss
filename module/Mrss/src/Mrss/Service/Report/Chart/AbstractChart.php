@@ -174,7 +174,15 @@ abstract class AbstractChart
 
     public function convertFormatForAxisLabel($format)
     {
-        return str_replace(array('y', '.2f', '.4f'), array('value', '.0f', '.2f'), $format);
+        $search = array('y', '.2f', '.4f');
+        $replace = array('value', '.0f', '.2f');
+
+        // Don't round non-percent benchmarks with 2 decimal places
+        if ($format == '{y:,.2f}') {
+            $replace[1] = '.2f';
+        }
+
+        return str_replace($search, $replace, $format);
     }
 
     public function convertFormatForTooltip($format)
