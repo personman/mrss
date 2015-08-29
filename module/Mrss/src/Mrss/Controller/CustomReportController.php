@@ -247,6 +247,7 @@ class CustomReportController extends ReportController
         $id = $this->params()->fromRoute('id');
         $report = $this->getReport($id);
 
+        $count = 0;
         foreach ($this->getAllColleges() as $college) {
             // Skip the current college to prevent dupes
             if ($college->getId() == $this->currentCollege()->getId()) {
@@ -254,11 +255,12 @@ class CustomReportController extends ReportController
             }
 
             $this->copyCustomReport($report, $college);
+            $count++;
         }
 
         $elapsed = round(microtime(true) - $start);
         $this->flashMessenger()->addSuccessMessage(
-            "Report copied to all institutions in $elapsed seconds.
+            "Report copied to all institutions ($count) in $elapsed seconds.
             Now <a href='/reports/custom/admin'>rebuild the cache</a>."
         );
         return $this->redirect()->toRoute('reports/custom');
@@ -267,6 +269,7 @@ class CustomReportController extends ReportController
     protected function copyCustomReport(Report $sourceReport, $college)
     {
         $peerGroupIdToCopy = 225; // Peer group for sample reports
+        $peerGroupIdToCopy = 149; // Peer group for sample reports
         $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $college);
 
         $report = new Report;
