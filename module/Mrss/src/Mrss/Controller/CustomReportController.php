@@ -247,22 +247,35 @@ class CustomReportController extends ReportController
         $id = $this->params()->fromRoute('id');
         $report = $this->getReport($id);
 
-        $count = 0;
-        foreach ($this->getAllColleges() as $college) {
-            // Skip the current college to prevent dupes
-            if ($college->getId() == $this->currentCollege()->getId()) {
-                continue;
+        /** @var \Mrss\Model\Setting $settingsModel */
+        $settingsModel = $this->getServiceLocator()->get('model.setting');
+        $copyDone = $settingsModel->getValueForIdentifier('copy_done');
+
+
+        if (empty($copyDone)) {
+            $count = 0;
+            foreach ($this->getAllColleges() as $college) {
+                // Skip the current college to prevent dupes
+                if ($college->getId() == $this->currentCollege()->getId()) {
+                    continue;
+                }
+
+                $this->copyCustomReport($report, $college);
+                $count++;
             }
 
-            //$this->copyCustomReport($report, $college);
-            $count++;
+            $elapsed = round(microtime(true) - $start);
+            $this->flashMessenger()->addSuccessMessage(
+                "Report copied to all institutions ($count) in $elapsed seconds.
+            Now <a href='/reports/custom/admin'>rebuild the cache</a>."
+            );
+
+            $settingsModel->setValueForIdentifier('copy_done', true);
+        } else {
+            $this->flashMessenger()->addErrorMessage('Copy already done.');
         }
 
-        $elapsed = round(microtime(true) - $start);
-        $this->flashMessenger()->addSuccessMessage(
-            "Report copied to all institutions ($count) in $elapsed seconds.
-            Now <a href='/reports/custom/admin'>rebuild the cache</a>."
-        );
+
         return $this->redirect()->toRoute('reports/custom');
     }
 
