@@ -254,7 +254,7 @@ class CustomReportController extends ReportController
                 continue;
             }
 
-            $this->copyCustomReport($report, $college);
+            //$this->copyCustomReport($report, $college);
             $count++;
         }
 
