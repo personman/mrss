@@ -215,7 +215,6 @@ class NavigationFactory extends DefaultNavigationFactory
             //}
 
             // Hide the reports that MRSS doesn't yet use
-            unset($pages['reports']['pages']['national']);
             unset($pages['reports']['pages']['peer']);
             unset($pages['reports']['pages']['summary']);
             unset($pages['reports']['pages']['strengths']);
