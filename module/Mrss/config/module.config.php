@@ -1709,8 +1709,11 @@ return array(
                         'action' => 'index',
                         'subject' => 'Free Webinar',
                         'body' => "Your institution:\n\n\nWho will join the demo (please include name, title, and " .
-                            "email for each person):\n\n\nThe webinar will be April 22 at 2:00 PM EDT " .
-                            "(1:00PM CDT; 11:00 AM PDT)."
+                            "email for each person):\n\n\nWhich webinar would you like to join? \n" .
+                            "Wednesday, Sept 2 at 2pm\n" .
+                            "Thursday, Sept 3 at 10am\n" .
+                            "Thursday, Sept 10 at 2pm\n" .
+                            "Monday, Sept 14 at 2pm  \n"
                     )
                 )
             ),
