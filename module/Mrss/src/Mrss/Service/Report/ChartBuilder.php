@@ -14,6 +14,8 @@ class ChartBuilder extends Report
 
     protected $minimumPeers = 5;
 
+    protected $college;
+
     protected $footnotes = array();
 
     public function setConfig($config)
@@ -93,5 +95,17 @@ class ChartBuilder extends Report
         }
 
         $this->footnotes = $subbedFootnotes;
+    }
+
+    public function setCollege($college)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
+    public function getCollege()
+    {
+        return $this->college;
     }
 }

@@ -109,6 +109,7 @@ class ReportItemController extends CustomReportController
             if (isset($data)) {
                 /** @var \Mrss\Service\Report\ChartBuilder $builder */
                 $builder = $this->getReportService()->getChartBuilder($data);
+                $builder->setCollege($this->currentCollege());
 
                 $chart = $builder->getChart();
 
