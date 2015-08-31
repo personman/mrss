@@ -20,8 +20,13 @@ class CustomReportController extends ReportController
      */
     public function indexAction()
     {
-        //$isAdmin = $this->
+        $webinarLink = '/webinar';
+        if ($this->currentStudy()->getId() != 1) {
+            $webinarLink = '/contact';
+        }
+
         return array(
+            'webinarLink' => $webinarLink,
             'reports' => $this->getReportModel()
                     ->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy())
         );

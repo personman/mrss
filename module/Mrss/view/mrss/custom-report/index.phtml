@@ -12,12 +12,16 @@ $this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print'
 </script>
 
 
+
 <div class="btn-group heading-btns">
     <a href="<?= $this->url('reports/custom/add') ?>" class="btn btn-default"><span class="glyphicon glyphicon-plus icon icon-plus"></span> Add a Report</a>
 </div>
 
 <h1>Custom Reports</h1>
 
+<div class="well">
+    <p><a href="<?= $webinarLink ?>">Request a webinar</a> to learn more about custom reports.</p>
+</div>
 
 <div class="customReportList">
 <?php foreach ($reports as $report): ?>

@@ -64,10 +64,17 @@ class DataExport
      */
     protected function getYears()
     {
-        // Quick fix for NCCBP
         $years = array();
-        foreach (array(2014) as $year) {
-            $years[$year] = array(1);
+        foreach ($this->getStudies() as $study) {
+            $studyYears = $this->getSubscriptionModel()->getYearsWithSubscriptions($study);
+
+            foreach ($studyYears as $year) {
+                if (empty($years[$year])) {
+                    $years[$year] = array();
+                }
+
+                $years[$year][] = $study->getId();
+            }
         }
 
         return $years;
@@ -304,6 +311,9 @@ class DataExport
         return $this;
     }
 
+    /**
+     * @return \Mrss\Model\Subscription
+     */
     public function getSubscriptionModel()
     {
         return $this->subscriptionModel;
