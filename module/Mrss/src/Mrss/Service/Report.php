@@ -659,14 +659,6 @@ class Report
             $benchmarkData['percentile_rank'] = '';
         }
 
-        if ($benchmark->getId() == 203) {
-            pr($this->getObservation()->getCollege()->getName());
-            pr($this->getSystem());
-            pr($year);
-            pr($percentileRank);
-            prd($benchmarkData);
-        }
-
         // Data labels
         $prefix = $suffix = '';
         if ($benchmark->isPercent()) {
