@@ -407,10 +407,10 @@ function getReportMenu()
                 'label' => 'Strengths/Opportunities Report',
                 'uri' => '/reports/strengths'
             ),
-            /*'custom' => array(
+            'custom' => array(
                 'label' => 'Custom Reports',
                 'uri' => '/reports/custom'
-            )*/
+            )
         )
     );
 }
