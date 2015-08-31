@@ -119,7 +119,6 @@ class NavigationFactory extends DefaultNavigationFactory
             // Logged in users don't need demos
             unset($pages['schedule-demo']);
 
-
             if (!empty($currentStudy)) {
                 /*
                 $dataEntryPages = array();
@@ -150,6 +149,11 @@ class NavigationFactory extends DefaultNavigationFactory
                 */
             } else {
                 // If there aren't any forms to show, drop the data entry menu item
+                unset($pages['data-entry']);
+            }
+
+            // Hide data entry menu item if data entry is closed
+            if (!$currentStudy->getDataEntryOpen()) {
                 unset($pages['data-entry']);
             }
 
