@@ -14,6 +14,7 @@ class National extends Max
         $reportData = array();
 
         $reportData['instructional'] = $this->getInstructionalActivityCosts();
+        $reportData['other'] = $this->getOtherInstructional();
         $reportData['studentServices'] = $this->getStudentServicesCosts();
         $reportData['studentServicesPercentages'] = $this->getStudentServicesPercentages();
         $reportData['academicSupport'] = $this->getAcademicSupport();
@@ -56,6 +57,14 @@ class National extends Max
         /** @var \Mrss\Service\Report\National $report */
         $report = $this->getServiceManager()->get('service.report.national');
         $data = $report->getData($this->getObservation(), false, 42);
+        return $data[0]['benchmarks'];
+    }
+
+    public function getOtherInstructional()
+    {
+        /** @var \Mrss\Service\Report\National $report */
+        $report = $this->getServiceManager()->get('service.report.national');
+        $data = $report->getData($this->getObservation(), false, 37);
         return $data[0]['benchmarks'];
     }
 

@@ -28,6 +28,20 @@ $this->headScript()->appendFile(
 <hr>
 
 
+<h3>Other Instructional Cost Measures</h3>
+
+<?= $this->partial(
+    'mrss/report/percentile.table.phtml',
+    array(
+        'heading' => $heading,
+        'breakpoints' => $breakpoints,
+        'reportData' => $reportData['other'],
+        'valueColumnLabel' => 'Reported Value'
+    )
+) ?>
+
+<hr>
+
 
 
 <h3>Student Services Costs</h3>
