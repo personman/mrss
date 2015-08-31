@@ -324,9 +324,6 @@ class ReportController extends AbstractActionController
         if ($this->params()->fromRoute('open')) {
             $open = true;
         }
-
-        $year = $this->getYearFromRouteOrStudy();
-
         $ipeds = $this->params()->fromRoute('ipeds');
         if ($ipeds) {
             /** @var \Mrss\Model\college $collegeModel */
@@ -338,6 +335,25 @@ class ReportController extends AbstractActionController
             $college = $this->currentCollege();
         }
 
+
+        $year = $this->getYearFromRouteOrStudy();
+
+        $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
+        // Don't show 2015 executive report yet
+        $newSubs = array();
+        $yearToSkip = 2015;
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->getYear() != $yearToSkip) {
+                $newSubs[] = $subscription;
+            }
+        }
+        $subscriptions = $newSubs;
+        if ($year == $yearToSkip) {
+            $year = $year - 1;
+        }
+
+
+
         //$this->view->headTitle('test');
 
         // Nccbp migration: temporary
@@ -348,8 +364,6 @@ class ReportController extends AbstractActionController
             return $this->redirect()->toUrl('/reports/executive/2014');
         }*/
 
-
-        $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
 
         /** @var \Mrss\Entity\Observation $observation */
         $observation = $college->getObservationForYear($year);
