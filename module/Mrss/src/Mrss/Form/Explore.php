@@ -8,7 +8,7 @@ use Zend\Form\Fieldset;
 class Explore extends AbstractForm
 {
 
-    public function __construct($benchmarks, $colleges, $years, $peerGroups)
+    public function __construct($benchmarks, $colleges, $years, $peerGroups, $includeTrends)
     {
         // Call the parent constructor
         parent::__construct('explore');
@@ -53,7 +53,7 @@ class Explore extends AbstractForm
                 ),
                 'attributes' => array(
                     'id' => 'inputType',
-                    'options' => $this->getPresentationOptions($years)
+                    'options' => $this->getPresentationOptions($includeTrends)
                 )
             )
         );
@@ -267,7 +267,7 @@ class Explore extends AbstractForm
         return $filter;
     }
 
-    protected function getPresentationOptions($years)
+    protected function getPresentationOptions($includeTrends)
     {
         $minYears = 3;
 
@@ -280,7 +280,10 @@ class Explore extends AbstractForm
         );
 
         // Remove trend option if there's not enough data
-        if (count($years) < $minYears) {
+        //if (count($years) < $minYears) {
+            //unset($options['line']);
+        //}
+        if (empty($includeTrends)) {
             unset($options['line']);
         }
 

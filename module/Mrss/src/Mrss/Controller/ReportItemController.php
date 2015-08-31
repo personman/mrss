@@ -38,8 +38,10 @@ class ReportItemController extends CustomReportController
         if ($this->currentStudy()->getId() == 2) {
             $years = array(2015);
         }
-        
-        $form = new Explore($benchmarks, $colleges, $years, $peerGroups);
+
+        $includeTrends = $this->getIncludeTrends();
+
+        $form = new Explore($benchmarks, $colleges, $years, $peerGroups, $includeTrends);
 
         // Are we editing an existing report item?
         $item = null;
@@ -143,6 +145,16 @@ class ReportItemController extends CustomReportController
         //$viewModel->setTerminal(true);
 
         return $viewModel;
+    }
+
+    public function getIncludeTrends()
+    {
+        $minYears = 3;
+
+        $model = $this->getSubscriptionModel();
+        $years = $model->getYearsWithSubscriptions($this->currentStudy());
+
+        return (count($years) >= $minYears);
     }
 
     public function reorderAction()
