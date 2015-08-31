@@ -27,14 +27,50 @@ class PercentileRank extends AbstractModel
         $year,
         $system = null
     ) {
-        return $this->getRepository()->findOneBy(
+
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select(array('r'));
+        $qb->from('\Mrss\Entity\PercentileRank', 'r');
+
+        $qb->andWhere('r.college = :college_id');
+        $qb->setParameter('college_id', $college->getId());
+
+        $qb->andWhere('r.benchmark = :benchmark_id');
+        $qb->setParameter('benchmark_id', $benchmark->getId());
+
+        $qb->andWhere('r.year = :year');
+        $qb->setParameter('year', $year);
+
+        if ($system) {
+            $qb->andWhere('r.system = :system_id');
+            $qb->setParameter('system_id', $system->getId());
+        } else {
+            $qb->andWhere('r.system IS NULL');
+        }
+
+        $result = null;
+        try {
+            $results = $qb->getQuery()->getResult();
+            if (count($results)) {
+                $result = $results[0];
+            }
+        } catch (\Exception $e) {
+            prd($e->getMessage());
+        }
+
+        return $result;
+
+        // The old, simple way didn't handle null systems correctly
+        /*return $this->getRepository()->findOneBy(
             array(
                 'college' => $college,
                 'benchmark' => $benchmark,
                 'year' => $year,
                 'system' => $system
             )
-        );
+        );*/
     }
 
     /**
