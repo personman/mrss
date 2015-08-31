@@ -89,7 +89,7 @@ class ReportItemController extends CustomReportController
 
                 // Save it, if requested
                 if ($buttonPressed == 'save') {
-                    if (!empty($data['title'])) {
+                    if (!empty($data['title']) || $data['presentation'] == 'text') {
                         $this->saveItem($data, $chart, $footnotes, $item);
                         $this->flashMessenger()->addSuccessMessage("Saved.");
                         return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));

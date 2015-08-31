@@ -61,7 +61,7 @@ function updateFormForChartType()
         textEditor.slideDown()
         chart.slideUp()
         footnotes.slideUp()
-        title.show()
+        //title.show()
         previewButton.hide()
     } else {
         textEditor.slideUp()
