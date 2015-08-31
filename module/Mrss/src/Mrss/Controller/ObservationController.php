@@ -912,7 +912,7 @@ class ObservationController extends AbstractActionController
 
             // Submitted values are for last year's data, until reports open
             $college = $this->currentCollege();
-            if (!$open) {
+            if ($checkReportOpen && !$open) {
                 $year = $year - 1;
             }
         }
