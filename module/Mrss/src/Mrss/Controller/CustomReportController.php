@@ -21,8 +21,10 @@ class CustomReportController extends ReportController
     public function indexAction()
     {
         $webinarLink = '/webinar';
-        if ($this->currentStudy()->getId() != 1) {
+        if ($this->currentStudy()->getId() == 2) {
             $webinarLink = '/contact';
+        } elseif ($this->currentStudy()->getId() == 3) {
+            $webinarLink = '/free-webinar';
         }
 
         return array(

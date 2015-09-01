@@ -1731,7 +1731,7 @@ return array(
                         'body' => "Your institution:\n\n\nWho will join the demo (please include name, title, and " .
                             "email for each person):\n\n\nWhich webinar would you like to join? \n" .
                             "Wednesday, Sept 9 at 10 am\n" .
-                            "Tuesday, Sept 15 at 2pm\n" 
+                            "Tuesday, Sept 15 at 2pm\n"
                     )
                 )
             ),
