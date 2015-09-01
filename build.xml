@@ -193,6 +193,10 @@
         <exec command="ssh max@maximizingresources.org 'cd beta.nccbp.org; bin/phing update'" passthru="true"/>
     </target>
 
+    <target name="ssh-git-deploy-fcs">
+        <exec command="ssh max@maximizingresources.org 'cd fcs.workforceproject.org; bin/phing update'" passthru="true"/>
+    </target>
+
     <target name="sync-from-production-db">
         <exec command="ssh max@maximizingresources.org 'shopt -s expand_aliases; ./mrssdump; tar czf mrss.production.tgz  mrss.production.sql;'" passthru="true"/>
         <exec command="scp max@maximizingresources.org:mrss.production.tgz /tmp" passthru="true" />

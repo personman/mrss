@@ -114,7 +114,7 @@ class Module
                     $currentStudy = $controller->currentStudy();
 
                     // NCCBP gets a different layout file
-                    if ($currentStudy->getId() == 1) {
+                    if (in_array($currentStudy->getId(), array(1, 4))) {
                         $controller->layout('layout/nccbp.phtml');
                     }
                 }, 100);
