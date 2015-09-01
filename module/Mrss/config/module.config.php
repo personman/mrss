@@ -1699,6 +1699,7 @@ return array(
                     )
                 )
             ),
+            // NCCBP
             'webinar' => array(
                 'type' => 'Segment',
                 'may_terminate' => true,
@@ -1714,6 +1715,23 @@ return array(
                             "Thursday, Sept 3 at 10am\n" .
                             "Thursday, Sept 10 at 2pm\n" .
                             "Monday, Sept 14 at 2pm  \n"
+                    )
+                )
+            ),
+            // Workforce
+            'free-webinar' => array(
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/free-webinar',
+                    'defaults' => array(
+                        'controller' => 'PhlyContact\Controller\Contact',
+                        'action' => 'index',
+                        'subject' => 'Free Webinar',
+                        'body' => "Your institution:\n\n\nWho will join the demo (please include name, title, and " .
+                            "email for each person):\n\n\nWhich webinar would you like to join? \n" .
+                            "Wednesday, Sept 9 at 10 am\n" .
+                            "Tuesday, Sept 15 at 2pm\n" 
                     )
                 )
             ),
