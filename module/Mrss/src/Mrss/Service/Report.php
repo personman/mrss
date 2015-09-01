@@ -973,11 +973,14 @@ class Report
             $chartData = $dataSet['data'];
             $chartDataWithLabels = array();
             foreach ($chartData as $point) {
-                if (empty($point['dataLabels']) || !is_array($point['dataLabels'])) {
-                    $point['dataLabels'] = array();
+                if (is_array($point)) {
+                    if (empty($point['dataLabels']) || !is_array($point['dataLabels'])) {
+                        $point['dataLabels'] = array();
+                    }
+
+                    $point['dataLabels']['enabled'] = true;
                 }
 
-                $point['dataLabels']['enabled'] = true;
                 $chartDataWithLabels[] = $point;
             }
 
