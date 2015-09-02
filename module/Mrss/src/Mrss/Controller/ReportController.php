@@ -299,6 +299,11 @@ class ReportController extends AbstractActionController
         }
 
         $year = $this->getYearFromRouteOrStudy();
+        $print = $this->params()->fromRoute('print');
+        $printMedia = 'print';
+        if ($print) {
+            $printMedia .= ', screen';
+        }
 
         /** @var \Mrss\Entity\Observation $observation */
         $observation = $this->currentObservation($year);
@@ -306,6 +311,9 @@ class ReportController extends AbstractActionController
 
         return array(
             'reportData' => $reportData,
+            'printMedia' => $printMedia,
+            'year' => $year,
+            'print' => $print,
             'college' => $observation->getCollege(),
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels()

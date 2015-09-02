@@ -822,7 +822,19 @@ return array(
                             'route' => '/summary[/:year]',
                             'defaults' => array(
                                 'action' => 'summary',
-                                'year' => null
+                                'year' => null,
+                                'print' => false
+                            )
+                        )
+                    ),
+                    'summary-print' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/summary-print[/:year]',
+                            'defaults' => array(
+                                'action' => 'summary',
+                                'year' => null,
+                                'print' => true
                             )
                         )
                     ),

@@ -1,0 +1,52 @@
+.summarySection .summaryChart {
+    width: 350px;
+    float: left;
+}
+
+.summarySection {
+    width: 800px;
+}
+
+a[href]:after {
+    content: none;
+}
+
+#wrapper:before {
+    content: url('/images/WTBP_Logo_black.png');
+    margin-left: 40px;
+    margin-top: 60px;
+}
+
+a.brand img {
+    display: none;
+}
+
+#wrapper .navbar {
+    display: none;
+}
+
+#wrapper .navbar .brand {
+    display: block;
+    margin-left: 50px;
+    background: #FFF url('/images/WTBP_Logo_black.png') no-repeat !important;
+    height: 55px;
+    width: 200px;
+}
+
+.nav-collapse {
+    display: none;
+}
+.navbar.navbar-inverse .navbar-inner {
+    background: #FFF !important;
+}
+
+h3 {
+    page-break-after: avoid;
+}
+.summarySection {
+    page-break-before: avoid;
+}
+
+.print-friendly-link {
+    display: none;
+}

@@ -1,4 +1,9 @@
 <?= $this->headLink()->appendStylesheet('/css/report-summary.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/report-summary-print.css', $printMedia) ?>
+
+<p class="print-friendly-link">
+    <a href="<?= $this->url('reports/summary-print', array('year' => $year)) ?>">Print-friendly version</a>
+</p>
 
 <h2>Key Benchmark Report</h2>
 
