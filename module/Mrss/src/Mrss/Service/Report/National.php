@@ -154,7 +154,7 @@ class National extends Report
                     $reported = null;
                 };
 
-                if ($benchmark['percentile_rank'] == '-') {
+                /*if ($benchmark['percentile_rank'] == '-') {
                     $rank = '-';
                 } elseif ($benchmark['percentile_rank'] < 1) {
                     $rank = '<1%';
@@ -165,6 +165,10 @@ class National extends Report
                     $rank = round($benchmark['percentile_rank']) . '%';
                 } else {
                     $rank = null;
+                }*/
+                $rank = $benchmark['percentile_rank'];
+                if (empty($benchmark['do_not_format_rank'])) {
+                    $rank = round($benchmark['percentile_rank']) . '%';
                 }
 
                 $dataRow = array(
