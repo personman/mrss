@@ -171,6 +171,12 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_o_cost_per_fte_student;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_fte_students_taught_by_ft;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    protected $inst_fte_students_taught_by_pt;
+
 
 
     // Form 1A (retired)
