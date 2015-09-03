@@ -24,7 +24,7 @@ class Percentile extends AbstractModel
      * @param null $system
      * @return PercentileEntity[]
      */
-    public function findByBenchmarkAndYear($benchmark, $year, $system = null)
+    public function findByBenchmarkAndYear($benchmark, $year, $breakpoints, $system = null)
     {
         if (empty($system)) {
             $system = null;
@@ -34,7 +34,8 @@ class Percentile extends AbstractModel
             array(
                 'benchmark' => $benchmark,
                 'year' => $year,
-                'system' => $system
+                'system' => $system,
+                'percentile' => $breakpoints
             ),
             array(
                 'percentile' => 'ASC'

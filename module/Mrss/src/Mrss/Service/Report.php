@@ -374,7 +374,7 @@ class Report
         }
 
         $percentiles = $this->getPercentileModel()
-            ->findByBenchmarkAndYear($benchmark, $observation->getYear());
+            ->findByBenchmarkAndYear($benchmark, $observation->getYear(), $this->getPercentileBreakpointsForStudy());
         $percentileData = array();
         foreach ($percentiles as /** var Percentile */ $percentile) {
             $percentileData[$percentile->getPercentile()] = $percentile
@@ -606,8 +606,9 @@ class Report
         );
 
         $year = $this->getObservation()->getYear();
+        $breakpoints = $this->getPercentileBreakpointsForStudy();
         $percentiles = $this->getPercentileModel()
-            ->findByBenchmarkAndYear($benchmark, $year, $this->getSystem());
+            ->findByBenchmarkAndYear($benchmark, $year, $breakpoints, $this->getSystem());
 
         $percentileData = array();
         foreach ($percentiles as $percentile) {
@@ -1013,6 +1014,14 @@ class Report
 
     public function getPercentileBreakpoints()
     {
+        //return array(10, 25, 50, 75, 90);
+        return array(10, 20, 25, 33, 40, 50, 60, 66, 75, 80, 90);
+    }
+
+    public function getPercentileBreakpointsForStudy()
+    {
+        $study = $this->getStudy();
+
         return array(10, 25, 50, 75, 90);
     }
 
@@ -1038,7 +1047,7 @@ class Report
 
     public function getPercentileBreakPointLabels()
     {
-        $breakpoints = $this->getPercentileBreakpoints();
+        $breakpoints = $this->getPercentileBreakpointsForStudy();
         $labels = array();
         foreach ($breakpoints as $breakpoint) {
             $label = $this->getOrdinal($breakpoint);
