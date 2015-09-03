@@ -30,6 +30,17 @@
     </div>
 <?php endif ?>
 
+
+<h2>Recently Created Reports</h2>
+
+<ul>
+<?php foreach ($recentReports as $report): ?>
+    <li>
+        <strong><?= $report->getName() ?></strong> - <?= $report->getCollege()->getName() ?>
+    </li>
+<?php endforeach ?>
+</ul>
+
 <?
 /**
  * Get a list of reports that need cache built, or report items.

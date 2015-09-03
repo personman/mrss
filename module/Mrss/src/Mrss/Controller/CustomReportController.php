@@ -226,9 +226,12 @@ class CustomReportController extends ReportController
 
         $reportsNeedingCache = $this->getReportModel()->findByEmptyCache($studyId);
 
+        $recentReports = $this->getReportModel()->findRecent($this->currentStudy());
+
         return array(
             'cacheClearDate' => $cacheClearDate,
-            'reportsNeedingCache' => $reportsNeedingCache
+            'reportsNeedingCache' => $reportsNeedingCache,
+            'recentReports' => $recentReports
         );
     }
 

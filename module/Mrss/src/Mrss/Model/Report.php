@@ -69,6 +69,19 @@ class Report extends AbstractModel
         return $results;
     }
 
+    public function findRecent($study)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'study' => $study
+            ),
+            array(
+                'id' => 'DESC'
+            ),
+            10
+        );
+    }
+
     /**
      * Save it with Doctrine
      *

@@ -48,16 +48,11 @@ class BarBuilder extends ChartBuilder
         asort($chartValues);
         $chartXCategories = array_keys($chartValues);
 
-        //pr($chartValues);
-        //pr($config);
-        //pr($chartXCategories);
-
         $series = $this->buildSeries($chartValues, $xBenchmark);
 
-
-
-
-        $this->addFootnote("$xLabel: " . $xBenchmark->getReportDescription(true));
+        if ($definition = $xBenchmark->getReportDescription(true)) {
+            $this->addFootnote("$xLabel: " . $definition);
+        }
 
         $barChart = new Bar;
         $barChart->setTitle($title)

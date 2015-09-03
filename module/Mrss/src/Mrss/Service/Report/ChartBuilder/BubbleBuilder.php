@@ -124,8 +124,13 @@ class BubbleBuilder extends ChartBuilder
         $xLabel = $xBenchmark->getDescriptiveReportLabel();
         $yLabel = $yBenchmark->getDescriptiveReportLabel();
 
-        $this->addFootnote("$xLabel: " . $xBenchmark->getReportDescription(true));
-        $this->addFootnote("$yLabel: " . $yBenchmark->getReportDescription(true));
+        if ($definition = $xBenchmark->getReportDescription(true)) {
+            $this->addFootnote("$xLabel: " . $definition);
+        }
+
+        if ($definition = $yBenchmark->getReportDescription(true)) {
+            $this->addFootnote("$yLabel: " . $definition);
+        }
 
 
         $series = array();

@@ -154,18 +154,6 @@ class National extends Report
                     $reported = null;
                 };
 
-                /*if ($benchmark['percentile_rank'] == '-') {
-                    $rank = '-';
-                } elseif ($benchmark['percentile_rank'] < 1) {
-                    $rank = '<1%';
-                    $benchmark['percentile_rank'] = $rank;
-                } elseif ($benchmark['percentile_rank'] > 99) {
-                    $rank = '>99%';
-                } elseif ($benchmark['percentile_rank']) {
-                    $rank = round($benchmark['percentile_rank']) . '%';
-                } else {
-                    $rank = null;
-                }*/
                 $rank = $benchmark['percentile_rank'];
                 if (empty($benchmark['do_not_format_rank'])) {
                     $rank = round($benchmark['percentile_rank']) . '%';
