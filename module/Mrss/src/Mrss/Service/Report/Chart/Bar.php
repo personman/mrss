@@ -32,11 +32,6 @@ class Bar extends AbstractChart
             'pointFormat' => ''
         );
 
-        $config['exporting']['buttons']['contextButton']['menuItems'] = array(
-            array(
-                'text' => 'test'
-            )
-        );
 
         $this->setConfig($config);
     }
