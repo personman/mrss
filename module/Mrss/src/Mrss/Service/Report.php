@@ -1045,9 +1045,12 @@ class Report
         return 'Your College';
     }
 
-    public function getPercentileBreakPointLabels()
+    public function getPercentileBreakPointLabels($breakpoints = null)
     {
-        $breakpoints = $this->getPercentileBreakpointsForStudy();
+        if (empty($breakpoints)) {
+            $breakpoints = $this->getPercentileBreakpointsForStudy();
+        }
+
         $labels = array();
         foreach ($breakpoints as $breakpoint) {
             $label = $this->getOrdinal($breakpoint);

@@ -12,11 +12,11 @@
 </style>
 
 <?php
-$this->headLink()->appendStylesheet('/css/custom-report.css');
+$this->headLink()->appendStylesheet('/css/custom-report.css?v=2');
 $this->headLink()->appendStylesheet('/css/chosen.min.css');
 
 $this->headScript()->appendFile(
-    '/js/report.js?v=1',
+    '/js/report.js?v=3',
     'text/javascript'
 );
 $this->headScript()->appendFile(
@@ -25,7 +25,7 @@ $this->headScript()->appendFile(
 );
 
 $this->headScript()->appendFile(
-    '/js/explore.js?v=1',
+    '/js/explore.js?v=2',
     'text/javascript'
 );
 
@@ -34,9 +34,13 @@ $this->headScript()->appendFile(
     'text/javascript'
 );
 
-
 ?>
 
+<?php if (!empty($defaultBreakpoints)): ?>
+    <script>
+        var defaultBreakpoints = <?= json_encode($defaultBreakpoints) ?>;
+    </script>
+<?php endif ?>
 
 <?php
 // Add an action and submit button to the form

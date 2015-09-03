@@ -8,7 +8,7 @@ use Zend\Form\Fieldset;
 class Explore extends AbstractForm
 {
 
-    public function __construct($benchmarks, $colleges, $years, $peerGroups, $includeTrends)
+    public function __construct($benchmarks, $colleges, $years, $peerGroups, $includeTrends, $allBreakpoints)
     {
         // Call the parent constructor
         parent::__construct('explore');
@@ -149,6 +149,21 @@ class Explore extends AbstractForm
             )
         );*/
 
+        $allBreakpoints = array_combine($allBreakpoints, $allBreakpoints);
+        $this->add(
+            array(
+                'name' => 'percentiles',
+                'type' => 'Zend\Form\Element\MultiCheckbox',
+                'options' => array(
+                    'label' => 'Percentiles',
+                    'value_options' => $allBreakpoints
+                ),
+                'attributes' => array(
+                    'id' => 'percentiles'
+                )
+            )
+        );
+
         $this->add(
             array(
                 'name' => 'content',
@@ -262,6 +277,7 @@ class Explore extends AbstractForm
         $filter = parent::getInputFilter();
         $filter->get('peerGroup')->setRequired(false);
         $filter->get('hideMine')->setRequired(false);
+        $filter->get('percentiles')->setRequired(false);
 
         //pr($filter);
         return $filter;

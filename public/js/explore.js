@@ -48,6 +48,7 @@ function updateFormForChartType()
     var textEditor = $('#text-editor')
     var chart = $('#chart')
     var footnotes = $('.custom-report-footnotes')
+    var percentiles = $('#control-group-percentiles')
     var hideMine = $('#control-group-hideMine')
     var hideNational = $('#control-group-hideNational')
     var previewButton = $('#previewButton')
@@ -112,6 +113,8 @@ function updateFormForChartType()
         subtitle.show()
         benchmark1.show()
         yearField.show()
+        percentiles.show()
+        populateDefaultBreakpoints()
     }
 }
 
@@ -193,4 +196,31 @@ function post_to_url(path, params, method) {
 
     document.body.appendChild(form);
     form.submit();
+}
+
+
+function populateDefaultBreakpoints()
+{
+    var percentileInputs = $('#control-group-percentiles input')
+
+    if (typeof defaultBreakpoints != 'undefined') {
+        // First, check to see if the checkboxes are blank
+        var allBlank = true
+        percentileInputs.each(function() {
+            if (this.checked) {
+                allBlank = false
+            }
+        })
+
+        if (allBlank) {
+            percentileInputs.each(function() {
+                var input = $(this)
+                if ($.inArray(parseInt(input.val()), defaultBreakpoints) > -1) {
+                    input[0].checked = true
+                } else {
+                    input[0].checked = false
+                }
+            })
+        }
+    }
 }

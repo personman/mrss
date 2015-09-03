@@ -12,6 +12,11 @@ class BarBuilder extends ChartBuilder
         $config = $this->getConfig();
 
         $x = $config['benchmark1'];
+        $percentileBreakpoints = $config['percentiles'];
+        if (empty($percentileBreakpoints)) {
+            $percentileBreakpoints = $this->getPercentileBreakpointsForStudy();
+        }
+
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $xFormat = $this->getFormat($xBenchmark);
         $xLabel = $xBenchmark->getDescriptiveReportLabel();
@@ -24,12 +29,12 @@ class BarBuilder extends ChartBuilder
 
         $collegeId = $this->getCollege()->getId();
 
-        $chartXCategories =$this->getPercentileBreakPointLabels();
+        $chartXCategories =$this->getPercentileBreakPointLabels($percentileBreakpoints);
 
         // @todo
         $series = array();
         $percentiles = $this->getPercentileModel()
-            ->findByBenchmarkAndYear($xBenchmark, $this->getYear(), $this->getPercentileBreakpointsForStudy());
+            ->findByBenchmarkAndYear($xBenchmark, $this->getYear(), $percentileBreakpoints);
         $percentileData = array();
         foreach ($percentiles as /** var Percentile */ $percentile) {
             if ($percentile->getPercentile() == 'N') {

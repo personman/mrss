@@ -41,7 +41,9 @@ class ReportItemController extends CustomReportController
 
         $includeTrends = $this->getIncludeTrends();
 
-        $form = new Explore($benchmarks, $colleges, $years, $peerGroups, $includeTrends);
+        $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
+
+        $form = new Explore($benchmarks, $colleges, $years, $peerGroups, $includeTrends, $allBreakpoints);
 
         // Are we editing an existing report item?
         $item = null;
@@ -140,7 +142,8 @@ class ReportItemController extends CustomReportController
             'chart' => $chart,
             'footnotes' => $footnotes,
             'report' => $report,
-            'edit' => $edit
+            'edit' => $edit,
+            'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy()
         ));
         //$viewModel->setTerminal(true);
 

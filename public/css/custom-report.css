@@ -66,7 +66,7 @@ body .explore .form-horizontal .control-label {
 body .form-horizontal .controls {
     margin-left: 5px;
 }
-.explore form input, .explore form textarea {
+.explore form input:not([type=checkbox]), .explore form textarea {
     width: 90%
 }
 
@@ -101,4 +101,11 @@ select {
 }
 .reportItems {
     width: 1140px;
+}
+
+#controls-percentiles {
+    margin: 30px 10px 0 45px;
+}
+#controls-percentiles label input {
+    border-top-color: red !important;
 }
