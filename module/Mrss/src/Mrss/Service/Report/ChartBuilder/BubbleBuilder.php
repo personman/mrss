@@ -50,6 +50,10 @@ class BubbleBuilder extends ChartBuilder
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);
 
+        if ($size) {
+            $zBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($size);
+        }
+
         $xFormat = $this->getFormat($xBenchmark);
         $yFormat = $this->getFormat($yBenchmark);
 
@@ -132,6 +136,17 @@ class BubbleBuilder extends ChartBuilder
             $this->addFootnote("$yLabel: " . $definition);
         }
 
+        if (!empty($zBenchmark)) {
+            $zLabel = $zBenchmark->getDescriptiveReportLabel();
+            $definition = $zBenchmark->getReportDescription(true);
+
+            if (empty($definition)) {
+                $definition = 'Bubble size.';
+            }
+
+            $this->addFootnote("$zLabel: $definition");
+        }
+
 
         $series = array();
 
@@ -198,6 +213,12 @@ class BubbleBuilder extends ChartBuilder
             ->setXLabel($xLabel)
             ->setYLabel($yLabel)
             ->addMedianLines($xMedian, $yMedian);
+
+        if (!empty($zBenchmark)) {
+            $sizeLabel = $zBenchmark->getDescriptiveReportLabel();
+            $bubbleChart->setZLabel($sizeLabel);
+        }
+
 
         $chart = $bubbleChart->getConfig();
 

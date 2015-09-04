@@ -3,7 +3,7 @@
  *
  * Author:   Torstein Honsi
  * Licence:  MIT
- * Version:  1.3.3
+ * Version:  1.3.5
  */
 /*global Highcharts, window, document, Blob */
 (function (Highcharts) {
@@ -34,9 +34,13 @@
             i,
             x,
 
+
         // Options
             dateFormat = options.dateFormat || '%Y-%m-%d %H:%M:%S';
 
+        if (this.options.chart.type == 'bubble' || this.options.chart.type == 'scatter') {
+            return this.getBubbleDataRows()
+        }
         // Loop the series and index values
         i = 0;
         each(this.series, function (series) {
@@ -66,7 +70,7 @@
                     }
 
                 });
-                i = j;
+                i = i + j;
             }
         });
 
@@ -101,6 +105,44 @@
             // Add the X/date/category
             row.unshift(category);
             dataRows.push(row);
+        });
+
+        return dataRows;
+    };
+
+    /**
+     * Get the data rows from bubble and scatter charts
+     */
+    Highcharts.Chart.prototype.getBubbleDataRows = function () {
+        var dataRows = [];
+        var bubble = false;
+
+        if (this.options.chart.type == 'bubble') {
+            bubble = true;
+        }
+
+        // Headers
+        var headers = [
+            'Series',
+            this.options.xAxis[0].title.text,
+            this.options.yAxis[0].title.text,
+        ];
+
+        if (bubble) {
+            headers.push('Bubble Size')
+        }
+
+        dataRows.push(headers);
+
+        // Row: Series, X, Y, (Z)
+        each(this.series, function (series) {
+            each(series.points, function (point) {
+                var row = [series.name, point.x, point.y];
+                if (bubble) {
+                    row.push(point.z);
+                }
+                dataRows.push(row);
+            });
         });
 
         return dataRows;
@@ -179,19 +221,27 @@
         return html;
     };
 
-    function getContent(chart, href, extention, content, MIME) {
+    function getContent(chart, href, extension, content, MIME) {
         var a,
             blobObject,
-            name = (chart.title ? chart.title.textStr.replace(/ /g, '-').toLowerCase() : 'chart'),
+            name,
             options = (chart.options.exporting || {}).csv || {},
             url = options.url || 'http://www.highcharts.com/studies/csv-export/download.php';
+
+        if (chart.options.exporting.filename) {
+            name = chart.options.exporting.filename;
+        } else if (chart.title) {
+            name = chart.title.textStr.replace(/ /g, '-').toLowerCase();
+        } else {
+            name = 'chart';
+        }
 
         // Download attribute supported
         if (downloadAttrSupported) {
             a = document.createElement('a');
             a.href = href;
             a.target      = '_blank';
-            a.download    = name + '.' + extention;
+            a.download    = name + '.' + extension;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -199,14 +249,14 @@
         } else if (window.Blob && window.navigator.msSaveOrOpenBlob) {
             // Falls to msSaveOrOpenBlob if download attribute is not supported
             blobObject = new Blob([content]);
-            window.navigator.msSaveOrOpenBlob(blobObject, name + '.' + extention);
+            window.navigator.msSaveOrOpenBlob(blobObject, name + '.' + extension);
 
         } else {
             // Fall back to server side handling
             Highcharts.post(url, {
                 data: content,
                 type: MIME,
-                extension: extention
+                extension: extension
             });
         }
     }

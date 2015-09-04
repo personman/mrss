@@ -20,7 +20,7 @@ class Chart extends AbstractHelper
 
     protected $exportingJsUri = '/js/highcharts-exporting.js?v=3';
 
-    protected $exportingCsvJsUri = '/js/highcharts-exporting-csv.js?v=2';
+    protected $exportingCsvJsUri = '/js/highcharts-exporting-csv.js?v=3';
 
     protected $moreJsUri = '/js/highcharts-more.js';
 

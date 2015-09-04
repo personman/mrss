@@ -102,4 +102,14 @@ class Bubble extends AbstractChart
 
         $this->setConfig($config);
     }
+
+    public function setZLabel($label)
+    {
+        $config = $this->getConfig();
+
+        $config['zLabel'] = $label;
+        $config['series'][0]['zLabel'] = $label;
+
+        return $config;
+    }
 }
