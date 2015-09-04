@@ -68,6 +68,8 @@ body .form-horizontal .controls {
 }
 .explore form input:not([type=checkbox]), .explore form textarea {
     width: 90%
+}
+.explore form input {
     clear: both;
 }
 
