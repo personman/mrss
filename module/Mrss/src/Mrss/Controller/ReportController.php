@@ -530,6 +530,7 @@ class ReportController extends AbstractActionController
                     $peerGroup->setName($name);
                     $peerGroup->setCollege($college);
 
+
                     // See if it exists
                     $existingGroup = $this->getPeerGroupModel()
                         ->findOneByCollegeAndName($college, $name);
@@ -539,7 +540,9 @@ class ReportController extends AbstractActionController
                         $this->getPeerGroupModel()->getEntityManager()
                             ->merge($peerGroup);
                     } else {
-                        $this->getPeerGroupModel()->save($peerGroup);
+                        $groupToSave = clone $peerGroup;
+                        $groupToSave->setStudy($this->currentStudy());
+                        $this->getPeerGroupModel()->save($groupToSave);
                     }
 
                     $this->getPeerGroupModel()->getEntityManager()->flush();
