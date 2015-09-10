@@ -15,13 +15,33 @@ class CurrentStudy extends AbstractHelper
      */
     protected $currentStudyPlugin;
 
+    protected $config;
+
     public function setPlugin(CurrentStudyPlugin $currentStudyPlugin)
     {
         $this->currentStudyPlugin = $currentStudyPlugin;
     }
 
-    public function __invoke()
+    public function __invoke($returnEntity = true)
     {
-        return $this->currentStudyPlugin->getCurrentStudy();
+        if ($returnEntity) {
+            $return = $this->currentStudyPlugin->getCurrentStudy();
+        } else {
+            $return = $this;
+        }
+
+        return $return;
+    }
+
+    public function setConfig($config)
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

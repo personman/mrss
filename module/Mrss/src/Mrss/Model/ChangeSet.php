@@ -31,7 +31,7 @@ class ChangeSet extends AbstractModel
         return $c;
     }
 
-    public function findByStudy($studyId, $limit = 100)
+    public function findByStudy($studyId, $limit = 1000)
     {
         return $this->getRepository()->findBy(
             array(

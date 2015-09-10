@@ -12,6 +12,7 @@ use Zend\Log\Writer\Stream;
 use Zend\Navigation\Page\Mvc;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
+use Zend\Config\Config;
 
 class Module
 {
@@ -111,12 +112,10 @@ class Module
         $e->getApplication()->getEventManager()->getSharedManager()
             ->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
                     $controller = $e->getTarget();
-                    $currentStudy = $controller->currentStudy();
 
-                    // NCCBP gets a different layout file
-                    if (in_array($currentStudy->getId(), array(1, 4))) {
-                        $controller->layout('layout/nccbp.phtml');
-                    }
+                    $studyConfig = $controller->getServiceLocator()->get('study');
+                    $layout = $studyConfig->layout;
+                    $controller->layout('layout/' . $layout);
                 }, 100);
     }
 
@@ -253,6 +252,22 @@ class Module
                         $cache->setMemcache($memcache);
                         return $cache;
                 },*/
+                'study' => function ($sm) {
+                    // Load the default study config
+                    $studyConfig = new Config(include 'config/studies/study.default.php', true);
+
+                    // Override with study-specivic config
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+                    $studyId = $currentStudy->getId();
+
+                    if ($studyConfigArray = include "config/studies/study.$studyId.php") {
+                        $specificStudyConfig = new Config($studyConfigArray);
+                        $studyConfig->merge($specificStudyConfig);
+                    }
+
+                    return $studyConfig;
+                },
                 'import.nccbp' => function ($sm) {
                     // Prepare the importer with the db to import from and the em
                     $nccbpDb = $sm->get('nccbp-db');
@@ -823,6 +838,8 @@ class Module
                     // Now inject the plugin
                     $helper = new View\Helper\CurrentStudy;
                     $helper->setPlugin($plugin);
+
+                    $helper->setConfig($sm->getServiceLocator()->get('study'));
 
                     return $helper;
                 },

@@ -11,6 +11,18 @@ $this->headScript()->appendFile(
 
 <h1>Report of National Aggregate Data</h1>
 
+    <p>
+        <a href="<?= $this->url(
+            'reports/national',
+            array(
+                'year' => $year,
+                'format' => 'excel'
+            )
+        ) ?>" class="btn btn-default">
+            <span class="glyphicon glyphicon-circle-arrow-down"></span>
+            Download Report
+        </a>
+    </p>
 
 
 <h3>Instructional Activity Costs</h3>

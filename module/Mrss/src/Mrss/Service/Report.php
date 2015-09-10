@@ -1012,6 +1012,7 @@ class Report
         return $format;
     }
 
+    // All possible percentil breakpoints
     public function getPercentileBreakpoints()
     {
         //return array(10, 25, 50, 75, 90);
@@ -1021,8 +1022,13 @@ class Report
     public function getPercentileBreakpointsForStudy()
     {
         $study = $this->getStudy();
+        $config = $this->getServiceManager()->get('study');
 
-        return array(10, 25, 50, 75, 90);
+        $breakpointsString = $config->breakpoints;
+        $breakpoints = explode(',', $breakpointsString);
+
+        return $breakpoints;
+        //return array(10, 25, 50, 75, 90);
     }
 
     public function getPercentileLabel($label)

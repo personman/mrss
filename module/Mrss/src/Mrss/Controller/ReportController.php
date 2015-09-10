@@ -217,11 +217,14 @@ class ReportController extends AbstractActionController
 
     public function nationalAction()
     {
+        // HTML or Excel?
+        $format = $this->params()->fromRoute('format');
+
         if ($redirect = $this->checkReportsAreOpen()) {
             return $redirect;
         }
 
-        if ($this->currentStudy()->getId() == 2) {
+        if ($this->currentStudy()->getId() == 2 && $format != 'excel') {
             return $this->maxNationalAction();
         }
 
@@ -266,9 +269,8 @@ class ReportController extends AbstractActionController
         $reportData = $this->getServiceLocator()->get('service.report.national')
             ->getData($observation, $system);
 
-        // HTML or Excel?
-        $format = $this->params()->fromRoute('format');
 
+        // Download?
         if ($format == 'excel') {
             $this->getServiceLocator()->get('service.report.national')
                 ->download($reportData, $system);
@@ -1059,6 +1061,7 @@ class ReportController extends AbstractActionController
 
         $view = new ViewModel(
             array(
+                'year' => $year,
                 'heading' => 'National Percentiles',
                 'reportData' => $reportData,
                 'breakpoints' => $this->getReportService()
