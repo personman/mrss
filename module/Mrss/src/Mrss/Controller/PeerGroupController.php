@@ -131,6 +131,7 @@ class PeerGroupController extends ReportController
         if (empty($id)) {
             $peerGroup = new PeerGroup();
             $peerGroup->setCollege($this->currentCollege());
+            $peerGroup->setStudy($this->currentStudy());
             $peerGroup->setYear($this->currentStudy()->getCurrentYear());
         } else {
             $peerGroup = $this->getPeerGroupModel()->find($id);

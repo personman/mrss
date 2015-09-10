@@ -247,6 +247,17 @@ class PeerGroup
     {
         return $this->college;
     }
+    public function setStudy($study)
+    {
+        $this->study = $study;
+
+        return $this;
+    }
+
+    public function getStudy()
+    {
+        return $this->study;
+    }
 
     /**
      * @param integer $year
