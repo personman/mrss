@@ -36,6 +36,11 @@ class PeerGroup
      */
     protected $college;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Study")
+     */
+    protected $study;
+
     /** @ORM\Column(type="string") */
     protected $name;
 

@@ -235,8 +235,11 @@ class ReportItemController extends CustomReportController
 
     protected function getPeerGroups()
     {
+        $model = $this->getPeerGroupModel();
+        $groups = $model->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy());
+
         $peerGroups = array();
-        foreach ($this->currentCollege()->getPeerGroups() as $group) {
+        foreach ($groups as $group) {
             $count = count($group->getPeers());
             $name = $group->getName();
             $peerGroups[$group->getId()] = "$name ($count)";

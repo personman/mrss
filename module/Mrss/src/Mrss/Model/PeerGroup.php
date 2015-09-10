@@ -38,7 +38,25 @@ class PeerGroup extends AbstractModel
     }
 
     /**
-     * Find all systems, ordered by name
+     * @param $college
+     * @param $study
+     * @return \Mrss\Entity\PeerGroup[]
+     */
+    public function findByCollegeAndStudy($college, $study)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'college' => $college,
+                'study' => $study
+            ),
+            array(
+                'name' => 'ASC'
+            )
+        );
+    }
+
+    /**
+     * Find all, ordered by name
      */
     public function findAll()
     {

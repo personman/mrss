@@ -13,7 +13,10 @@ class PeerGroupController extends ReportController
 {
     public function indexAction()
     {
-        $peerGroups = $this->currentCollege()->getPeerGroups();
+        $peerGroups = $this->getPeerGroupModel()->findByCollegeAndStudy(
+            $this->currentCollege(),
+            $this->currentStudy()
+        );
 
         $collegeNames = array();
         foreach ($peerGroups as $peerGroup) {
