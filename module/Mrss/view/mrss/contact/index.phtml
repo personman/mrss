@@ -52,19 +52,9 @@
         <h2>Contact Us</h2>
     </div>
 
-
-    <?php if ($this->currentStudy()->getId() == 3): ?>
-    <p class="page-intro">
-        Contact us about benchmarks, data collection and reporting, subscription, peer comparison, or to simply comment on the Workforce&nbsp;Project.
-    </p>
-    <?php endif ?>
-
-    <?php if ($this->currentStudy()->getId() == 2): ?>
+    <?php if ($text = $this->currentStudy(false)->getConfig()->contact_instructions): ?>
         <p class="page-intro">
-            Contact us about benefits, benchmarks, data collection and reporting, subscription, peer comparison, or to simply comment on Maximizing Resources for Student&nbsp;Success.
-        </p>
-        <p>
-            We're ready to answer any questions you have.
+            <?= $text ?>
         </p>
     <?php endif ?>
 

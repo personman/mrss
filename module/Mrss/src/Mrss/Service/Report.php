@@ -607,6 +607,7 @@ class Report
 
         $year = $this->getObservation()->getYear();
         $breakpoints = $this->getPercentileBreakpointsForStudy();
+        $breakpoints[] = 'N';
         $percentiles = $this->getPercentileModel()
             ->findByBenchmarkAndYear($benchmark, $year, $breakpoints, $this->getSystem());
 
