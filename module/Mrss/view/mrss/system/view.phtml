@@ -45,7 +45,14 @@
     <?php foreach ($system->getAdmins() as $user): ?>
         <tr>
             <td>
-                <?= $user->getFullName() ?>
+                <?php
+                $item = '<a title="Impersonate this user"
+                                href="/admin/user/impersonate/' . $user->getId()
+                    . '"><i class="icon icon-fire glyphicon glyphicon-transfer"></i></a> ';
+                $item .= "{$user->getFullName()}";
+                echo $item;
+                ?>
+
             </td>
             <td>
                 <a href="<?= $this->url(
