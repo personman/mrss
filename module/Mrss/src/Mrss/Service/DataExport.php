@@ -73,9 +73,12 @@ class DataExport
                     $years[$year] = array();
                 }
 
-                $years[$year][] = $study->getId();
+                $studyId = $study->getId();
+                $years[$year][] = $studyId;
             }
         }
+
+        $years = array(2015 => array($studyId), 2014 => array($studyId));
 
         return $years;
     }
