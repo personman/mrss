@@ -17,18 +17,12 @@
     <link rel="stylesheet" type="text/css" href="/css/index.css?v=3">
     <link rel="stylesheet" type="text/css" href="/css/app.css?v=3">
 
-    <?php if ($this->currentStudy()->getId() == 3): ?>
-    <link rel="stylesheet" type="text/css" href="/css/workforce.css">
-    <link rel="icon" href="/images/workforce-favicon.ico" type="image/x-icon">
+    <?php if ($cssFile = $this->currentStudy(false)->getConfig()->css): ?>
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=1">
     <?php endif ?>
 
-    <?php if ($this->currentStudy()->getId() == 2): ?>
-        <link rel="stylesheet" type="text/css" href="/css/mrss.css?v=1">
-        <link rel="stylesheet" type="text/css" href="/css/mrss-print.css?v=1" media="print">
-    <?php endif ?>
-
-    <?php if ($this->currentStudy()->getId() == 1): ?>
-        <link rel="stylesheet" type="text/css" href="/css/nccbp.css">
+    <?php if ($cssPrintFile = $this->currentStudy(false)->getConfig()->css_print): ?>
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssPrintFile ?>?v=1" media="print">
     <?php endif ?>
 
     <?php if ($favicon = $this->currentStudy(false)->getConfig()->favicon): ?>

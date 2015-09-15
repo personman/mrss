@@ -16,7 +16,15 @@
     <link href="/css/bootstrap3.css?v=3" rel="stylesheet">
     <link href="/css/bootstrap3-theme.css?v=3" rel="stylesheet">
     <link href="/css/content.css" rel="stylesheet" type="text/css" />
-    <link href="/css/nccbp.css?v=<?= 10 ?>" rel="stylesheet" type="text/css" />
+
+    <?php if ($cssFile = $this->currentStudy(false)->getConfig()->css): ?>
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=10">
+    <?php endif ?>
+
+    <?php if ($cssPrintFile = $this->currentStudy(false)->getConfig()->css_print): ?>
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssPrintFile ?>?v=1" media="print">
+    <?php endif ?>
+
 
     <!-- Google Fonts -->
     <? //<link href='http://fonts.googleapis.com/css?family=Fira+Sans:500,700,300italic|Cabin:400,400italic,500,700' rel='stylesheet' type='text/css'> ?>

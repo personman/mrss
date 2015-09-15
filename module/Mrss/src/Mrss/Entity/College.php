@@ -26,6 +26,11 @@ class College
     protected $ipeds;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    protected $opeId;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $address;
@@ -154,6 +159,18 @@ class College
     public function setIpeds($ipeds)
     {
         $this->ipeds = $ipeds;
+
+        return $this;
+    }
+
+    public function getOpeid()
+    {
+        return $this->opeId;
+    }
+
+    public function setOpeid($opeId)
+    {
+        $this->opeId = $opeId;
 
         return $this;
     }
