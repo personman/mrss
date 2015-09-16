@@ -622,11 +622,22 @@ class Module
 
                     return $routeCacheService;
                 },
+                'service.import.colleges' => function ($sm) {
+                    $service = new Service\Import\College();
+                    
+                    $collegeModel = $sm->get('model.college');
+                    $service->setCollegeModel($collegeModel);
+
+                    $systemModel = $sm->get('model.system');
+                    $service->setSystemModel($systemModel);
+
+                    return $service;
+                },
                 'service.formBuilder' => function ($sm) {
                     $service = new Service\FormBuilder;
 
-                        $variable = $sm->get('service.variableSubstitution');
-                        $service->setVariableSubstitutionService($variable);
+                    $variable = $sm->get('service.variableSubstitution');
+                    $service->setVariableSubstitutionService($variable);
 
                     return $service;
                 },

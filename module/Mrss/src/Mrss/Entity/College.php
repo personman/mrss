@@ -163,12 +163,12 @@ class College
         return $this;
     }
 
-    public function getOpeid()
+    public function getOpeId()
     {
         return $this->opeId;
     }
 
-    public function setOpeid($opeId)
+    public function setOpeId($opeId)
     {
         $this->opeId = $opeId;
 

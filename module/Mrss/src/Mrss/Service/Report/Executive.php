@@ -44,7 +44,7 @@ class Executive extends Report
                     'pt_perminus7_comp' => 'Completed'
                 ),
                 'description' => 'The percent of part-time students out of the unduplicated part-time, first-time,
-                 credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree or
+                 credit headcount from Fall ' . ($year - 6)  . ' IPEDS GRS cohort who either completed a degree or
                  certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before
                  fall ' . ($year - 1)  . '.'
             ),
@@ -146,8 +146,9 @@ class Executive extends Report
             $chartValues = array($yourCollegeLabel => $reportedValue);
 
             // Load the percentiles
+            $breakpoints = $this->getPercentileBreakpointsForStudy();
             $percentiles = $this->getPercentileModel()
-                ->findByBenchmarkAndYear($benchmark, $this->getYear());
+                ->findByBenchmarkAndYear($benchmark, $this->getYear(), $breakpoints);
 
             $percentileData = array();
             foreach ($percentiles as $percentile) {

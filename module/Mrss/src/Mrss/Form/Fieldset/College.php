@@ -52,6 +52,19 @@ class College extends Fieldset implements InputFilterProviderInterface
 
         $this->add(
             array(
+                'name' => 'opeId',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'OPE ID'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-opeid'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'address',
                 'type' => 'Text',
                 'options' => array(

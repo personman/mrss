@@ -30,6 +30,15 @@ class College extends AbstractModel
     }
 
     /**
+     * @param $opeId
+     * @return \Mrss\Entity\College|null
+     */
+    public function findOneByOpeId($opeId)
+    {
+        return $this->getRepository()->findOneBy(array('opeId' => $opeId));
+    }
+
+    /**
      * @param $id
      * @return null|\Mrss\Entity\College
      */

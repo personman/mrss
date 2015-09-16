@@ -14,6 +14,8 @@ class CollegeController extends AbstractActionController
 
     public function indexAction()
     {
+        $this->longRunningScript();
+
         $Colleges = $this->getServiceLocator()->get('model.college');
 
         // For completion heatmap
@@ -27,6 +29,8 @@ class CollegeController extends AbstractActionController
             'years' => $years
         );
     }
+
+
 
     public function flashtestAction()
     {
@@ -186,5 +190,51 @@ class CollegeController extends AbstractActionController
             'college' => $college,
             'redirect' => $this->params()->fromRoute('redirect')
         );
+    }
+
+    public function importAction()
+    {
+        $service = $this->getServiceLocator()->get('service.import.colleges');
+        $form = $service->getForm();
+
+        // Handle the form
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $this->longRunningScript();
+
+            $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $filename = $data['file']['tmp_name'];
+
+                $stats = $service->import($filename);
+
+                $this->flashMessenger()->addSuccessMessage($stats);
+                return $this->redirect()->toRoute('colleges/import');
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
+    protected function longRunningScript()
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(5600);
+
+        // Turn off query logging
+        $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
     }
 }

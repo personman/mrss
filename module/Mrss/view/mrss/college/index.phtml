@@ -29,7 +29,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 <table class="style1 table heatmap" id="colleges">
     <thead>
     <tr>
-        <th>IPEDS</th>
+        <th>IPEDS Id</th>
+        <th>OPE Id</th>
         <th>College</th>
         <?php foreach ($years as $year): ?>
             <th class="heatMapYear"><?= $year ?></th>
@@ -45,6 +46,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
         <tr>
             <td><?= $college->getIpeds() ?></td>
+            <td><?= $college->getOpeId() ?></td>
             <td>
                 <a href="<?= $this->url(
                     'colleges/view',
@@ -70,7 +72,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                     <td></td>
                 <?php endif ?>
 
-            <?php endforeach ?>
+            <?php endforeach  ?>
 
             <td style="font-size:80%">
                 <?php foreach ($college->getUsers() as $user): ?>
