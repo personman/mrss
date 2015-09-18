@@ -21,7 +21,7 @@ return array(
         'www.nccwtbp.org' => 3,
         'www.workforceproject.org' => 3,
         'fcs.workforceproject.org' => 4,
-        'fcs.dan'
+        'fcs.dan.com' => 4
     ),
     // These templates override the default data entry view
     'data_entry_templates' => array(
