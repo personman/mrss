@@ -6,7 +6,7 @@ return array(
     'layout' => 'nccbp.phtml',
     'favicon' => '/favicon.ico',
     'contact_instructions' => null,
-    'css' => 'nccbp.css'
+    'css' => 'nccbp.css',
     'css_print' => null
 );
 
