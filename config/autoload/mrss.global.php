@@ -20,7 +20,8 @@ return array(
         'nhebi-build.jccc.edu' => 2,
         'www.nccwtbp.org' => 3,
         'www.workforceproject.org' => 3,
-        'fcs.workforceproject.org' => 4
+        'fcs.workforceproject.org' => 4,
+        'fcs.dan'
     ),
     // These templates override the default data entry view
     'data_entry_templates' => array(
