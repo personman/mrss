@@ -1,0 +1,122 @@
+<?php $this->headLink()->appendStylesheet('/css/ui-lightness/jquery-ui-1.10.3.custom.min.css') ?>
+<style>
+    .help-block {
+        font-size: 80%;
+    }
+
+    #controls-submitButton {
+        width: 400px;
+    }
+    #submitButton {
+        float: left;
+    }
+    p.freeOr {
+        float: left;
+        width: 60px;
+        padding: 5px 16px 0px;
+    }
+    #freeSignIn {
+        float: left;
+        width: 80px;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    var allColleges = <?= $allColleges ?>;
+    var findUserUrl = '/find-user/';
+
+    $(function() {
+        setUpAutocomplete()
+        setUpJoinFree()
+    })
+
+    function setUpAutocomplete()
+    {
+        $('#search-field').autocomplete({
+            //source: '/institution/search',
+            source: allColleges,
+            delay: 100,
+            minLength: 1,
+            select: function(event, ui) {
+                var id = ui.item.id
+                $('#search-id').val(id)
+            }
+        })
+    }
+
+    function setUpJoinFree()
+    {
+        // @todo: handle form in error state (don't hide fields)
+        // Hide some stuff
+        $('.control-group').hide()
+        $('legend').hide()
+        $('#control-group-user-email').show()
+        $('#control-group-submitButton').show()
+
+        // Handle form submit form email checking
+        $('form#subscription-free').submit(function() {
+            setStateLoading()
+
+            var email = $('#user-email').val()
+            findUserUrl = findUserUrl + email
+            $.getJSON(findUserUrl, function(data) {
+                loadingDone()
+
+                if (data.userExists) {
+                    existingJoinFree()
+                } else {
+                    newJoinFree()
+                }
+            })
+
+            return false
+        })
+    }
+
+    function newJoinFree()
+    {
+        $('.control-group, legend').show()
+    }
+
+    /**
+     * The user exists, so give them the options to log in or reset their password
+     */
+    function existingJoinFree()
+    {
+        var form = $('form#subscription-free')
+
+        // Remove event handler
+        //$.off('submit', 'form#subscription-free')
+        form.unbind()
+
+        // Show a little message
+        form.find('#fieldset-buttons').prepend('<p>You already have a user account with us, so you can reset your password if needed or just sign in.</p>')
+
+        // Show the next steps
+        form.attr('action', '/reset-password')
+        $('#user-email').attr('name', 'email')
+        $('#submitButton').val('Reset Password').css('width', '150px')
+        $('#submitButton').after('<p class="freeOr">OR</p><a class="btn login-btn" id="freeSignIn" role="button" href="/user/login">Sign In</a>')
+    }
+
+    function setStateLoading()
+    {
+        var fieldsetButtons = $('#fieldset-buttons')
+        fieldsetButtons.find('input').hide()
+        fieldsetButtons.append('<div class="loading"><img src="/img/loading.gif" /></div>')
+    }
+
+    function loadingDone()
+    {
+        var fieldsetButtons = $('#fieldset-buttons')
+        fieldsetButtons.find('input').show()
+        fieldsetButtons.find('.loading').remove()
+    }
+</script>
+
+
+
+<h1>Join</h1>
+
+<?= $this->ztbForm($this->form->prepare()) ?>

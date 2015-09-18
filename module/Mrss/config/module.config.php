@@ -321,6 +321,28 @@ return array(
                     )
                 )
             ),
+            'join-free' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'options' => array(
+                    'route' => '/join-free',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'joinFree'
+                    )
+                )
+            ),
+            'find-user' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/find-user/:email',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'findUser',
+                        'email' => null
+                    )
+                )
+            ),
             'subscribe' => array(
                 'type' => 'segment',
                 'priority' => 10,
@@ -1345,6 +1367,15 @@ return array(
                                 'controller' => 'subscription',
                                 'action' => 'download',
                                 'year' => null
+                            )
+                        )
+                    ),
+                    'search' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/search',
+                            'defaults' => array(
+                                'action' => 'search'
                             )
                         )
                     ),

@@ -10,6 +10,7 @@ use Mrss\Entity\SubscriptionDraft;
 use Mrss\Entity\Payment;
 use Mrss\Form\AbstractForm;
 use Mrss\Form\Payment as PaymentForm;
+use Mrss\Form\SubscriptionFree;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
@@ -164,6 +165,69 @@ class SubscriptionController extends AbstractActionController
         return array(
             'form' => $form
         );
+    }
+
+    /**
+     * Sending a json object with all colleges requires 400KB, but using AJAX means a 2-3 second delay between
+     * typing and the results updating. Too slow, so send the data up front.
+     * @return array
+     */
+    public function joinFreeAction()
+    {
+        //$this->ge
+        $form = new SubscriptionFree();
+
+        return array(
+            'form' => $form,
+            'allColleges' => $this->getAllColleges()
+        );
+    }
+
+    public function findUserAction()
+    {
+        $email = $this->params()->fromRoute('email');
+        $userExists = false;
+
+        if ($email) {
+            /** @var \Mrss\Model\User $userModel */
+            $userModel = $this->getServiceLocator()->get('model.user');
+
+            $user = $userModel->findOneByEmail($email);
+
+            if ($user) {
+                $userExists = true;
+            }
+        }
+
+        $response = array(
+            'userExists' => $userExists
+        );
+
+        return new JsonModel($response);
+    }
+
+    protected function getAllColleges()
+    {
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $colleges = $collegeModel->findAll();
+
+        $allColleges = array();
+        foreach ($colleges as $college) {
+            $nameAndState = $college->getName() . ' (' . $college->getState() . ')';
+            if ($ipeds = $college->getIpeds()) {
+                $nameAndState .= ', IPEDS: ' . $ipeds;
+            }
+            if ($opeId = $college->getOpeId()) {
+                $nameAndState .= ', OPE: ' . $opeId;
+            }
+            $allColleges[] = array(
+                'label' => $nameAndState,
+                'id' => $college->getId()
+            );
+        }
+
+        return json_encode($allColleges);
     }
 
     public function renewAction()

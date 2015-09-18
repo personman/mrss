@@ -16,7 +16,6 @@ class Version20140910153007 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != "mysql", "Migration can only be executed safely on 'mysql'.");
         
         $this->addSql("ALTER TABLE benchmarks ADD includeInNationalReport TINYINT(1) NOT NULL");
-        $this->addSql("UPDATE benchmarks set includeInNationalReport = true");
     }
 
     public function down(Schema $schema)

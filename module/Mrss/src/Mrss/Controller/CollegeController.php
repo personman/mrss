@@ -8,6 +8,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Debug\Debug;
 use Zend\Form\Form;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\View\Model\JsonModel;
 
 class CollegeController extends AbstractActionController
 {
@@ -71,6 +72,34 @@ class CollegeController extends AbstractActionController
         $Colleges = $this->getServiceLocator()->get('model.college');
 
         return array('colleges' => $Colleges->findAll());
+    }
+
+
+    /**
+     * Used for the autocomplete on the free signup page
+     *
+     * @return JsonModel
+     */
+    public function searchAction()
+    {
+        $term = $this->params()->fromQuery('term');
+
+        /** @var \Mrss\Model\College $model */
+        $model = $this->getServiceLocator()->get('model.college');
+
+        $institutions = $model->findByNameAndIdentifiers($term);
+        $json = array();
+        foreach ($institutions as $institution) {
+            $nameAndState = $institution->getName() . ' (' . $institution->getState() . ')';
+
+            $json[] = array(
+                'label' => $nameAndState,
+                'value' => $nameAndState,
+                'id' => $institution->getId()
+            );
+        }
+
+        return new JsonModel($json);
     }
 
     public function peersAction()

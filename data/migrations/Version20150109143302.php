@@ -16,7 +16,6 @@ class Version20150109143302 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         
         $this->addSql('ALTER TABLE benchmark_groups ADD url VARCHAR(255) NOT NULL');
-        $this->addSql('UPDATE benchmark_groups SET url = id');
     }
 
     public function down(Schema $schema)

@@ -90,7 +90,7 @@ return array(
                 ),
                 array(
                     'controller' => 'colleges',
-                    'action' => 'peers',
+                    'action' => array('peers', 'search'),
                     'roles' => array('guest')
                 ),
                 array(

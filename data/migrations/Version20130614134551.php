@@ -17,14 +17,6 @@ class Version20130614134551 extends AbstractMigration
         
         $this->addSql("ALTER TABLE studies ADD logo VARCHAR(255) NOT NULL");
 
-        // Add the logos
-        $this->addSql(
-            "UPDATE studies SET logo = '/images/mrss-logo.png' WHERE id = 2"
-        );
-
-        $this->addSql(
-            "UPDATE studies SET logo = '/images/wtp-logo.png' WHERE id = 3"
-        );
     }
 
     public function down(Schema $schema)

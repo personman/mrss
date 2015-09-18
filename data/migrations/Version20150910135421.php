@@ -21,7 +21,6 @@ class Version20150910135421 extends AbstractMigration
         $this->addSql('ALTER TABLE peer_groups ADD study_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE peer_groups ADD CONSTRAINT FK_CED87FA0E7B003E9 FOREIGN KEY (study_id) REFERENCES studies (id)');
         $this->addSql('CREATE INDEX IDX_CED87FA0E7B003E9 ON peer_groups (study_id)');
-        $this->addSql('UPDATE peer_groups SET study_id = 1');
     }
 
     /**

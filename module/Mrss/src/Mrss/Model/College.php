@@ -114,6 +114,33 @@ class College extends AbstractModel
 
     }
 
+    public function findByNameAndIdentifiers($term, $limit = 10)
+    {
+        $term = strtolower($term);
+        $limit = intval($limit);
+
+        $em = $this->getEntityManager();
+        $q = $em->createQuery(
+            "SELECT c
+            FROM Mrss\Entity\College c
+            WHERE c.name LIKE ?1
+            OR c.ipeds LIKE ?1
+            OR c.opeId LIKE ?1
+            ORDER BY c.name"
+        );
+        $q->setParameter(1, '%' . $term . '%');
+        $q->setMaxResults($limit);
+
+        try {
+            $results = $q->getResult();
+
+        } catch (\Exception $e) {
+            return array();
+        }
+
+        return $results;
+    }
+
     /**
      * @param PeerGroupEntity $peerGroup
      * @param StudyEntity $currentStudy

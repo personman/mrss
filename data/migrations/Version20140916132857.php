@@ -14,7 +14,6 @@ class Version20140916132857 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("INSERT INTO roles (parent_id, roleId) VALUES (2, 'viewer')");
-        $this->addSql("UPDATE users SET role = 'data' WHERE role = 'user'");
         $this->addSql("UPDATE roles SET parent_id = 7 WHERE roleId = 'contact'");
         $this->addSql("UPDATE roles SET parent_id = 6 WHERE roleId = 'data'");
         $this->addSql("UPDATE roles SET parent_id = 5 WHERE roleId = 'system_admin'");

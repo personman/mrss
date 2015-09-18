@@ -16,7 +16,6 @@ class Version20130912111531 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != "mysql", "Migration can only be executed safely on 'mysql'.");
         
         $this->addSql("ALTER TABLE benchmark_groups ADD format VARCHAR(255) DEFAULT NULL");
-        $this->addSql("UPDATE benchmark_groups SET format = 'one-col'");
     }
 
     public function down(Schema $schema)

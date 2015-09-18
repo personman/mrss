@@ -19,14 +19,6 @@ class Version20141217094854 extends AbstractMigration
         $this->addSql('ALTER TABLE benchmark_headings ADD type VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE users ADD adminBenchmarkSorting VARCHAR(255) DEFAULT NULL');
 
-        // Copy benchmark sequence to new field
-        $this->addSql('UPDATE benchmarks SET reportSequence = sequence');
-
-        // Set all heading types to data-entry
-        $this->addSql('UPDATE benchmark_headings SET type = "data-entry"');
-
-        // Duplicate headings, setting type to report
-        $this->addSql("INSERT INTO benchmark_headings (name, description, dbColumn, sequence, benchmarkGroup_id, type) SELECT name, description, dbColumn, sequence, benchmarkGroup_id, 'report' FROM benchmark_headings WHERE type = 'data-entry'");
     }
 
     public function down(Schema $schema)
