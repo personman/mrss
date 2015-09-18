@@ -71,9 +71,12 @@ class Module
 
         $this->checkStudyAtLogin($e);
 
-        $this->setupTitle($e);
+        try {
+            $this->setupTitle($e);
+            $this->setupNavigation($e);
+        } catch (\Exception $e) {
 
-        $this->setupNavigation($e);
+        }
     }
 
     public function setupNavigation(MvcEvent $e)
