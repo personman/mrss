@@ -12,7 +12,11 @@ class BarBuilder extends ChartBuilder
         $config = $this->getConfig();
 
         $x = $config['benchmark1'];
-        $percentileBreakpoints = $config['percentiles'];
+
+        if (!empty($config['percentiles'])) {
+            $percentileBreakpoints = $config['percentiles'];
+        }
+
         if (empty($percentileBreakpoints)) {
             $percentileBreakpoints = $this->getPercentileBreakpointsForStudy();
         }
