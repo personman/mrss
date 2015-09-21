@@ -62,25 +62,27 @@ class LineBuilder extends ChartBuilder
 
         // Peer group median
         $peerMedians = array();
-        if ($peerGroup) {
+        if (!empty($peerGroup)) {
             $peerGroupModel = $this->getPeerGroupModel();
             $peerGroup = $peerGroupModel->find($peerGroup);
 
-            list($peerMedians, $peerIds) = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
+            if ($peerGroup) {
+                list($peerMedians, $peerIds) = $this->getPeerMedians($peerGroup, $dbColumn, array_keys($medianData));
 
-            $peerFootnote = "(Select a peer group with at least {$this->minimumPeers} data points.)";
-            if (count($peerIds) >= $this->minimumPeers) {
-                $this->setPeers($peerIds);
+                $peerFootnote = "(Select a peer group with at least {$this->minimumPeers} data points.)";
+                if (count($peerIds) >= $this->minimumPeers) {
+                    $this->setPeers($peerIds);
 
-                $includedPeers = $this->getCollegeModel()->findByIds($peerIds);
-                $peerNames = array();
-                foreach ($includedPeers as $peer) {
-                    $peerNames[] = $peer->getNAme();
+                    $includedPeers = $this->getCollegeModel()->findByIds($peerIds);
+                    $peerNames = array();
+                    foreach ($includedPeers as $peer) {
+                        $peerNames[] = $peer->getNAme();
+                    }
+                    $peerFootnote = implode(', ', $peerNames);
                 }
-                $peerFootnote = implode(', ', $peerNames);
-            }
 
-            $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
+                $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
+            }
         }
 
         list($data, $medianData, $peerMedians) = $this->fillInGaps($data, $medianData, $peerMedians);
