@@ -35,6 +35,7 @@ class Peer extends Report
         $year = $peerGroup->getYear();
         $benchmarks = $peerGroup->getBenchmarks();
         $colleges = $peerGroup->getPeers();
+
         $colleges[] = $peerGroup->getCollege()->getId();
 
         $observations = array();

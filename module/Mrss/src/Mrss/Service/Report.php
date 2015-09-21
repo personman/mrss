@@ -1392,8 +1392,10 @@ class Report
 
     public function setObservation(Observation $observation)
     {
-        $observation->getYear();
-        $this->observation = $observation;
+        if (!empty($observation)) {
+            $observation->getYear();
+            $this->observation = $observation;
+        }
 
         return $this;
     }

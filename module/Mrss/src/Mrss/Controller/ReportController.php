@@ -537,12 +537,13 @@ class ReportController extends AbstractActionController
 
                     if ($existingGroup) {
                         $peerGroup->setId($existingGroup->getId());
+                        $peerGroup->setStudy($this->currentStudy());
                         $this->getPeerGroupModel()->getEntityManager()
                             ->merge($peerGroup);
                     } else {
-                        $groupToSave = clone $peerGroup;
-                        $groupToSave->setStudy($this->currentStudy());
-                        $this->getPeerGroupModel()->save($groupToSave);
+                        //$groupToSave = clone $peerGroup;
+                        $peerGroup->setStudy($this->currentStudy());
+                        $this->getPeerGroupModel()->save($peerGroup);
                     }
 
                     $this->getPeerGroupModel()->getEntityManager()->flush();
@@ -1335,6 +1336,10 @@ class ReportController extends AbstractActionController
 
     public function savePeerGroupToSession(PeerGroup $peerGroup)
     {
+        if ($id = $peerGroup->getId()) {
+            $peerGroup = $id;
+        }
+
         $this->getSessionContainer()->peerGroup = $peerGroup;
     }
 
@@ -1342,12 +1347,17 @@ class ReportController extends AbstractActionController
     {
         $peerGroup = $this->getSessionContainer()->peerGroup;
 
+        if (!is_object($peerGroup) && intval($peerGroup) > 0) {
+            $peerGroup = $this->getPeerGroupModel()->find($peerGroup);
+        }
+
         if (empty($peerGroup)) {
             $peerGroup = new PeerGroup();
         }
 
         // Always set the college to the current college
         $peerGroup->setCollege($this->currentCollege());
+        $peerGroup->setStudy($this->currentStudy());
 
         return $peerGroup;
     }
