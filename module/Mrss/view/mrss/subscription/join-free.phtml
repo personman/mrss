@@ -25,6 +25,7 @@
 <script>
     var allColleges = <?= $allColleges ?>;
     var findUserUrl = '/find-user/';
+    var formHasErrors = <?= $formHasErrors ?>;
 
     $(function() {
         setUpAutocomplete()
@@ -47,7 +48,14 @@
 
     function setUpJoinFree()
     {
-        // @todo: handle form in error state (don't hide fields)
+        // handle form in error state (don't hide fields)
+        if (formHasErrors) {
+            console.log('form has errors')
+            return false;
+        } else {
+            console.log('no errors')
+        }
+
         // Hide some stuff
         $('.control-group').hide()
         $('legend').hide()
@@ -55,7 +63,7 @@
         $('#control-group-submitButton').show()
 
         // Handle form submit form email checking
-        $('form#subscription-free').submit(function() {
+        $('form#subscription-free').one('submit', function() {
             setStateLoading()
 
             var email = $('#user-email').val()
@@ -88,7 +96,7 @@
 
         // Remove event handler
         //$.off('submit', 'form#subscription-free')
-        form.unbind()
+        form.off()
 
         // Show a little message
         form.find('#fieldset-buttons').prepend('<p>You already have a user account with us, so you can reset your password if needed or just sign in.</p>')

@@ -168,6 +168,8 @@ class SubscriptionController extends AbstractActionController
     }
 
     /**
+     * Join action for studies that let users enter data for free
+     *
      * Sending a json object with all colleges requires 400KB, but using AJAX means a 2-3 second delay between
      * typing and the results updating. Too slow, so send the data up front.
      * @return array
@@ -177,9 +179,58 @@ class SubscriptionController extends AbstractActionController
         //$this->ge
         $form = new SubscriptionFree();
 
+        $formHasErrors = 0;
+
+        // If the form is submitted, they need to create a new subscription and new user
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $collegeId = $data['id'];
+                $college = $this->getServiceLocator()
+                    ->get('model.college')->find($collegeId);
+
+                if (!empty($college)) {
+                    //prd($form->getData());
+                    // Create the observation
+                    $observation = $this->createOrUpdateObservation($college);
+
+                    $subscription = $this->createOrUpdateSubscription(
+                        array('paymentType' => 'free'),
+                        $college,
+                        $observation
+                    );
+
+                    // create the user. Send email now or wait for approval?
+                    // Set state to 0
+                    $defaultRole = 'data';
+                    $userData = $data['user'];
+                    $defaultState = 0;
+                    $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+
+                    $this->getSubscriptionModel()->getEntityManager()->flush();
+
+                    // @todo: redirect
+                    die('Subscription created.');
+                } else {
+                    die('Unable to find institution.');
+                }
+
+
+            } else {
+                $formHasErrors = 1;
+            }
+        } else {
+            //die('not post');
+        }
+
         return array(
             'form' => $form,
-            'allColleges' => $this->getAllColleges()
+            'allColleges' => $this->getAllColleges(),
+            'formHasErrors' => $formHasErrors
         );
     }
 
@@ -745,7 +796,8 @@ class SubscriptionController extends AbstractActionController
         $subscription = $this->createOrUpdateSubscription(
             $paymentForm,
             $college,
-            $observation
+            $observation,
+            $this->getDraftSubscription()
         );
 
         if (empty($subscription)) {
@@ -890,7 +942,7 @@ class SubscriptionController extends AbstractActionController
         return $college;
     }
 
-    public function createOrUpdateUser($data, $role, $college)
+    public function createOrUpdateUser($data, $role, $college, $state = null)
     {
         $email = $data['email'];
 
@@ -914,11 +966,17 @@ class SubscriptionController extends AbstractActionController
         $user->setExtension($data['extension']);
         $user->addStudy($this->getStudy());
 
+
         // 111111
         $user->setPassword('$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');
         
         // set role
         $user->setRole($role);
+
+        // State (0 = pending, 1 = active, 2 = disabled)
+        if ($state !== null) {
+            $user->setState($state);
+        }
         
 
         $userModel->save($user);
@@ -944,16 +1002,14 @@ class SubscriptionController extends AbstractActionController
     public function createOrUpdateSubscription(
         $paymentForm,
         College $college,
-        Observation $observation
+        Observation $observation,
+        $draftSubscription = null
     ) {
         // Payment method
         $method = $paymentForm['paymentType'];
 
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-
         // Make sure they're not already subscribed.
-        $subscription = $subscriptionModel->findOne(
+        $subscription = $this->getSubscriptionModel()->findOne(
             $this->getCurrentYear(),
             $college->getId(),
             $this->getStudy()->getId()
@@ -969,17 +1025,20 @@ class SubscriptionController extends AbstractActionController
         } elseif ($method == 'system') {
             $subscription->setPaymentSystemName($paymentForm['system']);
             $status = 'pending';
+        } elseif ($method == 'free') {
+            $status = 'complete';
         } elseif ($method == 'pilot') {
             $status = 'pilot';
         } else {
             $status = 'pending';
         }
 
-        // Get the agreement data from the session
-        $draftSubscription = $this->getDraftSubscription();
-        $agreement = json_decode($draftSubscription->getAgreementData(), true);
 
-        $amount = $this->getPaymentAmount();
+        if ($method == 'free') {
+            $amount = 0;
+        } else {
+            $amount = $this->getPaymentAmount();
+        }
 
         $subscription->setYear($this->getCurrentYear());
         $subscription->setStatus($status);
@@ -987,11 +1046,17 @@ class SubscriptionController extends AbstractActionController
         $subscription->setStudy($this->getStudy());
         $subscription->setPaymentMethod($method);
         $subscription->setObservation($observation);
-        $subscription->setDigitalSignature($agreement['signature']);
-        $subscription->setDigitalSignatureTitle($agreement['title']);
         $subscription->setPaymentAmount($amount);
 
-        $subscriptionModel->save($subscription);
+        if (!empty($draftSubscription)) {
+            // Get the agreement data from the session
+            $agreement = json_decode($draftSubscription->getAgreementData(), true);
+
+            $subscription->setDigitalSignature($agreement['signature']);
+            $subscription->setDigitalSignatureTitle($agreement['title']);
+        }
+
+        $this->getSubscriptionModel()->save($subscription);
 
         return $subscription;
     }
