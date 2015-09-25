@@ -26,7 +26,7 @@
         "phpoffice/phpexcel": "1.8.*",
         "mwillbanks/zfc-twitter-bootstrap": "*",
         "bjyoungblood/bjy-authorize": "1.*",
-        "goalio/goalio-mailservice": "1lib/Doctrine/ORM/Internal/Hydration/ObjectHydrator.php.0.1",
+        "goalio/goalio-mailservice": "1.0.1",
         "goalio/goalio-forgotpassword": "1.0.2",
         "goalio/goalio-forgotpassword-doctrine-orm": "*",
         "thesoftwarefarm/exprlib": "*",

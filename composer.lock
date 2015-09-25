@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "8602ee6691a221231361e7cf4f8ac402",
+    "content-hash": "ad73a5166929e130e3be2a4df21433db",
     "packages": [
         {
             "name": "behat/transliterator",
