@@ -1280,6 +1280,15 @@ return array(
                             )
                         )
                     ),
+                    'queue' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/queue',
+                            'defaults' => array(
+                                'action' => 'approvalQueue',
+                            )
+                        )
+                    ),
                     'impersonate' => array(
                         'type' => 'segment',
                         'options' => array(
