@@ -21,6 +21,9 @@ $this->headScript()->appendFile(
 <p>
     <span class="peer-titles">Peer institutions:</span><br>
     <?= implode(', ', $report['colleges']) ?>
+    <?php if (count($report['sections']) > 1): ?>
+        (Peers will be omitted from charts and tables if they did not report relevant data.)
+    <?php endif ?>
 </p>
 
 <?php if ($name = $peerGroup->getName()): ?>

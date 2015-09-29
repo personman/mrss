@@ -103,7 +103,7 @@ class Subscription extends AbstractModel
      * @param boolean $excludeOutliers
      * @return SubscriptionEntity[]
      */
-    public function findWithPartialObservations($study, $year, $benchmarks, $excludeOutliers = true)
+    public function findWithPartialObservations($study, $year, $benchmarks, $excludeOutliers = true, $notNull = true)
     {
         $rsm = new ResultSetMapping;
 
@@ -121,10 +121,13 @@ class Subscription extends AbstractModel
 
         $subQueries = array();
         $notNulls = array();
+
         foreach ($benchmarks as $benchmark) {
-            $rsm->addFieldResult('o', $benchmark, $benchmark);
-            $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
-            $notNulls[] = " AND $benchmark IS NOT NULL ";
+                $rsm->addFieldResult('o', $benchmark, $benchmark);
+                $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
+            if ($notNull) {
+                $notNulls[] = " AND $benchmark IS NOT NULL ";
+            }
         }
         $notNulls = implode(' ', $notNulls);
 
