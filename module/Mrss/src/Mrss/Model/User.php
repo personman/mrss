@@ -27,6 +27,18 @@ class User extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function findByState($state)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'state' => $state
+            ),
+            array(
+                'lastName' => 'ASC'
+            )
+        );
+    }
+
     /**
      * Find all colleges, ordered by name
      */

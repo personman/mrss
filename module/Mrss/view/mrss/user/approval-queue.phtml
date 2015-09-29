@@ -1,0 +1,28 @@
+<?php /** @var \Mrss\Entity\User[] $users */ ?>
+<h1>User Approval Queue</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Institution</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <?php foreach ($users as $user): ?>
+            <tr>
+                <td>
+                    <?= $user->getFullName() ?>
+                </td>
+                <td>
+                    <?= $user->getEmail() ?>
+                </td>
+                <td>
+                    <?= $user->getCollege()->getName() ?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

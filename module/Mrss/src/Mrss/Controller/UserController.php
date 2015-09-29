@@ -26,8 +26,7 @@ class UserController extends AbstractActionController
         $passwordReset = null;
 
         $id = $this->params('id');
-        /** @var \Mrss\Model\User $userModel */
-        $userModel = $this->getServiceLocator()->get('model.user');
+        $userModel = $this->getUserModel();
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $redirect = $this->params('redirect');
 
@@ -214,7 +213,7 @@ class UserController extends AbstractActionController
             die('s userstudies done');
         }
 
-        $userModel = $this->getServiceLocator()->get('model.user');
+        $userModel = $this->getUserModel();
 
         // Is the user editing themselves, or someone else?
         $someoneElse = false;
@@ -330,7 +329,7 @@ class UserController extends AbstractActionController
             $definitions = null;
         }
 
-        $userModel = $this->getServiceLocator()->get('model.user');
+        $userModel = $this->getUserModel();
         $userId = $this->zfcUserAuthentication()->getIdentity()->getId();
         $user = $userModel->find($userId);
         $user->setDataDefinitions($definitions);
@@ -565,13 +564,32 @@ class UserController extends AbstractActionController
         $user = $this->zfcUserAuthentication()->getIdentity();
         $user->setAdminBenchmarkSorting($org);
 
-        /** @var \Mrss\Model\User $userModel */
-        $userModel = $this->getServiceLocator()->get('model.user');
+        $userModel = $this->getUserModel();
         $userModel->save($user);
         $userModel->getEntityManager()->flush();
 
         $this->flashMessenger()->addSuccessMessage("Benchmark organization changed to $org.");
         return $this->redirect()->toRoute('benchmark');
+    }
+
+    public function approvalQueueAction()
+    {
+        // 0 is pending approval
+        $users = $this->getUserModel()->findByState(0);
+
+        return array(
+            'users' => $users
+        );
+    }
+
+    /**
+     * @return \Mrss\Model\User
+     */
+    protected function getUserModel()
+    {
+        $userModel = $this->getServiceLocator()->get('model.user');
+
+        return $userModel;
     }
 
     public function getSystemAdminSessionContainer()

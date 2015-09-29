@@ -843,7 +843,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             }
 
             $formatted = $prefix .
-                number_format($value, $decimalPlaces) .
+                number_format(floatval($value), $decimalPlaces) .
                 $suffix;
         }
 
