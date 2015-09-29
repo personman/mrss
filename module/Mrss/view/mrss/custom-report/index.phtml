@@ -19,9 +19,11 @@ $this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print'
 
 <h1>Custom Reports</h1>
 
+<?php if (false): ?>
 <div class="well">
     <p><a href="<?= $webinarLink ?>">Request a webinar</a> to learn more about custom reports.</p>
 </div>
+<?php endif ?>
 
 <div class="customReportList">
 <?php foreach ($reports as $report): ?>
