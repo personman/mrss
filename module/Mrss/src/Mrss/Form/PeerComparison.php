@@ -48,7 +48,8 @@ class PeerComparison extends AbstractForm
                 'type' => 'Select',
                 'options' => array(
                     'label' => 'Peer Institutions',
-                    'help-block' => 'Select at least 5 peer institutions.'
+                    'help-block' => 'Select at least 5 peer institutions.
+                                    <a href="/peer-groups">Manage your peer groups</a>.'
                 ),
                 'attributes' => array(
                     'id' => 'peers',

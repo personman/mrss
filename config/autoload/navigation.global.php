@@ -437,6 +437,10 @@ function getAccountMenu()
                 'label' => 'Manage Your Institution\'s Users',
                 'route' => 'institution/users'
             ),
+            'peer-groups' => array(
+                'label' => 'Manage Your Peer Groups',
+                'route' => 'peer-groups'
+            ),
             'logout' => array(
                 'label' => 'Sign Out',
                 'route' => 'zfcuser/logout',
@@ -507,16 +511,20 @@ function getAdminMenu()
         'action' => 'index'
     ),
     array(
+        'label' => 'User Approval Queue',
+        'route' => 'users/queue'
+    ),
+    array(
         'label' => 'Tools',
         'route' => 'tools',
     ),
-    array(
+    /*array(
         'label' => 'User',
         'route' => 'zfcuser',
         'controller' => 'zfcuser',
         'action' => 'index',
         'ulClass' => 'dropdown-menu',
-    )
+    )*/
 );
 
 }
