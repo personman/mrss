@@ -954,6 +954,11 @@ class SubscriptionController extends AbstractActionController
         if (empty($user)) {
             $user = new User;
             $createUser = true;
+
+            // State (0 = pending, 1 = active, 2 = disabled)
+            if ($state !== null) {
+                $user->setState($state);
+            }
         }
 
         $user->setCollege($college);
@@ -973,11 +978,6 @@ class SubscriptionController extends AbstractActionController
         // set role
         $user->setRole($role);
 
-        // State (0 = pending, 1 = active, 2 = disabled)
-        if ($state !== null) {
-            $user->setState($state);
-        }
-        
 
         $userModel->save($user);
 
