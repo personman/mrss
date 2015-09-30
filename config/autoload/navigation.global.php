@@ -233,6 +233,10 @@ return array(
                         'label' => 'Peer Comparisons',
                         'uri' => '/peer-report'
                     ),
+                    'custom-reports' => array(
+                        'label' => 'Custom Reports',
+                        'uri' => '/custom-reports'
+                    ),
                     /*'best-performers-report' => array(
                         'label' => 'Best Performers',
                         'uri' => '/best-performers-report'
