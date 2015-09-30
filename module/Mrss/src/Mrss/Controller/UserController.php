@@ -36,6 +36,9 @@ class UserController extends AbstractActionController
             $user->setPassword('nothing');
             $user->setRole('data');
 
+            // @todo: decide how to handle this for AAUP
+            $user->setState(1);
+
             if ($collegeId = $this->params('college')) {
                 $college = $collegeModel->find($collegeId);
             } else {
