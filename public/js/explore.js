@@ -105,6 +105,8 @@ function updateFormForChartType()
         peerGroup.show()
         hideMine.show()
         hideNational.show()
+        percentiles.show()
+        populateDefaultBreakpoints([50])
     }
 
     // Percentile bar
@@ -199,11 +201,15 @@ function post_to_url(path, params, method) {
 }
 
 
-function populateDefaultBreakpoints()
+function populateDefaultBreakpoints(breakPoints)
 {
     var percentileInputs = $('#control-group-percentiles input')
 
-    if (typeof defaultBreakpoints != 'undefined') {
+    if (!breakPoints) {
+        breakPoints = getDefaultBreakpoints()
+    }
+
+    if (typeof breakPoints != 'undefined') {
         // First, check to see if the checkboxes are blank
         var allBlank = true
         percentileInputs.each(function() {
@@ -215,7 +221,8 @@ function populateDefaultBreakpoints()
         if (allBlank) {
             percentileInputs.each(function() {
                 var input = $(this)
-                if ($.inArray(parseInt(input.val()), defaultBreakpoints) > -1) {
+
+                if ($.inArray(parseInt(input.val()), breakPoints) > -1) {
                     input[0].checked = true
                 } else {
                     input[0].checked = false
@@ -223,4 +230,17 @@ function populateDefaultBreakpoints()
             })
         }
     }
+}
+
+function getDefaultBreakpoints()
+{
+    // Convert to integers
+    converted = []
+    if (typeof defaultBreakpoints != 'undefined') {
+        for (var i in defaultBreakpoints) {
+            converted.push(parseInt(defaultBreakpoints[i]))
+        }
+    }
+
+    return converted
 }
