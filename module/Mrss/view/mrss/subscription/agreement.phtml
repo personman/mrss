@@ -12,8 +12,17 @@
 
     Annual subscription fees are as follows:
     <br>
-    Renewal registration: $<?= number_format($this->currentStudy()->getRenewalPrice()) ?>
-    <br>
+
+    <?php if ($this->currentStudy()->getId() == 1): ?>
+        Early-bird renewal registration: $1,250
+        <br>
+        Regular renewal registration: $1,450
+        <br>
+    <?php else: ?>
+        Renewal registration: $<?= number_format($this->currentStudy()->getRenewalPrice()) ?>
+        <br>
+    <?php endif ?>
+
     Early-Bird registration: $<?= number_format($this->currentStudy()->getEarlyPrice()) ?>
     <br>
     Regular registration: $<?= number_format($this->currentStudy()->getPrice()) ?>
