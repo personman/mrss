@@ -805,13 +805,14 @@ class SubscriptionController extends AbstractActionController
         }
 
         // Create the users, if needed
+        $defaultState = 1;
 
         // Admin first
         $adminUser = null;
         if (!empty($subscriptionForm['adminContact'])) {
             $adminContactForm = $subscriptionForm['adminContact'];
             $adminUser = $this
-                ->createOrUpdateUser($adminContactForm, 'contact', $college);
+                ->createOrUpdateUser($adminContactForm, 'contact', $college, $defaultState);
         }
 
         // Data user overrides (if it's the same user)
@@ -819,7 +820,7 @@ class SubscriptionController extends AbstractActionController
         if (!empty($subscriptionForm['dataContact'])) {
             $dataContactForm = $subscriptionForm['dataContact'];
             $dataUser = $this
-                ->createOrUpdateUser($dataContactForm, 'data', $college);
+                ->createOrUpdateUser($dataContactForm, 'data', $college, $defaultState);
         }
 
 
