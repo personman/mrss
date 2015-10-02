@@ -1187,7 +1187,7 @@ class ReportController extends AbstractActionController
 
             // Lou's issue
             $currentUser = $this->zfcUserAuthentication()->getIdentity();
-            if ($currentUser->getId() == 1) {
+            if ($currentUser->getId() == 93) {
                 $states = print_r($peerGroup->getStates(), true);
                 $id = print_r($peerGroup->getId(), true);
                 $nameG = print_r($peerGroup->getName(), true);
