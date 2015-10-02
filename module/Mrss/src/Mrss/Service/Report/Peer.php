@@ -384,12 +384,14 @@ class Peer extends Report
                     $college = $subscription->getCollege();
 
                     if (in_array($college->getId(), $collegeIds)) {
-                        $filteredColleges[] = $college;
+                        $filteredColleges[$college->getName()] = $college;
                         continue 2;
                     }
                 }
             }
         }
+
+        ksort($filteredColleges);
 
         return $filteredColleges;
     }
