@@ -133,6 +133,44 @@ class PeerComparisonDemographics extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'fourYearDegrees',
+                'type' => 'Select',
+                'required' => false,
+                'options' => array(
+                    'label' => 'Four Year Degrees'
+                ),
+                'attributes' => array(
+                    'id' => 'fourYearDegrees',
+                    'options' => array(
+                        'Yes' => 'Yes',
+                        'No' => 'No'
+                    ),
+                    'multiple' => 'multiple'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'onCampusHousing',
+                'type' => 'Select',
+                'required' => false,
+                'options' => array(
+                    'label' => 'On-campus Housing'
+                ),
+                'attributes' => array(
+                    'id' => 'onCampusHousing',
+                    'options' => array(
+                        'Yes' => 'Yes',
+                        'No' => 'No'
+                    ),
+                    'multiple' => 'multiple'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'ipedsFallEnrollment',
                 'type' => 'Text',
                 'required' => false,
@@ -389,6 +427,14 @@ class PeerComparisonDemographics extends AbstractForm
         $staffUnionized = new Input('staffUnionized');
         $staffUnionized->setRequired(false);
         $filter->add($staffUnionized);
+
+        $fourYearDegrees = new Input('fourYearDegrees');
+        $fourYearDegrees->setRequired(false);
+        $filter->add($fourYearDegrees);
+
+        $onCampusHousing = new Input('onCampusHousing');
+        $onCampusHousing->setRequired(false);
+        $filter->add($onCampusHousing);
 
         $ipedsEnrollement = new Input('ipedsFallEnrollment');
         $ipedsEnrollement->setRequired(false);

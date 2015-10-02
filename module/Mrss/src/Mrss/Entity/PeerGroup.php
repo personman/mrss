@@ -104,6 +104,12 @@ class PeerGroup
     /** @ORM\Column(type="string", nullable=true) */
     protected $percentageFullTime;
 
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $onCampusHousing;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    protected $fourYearDegrees;
+
     /** @ORM\Column(type="text", nullable=true) */
     protected $benchmarks;
 
@@ -704,6 +710,46 @@ class PeerGroup
         return $hours;
     }
 
+    public function setOnCampusHousing($housing)
+    {
+        $housing = implode('|', $housing);
+
+        $this->onCampusHousing = $housing;
+
+        return $this;
+    }
+
+    public function getOnCampusHousing()
+    {
+        $housing = explode('|', $this->onCampusHousing);
+
+        if ($housing[0] == '') {
+            $housing = array();
+        }
+
+        return $housing;
+    }
+
+    public function setFourYearDegrees($fourYear)
+    {
+        $fourYear = implode('|', $fourYear);
+
+        $this->fourYearDegrees = $fourYear;
+
+        return $this;
+    }
+
+    public function getFourYearDegrees()
+    {
+        $fourYear = explode('|', $this->fourYearDegrees);
+
+        if ($fourYear[0] == '') {
+            $fourYear = array();
+        }
+
+        return $fourYear;
+    }
+
     public function setBenchmarks($benchmarks)
     {
         $this->benchmarks = implode('|', $benchmarks);
@@ -799,6 +845,8 @@ class PeerGroup
             $this->getStaffUnionized() ||
             $this->getInstitutionalControl() ||
             $this->getInstitutionalType() ||
+            $this->getOnCampusHousing() ||
+            $this->getFourYearDegrees() ||
             $this->getBlk() ||
             $this->getAsian() ||
             $this->getHispAnyrace()

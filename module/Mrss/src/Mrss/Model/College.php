@@ -209,6 +209,34 @@ class College extends AbstractModel
             );
         }
 
+        // Filter by four year degrees
+        if ($peerGroup->getFourYearDegrees()) {
+            $qb->andWhere(
+                $qb->expr()->in(
+                    'o.four_year_degrees',
+                    ':fourYearDegrees'
+                )
+            );
+            $qb->setParameter(
+                'fourYearDegrees',
+                $peerGroup->getFourYearDegrees()
+            );
+        }
+
+        // Filter by on-campus housing
+        if ($peerGroup->getOnCampusHousing()) {
+            $qb->andWhere(
+                $qb->expr()->in(
+                    'o.on_campus_housing',
+                    ':onCampusHousing'
+                )
+            );
+            $qb->setParameter(
+                'onCampusHousing',
+                $peerGroup->getOnCampusHousing()
+            );
+        }
+
         // Filter by institutional control
         if ($peerGroup->getInstitutionalControl()) {
             $qb->andWhere(
@@ -485,8 +513,11 @@ class College extends AbstractModel
             $count = count($colleges);
 
             var_dump($count);
-            var_dump($colleges);
-            die('findByPeerGroup');
+            //var_dump($colleges);
+
+            pr($peerGroup->getFourYearDegrees());
+            pr($peerGroup->getOnCampusHousing());
+            //die('findByPeerGroup');
             //var_dump($qb); die;*/
         }
 

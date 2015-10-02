@@ -645,7 +645,9 @@ class ReportController extends AbstractActionController
                 'facultyUnionized',
                 'staffUnionized',
                 'institutionalType',
-                'institutionalControl'
+                'institutionalControl',
+                'onCampusHousing',
+                'fourYearDegrees'
             );
 
             foreach ($multiselects as $multiselect) {
@@ -658,6 +660,11 @@ class ReportController extends AbstractActionController
 
             if ($form->isValid()) {
                 $this->savePeerGroupToSession($peerGroup);
+
+                if ($peerGroup->getId()) {
+                    $this->getPeerGroupModel()->save($peerGroup);
+                    $this->getPeerGroupModel()->getEntityManager()->flush();
+                }
 
                 return $this->redirect()->toRoute('reports/peer');
             }

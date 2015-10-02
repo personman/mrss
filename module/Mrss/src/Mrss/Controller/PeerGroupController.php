@@ -242,7 +242,9 @@ class PeerGroupController extends ReportController
                 'facultyUnionized',
                 'staffUnionized',
                 'institutionalType',
-                'institutionalControl'
+                'institutionalControl',
+                'onCampusHousing',
+                'fourYearDegrees'
             );
 
             foreach ($multiselects as $multiselect) {

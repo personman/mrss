@@ -79,6 +79,20 @@ $form->setAttribute('action', $this->url('reports/peer'));
                 </p>
             <?php endif ?>
 
+            <?php if ($peerGroup->getFourYearDegrees()): ?>
+                <p>
+                    <strong>Four Year Degrees:</strong>
+                    <?= implode(', ', $peerGroup->getFourYearDegrees()) ?>
+                </p>
+            <?php endif ?>
+
+            <?php if ($peerGroup->getOnCampusHousing()): ?>
+                <p>
+                    <strong>On-campus Housing:</strong>
+                    <?= implode(', ', $peerGroup->getOnCampusHousing()) ?>
+                </p>
+            <?php endif ?>
+
             <?php if ($peerGroup->getWorkforceEnrollment()): ?>
                 <p>
                     <strong>Workforce Enrollment:</strong>
