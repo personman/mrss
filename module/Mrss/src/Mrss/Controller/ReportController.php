@@ -14,6 +14,9 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
+use Zend\Log\Formatter\Simple;
 
 class ReportController extends AbstractActionController
 {
@@ -1140,6 +1143,22 @@ class ReportController extends AbstractActionController
         }
     }
 
+    protected function getErrorLog($shortFormat = false)
+    {
+        $formatter = new Simple('%message%' . PHP_EOL);
+
+        $writer = new Stream('error.log');
+
+        if ($shortFormat) {
+            $writer->setFormatter($formatter);
+        }
+
+        $logger = new Logger;
+        $logger->addWriter($writer);
+
+        return $logger;
+    }
+
     /**
      * AJAX action for returning a list of possible peer colleges based on the
      * peerGroup stored in the session and the year in the url.
@@ -1164,6 +1183,28 @@ class ReportController extends AbstractActionController
                 $peerGroup,
                 $this->currentStudy()
             );
+
+
+            // Lou's issue
+            $currentUser = $this->zfcUserAuthentication()->getIdentity();
+            if ($currentUser->getId() == 1) {
+                $states = print_r($peerGroup->getStates(), true);
+                $id = print_r($peerGroup->getId(), true);
+                $nameG = print_r($peerGroup->getName(), true);
+                $collegeNames = '';
+                foreach ($colleges as $c) {
+                    $collegeNames .= "{$c->getName()} ({$c->getState()})\n";
+                }
+
+                $message = "======= Peer demo filter not working ======\n";
+                $message .= "States: $states\n";
+                $message .= "Id: $id\n";
+                $message .= "Name: $nameG\n";
+                $message .= "Colleges:\n$collegeNames\n";
+
+                $this->getErrorLog()->info($message);
+            }
+
 
             if (!empty($benchmarks)) {
                 $benchmarkIds = explode(',', $benchmarks);
