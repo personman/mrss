@@ -291,8 +291,8 @@ class CustomReportController extends ReportController
 
     protected function copyCustomReport(Report $sourceReport, $college)
     {
-        //$peerGroupIdToCopy = 225; // Peer group for sample reports
-        $peerGroupIdToCopy = null; // Peer group for sample reports
+        $peerGroupIdToCopy = 3465; // Peer group for sample reports
+        //$peerGroupIdToCopy = null; // Peer group for sample reports
         $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $college);
 
         $report = new Report;
