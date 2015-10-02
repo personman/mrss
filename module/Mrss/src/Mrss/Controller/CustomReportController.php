@@ -316,7 +316,8 @@ class CustomReportController extends ReportController
         /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $this->getServiceLocator()->get('model.college');
 
-        return $collegeModel->findByStudy($this->currentStudy());
+        //return $collegeModel->findByStudy($this->currentStudy());
+        return $collegeModel->findByState('MO');
     }
 
     /**
