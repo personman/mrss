@@ -100,6 +100,7 @@ select {
 }
 
 .report-item-preview {
+    width: 500px;
     padding-left: 20px;
 }
 .reportItems {

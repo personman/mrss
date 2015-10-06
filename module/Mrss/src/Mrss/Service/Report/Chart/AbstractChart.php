@@ -205,7 +205,7 @@ abstract class AbstractChart
         $axis = array(
             'title' => array(
                 'enabled' => true,
-                'style' => array('width' => '350px'),
+                'style' => array('width' => '300px'),
             ),
             'labels' => array(),
             'plotLines' => array()
@@ -223,7 +223,8 @@ abstract class AbstractChart
         $length = strlen($this->getYLabel());
 
         $offsetPerLine = 100;
-        $charactersPerLine = 60;
+        $offsetPerLine = 60;
+        $charactersPerLine = 50;
 
         $offset = (ceil($length / $charactersPerLine) - 1) * $offsetPerLine;
         if ($offset > 0) {

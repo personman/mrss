@@ -16,7 +16,7 @@ class Line extends AbstractChart
         $config['yAxis'] = array(
             'title' => array(
                 'style' => array(
-                    'width' => '350px'
+                    'width' => '300px'
                 ),
             )
         );

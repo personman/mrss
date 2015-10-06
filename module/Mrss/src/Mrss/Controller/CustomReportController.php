@@ -342,6 +342,7 @@ class CustomReportController extends ReportController
             $newPeerGroup->setName($sampleGroup->getName());
             $newPeerGroup->setCollege($college);
             $newPeerGroup->setPeers($peers);
+            $newPeerGroup->setStudy($this->currentStudy());
 
             $this->getPeerGroupModel()->save($newPeerGroup);
             $this->getPeerGroupModel()->getEntityManager()->flush();
