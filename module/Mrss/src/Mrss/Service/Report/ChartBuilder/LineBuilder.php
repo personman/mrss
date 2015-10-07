@@ -32,6 +32,12 @@ class LineBuilder extends ChartBuilder
         $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy());
         $data = array();
         foreach ($subscriptions as $subscription) {
+            // Skip current year if reporting isn't open yet.
+            if ($this->getStudy()->getCurrentYear() == $subscription->getYear()
+                && !$this->getStudy()->getReportsOpen()) {
+                continue;
+            }
+
             $data[$subscription->getYear()] = floatval($subscription->getObservation()->get($dbColumn));
         }
         ksort($data);

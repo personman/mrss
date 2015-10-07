@@ -8,7 +8,6 @@ use PHPExcel_Worksheet;
 use PHPExcel_Worksheet_Row;
 use PHPExcel_IOFactory;
 
-
 class Import
 {
     /** @var PHPExcel $excel */
