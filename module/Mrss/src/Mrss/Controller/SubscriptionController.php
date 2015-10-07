@@ -223,8 +223,6 @@ class SubscriptionController extends AbstractActionController
             } else {
                 $formHasErrors = 1;
             }
-        } else {
-            //die('not post');
         }
 
         return array(
@@ -986,18 +984,61 @@ class SubscriptionController extends AbstractActionController
         $this->getServiceLocator()->get('em')->flush();
 
         if (!empty($createUser)) {
-            // Send out email with one-time login link
-            $pwService = $this->getPasswordService();
-            $pwService->getOptions()
-                ->setResetEmailTemplate('email/subscription/newuser');
-            $pwService->getOptions()->setResetEmailSubjectLine(
-                'Welcome to ' . $this->getStudy()->getDescription()
-            );
-
-            $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
+            // If they're already approved, send them a password reset link
+            if ($state == 1) {
+                $this->sendPasswordResetEmail($user);
+            } else {
+                // If they're not approved, notify the approver
+                $this->notifyApprover($user);
+            }
         }
 
         return $user;
+    }
+
+    protected function sendPasswordResetEmail($user)
+    {
+        $pwService = $this->getPasswordService();
+        $pwService->getOptions()
+            ->setResetEmailTemplate('email/subscription/newuser');
+        $pwService->getOptions()->setResetEmailSubjectLine(
+            'Welcome to ' . $this->getStudy()->getDescription()
+        );
+
+        $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
+    }
+
+    protected function notifyApprover(User $user)
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+        $approverEmail = $studyConfig->approver_email;
+        $fromEmail = $studyConfig->from_email;
+
+        $email = new Message();
+        $email->addFrom($fromEmail);
+        $email->addTo($approverEmail);
+
+        $study = $this->currentStudy();
+        $studyName = $study->getName();
+
+        $collegeName = $user->getCollege()->getName();
+
+        $email->setSubject("New user pending for $studyName");
+        $userName = $user->getFullName();
+        $url = $this->getServiceLocator()->get('ViewHelperManager')->get('serverUrl')
+            ->__invoke('/users/queue');
+
+        $body = "
+            Name: $userName
+            Email: {$user->getEmail()}
+            Institution: $collegeName
+
+            Approve users: $url
+            ";
+
+        $email->setBody($body);
+
+        $this->getServiceLocator()->get('mail.transport')->send($email);
     }
 
     public function createOrUpdateSubscription(
@@ -1216,6 +1257,9 @@ class SubscriptionController extends AbstractActionController
 
     protected function sendWelcomeEmail(Subscription $subscription)
     {
+        $from_email = $this->currentStudy(false)->getConfig()->from_email;
+        $cc_email = $this->currentStudy(false)->getConfig()->cc_email;
+
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
@@ -1232,12 +1276,8 @@ class SubscriptionController extends AbstractActionController
 
         $message = new Message();
         $message->setSubject("Welcome to " . $study->getName());
-        $message->setFrom('no-reply@jccc.edu');
-        $message->addBcc('michelletaylor@jccc.edu');
-
-        if ($subscription->getStudy()->getId() == 2) {
-            $message->addBcc('louguthrie@jccc.edu');
-        }
+        $message->setFrom($from_email);
+        $message->addBcc($cc_email);
 
         // Add recipients
         $users = $subscription->getCollege()->getUsersByStudy($study);

@@ -589,6 +589,7 @@ class UserController extends AbstractActionController
                     $this->getUserModel()->save($user);
 
                     // @todo: send welcome email
+                    //$this->sendPasswordResetEmail($user);
                     $count++;
                 }
             }
@@ -610,6 +611,18 @@ class UserController extends AbstractActionController
         return array(
             'users' => $users
         );
+    }
+
+    protected function sendPasswordResetEmail($user)
+    {
+        $pwService = $this->getPasswordService();
+        $pwService->getOptions()
+            ->setResetEmailTemplate('email/subscription/newuser');
+        $pwService->getOptions()->setResetEmailSubjectLine(
+            'Welcome to ' . $this->getStudy()->getDescription()
+        );
+
+        $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
     }
 
     /**

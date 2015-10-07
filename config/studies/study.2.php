@@ -2,6 +2,7 @@
 
 // Maximizing Resources study config
 return array(
+    'cc_email' => 'michelletaylor@jccc.edu,louguthrie@jccc.edu',
     'favicon' => '/images/max-favicon.ico',
     'css' => 'mrss.css',
     'css_print' => 'mrss-print.css',
