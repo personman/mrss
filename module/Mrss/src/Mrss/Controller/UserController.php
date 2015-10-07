@@ -577,6 +577,33 @@ class UserController extends AbstractActionController
 
     public function approvalQueueAction()
     {
+        if ($this->getRequest()->isPost()) {
+            $usersToApprove = $this->params()->fromPost('users');
+            $usersToApprove = array_keys($usersToApprove);
+            $newState = 1; // Approve = 1
+
+            $count = 0;
+            foreach ($usersToApprove as $userId) {
+                if ($user = $this->getUserModel()->find($userId)) {
+                    $user->setState($newState);
+                    $this->getUserModel()->save($user);
+
+                    // @todo: send welcome email
+                    $count++;
+                }
+            }
+
+            $this->getUserModel()->getEntityManager()->flush();
+
+            $noun = 'user';
+            if ($count != 1) {
+                $noun .= 's';
+            }
+
+            $this->flashMessenger()->addSuccessMessage("$count $noun approved.");
+            return $this->redirect()->toRoute('users/queue');
+        }
+
         // 0 is pending approval
         $users = $this->getUserModel()->findByState(0);
 

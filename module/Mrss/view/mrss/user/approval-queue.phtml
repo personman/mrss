@@ -1,28 +1,44 @@
 <?php /** @var \Mrss\Entity\User[] $users */ ?>
 <h1>User Approval Queue</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Institution</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <?php foreach ($users as $user): ?>
+<form action="" class="form-horizontal" method="post">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    <?= $user->getFullName() ?>
-                </td>
-                <td>
-                    <?= $user->getEmail() ?>
-                </td>
-                <td>
-                    <?= $user->getCollege()->getName() ?>
-                </td>
+                <th></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Institution</th>
             </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            <?php foreach ($users as $user): ?>
+                <tr>
+                    <td>
+                        <input type="checkbox" name="users[<?= $user->getId() ?>]" />
+                    </td>
+                    <td>
+                        <a href="<?= $this->url('account/edit', array('id' => $user->getId(), 'redirect' => null)) ?>">
+                            <?= $user->getFullName() ?>
+                        </a>
+                    </td>
+                    <td>
+                        <?= $user->getEmail() ?>
+                    </td>
+                    <td>
+                        <?= $user->getCollege()->getName() ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+
+    <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-submitButton">
+            <div class="controls" id="controls-submitButton">
+                <input type="submit" name="buttons[submit]" class="btn btn-primary" id="submitButton" value="Approve">
+            </div>
+        </div>
+    </fieldset>
+</form>
