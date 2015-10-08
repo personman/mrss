@@ -3,3 +3,28 @@
 .logo img {
 	width: 230px;
 }
+
+h1, .page-header h2 {
+	color: black;
+	border-bottom: 4px solid #C50C46;
+}
+
+a.schedule-btn {
+	background: #04497B;
+}
+
+a.login-btn {
+	background: #C50C46;
+}
+
+.navbar-nav .open .dropdown-menu {
+	background: #04497B;
+}
+
+.btn-primary {
+	background: #04497B;
+}
+
+.renew-nav, .join-nav {
+	background: #618378;
+}
