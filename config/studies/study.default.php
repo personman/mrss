@@ -11,5 +11,6 @@ return array(
     'contact_instructions' => '',
     'css' => null,
     'css_print' => null,
-    'header_title' => null
+    'header_title' => null,
+    'user_role_choices' => 'viewer,contact,data' // Comma separated, no spaces
 );

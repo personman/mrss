@@ -18,7 +18,8 @@ class User extends Fieldset implements InputFilterProviderInterface
         $includeEmailConfirm = true,
         $adminControls = false,
         $em = null,
-        $roleSubset = false
+        $roleSubset = false,
+        $userRoleChoices = array('viewer', 'contact', 'data')
     ) {
         $this->includeEmailConfirm = $includeEmailConfirm;
 
@@ -143,6 +144,14 @@ class User extends Fieldset implements InputFilterProviderInterface
         }
 
         if ($adminControls) {
+            $userRoles = array(
+                'data' => 'Data Manager',
+                'contact' => 'Membership Coordinator',
+                'viewer' => 'View Reports Only',
+                'system_admin' => 'State System Administrator',
+                'admin' => 'NHEBI Staff'
+            );
+
             $this->add(
                 array(
                     'name' => 'role',
@@ -150,16 +159,10 @@ class User extends Fieldset implements InputFilterProviderInterface
                     'required' => true,
                     'options' => array(
                         'label' => 'Role',
-                        'help-block' => $this->getRoleHelp()
+                        'help-block' => $this->getRoleHelp($userRoles)
                     ),
                     'attributes' => array(
-                        'options' => array(
-                            'data' => 'Data Manager',
-                            'contact' => 'Membership Coordinator',
-                            'viewer' => 'View Reports Only',
-                            'system_admin' => 'State System Administrator',
-                            'admin' => 'NHEBI Staff'
-                        )
+                        'options' => $userRoles
                     )
                 )
             );
@@ -179,6 +182,17 @@ class User extends Fieldset implements InputFilterProviderInterface
                 );
             }
         } elseif ($roleSubset) {
+            $userRoles = array(
+                'data' => 'Data Manager',
+                'contact' => 'Membership Coordinator',
+                'viewer' => 'View Reports Only'
+            );
+            foreach ($userRoles as $key => $label) {
+                if (!in_array($key, $userRoleChoices)) {
+                    unset($userRoles[$key]);
+                }
+            }
+
             $this->add(
                 array(
                     'name' => 'role',
@@ -186,14 +200,10 @@ class User extends Fieldset implements InputFilterProviderInterface
                     'required' => true,
                     'options' => array(
                         'label' => 'Role',
-                        'help-block' => $this->getRoleHelp()
+                        'help-block' => $this->getRoleHelp($userRoles)
                     ),
                     'attributes' => array(
-                        'options' => array(
-                            'data' => 'Data Manager',
-                            'contact' => 'Membership Coordinator',
-                            'viewer' => 'View Reports Only'
-                        )
+                        'options' => $userRoles
                     )
                 )
             );
@@ -201,12 +211,26 @@ class User extends Fieldset implements InputFilterProviderInterface
         }
     }
 
-    protected function getRoleHelp()
+    protected function getRoleHelp($roles)
     {
-        return '<em>View Reports Only</em> users can only view reports.
-            <em>Membership Coordinators</em> can view reports, renew membership, and
-            manage users. <em>Data Managers</em> can view reports, renew memberships,
+        $descriptions = array();
+
+        if (!empty($roles['viewer'])) {
+            $descriptions[] = '<em>View Reports Only</em> users can only view reports.';
+        }
+
+        if (!empty($roles['contact'])) {
+            $descriptions[] = '<em>Membership Coordinators</em> can view reports, renew membership, and
+            manage users.';
+        }
+
+        if (!empty($roles['data'])) {
+            $descriptions[] = '<em>Data Managers</em> can view reports, renew memberships,
             manage users, and enter data.';
+        }
+
+
+        return implode(' ', $descriptions);
     }
 
     /**

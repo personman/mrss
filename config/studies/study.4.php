@@ -13,6 +13,7 @@ return array(
     'contact_instructions' => null,
     'css' => 'aaup.css',
     'css_print' => null,
-	'header_title' => 'Faculty<br>Compensation<br>Survey'
+	'header_title' => 'Faculty<br>Compensation<br>Survey',
+    'user_role_choices' => 'viewer'
 );
 
