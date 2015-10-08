@@ -9,11 +9,16 @@ h1, .page-header h2 {
 	border-bottom: 4px solid #C50C46;
 }
 
+.header-title h1 {
+	border-bottom: none;
+	text-transform: none !important;
+}
+
 a.schedule-btn {
 	background: #04497B;
 }
 
-a.login-btn {
+a.login-btn, #headerLoginForm button {
 	background: #C50C46;
 }
 
