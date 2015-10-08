@@ -12,6 +12,7 @@ return array(
     'favicon' => '/favicon.ico',
     'contact_instructions' => null,
     'css' => 'aaup.css',
-    'css_print' => null
+    'css_print' => null,
+	'header_title' => 'Faculty<br>Compensation<br>Survey'
 );
 

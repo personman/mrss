@@ -10,5 +10,6 @@ return array(
     'favicon' => '/favicon.ico',
     'contact_instructions' => '',
     'css' => null,
-    'css_print' => null
+    'css_print' => null,
+    'header_title' => null
 );

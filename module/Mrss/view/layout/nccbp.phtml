@@ -80,7 +80,9 @@
             </div>
 
             <div class="col-xs-1 header-title">
-                <h1>Faculty<br>Compensation<br>Survey</h1>
+			    <?php if ($headerTitle = $this->currentStudy(false)->getConfig()->header_title): ?>
+	                <h1><?= $headerTitle ?></h1>
+			    <?php endif ?>
             </div>
 
 
