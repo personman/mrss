@@ -18,51 +18,20 @@ class ReportItemController extends CustomReportController
     {
         $this->longRunningScript();
 
+        $footnotes = array();
+
         $id = $this->params('id');
         $report = $this->getReport($id);
         $this->report = $report;
 
+        $form = $this->getForm();
+
         $edit = false;
-
-        /** @var \Mrss\Entity\Study $study */
-        $study = $this->currentStudy();
-        $benchmarks = $this->getBenchmarks();
-        $footnotes = array();
-
-        $colleges = array();
-
-        $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
-        $peerGroups = $this->getPeerGroups();
-
-        // Quick hack until Max has a year open for reports
-        if ($this->currentStudy()->getId() == 2) {
-            $years = array(2015);
+        if ($item = $this->getItem()) {
+            $data = $item->getConfig(true);
+            $year = $data['year'];
+            $edit = true;
         }
-
-        $includeTrends = $this->getIncludeTrends();
-
-        $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
-
-        $form = new Explore($benchmarks, $colleges, $years, $peerGroups, $includeTrends, $allBreakpoints);
-
-        // Are we editing an existing report item?
-        $item = null;
-        $item_id = $this->params()->fromRoute('item_id');
-        if ($item_id) {
-            $item = $this->getReportItemModel()->find($item_id);
-            if ($item) {
-                $data = $item->getConfig(true);
-                $data['buttons']['submit'] = 'Save';
-                $data['buttons']['preview'] = 'Preview';
-                $data['buttons']['cancel'] = 'Cancel';
-
-                $form->setData($data);
-
-                $year = $data['year'];
-                $edit = true;
-            }
-        }
-
 
         $chart = null;
         if ($this->getRequest()->isPost()) {
@@ -73,12 +42,7 @@ class ReportItemController extends CustomReportController
                 $data = $form->getData();
 
                 // What type of button was pressed?
-                $buttonPressed = 'save';
-                if (!empty($data['isCancel'])) {
-                    $buttonPressed = 'cancel';
-                } elseif (!empty($data['isPreview'])) {
-                    $buttonPressed = 'preview';
-                }
+                $buttonPressed = $this->getButtonPressed($data);
 
                 // Handle cancel
                 if ($buttonPressed == 'cancel') {
@@ -111,12 +75,8 @@ class ReportItemController extends CustomReportController
             $form->setData($post);
         } else {
             if (isset($data)) {
-                /** @var \Mrss\Service\Report\ChartBuilder $builder */
-                $builder = $this->getReportService()->getChartBuilder($data);
-                $builder->setCollege($this->currentCollege());
-
+                $builder = $this->getChartBuilder($data);
                 $chart = $builder->getChart();
-
                 $footnotes = $builder->getFootnotes();
             }
         }
@@ -130,12 +90,7 @@ class ReportItemController extends CustomReportController
         $form->get('isPreview')->setValue(false);
 
         // Substitute variables (years)
-        $substitution = $this->getReportService()->getVariableSubstitution()->setStudyYear($year);
-        $finalFootnotes = array();
-        foreach ($footnotes as $key => $footnote) {
-            $finalFootnotes[$key] = $substitution->substitute($footnote);
-        }
-        $footnotes = $finalFootnotes;
+        $footnotes = $this->subFootnoteVariables($footnotes, $year);
 
         $viewModel = new ViewModel(array(
             'form' => $form,
@@ -145,9 +100,51 @@ class ReportItemController extends CustomReportController
             'edit' => $edit,
             'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy()
         ));
-        //$viewModel->setTerminal(true);
 
         return $viewModel;
+    }
+
+    public function getForm()
+    {
+        $benchmarks = $this->getBenchmarks();
+        $colleges = array();
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
+        $peerGroups = $this->getPeerGroups();
+
+
+        $includeTrends = $this->getIncludeTrends();
+
+        $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
+
+        $form = new Explore($benchmarks, $colleges, $years, $peerGroups, $includeTrends, $allBreakpoints);
+
+        // Are we editing an existing report item?
+        if ($item = $this->getItem()) {
+            $data = $item->getConfig(true);
+            $data['buttons']['submit'] = 'Save';
+            $data['buttons']['preview'] = 'Preview';
+            $data['buttons']['cancel'] = 'Cancel';
+
+            $form->setData($data);
+        }
+
+        return $form;
+    }
+
+    public function getItem()
+    {
+        // Are we editing an existing report item?
+        $item = null;
+        $item_id = $this->params()->fromRoute('item_id');
+        if ($item_id) {
+            $item = $this->getReportItemModel()->find($item_id);
+        }
+
+        return $item;
     }
 
     public function getIncludeTrends()
@@ -174,7 +171,12 @@ class ReportItemController extends CustomReportController
         }
 
         $this->getReportItemModel()->getEntityManager()->flush();
-        die('ok');
+
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->setContent('ok');
+
+        return $response;
     }
 
     public function deleteAction()
@@ -285,5 +287,38 @@ class ReportItemController extends CustomReportController
         $sequence++;
 
         return $sequence;
+    }
+
+    protected function subFootnoteVariables($footnotes, $year)
+    {
+        $substitution = $this->getReportService()->getVariableSubstitution()->setStudyYear($year);
+        $finalFootnotes = array();
+        foreach ($footnotes as $key => $footnote) {
+            $finalFootnotes[$key] = $substitution->substitute($footnote);
+        }
+        $footnotes = $finalFootnotes;
+
+        return $footnotes;
+    }
+
+    protected function getChartBuilder($data)
+    {
+        /** @var \Mrss\Service\Report\ChartBuilder $builder */
+        $builder = $this->getReportService()->getChartBuilder($data);
+        $builder->setCollege($this->currentCollege());
+
+        return $builder;
+    }
+
+    protected function getButtonPressed($data)
+    {
+        $buttonPressed = 'save';
+        if (!empty($data['isCancel'])) {
+            $buttonPressed = 'cancel';
+        } elseif (!empty($data['isPreview'])) {
+            $buttonPressed = 'preview';
+        }
+
+        return $buttonPressed;
     }
 }
