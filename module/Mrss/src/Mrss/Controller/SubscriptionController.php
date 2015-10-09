@@ -213,8 +213,8 @@ class SubscriptionController extends AbstractActionController
 
                     $this->getSubscriptionModel()->getEntityManager()->flush();
 
-                    // @todo: redirect
-                    die('Subscription created.');
+                    // redirect
+                    return $this->redirect()->toRoute('joined');
                 } else {
                     die('Unable to find institution.');
                 }
@@ -627,6 +627,11 @@ class SubscriptionController extends AbstractActionController
     }
 
     public function completeAction()
+    {
+
+    }
+
+    public function joinedAction()
     {
 
     }

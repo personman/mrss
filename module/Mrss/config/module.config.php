@@ -332,6 +332,17 @@ return array(
                     )
                 )
             ),
+            'joined' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'options' => array(
+                    'route' => '/joined',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'joined'
+                    )
+                )
+            ),
             'find-user' => array(
                 'type' => 'segment',
                 'options' => array(
