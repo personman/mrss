@@ -173,8 +173,8 @@ class College extends AbstractModel
             'WITH',
             's.college = c.id'
         );
-        $qb->where('s.year = :year');
-        $qb->setParameter('year', $peerGroup->getYear());
+        //$qb->where('s.year = :year');
+        //$qb->setParameter('year', $peerGroup->getYear());
         $qb->andWhere('s.study = :study_id');
         $qb->setParameter('study_id', $currentStudy->getId());
 
