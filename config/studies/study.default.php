@@ -12,5 +12,6 @@ return array(
     'css' => null,
     'css_print' => null,
     'header_title' => null,
-    'user_role_choices' => 'viewer,contact,data' // Comma separated, no spaces
+    'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
+    'copyright' => "2004 - " . date('Y') . " Johnson County Community College"
 );

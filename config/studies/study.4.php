@@ -14,6 +14,7 @@ return array(
     'css' => 'aaup.css',
     'css_print' => null,
 	'header_title' => 'Faculty<br>Compensation<br>Survey',
-    'user_role_choices' => 'viewer'
+    'user_role_choices' => 'viewer',
+    'copyright' => "1915 - " . date('Y') . " American Association of University Professors"
 );
 
