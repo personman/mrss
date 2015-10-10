@@ -1,6 +1,8 @@
 Maximizing Resources for Student Success
 =======================
 
+[![Code Climate](https://codeclimate.com/repos/54700e03e30ba02e71015c4c/badges/e725155cb57a15822c2f/gpa.svg)](https://codeclimate.com/repos/54700e03e30ba02e71015c4c/feed)
+
 Introduction
 ------------
 This application is a project of the National Higher Education Benchmark Institute
