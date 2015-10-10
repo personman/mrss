@@ -59,24 +59,24 @@ class AdminController extends AbstractActionController
 
     protected function emailTest()
     {
-        if (!empty($_GET['email'])) {
+        $email = $this->params()->fromGet('email');
+
+        if (!empty($email)) {
             // The template used by the PhpRenderer to create the content of the mail
             $viewTemplate = 'mrss/email/test';
 
             $from = 'no-reply@maximizingresources.org';
-            $to = 'personman2@gmail.com';
 
-            if (!empty($_GET['to'])) {
-                $to = $_GET['to'];
-            }
+            $toEmail = $this->params()->fromQuery('to', 'personman2@gmail.com');
 
-            $subject = 'Email test from ' . $_SERVER['HTTP_HOST'];
+            $uri = $this->getRequest()->getUri();
+            $subject = 'Email test from ' . $uri->getHost();
 
             $mailService = $this->getServiceLocator()->get('goaliomailservice_message');
-            $message = $mailService->createTextMessage($from, $to, $subject, $viewTemplate);
+            $message = $mailService->createTextMessage($from, $toEmail, $subject, $viewTemplate);
             $mailService->send($message);
 
-            $this->flashMessenger()->addSuccessMessage('Email sent to ' . $to);
+            $this->flashMessenger()->addSuccessMessage('Email sent to ' . $toEmail);
         }
     }
 }
