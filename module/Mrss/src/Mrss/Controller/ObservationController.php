@@ -254,18 +254,6 @@ class ObservationController extends AbstractActionController
         return $observation;
     }
 
-    protected function df($var)
-    {
-        if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
-            if ($var == 'die') {
-                die('End of debugging.');
-            }
-
-            pr($var);
-        }
-    }
-
-
     public function dataEntryAction()
     {
         // Fetch the form

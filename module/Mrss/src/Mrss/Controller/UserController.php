@@ -26,11 +26,13 @@ class UserController extends AbstractActionController
         $passwordReset = null;
 
         $id = $this->params('id');
+        $postUser = $this->params()->fromPost('user', array());
+
         $userModel = $this->getUserModel();
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $redirect = $this->params('redirect');
 
-        if ($id == 'add' || (empty($id) && empty($_POST['user']['id']))) {
+        if ($id == 'add' || (empty($id) && empty($postUser['id']))) {
             $user = new UserEntity();
             $user->setId('add');
             $user->setPassword('nothing');
@@ -48,7 +50,7 @@ class UserController extends AbstractActionController
             $user->setCollege($college);
         } else {
             if (empty($id)) {
-                $id = $_POST['user']['id'];
+                $id = $postUser['id'];
             }
 
             if (empty($id)) {
@@ -208,14 +210,6 @@ class UserController extends AbstractActionController
      */
     public function accounteditAction()
     {
-        if (!empty($_GET['usersstudies'])) {
-            $start = microtime(1);
-            $this->populateUserStudies();
-            $el = round(microtime(1) - $start, 3);
-            echo $el;
-            die('s userstudies done');
-        }
-
         $userModel = $this->getUserModel();
 
         // Is the user editing themselves, or someone else?

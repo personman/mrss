@@ -60,10 +60,6 @@ class SubscriptionController extends AbstractActionController
      */
     public function viewAction()
     {
-        if (!empty($_GET['slack'])) {
-            $this->slack('slack test.');
-        }
-
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $study = $this->currentStudy();
 
@@ -121,7 +117,7 @@ class SubscriptionController extends AbstractActionController
 
     public function addAction()
     {
-        if (!empty($_GET['send'])) {
+        if ($this->params()->fromQuery('send')) {
             $message = new Message();
             $message->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
             $message->addTo('personman2@gmail.com');

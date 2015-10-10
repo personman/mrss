@@ -370,7 +370,7 @@ class BenchmarkController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                foreach ($_POST['equation'] as $id => $equation) {
+                foreach ($this->params()->fromPost('equation') as $id => $equation) {
                     $benchmark = $this->getBenchmarkModel()->find($id);
                     $benchmark->setEquation($equation);
                     $this->getServiceLocator()->get('em')->flush();

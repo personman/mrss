@@ -584,7 +584,7 @@ class ToolController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
 
-            foreach ($_POST['benchmarks'] as $id => $yearOffset) {
+            foreach ($this->params()->fromPost('benchmarks') as $id => $yearOffset) {
                 if (!empty($benchmarks[$id])) {
                     $benchmark = $benchmarks[$id];
 

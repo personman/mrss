@@ -1355,7 +1355,7 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             )*/
         );
 
-        if (empty($_GET['all']) && !$all) {
+        if (!$this->params()->fromQuery('all') && !$all) {
             unset($imports['colleges']);
             unset($imports['systems']);
             unset($imports['users']);
