@@ -20,8 +20,8 @@ class ReportItemController extends CustomReportController
 
         $footnotes = array();
 
-        $id = $this->params('id');
-        $report = $this->getReport($id);
+        $reportId = $this->params('id');
+        $report = $this->getReport($reportId);
         $this->report = $report;
 
         $form = $this->getForm();
@@ -69,16 +69,12 @@ class ReportItemController extends CustomReportController
             }
 
             // Restore the button labels
-            $post['buttons']['submit'] = 'Save';
-            $post['buttons']['preview'] = 'Preview';
-            $post['buttons']['cancel'] = 'Cancel';
+            $post = $this->restoreButtonLabels($post);
             $form->setData($post);
-        } else {
-            if (isset($data)) {
-                $builder = $this->getChartBuilder($data);
-                $chart = $builder->getChart();
-                $footnotes = $builder->getFootnotes();
-            }
+        } elseif (isset($data)) {
+            $builder = $this->getChartBuilder($data);
+            $chart = $builder->getChart();
+            $footnotes = $builder->getFootnotes();
         }
 
         if (empty($year)) {
@@ -114,10 +110,7 @@ class ReportItemController extends CustomReportController
 
         $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
         $peerGroups = $this->getPeerGroups();
-
-
         $includeTrends = $this->getIncludeTrends();
-
         $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
 
         $form = new Explore($benchmarks, $colleges, $years, $peerGroups, $includeTrends, $allBreakpoints);
@@ -125,14 +118,20 @@ class ReportItemController extends CustomReportController
         // Are we editing an existing report item?
         if ($item = $this->getItem()) {
             $data = $item->getConfig(true);
-            $data['buttons']['submit'] = 'Save';
-            $data['buttons']['preview'] = 'Preview';
-            $data['buttons']['cancel'] = 'Cancel';
-
+            $data = $this->restoreButtonLabels($data);
             $form->setData($data);
         }
 
         return $form;
+    }
+
+    protected function restoreButtonLabels($data)
+    {
+        $data['buttons']['submit'] = 'Save';
+        $data['buttons']['preview'] = 'Preview';
+        $data['buttons']['cancel'] = 'Cancel';
+
+        return $data;
     }
 
     public function getItem()
