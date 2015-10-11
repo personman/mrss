@@ -9,3 +9,4 @@ exclude_paths:
 - "public/*"
 - "debug.php"
 - "features/*"
+- "module/Mrss/test/Bootstrap.php"

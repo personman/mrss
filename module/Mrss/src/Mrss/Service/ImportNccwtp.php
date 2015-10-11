@@ -10,6 +10,7 @@ use Zend\Dom\Query;
  * This is no longer in use and only included for historical or analysis purposes
  * This class just extracts some data from the old WTP html forms
  *
+ * @deprecated
  * @package Mrss\Service
  */
 
@@ -28,10 +29,10 @@ class ImportNccwtp
                 $this->dom = new Query(file_get_contents($filename));
 
                 $groupName = $this->getTitle();
-                var_dump($groupName);
+                //var_dump($groupName);
 
                 foreach ($this->getBenchmarks() as $benchmark) {
-                    var_dump($benchmark);
+                    //var_dump($benchmark);
                 }
 
             }
@@ -79,7 +80,7 @@ class ImportNccwtp
             $benchmarks[] = $benchmark;
         }
 
-        var_dump($benchmarks);
+        //var_dump($benchmarks);
 
         return array();
     }

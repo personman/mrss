@@ -23,6 +23,8 @@ use DateTime;
 /**
  * Import data from NCCBP database
  *
+ * @deprecated
+ *
  * Get nccbp db, query, translate to entity, save
  */
 class ImportNccbp
@@ -550,8 +552,8 @@ inner join node g on a.group_nid = g.nid";
         $this->setType($table);
 
         // This may take some time (and RAM)
-        set_time_limit(9600);
-        ini_set('memory_limit', '700M');
+        //set_time_limit(9600);
+        //ini_set('memory_limit', '700M');
 
         $query = "select n.title, y.field_data_entry_year_value as year, form.*
 from $table form
@@ -913,8 +915,8 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
     public function importSubscriptions($year = null)
     {
         // This may take some time (and RAM)
-        set_time_limit(9600);
-        ini_set('memory_limit', '512M');
+        //set_time_limit(9600);
+        //ini_set('memory_limit', '512M');
 
         $this->setType('subscriptions');
 

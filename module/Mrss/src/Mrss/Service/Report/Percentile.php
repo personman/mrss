@@ -107,12 +107,12 @@ class Percentile extends Report
             foreach ($data as $collegeId => $datum) {
                 $percentile = $calculator->getPercentileForValue($datum);
 
-                if (false && $collegeId == 101 && $benchmark->getId() == 1) {
+                /*if (false && $collegeId == 101 && $benchmark->getId() == 1) {
                     var_dump($data);
                     var_dump($datum);
                     var_dump($percentile);
                     die;
-                }
+                }*/
 
                 $percentileRank = new PercentileRank;
                 $percentileRank->setStudy($study);

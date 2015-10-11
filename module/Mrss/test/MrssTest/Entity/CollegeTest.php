@@ -21,9 +21,6 @@ class CollegeTest extends PHPUnit_Framework_TestCase
      */
     public function testCollegeInitialState()
     {
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
-
         $college = new College();
 
         $this->assertNull(
