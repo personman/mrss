@@ -105,12 +105,12 @@ class SubscriptionController extends AbstractActionController
         // You can get your webhook endpoint from your Slack settings
         $url = "https://hooks.slack.com/services/" .
             "T0316049N/B031HJY29/FHHvaDQ6Mgh60nXqh6i59zrC";
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($curl);
+        curl_close($curl);
 
         return $result;
     }
@@ -1141,14 +1141,14 @@ class SubscriptionController extends AbstractActionController
 
     public function sendinvoiceAction()
     {
-        $id = $this->params()->fromPost('id');
-        $to = $this->params()->fromPost('to');
+        $subscriptionId = $this->params()->fromPost('id');
+        $toAddress = $this->params()->fromPost('to');
 
-        if ($id && $sub = $this->getSubscriptionModel()->find($id)) {
-            $this->sendInvoice($sub, null, null, $to);
-            $this->flashMessenger()->addSuccessMessage('Invoice sent to ' . $to);
+        if ($subscriptionId && $sub = $this->getSubscriptionModel()->find($subscriptionId)) {
+            $this->sendInvoice($sub, null, null, $toAddress);
+            $this->flashMessenger()->addSuccessMessage('Invoice sent to ' . $toAddress);
         } else {
-            $this->flashMessenger()->addErrorMessage('No membership found for id: ' . $to);
+            $this->flashMessenger()->addErrorMessage('No membership found for id: ' . $toAddress);
         }
 
         $url = $this->getRequest()->getHeader('Referer')->getUri();
@@ -1483,8 +1483,8 @@ class SubscriptionController extends AbstractActionController
         $draft = new SubscriptionDraft();
         $draft->setFormData(json_encode($data));
         $draft->setDate(new DateTime('now'));
-        $ip = $this->getRequest()->getServer('REMOTE_ADDR');
-        $draft->setIp($ip);
+        $ipAddress = $this->getRequest()->getServer('REMOTE_ADDR');
+        $draft->setIp($ipAddress);
 
         $this->getSubscriptionDraftModel()->save($draft);
         $this->getSubscriptionDraftModel()->getEntityManager()->flush();
@@ -1606,7 +1606,6 @@ class SubscriptionController extends AbstractActionController
         $year = $this->params()->fromRoute('year');
 
         $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
-        $c = count($subscriptions);
 
         $subscriptionsInfo[] = array(
             'Institution',
