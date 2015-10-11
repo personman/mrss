@@ -79,7 +79,7 @@ class ToolController extends AbstractActionController
             $files = $request->getFiles()->toArray();
 
             if (empty($files['excel_file']['tmp_name'])) {
-                die('missing file.');
+                //die('missing file.');
             } else {
                 $tmpFile = $files['excel_file']['tmp_name'];
                 $fileName = $files['excel_file']['name'];

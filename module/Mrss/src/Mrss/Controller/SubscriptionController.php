@@ -127,7 +127,7 @@ class SubscriptionController extends AbstractActionController
             $this->getLog()->alert($body);
             $message->setBody($body);
             $this->getServiceLocator()->get('mail.transport')->send($message);
-            die('sent');
+            //die('sent');
         }
 
         // Are they signed in? If so, redirect them to renew
@@ -212,7 +212,8 @@ class SubscriptionController extends AbstractActionController
                     // redirect
                     return $this->redirect()->toRoute('joined');
                 } else {
-                    die('Unable to find institution.');
+                    $this->flashMessenger()->addErrorMessage("Unable to find institution.");
+                    return $this->redirect()->toUrl('/join-free');
                 }
 
 

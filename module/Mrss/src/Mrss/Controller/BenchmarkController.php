@@ -295,8 +295,10 @@ class BenchmarkController extends AbstractActionController
 
         //print_r($benchmarkGroupId); print_r($benchmarks); die;
 
-        echo 'ok';
-        die;
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->setContent('ok');
+        return $response;
     }
 
     public function equationsAction()

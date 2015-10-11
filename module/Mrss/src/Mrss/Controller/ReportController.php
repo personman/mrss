@@ -1144,7 +1144,8 @@ class ReportController extends AbstractActionController
             );
 
         } else {
-            die('Missing year.');
+            $this->flashMessenger()->addErrorMessage('Missing year.');
+            return $this->redirect()->toUrl('/');
         }
     }
 

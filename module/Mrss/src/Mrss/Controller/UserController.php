@@ -333,7 +333,10 @@ class UserController extends AbstractActionController
         $userModel->save($user);
         $userModel->getEntityManager()->flush();
 
-        die('ok');
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->setContent('ok');
+        return $response;
     }
 
     protected function getUserForm($user)
