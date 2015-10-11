@@ -202,8 +202,8 @@ class Report
                 $dbColumn = $benchmark->getDbColumn();
                 $value = $observation->get($dbColumn);
                 $collegeId = $subscription->getCollege()->getId();
-                if (!empty($_GET['debug'])
-                    && $benchmark->getDbColumn() == $_GET['debug']) {
+                if (!empty($this->params()->fromQuery('debug'))
+                    && $benchmark->getDbColumn() == $this->params()->fromQuery('debug')) {
                     //pr($value);
                 }
                 // Leave out null values
@@ -219,21 +219,6 @@ class Report
         }
 
         ksort($iData);
-        //if ($benchmark->getDbColumn() == 'ft_perc_comp') {
-        if (!empty($_GET['debug']) && $benchmark->getDbColumn() == $_GET['debug']) {
-            if (empty($system) ||
-                (!empty($_GET['system']) && $_GET['system'] == $system->getId())) {
-                pr(count($subscriptions));
-                pr(count($iData));
-                pr($year);
-                echo 'skipped:';
-                pr($skipped);
-                prd($iData);
-            }
-        }
-        //echo $benchmark->getName();
-        //echo implode('<br>', $iData); die('ok');
-        //prd($iData);
 
         return $data;
     }

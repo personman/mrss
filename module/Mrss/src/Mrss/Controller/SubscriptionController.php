@@ -684,17 +684,6 @@ class SubscriptionController extends AbstractActionController
         $year = $this->params()->fromQuery('year');
         $ipeds = $this->params()->fromQuery('ipeds');
 
-        // Debug
-        $test = $this->params()->fromQuery('test');
-        if ($test) {
-            $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
-            $service->setCurrentStudyCode('test');
-
-            $discount = $service->checkForDiscount($year, $ipeds);
-            var_dump($discount);
-            die;
-        }
-
         $checker = $this->getServiceLocator()->get('service.nhebisubscriptions.mrss');
         $checker->setStudyId($this->getStudy()->getId());
 

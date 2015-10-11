@@ -12,6 +12,12 @@ use Zend\Session\Container;
 use Zend\Json\Json;
 use Zend\Console\Request as ConsoleRequest;
 
+/**
+ * Class ImportController
+ *
+ * @deprecated
+ * @package Mrss\Controller
+ */
 class ImportController extends AbstractActionController
 {
     protected $triggerInBackground = false;
@@ -34,8 +40,8 @@ class ImportController extends AbstractActionController
      */
     public function triggerAction()
     {
-        ini_set('memory_limit', '512M');
-        set_time_limit(3600);
+        //ini_set('memory_limit', '512M');
+        //set_time_limit(3600);
 
         $type = $this->params()->fromQuery('type');
         $year = $this->params()->fromQuery('year');
@@ -97,8 +103,8 @@ class ImportController extends AbstractActionController
         if (empty($imports[$type])) {
             throw new \Exception("'$type' is an invalid import type.");
         }
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
+        //ini_set('display_errors', 1);
+        //error_reporting(E_ALL);
         $import = $imports[$type];
 
         // Load the importer from the service manager
@@ -254,7 +260,7 @@ class ImportController extends AbstractActionController
                 $data = $form->getData();
                 $data = $data['json'];
                 $result = json_decode($data, true);
-                $result = var_export($result, true);
+                //$result = var_export($result, true);
 
                 $result = preg_replace('/(\d+) \=\> /', '', $result);
                 $result = preg_replace('/array \(/', 'array(', $result);

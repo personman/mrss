@@ -6,3 +6,6 @@ exclude_paths:
 - "data/*"
 - "module/Mrss/config/module.config.php"
 - "module/Mrss/Module.php"
+- "public/*"
+- "debug.php"
+- "features/*"

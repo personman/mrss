@@ -517,14 +517,14 @@ class College extends AbstractModel
 
         if (false) {
             $dql = $qb->getDQL();
-            var_dump($dql);
+            //var_dump($dql);
             $p = $qb->getParameters();
-            var_dump($p);
+            //var_dump($p);
 
             $colleges = $qb->getQuery()->getResult();
             $count = count($colleges);
 
-            var_dump($count);
+            //var_dump($count);
             //var_dump($colleges);
 
             pr($peerGroup->getFourYearDegrees());
