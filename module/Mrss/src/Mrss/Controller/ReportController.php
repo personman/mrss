@@ -207,8 +207,7 @@ class ReportController extends AbstractActionController
 
     protected function longRunningScript()
     {
-        ini_set('memory_limit', '512M');
-        set_time_limit(5600);
+        takeYourTime();
 
         // Turn off query logging
         $this->getServiceLocator()

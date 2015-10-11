@@ -1302,8 +1302,7 @@ class SubscriptionController extends AbstractActionController
         $subscriptionId = $this->params()->fromRoute('id');
 
         if ($subscriptionId == 'all') {
-            ini_set('memory_limit', '512M');
-            set_time_limit(3600);
+            takeYourTime();
 
             /** @var \Mrss\Entity\Study $study */
             $study = $this->currentStudy();

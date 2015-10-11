@@ -711,7 +711,13 @@ class ToolController extends AbstractActionController
 
     protected function longRunningScript()
     {
-        ini_set('memory_limit', '512M');
-        set_time_limit(3600);
+        takeYourTime();
+
+        // Turn off query logging
+        $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
     }
 }

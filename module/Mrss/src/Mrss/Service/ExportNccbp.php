@@ -44,11 +44,7 @@ class ExportNccbp
     public function export()
     {
         // This may take some time (and RAM)
-        set_time_limit(7800);
-        ini_set('memory_limit', '612M');
-
-        error_reporting(E_ALL);
-        ini_set('display_errors', true);
+        takeYourTime();
 
         // Start building the Excel file
         $this->excel = new PHPExcel();

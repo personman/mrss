@@ -34,8 +34,7 @@ class StudyController extends AbstractActionController
 
     public function completionAction()
     {
-        set_time_limit(1200);
-        ini_set('memory_limit', '256M');
+        takeYourTime();
 
         // Turn off query logging so we don't exhaust our RAM
         $this->getServiceLocator()

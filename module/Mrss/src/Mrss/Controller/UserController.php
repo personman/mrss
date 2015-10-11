@@ -446,8 +446,7 @@ class UserController extends AbstractActionController
      */
     public function exportLoginLinksAction()
     {
-        ini_set('memory_limit', '512M');
-        set_time_limit(3600);
+        takeYourTime();
 
         // Get all users with NCCBP subscriptions who have never logged in
         $users = $this->getAllNewNCCBPUsers();

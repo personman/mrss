@@ -10,3 +10,4 @@ exclude_paths:
 - "debug.php"
 - "features/*"
 - "module/Mrss/test/Bootstrap.php"
+- "module/Mrss/src/Mrss/Service/ImportNccbp.php"

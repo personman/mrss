@@ -16,3 +16,9 @@ function prd($var) {
     pr($var, $callee);
     die;
 }
+
+function takeYourTime()
+{
+    ini_set('memory_limit', '512M');
+    set_time_limit(5600);
+}
