@@ -1686,6 +1686,7 @@ return array(
             ),
             'criteria' => array(
                 'type' => 'segment',
+                'may_terminate' => true,
                 'options' => array(
                     'route' => '/criteria',
                     'defaults' => array(

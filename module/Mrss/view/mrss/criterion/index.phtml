@@ -1,6 +1,21 @@
+<?php
+/** \Mrss\Entity\Criterion[] $criteria  */
+?>
+
 <h1>Demographic Criteria</h1>
 
 <a href="/criteria/add" class="btn btn-default">
     <span class="glyphicon glyphicon-plus"></span>
     Add a Criterion
 </a>
+
+
+<table class="table">
+    <?php foreach ($criteria as $criterion): ?>
+        <tr>
+            <td>
+                <?= $criterion->getName() ?>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>
