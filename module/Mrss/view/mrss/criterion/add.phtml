@@ -1,0 +1,28 @@
+<?php
+$this->headLink()->appendStylesheet('/css/chosen.min.css');
+
+$this->headScript()->appendFile(
+    '/js/chosen.jquery.min.js?v=1',
+    'text/javascript'
+);
+?>
+
+<script>
+    $(function() {
+        $('#benchmark').chosen({search_contains: true, placeholder_text_single: 'Choose...'})
+            .change(function(event, params) {
+                var benchmarkName = $("#benchmark option:selected").html()
+                $('#name').val(benchmarkName)
+            })
+    })
+</script>
+
+<style>
+    #benchmark {
+        width: 60%;
+    }
+</style>
+
+<h1>Add a Demographic Criterion</h1>
+
+<?= $this->ztbForm($this->form->prepare()) ?>

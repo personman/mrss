@@ -1684,6 +1684,27 @@ return array(
                     ),
                 )
             ),
+            'criteria' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/criteria',
+                    'defaults' => array(
+                        'controller' => 'criteria',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add',
+                            'defaults' => array(
+                                'action' => 'add'
+                            )
+                        )
+                    )
+                )
+            ),
             'peer-groups' => array(
                 'type' => 'Segment',
                 'may_terminate' => true,
@@ -1953,6 +1974,7 @@ return array(
             'reports' => 'Mrss\Controller\ReportController',
             'customReports' => 'Mrss\Controller\CustomReportController',
             'peerGroups' => 'Mrss\Controller\PeerGroupController',
+            'criteria' => 'Mrss\Controller\CriterionController',
             'reportItems' => 'Mrss\Controller\ReportItemController',
             'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'

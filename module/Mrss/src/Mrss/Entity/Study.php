@@ -46,6 +46,13 @@ class Study
     protected $benchmarkGroups;
 
     /**
+     * @ORM\OneToMany(targetEntity="Criterion", mappedBy="study")
+     * @ORM\OrderBy({"sequence" = "ASC"})
+     * @var \Mrss\Entity\Criterion[]
+     */
+    protected $criteria;
+
+    /**
      * @ORM\Column(type="float")
      */
     protected $price;
@@ -165,11 +172,26 @@ class Study
     }
 
     /**
-     * @return \Mrss\Entity\BenchmarkGroup[]
+     * @return BenchmarkGroup[]
      */
     public function getBenchmarkGroups()
     {
         return $this->benchmarkGroups;
+    }
+
+    public function setCriteria($criteria)
+    {
+        $this->criteria = $criteria;
+
+        return $this;
+    }
+
+    /**
+     * @return Criterion[]
+     */
+    public function getCriteria()
+    {
+        return $this->criteria;
     }
 
     public function setOfferCodes($offerCodes)
@@ -179,7 +201,7 @@ class Study
         return $this;
     }
 
-    /** @return \Mrss\Entity\OfferCode[] */
+    /** @return OfferCode[] */
     public function getOfferCodes()
     {
         return $this->offerCodes;
@@ -537,6 +559,35 @@ class Study
         }
 
         return $allKeys;
+    }
+
+    public function getStructuredBenchmarks($onlyReported = true, $keyField = 'dbColumn')
+    {
+        $benchmarks = array();
+        foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+            $group = array(
+                'label' => $benchmarkGroup->getName(),
+                'options' => array()
+            );
+
+            foreach ($benchmarkGroup->getBenchmarksForYear($this->getCurrentYear()) as $benchmark) {
+                // Skip non-report benchmarks
+                if ($onlyReported && !$benchmark->getIncludeInNationalReport()) {
+                    continue;
+                }
+
+                $key = $benchmark->getDbColumn();
+                if ($keyField == 'id') {
+                    $key = $benchmark->getId();
+                }
+
+                $group['options'][$key] = $benchmark->getDescriptiveReportLabel();
+            }
+
+            $benchmarks[$benchmarkGroup->getId()] = $group;
+        }
+
+        return $benchmarks;
     }
 
     /**
