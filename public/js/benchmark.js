@@ -31,13 +31,10 @@ $(function() {
                 headings: headingIds
             }
 
-            console.log(data)
-
             $.post('/benchmark/reorder', data, function(result) {
                 //console.log(result)
                 if (result != 'ok') {
                     alert('There was a problem saving your sequence. ');
-                    console.log(result)
                 }
             })
         }

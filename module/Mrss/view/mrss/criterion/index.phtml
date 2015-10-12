@@ -2,6 +2,31 @@
 /** \Mrss\Entity\Criterion[] $criteria  */
 ?>
 
+<script>
+    $(function() {
+        // Make benchmrks sortable
+        $('tbody.sortable').sortable({
+            handle: '.sortHandle',
+            update: function (event, ui) {
+                var data = $(this).sortable('serialize')
+
+                $.post('/criteria/reorder', data, function(result) {
+                    console.log(result)
+                    if (result != 'ok') {
+                        alert('There was a problem saving your sequence. ');
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+<style>
+    .sortable tr td.sortHandle {
+        width: 15px;
+    }
+</style>
+
 <h1>Demographic Criteria</h1>
 
 <a href="/criteria/add" class="btn btn-default">
@@ -11,11 +36,19 @@
 
 
 <table class="table">
+    <tbody class="sortable">
     <?php foreach ($criteria as $criterion): ?>
-        <tr>
+        <tr id="criteria_<?= $criterion->getId() ?>">
+            <td class="sortHandle">
+                <span class="icon-move glyphicon glyphicon-move"></span>
+            </td>
             <td>
                 <?= $criterion->getName() ?>
             </td>
+            <td>
+                <a href="/criteria/delete/<?= $criterion->getId() ?>">Delete</a>
+            </td>
         </tr>
     <?php endforeach ?>
+    </tbody>
 </table>

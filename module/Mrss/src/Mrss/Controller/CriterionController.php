@@ -45,6 +45,37 @@ class CriterionController extends AbstractActionController
         );
     }
 
+    public function reorderAction()
+    {
+        $criteriaSequence = $this->params()->fromPost('criteria');
+
+        foreach ($criteriaSequence as $sequence => $criteriaId) {
+            $sequence++;
+
+            $criterion = $this->getCriterionModel()->find($criteriaId);
+            $criterion->setSequence($sequence);
+            $this->getCriterionModel()->save($criterion);
+        }
+
+        $this->getCriterionModel()->getEntityManager()->flush();
+
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->setContent('ok');
+        return $response;
+    }
+
+    public function deleteAction()
+    {
+        $criterionId = $this->params()->fromRoute('id');
+
+        $criterion = $this->getCriterionModel()->find($criterionId);
+        $this->getCriterionModel()->delete($criterion);
+
+        $this->flashMessenger()->addSuccessMessage('Criterion deleted.');
+        return $this->redirect()->toRoute('criteria');
+    }
+
     protected function getForm()
     {
         $benchmarks = $this->currentStudy()->getStructuredBenchmarks(false, 'id');

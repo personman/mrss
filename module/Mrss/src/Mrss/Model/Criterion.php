@@ -18,41 +18,13 @@ class Criterion extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Criterion';
 
-    public function findOneByName($name)
-    {
-        return $this->getRepository()->findOneBy(array('name' => $name));
-    }
-
-    public function findOneByShortName($shortName)
-    {
-        return $this->getRepository()->findOneBy(array('shortName' => $shortName));
-    }
-
-    /**
-     * @param $url
-     * @return BenchmarkGroupEntity
-     */
-    public function findOneByUrlAndStudy($url, $study)
-    {
-        return $this->getRepository()->findOneBy(array('url' => $url, 'study' => $study));
-    }
-
     /**
      * @param $id
-     * @return \Mrss\Entity\BenchmarkGroup
+     * @return \Mrss\Entity\Criterion
      */
     public function find($id)
     {
         return $this->getRepository()->find($id);
-    }
-
-    /**
-     * Find all benchmark groups, ordered by sequence
-     */
-    public function findAll()
-    {
-        $c = $this->getRepository()->findBy(array(), array('sequence' => 'ASC'));
-        return $c;
     }
 
     /**
@@ -89,4 +61,11 @@ class Criterion extends AbstractModel
 
         return $max;
     }
+
+    public function delete(CriterionEntity $criterion)
+    {
+        $this->getEntityManager()->remove($criterion);
+        $this->getEntityManager()->flush();
+    }
+
 }

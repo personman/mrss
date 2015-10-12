@@ -1703,6 +1703,25 @@ return array(
                                 'action' => 'add'
                             )
                         )
+                    ),
+                    'delete' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/delete/:id',
+                            'defaults' => array(
+                                'action' => 'delete',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'reorder' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/reorder',
+                            'defaults' => array(
+                                'action' => 'reorder'
+                            )
+                        )
                     )
                 )
             ),
