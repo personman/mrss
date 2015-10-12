@@ -1248,8 +1248,9 @@ class SubscriptionController extends AbstractActionController
 
     protected function sendWelcomeEmail(Subscription $subscription)
     {
-        $from_email = $this->currentStudy(false)->getConfig()->from_email;
-        $cc_email = $this->currentStudy(false)->getConfig()->cc_email;
+        $studyConfig = $this->getServiceLocator()->get('study');
+        $from_email = $studyConfig->from_email;
+        $cc_email = $studyConfig->cc_email;
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
