@@ -425,8 +425,8 @@ class College
     {
         $subscriptions = array();
         foreach ($this->getSubscriptions() as $sub) {
-            if (!$s = $sub->getStudy()) {
-                $m = "Subscription ({$sub->getId()}) missing study";
+            if (!$subStudy = $sub->getStudy()) {
+                //$m = "Subscription ({$sub->getId()}) missing study";
                 //pr($m);
                 continue;
 
