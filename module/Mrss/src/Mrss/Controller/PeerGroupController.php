@@ -218,7 +218,7 @@ class PeerGroupController extends ReportController
 
     public function addDemographicAction()
     {
-        $form = new PeerComparisonDemographics($this->currentStudy()->getId());
+        $form = new PeerComparisonDemographics($this->currentStudy());
 
         $id = $this->params()->fromRoute('id');
         $peerGroup = $this->getPeerGroup($id);

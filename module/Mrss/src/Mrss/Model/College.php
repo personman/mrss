@@ -153,6 +153,11 @@ class College extends AbstractModel
         return $results;
     }
 
+    public function findByCriteria($criteria, StudyEntity $currentStudy)
+    {
+
+    }
+
     /**
      * @param PeerGroupEntity $peerGroup
      * @param StudyEntity $currentStudy

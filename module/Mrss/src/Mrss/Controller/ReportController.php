@@ -629,7 +629,7 @@ class ReportController extends AbstractActionController
             return $redirect;
         }
 
-        $form = new PeerComparisonDemographics($this->currentStudy()->getId());
+        $form = new PeerComparisonDemographics($this->currentStudy());
         $peerGroup = $this->getPeerGroupFromSession();
 
         $em = $this->getServiceLocator()->get('em');

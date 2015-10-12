@@ -5,18 +5,29 @@ namespace Mrss\Form;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
 use Zend\Validator\Regex;
+use Mrss\Entity\Study;
 
 class PeerComparisonDemographics extends AbstractForm
 {
-    protected $studyId;
+    protected $study;
 
-    public function __construct($studyId)
+    public function __construct(Study $study)
     {
-        $this->studyId = $studyId;
+        $this->study = $study;
 
         // Call the parent constructor
         parent::__construct('peerComparison');
 
+        $this->addStates();
+        $this->addCriteria();
+
+        $this->add($this->getButtonFieldset('Continue', true));
+
+        $this->setInputFilter($this->getInputFilterSetup());
+    }
+
+    protected function addStates()
+    {
         $this->add(
             array(
                 'name' => 'states',
@@ -32,371 +43,46 @@ class PeerComparisonDemographics extends AbstractForm
                 )
             )
         );
+    }
 
-        $this->add(
-            array(
-                'name' => 'environments',
-                'type' => 'Select',
+    protected function addCriteria()
+    {
+        foreach ($this->study->getCriteria() as $criterion) {
+            $benchmark = $criterion->getBenchmark();
+
+            $type = 'Text';
+            $options = null;
+            if ($benchmark->getInputType() == 'radio') {
+                $type = 'Select';
+                $options = $benchmark->getOptions();
+                $options = explode("\n", $options);
+                $options = array_map('trim', $options);
+                $options = array_combine($options, $options);
+            }
+
+            $field = array(
+                'name' => $benchmark->getDbColumn(),
+                'type' => $type,
                 'required' => false,
                 'options' => array(
-                    'label' => 'Campus Environment'
+                    'label' => $criterion->getName()
                 ),
                 'attributes' => array(
-                    'id' => 'environments',
-                    'options' => array(
-                        'Urban' => 'Urban',
-                        'Suburban' => 'Suburban',
-                        'Rural' => 'Rural'
-                    ),
-                    'multiple' => 'multiple'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'institutionalType',
-                'type' => 'Select',
-                'required' => false,
-                'options' => array(
-                    'label' => 'Institutional Type'
-                ),
-                'attributes' => array(
-                    'id' => 'institutionalType',
-                    'options' => array(
-                        'Single-campus' => 'Single-campus',
-                        'Multi-campus' => 'Multi-campus',
-                        'Multi-college district' => 'Multi-college district'
-                    ),
-                    'multiple' => 'multiple'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'institutionalControl',
-                'type' => 'Select',
-                'required' => false,
-                'options' => array(
-                    'label' => 'Institutional Control'
-                ),
-                'attributes' => array(
-                    'id' => 'institutionalControl',
-                    'options' => array(
-                        'Public' => 'Public',
-                        'Private' => 'Private',
-                        'Proprietary' => 'Proprietary'
-                    ),
-                    'multiple' => 'multiple'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'facultyUnionized',
-                'type' => 'Select',
-                'required' => false,
-                'options' => array(
-                    'label' => 'Faculty Unionized'
-                ),
-                'attributes' => array(
-                    'id' => 'facultyUnionized',
-                    'options' => array(
-                        'Yes' => 'Yes',
-                        'No' => 'No'
-                    ),
-                    'multiple' => 'multiple'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'staffUnionized',
-                'type' => 'Select',
-                'required' => false,
-                'options' => array(
-                    'label' => 'Staff Unionized'
-                ),
-                'attributes' => array(
-                    'id' => 'staffUnionized',
-                    'options' => array(
-                        'Yes' => 'Yes',
-                        'No' => 'No'
-                    ),
-                    'multiple' => 'multiple'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'fourYearDegrees',
-                'type' => 'Select',
-                'required' => false,
-                'options' => array(
-                    'label' => 'Four Year Degrees'
-                ),
-                'attributes' => array(
-                    'id' => 'fourYearDegrees',
-                    'options' => array(
-                        'Yes' => 'Yes',
-                        'No' => 'No'
-                    ),
-                    'multiple' => 'multiple'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'onCampusHousing',
-                'type' => 'Select',
-                'required' => false,
-                'options' => array(
-                    'label' => 'On-campus Housing'
-                ),
-                'attributes' => array(
-                    'id' => 'onCampusHousing',
-                    'options' => array(
-                        'Yes' => 'Yes',
-                        'No' => 'No'
-                    ),
-                    'multiple' => 'multiple'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'ipedsFallEnrollment',
-                'type' => 'Text',
-                'required' => false,
-                'options' => array(
-                    'label' => 'IPEDS Fall Enrollment',
-                    'help-block' => 'Specify a range (e.g., "2000 - 14000", without
-                        quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'ipedsFallEnrollment',
-                )
-            )
-        );
-
-        if ($studyId == 2) {
-            $this->add(
-                array(
-                    'name' => 'fiscalCreditHours',
-                    'type' => 'Text',
-                    'required' => false,
-                    'options' => array(
-                        'label' => 'Fiscal Year Student Credit Hours',
-                        'help-block' => 'Specify a range (e.g., "9000 - 34000", without
-                        quotes).'
-                    ),
-                    'attributes' => array(
-                        'id' => 'fiscalCreditHours',
-                    )
+                    'id' => $benchmark->getDbColumn()
                 )
             );
+
+            if (!empty($options)) {
+                $field['attributes']['options'] = $options;
+                $field['attributes']['multiple'] = 'multiple';
+            }
+
+            if ($help = $criterion->getHelpText()) {
+                $field['options']['help-block'] = $help;
+            }
+
+            $this->add($field);
         }
-
-        $this->add(
-            array(
-                'name' => 'pellGrantRecipients',
-                'type' => 'Text',
-                'required' => false,
-                'options' => array(
-                    'label' => '% Pell Grant Recipients',
-                    'help-block' => 'Specify a range (e.g., "10 - 33", without
-                        quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'pellGrantRecipients',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'blk',
-                'type' => 'Text',
-                'required' => false,
-                'options' => array(
-                    'label' => '% Black or African American',
-                    'help-block' => 'Specify a range (e.g., "5 - 15", without
-                        quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'blk',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'asian',
-                'type' => 'Text',
-                'required' => false,
-                'options' => array(
-                    'label' => '% Asian',
-                    'help-block' => 'Specify a range (e.g., "5 - 15", without
-                        quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'asian',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'hispAnyrace',
-                'type' => 'Text',
-                'required' => false,
-                'options' => array(
-                    'label' => '% Hispanics of Any Race',
-                    'help-block' => 'Specify a range (e.g., "5 - 15", without
-                        quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'hispAnyrace',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'operatingRevenue',
-                'type' => 'Text',
-                'required' => false,
-                'options' => array(
-                    'label' => 'Unrestricted Operating Revenue',
-                    'help-block' => 'Specify a range (e.g., "1000000 - 8000000", without
-                        quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'operatingRevenue',
-                )
-            )
-        );
-
-
-
-        // @todo: % of Workforce Training Enrollment of Total
-
-        // Workforce only
-        if ($studyId == 3) {
-            $this->add(
-                array(
-                    'name' => 'workforceEnrollment',
-                    'type' => 'Text',
-                    'options' => array(
-                        'label' => 'Unduplicated Workforce Enrollment',
-                        'help-block' => 'Specify a range (e.g., "2000 - 4000", without
-                            quotes).'
-                    ),
-                    'attributes' => array(
-                        'id' => 'workforceEnrollment',
-                    )
-                )
-            );
-
-            $this->add(
-                array(
-                    'name' => 'workforceRevenue',
-                    'type' => 'Text',
-                    'options' => array(
-                        'label' => 'Total Workforce Gross Revenue',
-                        'help-block' => 'Specify a range (e.g., "19000000 - 30000000",
-                            without quotes).'
-                    ),
-                    'attributes' => array(
-                        'id' => 'workforceRevenue',
-                    )
-                )
-            );
-        }
-
-        $this->add(
-            array(
-                'name' => 'serviceAreaPopulation',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Service Area Population',
-                    'help-block' => 'Specify a range (e.g., "200000 - 800000",
-                        without quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'serviceAreaPopulation',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'serviceAreaUnemployment',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Service Area Unemployment Rate',
-                    'help-block' => 'Specify a range (e.g., "3 - 6", without quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'serviceAreaUnemployment',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'serviceAreaMedianIncome',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Service Area Median Household Income',
-                    'help-block' => 'Specify a range (e.g., "30000 - 50000",
-                        without quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'serviceAreaMedianIncome',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'technicalCredit',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => '% Technical/Career Credit Hours',
-                    'help-block' => 'Specify a range (e.g., "5 - 20",
-                        without quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'serviceAreaMedianIncome',
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'percentageFullTime',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => '% of Full-time Students',
-                    'help-block' => 'Specify a range (e.g., "5 - 20",
-                        without quotes).'
-                ),
-                'attributes' => array(
-                    'id' => 'percentageFullTime',
-                )
-            )
-        );
-
-        $this->add($this->getButtonFieldset('Continue', true));
-
-        $this->setInputFilter($this->getInputFilterSetup());
     }
 
     public function getInputFilterSetup()
@@ -408,108 +94,18 @@ class PeerComparisonDemographics extends AbstractForm
         $state->setRequired(false);
         $filter->add($state);
 
-        $environment = new Input('environments');
-        $environment->setRequired(false);
-        $filter->add($environment);
+        foreach ($this->study->getCriteria() as $criterion) {
+            $benchmark = $criterion->getBenchmark();
 
-        $type = new Input('institutionalType');
-        $type->setRequired(false);
-        $filter->add($type);
+            $field = new Input($benchmark->getDbColumn());
+            $field->setRequired(false);
 
-        $control = new Input('institutionalControl');
-        $control->setRequired(false);
-        $filter->add($control);
+            if ($benchmark->getInputType() != 'radio') {
+                $field->getValidatorChain()->attach($this->getRangeValidator());
+            }
 
-        $facultyUnionized = new Input('facultyUnionized');
-        $facultyUnionized->setRequired(false);
-        $filter->add($facultyUnionized);
-
-        $staffUnionized = new Input('staffUnionized');
-        $staffUnionized->setRequired(false);
-        $filter->add($staffUnionized);
-
-        $fourYearDegrees = new Input('fourYearDegrees');
-        $fourYearDegrees->setRequired(false);
-        $filter->add($fourYearDegrees);
-
-        $onCampusHousing = new Input('onCampusHousing');
-        $onCampusHousing->setRequired(false);
-        $filter->add($onCampusHousing);
-
-        $ipedsEnrollement = new Input('ipedsFallEnrollment');
-        $ipedsEnrollement->setRequired(false);
-        $ipedsEnrollement->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($ipedsEnrollement);
-
-        if ($this->studyId == 2) {
-            $fiscalCreditHours = new Input('fiscalCreditHours');
-            $fiscalCreditHours->setRequired(false);
-            $fiscalCreditHours->getValidatorChain()->attach($this->getRangeValidator());
-            $filter->add($fiscalCreditHours);
+            $filter->add($field);
         }
-
-        $pellGrantRecipients = new Input('pellGrantRecipients');
-        $pellGrantRecipients->setRequired(false);
-        $pellGrantRecipients->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($pellGrantRecipients);
-
-        $blk = new Input('blk');
-        $blk->setRequired(false);
-        $blk->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($blk);
-
-        $asian = new Input('asian');
-        $asian->setRequired(false);
-        $asian->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($asian);
-
-        $hispAnyrace = new Input('hispAnyrace');
-        $hispAnyrace->setRequired(false);
-        $hispAnyrace->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($hispAnyrace);
-
-        $operatingRevenue = new Input('operatingRevenue');
-        $operatingRevenue->setRequired(false);
-        $operatingRevenue->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($operatingRevenue);
-
-        if ($this->studyId == 3) {
-            $enrollment = new Input('workforceEnrollment');
-            $enrollment->setRequired(false);
-            $enrollment->getValidatorChain()->attach($this->getRangeValidator());
-            $filter->add($enrollment);
-
-            $revenue = new Input('workforceRevenue');
-            $revenue->setRequired(false);
-            $revenue->getValidatorChain()->attach($this->getRangeValidator());
-            $filter->add($revenue);
-        }
-
-        $pop = new Input('serviceAreaPopulation');
-        $pop->setRequired(false);
-        $pop->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($pop);
-
-        $unemployment = new Input('serviceAreaUnemployment');
-        $unemployment->setRequired(false);
-        $unemployment->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($unemployment);
-
-
-        $income = new Input('serviceAreaMedianIncome');
-        $income->setRequired(false);
-        $income->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($income);
-
-        $technical = new Input('technicalCredit');
-        $technical->setRequired(false);
-        $technical->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($technical);
-
-        $fullTime = new Input('percentageFullTime');
-        $fullTime->setRequired(false);
-        $fullTime->getValidatorChain()->attach($this->getRangeValidator());
-        $filter->add($fullTime);
 
         return $filter;
     }
