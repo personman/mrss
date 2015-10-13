@@ -498,6 +498,10 @@ function getAdminMenu()
         'label' => 'Custom Report Admin',
         'route' => 'reports/custom/admin'
     ),
+    'demographic-criteria' => array(
+        'label' => 'Demographic Criteria',
+        'route' => 'criteria'
+    ),
     array(
         'label' => 'Colleges',
         'controller' => 'colleges',
