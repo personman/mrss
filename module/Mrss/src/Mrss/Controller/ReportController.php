@@ -573,11 +573,47 @@ class ReportController extends AbstractActionController
         }
         $peerGroups = json_encode($peerGroups);
 
+        $criteria = $this->getCriteriaFromSession();
+        $criteria = $this->addCriteriaLabels($criteria);
+
         return array(
             'form' => $form,
             'peerGroup' => $peerGroup,
-            'peerGroups' => $peerGroups
+            'peerGroups' => $peerGroups,
+            'criteria' => $criteria
         );
+    }
+
+    protected function addCriteriaLabels($criteria)
+    {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+        $allCriteria = $study->getCriteria();
+
+        $withLabels = array();
+        foreach ($criteria as $dbColumn => $value) {
+            // We only need labels for those with a value
+            if (!empty($value)) {
+                // Implode arrays
+                if (is_array($value)) {
+                    $value = implode(', ', $value);
+                }
+
+                if ($dbColumn == 'states') {
+                    $withLabels['States'] = $value;
+                    continue;
+                }
+
+                foreach ($allCriteria as $criterion) {
+                    if ($dbColumn == $criterion->getBenchmark()->getDbColumn()) {
+                        $withLabels[$criterion->getName()] = $value;
+                        continue;
+                    }
+                }
+            }
+        }
+
+        return $withLabels;
     }
 
     public function peerResultsAction()
@@ -630,18 +666,23 @@ class ReportController extends AbstractActionController
         }
 
         $form = new PeerComparisonDemographics($this->currentStudy());
-        $peerGroup = $this->getPeerGroupFromSession();
+
+        $criteria = $this->getCriteriaFromSession();
+        $form->setData($criteria);
+
+        /*$peerGroup = $this->getPeerGroupFromSession();
 
         $em = $this->getServiceLocator()->get('em');
 
         $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\PeerGroup'));
-        $form->bind($peerGroup);
+        $form->bind($peerGroup);*/
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->params()->fromPost();
+            unset($postData['buttons']);
 
             // Handle empty multiselects
-            $multiselects = array(
+            /*$multiselects = array(
                 'states',
                 'environments',
                 'facultyUnionized',
@@ -656,17 +697,12 @@ class ReportController extends AbstractActionController
                 if (empty($postData[$multiselect])) {
                     $postData[$multiselect] = array();
                 }
-            }
+            }*/
 
             $form->setData($postData);
 
             if ($form->isValid()) {
-                $this->savePeerGroupToSession($peerGroup);
-
-                if ($peerGroup->getId()) {
-                    $this->getPeerGroupModel()->save($peerGroup);
-                    $this->getPeerGroupModel()->getEntityManager()->flush();
-                }
+                $this->saveCriteriaToSession($postData);
 
                 return $this->redirect()->toRoute('reports/peer');
             }
@@ -1087,24 +1123,26 @@ class ReportController extends AbstractActionController
         $peerService = $this->getServiceLocator()->get('service.report.peer');
 
         if (!empty($year)) {
-            $peerGroup = $this->getPeerGroupFromSession();
-            $peerGroup->setYear($year);
+            //$peerGroup = $this->getPeerGroupFromSession();
+            //$peerGroup->setYear($year);
 
             /** @var \Mrss\Model\College $collegeModel */
             $collegeModel = $this->getServiceLocator()->get('model.college');
 
-            $colleges = $collegeModel->findByPeerGroup(
+            /*$colleges = $collegeModel->findByPeerGroup(
                 $peerGroup,
                 $this->currentStudy()
-            );
+            );*/
+
+            $criteria = $this->getCriteriaFromSession();
+            $colleges = $collegeModel->findByCriteria($criteria, $this->currentStudy(), $this->currentCollege());
 
 
             // Lou's issue
             $currentUser = $this->zfcUserAuthentication()->getIdentity();
             if ($currentUser->getId() == 93) {
-                $states = print_r($peerGroup->getStates(), true);
-                $id = print_r($peerGroup->getId(), true);
-                $nameG = print_r($peerGroup->getName(), true);
+                $states = print_r($criteria['states'], true);
+                //$nameG = print_r($->getName(), true);
                 $collegeNames = '';
                 foreach ($colleges as $c) {
                     $collegeNames .= "{$c->getName()} ({$c->getState()})\n";
@@ -1112,8 +1150,7 @@ class ReportController extends AbstractActionController
 
                 $message = "======= Peer demo filter not working ======\n";
                 $message .= "States: $states\n";
-                $message .= "Id: $id\n";
-                $message .= "Name: $nameG\n";
+                //$message .= "Name: $nameG\n";
                 $message .= "Colleges:\n$collegeNames\n";
 
                 $this->getErrorLog()->info($message);
@@ -1295,6 +1332,16 @@ class ReportController extends AbstractActionController
             'institutional_demographics_faculty_unionized',
             'institutional_demographics_staff_unionized'
         );
+    }
+
+    protected function saveCriteriaToSession($criteria)
+    {
+        $this->getSessionContainer()->criteria = $criteria;
+    }
+
+    protected function getCriteriaFromSession()
+    {
+        return $this->getSessionContainer()->criteria;
     }
 
     public function savePeerGroupToSession(PeerGroup $peerGroup)

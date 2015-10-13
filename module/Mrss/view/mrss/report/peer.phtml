@@ -35,161 +35,17 @@ $form->setAttribute('action', $this->url('reports/peer'));
             <a href="<?= $this->url('reports/peer-demographic') ?>">Change</a>
         </p>
 
-        <?php if ($peerGroup->hasCriteria()): ?>
+        <?php if (!empty($criteria)): ?>
 
-            <?php if ($peerGroup->getStates()): ?>
+            <?php foreach ($criteria as $label => $value): ?>
                 <p>
-                    <strong>State(s):</strong>
-                    <?= implode(', ', $peerGroup->getStates()) ?>
+                    <strong><?= $label ?>:</strong>
+                    <?= $value ?>
                 </p>
-            <?php endif ?>
 
-            <?php if ($peerGroup->getEnvironments()): ?>
-                <p>
-                    <strong>Campus Environment(s):</strong>
-                    <?= implode(', ', $peerGroup->getEnvironments()) ?>
-                </p>
-            <?php endif ?>
 
-            <?php if ($peerGroup->getInstitutionalControl()): ?>
-                <p>
-                    <strong>Institutional Control:</strong>
-                    <?= implode(', ', $peerGroup->getInstitutionalControl()) ?>
-                </p>
-            <?php endif ?>
+            <?php endforeach ?>
 
-            <?php if ($peerGroup->getInstitutionalType()): ?>
-                <p>
-                    <strong>Institutional Type:</strong>
-                    <?= implode(', ', $peerGroup->getInstitutionalType()) ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getFacultyUnionized()): ?>
-                <p>
-                    <strong>Faculty Unionized:</strong>
-                    <?= implode(', ', $peerGroup->getFacultyUnionized()) ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getStaffUnionized()): ?>
-                <p>
-                    <strong>Staff Unionized:</strong>
-                    <?= implode(', ', $peerGroup->getStaffUnionized()) ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getFourYearDegrees()): ?>
-                <p>
-                    <strong>Four Year Degrees:</strong>
-                    <?= implode(', ', $peerGroup->getFourYearDegrees()) ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getOnCampusHousing()): ?>
-                <p>
-                    <strong>On-campus Housing:</strong>
-                    <?= implode(', ', $peerGroup->getOnCampusHousing()) ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getWorkforceEnrollment()): ?>
-                <p>
-                    <strong>Workforce Enrollment:</strong>
-                    <?= $peerGroup->getWorkforceEnrollment() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getWorkforceRevenue()): ?>
-                <p>
-                    <strong>Workforce Revenue:</strong>
-                    <?= $peerGroup->getWorkforceRevenue() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getIpedsFallEnrollment()): ?>
-                <p>
-                    <strong>IPEDS Fall Enrollment:</strong>
-                    <?= $peerGroup->getIpedsFallEnrollment() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getFiscalCreditHours()): ?>
-                <p>
-                    <strong>Fiscal Year Student Credit Hours:</strong>
-                    <?= $peerGroup->getFiscalCreditHours() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getPellGrantRecipients()): ?>
-                <p>
-                    <strong>Pell Grant Recipients:</strong>
-                    <?= $peerGroup->getPellGrantRecipients() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getBlk()): ?>
-                <p>
-                    <strong>% Black or African American:</strong>
-                    <?= $peerGroup->getBlk() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getAsian()): ?>
-                <p>
-                    <strong>% Asian:</strong>
-                    <?= $peerGroup->getAsian() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getHispAnyrace()): ?>
-                <p>
-                    <strong>% Hispanic of Any Race:</strong>
-                    <?= $peerGroup->getHispAnyrace() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getOperatingRevenue()): ?>
-                <p>
-                    <strong>Unrestricted Operating Revenue:</strong>
-                    <?= $peerGroup->getOperatingRevenue() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getServiceAreaPopulation()): ?>
-                <p>
-                    <strong>Service Area Population:</strong>
-                    <?= $peerGroup->getServiceAreaPopulation() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getServiceAreaUnemployment()): ?>
-                <p>
-                    <strong>Service Area Unemployment:</strong>
-                    <?= $peerGroup->getServiceAreaUnemployment() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getServiceAreaMedianIncome()): ?>
-                <p>
-                    <strong>Service Area Median Income:</strong>
-                    <?= $peerGroup->getServiceAreaMedianIncome() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getTechnicalCredit()): ?>
-                <p>
-                    <strong>% Technical/Career Credit Hours:</strong>
-                    <?= $peerGroup->getTechnicalCredit() ?>
-                </p>
-            <?php endif ?>
-
-            <?php if ($peerGroup->getPercentageFullTime()): ?>
-                <p>
-                    <strong>% of Full-time Students:</strong>
-                    <?= $peerGroup->getPercentageFullTime() ?>
-                </p>
-            <?php endif ?>
         <?php else: ?>
             <p>None selected</p>
         <?php endif ?>
