@@ -107,7 +107,16 @@ class PeerGroupController extends ReportController
 
     public function deleteAction()
     {
+        $groupId = $this->params()->fromRoute('id');
 
+        $peerGroup = $this->getPeerGroupModel()->find($groupId);
+
+        if ($peerGroup) {
+            $this->getPeerGroupModel()->delete($peerGroup);
+        }
+
+        $this->flashMessenger()->addSuccessMessage('Peer group deleted.');
+        return $this->redirect()->toRoute('peer-groups');
     }
 
     /**
