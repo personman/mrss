@@ -27,7 +27,7 @@ class Executive extends Report
                 'percent' => true,
                 'benchmarks' => array(
                     'ft_perc_transf' => 'Transferred', // Transferred in 3 years, full time
-                    'ft_perc_comp' => 'Completed', // Completed in 3 years, full time
+                    'ft_minus4_perc_completed' => 'Completed', // Completed in 3 years, full time
                 ),
                 'description' => 'The percent of students out of the unduplicated full-time, first-time,
                     credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree
@@ -41,7 +41,7 @@ class Executive extends Report
                 'percent' => true,
                 'benchmarks' => array(
                     'pt_percminus7_tran' => 'Transferred',
-                    'pt_perminus7_comp' => 'Completed'
+                    'pt_minus7_perc_completed' => 'Completed'
                 ),
                 'description' => 'The percent of part-time students out of the unduplicated part-time, first-time,
                  credit headcount from Fall ' . ($year - 6)  . ' IPEDS GRS cohort who either completed a degree or
