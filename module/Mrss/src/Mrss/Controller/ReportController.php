@@ -348,12 +348,12 @@ class ReportController extends AbstractActionController
         }
 
 
-        $year = $this->getYearFromRouteOrStudy();
+        $year = $this->getYearFromRouteOrStudy($college);
 
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
         // Don't show 2015 executive report yet
         $newSubs = array();
-        $yearToSkip = 2016;
+        $yearToSkip = 2015;
         foreach ($subscriptions as $subscription) {
             if ($subscription->getYear() != $yearToSkip) {
                 $newSubs[] = $subscription;
@@ -441,9 +441,12 @@ class ReportController extends AbstractActionController
         );
     }
 
-    public function getYearFromRouteOrStudy()
+    public function getYearFromRouteOrStudy($college = null)
     {
-        $college = $this->currentCollege();
+        if (empty($college)) {
+            $college = $this->currentCollege();
+        }
+
         $year = $this->params()->fromRoute('year');
 
         if (empty($year)) {
