@@ -286,7 +286,7 @@ class Executive extends Report
         );
     }
 
-    public function getStrengths($weaknesses = false, $threshold = 85)
+    public function getStrengths($weaknesses = false, $threshold = 75)
     {
         $college = $this->getObservation()->getCollege();
         $year = $this->getObservation()->getYear();
@@ -318,7 +318,7 @@ class Executive extends Report
         return $ranks;
     }
 
-    public function getWeaknesses($threshold = 85)
+    public function getWeaknesses($threshold = 75)
     {
         return $this->getStrengths(true, $threshold);
     }
