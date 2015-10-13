@@ -153,14 +153,136 @@ class College extends AbstractModel
         return $results;
     }
 
-    public function findByCriteria($criteria, StudyEntity $currentStudy)
+    protected function parseRange($range)
     {
+        $parts = explode('-', $range);
+        $min = intval(trim($parts[0]));
+        $max = intval(trim($parts[1]));
 
+        return array(
+            'min' => $min,
+            'max' => $max
+        );
+    }
+
+    /**
+     * @param $criteria
+     * @param StudyEntity $currentStudy
+     * @param $currentCollege
+     * @return \Mrss\Entity\College[]
+     */
+    public function findByCriteria($criteria, StudyEntity $currentStudy, $currentCollege)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->add('select', 'c');
+        $qb->add('from', '\Mrss\Entity\College c');
+
+        // Join subscriptions
+        $qb->innerJoin(
+            '\Mrss\Entity\Subscription',
+            's',
+            'WITH',
+            's.college = c.id'
+        );
+        $qb->andWhere('s.study = :study_id');
+        $qb->setParameter('study_id', $currentStudy->getId());
+
+        // Filter by state
+        if ($states = $criteria['states']) {
+            if (is_array($states) && count($states) > 0) {
+                $qb->andWhere($qb->expr()->in('c.state', ':states'));
+                $qb->setParameter('states', $states);
+            }
+        }
+
+        // Join observations
+        $qb->innerJoin(
+            '\Mrss\Entity\Observation',
+            'o',
+            'WITH',
+            's.observation = o.id'
+        );
+
+
+        // Filter the the other criteria
+        foreach ($criteria as $criterion => $value) {
+            if ($criterion == 'states') {
+                // Already handled this
+                continue;
+            }
+
+            if (!empty($value)) {
+                // Criteria that support multiple values, use IN
+                if (is_array($value)) {
+                    $qb->andWhere(
+                        $qb->expr()->in(
+                            "o.$criterion",
+                            ':' . $criterion
+                        )
+                    );
+                    $qb->setParameter(
+                        $criterion,
+                        $value
+                    );
+
+                } else {
+                    // Criteria that support a range
+                    $parsedRange = $this->parseRange($value);
+
+                    $qb->andWhere(
+                        "o.$criterion BETWEEN :{$criterion}_min AND :{$criterion}_max"
+                    );
+                    $qb->setParameter(
+                        $criterion . '_min',
+                        $parsedRange['min']
+                    );
+                    $qb->setParameter(
+                        $criterion . '_max',
+                        $parsedRange['max']
+                    );
+                }
+            }
+        }
+
+        // Exclude the current college (they can't be their own peer)
+        $qb->andWhere('c.id != :current_college_id');
+        $qb->setParameter('current_college_id', $currentCollege->getId());
+
+        // Order
+        $qb->orderBy('c.name', 'ASC');
+
+
+        if (false) {
+            $dql = $qb->getDQL();
+            //var_dump($dql);
+            $p = $qb->getParameters();
+            //var_dump($p);
+
+            $colleges = $qb->getQuery()->getResult();
+            $count = count($colleges);
+
+            //var_dump($count);
+
+            foreach ($colleges as $college) {
+                pr($college->getName());
+            }
+            //var_dump($colleges);
+
+            //die('findByPeerGroup');
+            //var_dump($qb); die;*/
+        }
+
+        $colleges = $qb->getQuery()->getResult();
+
+        return $colleges;
     }
 
     /**
      * @param PeerGroupEntity $peerGroup
      * @param StudyEntity $currentStudy
+     * @deprecated
      * @return array
      */
     public function findByPeerGroup(PeerGroupEntity $peerGroup, StudyEntity $currentStudy)
