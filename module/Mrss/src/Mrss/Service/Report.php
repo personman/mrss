@@ -202,11 +202,11 @@ class Report
                 $dbColumn = $benchmark->getDbColumn();
                 $value = $observation->get($dbColumn);
                 $collegeId = $subscription->getCollege()->getId();
-                $isDebug = $this->params()->fromQuery('debug');
+                /*$isDebug = $this->params()->fromQuery('debug');
                 if (!empty($isDebug)
                     && $benchmark->getDbColumn() == $this->params()->fromQuery('debug')) {
                     //pr($value);
-                }
+                }*/
                 // Leave out null values
                 if ($skipNull && $value === null) {
                     $skipped++;
