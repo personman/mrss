@@ -909,7 +909,7 @@ class ObservationController extends AbstractActionController
 
     public function submittedValuesAction()
     {
-        //$year = $this->getYearFromRouteOrStudy(false);
+        $year = $this->getYearFromRouteOrStudy(false);
 
         // Get their subscriptions
         $subscriptions = $this->currentCollege()
@@ -917,10 +917,13 @@ class ObservationController extends AbstractActionController
 
         // Set the year to be the most recent they have a subscription for
         foreach ($subscriptions as $sub) {
-            $year = $sub->getYear();
+            $latestYear = $sub->getYear();
             break;
         }
         reset($subscriptions);
+        if ($year > $latestYear) {
+            $year = $latestYear;
+        }
 
         // Get the observation
         /** @var \Mrss\Model\Subscription $subscriptionModel */
