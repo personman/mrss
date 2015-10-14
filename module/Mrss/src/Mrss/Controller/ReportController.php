@@ -353,7 +353,7 @@ class ReportController extends AbstractActionController
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
         // Don't show 2015 executive report yet
         $newSubs = array();
-        $yearToSkip = 2016;
+        $yearToSkip = 2015;
         foreach ($subscriptions as $subscription) {
             if ($subscription->getYear() != $yearToSkip) {
                 $newSubs[] = $subscription;
