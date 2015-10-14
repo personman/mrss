@@ -202,7 +202,7 @@ class Report
                 $dbColumn = $benchmark->getDbColumn();
                 $value = $observation->get($dbColumn);
                 $collegeId = $subscription->getCollege()->getId();
-                if (!empty($this->params()->fromQuery('debug'))
+                if ($this->params()->fromQuery('debug')
                     && $benchmark->getDbColumn() == $this->params()->fromQuery('debug')) {
                     //pr($value);
                 }
