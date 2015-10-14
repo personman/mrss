@@ -1341,7 +1341,12 @@ class ReportController extends AbstractActionController
 
     protected function getCriteriaFromSession()
     {
-        return $this->getSessionContainer()->criteria;
+        $criteria = $this->getSessionContainer()->criteria;
+        if (!$criteria) {
+            $criteria = array();
+        }
+
+        return $criteria;
     }
 
     public function savePeerGroupToSession(PeerGroup $peerGroup)
