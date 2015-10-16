@@ -523,7 +523,11 @@ class ReportController extends AbstractActionController
             if ($form->isValid()) {
                 $data = $form->getData();
                 $peerGroup->setYear($data['reportingPeriod']);
-                $peerGroup->setBenchmarks($data['benchmarks']);
+                //$peerGroup->setBenchmarks($data['benchmarks']);
+                $this->getSessionContainer()->benchmarks = $data['benchmarks'];
+                $this->getSessionContainer()->peers = $data['peers'];
+                $this->getSessionContainer()->year = $data['reportingPeriod'];
+                $_SESSION['test'] = 'test ok';
                 $peerGroup->setPeers($data['peers']);
 
                 // Save to db?
@@ -548,6 +552,8 @@ class ReportController extends AbstractActionController
                         $this->getPeerGroupModel()->save($peerGroup);
                     }
 
+                    $this->getSessionContainer()->peerGroupName = $peerGroup->getName();
+
                     $this->getPeerGroupModel()->getEntityManager()->flush();
 
                     $this->flashMessenger()->addSuccessMessage(
@@ -555,7 +561,7 @@ class ReportController extends AbstractActionController
                     );
                 }
 
-                $this->savePeerGroupToSession($peerGroup);
+                //$this->savePeerGroupToSession($peerGroup);
 
                 return $this->redirect()->toRoute('reports/peer-results');
             }
@@ -628,12 +634,21 @@ class ReportController extends AbstractActionController
         $format = $this->params()->fromRoute('format');
 
         ini_set('memory_limit', '512M');
-        $peerGroup = $this->getPeerGroupFromSession();
 
-        $report = $peerService->getPeerReport($peerGroup);
+        $benchmarks = $this->getSessionContainer()->benchmarks;
+        $peers = $this->getSessionContainer()->peers;
+        $year = $this->getSessionContainer()->year;
+
+        $peerGroupName = null;
+        if ($peerGroup = $this->getPeerGroupFromSession()) {
+            $peerGroupName = $peerGroup->getName();
+        }
+
+
+        $report = $peerService->getPeerReport($benchmarks, $peers, $this->currentCollege(), $year, $peerGroupName);
 
         if ($format == 'excel') {
-            $peerService->downloadPeerReport($report, $peerGroup);
+            $peerService->downloadPeerReport($report);
         }
 
         return array(
@@ -1139,7 +1154,7 @@ class ReportController extends AbstractActionController
 
 
             // Lou's issue
-            $currentUser = $this->zfcUserAuthentication()->getIdentity();
+            /*$currentUser = $this->zfcUserAuthentication()->getIdentity();
             $this->getErrorLog()->info('Accessing peerCollegesAction as ' . $currentUser->getFullName());
             if (true || $currentUser->getId() == 93) {
                 $states = print_r($criteria['states'], true);
@@ -1155,7 +1170,7 @@ class ReportController extends AbstractActionController
                 $message .= "Colleges:\n$collegeNames\n";
 
                 $this->getErrorLog()->info($message);
-            }
+            }*/
 
 
             if (!empty($benchmarks)) {
