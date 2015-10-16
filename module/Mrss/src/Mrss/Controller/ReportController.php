@@ -1141,7 +1141,7 @@ class ReportController extends AbstractActionController
             // Lou's issue
             $currentUser = $this->zfcUserAuthentication()->getIdentity();
             $this->getErrorLog()->info('Accessing peerCollegesAction as ' . $currentUser->getFullName());
-            if ($currentUser->getId() == 93) {
+            if (true || $currentUser->getId() == 93) {
                 $states = print_r($criteria['states'], true);
                 //$nameG = print_r($->getName(), true);
                 $collegeNames = '';
