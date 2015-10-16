@@ -490,6 +490,14 @@ class Module
 
                     return $benchmarkGroupkModel;
                 },
+                'model.criterion' => function ($sm) {
+                    $model = new Model\Criterion();
+                    $em = $sm->get('em');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
                 'model.study' => function ($sm) {
                     $studyModel = new Model\Study();
                     $em = $sm->get('em');

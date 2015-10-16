@@ -227,25 +227,26 @@ class PeerGroupController extends ReportController
 
     public function addDemographicAction()
     {
-        $form = new PeerComparisonDemographics($this->currentStudy()->getId());
+        $form = new PeerComparisonDemographics($this->currentStudy());
 
         $id = $this->params()->fromRoute('id');
         $peerGroup = $this->getPeerGroup($id);
 
         // Bind an empty peer group just to serve as the container for these criteria
-        $emptyPeerGroup = new PeerGroup();
+        /*$emptyPeerGroup = new PeerGroup();
         $emptyPeerGroup->setCollege($this->currentCollege());
         $emptyPeerGroup->setYear($this->currentStudy()->getCurrentYear());
         $em = $this->getServiceLocator()->get('em');
         $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\PeerGroup'));
-        $form->bind($emptyPeerGroup);
+        $form->bind($emptyPeerGroup);*/
 
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->params()->fromPost();
+            unset($postData['buttons']);
 
             // Handle empty multiselects
-            $multiselects = array(
+            /*$multiselects = array(
                 'states',
                 'environments',
                 'facultyUnionized',
@@ -260,7 +261,7 @@ class PeerGroupController extends ReportController
                 if (empty($postData[$multiselect])) {
                     $postData[$multiselect] = array();
                 }
-            }
+            }*/
 
             $form->setData($postData);
 
@@ -270,20 +271,24 @@ class PeerGroupController extends ReportController
                 /** @var \Mrss\Model\College $collegeModel */
                 $collegeModel = $this->getServiceLocator()->get('model.college');
 
-                $colleges = $collegeModel->findByPeerGroup(
+                /*$colleges = $collegeModel->findByPeerGroup(
                     $emptyPeerGroup,
                     $this->currentStudy()
-                );
+                );*/
 
+                $colleges = $collegeModel->findByCriteria($postData, $this->currentStudy(), $this->currentCollege());
+
+                $names = array();
                 foreach ($colleges as $college) {
                     $peerGroup->addPeer($college->getId());
+                    $names[] = $college->getName() . ' (' . $college->getState() . ')';
                 }
 
                 $count = count($colleges);
 
                 $this->getServiceLocator()->get('em')->flush();
 
-                $this->flashMessenger()->addSuccessMessage($count . ' peers added.');
+                $this->flashMessenger()->addSuccessMessage($count . ' peers added: ' . implode(', ', $names));
 
                 return $this->redirect()->toRoute(
                     'peer-groups/edit',

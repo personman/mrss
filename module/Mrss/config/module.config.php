@@ -1685,6 +1685,47 @@ return array(
                     ),
                 )
             ),
+            'criteria' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/criteria',
+                    'defaults' => array(
+                        'controller' => 'criteria',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add',
+                            'defaults' => array(
+                                'action' => 'add'
+                            )
+                        )
+                    ),
+                    'delete' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/delete/:id',
+                            'defaults' => array(
+                                'action' => 'delete',
+                                'id' => 0
+                            )
+                        )
+                    ),
+                    'reorder' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/reorder',
+                            'defaults' => array(
+                                'action' => 'reorder'
+                            )
+                        )
+                    )
+                )
+            ),
             'peer-groups' => array(
                 'type' => 'Segment',
                 'may_terminate' => true,
@@ -1954,6 +1995,7 @@ return array(
             'reports' => 'Mrss\Controller\ReportController',
             'customReports' => 'Mrss\Controller\CustomReportController',
             'peerGroups' => 'Mrss\Controller\PeerGroupController',
+            'criteria' => 'Mrss\Controller\CriterionController',
             'reportItems' => 'Mrss\Controller\ReportItemController',
             'users' => 'Mrss\Controller\UserController',
             'EquationValidator' => '\Mrss\Validator\Equation'

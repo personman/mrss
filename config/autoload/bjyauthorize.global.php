@@ -233,6 +233,10 @@ return array(
                     'roles' => array('admin')
                 ),
                 array(
+                    'controller' => 'criteria',
+                    'roles' => array('admin')
+                ),
+                array(
                     'controller' => 'benchmarkgroups',
                     'roles' => array('admin')
                 ),

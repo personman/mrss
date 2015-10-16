@@ -19,7 +19,7 @@ class Peer extends Report
 {
     protected $peerBenchmarkModel;
 
-    public function getPeerReport(PeerGroup $peerGroup)
+    public function getPeerReport($benchmarks, $colleges, $currentCollege, $year, $peerGroupName)
     {
         $minPeers = 5;
 
@@ -28,15 +28,14 @@ class Peer extends Report
             'youHaveNoData' => array(),
             'sections' => array(),
             'colleges' => array(),
-            'currentCollege' => $peerGroup->getCollege()->getName(),
-            'year' => $peerGroup->getYear()
+            'currentCollege' => $currentCollege->getName(),
+            'year' => $year
         );
 
-        $year = $peerGroup->getYear();
-        $benchmarks = $peerGroup->getBenchmarks();
-        $colleges = $peerGroup->getPeers();
+        //$benchmarks = $peerGroup->getBenchmarks();
+        //$colleges = $peerGroup->getPeers();
 
-        $colleges[] = $peerGroup->getCollege()->getId();
+        $colleges[] = $currentCollege->getId();
 
         $observations = array();
         $collegeEntities = array();
@@ -49,9 +48,9 @@ class Peer extends Report
             $collegeEntities[$collegeId] = $college;
             $observations[$collegeId] = $college->getObservationForYear($year);
 
-            if ($college->getId() != $peerGroup->getCollege()->getId()) {
+            if ($college->getId() != $currentCollege->getId()) {
                 $report['colleges'][] = $college->getName();
-            } else {
+            } elseif (!empty($observations[$collegeId])) {
                 $this->setObservation($observations[$collegeId]);
             }
         }
@@ -60,7 +59,7 @@ class Peer extends Report
         foreach ($benchmarks as $benchmarkId) {
             /** @var \Mrss\Entity\Benchmark $benchmark */
             $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
-            $this->logPeerBenchmark($benchmark, $peerGroup->getCollege());
+            $this->logPeerBenchmark($benchmark, $currentCollege);
 
             // Build the report data
             $data = array();
@@ -83,12 +82,12 @@ class Peer extends Report
             }
 
             // Also skip benchmarks where the current college didn't report
-            if (!isset($data[$peerGroup->getCollege()->getId()])) {
+            if (!isset($data[$currentCollege->getId()])) {
                 $report['youHaveNoData'][] = $benchmark->getPeerReportLabel();
                 continue;
             }
 
-            $data = $this->sortAndLabelPeerData($data, $peerGroup->getCollege());
+            $data = $this->sortAndLabelPeerData($data, $currentCollege);
 
             // Data labels
             $prefix = $suffix = '';
@@ -115,7 +114,7 @@ class Peer extends Report
         return $report;
     }
 
-    public function downloadPeerReport($report, $peerGroup)
+    public function downloadPeerReport($report)
     {
         $filename = 'peer-comparison-report';
 
@@ -161,9 +160,9 @@ class Peer extends Report
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         // Set column widths
-        PHPExcel_Shared_Font::setAutoSizeMethod(
-            PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
-        );
+        //PHPExcel_Shared_Font::setAutoSizeMethod(
+        //    PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
+        //);
         foreach (range(0, 1) as $column) {
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         }

@@ -254,23 +254,7 @@ class ReportItemController extends CustomReportController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
         
-        $benchmarks = array();
-        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
-            $group = array(
-                'label' => $benchmarkGroup->getName(),
-                'options' => array()
-            );
-
-            foreach ($benchmarkGroup->getBenchmarksForYear($study->getCurrentYear()) as $benchmark) {
-                // Skip non-report benchmarks
-                if (!$benchmark->getIncludeInNationalReport()) {
-                    continue;
-                }
-                $group['options'][$benchmark->getDbColumn()] = $benchmark->getDescriptiveReportLabel();
-            }
-
-            $benchmarks[$benchmarkGroup->getId()] = $group;
-        }
+        $benchmarks = $study->getStructuredBenchmarks();
         
         return $benchmarks;
     }
