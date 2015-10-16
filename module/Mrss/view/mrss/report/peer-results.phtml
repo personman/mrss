@@ -26,10 +26,10 @@ $this->headScript()->appendFile(
     <?php endif ?>
 </p>
 
-<?php if ($name = $peerGroup->getName()): ?>
+<?php if (!empty($peerGroupName)): ?>
 <p>
     <span class="peer-titles">Peer group:</span><br>
-    <?= $name ?>
+    <?= $peerGroupName ?>
 </p>
 <?php endif ?>
 

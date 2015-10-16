@@ -643,10 +643,7 @@ class ReportController extends AbstractActionController
         $year = $this->getSessionContainer()->year;
 
         $peerGroupName = null;
-        if ($peerGroup = $this->getPeerGroupFromSession()) {
-            $peerGroupName = $peerGroup->getName();
-        }
-
+        $this->getSessionContainer()->peerGroupName;
 
         $report = $peerService->getPeerReport($benchmarks, $peers, $this->currentCollege(), $year, $peerGroupName);
 
@@ -655,7 +652,7 @@ class ReportController extends AbstractActionController
         }
 
         return array(
-            'peerGroup' => $peerGroup,
+            'peerGroupName' => $peerGroupName,
             'report' => $report
         );
     }
