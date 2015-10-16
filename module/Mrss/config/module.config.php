@@ -37,11 +37,12 @@ return array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/submitted-values[/:year]',
+                    'route' => '/submitted-values[/:year][/:format]',
                     'defaults' => array(
                         'controller' => 'observations',
                         'action' => 'submittedValues',
-                        'year' => null
+                        'year' => null,
+                        'format' => 'html'
                     )
                 )
             ),

@@ -31,6 +31,12 @@
 </ul>
 
 <p>
+    <a href="<?= $this->url('submitted-values', array('year' => $year, 'format' => 'xls')) ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download
+    </a>
+</p>
+<p>
     <strong>Please note:</strong> The website has created the values in grey italics based on the data you entered.
 </p>
 <div class="row row-fluid">
@@ -81,7 +87,7 @@
         <?php else: ?>
             <?php $b = $benchmark['benchmark'] ?>
             <?php $class = ($b->getComputed()) ? 'computed' : 'submitted' ?>
-            <td class="<?= $class ?>"><?= $variable->substitute($b->getName()) ?></td>
+            <td class="<?= $class ?>"><?= $benchmark['benchmarkName'] ?></td>
             <td class="value <?= $class ?>"><?= $benchmark['value'] ?></td>
         <?php endif ?>
         </tr>

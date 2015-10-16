@@ -12,6 +12,12 @@ use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use Zend\Form\Form;
 use Zend\Form\Element;
+use PHPExcel;
+use PHPExcel_Worksheet;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Fill;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Shared_Font;
 
 class ObservationController extends AbstractActionController
 {
@@ -910,6 +916,7 @@ class ObservationController extends AbstractActionController
     public function submittedValuesAction()
     {
         $year = $this->getYearFromRouteOrStudy(false);
+        $format = $this->params()->fromRoute('format', 'html');
 
         // Get their subscriptions
         $subscriptions = $this->currentCollege()
@@ -977,20 +984,130 @@ class ObservationController extends AbstractActionController
 
                 $groupData['benchmarks'][] = array(
                     'benchmark' => $benchmark,
-                    'value' => $value
+                    'value' => $value,
+                    'benchmarkName' => $variable->substitute($benchmark->getName())
                 );
             }
 
             $submittedValues[] = $groupData;
         }
 
+        if ($format == 'xls') {
+            $this->downloadSubmittedValues($submittedValues, $year);
+        }
+
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
             'submittedValues' => $submittedValues,
-            'variable' => $variable,
             'completionPercentage' => round($subscription->getCompletion(), 1)
         );
+    }
+
+    protected function downloadSubmittedValues($submittedValues, $year)
+    {
+        takeYourTime();
+
+        $filename = 'submitted-values-' . $year;
+
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $row = 1;
+
+        // Format for header row
+        $blueBar = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'DCE6F1')
+            ),
+            'font' => array(
+                'bold' => true
+            )
+        );
+
+        // Subheadings, just bold
+        $bold = array(
+            'font' => array(
+                'bold' => true
+            )
+        );
+
+        // Italics for computed benchmarks
+        $italic = array(
+            'font' => array(
+                'italic' => true
+            )
+        );
+
+        foreach ($submittedValues as $benchmarkGroup) {
+
+            // Header
+            $headerRow = array(
+                $benchmarkGroup['benchmarkGroup']
+            );
+
+            $sheet->fromArray($headerRow, null, 'A' . $row);
+            $sheet->getStyle("A$row:B$row")->applyFromArray($blueBar);
+            $row++;
+
+            // Data
+            foreach ($benchmarkGroup['benchmarks'] as $benchmark) {
+                // Is this a subheading?
+                if (!empty($benchmark['heading'])) {
+                    $dataRow = array(
+                        $benchmark['name']
+                    );
+
+                    $sheet->fromArray($dataRow, null, 'A' . $row);
+                    $sheet->getStyle("A$row:B$row")->applyFromArray($bold);
+                    $row++;
+                    continue;
+                } else {
+                    $b = $benchmark['benchmark'];
+                }
+
+                $dataRow = array(
+                    $benchmark['benchmarkName'],
+                    $benchmark['value']
+                );
+
+                if ($b->getComputed()) {
+                    $sheet->getStyle("A$row")->applyFromArray($italic);
+                }
+
+
+                $sheet->fromArray($dataRow, null, 'A' . $row);
+                $row++;
+            }
+
+            // Add a blank row after each form
+            $row++;
+        }
+
+        // Align right
+        $sheet->getStyle('B1:B500')->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        // Set column widths
+        //PHPExcel_Shared_Font::setAutoSizeMethod(
+        //    PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
+        //);
+        foreach (range(0, 2) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        // redirect output to client browser
+        header(
+            'Content-Type: '.
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+
+        die;
     }
 
     /**
