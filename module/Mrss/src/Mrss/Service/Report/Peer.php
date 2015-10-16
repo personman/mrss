@@ -51,7 +51,7 @@ class Peer extends Report
 
             if ($college->getId() != $peerGroup->getCollege()->getId()) {
                 $report['colleges'][] = $college->getName();
-            } else {
+            } elseif (!empty($observations[$collegeId])) {
                 $this->setObservation($observations[$collegeId]);
             }
         }

@@ -190,7 +190,7 @@ class College extends AbstractModel
         $qb->setParameter('study_id', $currentStudy->getId());
 
         // Filter by state
-        if ($states = $criteria['states']) {
+        if (!empty($criteria['states']) && $states = $criteria['states']) {
             if (is_array($states) && count($states) > 0) {
                 $qb->andWhere($qb->expr()->in('c.state', ':states'));
                 $qb->setParameter('states', $states);
