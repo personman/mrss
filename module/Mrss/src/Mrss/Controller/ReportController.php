@@ -642,8 +642,7 @@ class ReportController extends AbstractActionController
         $peers = $this->getSessionContainer()->peers;
         $year = $this->getSessionContainer()->year;
 
-        $peerGroupName = null;
-        $this->getSessionContainer()->peerGroupName;
+        $peerGroupName = $this->getSessionContainer()->peerGroupName;
 
         $report = $peerService->getPeerReport($benchmarks, $peers, $this->currentCollege(), $year, $peerGroupName);
 
