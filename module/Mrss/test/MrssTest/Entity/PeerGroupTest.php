@@ -166,20 +166,6 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($results, $expectedResult);
     }
 
-    public function testHasCriteria()
-    {
-        $this->assertFalse($this->peerGroup->hasCriteria());
-
-        $this->peerGroup->setStates(array('MO'));
-        $this->assertTrue($this->peerGroup->hasCriteria());
-
-        $this->peerGroup->setStates(array());
-        $this->assertFalse($this->peerGroup->hasCriteria());
-
-        $this->peerGroup->setServiceAreaUnemployment('3-6');
-        $this->assertTrue($this->peerGroup->hasCriteria());
-    }
-
     public function testGettersWithMinMax()
     {
         $this->peerGroup->setWorkforceEnrollment('100-500');

@@ -530,7 +530,7 @@ class ReportController extends AbstractActionController
                 $this->getSessionContainer()->benchmarks = $data['benchmarks'];
                 $this->getSessionContainer()->peers = $data['peers'];
                 $this->getSessionContainer()->year = $data['reportingPeriod'];
-                $_SESSION['test'] = 'test ok';
+                $this->getSessionContainer()->peerGroupName = null;
                 $peerGroup->setPeers($data['peers']);
 
                 // Save to db?
