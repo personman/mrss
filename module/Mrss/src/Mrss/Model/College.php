@@ -2,6 +2,7 @@
 
 namespace Mrss\Model;
 
+use Doctrine\ORM\QueryBuilder;
 use \Mrss\Entity\College as CollegeEntity;
 use \Mrss\Entity\PeerGroup as PeerGroupEntity;
 use \Mrss\Entity\Study as StudyEntity;
@@ -53,8 +54,7 @@ class College extends AbstractModel
      */
     public function findAll()
     {
-        $c = $this->getRepository()->findBy(array(), array('name' => 'ASC'));
-        return $c;
+        return $this->getRepository()->findBy(array(), array('name' => 'ASC'));
     }
 
     /**
@@ -132,7 +132,7 @@ class College extends AbstractModel
         $limit = intval($limit);
 
         $em = $this->getEntityManager();
-        $q = $em->createQuery(
+        $query = $em->createQuery(
             "SELECT c
             FROM Mrss\Entity\College c
             WHERE c.name LIKE ?1
@@ -140,11 +140,11 @@ class College extends AbstractModel
             OR c.opeId LIKE ?1
             ORDER BY c.name"
         );
-        $q->setParameter(1, '%' . $term . '%');
-        $q->setMaxResults($limit);
+        $query->setParameter(1, '%' . $term . '%');
+        $query->setMaxResults($limit);
 
         try {
-            $results = $q->getResult();
+            $results = $query->getResult();
 
         } catch (\Exception $e) {
             return array();
@@ -174,38 +174,58 @@ class College extends AbstractModel
     public function findByCriteria($criteria, StudyEntity $currentStudy, $currentCollege)
     {
         $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
+        $builder = $em->createQueryBuilder();
 
-        $qb->add('select', 'c');
-        $qb->add('from', '\Mrss\Entity\College c');
+        $builder->add('select', 'c');
+        $builder->add('from', '\Mrss\Entity\College c');
 
         // Join subscriptions
-        $qb->innerJoin(
+        $builder->innerJoin(
             '\Mrss\Entity\Subscription',
             's',
             'WITH',
             's.college = c.id'
         );
-        $qb->andWhere('s.study = :study_id');
-        $qb->setParameter('study_id', $currentStudy->getId());
+        $builder->andWhere('s.study = :study_id');
+        $builder->setParameter('study_id', $currentStudy->getId());
 
         // Filter by state
         if (!empty($criteria['states']) && $states = $criteria['states']) {
             if (is_array($states) && count($states) > 0) {
-                $qb->andWhere($qb->expr()->in('c.state', ':states'));
-                $qb->setParameter('states', $states);
+                $builder->andWhere($builder->expr()->in('c.state', ':states'));
+                $builder->setParameter('states', $states);
             }
         }
 
         // Join observations
-        $qb->innerJoin(
+        $builder->innerJoin(
             '\Mrss\Entity\Observation',
             'o',
             'WITH',
             's.observation = o.id'
         );
 
+        $builder = $this->addCriteria($builder, $criteria);
 
+        // Exclude the current college (they can't be their own peer)
+        $builder->andWhere('c.id != :current_college_id');
+        $builder->setParameter('current_college_id', $currentCollege->getId());
+
+        // Order
+        $builder->orderBy('c.name', 'ASC');
+
+        $colleges = $builder->getQuery()->getResult();
+
+        return $colleges;
+    }
+
+    /**
+     * @param QueryBuilder $builder
+     * @param $criteria
+     * @return QueryBuilder
+     */
+    protected function addCriteria(QueryBuilder $builder, $criteria)
+    {
         // Filter the the other criteria
         foreach ($criteria as $criterion => $value) {
             if ($criterion == 'states') {
@@ -216,13 +236,13 @@ class College extends AbstractModel
             if (!empty($value)) {
                 // Criteria that support multiple values, use IN
                 if (is_array($value)) {
-                    $qb->andWhere(
-                        $qb->expr()->in(
+                    $builder->andWhere(
+                        $builder->expr()->in(
                             "o.$criterion",
                             ':' . $criterion
                         )
                     );
-                    $qb->setParameter(
+                    $builder->setParameter(
                         $criterion,
                         $value
                     );
@@ -231,14 +251,14 @@ class College extends AbstractModel
                     // Criteria that support a range
                     $parsedRange = $this->parseRange($value);
 
-                    $qb->andWhere(
+                    $builder->andWhere(
                         "o.$criterion BETWEEN :{$criterion}_min AND :{$criterion}_max"
                     );
-                    $qb->setParameter(
+                    $builder->setParameter(
                         $criterion . '_min',
                         $parsedRange['min']
                     );
-                    $qb->setParameter(
+                    $builder->setParameter(
                         $criterion . '_max',
                         $parsedRange['max']
                     );
@@ -246,37 +266,7 @@ class College extends AbstractModel
             }
         }
 
-        // Exclude the current college (they can't be their own peer)
-        $qb->andWhere('c.id != :current_college_id');
-        $qb->setParameter('current_college_id', $currentCollege->getId());
-
-        // Order
-        $qb->orderBy('c.name', 'ASC');
-
-
-        /*if (false) {
-            $dql = $qb->getDQL();
-            //var_dump($dql);
-            $p = $qb->getParameters();
-            //var_dump($p);
-
-            $colleges = $qb->getQuery()->getResult();
-            $count = count($colleges);
-
-            //var_dump($count);
-
-            foreach ($colleges as $college) {
-                pr($college->getName());
-            }
-            //var_dump($colleges);
-
-            //die('findByPeerGroup');
-            //var_dump($qb); die;
-        }*/
-
-        $colleges = $qb->getQuery()->getResult();
-
-        return $colleges;
+        return $builder;
     }
 
     public function save(CollegeEntity $college)
