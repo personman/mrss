@@ -927,7 +927,7 @@ input:focus, textarea:focus {
 
 /* Report overview slides */
 #reports-slides .carousel-inner {
-    max-width: 540px;
+    max-width: 630px;
 }
 
 #reports-slides .carousel-caption {
