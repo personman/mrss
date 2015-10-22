@@ -337,10 +337,6 @@ class ToolController extends AbstractActionController
 
         // Exclude some for 2014:
         $ipedsToExclude = array(
-            '217989',
-            '146603',
-            '020774',
-            '107992'
         );
 
         foreach ($subscriptions as $subscription) {
