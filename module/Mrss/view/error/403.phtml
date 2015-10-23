@@ -1,5 +1,5 @@
-<?php if ($this->currentStudy()->getId() == 1): ?>
-    <?php $this->layout('layout/nccbp.phtml') ?>
+<?php if ($layout = $this->currentStudy(false)->getConfig()->layout): ?>
+    <?php $this->layout('layout/' . $layout) ?>
 <?php endif ?>
 
 <?php if ($this->zfcUserIdentity()): ?>
