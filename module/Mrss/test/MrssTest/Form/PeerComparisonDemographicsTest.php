@@ -17,15 +17,16 @@ class PeerComparisonDemographicsTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->form = new PeerComparisonDemographics(1);
+        $studyMock = $this->getMock('Mrss\Entity\Study');
+        $studyMock->expects($this->any())
+            ->method('getCriteria')
+            ->will($this->returnValue(array()));
+
+        $this->form = new PeerComparisonDemographics($studyMock);
     }
 
     public function testFormConstruction()
     {
         $this->assertInstanceOf('Mrss\Form\PeerComparisonDemographics', $this->form);
-
-        // Make sure the elements are present
-        $this->assertNotEmpty($this->form->get('states'));
-        $this->assertNotEmpty($this->form->get('environments'));
     }
 }

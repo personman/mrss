@@ -32,89 +32,15 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         $this->peerGroup->setId(5)
             ->setYear(2014)
             ->setName('Test Peergroup')
-            ->setStates(array('MO', 'KS'))
-            ->setEnvironments(array('Urban'))
-            ->setWorkforceEnrollment('2000 - 4000')
-            ->setWorkforceRevenue('1900000 - 5000000')
-            ->setServiceAreaPopulation('10000 - 100000')
-            ->setServiceAreaUnemployment('3 - 6')
-            ->setServiceAreaMedianIncome('20000 - 80000')
-            ->setBenchmarks(array('test', 'test2'))
-            ->setPeers(array(1, 2, 3))
-            ->setInstitutionalControl(array('local'))
-            ->setPellGrantRecipients('5 - 10')
-            ->setOperatingRevenue('10000 - 1000000')
-            ->setIpedsFallEnrollment('100 - 1000')
-            ->setFiscalCreditHours('1 - 3')
-            ->setFacultyUnionized(array('Yes'))
-            ->setStaffUnionized(array('Yes'))
-            ->setInstitutionalType(array('private'));
+            ->setPeers(array(1, 2, 3));
 
         $this->assertEquals(5, $this->peerGroup->getId());
         $this->assertEquals(2014, $this->peerGroup->getYear());
         $this->assertEquals('Test Peergroup', $this->peerGroup->getName());
-        $this->assertEquals(array('MO', 'KS'), $this->peerGroup->getStates());
-        $this->assertEquals(array('Urban'), $this->peerGroup->getEnvironments());
-        $this->assertEquals(
-            '2000 - 4000',
-            $this->peerGroup->getWorkforceEnrollment()
-        );
-        $this->assertEquals(
-            '1900000 - 5000000',
-            $this->peerGroup->getWorkforceRevenue()
-        );
-        $this->assertEquals(
-            '10000 - 100000',
-            $this->peerGroup->getServiceAreaPopulation()
-        );
-        $this->assertEquals(
-            '3 - 6',
-            $this->peerGroup->getServiceAreaUnemployment()
-        );
-        $this->assertEquals(
-            '20000 - 80000',
-            $this->peerGroup->getServiceAreaMedianIncome()
-        );
-        $this->assertEquals(
-            array('test', 'test2'),
-            $this->peerGroup->getBenchmarks()
-        );
+
         $this->assertEquals(
             array(1, 2, 3),
             $this->peerGroup->getPeers()
-        );
-
-        $this->assertEquals(
-            array('local'),
-            $this->peerGroup->getInstitutionalControl()
-        );
-        $this->assertEquals(
-            array('private'),
-            $this->peerGroup->getInstitutionalType()
-        );
-        $this->assertEquals(
-            '5 - 10',
-            $this->peerGroup->getPellGrantRecipients()
-        );
-        $this->assertEquals(
-            '10000 - 1000000',
-            $this->peerGroup->getOperatingRevenue()
-        );
-        $this->assertEquals(
-            '100 - 1000',
-            $this->peerGroup->getIpedsFallEnrollment()
-        );
-        $this->assertEquals(
-            '1 - 3',
-            $this->peerGroup->getFiscalCreditHours()
-        );
-        $this->assertEquals(
-            array('Yes'),
-            $this->peerGroup->getFacultyUnionized()
-        );
-        $this->assertEquals(
-            array('Yes'),
-            $this->peerGroup->getStaffUnionized()
         );
     }
 
@@ -145,15 +71,6 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testEmptyFilters()
-    {
-        $this->peerGroup->setStates(array());
-        $this->assertEquals(array(), $this->peerGroup->getStates());
-
-        $this->peerGroup->setEnvironments(array());
-        $this->assertEquals(array(), $this->peerGroup->getEnvironments());
-    }
-
     /**
      * @param $range
      * @param $expectedResult
@@ -164,41 +81,6 @@ class PeerGroupTest extends PHPUnit_Framework_TestCase
         $results = $this->peerGroup->parseRange($range);
 
         $this->assertEquals($results, $expectedResult);
-    }
-
-    public function testGettersWithMinMax()
-    {
-        $this->peerGroup->setWorkforceEnrollment('100-500');
-        $this->assertEquals(100, $this->peerGroup->getWorkforceEnrollment('min'));
-        $this->assertEquals(500, $this->peerGroup->getWorkforceEnrollment('max'));
-
-        $this->peerGroup->setWorkforceRevenue('100000-500000');
-        $this->assertEquals(100000, $this->peerGroup->getWorkforceRevenue('min'));
-        $this->assertEquals(500000, $this->peerGroup->getWorkforceRevenue('max'));
-
-        $this->peerGroup->setServiceAreaPopulation('10000-50000');
-        $this->assertEquals(10000, $this->peerGroup->getServiceAreaPopulation('min'));
-        $this->assertEquals(50000, $this->peerGroup->getServiceAreaPopulation('max'));
-
-        $this->peerGroup->setServiceAreaUnemployment('3-5');
-        $this->assertEquals(3, $this->peerGroup->getServiceAreaUnemployment('min'));
-        $this->assertEquals(5, $this->peerGroup->getServiceAreaUnemployment('max'));
-
-        $this->peerGroup->setServiceAreaMedianIncome('30000-50000');
-        $this->assertEquals(30000, $this->peerGroup->getServiceAreaMedianIncome('min'));
-        $this->assertEquals(50000, $this->peerGroup->getServiceAreaMedianIncome('max'));
-
-        $this->peerGroup->setPellGrantRecipients('5-10');
-        $this->assertEquals(5, $this->peerGroup->getPellGrantRecipients('min'));
-
-        $this->peerGroup->setOperatingRevenue('50-1000');
-        $this->assertEquals(50, $this->peerGroup->getOperatingRevenue('min'));
-
-        $this->peerGroup->setIpedsFallEnrollment('100-1000');
-        $this->assertEquals(1000, $this->peerGroup->getIpedsFallEnrollment('max'));
-
-        $this->peerGroup->setFiscalCreditHours('3333-4444');
-        $this->assertEquals(4444, $this->peerGroup->getFiscalCreditHours('max'));
     }
 
     public function getRanges()
