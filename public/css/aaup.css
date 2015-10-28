@@ -33,3 +33,13 @@ a.login-btn, #headerLoginForm button {
 .renew-nav, .join-nav {
 	background: #618378;
 }
+
+/** Data entry **/
+.input-group {
+	width: 30px;
+}
+.data-entry-subheading {
+	text-transform: none;
+	color: #666;
+	font-size: 100%;
+}

@@ -538,6 +538,9 @@ class ObservationController extends AbstractActionController
         $id = $benchmarkGroup->getId();
         $shortName = $benchmarkGroup->getShortName();
 
+        $studyConfig = $this->getServiceLocator()->get('Study');
+        $dataEntryTemplates = $studyConfig->data_entry_templates;
+
         // Do we have a config for the grouped template?
         if (false && !empty($config['data-entry']['grouped'][$shortName])) {
             $groupedConfig = $this->getGroupedConfig($shortName);
@@ -545,8 +548,7 @@ class ObservationController extends AbstractActionController
             $view->setTemplate('mrss/observation/' . $template);
             $view->setVariable('groupedConfig', $groupedConfig);
 
-        } elseif (!empty($config['data_entry_templates'][$id])) {
-            $template = $config['data_entry_templates'][$id];
+        } elseif ($template = $dataEntryTemplates->$id) {
             $view->setTemplate('mrss/observation/' . $template);
         }
     }

@@ -5,6 +5,7 @@ return array(
     'from_email' => 'no-reply@jccc.edu',
     'cc_email' => 'michelletaylor@jccc.edu',
     'approver_email' => 'dfergu15@jccc.edu',
+    'data_entry_templates' => array(),
     'breakpoints' => '10,25,50,75,90',
     'layout' => 'layout.phtml',
     'favicon' => '/favicon.ico',

@@ -1,0 +1,220 @@
+<?php
+/**
+ * This is a special data-entry template that displays this form as a table
+ */
+
+$tableConfig = array(
+    // Faculty
+/*    array(
+        'title' => 'Academic Rank',
+        'rowClass' => 'grid-subcategory',
+        'rows' => array(
+            'Full-time' => array(
+                'inst_full_expend',
+                'inst_full_num',
+                'inst_full_cred_hrs'
+            ),
+            'Part-time or Adjunct' => array(
+                'inst_part_expend',
+                'inst_part_num',
+                'inst_part_cred_hrs'
+            ),
+        ),
+    ),*/
+    array(
+        'rows' => array(
+            'Male Faculty on 9-month Contracts (i.e., regardless of number of salary installments)',
+            'Professor' => array(
+                'ft_male_professor_number_9_month',
+                'ft_male_professor_salaries_9_month',
+                'ft_male_professor_ntt_9_month',
+                'ft_male_professor_tt_9_month',
+                'ft_male_professor_t_9_month'
+            ),
+            'Associate' => array(
+                'ft_male_associate_professor_number_9_month',
+                'ft_male_associate_professor_salaries_9_month',
+                'ft_male_associate_professor_ntt_9_month',
+                'ft_male_associate_professor_tt_9_month',
+                'ft_male_associate_professor_t_9_month'
+            ),
+            'Assistant' => array(
+                'ft_male_assistant_professor_number_9_month',
+                'ft_male_assistant_professor_salaries_9_month',
+                'ft_male_assistant_professor_ntt_9_month',
+                'ft_male_assistant_professor_tt_9_month',
+                'ft_male_assistant_professor_t_9_month'
+            ),
+            'Instructor' => array(
+                'ft_male_instructor_number_9_month',
+                'ft_male_instructor_salaries_9_month',
+                'ft_male_instructor_ntt_9_month',
+                'ft_male_instructor_tt_9_month',
+                'ft_male_instructor_t_9_month'
+            ),
+            'Lecturer' => array(
+                'ft_male_lecturer_number_9_month',
+                'ft_male_lecturer_salaries_9_month',
+                'ft_male_lecturer_ntt_9_month',
+                'ft_male_lecturer_tt_9_month',
+                'ft_male_lecturer_t_9_month'
+            ),
+            'No rank' => array(
+                'ft_male_no_rank_number_9_month',
+                'ft_male_no_rank_salaries_9_month',
+                'ft_male_no_rank_ntt_9_month',
+                'ft_male_no_rank_tt_9_month',
+                'ft_male_no_rank_t_9_month'
+            ),
+            'Female Faculty on 9-month Contracts (i.e., regardless of number of salary installments)',
+            'Professor ' => array(
+                'ft_female_professor_number_9_month',
+                'ft_female_professor_salaries_9_month',
+                'ft_female_professor_ntt_9_month',
+                'ft_female_professor_tt_9_month',
+                'ft_female_professor_t_9_month'
+            ),
+            'Associate ' => array(
+                'ft_female_associate_professor_number_9_month',
+                'ft_female_associate_professor_salaries_9_month',
+                'ft_female_associate_professor_ntt_9_month',
+                'ft_female_associate_professor_tt_9_month',
+                'ft_female_associate_professor_t_9_month'
+            ),
+            'Assistant ' => array(
+                'ft_female_assistant_professor_number_9_month',
+                'ft_female_assistant_professor_salaries_9_month',
+                'ft_female_assistant_professor_ntt_9_month',
+                'ft_female_assistant_professor_tt_9_month',
+                'ft_female_assistant_professor_t_9_month'
+            ),
+            'Instructor ' => array(
+                'ft_female_instructor_number_9_month',
+                'ft_female_instructor_salaries_9_month',
+                'ft_female_instructor_ntt_9_month',
+                'ft_female_instructor_tt_9_month',
+                'ft_female_instructor_t_9_month'
+            ),
+            'Lecturer ' => array(
+                'ft_female_lecturer_number_9_month',
+                'ft_female_lecturer_salaries_9_month',
+                'ft_female_lecturer_ntt_9_month',
+                'ft_female_lecturer_tt_9_month',
+                'ft_female_lecturer_t_9_month'
+            ),
+            'No rank ' => array(
+                'ft_female_no_rank_number_9_month',
+                'ft_female_no_rank_salaries_9_month',
+                'ft_female_no_rank_ntt_9_month',
+                'ft_female_no_rank_tt_9_month',
+                'ft_female_no_rank_t_9_month'
+            ),
+        )
+    )
+);
+
+$colClassConfig = array('faculty', 'salaries', 'ntt', 'tt', 'tenured');
+$colSpan = 6;
+?>
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+<h1>
+    <?= $benchmarkGroup->getName() ?>
+</h1>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+
+
+<?= $this->form()->openTag($form) ?>
+
+<table class="table table-condensed table-bordered data-entry-grid" id="instructionalGrid">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Number of Faculty</th>
+        <th>Total Contracted Salaries ($)</th>
+        <th>Non-tenure-track</th>
+        <th>On Tenure-track</th>
+        <th>Tenured</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach ($tableConfig as $section): ?>
+        <? if (!empty($section['title'])): ?>
+            <tr>
+                <td class="grid-category" colspan="4"><?= $section['title'] ?></td>
+            </tr>
+        <?php endif ?>
+
+        <?php foreach ($section['rows'] as $label => $row): ?>
+            <tr>
+                <?php if (!is_array($row)): ?>
+                    <td colspan="<?= $colSpan ?>">
+                        <h2 class="data-entry-subheading">
+                            <?= $row ?>
+                        </h2>
+                    </td>
+                <?php else: ?>
+                    <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
+                        <?= $label ?>
+                    </td>
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <?php if (!empty($field)):  ?>
+                            <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                                id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                                <?= $this->simpleFormElement($form->get($field)) ?>
+                            </td>
+                        <?php else: ?>
+                            <td class="emptyCell"></td>
+                        <?php endif ?>
+                    <?php endforeach ?>
+                </tr>
+
+                <tr class="help-text">
+                    <td class="grid-category"></td>
+                    <td colspan="<?= count($row) ?>">
+
+                        <?php foreach ($row as $i => $field): ?>
+                            <?php if (empty($field)) continue ?>
+                            <div class="<?= $colClassConfig[$i] ?>-help grid-help">
+                                <h5><?= $form->get($field)->getLabel() ?></h5>
+                                <?= $form->get($field)->getOption('help-block') ?>
+                            </div>
+                        <?php endforeach ?>
+
+                    </td>
+                <?php endif ?>
+            </tr>
+        <?php endforeach ?>
+    <?php endforeach ?>
+
+    </tbody>
+</table>
+
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+    <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-buttons[submit]">
+            <div class="controls" id="controls-buttons[submit]">
+                <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+            </div>
+        </div>
+    </fieldset>
+<?php endif ?>
+
+<?= $this->form()->closeTag() ?>
