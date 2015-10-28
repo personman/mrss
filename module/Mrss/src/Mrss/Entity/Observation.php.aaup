@@ -72,7 +72,7 @@ class Observation
     /** @ORM\Column(type="string", nullable=true) */
     protected $institution_publication_footnote;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="float", nullable=true) */
     protected $institution_conversion_factor;
 
     /** @ORM\Column(type="integer", nullable=true) */
