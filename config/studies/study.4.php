@@ -20,11 +20,7 @@ return array(
     'footerSocial' => '',
     'data_entry_templates' => array(
         3 => 'fcs/full-time-salary.phtml',
-        38 => 'student-services-grid.phtml',
-        39 => 'academic-support-grid.phtml',
-        40 => 'demographics.phtml',
-        44 => 'managerial-grid-at.phtml',
-        42 => 'student-success-metrics.phtml'
+        5 => 'fcs/full-time-continuing.phtml',
     )
 );
 
