@@ -174,6 +174,9 @@ class ImportBenchmarks
             $benchmarkGroup->setShortName($row['benchmarkGroup']);
             $benchmarkGroup->setDescription('');
 
+            $url = filter_var($row['benchmarkGroup'], FILTER_SANITIZE_NUMBER_INT);
+            $benchmarkGroup->setUrl($url);
+
             // Save it
             $this->getBenchmarkGroupModel()->save($benchmarkGroup);
         }
@@ -211,7 +214,11 @@ class ImportBenchmarks
         $benchmark->setExcludeFromCompletion(($row['excludeFromCompletion']));
         $benchmark->setIncludeInNationalReport(($row['includeInNationalReport']));
         $benchmark->setYearsAvailable($this->getYears());
-        $benchmark->setSequence($this->getSequence($benchmark));
+
+        $sequence = $this->getSequence($benchmark);
+        $benchmark->setSequence($sequence);
+        $benchmark->setReportSequence($sequence);
+
         $yearsAvailable = explode(',', $row['yearsAvailable']);
         $benchmark->setYearsAvailable($yearsAvailable);
 

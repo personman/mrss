@@ -104,6 +104,8 @@ class StudyController extends AbstractActionController
 
     public function importAction()
     {
+        takeYourTime();
+
         $studyId = $this->params()->fromRoute('id');
         $filename = $this->getCsvImportFileForStudy($studyId);
 
@@ -148,7 +150,8 @@ class StudyController extends AbstractActionController
         $csvFiles = array(
             1 => 'data/imports/nccbp-benchmarks.csv',
             2 => 'data/imports/mrss-benchmarks.csv',
-            3 => 'data/imports/nccwtp-benchmarks.csv'
+            3 => 'data/imports/nccwtp-benchmarks.csv',
+            4 => 'data/imports/aaup-benchmarks.csv'
         );
 
         if (empty($csvFiles[$studyId])) {
