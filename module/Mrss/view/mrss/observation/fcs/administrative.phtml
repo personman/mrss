@@ -1,0 +1,138 @@
+<?php
+/**
+ * This is a special data-entry template that displays this form as a table
+ */
+
+$currentYear = $this->currentStudy()->getCurrentYear();
+
+$tableConfig = array(
+    // Faculty
+    array(
+        'rows' => array(
+            'President/Chancellor' => array(
+                'ft_president_salary',
+                'ft_president_supplemental',
+            ),
+            'Chief Academic Officer' => array(
+                'ft_chief_academic_salary',
+                'ft_chief_academic_supplemental',
+            ),
+            'Chief Financial Officer' => array(
+                'ft_chief_financial_salary',
+                'ft_chief_financial_supplemental',
+            ),
+            'Chief Development Officer' => array(
+                'ft_chief_development_salary',
+                'ft_chief_development_supplemental',
+            ),
+            'Chief Administrative Officer' => array(
+                'ft_chief_administrative_salary',
+                'ft_chief_administrative_supplemental',
+            ),
+        ),
+    ),
+);
+
+$colClassConfig = array('faculty', 'salaries', 'ntt', 'tt', 'tenured');
+$colSpan = 6;
+?>
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+<h1>
+    <?= $benchmarkGroup->getName() ?>
+</h1>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+
+
+<?= $this->form()->openTag($form) ?>
+
+
+<table class="table table-condensed table-bordered data-entry-grid" id="instructionalGrid">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Base Salary</th>
+        <th>Supplement</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach ($tableConfig as $section): ?>
+        <? if (!empty($section['title'])): ?>
+            <tr>
+                <td class="grid-category" colspan="4"><?= $section['title'] ?></td>
+            </tr>
+        <?php endif ?>
+
+        <?php foreach ($section['rows'] as $label => $row): ?>
+            <tr>
+            <?php if (!is_array($row)): ?>
+                <td colspan="<?= $colSpan ?>">
+                    <h2 class="data-entry-subheading">
+                        <?= $row ?>
+                    </h2>
+                </td>
+            <?php else: ?>
+                <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
+                    <?= $label ?>
+                </td>
+
+                <?php foreach ($row as $i => $field): ?>
+                    <?php if (!empty($field)):  ?>
+                        <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                            id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                            <?= $this->simpleFormElement($form->get($field)) ?>
+                        </td>
+                    <?php else: ?>
+                        <td class="emptyCell"></td>
+                    <?php endif ?>
+                <?php endforeach ?>
+                </tr>
+
+                <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <?php if (empty($field)) continue ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help grid-help">
+                            <h5><?= $form->get($field)->getLabel() ?></h5>
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
+
+                </td>
+            <?php endif ?>
+            </tr>
+        <?php endforeach ?>
+    <?php endforeach ?>
+
+    </tbody>
+</table>
+
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+    <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-buttons[submit]">
+            <div class="controls" id="controls-buttons[submit]">
+                <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+            </div>
+        </div>
+    </fieldset>
+<?php endif ?>
+
+<?= $this->form()->closeTag() ?>

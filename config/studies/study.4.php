@@ -21,6 +21,7 @@ return array(
     'data_entry_templates' => array(
         3 => 'fcs/full-time-salary.phtml',
         5 => 'fcs/full-time-continuing.phtml',
+        6 => 'fcs/administrative.phtml'
     )
 );
 
