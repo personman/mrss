@@ -43,3 +43,8 @@ a.login-btn, #headerLoginForm button {
 	color: #666;
 	font-size: 100%;
 }
+.table > thead > tr.smallHeading > th {
+	font-size: 77%;
+	text-transform: none;
+	color: #888;
+}
