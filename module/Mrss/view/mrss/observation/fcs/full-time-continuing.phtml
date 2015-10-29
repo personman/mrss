@@ -91,6 +91,16 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
+
+<?= $this->partial(
+    'mrss/observation/data-entry-nav.partial.phtml',
+    array(
+        'benchmarkGroup' => $benchmarkGroup,
+        'benchmarkGroups' => $benchmarkGroups
+    )
+)
+?>
+
 <h1>
     <?= $benchmarkGroup->getName() ?>
 </h1>

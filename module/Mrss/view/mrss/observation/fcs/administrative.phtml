@@ -29,6 +29,18 @@ $tableConfig = array(
                 'ft_chief_administrative_salary',
                 'ft_chief_administrative_supplemental',
             ),
+            'Chief Counsel' => array(
+                'ft_chief_counsel_salary',
+                'ft_chief_counsel_supplemental'
+            ),
+            'Director of Enrollment Management' => array(
+                'ft_director_enrollment_management_salary',
+                'ft_director_enrollment_management_supplemental'
+            ),
+            'Director of Athletics' => array(
+                'ft_director_athletics_salary',
+                'ft_director_athletics_supplemental'
+            )
         ),
     ),
 );
@@ -39,11 +51,22 @@ $colSpan = 6;
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
 
+
 <?php
 $this->headScript()->appendFile(
     '/js/data-entry.js',
     'text/javascript'
 ); ?>
+
+<?= $this->partial(
+    'mrss/observation/data-entry-nav.partial.phtml',
+    array(
+        'benchmarkGroup' => $benchmarkGroup,
+        'benchmarkGroups' => $benchmarkGroups
+    )
+)
+?>
+
 
 <h1>
     <?= $benchmarkGroup->getName() ?>

@@ -11,21 +11,14 @@ $this->headScript()->appendFile(
 ); ?>
 
 
-<ul class="nav nav-pills form-nav">
-    <li class="form-nav-head"><h2>Forms:</h2></li>
-    <?php foreach ($benchmarkGroups as $bGroup): ?>
-        <li<? if ($bGroup->getId() == $benchmarkGroup->getId()) echo ' class="active"' ?>>
-            <a href="<?= $this->url(
-                'data-entry/edit',
-                array(
-                    'benchmarkGroup' => $bGroup->getUrl()
-                )
-            ) ?>" title="<?= $bGroup->getName() ?>" class="infotip">
-                <?= $bGroup->getUrl() ?>
-            </a>
-        </li>
-    <?php endforeach ?>
-</ul>
+<?= $this->partial(
+    'mrss/observation/data-entry-nav.partial.phtml',
+    array(
+        'benchmarkGroup' => $benchmarkGroup,
+        'benchmarkGroups' => $benchmarkGroups
+    )
+)
+?>
 
 <div class="row">
     <div class="col-md-9 span9">

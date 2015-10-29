@@ -237,9 +237,9 @@ $this->headScript()->appendFile(
 
 
 <p>
-    <h3>Conversion factor (if entering 12-month data)</h3>
-    The 12 to 9 month conversion factor for this institution:
-    <?= $this->formElement($form->get('institution_conversion_factor')) ?>
+<h3>Conversion factor (if entering 12-month data)</h3>
+The 12 to 9 month conversion factor for this institution:
+<?= $this->formElement($form->get('institution_conversion_factor')) ?>
 </p>
 
 <table class="table table-condensed table-bordered data-entry-grid" id="instructionalGrid">
@@ -264,43 +264,43 @@ $this->headScript()->appendFile(
 
         <?php foreach ($section['rows'] as $label => $row): ?>
             <tr>
-                <?php if (!is_array($row)): ?>
-                    <td colspan="<?= $colSpan ?>">
-                        <h2 class="data-entry-subheading">
-                            <?= $row ?>
-                        </h2>
-                    </td>
-                <?php else: ?>
-                    <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
-                        <?= $label ?>
-                    </td>
+            <?php if (!is_array($row)): ?>
+                <td colspan="<?= $colSpan ?>">
+                    <h2 class="data-entry-subheading">
+                        <?= $row ?>
+                    </h2>
+                </td>
+            <?php else: ?>
+                <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
+                    <?= $label ?>
+                </td>
 
-                    <?php foreach ($row as $i => $field): ?>
-                        <?php if (!empty($field)):  ?>
-                            <td class="grid-value <?= $colClassConfig[$i] ?>-value"
-                                id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
-                                <?= $this->simpleFormElement($form->get($field)) ?>
-                            </td>
-                        <?php else: ?>
-                            <td class="emptyCell"></td>
-                        <?php endif ?>
-                    <?php endforeach ?>
+                <?php foreach ($row as $i => $field): ?>
+                    <?php if (!empty($field)):  ?>
+                        <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                            id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                            <?= $this->simpleFormElement($form->get($field)) ?>
+                        </td>
+                    <?php else: ?>
+                        <td class="emptyCell"></td>
+                    <?php endif ?>
+                <?php endforeach ?>
                 </tr>
 
                 <tr class="help-text">
-                    <td class="grid-category"></td>
-                    <td colspan="<?= count($row) ?>">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
 
-                        <?php foreach ($row as $i => $field): ?>
-                            <?php if (empty($field)) continue ?>
-                            <div class="<?= $colClassConfig[$i] ?>-help grid-help">
-                                <h5><?= $form->get($field)->getLabel() ?></h5>
-                                <?= $form->get($field)->getOption('help-block') ?>
-                            </div>
-                        <?php endforeach ?>
+                    <?php foreach ($row as $i => $field): ?>
+                        <?php if (empty($field)) continue ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help grid-help">
+                            <h5><?= $form->get($field)->getLabel() ?></h5>
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
 
-                    </td>
-                <?php endif ?>
+                </td>
+            <?php endif ?>
             </tr>
         <?php endforeach ?>
     <?php endforeach ?>

@@ -20,6 +20,7 @@ return array(
     'footerSocial' => '',
     'data_entry_templates' => array(
         3 => 'fcs/full-time-salary.phtml',
+        4 => 'fcs/full-time-benefits.phtml',
         5 => 'fcs/full-time-continuing.phtml',
         6 => 'fcs/administrative.phtml'
     )
