@@ -421,13 +421,30 @@ class ObservationController extends AbstractActionController
                 'benchmarkGroups' => $this->getCurrentStudy()->getBenchmarkGroups(),
                 'nccbpSubscription' => $nccbpSubscription,
                 'variable' => $this->getVariableSubstitutionService(),
-                'dataDefinitionForm' => $this->getDataDefinitionForm()
+                'dataDefinitionForm' => $this->getDataDefinitionForm(),
+                'dataEntryLayout' => $this->getDataEntryLayout($benchmarkGroup)
             )
         );
 
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    protected function getDataEntryLayout($benchmarkGroup)
+    {
+        $studyConfig = $this->getServiceLocator()->get('Study');
+
+        /** @var \Zend\Config\Config $dataEntryLayouts */
+        $dataEntryLayouts = $studyConfig->data_entry_layout;
+        $dataEntryLayouts = $dataEntryLayouts->toArray();
+
+        $layout = null;
+        if (!empty($dataEntryLayouts[$benchmarkGroup->getId()])) {
+            $layout = $dataEntryLayouts[$benchmarkGroup->getId()];
+        }
+
+        return $layout;
     }
 
     protected function copyCampusInfoFromLastYear($form)

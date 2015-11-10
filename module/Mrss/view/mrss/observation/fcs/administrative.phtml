@@ -5,45 +5,7 @@
 
 $currentYear = $this->currentStudy()->getCurrentYear();
 
-$tableConfig = array(
-    // Faculty
-    array(
-        'rows' => array(
-            'President/Chancellor' => array(
-                'ft_president_salary',
-                'ft_president_supplemental',
-            ),
-            'Chief Academic Officer' => array(
-                'ft_chief_academic_salary',
-                'ft_chief_academic_supplemental',
-            ),
-            'Chief Financial Officer' => array(
-                'ft_chief_financial_salary',
-                'ft_chief_financial_supplemental',
-            ),
-            'Chief Development Officer' => array(
-                'ft_chief_development_salary',
-                'ft_chief_development_supplemental',
-            ),
-            'Chief Administrative Officer' => array(
-                'ft_chief_administrative_salary',
-                'ft_chief_administrative_supplemental',
-            ),
-            'Chief Counsel' => array(
-                'ft_chief_counsel_salary',
-                'ft_chief_counsel_supplemental'
-            ),
-            'Director of Enrollment Management' => array(
-                'ft_director_enrollment_management_salary',
-                'ft_director_enrollment_management_supplemental'
-            ),
-            'Director of Athletics' => array(
-                'ft_director_athletics_salary',
-                'ft_director_athletics_supplemental'
-            )
-        ),
-    ),
-);
+$tableConfig = $dataEntryLayout;
 
 $colClassConfig = array('faculty', 'salaries', 'ntt', 'tt', 'tenured');
 $colSpan = 6;
