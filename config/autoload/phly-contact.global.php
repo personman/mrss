@@ -11,15 +11,14 @@
 
 $settings = array(
     // This is simply configuration to pass to Zend\Captcha\Factory
-    'captcha' => array(
+    /*'captcha' => array(
         'class'   => 'recaptcha',
         'options' => array(
             'pubkey'  => '6Lf_pOISAAAAAE6_77NYlkBeU0sbZsudXiXIlF-0',
             'privkey' => '6Lf_pOISAAAAAJ0fHOk8IzvseM5-rUTBDnCnxatY',
             'theme' => 'clean'
         ),
-    ),
-
+    ),*/
 
     // This sets the default "to" and "sender" headers for your message
     'message' => array(
