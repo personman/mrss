@@ -48,6 +48,8 @@ class Excel
 
     protected $row = 1;
 
+    protected $studyConfig;
+
     /**
      * @deprecated
      * @param Subscription $subscription
@@ -69,8 +71,12 @@ class Excel
     public function getExcelForSubscriptions($subscriptions)
     {
         $excel = new PHPExcel();
-        $this->writeHeadersSystem($excel, $subscriptions);
-        $this->writeBodySystem($excel, $subscriptions);
+        $subscription = $subscriptions[0];
+
+        if ($subscription->getStudy()->getId() != 4) {
+            $this->writeHeadersSystem($excel, $subscriptions);
+            $this->writeBodySystem($excel, $subscriptions);
+        }
 
         // Per-study export customization
         if (count($subscriptions) == 1) {
@@ -81,6 +87,10 @@ class Excel
 
             if ($subscription->getStudy()->getId() == 3) {
                 $this->customizeForWorkforce($excel, $subscription);
+            }
+
+            if ($subscription->getStudy()->getId() == 4) {
+                $this->customizeForAaup($excel, $subscription);
             }
         }
 
@@ -632,6 +642,24 @@ class Excel
         }
     }
 
+    protected function customizeForAaup(PHPExcel $spreadsheet, Subscription $subscription)
+    {
+        takeYourTime();
+        // Discard the generic version
+        unset($spreadsheet);
+
+        // Open the template Excel  file (this takes some time)
+        $filename = 'data/imports/aaup-export.xlsx';
+        $spreadsheet = PHPExcel_IOFactory::load($filename);
+
+        $this->populateAaup($spreadsheet, $subscription);
+
+        // Activate the first sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $this->download($spreadsheet);
+    }
+
     protected function customizeForMrss(PHPExcel $spreadsheet, Subscription $subscription)
     {
         // Discard the generic version
@@ -648,7 +676,6 @@ class Excel
 
 
         $this->download($spreadsheet);
-
     }
 
     protected function populateMrss(PHPExcel $spreadsheet, Subscription $subscription)
@@ -876,6 +903,69 @@ class Excel
         }
     }
 
+    /**
+     * @todo: Break this apart so the dbColumn => cell coordinates can be reused in import
+     *
+     * @param PHPExcel $spreadsheet
+     * @param Subscription $subscription
+     */
+    protected function populateAaup(PHPExcel $spreadsheet, Subscription $subscription)
+    {
+        $config = $this->getStudyConfig();
+
+        $sheetNames = $config->export_sheet_names->toArray();
+        $gridLayouts = $config->data_entry_layout->toArray();
+
+        foreach ($sheetNames as $benchmarkGroupId => $sheetInfo) {
+            if (empty($gridLayouts[$benchmarkGroupId])) {
+                continue;
+            }
+
+            $sheet = $spreadsheet->getSheetByName($sheetInfo['sheetName']);
+
+            $gridLayout = $gridLayouts[$benchmarkGroupId];
+
+            foreach ($gridLayout as $sectionKey => $section) {
+
+                if (empty($sheetInfo['sectionStartingCells'][$sectionKey])) {
+                    continue;
+                }
+
+                $startingCell = $sheetInfo['sectionStartingCells'][$sectionKey];
+
+                $startingCoordinates = PHPExcel_Cell::coordinateFromString($startingCell);
+                $startingColumn = $startingCoordinates[0];
+                $currentColumn = $startingColumn;
+                $currentRow = $startingCoordinates[1];
+
+                //var_dump($coordinate);
+                //die;
+
+                foreach ($section['rows'] as $row) {
+                    if (is_array($row)) {
+                        foreach ($row as $dbColumn) {
+                            $cell = $currentColumn . $currentRow;
+                            if ($cell) {
+                                $sheet->setCellValue($cell, $dbColumn);
+                            }
+
+
+                            $currentColumn++;
+                        }
+
+                        $currentRow++;
+                        $currentColumn = $startingColumn;
+                    }
+
+                }
+            }
+
+        }
+
+        //die('ok');
+        //prd($sheetNames);
+    }
+
     protected function placeReference(PHPExcel $spreadsheet, $reference, $dbColumn)
     {
         $sheetName = 'Worksheet';
@@ -1008,5 +1098,17 @@ class Excel
         }
 
         return $this->valueColumnBackground;
+    }
+
+    public function setStudyConfig($config)
+    {
+        $this->studyConfig = $config;
+
+        return $this;
+    }
+
+    protected function getStudyConfig()
+    {
+        return $this->studyConfig;
     }
 }

@@ -816,6 +816,10 @@ class ObservationController extends AbstractActionController
         );
         $excelService->setCurrentStudy($this->currentStudy());
         $excelService->setVariableSubstition($this->getVariableSubstitutionService());
+
+        $config = $this->getServiceLocator()->get('study');
+        $excelService->setStudyConfig($config);
+
         $excelService->getExcelForSubscriptions(array($subscription));
     }
 

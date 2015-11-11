@@ -24,6 +24,15 @@ return array(
         5 => 'fcs/full-time-continuing.phtml',
         6 => 'fcs/administrative.phtml'
     ),
+    'export_sheet_names' => array(
+        // benchmarkGroup id => excel sheet name
+        3 => array(
+            'sheetName' => 'Section1',
+            'sectionStartingCells' => array(
+                0 => 'B16'
+            )
+        )
+    ),
     'data_entry_layout' => array(
         // Full-time Salary
         3 => array(
