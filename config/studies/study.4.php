@@ -29,7 +29,36 @@ return array(
         3 => array(
             'sheetName' => 'Section1',
             'sectionStartingCells' => array(
-                0 => 'B16'
+                0 => 'B16',
+                1 => 'G16',
+                2 => 'B24',
+                3 => 'G24',
+            )
+        ),
+        4 => array(
+            'sheetName' => 'Section2',
+            'sectionStartingCells' => array(
+                0 => 'B6',
+                1 => 'B19'
+            )
+        ),
+        5 => array(
+            'sheetName' => 'Section3',
+            'sectionStartingCells' => array(
+                0 => 'B9',
+                1 => 'B19'
+            )
+        ),
+        6 => array(
+            'sheetName' => 'Section4',
+            'sectionStartingCells' => array(
+                0 => 'B6',
+            )
+        ),
+        7 => array(
+            'sheetName' => 'Section5',
+            'sectionStartingCells' => array(
+                0 => 'B6',
             )
         )
     ),
@@ -663,7 +692,8 @@ return array(
                     )
                 ),
             ),
-        )
+        ),
+        // @todo: add new forms here
     )
 );
 

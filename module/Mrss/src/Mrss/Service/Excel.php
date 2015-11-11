@@ -911,17 +911,39 @@ class Excel
      */
     protected function populateAaup(PHPExcel $spreadsheet, Subscription $subscription)
     {
+        $structure = $this->getAaupStructure();
+
+        foreach ($structure as $benchmarkGroupId => $sheetInfo) {
+            $sheetName = $sheetInfo['sheetName'];
+            $sheet = $spreadsheet->getSheetByName($sheetName);
+
+            foreach ($sheetInfo['positions'] as $dbColumn => $coordinates) {
+                $sheet->setCellValue($coordinates, $dbColumn);
+            }
+        }
+
+        //prd($structure);
+    }
+
+    protected function getAaupStructure()
+    {
         $config = $this->getStudyConfig();
 
         $sheetNames = $config->export_sheet_names->toArray();
         $gridLayouts = $config->data_entry_layout->toArray();
+
+        $structure = array();
 
         foreach ($sheetNames as $benchmarkGroupId => $sheetInfo) {
             if (empty($gridLayouts[$benchmarkGroupId])) {
                 continue;
             }
 
-            $sheet = $spreadsheet->getSheetByName($sheetInfo['sheetName']);
+            $structure[$benchmarkGroupId] = array(
+                'sheetName' => $sheetInfo['sheetName'],
+            );
+
+            $benchmarkPositions = array();
 
             $gridLayout = $gridLayouts[$benchmarkGroupId];
 
@@ -938,15 +960,12 @@ class Excel
                 $currentColumn = $startingColumn;
                 $currentRow = $startingCoordinates[1];
 
-                //var_dump($coordinate);
-                //die;
-
                 foreach ($section['rows'] as $row) {
                     if (is_array($row)) {
                         foreach ($row as $dbColumn) {
                             $cell = $currentColumn . $currentRow;
                             if ($cell) {
-                                $sheet->setCellValue($cell, $dbColumn);
+                                $benchmarkPositions[$dbColumn] = $cell;
                             }
 
 
@@ -960,10 +979,11 @@ class Excel
                 }
             }
 
+            $structure[$benchmarkGroupId]['positions'] = $benchmarkPositions;
+
         }
 
-        //die('ok');
-        //prd($sheetNames);
+        return $structure;
     }
 
     protected function placeReference(PHPExcel $spreadsheet, $reference, $dbColumn)
