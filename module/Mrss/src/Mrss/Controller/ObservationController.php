@@ -588,6 +588,8 @@ class ObservationController extends AbstractActionController
 
     public function importAction()
     {
+        takeYourTime();
+
         // Get the import form
         $form = new ImportData('import');
 
@@ -631,6 +633,9 @@ class ObservationController extends AbstractActionController
                     $excelService->setCurrentStudy($study);
                     $excelService->setCurrentCollege($this->currentCollege());
                     $excelService->setVariableSubstition($this->getVariableSubstitutionService());
+                    $config = $this->getServiceLocator()->get('study');
+                    $excelService->setStudyConfig($config);
+
 
                     $allData = $excelService->getObservationDataFromExcel($filename);
                 } catch (\Exception $exception) {
@@ -735,7 +740,9 @@ class ObservationController extends AbstractActionController
             // How did that go?
             if (empty($errorMessages)) {
                 // Merge subobservations
-                $observation->mergeSubobservations();
+                if ($this->getCurrentStudy()->hasSubobservations()) {
+                    $observation->mergeSubobservations();
+                }
 
                 // Log any changes
                 $this->getServiceLocator()->get('service.observationAudit')

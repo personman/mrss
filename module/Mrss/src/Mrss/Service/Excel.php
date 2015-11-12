@@ -349,7 +349,10 @@ class Excel
         $emptyObservation = new Observation();
         $emptySubObservation = new SubObservation();
 
-        $this->applyImportCustomizations();
+        $customizedData = $this->applyImportCustomizations($excel);
+        if ($customizedData) {
+            return $customizedData;
+        }
 
         $colleges = $this->getCollegesFromExcel($sheet);
         $data = array();
@@ -449,12 +452,44 @@ class Excel
         return false;
     }
 
-    protected function applyImportCustomizations()
+    protected function applyImportCustomizations(PHPExcel $excel)
     {
+        $return = null;
+
         // Workforce import customizations
         if ($this->getCurrentStudy()->getId() == 3) {
             $this->headerRowIndex = 5;
         }
+
+        // Workforce import customizations
+        if ($this->getCurrentStudy()->getId() == 4) {
+            $return = $this->getAaupDataFromExcel($excel);
+        }
+
+        return $return;
+    }
+
+    protected function getAaupDataFromExcel(PHPExel $excel)
+    {
+        $structure = $this->getAaupStructure();
+        $data = array();
+        foreach ($structure as $benchmarkGroupId => $sheetInfo) {
+            $sheetName = $sheetInfo['sheetName'];
+            $sheet = $excel->getSheetByName($sheetName);
+
+            foreach ($sheetInfo['positions'] as $dbColumn => $coordinates) {
+                $value = $sheet->getCell($coordinates)->getValue();
+                $data[$dbColumn] = $value;
+            }
+        }
+
+        // Add a key with the college's ipeds
+        $ipeds = $this->getCurrentCollege()->getIpeds();
+        $data = array(
+            $ipeds => $data
+        );
+
+        return $data;
     }
 
     /**
@@ -912,17 +947,17 @@ class Excel
     protected function populateAaup(PHPExcel $spreadsheet, Subscription $subscription)
     {
         $structure = $this->getAaupStructure();
+        $observation = $subscription->getObservation();
 
         foreach ($structure as $benchmarkGroupId => $sheetInfo) {
             $sheetName = $sheetInfo['sheetName'];
             $sheet = $spreadsheet->getSheetByName($sheetName);
 
             foreach ($sheetInfo['positions'] as $dbColumn => $coordinates) {
-                $sheet->setCellValue($coordinates, $dbColumn);
+                $value = $observation->get($dbColumn);
+                $sheet->setCellValue($coordinates, $value);
             }
         }
-
-        //prd($structure);
     }
 
     protected function getAaupStructure()

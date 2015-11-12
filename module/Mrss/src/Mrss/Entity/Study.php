@@ -606,4 +606,17 @@ class Study
 
         return $inputFilter;
     }
+
+    public function hasSubobservations()
+    {
+        $has = false;
+        foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+            if ($benchmarkGroup->getUseSubObservation()) {
+                $has = true;
+                break;
+            }
+        }
+
+        return $has;
+    }
 }

@@ -27,36 +27,36 @@ return array(
     'export_sheet_names' => array(
         // benchmarkGroup id => excel sheet name
         3 => array(
-            'sheetName' => 'Section1',
+            'sheetName' => 'Form 1',
             'sectionStartingCells' => array(
-                0 => 'B16',
-                1 => 'G16',
-                2 => 'B24',
-                3 => 'G24',
+                0 => 'B17',
+                1 => 'G17',
+                2 => 'B25',
+                3 => 'G25',
             )
         ),
         4 => array(
-            'sheetName' => 'Section2',
+            'sheetName' => 'Form 2',
             'sectionStartingCells' => array(
                 0 => 'B6',
                 1 => 'B19'
             )
         ),
         5 => array(
-            'sheetName' => 'Section3',
+            'sheetName' => 'Form 3',
             'sectionStartingCells' => array(
-                0 => 'B9',
-                1 => 'B19'
+                0 => 'B6',
+                1 => 'B16'
             )
         ),
         6 => array(
-            'sheetName' => 'Section4',
+            'sheetName' => 'Form 4',
             'sectionStartingCells' => array(
-                0 => 'B6',
+                0 => 'B7',
             )
         ),
         7 => array(
-            'sheetName' => 'Section5',
+            'sheetName' => 'Form 5',
             'sectionStartingCells' => array(
                 0 => 'B6',
             )
