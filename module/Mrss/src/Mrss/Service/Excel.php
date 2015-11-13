@@ -1014,6 +1014,10 @@ class Excel
                 }
             }
 
+            if (!empty($sheetInfo['extra'])) {
+                $benchmarkPositions = array_merge($benchmarkPositions, $sheetInfo['extra']);
+            }
+
             $structure[$benchmarkGroupId]['positions'] = $benchmarkPositions;
 
         }

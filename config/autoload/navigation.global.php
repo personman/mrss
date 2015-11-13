@@ -371,10 +371,10 @@ return array(
                 'pages' => array(
                     'aaup' => array(
                         'label' => 'AAUP',
-                        'uri' => '/about'
+                        'uri' => '/aaup'
                     ),
                     'history' => array(
-                        'label' => 'History',
+                        'label' => 'FCS History',
                         'uri' => '/history'
                     ),
                     'survey' => array(
@@ -472,10 +472,10 @@ return array(
                 'pages' => array(
                     'aaup' => array(
                         'label' => 'AAUP',
-                        'uri' => '/about'
+                        'uri' => '/aaup'
                     ),
                     'history' => array(
-                        'label' => 'History',
+                        'label' => 'FCS History',
                         'uri' => '/history'
                     ),
                     'survey' => array(

@@ -34,6 +34,9 @@ return array(
                 1 => 'G17',
                 2 => 'B25',
                 3 => 'G25',
+            ),
+            'extra' => array(
+                'institution_conversion_factor' => 'G14'
             )
         ),
         4 => array(
@@ -41,7 +44,7 @@ return array(
             'sectionStartingCells' => array(
                 0 => 'B6',
                 1 => 'B19'
-            )
+            ),
         ),
         5 => array(
             'sheetName' => 'Form 3',
