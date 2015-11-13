@@ -1,3 +1,16 @@
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry-import.js',
+    'text/javascript'
+); ?>
+
+<style>
+    #fieldset-submit, #download {
+        width: 450px;
+    }
+</style>
+
+
 <?php if (!empty($errorMessages)): ?>
     <div class="well">
         <h2>Invalid Data</h2>
@@ -29,7 +42,7 @@
 
 </p>
 <p>
-    <div class="form-horizontal">
+    <div class="form-horizontal" id="download">
     <div class="controls">
         <a class="btn btn-primary" href="<?= $this->url('data-entry/export') ?>">Download</a>
     </div>
