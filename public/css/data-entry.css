@@ -50,6 +50,10 @@ form#system-admin-switch select {
     width: 200px;
 }
 
+.controls select {
+    width: 85%;
+}
+
 /* Side-by-side fields in instruction form */
 .two-col .control-group {
     width: 47%;
