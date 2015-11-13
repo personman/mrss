@@ -1,6 +1,9 @@
 <?php $this->headTitle()->prepend('Contact'); ?>
 <script type="text/javascript">
     $(function() {
+        backgroundVerification()
+
+        /* Deprecated along with old reCaptcha
         setTimeout(function() {
             // Add an enlarge link
             //alert('test')
@@ -43,8 +46,29 @@
                 return false
             })
 
-        }, 500)
+        }, 500)*/
     })
+
+    function backgroundVerification()
+    {
+        var captchaControls = $('#control-group-captcha');
+
+        // Are we using the default captcha (reverse word)?
+        if (captchaControls.html().search('backwards')) {
+            var word = captchaControls.find('b').html();
+            var reversed = reverse(word);
+
+            // Fill in the input
+            captchaControls.find('input[type=text]').val(reversed)
+
+            // Now hide the whole controls
+            captchaControls.hide()
+        }
+    }
+
+    function reverse(s) {
+        return s.split('').reverse().join('');
+    }
 </script>
 
 <section class="contact">

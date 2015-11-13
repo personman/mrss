@@ -72,8 +72,10 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['reports_preview']);
 
             // Since they're logged in, also change the home page
-            unset($pages['home']['route']);
-            $pages['home']['uri'] = '/members';
+            if (!empty($pages['home'])) {
+                unset($pages['home']['route']);
+                $pages['home']['uri'] = '/members';
+            }
 
             // Do they belong to a system?
             $user = $auth->getIdentity();

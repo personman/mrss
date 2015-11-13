@@ -9,6 +9,7 @@ return array(
     'approver_email' => 'dfergu15@jccc.edu',
     'breakpoints' => '20,40,60,80',
     'layout' => 'nccbp.phtml',
+    'navigation' => 'fcs_navigation',
     'favicon' => '/favicon.ico',
     'contact_instructions' => null,
     'css' => 'aaup.css',

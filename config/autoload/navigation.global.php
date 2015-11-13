@@ -363,6 +363,151 @@ return array(
                 'pages' => getAdminMenu()
             )
         ),
+        'aaup' => array(
+            'about' => array(
+                'label' => 'About',
+                'uri' => '#',
+                'pages' => array(
+                    'aaup' => array(
+                        'label' => 'AAUP',
+                        'uri' => '/about'
+                    ),
+                    'history' => array(
+                        'label' => 'History',
+                        'uri' => '/history'
+                    ),
+                    'survey' => array(
+                        'label' => 'Survey',
+                        'uri' => '/survey'
+                    ),
+                    'contact' => array(
+                        'label' => 'Contact',
+                        'uri' => '/contact'
+                    )
+
+                )
+            ),
+            'survey' => array(
+                'label' => 'Survey',
+                'uri' => '#',
+                'pages' => array(
+                    'instructions' => array(
+                        'label' => 'Instructions',
+                        'uri' => '/instructions'
+                    ),
+                    'start' => array(
+                        'label' => 'Start',
+                        'uri' => '/start'
+                    ),
+                    'order' => array(
+                        'label' => 'Order',
+                        'uri' => '/order'
+                    ),
+                    'results' => array(
+                        'label' => 'Results',
+                        'uri' => '/results'
+                    )
+                )
+            ),
+            'results' => array(
+                'label' => 'Results',
+                'uri' => '#',
+                'pages' => array(
+                    'sample-results' => array(
+                        'label' => 'Sample Results',
+                        'uri' => '/sample-results'
+                    ),
+                    'order' => array(
+                        'label' => 'Order',
+                        'uri' => '/order-results'
+                    ),
+                )
+            ),
+            'resources' => array(
+                'label' => 'Resources',
+                'uri' => '#',
+                'pages' => array(
+                    'presentations' => array(
+                        'label' => 'Presentations',
+                        'uri' => '/presentations'
+                    ),
+                    'publications' => array(
+                        'label' => 'Publications',
+                        'uri' => '/publications'
+                    ),
+                    'webinars' => array(
+                        'label' => 'Webinars',
+                        'uri' => '/webinars'
+                    ),
+                    'media' => array(
+                        'label' => 'Media',
+                        'uri' => '/media'
+                    ),
+                )
+            ),
+            'data-documentation' => array(
+                'label' => 'Data Documentation',
+                'uri' => '#',
+                'pages' => array(
+                    'faq' => array(
+                        'label' => 'Submitted Values',
+                        'uri' => '/submitted-values'
+                    ),
+                    'contact' => array(
+                        'label' => 'Data Dictionary',
+                        'uri' => '/data-dictionary'
+                    ),
+                    'calculations' => array(
+                        'label' => 'Benchmark Calculations',
+                        'uri' => '/calculations'
+                    ),
+                    'changes' => array(
+                        'label' => 'Changes and Errata',
+                        'uri' => '/changes'
+                    ),
+                )
+            ),
+            'help' => array(
+                'label' => 'Help',
+                'uri' => '#',
+                'pages' => array(
+                    /*'faq' => array(
+                        'label' => 'FAQ',
+                        'uri' => '/faq'
+                    ),*/
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
+                )
+            ),
+            'contact' => array(
+                'label' => 'Contact',
+                'uri' => '/contact',
+                'pages' => array(
+                    'staff' => array(
+                        'label' => 'Staff',
+                        'uri' => '/staff'
+                    ),
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
+                    'consultation' => array(
+                        'label' => 'Free Consultation',
+                        'uri' => '/consultation'
+                    ),
+                )
+            ),
+            'account' => getAccountMenu(),
+            'admin' => array(
+                'label' => '<span class="glyphicon glyphicon-cog icon icon-cog adminMenuIcon"></span>',
+                'uri' => '/admin',
+                'resource' => 'adminMenu',
+                'privilege' => 'view',
+                'pages' => getAdminMenu()
+            )
+        ),
         'admin' => getAdminMenu()
     )
 );

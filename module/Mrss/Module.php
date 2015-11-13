@@ -246,6 +246,8 @@ class Module
                 'Mrss\Service\AdminNavigationFactory',
                 'nccbp_navigation' =>
                 'Mrss\Service\NccbpNavigationFactory',
+                'fcs_navigation' =>
+                'Mrss\Service\FcsNavigationFactory',
                 //'service.report.percentile' => 'Mrss\Service\Report\Factory',
                 /*'doctrine.cache.my_memcache' => function ($sm) {
                         $cache = new \Doctrine\Common\Cache\MemcacheCache();

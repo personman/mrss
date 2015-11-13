@@ -8,6 +8,7 @@ return array(
     'data_entry_templates' => array(),
     'breakpoints' => '10,25,50,75,90',
     'layout' => 'layout.phtml',
+    'navigation' => 'navigation',
     'favicon' => '/favicon.ico',
     'contact_instructions' => '',
     'css' => null,
