@@ -294,9 +294,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
         // Check permissions
-        /** @var Authorize $authorizeService */
-        $authorizeService = $serviceLocator->get('BjyAuthorizeServiceAuthorize');
-
+        $authorizeService = $this->getAuthorizeService();
 
         // Admin menu is done through config via integration with zend nav
         // @todo: move these others there, too.
@@ -377,5 +375,15 @@ class NavigationFactory extends DefaultNavigationFactory
         if (!empty($container->college)) {
             return $container->college;
         }
+    }
+
+    /**
+     * @return Authorize
+     */
+    protected function getAuthorizeService()
+    {
+        $authorizeService = $this->serviceLocator->get('BjyAuthorizeServiceAuthorize');
+
+        return $authorizeService;
     }
 }

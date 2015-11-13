@@ -364,6 +364,7 @@ return array(
             )
         ),
         'aaup' => array(
+            // Public navigation
             'about' => array(
                 'label' => 'About',
                 'uri' => '#',
@@ -445,42 +446,6 @@ return array(
                     ),
                 )
             ),
-            'data-documentation' => array(
-                'label' => 'Data Documentation',
-                'uri' => '#',
-                'pages' => array(
-                    'faq' => array(
-                        'label' => 'Submitted Values',
-                        'uri' => '/submitted-values'
-                    ),
-                    'contact' => array(
-                        'label' => 'Data Dictionary',
-                        'uri' => '/data-dictionary'
-                    ),
-                    'calculations' => array(
-                        'label' => 'Benchmark Calculations',
-                        'uri' => '/calculations'
-                    ),
-                    'changes' => array(
-                        'label' => 'Changes and Errata',
-                        'uri' => '/changes'
-                    ),
-                )
-            ),
-            'help' => array(
-                'label' => 'Help',
-                'uri' => '#',
-                'pages' => array(
-                    /*'faq' => array(
-                        'label' => 'FAQ',
-                        'uri' => '/faq'
-                    ),*/
-                    'contact' => array(
-                        'label' => 'Contact Us',
-                        'uri' => '/contact'
-                    ),
-                )
-            ),
             'contact' => array(
                 'label' => 'Contact',
                 'uri' => '/contact',
@@ -492,6 +457,176 @@ return array(
                     'contact' => array(
                         'label' => 'Contact Us',
                         'uri' => '/contact'
+                    ),
+                    'consultation' => array(
+                        'label' => 'Free Consultation',
+                        'uri' => '/consultation'
+                    ),
+                )
+            ),
+
+            // Member navigation
+            'members-about' => array(
+                'label' => 'About',
+                'uri' => '#',
+                'pages' => array(
+                    'aaup' => array(
+                        'label' => 'AAUP',
+                        'uri' => '/about'
+                    ),
+                    'history' => array(
+                        'label' => 'History',
+                        'uri' => '/history'
+                    ),
+                    'survey' => array(
+                        'label' => 'Survey',
+                        'uri' => '/survey'
+                    ),
+                    'research' => array(
+                        'label' => 'Research',
+                        'uri' => '/research'
+                    ),
+                    'results' => array(
+                        'label' => 'Results',
+                        'uri' => '/results'
+                    ),
+                    'order' => array(
+                        'label' => 'Order',
+                        'uri' => '/order'
+                    )
+                )
+            ),
+            'data-collection' => array(
+                'label' => 'Data Collection',
+                'uri' => '#',
+                'pages' => array(
+                    'instructions' => array(
+                        'label' => 'Instructions',
+                        'uri' => '/instructions'
+                    ),
+                    'webinars' => array(
+                        'label' => 'Webinars',
+                        'uri' => '/webinars'
+                    ),
+                    'template' => array(
+                        'label' => 'Template',
+                        'uri' => '/template'
+                    ),
+                    'user' => array(
+                        'label' => 'User',
+                        'uri' => '/account'
+                    ),
+                    'institution' => array(
+                        'label' => 'Institution(s)',
+                        'uri' => '/institution/edit'
+                    ),
+                )
+            ),
+            'documentation' => array(
+                'label' => 'Documentation',
+                'uri' => '#',
+                'pages' => array(
+                    'instructions' => array(
+                        'label' => 'Instructions',
+                        'uri' => '/instructions'
+                    ),
+                    'webinars' => array(
+                        'label' => 'Webinars',
+                        'uri' => '/webinars'
+                    ),
+                    'faq' => array(
+                        'label' => 'FAQ',
+                        'uri' => 'faq'
+                    ),
+                    /*'submitted-values' => array(
+                        'label' => 'Submitted Values',
+                        'uri' => '/submitted-values'
+                    ),
+                    'dictionary' => array(
+                        'label' => 'Data Dictionary',
+                        'uri' => '/data-dictionary'
+                    ),*/
+                    'calculations' => array(
+                        'label' => 'Calculations',
+                        'uri' => '/calculations'
+                    ),
+                    'resources' => array(
+                        'label' => 'Resources',
+                        'uri' => '/resources'
+                    ),
+                    'changes' => array(
+                        'label' => 'Changes/Errata',
+                        'uri' => '/changes'
+                    ),
+                    'order' => array(
+                        'label' => 'Order',
+                        'uri' => '/order'
+                    )
+                )
+            ),
+            'members-results' => array(
+                'label' => 'Results',
+                'uri' => '#',
+                'pages' => array(
+                    'sample-results' => array(
+                        'label' => 'Sample Results',
+                        'uri' => '/sample-results'
+                    ),
+                    'order' => array(
+                        'label' => 'Order',
+                        'uri' => '/order-results'
+                    ),
+                    'consultation' => array(
+                        'label' => 'Free Consultation',
+                        'uri' => '/consultation'
+                    ),
+                )
+            ),
+            'members-resources' => array(
+                'label' => 'Resources',
+                'uri' => '#',
+                'pages' => array(
+                    'instructions' => array(
+                        'label' => 'Instructions',
+                        'uri' => '/instructions'
+                    ),
+                    'presentations' => array(
+                        'label' => 'Presentations',
+                        'uri' => '/presentations'
+                    ),
+                    'publications' => array(
+                        'label' => 'Publications',
+                        'uri' => '/publications'
+                    ),
+                    'webinars' => array(
+                        'label' => 'Webinars',
+                        'uri' => '/webinars'
+                    ),
+                    'media' => array(
+                        'label' => 'Media',
+                        'uri' => '/media'
+                    ),
+                    'consultation' => array(
+                        'label' => 'Free Consultation',
+                        'uri' => '/consultation'
+                    ),
+                )
+            ),
+            'members-contact' => array(
+                'label' => 'Contact',
+                'uri' => '/contact',
+                'pages' => array(
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
+                    'staff' => array(
+                        'label' => 'Staff',
+                        'uri' => '/staff'
+                    ),
+                    'order' => array(
+                        'label' => 'Order',
+                        'uri' => '/order'
                     ),
                     'consultation' => array(
                         'label' => 'Free Consultation',
