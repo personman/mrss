@@ -73,7 +73,7 @@ class Excel
         $excel = new PHPExcel();
         $subscription = $subscriptions[0];
 
-        if ($subscription->getStudy()->getId() != 4) {
+        if (true || $subscription->getStudy()->getId() != 4) {
             $this->writeHeadersSystem($excel, $subscriptions);
             $this->writeBodySystem($excel, $subscriptions);
         }
@@ -89,7 +89,7 @@ class Excel
                 $this->customizeForWorkforce($excel, $subscription);
             }
 
-            if ($subscription->getStudy()->getId() == 4) {
+            if (false && $subscription->getStudy()->getId() == 4) {
                 $this->customizeForAaup($excel, $subscription);
             }
         }
