@@ -9,6 +9,14 @@ h1, .page-header h2 {
 	border-bottom: 4px solid #C50C46;
 }
 
+h2 {
+	color: #262981;
+}
+
+h3 {
+	color: #666;
+}
+
 .header-title h1 {
 	border-bottom: none;
 	text-transform: none !important;
@@ -51,4 +59,38 @@ a.login-btn, #headerLoginForm button {
 	font-size: 77%;
 	text-transform: none;
 	color: #888;
+}
+
+
+.table > thead > tr > th.data-entry-men {
+	background: #262981;
+	color: white;
+	border: none
+}
+
+.table > thead > tr > th.data-entry-women {
+	background: #C50B45;
+	color: white;
+	border: none !important;
+}
+
+.table tr > .data-entry-border-right {
+	border-right: 2px solid #CCC;
+}
+
+
+.table > thead > tr.data-entry-heading > th {
+	text-transform: none;
+	color: #333;
+	font-size: 92%;
+	background: #f2f2f2;
+	border-bottom: none;
+}
+
+/** Tabs **/
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+	background-color: #262981;
+}
+a, a:visited {
+	color: #262981;
 }
