@@ -5,11 +5,13 @@
 
 $tableConfig = $dataEntryLayout;
 
-$colClassConfig = array('faculty', 'salaries', 'ntt', 'tt', 'tenured');
-$colSpan = 6;
+$colClassConfig = array('male faculty', 'male salaries', 'male ntt', 'male tt', 'male tenured', 'female faculty', 'female salaries', 'female ntt', 'female tt', 'female tenured');
+$colSpan = 11;
 ?>
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
+
 
 <?php
 $this->headScript()->appendFile(
@@ -44,8 +46,8 @@ $this->headScript()->appendFile(
 <?= $this->form()->openTag($form) ?>
 
 
+<h3>Conversion factor (if entering 12-month data)</h3>
 <p>
-    <h3>Conversion factor (if entering 12-month data)</h3>
     The 12 to 9 month conversion factor for this institution:
     <?= $this->formElement($form->get('institution_conversion_factor')) ?>
 </p>
@@ -53,7 +55,17 @@ $this->headScript()->appendFile(
 <table class="table table-condensed table-bordered data-entry-grid" id="instructionalGrid">
     <thead>
     <tr>
-        <th></th>
+        <td></td>
+        <th colspan="5" class="data-entry-men">Men</th>
+        <th colspan="5" class="data-entry-women">Women</th>
+    </tr>
+    <tr class="data-entry-heading">
+        <th>Academic Rank</th>
+        <th>Number of Faculty</th>
+        <th>Total Contracted Salaries ($)</th>
+        <th>Non-tenure-track</th>
+        <th>On Tenure-track</th>
+        <th class="data-entry-border-right">Tenured</th>
         <th>Number of Faculty</th>
         <th>Total Contracted Salaries ($)</th>
         <th>Non-tenure-track</th>
@@ -85,7 +97,8 @@ $this->headScript()->appendFile(
 
                     <?php foreach ($row as $i => $field): ?>
                         <?php if (!empty($field)):  ?>
-                            <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                            <?php $class = ($i == 4) ? 'data-entry-border-right' : ''; ?>
+                            <td class="grid-value <?= $colClassConfig[$i] ?>-value <?= $class ?>"
                                 id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
                                 <?= $this->simpleFormElement($form->get($field)) ?>
                             </td>
@@ -123,6 +136,12 @@ $this->headScript()->appendFile(
                 <?= $this->formElement($form->get('buttons')->get('submit')) ?>
             </div>
         </div>
+        <div class="control-group" id="control-group-buttons[save-edit]">
+            <div class="controls" id="controls-buttons[save-edit]">
+                <?= $this->formElement($form->get('buttons')->get('save-edit')) ?>
+            </div>
+        </div>
+
     </fieldset>
 <?php endif ?>
 

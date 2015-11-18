@@ -72,55 +72,13 @@ return array(
             // Faculty
             array(
                 'rows' => array(
-                    'Male Faculty on 9-month Contracts (i.e., regardless of number of salary installments)',
+                    'Section 1. Faculty on 9-month Contracts (i.e., regardless of number of salary installments)',
                     'Professor' => array(
                         'ft_male_professor_number_9_month',
                         'ft_male_professor_salaries_9_month',
                         'ft_male_professor_ntt_9_month',
                         'ft_male_professor_tt_9_month',
-                        'ft_male_professor_t_9_month'
-                    ),
-                    'Associate' => array(
-                        'ft_male_associate_professor_number_9_month',
-                        'ft_male_associate_professor_salaries_9_month',
-                        'ft_male_associate_professor_ntt_9_month',
-                        'ft_male_associate_professor_tt_9_month',
-                        'ft_male_associate_professor_t_9_month'
-                    ),
-                    'Assistant' => array(
-                        'ft_male_assistant_professor_number_9_month',
-                        'ft_male_assistant_professor_salaries_9_month',
-                        'ft_male_assistant_professor_ntt_9_month',
-                        'ft_male_assistant_professor_tt_9_month',
-                        'ft_male_assistant_professor_t_9_month'
-                    ),
-                    'Instructor' => array(
-                        'ft_male_instructor_number_9_month',
-                        'ft_male_instructor_salaries_9_month',
-                        'ft_male_instructor_ntt_9_month',
-                        'ft_male_instructor_tt_9_month',
-                        'ft_male_instructor_t_9_month'
-                    ),
-                    'Lecturer' => array(
-                        'ft_male_lecturer_number_9_month',
-                        'ft_male_lecturer_salaries_9_month',
-                        'ft_male_lecturer_ntt_9_month',
-                        'ft_male_lecturer_tt_9_month',
-                        'ft_male_lecturer_t_9_month'
-                    ),
-                    'No Rank' => array(
-                        'ft_male_no_rank_number_9_month',
-                        'ft_male_no_rank_salaries_9_month',
-                        'ft_male_no_rank_ntt_9_month',
-                        'ft_male_no_rank_tt_9_month',
-                        'ft_male_no_rank_t_9_month'
-                    ),
-                ),
-            ),
-            array(
-                'rows' => array(
-                    'Female Faculty on 9-month Contracts (i.e., regardless of number of salary installments)',
-                    'Professor' => array(
+                        'ft_male_professor_t_9_month',
                         'ft_female_professor_number_9_month',
                         'ft_female_professor_salaries_9_month',
                         'ft_female_professor_ntt_9_month',
@@ -128,6 +86,11 @@ return array(
                         'ft_female_professor_t_9_month'
                     ),
                     'Associate' => array(
+                        'ft_male_associate_professor_number_9_month',
+                        'ft_male_associate_professor_salaries_9_month',
+                        'ft_male_associate_professor_ntt_9_month',
+                        'ft_male_associate_professor_tt_9_month',
+                        'ft_male_associate_professor_t_9_month',
                         'ft_female_associate_professor_number_9_month',
                         'ft_female_associate_professor_salaries_9_month',
                         'ft_female_associate_professor_ntt_9_month',
@@ -135,6 +98,11 @@ return array(
                         'ft_female_associate_professor_t_9_month'
                     ),
                     'Assistant' => array(
+                        'ft_male_assistant_professor_number_9_month',
+                        'ft_male_assistant_professor_salaries_9_month',
+                        'ft_male_assistant_professor_ntt_9_month',
+                        'ft_male_assistant_professor_tt_9_month',
+                        'ft_male_assistant_professor_t_9_month',
                         'ft_female_assistant_professor_number_9_month',
                         'ft_female_assistant_professor_salaries_9_month',
                         'ft_female_assistant_professor_ntt_9_month',
@@ -142,6 +110,11 @@ return array(
                         'ft_female_assistant_professor_t_9_month'
                     ),
                     'Instructor' => array(
+                        'ft_male_instructor_number_9_month',
+                        'ft_male_instructor_salaries_9_month',
+                        'ft_male_instructor_ntt_9_month',
+                        'ft_male_instructor_tt_9_month',
+                        'ft_male_instructor_t_9_month',
                         'ft_female_instructor_number_9_month',
                         'ft_female_instructor_salaries_9_month',
                         'ft_female_instructor_ntt_9_month',
@@ -149,6 +122,11 @@ return array(
                         'ft_female_instructor_t_9_month'
                     ),
                     'Lecturer' => array(
+                        'ft_male_lecturer_number_9_month',
+                        'ft_male_lecturer_salaries_9_month',
+                        'ft_male_lecturer_ntt_9_month',
+                        'ft_male_lecturer_tt_9_month',
+                        'ft_male_lecturer_t_9_month',
                         'ft_female_lecturer_number_9_month',
                         'ft_female_lecturer_salaries_9_month',
                         'ft_female_lecturer_ntt_9_month',
@@ -156,6 +134,11 @@ return array(
                         'ft_female_lecturer_t_9_month'
                     ),
                     'No Rank' => array(
+                        'ft_male_no_rank_number_9_month',
+                        'ft_male_no_rank_salaries_9_month',
+                        'ft_male_no_rank_ntt_9_month',
+                        'ft_male_no_rank_tt_9_month',
+                        'ft_male_no_rank_t_9_month',
                         'ft_female_no_rank_number_9_month',
                         'ft_female_no_rank_salaries_9_month',
                         'ft_female_no_rank_ntt_9_month',
@@ -167,56 +150,13 @@ return array(
             array(
                 'rows' => array(
 
-                    'Male Faculty on 12-month Contracts (i.e., regardless of number of salary installments)',
+                    'Section 2. Faculty on 12-month Contracts (i.e., regardless of number of salary installments)',
                     'Professor' => array(
                         'ft_male_professor_number_12_month',
                         'ft_male_professor_salaries_12_month',
                         'ft_male_professor_ntt_12_month',
                         'ft_male_professor_tt_12_month',
-                        'ft_male_professor_t_12_month'
-                    ),
-                    'Associate' => array(
-                        'ft_male_associate_professor_number_12_month',
-                        'ft_male_associate_professor_salaries_12_month',
-                        'ft_male_associate_professor_ntt_12_month',
-                        'ft_male_associate_professor_tt_12_month',
-                        'ft_male_associate_professor_t_12_month'
-                    ),
-                    'Assistant' => array(
-                        'ft_male_assistant_professor_number_12_month',
-                        'ft_male_assistant_professor_salaries_12_month',
-                        'ft_male_assistant_professor_ntt_12_month',
-                        'ft_male_assistant_professor_tt_12_month',
-                        'ft_male_assistant_professor_t_12_month'
-                    ),
-                    'Instructor' => array(
-                        'ft_male_instructor_number_12_month',
-                        'ft_male_instructor_salaries_12_month',
-                        'ft_male_instructor_ntt_12_month',
-                        'ft_male_instructor_tt_12_month',
-                        'ft_male_instructor_t_12_month'
-                    ),
-                    'Lecturer' => array(
-                        'ft_male_lecturer_number_12_month',
-                        'ft_male_lecturer_salaries_12_month',
-                        'ft_male_lecturer_ntt_12_month',
-                        'ft_male_lecturer_tt_12_month',
-                        'ft_male_lecturer_t_12_month'
-                    ),
-                    'No Rank' => array(
-                        'ft_male_no_rank_number_12_month',
-                        'ft_male_no_rank_salaries_12_month',
-                        'ft_male_no_rank_ntt_12_month',
-                        'ft_male_no_rank_tt_12_month',
-                        'ft_male_no_rank_t_12_month'
-                    ),
-                ),
-            ),
-            array(
-                'rows' => array(
-
-                    'Female Faculty on 12-month Contracts (i.e., regardless of number of salary installments)',
-                    'Professor' => array(
+                        'ft_male_professor_t_12_month',
                         'ft_female_professor_number_12_month',
                         'ft_female_professor_salaries_12_month',
                         'ft_female_professor_ntt_12_month',
@@ -224,6 +164,11 @@ return array(
                         'ft_female_professor_t_12_month'
                     ),
                     'Associate' => array(
+                        'ft_male_associate_professor_number_12_month',
+                        'ft_male_associate_professor_salaries_12_month',
+                        'ft_male_associate_professor_ntt_12_month',
+                        'ft_male_associate_professor_tt_12_month',
+                        'ft_male_associate_professor_t_12_month',
                         'ft_female_associate_professor_number_12_month',
                         'ft_female_associate_professor_salaries_12_month',
                         'ft_female_associate_professor_ntt_12_month',
@@ -231,6 +176,11 @@ return array(
                         'ft_female_associate_professor_t_12_month'
                     ),
                     'Assistant' => array(
+                        'ft_male_assistant_professor_number_12_month',
+                        'ft_male_assistant_professor_salaries_12_month',
+                        'ft_male_assistant_professor_ntt_12_month',
+                        'ft_male_assistant_professor_tt_12_month',
+                        'ft_male_assistant_professor_t_12_month',
                         'ft_female_assistant_professor_number_12_month',
                         'ft_female_assistant_professor_salaries_12_month',
                         'ft_female_assistant_professor_ntt_12_month',
@@ -238,6 +188,11 @@ return array(
                         'ft_female_assistant_professor_t_12_month'
                     ),
                     'Instructor' => array(
+                        'ft_male_instructor_number_12_month',
+                        'ft_male_instructor_salaries_12_month',
+                        'ft_male_instructor_ntt_12_month',
+                        'ft_male_instructor_tt_12_month',
+                        'ft_male_instructor_t_12_month',
                         'ft_female_instructor_number_12_month',
                         'ft_female_instructor_salaries_12_month',
                         'ft_female_instructor_ntt_12_month',
@@ -245,6 +200,11 @@ return array(
                         'ft_female_instructor_t_12_month'
                     ),
                     'Lecturer' => array(
+                        'ft_male_lecturer_number_12_month',
+                        'ft_male_lecturer_salaries_12_month',
+                        'ft_male_lecturer_ntt_12_month',
+                        'ft_male_lecturer_tt_12_month',
+                        'ft_male_lecturer_t_12_month',
                         'ft_female_lecturer_number_12_month',
                         'ft_female_lecturer_salaries_12_month',
                         'ft_female_lecturer_ntt_12_month',
@@ -252,14 +212,19 @@ return array(
                         'ft_female_lecturer_t_12_month'
                     ),
                     'No Rank' => array(
+                        'ft_male_no_rank_number_12_month',
+                        'ft_male_no_rank_salaries_12_month',
+                        'ft_male_no_rank_ntt_12_month',
+                        'ft_male_no_rank_tt_12_month',
+                        'ft_male_no_rank_t_12_month',
                         'ft_female_no_rank_number_12_month',
                         'ft_female_no_rank_salaries_12_month',
                         'ft_female_no_rank_ntt_12_month',
                         'ft_female_no_rank_tt_12_month',
                         'ft_female_no_rank_t_12_month'
                     ),
-                )
-            )
+                ),
+            ),
         ),
         // Full-time benefits
         4 => array(
