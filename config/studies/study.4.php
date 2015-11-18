@@ -145,6 +145,7 @@ return array(
                         'ft_female_no_rank_tt_9_month',
                         'ft_female_no_rank_t_9_month'
                     ),
+                    '[total_row_9]'
                 ),
             ),
             array(
@@ -223,6 +224,9 @@ return array(
                         'ft_female_no_rank_tt_12_month',
                         'ft_female_no_rank_t_12_month'
                     ),
+                    '[total_row_12]',
+                    'Section 3.  9-Month Contracts plus 11 or 12-Month Contracts (Converts 11 or 12-month salaries and calculates automatically.)',
+                    '[total_rows_9_12]'
                 ),
             ),
         ),
