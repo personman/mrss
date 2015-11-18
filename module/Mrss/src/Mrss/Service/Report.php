@@ -362,7 +362,12 @@ class Report
         }
 
         $percentiles = $this->getPercentileModel()
-            ->findByBenchmarkAndYear($benchmark, $observation->getYear(), $this->getPercentileBreakpointsForStudy());
+            ->findByBenchmarkAndYear(
+                $benchmark,
+                $observation->getYear(),
+                $this->getPercentileBreakpointsForStudy(),
+                $this->getSystem()
+            );
         $percentileData = array();
         foreach ($percentiles as /** var Percentile */ $percentile) {
             $percentileData[$percentile->getPercentile()] = $percentile
