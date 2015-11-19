@@ -62,13 +62,13 @@ a.login-btn, #headerLoginForm button {
 }
 
 
-.table > thead > tr > th.data-entry-men {
+.table > thead > tr > th.data-entry-blue {
 	background: #262981;
 	color: white;
 	border: none
 }
 
-.table > thead > tr > th.data-entry-women {
+.table > thead > tr > th.data-entry-red {
 	background: #C50B45;
 	color: white;
 	border: none !important;
