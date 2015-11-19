@@ -26,8 +26,13 @@ h3 {
 	margin-top: 0px !important;
 }
 
-a.schedule-btn {
+a.schedule-btn, a:visited.schedule-btn {
 	background: #04497B;
+	color: white;
+}
+
+.navbar-default .navbar-nav > li.renew-nav > a, .navbar-default .navbar-nav > li.join-nav > a {
+	background-color: #608279;
 }
 
 a.login-btn, #headerLoginForm button {
@@ -93,4 +98,13 @@ a.login-btn, #headerLoginForm button {
 }
 a, a:visited {
 	color: #262981;
+}
+
+table.data-entry-compact input[type=text] {
+	width: 52px;
+	padding: 3px;
+}
+
+table.data-entry-compact .input-group-addon {
+	padding: 6px 4px;
 }

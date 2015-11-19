@@ -34,7 +34,7 @@ class FcsNavigationFactory extends NavigationFactory
         if ($auth->hasIdentity()) {
             unset($pages['join']);
             unset($pages['about']);
-            unset($pages['survey']);
+            unset($pages['start']);
             unset($pages['results']);
             unset($pages['resources']);
             unset($pages['contact']);

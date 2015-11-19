@@ -378,8 +378,8 @@ return array(
                         'uri' => '/history'
                     ),
                     'survey' => array(
-                        'label' => 'Survey',
-                        'uri' => '/survey'
+                        'label' => 'Research',
+                        'uri' => '/research'
                     ),
                     'contact' => array(
                         'label' => 'Contact',
@@ -388,27 +388,10 @@ return array(
 
                 )
             ),
-            'survey' => array(
-                'label' => 'Survey',
-                'uri' => '#',
-                'pages' => array(
-                    'instructions' => array(
-                        'label' => 'Instructions',
-                        'uri' => '/instructions'
-                    ),
-                    'start' => array(
-                        'label' => 'Start',
-                        'uri' => '/start'
-                    ),
-                    'order' => array(
-                        'label' => 'Order',
-                        'uri' => '/order'
-                    ),
-                    'results' => array(
-                        'label' => 'Results',
-                        'uri' => '/results'
-                    )
-                )
+            'start' => array(
+                'label' => 'Start',
+                'uri' => '/join-free',
+                'class' => 'renew-nav'
             ),
             'results' => array(
                 'label' => 'Results',
@@ -486,15 +469,12 @@ return array(
                         'label' => 'Research',
                         'uri' => '/research'
                     ),
-                    'results' => array(
-                        'label' => 'Results',
-                        'uri' => '/results'
-                    ),
-                    'order' => array(
-                        'label' => 'Order',
-                        'uri' => '/order'
-                    )
                 )
+            ),
+            'renew' => array(
+                'label' => 'Start',
+                'uri' => '/renew',
+                'class' => 'renew-nav'
             ),
             'data-collection' => array(
                 'label' => 'Data Collection',
@@ -504,21 +484,13 @@ return array(
                         'label' => 'Instructions',
                         'uri' => '/instructions'
                     ),
-                    'webinars' => array(
-                        'label' => 'Webinars',
-                        'uri' => '/webinars'
-                    ),
                     'template' => array(
                         'label' => 'Template',
-                        'uri' => '/template'
+                        'uri' => '/data-entry/import'
                     ),
-                    'user' => array(
-                        'label' => 'User',
-                        'uri' => '/account'
-                    ),
-                    'institution' => array(
-                        'label' => 'Institution(s)',
-                        'uri' => '/institution/edit'
+                    'overview' => array(
+                        'label' => 'Overview',
+                        'uri' => '/data-entry'
                     ),
                 )
             ),
@@ -550,18 +522,10 @@ return array(
                         'label' => 'Calculations',
                         'uri' => '/calculations'
                     ),
-                    'resources' => array(
-                        'label' => 'Resources',
-                        'uri' => '/resources'
-                    ),
                     'changes' => array(
                         'label' => 'Changes/Errata',
                         'uri' => '/changes'
                     ),
-                    'order' => array(
-                        'label' => 'Order',
-                        'uri' => '/order'
-                    )
                 )
             ),
             'members-results' => array(
@@ -586,10 +550,6 @@ return array(
                 'label' => 'Resources',
                 'uri' => '#',
                 'pages' => array(
-                    'instructions' => array(
-                        'label' => 'Instructions',
-                        'uri' => '/instructions'
-                    ),
                     'presentations' => array(
                         'label' => 'Presentations',
                         'uri' => '/presentations'
