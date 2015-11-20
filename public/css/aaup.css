@@ -83,7 +83,9 @@ a.login-btn, #headerLoginForm button {
 	/** #BA123E */
 }
 
-
+.testimonial {
+	clear: both;
+}
 
 /** Data entry **/
 .input-group {
