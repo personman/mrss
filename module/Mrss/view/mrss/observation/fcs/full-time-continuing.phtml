@@ -12,6 +12,7 @@ $colSpan = 6;
 ?>
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
 
 <?php
 $this->headScript()->appendFile(
@@ -139,7 +140,7 @@ $this->headScript()->appendFile(
                 <?php foreach ($row as $i => $field): ?>
                     <?php if (!empty($field)):  ?>
                         <?php $months = (stristr($field, '12')) ? 9 : 12; ?>
-                        <td class="grid-value <?= $colClassConfig[$i] ?> month-<?= $months ?>"
+                        <td class="grid-value <?= $colClassConfig[$i] ?> month-<?= $months ?> <?= str_replace(' ', '-', strtolower($label)) ?>"
                             id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
                             <?= $this->simpleFormElement($form->get($field)) ?>
                         </td>
@@ -181,6 +182,39 @@ $this->headScript()->appendFile(
         </tr>
     <?php endforeach ?>
 
+        <tr>
+            <td colspan="<?= $colSpan ?>">
+                <h2 class="data-entry-subheading">
+                    Section 3.  9-Month plus 12-Month Converted  (Calculates automatically)
+                </h2>
+            </td>
+        </tr>
+        <?php $facultyTypes = array(
+            'professor',
+            'associate',
+            'assistant',
+            'instructor',
+            'lecturer',
+            'no-rank'
+        ); ?>
+        <?php foreach ($facultyTypes as $type): ?>
+        <tr>
+            <td class="grid-category"><?= ucwords(str_replace('-', ' ', $type)) ?></td>
+            <td class="column-total faculty" id="faculty_<?= $type ?>">0</td>
+            <td class="column-total current" id="current_<?= $type ?>">0</td>
+            <td class="column-total previous" id="previous_<?= $type ?>">0</td>
+            <td class="percentage-increase">0.00%</td>
+        </tr>
+        <?php endforeach ?>
+
+        <tr>
+            <td class="grid-category">TOTAL</td>
+            <td class="column-total faculty" id="faculty">0</td>
+            <td class="column-total current" id="current">0</td>
+            <td class="column-total previous" id="previous">0</td>
+            <td class="percentage-increase">0.00%</td>
+        </tr>
+
     </tbody>
 </table>
 
@@ -191,6 +225,12 @@ $this->headScript()->appendFile(
                 <?= $this->formElement($form->get('buttons')->get('submit')) ?>
             </div>
         </div>
+        <div class="control-group" id="control-group-buttons[save-edit]">
+            <div class="controls" id="controls-buttons[save-edit]">
+                <?= $this->formElement($form->get('buttons')->get('save-edit')) ?>
+            </div>
+        </div>
+
     </fieldset>
 <?php endif ?>
 
