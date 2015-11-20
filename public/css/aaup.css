@@ -56,14 +56,33 @@ a.login-btn, #headerLoginForm button {
 	padding: 0;
 }
 
+#matter .carousel-caption {
+	background-color: #00508d;
+	background-color: rgba(34, 73, 123, 0.85);
+	top: 8%;
+	right: auto;
+	left: 3%;
+	bottom: auto;
+}
+
 #accountability .carousel-caption {
 	top: auto;
 	right: 6%;
 	bottom: 8%;
 	left: auto;
-
 	background-color: rgba(155, 155, 155, .85);
 }
+
+#yardstick .carousel-caption {
+	top: 9%;
+	right: 8%;
+	bottom: auto;
+	left: auto;
+	background-color: rgba(193,7,61, .85);
+	background-color: rgba(142, 0, 10, .85);
+	/** #BA123E */
+}
+
 
 
 /** Data entry **/
