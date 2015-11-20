@@ -378,6 +378,10 @@ return array(
                         'uri' => '/history'
                     ),
                     'survey' => array(
+                        'label' => 'Survey',
+                        'uri' => '/survey'
+                    ),
+                    'research' => array(
                         'label' => 'Research',
                         'uri' => '/research'
                     ),
