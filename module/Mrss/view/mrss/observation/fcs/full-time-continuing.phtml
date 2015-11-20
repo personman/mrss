@@ -7,7 +7,7 @@ $currentYear = $this->currentStudy()->getCurrentYear();
 
 $tableConfig = $dataEntryLayout;
 
-$colClassConfig = array('faculty', 'salaries', 'ntt', 'tt', 'tenured');
+$colClassConfig = array('faculty', 'current', 'previous');
 $colSpan = 6;
 ?>
 
@@ -29,6 +29,57 @@ $this->headScript()->appendFile(
 )
 ?>
 
+
+<script>
+    $(function() {
+        updateSalaryTotals();
+        updatePercentageIncrease();
+        $('form input').change(function() {
+            updateSalaryTotals();
+            updatePercentageIncrease();
+        })
+    })
+
+    function updateSalaryTotals()
+    {
+        $('.column-total').each(function() {
+            var id = $(this).attr('id')
+
+            // Convert the id into the class selector for finding the inputs to sum
+            var idParts = id.split('_');
+            var selector = '.' + idParts.join('.') + ' input';
+            var sum = 0;
+            $(selector).each(function() {
+                sum += Number($(this).val());
+            })
+
+            $(this).html(sum);
+        })
+    }
+
+    function updatePercentageIncrease()
+    {
+        $('.percentage-increase').each(function() {
+            var previous = $(this).parent().find('.previous input').val();
+            var current = $(this).parent().find('.current input').val();
+
+            // Handle total rows. They have no inputs
+            if ($(this).parent().find('input').length == 0) {
+                var previous = parseFloat($(this).parent().find('.previous').html());
+                var current = parseFloat($(this).parent().find('.current').html());
+            }
+            var increase = 0;
+            if (current && previous) {
+                increase = ((current - previous) / previous) * 100;
+            }
+
+            increase = round(increase, 2);
+            increase = increase + '%';
+            $(this).html(increase);
+        })
+    }
+</script>
+
 <h1>
     <?= $benchmarkGroup->getName() ?>
 </h1>
@@ -49,10 +100,18 @@ $this->headScript()->appendFile(
 <table class="table table-condensed table-bordered data-entry-grid" id="instructionalGrid">
     <thead>
     <tr>
+        <td colspan="2"></td>
+        <th colspan="2">
+            Total Salary Outlays
+        </th>
+        <td></td>
+    </tr>
+    <tr>
         <th>Academic Rank <?= $currentYear - 3 ?>-<?= $currentYear - 2 ?></th>
         <th>Number of Continuing Faculty</th>
         <th>Current Year (<?= $currentYear - 2 ?>-<?= $currentYear - 1 ?>)</th>
         <th>Previous Year (<?= $currentYear - 3 ?>-<?= $currentYear - 2 ?>)</th>
+        <th>Percentage Increase</th>
     </tr>
     </thead>
 
@@ -79,7 +138,8 @@ $this->headScript()->appendFile(
 
                 <?php foreach ($row as $i => $field): ?>
                     <?php if (!empty($field)):  ?>
-                        <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                        <?php $months = (stristr($field, '12')) ? 9 : 12; ?>
+                        <td class="grid-value <?= $colClassConfig[$i] ?> month-<?= $months ?>"
                             id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
                             <?= $this->simpleFormElement($form->get($field)) ?>
                         </td>
@@ -87,12 +147,17 @@ $this->headScript()->appendFile(
                         <td class="emptyCell"></td>
                     <?php endif ?>
                 <?php endforeach ?>
+
+                <td class="percentage-increase">
+                    0.00%
+                </td>
+
                 </tr>
 
                 <tr class="help-text">
                 <td class="grid-category"></td>
                 <td colspan="<?= count($row) ?>">
-
+                    <?php if (false): ?>
                     <?php foreach ($row as $i => $field): ?>
                         <?php if (empty($field)) continue ?>
                         <div class="<?= $colClassConfig[$i] ?>-help grid-help">
@@ -100,11 +165,20 @@ $this->headScript()->appendFile(
                             <?= $form->get($field)->getOption('help-block') ?>
                         </div>
                     <?php endforeach ?>
+                    <?php endif ?>
 
                 </td>
             <?php endif ?>
             </tr>
         <?php endforeach ?>
+
+        <tr>
+            <td class="grid-category">TOTAL</td>
+            <td class="column-total faculty" id="faculty_month-<?= $months ?>">0</td>
+            <td class="column-total current" id="current_month-<?= $months ?>">0</td>
+            <td class="column-total previous" id="previous_month-<?= $months ?>">0</td>
+            <td class="percentage-increase">0.00%</td>
+        </tr>
     <?php endforeach ?>
 
     </tbody>
