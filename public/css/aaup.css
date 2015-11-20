@@ -52,6 +52,9 @@ a.login-btn, #headerLoginForm button {
 }
 
 /** Homepage **/
+#homepage-slide-container {
+	background-color: #00508d;
+}
 .homepage-slider-c {
 	padding: 0;
 }
