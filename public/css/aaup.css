@@ -51,6 +51,21 @@ a.login-btn, #headerLoginForm button {
 	background: #618378;
 }
 
+/** Homepage **/
+.homepage-slider-c {
+	padding: 0;
+}
+
+#accountability .carousel-caption {
+	top: auto;
+	right: 6%;
+	bottom: 8%;
+	left: auto;
+
+	background-color: rgba(155, 155, 155, .85);
+}
+
+
 /** Data entry **/
 .input-group {
 	width: 30px;
