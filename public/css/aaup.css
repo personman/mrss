@@ -163,3 +163,12 @@ table.data-entry-compact input[type=text] {
 table.data-entry-compact .input-group-addon {
 	padding: 6px 4px;
 }
+
+table.data-entry-compact .input-group .form-control, table.data-entry-compact .input-group {
+	width: 95px;
+}
+
+.container-wide {
+	width: 90% !important;
+	margin: 15px auto;
+}

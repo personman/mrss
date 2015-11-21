@@ -249,7 +249,9 @@ return array(
                         'ft_retirement_expenditure_lecturer_9_month',
                         'ft_retirement_covered_lecturer_9_month',
                         'ft_retirement_expenditure_no_rank_9_month',
-                        'ft_retirement_covered_no_rank_9_month'
+                        'ft_retirement_covered_no_rank_9_month',
+                        'ft_retirement_covered_no_diff_9_month',
+                        'ft_retirement_covered_no_diff_9_month'
                     ),
                     'Medical' => array(
                         'ft_medical_expenditure_professor_9_month',
@@ -263,7 +265,9 @@ return array(
                         'ft_medical_expenditure_lecturer_9_month',
                         'ft_medical_covered_lecturer_9_month',
                         'ft_medical_expenditure_no_rank_9_month',
-                        'ft_medical_covered_no_rank_9_month'
+                        'ft_medical_covered_no_rank_9_month',
+                        'ft_medical_expentirue_no_diff_9_month',
+                        'ft_medical_covered_no_diff_9_month'
                     ),
                     'Dental' => array(
                         'ft_dental_expenditure_professor_9_month',
@@ -277,7 +281,9 @@ return array(
                         'ft_dental_expenditure_lecturer_9_month',
                         'ft_dental_covered_lecturer_9_month',
                         'ft_dental_expenditure_no_rank_9_month',
-                        'ft_dental_covered_no_rank_9_month'
+                        'ft_dental_covered_no_rank_9_month',
+                        'ft_dental_expentirue_no_diff_9_month',
+                        'ft_dental_covered_no_diff_9_month'
                     ),
                     '(Optional) Combined Medical w/ Dental' => array(
                         'ft_combined_medical_dental_expenditure_professor_9_month',
@@ -291,7 +297,9 @@ return array(
                         'ft_combined_medical_dental_expenditure_lecturer_9_month',
                         'ft_combined_medical_dental_covered_lecturer_9_month',
                         'ft_combined_medical_dental_expenditure_no_rank_9_month',
-                        'ft_combined_medical_dental_covered_no_rank_9_month'
+                        'ft_combined_medical_dental_covered_no_rank_9_month',
+                        'ft_combined_medical_dental_expentirue_no_diff_9_month',
+                        'ft_combined_medical_dental_covered_no_diff_9_month'
                     ),
                     'Disability' => array(
                         'ft_disability_expenditure_professor_9_month',
@@ -305,7 +313,9 @@ return array(
                         'ft_disability_expenditure_lecturer_9_month',
                         'ft_disability_covered_lecturer_9_month',
                         'ft_disability_expenditure_no_rank_9_month',
-                        'ft_disability_covered_no_rank_9_month'
+                        'ft_disability_covered_no_rank_9_month',
+                        'ft_disability_expentirue_no_diff_9_month',
+                        'ft_disability_covered_no_diff_9_month'
                     ),
                     'Tuition' => array(
                         'ft_tuition_expenditure_professor_9_month',
@@ -319,7 +329,9 @@ return array(
                         'ft_tuition_expenditure_lecturer_9_month',
                         'ft_tuition_covered_lecturer_9_month',
                         'ft_tuition_expenditure_no_rank_9_month',
-                        'ft_tuition_covered_no_rank_9_month'
+                        'ft_tuition_covered_no_rank_9_month',
+                        'ft_tuition_expentirue_no_diff_9_month',
+                        'ft_tuition_covered_no_diff_9_month'
                     ),
                     'FICA' => array(
                         'ft_fica_expenditure_professor_9_month',
@@ -333,7 +345,9 @@ return array(
                         'ft_fica_expenditure_lecturer_9_month',
                         'ft_fica_covered_lecturer_9_month',
                         'ft_fica_expenditure_no_rank_9_month',
-                        'ft_fica_covered_no_rank_9_month'
+                        'ft_fica_covered_no_rank_9_month',
+                        'ft_fica_expentirue_no_diff_9_month',
+                        'ft_fica_covered_no_diff_9_month'
                     ),
                     'Unemployment' => array(
                         'ft_unemployment_expenditure_professor_9_month',
@@ -347,7 +361,9 @@ return array(
                         'ft_unemployment_expenditure_lecturer_9_month',
                         'ft_unemployment_covered_lecturer_9_month',
                         'ft_unemployment_expenditure_no_rank_9_month',
-                        'ft_unemployment_covered_no_rank_9_month'
+                        'ft_unemployment_covered_no_rank_9_month',
+                        'ft_unemployment_expentirue_no_diff_9_month',
+                        'ft_unemployment_covered_no_diff_9_month'
                     ),
                     'Group Life' => array(
                         'ft_group_life_expenditure_professor_9_month',
@@ -361,7 +377,9 @@ return array(
                         'ft_group_life_expenditure_lecturer_9_month',
                         'ft_group_life_covered_lecturer_9_month',
                         'ft_group_life_expenditure_no_rank_9_month',
-                        'ft_group_life_covered_no_rank_9_month'
+                        'ft_group_life_covered_no_rank_9_month',
+                        'ft_group_life_expentirue_no_diff_9_month',
+                        'ft_group_life_covered_no_diff_9_month'
                     ),
                     'Worker\'s Comp.' => array(
                         'ft_worker_comp_expenditure_professor_9_month',
@@ -375,7 +393,9 @@ return array(
                         'ft_worker_comp_expenditure_lecturer_9_month',
                         'ft_worker_comp_covered_lecturer_9_month',
                         'ft_worker_comp_expenditure_no_rank_9_month',
-                        'ft_worker_comp_covered_no_rank_9_month'
+                        'ft_worker_comp_covered_no_rank_9_month',
+                        'ft_worker_comp_expentirue_no_diff_9_month',
+                        'ft_worker_comp_covered_no_diff_9_month'
                     ),
                     'Other' => array(
                         'ft_other_expenditure_professor_9_month',
@@ -389,8 +409,11 @@ return array(
                         'ft_other_expenditure_lecturer_9_month',
                         'ft_other_covered_lecturer_9_month',
                         'ft_other_expenditure_no_rank_9_month',
-                        'ft_other_covered_no_rank_9_month'
+                        'ft_other_covered_no_rank_9_month',
+                        'ft_other_expentirue_no_diff_9_month',
+                        'ft_other_covered_no_diff_9_month'
                     ),
+                    '[total_row_9]'
 
                 ),
             ),
@@ -409,7 +432,9 @@ return array(
                         'ft_retirement_expenditure_lecturer_12_month',
                         'ft_retirement_covered_lecturer_12_month',
                         'ft_retirement_expenditure_no_rank_12_month',
-                        'ft_retirement_covered_no_rank_12_month'
+                        'ft_retirement_covered_no_rank_12_month',
+                        'ft_retirement_covered_no_diff_12_month',
+                        'ft_retirement_covered_no_diff_12_month'
                     ),
                     'Medical' => array(
                         'ft_medical_expenditure_professor_12_month',
@@ -423,7 +448,9 @@ return array(
                         'ft_medical_expenditure_lecturer_12_month',
                         'ft_medical_covered_lecturer_12_month',
                         'ft_medical_expenditure_no_rank_12_month',
-                        'ft_medical_covered_no_rank_12_month'
+                        'ft_medical_covered_no_rank_12_month',
+                        'ft_medical_expentirue_no_diff_12_month',
+                        'ft_medical_covered_no_diff_12_month'
                     ),
                     'Dental' => array(
                         'ft_dental_expenditure_professor_12_month',
@@ -437,7 +464,9 @@ return array(
                         'ft_dental_expenditure_lecturer_12_month',
                         'ft_dental_covered_lecturer_12_month',
                         'ft_dental_expenditure_no_rank_12_month',
-                        'ft_dental_covered_no_rank_12_month'
+                        'ft_dental_covered_no_rank_12_month',
+                        'ft_dental_expentirue_no_diff_12_month',
+                        'ft_dental_covered_no_diff_12_month'
                     ),
                     '(Optional) Combined Medical w/ Dental' => array(
                         'ft_combined_medical_dental_expenditure_professor_12_month',
@@ -451,7 +480,9 @@ return array(
                         'ft_combined_medical_dental_expenditure_lecturer_12_month',
                         'ft_combined_medical_dental_covered_lecturer_12_month',
                         'ft_combined_medical_dental_expenditure_no_rank_12_month',
-                        'ft_combined_medical_dental_covered_no_rank_12_month'
+                        'ft_combined_medical_dental_covered_no_rank_12_month',
+                        'ft_combined_medical_dental_expentirue_no_diff_12_month',
+                        'ft_combined_medical_dental_covered_no_diff_12_month'
                     ),
                     'Disability' => array(
                         'ft_disability_expenditure_professor_12_month',
@@ -465,7 +496,9 @@ return array(
                         'ft_disability_expenditure_lecturer_12_month',
                         'ft_disability_covered_lecturer_12_month',
                         'ft_disability_expenditure_no_rank_12_month',
-                        'ft_disability_covered_no_rank_12_month'
+                        'ft_disability_covered_no_rank_12_month',
+                        'ft_disability_expentirue_no_diff_12_month',
+                        'ft_disability_covered_no_diff_12_month'
                     ),
                     'Tuition' => array(
                         'ft_tuition_expenditure_professor_12_month',
@@ -479,7 +512,9 @@ return array(
                         'ft_tuition_expenditure_lecturer_12_month',
                         'ft_tuition_covered_lecturer_12_month',
                         'ft_tuition_expenditure_no_rank_12_month',
-                        'ft_tuition_covered_no_rank_12_month'
+                        'ft_tuition_covered_no_rank_12_month',
+                        'ft_tuition_expentirue_no_diff_12_month',
+                        'ft_tuition_covered_no_diff_12_month'
                     ),
                     'FICA' => array(
                         'ft_fica_expenditure_professor_12_month',
@@ -493,7 +528,9 @@ return array(
                         'ft_fica_expenditure_lecturer_12_month',
                         'ft_fica_covered_lecturer_12_month',
                         'ft_fica_expenditure_no_rank_12_month',
-                        'ft_fica_covered_no_rank_12_month'
+                        'ft_fica_covered_no_rank_12_month',
+                        'ft_fica_expentirue_no_diff_12_month',
+                        'ft_fica_covered_no_diff_12_month'
                     ),
                     'Unemployment' => array(
                         'ft_unemployment_expenditure_professor_12_month',
@@ -507,7 +544,9 @@ return array(
                         'ft_unemployment_expenditure_lecturer_12_month',
                         'ft_unemployment_covered_lecturer_12_month',
                         'ft_unemployment_expenditure_no_rank_12_month',
-                        'ft_unemployment_covered_no_rank_12_month'
+                        'ft_unemployment_covered_no_rank_12_month',
+                        'ft_unemployment_expentirue_no_diff_12_month',
+                        'ft_unemployment_covered_no_diff_12_month'
                     ),
                     'Group Life' => array(
                         'ft_group_life_expenditure_professor_12_month',
@@ -521,7 +560,9 @@ return array(
                         'ft_group_life_expenditure_lecturer_12_month',
                         'ft_group_life_covered_lecturer_12_month',
                         'ft_group_life_expenditure_no_rank_12_month',
-                        'ft_group_life_covered_no_rank_12_month'
+                        'ft_group_life_covered_no_rank_12_month',
+                        'ft_group_life_expentirue_no_diff_12_month',
+                        'ft_group_life_covered_no_diff_12_month'
                     ),
                     'Worker\'s Comp.' => array(
                         'ft_worker_comp_expenditure_professor_12_month',
@@ -535,7 +576,9 @@ return array(
                         'ft_worker_comp_expenditure_lecturer_12_month',
                         'ft_worker_comp_covered_lecturer_12_month',
                         'ft_worker_comp_expenditure_no_rank_12_month',
-                        'ft_worker_comp_covered_no_rank_12_month'
+                        'ft_worker_comp_covered_no_rank_12_month',
+                        'ft_worker_comp_expentirue_no_diff_12_month',
+                        'ft_worker_comp_covered_no_diff_12_month'
                     ),
                     'Other' => array(
                         'ft_other_expenditure_professor_12_month',
@@ -549,9 +592,12 @@ return array(
                         'ft_other_expenditure_lecturer_12_month',
                         'ft_other_covered_lecturer_12_month',
                         'ft_other_expenditure_no_rank_12_month',
-                        'ft_other_covered_no_rank_12_month'
+                        'ft_other_covered_no_rank_12_month',
+                        'ft_other_expentirue_no_diff_12_month',
+                        'ft_other_covered_no_diff_12_month'
                     ),
-
+                    '[total_row_12]',
+                    'Section 3.   9-Month plus 12-Month converted**  (Calculates automatically)'
                 ),
             )
         ),

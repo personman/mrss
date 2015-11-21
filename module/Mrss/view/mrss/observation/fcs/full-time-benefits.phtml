@@ -4,32 +4,72 @@
  */
 
 $tableConfig = $dataEntryLayout;
+$this->layout()->setVariable('noWrapper', true);
 
 $colClassConfig = array(
-    'professor_exp', 
-    'professor_cov', 
-    'associate_exp', 
-    'associate_cov', 
-    'assistant_exp', 
-    'assistant_cov', 
-    'instructor_exp', 
-    'instructor_cov', 
-    'lecturer_exp', 
-    'lecturer_cov', 
-    'no_rank_exp', 
-    'no_rank_cov',
+    'professor exp 9-month', 
+    'professor cov 9-month', 
+    'associate exp 9-month', 
+    'associate cov 9-month', 
+    'assistant exp 9-month', 
+    'assistant cov 9-month', 
+    'instructor exp 9-month', 
+    'instructor cov 9-month', 
+    'lecturer exp 9-month', 
+    'lecturer cov 9-month', 
+    'no-rank exp 9-month',
+    'no-rank cov 9-month',
+    'no-diff exp 9-month',
+    'no-diff cov 9-month'
 );
+
+$colClassConfig2 = array(
+    'professor exp 12-month', 
+    'professor cov 12-month', 
+    'associate exp 12-month', 
+    'associate cov 12-month', 
+    'assistant exp 12-month', 
+    'assistant cov 12-month', 
+    'instructor exp 12-month', 
+    'instructor cov 12-month', 
+    'lecturer exp 12-month', 
+    'lecturer cov 12-month', 
+    'no-rank exp 12-month',
+    'no-rank cov 12-month',
+    'no-diff exp 12-month',
+    'no-diff cov 12-month'
+);
+
+$benefitRowClassesWithLabels = array(
+    'Retirement' => 'retirement',
+    'Medical' => 'medical',
+    'Dental' => 'dental',
+    '(Optional) Combined Medical w/ Dental' => 'combined',
+    'Disability' => 'disability',
+    'Tuition' => 'tuition',
+    'FICA' => 'fica',
+    'Unemployment' => 'unemployment',
+    'Group Life' => 'group-life',
+    "Worker's Comp." => 'workers-comp',
+    'Other' => 'other'
+);
+$benefitRowClasses = array_values($benefitRowClassesWithLabels);
 
 $colSpan = 13;
 ?>
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
 
 <?php
 $this->headScript()->appendFile(
     '/js/data-entry.js',
     'text/javascript'
 ); ?>
+
+
+<div id="content">
+    <div class="container-wide">
 
 
 <?= $this->partial(
@@ -40,6 +80,16 @@ $this->headScript()->appendFile(
     )
 )
 ?>
+
+<script>
+    $(function() {
+        updateSalaryTotals()
+        $('form input').change(function() {
+            updateSalaryTotals()
+        })
+    })
+</script>
+
 
 <h1>
     <?= $benchmarkGroup->getName() ?>
@@ -74,9 +124,12 @@ The 12 to 9 month conversion factor for this institution:
         <th colspan="2" class="data-entry-blue">Instructor</th>
         <th colspan="2" class="data-entry-red">Lecturer</th>
         <th colspan="2" class="data-entry-blue">No Rank</th>
+        <th colspan="2" class="data-entry-red">UNDIFFERENTIATED RANK</th>
     </tr>
     <tr class="smallHeading splitHeading data-entry-heading">
         <th></th>
+        <th>Total Expenditure</th>
+        <th>Number Covered</th>
         <th>Total Expenditure</th>
         <th>Number Covered</th>
         <th>Total Expenditure</th>
@@ -101,14 +154,30 @@ The 12 to 9 month conversion factor for this institution:
             </tr>
         <?php endif ?>
 
+        <?php $sectionRow = 0; ?>
         <?php foreach ($section['rows'] as $label => $row): ?>
             <tr>
             <?php if (!is_array($row)): ?>
-                <td colspan="<?= $colSpan ?>">
-                    <h2 class="data-entry-subheading">
-                        <?= $row ?>
-                    </h2>
-                </td>
+                <?php if ($row == '[total_row_9]'): ?>
+                    <td class="grid-category">TOTAL</td>
+                    <?php foreach ($colClassConfig as $class): ?>
+                        <?php $newId = implode('_', explode(' ', $class)); ?>
+                    <td class="column-total" id="<?= $newId ?>">0</td>
+                    <?php endforeach ?>
+                    <?php $colClassConfig = $colClassConfig2; ?>
+                <?php elseif ($row == '[total_row_12]'): ?>
+                    <td class="grid-category">TOTAL</td>
+                    <?php foreach ($colClassConfig as $class): ?>
+                        <?php $newId = implode('_', explode(' ', $class)); ?>
+                        <td class="column-total" id="<?= $newId ?>">0</td>
+                    <?php endforeach ?>
+                <?php else: ?>
+                    <td colspan="<?= $colSpan ?>">
+                        <h2 class="data-entry-subheading">
+                            <?= $row ?>
+                        </h2>
+                    </td>
+                <?php endif ?>
             <?php else: ?>
                 <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
                     <?= $label ?>
@@ -116,7 +185,7 @@ The 12 to 9 month conversion factor for this institution:
 
                 <?php foreach ($row as $i => $field): ?>
                     <?php if (!empty($field)):  ?>
-                        <td class="grid-value <?= $colClassConfig[$i] ?>-value"
+                        <td class="grid-value <?= $colClassConfig[$i] ?> <?= $benefitRowClasses[$sectionRow] ?>"
                             id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
                             <?= $this->simpleFormElement($form->get($field)) ?>
                         </td>
@@ -139,10 +208,30 @@ The 12 to 9 month conversion factor for this institution:
                     <?php endforeach */ ?>
 
                 </td>
+                <?php $sectionRow++ ?>
             <?php endif ?>
             </tr>
         <?php endforeach ?>
     <?php endforeach ?>
+
+    <?php foreach ($benefitRowClassesWithLabels as $label => $rowClass): ?>
+        <tr>
+            <td class="grid-category"><?= $label ?></td>
+            <?php foreach ($colClassConfig as $class): ?>
+                <?php $class = str_replace(' 12-month', '', $class) . ' ' . $rowClass; ?>
+                <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total">0</td>
+            <?php endforeach ?>
+        </tr>
+    <?php endforeach ?>
+
+    <tr>
+        <td class="grid-category">TOTAL</td>
+        <?php foreach ($colClassConfig as $class): ?>
+            <?php $class = str_replace(' 12-month', '', $class); ?>
+            <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total">0</td>
+        <?php endforeach ?>
+    </tr>
+
 
     </tbody>
 </table>
@@ -154,7 +243,15 @@ The 12 to 9 month conversion factor for this institution:
                 <?= $this->formElement($form->get('buttons')->get('submit')) ?>
             </div>
         </div>
+        <div class="control-group" id="control-group-buttons[save-edit]">
+            <div class="controls" id="controls-buttons[save-edit]">
+                <?= $this->formElement($form->get('buttons')->get('save-edit')) ?>
+            </div>
+        </div>
+
     </fieldset>
 <?php endif ?>
 
 <?= $this->form()->closeTag() ?>
+</div>
+</div>

@@ -475,3 +475,20 @@ function trackFormChanges()
         }
     })
 }
+
+function updateSalaryTotals()
+{
+    $('.column-total').each(function() {
+        var id = $(this).attr('id')
+
+        // Convert the id into the class selector for finding the inputs to sum
+        var idParts = id.split('_');
+        var selector = '.' + idParts.join('.') + ' input';
+        var sum = 0;
+        $(selector).each(function() {
+            sum += Number($(this).val());
+        })
+
+        $(this).html(sum);
+    })
+}
