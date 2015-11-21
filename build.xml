@@ -205,6 +205,14 @@
         <echo>Done.</echo>
     </target>
 
+    <target name="sync-aaup-db">
+        <exec command="ssh max@maximizingresources.org 'shopt -s expand_aliases; ./aaupdump; tar czf aaup.production.tgz  aaup.production.sql;'" passthru="true"/>
+        <exec command="scp max@maximizingresources.org:aaup.production.tgz /tmp" passthru="true" />
+        <exec command="tar zxf /tmp/aaup.production.tgz -C /tmp" passthru="true" />
+        <exec command="mysql -u root -proot aaup_test &lt; /tmp/aaup.production.sql" passthru="true" />
+        <echo>Done.</echo>
+    </target>
+
     <target name="sync" depends="sync-from-production-db"/>
 
     <target name="deploy" depends="ssh-git-deploy,slack-deploy-message" />

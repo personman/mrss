@@ -23,7 +23,8 @@ return array(
         3 => 'fcs/full-time-salary.phtml',
         4 => 'fcs/full-time-benefits.phtml',
         5 => 'fcs/full-time-continuing.phtml',
-        6 => 'fcs/administrative.phtml'
+        6 => 'fcs/administrative.phtml',
+        7 => 'fcs/part-time.phtml'
     ),
     'export_sheet_names' => array(
         // benchmarkGroup id => excel sheet name
@@ -666,7 +667,29 @@ return array(
                 ),
             ),
         ),
-        // @todo: add new forms here
+        7 => array(
+            array(
+                'rows' => array(
+                    'Section 1.  Faculty on 9-Month Contracts (i.e., regardless of number of salary installments)',
+                    'Part-time Faculty' => array(
+                        'pt_male_faculty',
+                        'pt_male_salaries',
+                        'pt_female_faculty',
+                        'pt_female_salaries',
+                        'pt_total_faculty',
+                        'pt_total_salaries',
+                    ),
+                    'Graduate Teaching Assistant' => array(
+                        'pt_male_graduate_teaching',
+                        'pt_male_graduate_teaching_salaries',
+                        'pt_female_graduate_teaching',
+                        'pt_female_graduate_teaching_salaries',
+                        'pt_total_graduate_teaching',
+                        'pt_total_graduate_teaching_salaries',
+                    )
+                )
+            )
+        )
     )
 );
 

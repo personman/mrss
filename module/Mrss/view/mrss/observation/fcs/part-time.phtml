@@ -1,0 +1,172 @@
+<?php
+/**
+ * This is a special data-entry template that displays this form as a table
+ */
+
+$tableConfig = $dataEntryLayout;
+
+$colClassConfig = array('male faculty', 'male salaries', 'female faculty', 'female salaries', 'total faculty', 'total salaries');
+$colSpan = 7;
+?>
+
+<?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
+
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js',
+    'text/javascript'
+); ?>
+
+
+<?= $this->partial(
+    'mrss/observation/data-entry-nav.partial.phtml',
+    array(
+        'benchmarkGroup' => $benchmarkGroup,
+        'benchmarkGroups' => $benchmarkGroups
+    )
+)
+?>
+
+<script>
+    $(function() {
+        updateSalaryTotals()
+        $('form input').change(function() {
+            updateSalaryTotals()
+        })
+    })
+
+    function updateSalaryTotals()
+    {
+        $('.column-total').each(function() {
+            var id = $(this).attr('id')
+
+            // Convert the id into the class selector for finding the inputs to sum
+            var idParts = id.split('_');
+            var selector = '.' + idParts.join('.') + ' input';
+            var sum = 0;
+            $(selector).each(function() {
+                sum += Number($(this).val());
+            })
+
+            $(this).html(sum);
+        })
+    }
+</script>
+
+<h1>
+    <?= $benchmarkGroup->getName() ?>
+</h1>
+
+<?php if ($description = $benchmarkGroup->getDescription()): ?>
+    <div class="well">
+        <?= $description ?>
+    </div>
+<?php endif ?>
+
+
+<?php $form->prepare() ?>
+
+
+<?= $this->form()->openTag($form) ?>
+
+<table class="table table-condensed table-bordered data-entry-grid" id="instructionalGrid">
+    <thead>
+    <tr>
+        <td></td>
+        <th colspan="2" class="data-entry-blue">Men</th>
+        <th colspan="2" class="data-entry-red">Women</th>
+        <th colspan="2">TOTAL</th>
+    </tr>
+    <tr class="data-entry-heading">
+        <th>Academic Rank</th>
+        <th>Number of Faculty</th>
+        <th>Total Contracted Salaries ($)</th>
+        <th>Number of Faculty</th>
+        <th>Total Contracted Salaries ($)</th>
+        <th>Number of Faculty</th>
+        <th>Total Contracted Salaries ($)</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach ($tableConfig as $section): ?>
+        <? if (!empty($section['title'])): ?>
+            <tr>
+                <td class="grid-category" colspan="4"><?= $section['title'] ?></td>
+            </tr>
+        <?php endif ?>
+
+        <?php foreach ($section['rows'] as $label => $row): ?>
+            <tr>
+            <?php if (!is_array($row)): ?>
+                <td colspan="<?= $colSpan ?>">
+                    <h2 class="data-entry-subheading">
+                        <?= $row ?>
+                    </h2>
+                </td>
+            <?php else: ?>
+                <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
+                    <?= $label ?>
+                </td>
+
+                <?php foreach ($row as $i => $field): ?>
+                    <?php if (!empty($field)):  ?>
+                        <?php $class = ($i == 4) ? 'data-entry-border-right' : ''; ?>
+                        <td class="grid-value <?= $colClassConfig[$i] ?> <?= $class ?> <?= str_replace(' ', '-', strtolower($label)) ?>"
+                            id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                            <?= $this->simpleFormElement($form->get($field)) ?>
+                        </td>
+                    <?php else: ?>
+                        <td class="emptyCell"></td>
+                    <?php endif ?>
+                <?php endforeach ?>
+                </tr>
+
+                <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php foreach ($row as $i => $field): ?>
+                        <?php if (empty($field)) continue ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help grid-help">
+                            <h5><?= $form->get($field)->getLabel() ?></h5>
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach ?>
+
+                </td>
+            <?php endif ?>
+            </tr>
+        <?php endforeach ?>
+    <?php endforeach ?>
+        <tr>
+            <td class="grid-category">TOTAL</td>
+            <td class="column-total" id="male_faculty">0</td>
+            <td class="column-total" id="male_salaries">0</td>
+            <td class="column-total" id="female_faculty">0</td>
+            <td class="column-total" id="female_salaries">0</td>
+            <td class="column-total" id="total_faculty">0</td>
+            <td class="column-total" id="total_salaries">0</td>
+        </tr>
+    </tbody>
+</table>
+
+<?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+    <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-buttons[submit]">
+            <div class="controls" id="controls-buttons[submit]">
+                <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+            </div>
+        </div>
+        <div class="control-group" id="control-group-buttons[save-edit]">
+            <div class="controls" id="controls-buttons[save-edit]">
+                <?= $this->formElement($form->get('buttons')->get('save-edit')) ?>
+            </div>
+        </div>
+
+    </fieldset>
+<?php endif ?>
+
+<?= $this->form()->closeTag() ?>
