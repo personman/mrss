@@ -43,8 +43,9 @@ a.login-btn, #headerLoginForm button {
 	background: #04497B;
 }
 
-.btn-primary {
+.btn-primary, a:visited.btn-primary {
 	background: #04497B;
+	color: white;
 }
 
 .renew-nav, .join-nav {

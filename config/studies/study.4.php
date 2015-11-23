@@ -29,41 +29,41 @@ return array(
     'export_sheet_names' => array(
         // benchmarkGroup id => excel sheet name
         3 => array(
-            'sheetName' => 'Form 1',
+            'sheetName' => 'Form 2',
             'sectionStartingCells' => array(
-                0 => 'B17',
-                1 => 'G17',
-                2 => 'B25',
-                3 => 'G25',
+                0 => 'B7',
+                1 => 'G7',
+                2 => 'B15',
+                3 => 'G15',
             ),
             'extra' => array(
                 'institution_conversion_factor' => 'G14'
             )
         ),
         4 => array(
-            'sheetName' => 'Form 2',
+            'sheetName' => 'Form 3',
             'sectionStartingCells' => array(
                 0 => 'B6',
                 1 => 'B19'
             ),
         ),
         5 => array(
-            'sheetName' => 'Form 3',
+            'sheetName' => 'Form 4',
             'sectionStartingCells' => array(
                 0 => 'B6',
                 1 => 'B16'
             )
         ),
         6 => array(
-            'sheetName' => 'Form 4',
+            'sheetName' => 'Form 5',
             'sectionStartingCells' => array(
                 0 => 'B7',
             )
         ),
         7 => array(
-            'sheetName' => 'Form 5',
+            'sheetName' => 'Form 6',
             'sectionStartingCells' => array(
-                0 => 'B6',
+                0 => 'B8',
             )
         )
     ),
