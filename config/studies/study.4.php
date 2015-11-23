@@ -250,7 +250,7 @@ return array(
                         'ft_retirement_covered_lecturer_9_month',
                         'ft_retirement_expenditure_no_rank_9_month',
                         'ft_retirement_covered_no_rank_9_month',
-                        'ft_retirement_covered_no_diff_9_month',
+                        'ft_retirement_expentirue_no_diff_9_month',
                         'ft_retirement_covered_no_diff_9_month'
                     ),
                     'Medical' => array(
