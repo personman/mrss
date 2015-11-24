@@ -37,7 +37,7 @@ return array(
                 3 => 'G15',
             ),
             'extra' => array(
-                'institution_conversion_factor' => 'G14'
+                //'institution_conversion_factor' => 'G14'
             )
         ),
         4 => array(
@@ -433,7 +433,7 @@ return array(
                         'ft_retirement_covered_lecturer_12_month',
                         'ft_retirement_expenditure_no_rank_12_month',
                         'ft_retirement_covered_no_rank_12_month',
-                        'ft_retirement_covered_no_diff_12_month',
+                        'ft_retirement_expentirue_no_diff_12_month',
                         'ft_retirement_covered_no_diff_12_month'
                     ),
                     'Medical' => array(
