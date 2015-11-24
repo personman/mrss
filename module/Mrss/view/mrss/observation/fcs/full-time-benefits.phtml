@@ -4,6 +4,9 @@
  */
 
 $tableConfig = $dataEntryLayout;
+$tableConfig2 = $this->currentStudy(false)->getConfig()->data_entry_layout->toArray();
+$tableConfig2 = $tableConfig2['4b'];
+
 $this->layout()->setVariable('noWrapper', true);
 
 $colClassConfig = array(
@@ -19,8 +22,6 @@ $colClassConfig = array(
     'lecturer cov 9-month', 
     'no-rank exp 9-month',
     'no-rank cov 9-month',
-    'no-diff exp 9-month',
-    'no-diff cov 9-month'
 );
 
 $colClassConfig2 = array(
@@ -36,6 +37,14 @@ $colClassConfig2 = array(
     'lecturer cov 12-month', 
     'no-rank exp 12-month',
     'no-rank cov 12-month',
+);
+
+$colClassConfig3 = array(
+    'no-diff exp 9-month',
+    'no-diff cov 9-month'
+);
+
+$colClassConfig4 = array(
     'no-diff exp 12-month',
     'no-diff cov 12-month'
 );
@@ -83,11 +92,36 @@ $this->headScript()->appendFile(
 
 <script>
     $(function() {
-        updateSalaryTotals()
+        updateSalaryTotals();
         $('form input').change(function() {
             updateSalaryTotals()
         })
+
+        updateAggregateToggle();
+        $('select#institution_aggregate_benefits').change(function() {
+            updateAggregateToggle();
+        })
     })
+
+    function updateAggregateToggle()
+    {
+        // Grab the tables
+        var rankedTable = $('#benefitsRanked');
+        var aggregateTable = $('#benefitsAggregate');
+
+        // First, hide them both
+        rankedTable.hide();
+        aggregateTable.hide();
+
+        // Now check the value of the dropdown
+        var benefitSetting = $('select#institution_aggregate_benefits').val();
+
+        if (benefitSetting == 'Yes') {
+            aggregateTable.show();
+        } else if (benefitSetting == 'No') {
+            rankedTable.show();
+        }
+    }
 </script>
 
 
@@ -109,12 +143,12 @@ $this->headScript()->appendFile(
 
 
 <p>
-<h3>Conversion factor (if entering 12-month data)</h3>
-The 12 to 9 month conversion factor for this institution:
-<?= $this->formElement($form->get('institution_conversion_factor')) ?>
+<h3>Aggregate Benefits</h3>
+        Does Institution Aggregate Benefits?
+<?= $this->formElement($form->get('institution_aggregate_benefits')) ?>
 </p>
 
-<table class="table table-condensed table-bordered data-entry-grid data-entry-compact" id="instructionalGrid">
+<table class="table table-condensed table-bordered data-entry-grid data-entry-compact" id="benefitsRanked">
     <thead>
     <tr class="splitHeading">
         <td></td>
@@ -124,12 +158,9 @@ The 12 to 9 month conversion factor for this institution:
         <th colspan="2" class="data-entry-blue">Instructor</th>
         <th colspan="2" class="data-entry-red">Lecturer</th>
         <th colspan="2" class="data-entry-blue">No Rank</th>
-        <th colspan="2" class="data-entry-red">UNDIFFERENTIATED RANK</th>
     </tr>
     <tr class="smallHeading splitHeading data-entry-heading">
         <th></th>
-        <th>Total Expenditure</th>
-        <th>Number Covered</th>
         <th>Total Expenditure</th>
         <th>Number Covered</th>
         <th>Total Expenditure</th>
@@ -235,6 +266,127 @@ The 12 to 9 month conversion factor for this institution:
 
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+<?php $colSpan = 3; ?>
+
+
+
+<table class="table table-condensed table-bordered data-entry-grid data-entry-compact" id="benefitsAggregate">
+    <thead>
+    <tr class="splitHeading">
+        <td></td>
+        <th colspan="2" class="data-entry-red">UNDIFFERENTIATED RANK</th>
+    </tr>
+    <tr class="smallHeading splitHeading data-entry-heading">
+        <th></th>
+        <th>Total Expenditure</th>
+        <th>Number Covered</th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+    <?php foreach ($tableConfig2 as $section): ?>
+        <? if (!empty($section['title'])): ?>
+            <tr>
+                <td class="grid-category" colspan="3"><?= $section['title'] ?></td>
+            </tr>
+        <?php endif ?>
+
+        <?php $sectionRow = 0; ?>
+        <?php foreach ($section['rows'] as $label => $row): ?>
+            <tr>
+            <?php if (!is_array($row)): ?>
+                <?php if ($row == '[total_row_9]'): ?>
+                    <td class="grid-category">TOTAL</td>
+                    <?php foreach ($colClassConfig3 as $class): ?>
+                        <?php $newId = implode('_', explode(' ', $class)); ?>
+                    <td class="column-total" id="<?= $newId ?>">0</td>
+                    <?php endforeach ?>
+                    <?php $colClassConfig3 = $colClassConfig4; ?>
+                <?php elseif ($row == '[total_row_12]'): ?>
+                    <td class="grid-category">TOTAL</td>
+                    <?php foreach ($colClassConfig3 as $class): ?>
+                        <?php $newId = implode('_', explode(' ', $class)); ?>
+                        <td class="column-total" id="<?= $newId ?>">0</td>
+                    <?php endforeach ?>
+                <?php else: ?>
+                    <td colspan="<?= $colSpan ?>">
+                        <h2 class="data-entry-subheading">
+                            <?= $row ?>
+                        </h2>
+                    </td>
+                <?php endif ?>
+            <?php else: ?>
+                <td class="grid-category <?= (empty($section['rowClass'])) ? '' : $section['rowClass'] ?>">
+                    <?= $label ?>
+                </td>
+
+                <?php foreach ($row as $i => $field): ?>
+                    <?php if (!empty($field)):  ?>
+                        <td class="grid-value <?= $colClassConfig3[$i] ?> <?= $benefitRowClasses[$sectionRow] ?>"
+                            id="<?= $colClassConfig3[$i] ?>-<?= $field ?>">
+                            <?= $this->simpleFormElement($form->get($field)) ?>
+                        </td>
+                    <?php else: ?>
+                        <td class="emptyCell"></td>
+                    <?php endif ?>
+                <?php endforeach ?>
+                </tr>
+
+                <tr class="help-text">
+                <td class="grid-category"></td>
+                <td colspan="<?= count($row) ?>">
+
+                    <?php /* foreach ($row as $i => $field): ?>
+                        <?php if (empty($field)) continue ?>
+                        <div class="<?= $colClassConfig[$i] ?>-help grid-help">
+                            <h5><?= $form->get($field)->getLabel() ?></h5>
+                            <?= $form->get($field)->getOption('help-block') ?>
+                        </div>
+                    <?php endforeach */ ?>
+
+                </td>
+                <?php $sectionRow++ ?>
+            <?php endif ?>
+            </tr>
+        <?php endforeach ?>
+    <?php endforeach ?>
+
+    <?php foreach ($benefitRowClassesWithLabels as $label => $rowClass): ?>
+        <tr>
+            <td class="grid-category"><?= $label ?></td>
+            <?php foreach ($colClassConfig3 as $class): ?>
+                <?php $class = str_replace(' 12-month', '', $class) . ' ' . $rowClass; ?>
+                <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total">0</td>
+            <?php endforeach ?>
+        </tr>
+    <?php endforeach ?>
+
+    <tr>
+        <td class="grid-category">TOTAL</td>
+        <?php foreach ($colClassConfig3 as $class): ?>
+            <?php $class = str_replace(' 12-month', '', $class); ?>
+            <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total">0</td>
+        <?php endforeach ?>
+    </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
 
 <?php if ($this->currentStudy()->getDataEntryOpen()): ?>
     <fieldset id="fieldset-buttons" class="well well-small">
