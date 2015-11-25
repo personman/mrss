@@ -180,6 +180,29 @@ class ComputedFieldsTest extends TestCase
         $this->assertEquals(null, $result);
     }
 
+    public function testCalculateComparison()
+    {
+        $this->benchmarkMock->expects($this->once())
+            ->method('getEquation')
+            ->will($this->returnValue('2 < 5'));
+
+        $this->benchmarkMock->expects($this->once())
+            ->method('getDbColumn')
+            ->will($this->returnValue('my_test_column'));
+
+        $this->observationMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $result = $this->computedFields->calculate(
+            $this->benchmarkMock,
+            $this->observationMock
+        );
+
+        var_dump($result);
+        $this->assertEquals(true, $result);
+    }
+
     public function testCalculateAllForObservation()
     {
         $computedBenchmarkMocks = array(
