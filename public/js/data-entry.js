@@ -504,7 +504,6 @@ function updateSalaryTotals()
     updateMaxFields();
 }
 
-var conversionFactor = 0.5;
 
 function applyConversionFactor(element)
 {
@@ -531,12 +530,22 @@ function applyConversionFactor(element)
 
         // If this is true, actually perform the conversion
         if (matchesAllClasses) {
+            conversionFactor = getConversionFactor();
             newValue = newValue * conversionFactor;
         }
 
     }
 
     return newValue;
+}
+
+function getConversionFactor()
+{
+    if (typeof conversionFactor == 'undefined' || !conversionFactor) {
+        conversionFactor = 1;
+    }
+
+    return Number(conversionFactor);
 }
 
 function getClassesToConvert()
