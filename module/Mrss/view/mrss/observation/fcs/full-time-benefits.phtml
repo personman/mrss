@@ -72,7 +72,7 @@ $colSpan = 13;
 
 <?php
 $this->headScript()->appendFile(
-    '/js/data-entry.js',
+    '/js/data-entry.js?v=2',
     'text/javascript'
 ); ?>
 
@@ -158,9 +158,12 @@ $this->headScript()->appendFile(
         <th colspan="2" class="data-entry-blue">Instructor</th>
         <th colspan="2" class="data-entry-red">Lecturer</th>
         <th colspan="2" class="data-entry-blue">No Rank</th>
+        <th colspan="2" class="data-entry-red">TOTAL</th>
     </tr>
     <tr class="smallHeading splitHeading data-entry-heading">
         <th></th>
+        <th>Total Expenditure</th>
+        <th>Number Covered</th>
         <th>Total Expenditure</th>
         <th>Number Covered</th>
         <th>Total Expenditure</th>
@@ -195,6 +198,10 @@ $this->headScript()->appendFile(
                         <?php $newId = implode('_', explode(' ', $class)); ?>
                     <td class="column-total" id="<?= $newId ?>">0</td>
                     <?php endforeach ?>
+
+                    <td class="column-total" id="exp_9-month">0</td>
+                    <td class="column-max" id="cov_9-month">0</td>
+
                     <?php $colClassConfig = $colClassConfig2; ?>
                 <?php elseif ($row == '[total_row_12]'): ?>
                     <td class="grid-category">TOTAL</td>
@@ -202,6 +209,10 @@ $this->headScript()->appendFile(
                         <?php $newId = implode('_', explode(' ', $class)); ?>
                         <td class="column-total" id="<?= $newId ?>">0</td>
                     <?php endforeach ?>
+
+                    <td class="column-total" id="exp_12-month">0</td>
+                    <td class="column-max" id="cov_12-month">0</td>
+
                 <?php else: ?>
                     <td colspan="<?= $colSpan ?>">
                         <h2 class="data-entry-subheading">
@@ -224,6 +235,24 @@ $this->headScript()->appendFile(
                         <td class="emptyCell"></td>
                     <?php endif ?>
                 <?php endforeach ?>
+
+                <?php
+                $classParts = explode(' ', $colClassConfig[$i - 1]);
+                array_shift($classParts);
+                array_push($classParts, $benefitRowClasses[$sectionRow]);
+                $totalId = implode('_', $classParts);
+                ?>
+                <td class="column-total" id="<?= $totalId ?>">0</td>
+
+                <?php
+                $classParts = explode(' ', $colClassConfig[$i]);
+                array_shift($classParts);
+                $maxClass = implode(' ', $classParts);
+                array_push($classParts, $benefitRowClasses[$sectionRow]);
+                $totalId = implode('_', $classParts);
+                ?>
+                <td class="column-total max-target <?= $maxClass ?>" id="<?= $totalId ?>">0</td>
+
                 </tr>
 
                 <tr class="help-text">
@@ -250,8 +279,12 @@ $this->headScript()->appendFile(
             <td class="grid-category"><?= $label ?></td>
             <?php foreach ($colClassConfig as $class): ?>
                 <?php $class = str_replace(' 12-month', '', $class) . ' ' . $rowClass; ?>
-                <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total">0</td>
+                <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total apply-conversion">0</td>
             <?php endforeach ?>
+
+            <td class="column-total apply-conversion" id="exp_<?= $rowClass ?>">0</td>
+            <td class="column-total max-target cov" id="cov_<?= $rowClass ?>">0</td>
+
         </tr>
     <?php endforeach ?>
 
@@ -259,8 +292,12 @@ $this->headScript()->appendFile(
         <td class="grid-category">TOTAL</td>
         <?php foreach ($colClassConfig as $class): ?>
             <?php $class = str_replace(' 12-month', '', $class); ?>
-            <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total">0</td>
+            <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total apply-conversion">0</td>
         <?php endforeach ?>
+
+        <td class="column-total apply-conversion" id="exp">0</td>
+        <td class="column-max" id="cov">0</td>
+
     </tr>
 
 

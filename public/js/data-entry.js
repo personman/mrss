@@ -479,16 +479,98 @@ function trackFormChanges()
 function updateSalaryTotals()
 {
     $('.column-total').each(function() {
-        var id = $(this).attr('id')
+        var totalTd = $(this);
+        var id = totalTd.attr('id')
 
         // Convert the id into the class selector for finding the inputs to sum
         var idParts = id.split('_');
         var selector = '.' + idParts.join('.') + ' input';
         var sum = 0;
-        $(selector).each(function() {
-            sum += Number($(this).val());
+        $(selector).each(function(i, e) {
+            if (totalTd.hasClass('apply-conversion')) {
+                var converted = applyConversionFactor($(e));
+            } else {
+                var converted = $(e).val();
+            }
+
+            //sum += Number($(this).val());
+            sum += Number(converted);
         })
 
         $(this).html(sum);
     })
+
+    // Now update the max fields
+    updateMaxFields();
 }
+
+var conversionFactor = 0.5;
+
+function applyConversionFactor(element)
+{
+    var newValue = element.val();
+
+    var td = element.parents('td');
+
+    // Check to see if the field should get converted
+    var classesToConvert = getClassesToConvert();
+    for (c in classesToConvert) {
+        var theClass = classesToConvert[c];
+
+        var classes = theClass.split(' ');
+        var matchesAllClasses = true;
+
+        for (d in classes) {
+            var classToCheck = classes[d];
+
+            if (!td.hasClass(classToCheck)) {
+                matchesAllClasses = false;
+                break;
+            }
+        }
+
+        // If this is true, actually perform the conversion
+        if (matchesAllClasses) {
+            newValue = newValue * conversionFactor;
+        }
+
+    }
+
+    return newValue;
+}
+
+function getClassesToConvert()
+{
+    return [
+        'exp 12-month retirement',
+        'exp 12-month fica',
+        'exp 12-month group-life',
+        'exp 12-month workers-comp'
+    ];
+}
+
+function updateMaxFields()
+{
+    $('.column-max').each(function() {
+        var totalTd = $(this);
+        var id = totalTd.attr('id');
+
+        // Convert the id into the class selector for finding the inputs to sum
+        var idParts = id.split('_');
+        var selector = '.max-target.' + idParts.join('.');
+        console.log(selector);
+        var max = 0;
+        $(selector).each(function(i, e) {
+            var maxTargetValue = Number($(this).html());
+            console.log(maxTargetValue);
+
+            if (maxTargetValue > max) {
+                max = maxTargetValue;
+            }
+        })
+
+        $(this).html(max);
+    })
+}
+
+
