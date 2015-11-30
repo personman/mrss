@@ -551,6 +551,9 @@ function getConversionFactor()
 function getClassesToConvert()
 {
     return [
+        // Form 2
+        'salaries month-12',
+        // Form 3
         'exp 12-month retirement',
         'exp 12-month fica',
         'exp 12-month group-life',

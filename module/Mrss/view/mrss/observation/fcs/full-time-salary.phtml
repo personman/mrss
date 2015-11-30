@@ -31,6 +31,9 @@ $this->headScript()->appendFile(
 ?>
 
 <script>
+    // Conversion factor (set in form 1)
+    var conversionFactor = <?= $form->get('institution_conversion_factor')->getValue(); ?>;
+
     $(function() {
         updateSalaryTotals()
         $('form input').change(function() {
@@ -125,84 +128,84 @@ $this->headScript()->appendFile(
                 <?php elseif ($row == '[total_rows_9_12]'): ?>
                     <td class="grid-category">Professor</td>
                     <td class="column-total" id="male_faculty_professor">0</td>
-                    <td class="column-total" id="male_salaries_professor">0</td>
+                    <td class="column-total apply-conversion" id="male_salaries_professor">0</td>
                     <td class="column-total" id="male_ntt_professor">0</td>
                     <td class="column-total" id="male_tt_professor">0</td>
                     <td class="column-total data-entry-border-right" id="male_tenured_professor">0</td>
                     <td class="column-total" id="female_faculty_professor">0</td>
-                    <td class="column-total" id="female_salaries_professor">0</td>
+                    <td class="column-total apply-conversion" id="female_salaries_professor">0</td>
                     <td class="column-total" id="female_ntt_professor">0</td>
                     <td class="column-total" id="female_tt_professor">0</td>
                     <td class="column-total" id="female_tenured_professor">0</td>
                     </tr><tr>
                     <td class="grid-category">Associate</td>
                     <td class="column-total" id="male_faculty_associate">0</td>
-                    <td class="column-total" id="male_salaries_associate">0</td>
+                    <td class="column-total apply-conversion" id="male_salaries_associate">0</td>
                     <td class="column-total" id="male_ntt_associate">0</td>
                     <td class="column-total" id="male_tt_associate">0</td>
                     <td class="column-total data-entry-border-right" id="male_tenured_associate">0</td>
                     <td class="column-total" id="female_salaries_associate">0</td>
-                    <td class="column-total" id="female_salaries_associate">0</td>
+                    <td class="column-total apply-conversion" id="female_salaries_associate">0</td>
                     <td class="column-total" id="female_ntt_associate">0</td>
                     <td class="column-total" id="female_tt_associate">0</td>
                     <td class="column-total" id="female_tenured_associate">0</td>
                     </tr><tr>
                     <td class="grid-category">Assistant</td>
                     <td class="column-total" id="male_faculty_assistant">0</td>
-                    <td class="column-total" id="male_salaries_assistant">0</td>
+                    <td class="column-total apply-conversion" id="male_salaries_assistant">0</td>
                     <td class="column-total" id="male_ntt_assistant">0</td>
                     <td class="column-total" id="male_tt_assistant">0</td>
                     <td class="column-total data-entry-border-right" id="male_tenured_assistant">0</td>
                     <td class="column-total" id="female_salaries_assistant">0</td>
-                    <td class="column-total" id="female_salaries_assistant">0</td>
+                    <td class="column-total apply-conversion" id="female_salaries_assistant">0</td>
                     <td class="column-total" id="female_ntt_assistant">0</td>
                     <td class="column-total" id="female_tt_assistant">0</td>
                     <td class="column-total" id="female_tenured_assistant">0</td>
                     </tr><tr>
                     <td class="grid-category">Instructor</td>
                     <td class="column-total" id="male_faculty_instructor">0</td>
-                    <td class="column-total" id="male_salaries_instructor">0</td>
+                    <td class="column-total apply-conversion" id="male_salaries_instructor">0</td>
                     <td class="column-total" id="male_ntt_instructor">0</td>
                     <td class="column-total" id="male_tt_instructor">0</td>
                     <td class="column-total data-entry-border-right" id="male_tenured_instructor">0</td>
                     <td class="column-total" id="female_salaries_instructor">0</td>
-                    <td class="column-total" id="female_salaries_instructor">0</td>
+                    <td class="column-total apply-conversion" id="female_salaries_instructor">0</td>
                     <td class="column-total" id="female_ntt_instructor">0</td>
                     <td class="column-total" id="female_tt_instructor">0</td>
                     <td class="column-total" id="female_tenured_instructor">0</td>
                     </tr><tr>
                     <td class="grid-category">Lecturer</td>
                     <td class="column-total" id="male_faculty_lecturer">0</td>
-                    <td class="column-total" id="male_salaries_lecturer">0</td>
+                    <td class="column-total apply-conversion" id="male_salaries_lecturer">0</td>
                     <td class="column-total" id="male_ntt_lecturer">0</td>
                     <td class="column-total" id="male_tt_lecturer">0</td>
                     <td class="column-total data-entry-border-right" id="male_tenured_lecturer">0</td>
                     <td class="column-total" id="female_salaries_lecturer">0</td>
-                    <td class="column-total" id="female_salaries_lecturer">0</td>
+                    <td class="column-total apply-conversion" id="female_salaries_lecturer">0</td>
                     <td class="column-total" id="female_ntt_lecturer">0</td>
                     <td class="column-total" id="female_tt_lecturer">0</td>
                     <td class="column-total" id="female_tenured_lecturer">0</td>
                     </tr><tr>
                     <td class="grid-category">No Rank</td>
                     <td class="column-total" id="male_faculty_no-rank">0</td>
-                    <td class="column-total" id="male_salaries_no-rank">0</td>
+                    <td class="column-total apply-conversion" id="male_salaries_no-rank">0</td>
                     <td class="column-total" id="male_ntt_no-rank">0</td>
                     <td class="column-total" id="male_tt_no-rank">0</td>
                     <td class="column-total data-entry-border-right" id="male_tenured_no-rank">0</td>
-                    <td class="column-total" id="female_salaries_no-rank">0</td>
-                    <td class="column-total" id="female_salaries_no-rank">0</td>
+                    <td class="column-total" id="female_faculty_no-rank">0</td>
+                    <td class="column-total apply-conversion" id="female_salaries_no-rank">0</td>
                     <td class="column-total" id="female_ntt_no-rank">0</td>
                     <td class="column-total" id="female_tt_no-rank">0</td>
                     <td class="column-total" id="female_tenured_no-rank">0</td>
                     </tr><tr>
                     <td class="grid-category">TOTAL</td>
                     <td class="column-total" id="male_faculty">0</td>
-                    <td class="column-total" id="male_salaries">0</td>
+                    <td class="column-total apply-conversion" id="male_salaries">0</td>
                     <td class="column-total" id="male_ntt">0</td>
                     <td class="column-total" id="male_tt">0</td>
                     <td class="column-total data-entry-border-right" id="male_tenured">0</td>
-                    <td class="column-total" id="female_salaries">0</td>
-                    <td class="column-total" id="female_salaries">0</td>
+                    <td class="column-total" id="female_faculty">0</td>
+                    <td class="column-total apply-conversion" id="female_salaries">0</td>
                     <td class="column-total" id="female_ntt">0</td>
                     <td class="column-total" id="female_tt">0</td>
                     <td class="column-total" id="female_tenured">0</td>
