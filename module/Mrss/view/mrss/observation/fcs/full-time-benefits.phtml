@@ -192,27 +192,23 @@ $this->headScript()->appendFile(
         <?php foreach ($section['rows'] as $label => $row): ?>
             <tr>
             <?php if (!is_array($row)): ?>
-                <?php if ($row == '[total_row_9]'): ?>
+                <?php if ($row == '[total_row_9]' || $row == '[total_row_12]'): ?>
+                    <?php $monthNumber = preg_replace('/[^0-9]/', '', $row) ?>
                     <td class="grid-category">TOTAL</td>
                     <?php foreach ($colClassConfig as $class): ?>
-                        <?php $newId = implode('_', explode(' ', $class)); ?>
-                    <td class="column-total" id="<?= $newId ?>">0</td>
+                        <?php $classes = explode(' ', $class); ?>
+                        <?php $newId = implode('_', $classes); ?>
+                        <?php if (in_array('exp', $classes)): ?>
+                            <td class="column-total" id="<?= $newId ?>">0</td>
+                        <?php else: ?>
+                            <td class="column-input-max" id="<?= $newId ?>">0</td>
+                        <?php endif ?>
                     <?php endforeach ?>
 
-                    <td class="column-total" id="exp_9-month">0</td>
-                    <td class="column-max" id="cov_9-month">0</td>
+                    <td class="column-total" id="exp_<?= $monthNumber ?>-month">0</td>
+                    <td class="column-max" id="cov_<?= $monthNumber ?>-month">0</td>
 
                     <?php $colClassConfig = $colClassConfig2; ?>
-                <?php elseif ($row == '[total_row_12]'): ?>
-                    <td class="grid-category">TOTAL</td>
-                    <?php foreach ($colClassConfig as $class): ?>
-                        <?php $newId = implode('_', explode(' ', $class)); ?>
-                        <td class="column-total" id="<?= $newId ?>">0</td>
-                    <?php endforeach ?>
-
-                    <td class="column-total" id="exp_12-month">0</td>
-                    <td class="column-max" id="cov_12-month">0</td>
-
                 <?php else: ?>
                     <td colspan="<?= $colSpan ?>">
                         <h2 class="data-entry-subheading">
@@ -279,7 +275,12 @@ $this->headScript()->appendFile(
             <td class="grid-category"><?= $label ?></td>
             <?php foreach ($colClassConfig as $class): ?>
                 <?php $class = str_replace(' 12-month', '', $class) . ' ' . $rowClass; ?>
-                <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total apply-conversion">0</td>
+                <?php $classes = explode(' ', $class) ?>
+                <?php if (in_array('exp', $classes)): ?>
+                    <td id="<?= implode('_', $classes) ?>" class="column-total apply-conversion">0</td>
+                <?php else: ?>
+                    <td class="column-total max-target <?= implode(' ', $classes) ?>" id="<?= implode('_', $classes) ?>">0</td>
+                <?php endif ?>
             <?php endforeach ?>
 
             <td class="column-total apply-conversion" id="exp_<?= $rowClass ?>">0</td>
@@ -292,11 +293,16 @@ $this->headScript()->appendFile(
         <td class="grid-category">TOTAL</td>
         <?php foreach ($colClassConfig as $class): ?>
             <?php $class = str_replace(' 12-month', '', $class); ?>
-            <td id="<?= implode('_', explode(' ', $class)) ?>" class="column-total apply-conversion">0</td>
+            <?php $classes = explode(' ', $class); ?>
+            <?php if (in_array('exp', $classes)): ?>
+                <td id="<?= implode('_', $classes) ?>" class="column-total apply-conversion">0</td>
+            <?php else: ?>
+                <td id="<?= implode('_', $classes) ?>" class="column-max">0</td>
+            <?php endif ?>
         <?php endforeach ?>
 
         <td class="column-total apply-conversion" id="exp">0</td>
-        <td class="column-max" id="cov">0</td>
+        <td class="column-max" id="cov">0 @todo</td>
 
     </tr>
 

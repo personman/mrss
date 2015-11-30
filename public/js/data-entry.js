@@ -558,11 +558,31 @@ function updateMaxFields()
         // Convert the id into the class selector for finding the inputs to sum
         var idParts = id.split('_');
         var selector = '.max-target.' + idParts.join('.');
-        console.log(selector);
+
         var max = 0;
         $(selector).each(function(i, e) {
             var maxTargetValue = Number($(this).html());
-            console.log(maxTargetValue);
+
+            if (maxTargetValue > max) {
+                max = maxTargetValue;
+            }
+        })
+
+        $(this).html(max);
+    })
+
+
+    $('.column-input-max').each(function() {
+        var totalTd = $(this);
+        var id = totalTd.attr('id');
+
+        // Convert the id into the class selector for finding the inputs to sum
+        var idParts = id.split('_');
+        var selector = '.' + idParts.join('.') + ' input';
+
+        var max = 0;
+        $(selector).each(function(i, e) {
+            var maxTargetValue = Number($(this).val());
 
             if (maxTargetValue > max) {
                 max = maxTargetValue;
