@@ -2,6 +2,7 @@
 languages:
   PHP: true
 exclude_paths:
+- "autoload_classmap.php"
 - "config/*"
 - "data/*"
 - "module/Mrss/config/module.config.php"
