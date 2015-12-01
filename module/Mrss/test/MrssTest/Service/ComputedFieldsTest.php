@@ -289,4 +289,40 @@ class ComputedFieldsTest extends TestCase
         $this->assertEquals(false, $result);
 
     }
+
+    public function testComparisons()
+    {
+        // Greater than
+        $equation = "5 > 4";
+        $parsedEquation = $this->computedFields->buildEquation($equation);
+        $result = $parsedEquation->evaluate();
+
+        $this->assertEquals(true, $result);
+
+        $equation = "3 > 4";
+        $parsedEquation = $this->computedFields->buildEquation($equation);
+        $result = $parsedEquation->evaluate();
+
+        $this->assertEquals(false, $result);
+
+        // Less than
+        $equation = "5 < 4";
+        $parsedEquation = $this->computedFields->buildEquation($equation);
+        $result = $parsedEquation->evaluate();
+
+        $this->assertEquals(false, $result);
+
+        $equation = "3 < 4";
+        $parsedEquation = $this->computedFields->buildEquation($equation);
+        $result = $parsedEquation->evaluate();
+
+        $this->assertEquals(true, $result);
+
+        // Equals
+        $equation = "3 != 4";
+        $parsedEquation = $this->computedFields->buildEquation($equation);
+        $result = $parsedEquation->evaluate();
+
+        $this->assertEquals(true, $result);
+    }
 }
