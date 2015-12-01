@@ -3395,6 +3395,11 @@ class Observation
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
+    protected $test_ass_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $career_staff_ratio;
 
     /**
