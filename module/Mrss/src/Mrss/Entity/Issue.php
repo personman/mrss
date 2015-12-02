@@ -20,7 +20,7 @@ class Issue
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ChangeSet", inversedBy="changes", nullable=true)
+     * @ORM\ManyToOne(targetEntity="ChangeSet", inversedBy="changes")
      * @var ChangeSet
      */
     protected $changeSet;

@@ -319,7 +319,7 @@ class ComputedFieldsTest extends TestCase
         $this->assertEquals(true, $result);
 
         // Equals
-        $equation = "3 != 4";
+        $equation = "4 = 4";
         $parsedEquation = $this->computedFields->buildEquation($equation);
         $result = $parsedEquation->evaluate();
 
