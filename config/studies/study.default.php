@@ -16,6 +16,7 @@ return array(
     'header_title' => null,
     'data_entry_layout' => array(),
     'export_sheet_names' => null,
+    'validation_class' => null,
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
     'copyright' => "2004 - " . date('Y') . " Johnson County Community College",
     'footerLogo' => '<a href="/benchmarking-institute"><img src="/images/benchmark_logo.png" /></a>',

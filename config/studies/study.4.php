@@ -14,6 +14,7 @@ return array(
     'contact_instructions' => null,
     'css' => 'aaup.css',
     'css_print' => null,
+    'validation_class' => 'FCSValidation',
 	'header_title' => 'Faculty<br>Compensation<br>Survey',
     'user_role_choices' => 'viewer',
     'copyright' => "1915 - " . date('Y') . " American Association of University Professors",

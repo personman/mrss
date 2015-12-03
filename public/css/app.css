@@ -135,3 +135,14 @@ h1 {
 .loading {
     text-align: center;
 }
+
+
+/** Data issues **/
+.issue {
+    padding: 15px;
+    border-bottom: 2px solid #CCC;
+}
+
+.issue a, .issue a:visited {
+    color: black;
+}

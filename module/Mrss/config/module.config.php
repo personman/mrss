@@ -355,6 +355,17 @@ return array(
                     )
                 )
             ),
+            'issues' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/issues',
+                    'defaults' => array(
+                        'controller' => 'issues',
+                        'action' => 'index'
+                    )
+                )
+            ),
             'subscribe' => array(
                 'type' => 'segment',
                 'priority' => 10,
@@ -1998,6 +2009,7 @@ return array(
             'criteria' => 'Mrss\Controller\CriterionController',
             'reportItems' => 'Mrss\Controller\ReportItemController',
             'users' => 'Mrss\Controller\UserController',
+            'issues' => 'Mrss\Controller\IssueController',
             'EquationValidator' => '\Mrss\Validator\Equation'
         ),
         'factories' => array(

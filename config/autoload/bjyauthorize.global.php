@@ -164,6 +164,10 @@ return array(
                     'controller' => 'subobservations',
                     'roles' => array('data')
                 ),
+                array(
+                    'controller' => 'issues',
+                    'roles' => array('data')
+                ),
 
                 // System admin
                 array(
