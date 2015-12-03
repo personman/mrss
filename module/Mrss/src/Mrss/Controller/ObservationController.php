@@ -373,11 +373,15 @@ class ObservationController extends AbstractActionController
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
 
-                $this->getServiceLocator()->get('service.observationAudit')
+                $changeSet = $this->getServiceLocator()->get('service.observationAudit')
                     ->logChanges($oldObservation, $observation, 'dataEntry');
 
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
+
+                $validationService = $this->getServiceLocator()->get('service.validation');
+                $validationService->setChangeSet($changeSet);
+                $issues = $validationService->validate($observation);
 
                 if ($benchmarkGroup->getUseSubObservation()) {
                     $this->mergeAllSubobservations();
@@ -387,7 +391,11 @@ class ObservationController extends AbstractActionController
                 $completion = $this->currentStudy()->getCompletionPercentage($observation);
 
                 $subscription = $subscriptionModel
-                    ->findOne($observation->getYear(), $observation->getCollege(), $this->currentStudy()->getId());
+                    ->findOne(
+                        $observation->getYear(),
+                        $observation->getCollege(),
+                        $this->currentStudy()->getId())
+                ;
                 $subscription->setCompletion($completion);
 
                 $this->getServiceLocator()->get('em')->flush();
@@ -400,7 +408,15 @@ class ObservationController extends AbstractActionController
                     $redirect = '/data-entry/' . $benchmarkGroup->getUrl();
                 }
 
-                $this->flashMessenger()->addSuccessMessage('Data saved.');
+                if (empty($issues)) {
+                    $this->flashMessenger()->addSuccessMessage('Data saved.');
+                } else {
+                    $count = count($issues);
+                    $noun = ($count == 1) ? 'problem' : 'problems';
+                    $this->flashMessenger()->addErrorMessage(
+                        "Your data was saved but we identified $count potential $noun with it."
+                    );
+                }
                 return $this->redirect()->toUrl($redirect);
             }
 

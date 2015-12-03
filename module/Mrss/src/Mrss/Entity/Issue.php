@@ -20,7 +20,23 @@ class Issue
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ChangeSet", inversedBy="changes")
+     * @ORM\ManyToOne(targetEntity="Study", inversedBy="benchmarkGroups")
+     */
+    protected $study;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $year;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="College", inversedBy="observations")
+     */
+    protected $college;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ChangeSet")
+     * @ORM\JoinColumn(name="changeSet_id", referencedColumnName="id", nullable=true)
      * @var ChangeSet
      */
     protected $changeSet;
@@ -36,14 +52,28 @@ class Issue
     protected $message;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Benchmark")
-     * @ORM\JoinColumn(name="benchmark_id", referencedColumnName="id", onDelete="CASCADE")
-     * @var Benchmark
+     * @ORM\Column(type="string", nullable=true)
      */
-    protected $benchmark;
+    protected $errorCode;
 
-    // @todo: entity to represent the rule that was broken
-    // @todo: study and year and status and probably staff note and user note
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $formUrl;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="changes")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
+     * @var User
+     */
+    protected $user;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $status;
+
+
 
     /**
      * @param $id
@@ -103,15 +133,92 @@ class Issue
         return $this->message;
     }
 
-    public function setBenchmark(Benchmark $benchmark)
+    public function setStudy(Study $study)
     {
-        $this->benchmark = $benchmark;
+        $this->study = $study;
 
         return $this;
     }
 
-    public function getBenchmark()
+    /**
+     * @return \Mrss\Entity\Study
+     */
+    public function getStudy()
     {
-        return $this->benchmark;
+        return $this->study;
+    }
+
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    public function setYear($year)
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function setFormUrl($url)
+    {
+        $this->formUrl = $url;
+
+        return $this;
+    }
+
+    public function getFormUrl()
+    {
+        return $this->formUrl;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setCollege(College $college)
+    {
+        $this->college = $college;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Entity\College
+     */
+    public function getCollege()
+    {
+        return $this->college;
+    }
+
+    public function setErrorCode($code)
+    {
+        $this->errorCode = $code;
+
+        return $this;
+    }
+
+    public function getErrorCode()
+    {
+        return $this->errorCode;
     }
 }

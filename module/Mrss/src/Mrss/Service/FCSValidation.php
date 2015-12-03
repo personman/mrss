@@ -48,11 +48,12 @@ class FCSValidation
      *
      * @param $message
      */
-    protected function addIssue($message, $formUrl = null)
+    protected function addIssue($message, $errorCode, $formUrl = null)
     {
         $this->issues[] = array(
             'message' => $message,
-            'formUrl' => $formUrl
+            'formUrl' => $formUrl,
+            'errorCode' => $errorCode
         );
     }
 
@@ -63,20 +64,22 @@ class FCSValidation
 
     public function validateSalariesEntered()
     {
+        $code = 'salaries_entered';
+
         // @todo: add more
         $salaryFields = array(
             'ft_male_professor_number_9_month',
             'ft_male_professor_salaries_9_month',
             'ft_male_associate_professor_number_9_month',
             'ft_male_associate_professor_salaries_9_month',
-            'ft_male_assistant_number_9_month',
-            'ft_male_assistant_salaries_9_month',
-            'ft_male_instructor_professor_number_9_month',
-            'ft_male_instructor_professor_salaries_9_month',
-            'ft_male_lecturer_professor_number_9_month',
-            'ft_male_lecturer_professor_salaries_9_month',
-            'ft_male_no_rank_professor_number_9_month',
-            'ft_male_no_rank_professor_salaries_9_month',
+            'ft_male_assistant_professor_number_9_month',
+            'ft_male_assistant_professor_salaries_9_month',
+            'ft_male_instructor_number_9_month',
+            'ft_male_instructor_salaries_9_month',
+            'ft_male_lecturer_number_9_month',
+            'ft_male_lecturer_salaries_9_month',
+            'ft_male_no_rank_number_9_month',
+            'ft_male_no_rank_salaries_9_month',
         );
 
         $total = 0;
@@ -85,12 +88,14 @@ class FCSValidation
         }
 
         if ($total == 0) {
-            $this->addIssue("There are no data for Form 2: Full-time Faculty Salary.", 2);
+            $this->addIssue("There are no data for Form 2: Full-time Faculty Salary.", $code, 2);
         }
     }
 
     public function validateExecCompensation()
     {
+        $code = 'exec_compensation';
+
         $execSalary = $this->observation->get('ft_president_salary');
         $execSuppl = $this->observation->get('ft_president_supplemental');
         $total = $execSalary + $execSuppl;
@@ -101,14 +106,18 @@ class FCSValidation
         $formattedMax = number_format($max);
         $formattedMin = number_format($min);
 
+        if ($total == 0) {
+            //return;
+        }
+
         // Too high?
         if ($total > $max) {
-            $this->addIssue("Total compensation for President/Chancellor is greater than $$formattedMax.", 5);
+            $this->addIssue("Total compensation for President/Chancellor is greater than $$formattedMax.", $code . '_max', 5);
         }
 
         // Too low?
         if ($total < $min) {
-            $this->addIssue("Total compensation for President/Chancellor is less than $$formattedMin. Please verify that this is an annual amount.", 5);
+            $this->addIssue("Total compensation for President/Chancellor is less than $$formattedMin. Please verify that this is an annual amount.", $code . '_min', 5);
         }
     }
 }

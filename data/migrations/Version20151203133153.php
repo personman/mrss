@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20151130162641 extends AbstractMigration
+class Version20151203133153 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -18,7 +18,9 @@ class Version20151130162641 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        //$this->addSql('ALTER TABLE observations DROP test_ass_staff_ratio, DROP test_student_count, DROP test_green_eye_count, DROP test_green_eye_percentage');
+        $this->addSql('ALTER TABLE issues DROP FOREIGN KEY FK_DA7D7F834F029208');
+        $this->addSql('DROP INDEX IDX_DA7D7F834F029208 ON issues');
+        $this->addSql('ALTER TABLE issues ADD formUrl VARCHAR(255) DEFAULT NULL, DROP benchmarkGroup_id');
     }
 
     /**
@@ -29,6 +31,8 @@ class Version20151130162641 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE observations ADD test_ass_staff_ratio VARCHAR(20) DEFAULT NULL, ADD test_student_count INT DEFAULT NULL, ADD test_green_eye_count INT DEFAULT NULL, ADD test_green_eye_percentage DOUBLE PRECISION DEFAULT NULL');
+        $this->addSql('ALTER TABLE issues ADD benchmarkGroup_id INT DEFAULT NULL, DROP formUrl');
+        $this->addSql('ALTER TABLE issues ADD CONSTRAINT FK_DA7D7F834F029208 FOREIGN KEY (benchmarkGroup_id) REFERENCES benchmark_groups (id)');
+        $this->addSql('CREATE INDEX IDX_DA7D7F834F029208 ON issues (benchmarkGroup_id)');
     }
 }

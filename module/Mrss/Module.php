@@ -333,6 +333,31 @@ class Module
 
                     return $service;
                 },
+                'service.validation' => function ($sm) {
+                    $service = new Service\Validation();
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+                    $service->setStudy($currentStudy);
+
+                    // Find the validator class in the study config
+                    $studyConfig = $sm->get('study');
+                    if ($class = $studyConfig->validation_class) {
+                        $class = "Mrss\\Service\\$class";
+                        $validator = new $class;
+                        $service->setValidator($validator);
+                    }
+
+                    // Set the user
+                    $userService = $sm->get('zfcuser_auth_service');
+                    $user = $userService->getIdentity();
+                    $service->setUser($user);
+
+                    // Set the issue model
+                    $issueModel = $sm->get('model.issue');
+                    $service->setIssueModel($issueModel);
+
+                    return $service;
+                },
                 'import.nccwtp' => function ($sm) {
                     $nccwtp = new Service\ImportNccwtp();
 
@@ -614,6 +639,14 @@ class Module
                 },
                 'model.chart' => function ($sm) {
                     $model = new Model\Chart;
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+
+                    $model->setEntityManager($em);
+
+                    return $model;
+                },
+                'model.issue' => function ($sm) {
+                    $model = new Model\Issue;
                     $em = $sm->get('doctrine.entitymanager.orm_default');
 
                     $model->setEntityManager($em);
