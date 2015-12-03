@@ -48,10 +48,14 @@ class Validation
             $issue->setStudy($this->getStudy());
             $issue->setYear($observation->getYear());
             $issue->setCollege($observation->getCollege());
-            $issue->setChangeSet($this->getChangeSet());
             $issue->setErrorCode($issueInfo['errorCode']);
             $issue->setFormUrl($issueInfo['formUrl']);
             $issue->setUser($this->getUser());
+
+            if ($changeSet = $this->getChangeSet()) {
+                $issue->setChangeSet($changeSet);
+            }
+
 
             // @todo: handle existing
 
