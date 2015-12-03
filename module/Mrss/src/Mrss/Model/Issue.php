@@ -51,8 +51,10 @@ class Issue extends AbstractModel
         $this->getEntityManager()->flush();
     }
 
-    public function deleteByCollege($collegeId)
+    public function deleteByCollege($college)
     {
-
+        foreach ($this->findByCollege($college) as $issue) {
+            $this->delete($issue);
+        }
     }
 }

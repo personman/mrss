@@ -414,7 +414,8 @@ class ObservationController extends AbstractActionController
                     $count = count($issues);
                     $noun = ($count == 1) ? 'problem' : 'problems';
                     $this->flashMessenger()->addErrorMessage(
-                        "Your data was saved but we identified $count potential $noun with it."
+                        "Your data was saved but we identified $count potential $noun with it.
+                        <a href='/issues'>Please review</a>."
                     );
                 }
                 return $this->redirect()->toUrl($redirect);

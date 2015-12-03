@@ -19,6 +19,8 @@ class Validation
 
     public function validate($observation, $priorObservation = null)
     {
+        $this->clearExistingIssues();
+
         $issues = array();
         $validator = $this->getValidator();
 
@@ -28,6 +30,11 @@ class Validation
         }
 
         return $issues;
+    }
+
+    protected function clearExistingIssues()
+    {
+        $this->getIssueModel()->deleteByCollege($this->getUser()->getCollege());
     }
 
     public function saveIssues($issues, $observation)
@@ -115,6 +122,9 @@ class Validation
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\User
+     */
     public function getUser()
     {
         return $this->user;
