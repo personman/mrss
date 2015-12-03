@@ -54,7 +54,8 @@ a.login-btn, #headerLoginForm button {
 
 /** Homepage **/
 #homepage-slide-container {
-	background-color: #00508d;
+	/*background-color: #00508d;*/
+	background-color: transparent;
 }
 .homepage-slider-c {
 	padding: 0;
