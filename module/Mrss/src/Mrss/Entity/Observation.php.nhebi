@@ -1551,9 +1551,6 @@ class Observation
     protected $max_res_pell_grant_rec;
 
     /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_male_cred_stud;
-
-    /** @ORM\Column(type="float", nullable=true) */
     protected $max_res_fem_cred_stud;
 
     /** @ORM\Column(type="float", nullable=true) */
@@ -1634,44 +1631,23 @@ class Observation
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_ft_f_yminus4_headc;
 
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_op_exp_inst;
-
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_ft_f_yminus4_degr_cert;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_op_exp_student_services;
 
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_ft_f_yminus4_transf;
 
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_op_exp_acad_supp;
-
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_pt_f_yminus4_headc;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_op_exp_inst_support;
 
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_pt_f_yminus4_degr_cert;
 
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_op_exp_research;
-
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_pt_f_yminus4_transf;
 
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_op_exp_pub_serv;
-
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_f_yminus7_headc;
-
-    /** @ORM\Column(type="float", nullable=true) */
-    protected $max_res_op_exp_oper_n_maint;
 
     /** @ORM\Column(type="integer", nullable=true) */
     protected $max_res_ft_yminus7_degr;
@@ -2025,6 +2001,11 @@ class Observation
      */
     protected $ft_yminus3_perc_comp_transf;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_f_yminus3_degr_no_transf;
+
 
 
     /**
@@ -2063,6 +2044,13 @@ class Observation
     protected $ft_perc_comp_transf;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_f_yminus4_degr_no_transf;
+
+
+
+    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $pt_f_yminus4_headc;
@@ -2096,6 +2084,13 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $pt_perc_comp_transf;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_f_yminus4_degr_no_transf;
+
+
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -2133,6 +2128,12 @@ class Observation
     protected $percminus7_comtran;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_f_yminus7_degr_no_transf;
+
+
+    /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $pt_fminus7_headc;
@@ -2166,6 +2167,13 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $pt_pminus7_comtran;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $pt_f_yminus7_degr_no_transf;
+
+
 
 
     // 2015 changes to NCCBP form 2
@@ -3387,6 +3395,11 @@ class Observation
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
+    protected $test_ass_staff_ratio;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $career_staff_ratio;
 
     /**
@@ -3798,38 +3811,6 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $expenditures_continuing_education_percent;
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // Test fields
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
-    protected $test_ass_staff_ratio;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $test_student_count;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $test_green_eye_count;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    protected $test_green_eye_percentage;
 
 
 
