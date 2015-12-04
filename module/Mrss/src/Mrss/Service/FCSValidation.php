@@ -134,7 +134,56 @@ class FCSValidation
             }
         }
     }
-    
+
+    public function validateBenefitPercentages()
+    {
+        $benefitsToCheck = array(
+            'retirement' => 50,
+            'medical' => 50,
+            'tuition' => 50
+        );
+
+        // Only check this if they don't aggregate their benefits
+        if ($this->observation->get('institution_aggregate_benefits') == 'No') {
+            foreach ($benefitsToCheck as $benefit => $minPercentage) {
+                foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                    foreach ($this->getRanks() as $rank => $rankLabel) {
+                        // First, sum up the male and female counts from form 2
+                        $maleCol = "ft_male_{$rank}_number_{$contract}";
+                        $femaleCol = "ft_female_{$rank}_number_{$contract}";
+                        $form2Total = $this->observation->get($maleCol) + $this->observation->get($femaleCol);
+
+                        // Have they reported faculty count on form 2 yet?
+                        if (!$form2Total) {
+                            continue;
+                        }
+
+                        // Now how many of those folks get the benefit?
+                        $benefitCol = "ft_{$benefit}_covered_{$rank}_{$contract}";
+                        $benefitCount = $this->observation->get($benefitCol);
+
+                        // Skip if they haven't reported it yet
+                        if (!$benefitCount) {
+                            continue;
+                        }
+
+                        // So, what percentage is that?
+                        $percentage = ($benefitCount / $form2Total) * 100;
+
+                        // Does that trigger an issue?
+                        if ($percentage < $minPercentage) {
+                            $benefitLabel = ucwords($benefit);
+                            $message = "Number covered for $benefitLabel is less than {$minPercentage}% " .
+                                "of the similar number of faculty in form 2 ({$contractLabel} {$rankLabel}).";
+                            $code = "{ft_benefit_min_{$benefit}_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, 3);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     protected function getForm2Fields($gender = 'male')
     {
         $salaryFields = array(
