@@ -146,3 +146,7 @@ h1 {
 .issue a, .issue a:visited {
     color: black;
 }
+
+.issue-message {
+    font-size: 120%;
+}

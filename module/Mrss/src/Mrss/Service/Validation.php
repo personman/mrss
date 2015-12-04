@@ -39,9 +39,6 @@ class Validation
 
     public function saveIssues($issues, $observation)
     {
-        // @todo: delete this college's other issues
-
-
         foreach ($issues as $issueInfo) {
             $issue = new Issue;
             $issue->setMessage($issueInfo['message']);

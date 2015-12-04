@@ -894,7 +894,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $decimalPlaces = $map[$dbColumn];
         } else {
             //All NCCBP percentages should use 2 decimal places
-            if ($this->getBenchmarkGroup()->getStudy()->getId() == 1 && $this->isPercent()) {
+            if (/*$this->getBenchmarkGroup()->getStudy()->getId() == 1 &&*/ $this->isPercent()) {
                 $decimalPlaces = 2;
             }
 

@@ -4,17 +4,16 @@
 
 <?php foreach ($issues as $issue): ?>
     <div class="issue row">
-        <div class="col-md-9">
+        <div class="col-md-9 issue-message">
             <?= $issue->getMessage() ?>
         </div>
 
         <div class="col-md-3">
             <a href="/data-entry/<?= $issue->getFormUrl() ?>" class="btn btn-default">
                 <span class="icon-edit glyphicon glyphicon-edit"></span>
-                Edit
+                Go to Form <?= $issue->getFormUrl() ?>
             </a>
         </div>
 
     </div>
-
 <?php endforeach ?>
