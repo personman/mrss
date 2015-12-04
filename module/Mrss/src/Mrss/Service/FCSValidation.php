@@ -180,12 +180,12 @@ class FCSValidation
         }
 
         // Too high?
-        if ($total > $max) {
+        if ($total && $total > $max) {
             $this->addIssue("Total compensation for President/Chancellor is greater than $$formattedMax.", $code . '_max', 5);
         }
 
         // Too low?
-        if ($total < $min) {
+        if ($total && $total < $min) {
             $this->addIssue("Total compensation for President/Chancellor is less than $$formattedMin. Please verify that this is an annual amount.", $code . '_min', 5);
         }
     }
