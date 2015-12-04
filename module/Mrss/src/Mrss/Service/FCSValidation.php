@@ -2,15 +2,18 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\Observation;
+
 class FCSValidation
 {
+    /** @var  Observation $observation */
     protected $observation;
 
     protected $priorYearObservation;
 
     protected $issues = array();
 
-    public function setObservation($observation)
+    public function setObservation(Observation $observation)
     {
         $this->observation = $observation;
 
@@ -44,7 +47,6 @@ class FCSValidation
     }
 
     /**
-     * @todo: May need a unique id per message/variable so user resolved issues don't get overwritten
      *
      * @param $message
      */
@@ -66,21 +68,8 @@ class FCSValidation
     {
         $code = 'salaries_entered';
 
-        // @todo: add more
-        $salaryFields = array(
-            'ft_male_professor_number_9_month',
-            'ft_male_professor_salaries_9_month',
-            'ft_male_associate_professor_number_9_month',
-            'ft_male_associate_professor_salaries_9_month',
-            'ft_male_assistant_professor_number_9_month',
-            'ft_male_assistant_professor_salaries_9_month',
-            'ft_male_instructor_number_9_month',
-            'ft_male_instructor_salaries_9_month',
-            'ft_male_lecturer_number_9_month',
-            'ft_male_lecturer_salaries_9_month',
-            'ft_male_no_rank_number_9_month',
-            'ft_male_no_rank_salaries_9_month',
-        );
+        $salaryFields = $this->getForm2Fields();
+        $salaryFields = array_merge($salaryFields, $this->getForm2Fields('female'));
 
         $total = 0;
         foreach ($salaryFields as $dbColumn) {
@@ -117,6 +106,32 @@ class FCSValidation
                 'salaries_women_empty',
                 2
             );
+        }
+    }
+
+    public function validateForm2FacultyTotals()
+    {
+        $colsToSum = array('ntt', 'tt', 't');
+
+        foreach ($this->getGenders() as $gender => $genderLabel) {
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getRanks() as $rank => $rankLabel) {
+                    $totalCol = "ft_{$gender}_{$rank}_number_{$contract}";
+                    $total = $this->observation->get($totalCol);
+                    $sum = 0;
+
+                    foreach ($colsToSum as $col) {
+                        $colToSum = "ft_{$gender}_{$rank}_{$col}_{$contract}";
+                        $sum += $this->observation->get($colToSum);
+                    }
+
+                    if ($total && $total != $sum) {
+                        $message = "The number of faculty entered for $genderLabel $contractLabel $rankLabel does not equal the sum of the non-tenure track, on tenure-track, and tenured fields.";
+                        $code = "ft_faculty_sum_mismatch_{$gender}_{$rank}_{$contract}";
+                        $this->addIssue($message, $code, 2);
+                    }
+                }
+            }
         }
     }
     
@@ -201,11 +216,6 @@ class FCSValidation
                     continue;
                 }
 
-                // Account for some naming oddities
-                if ($rank != 'professor') {
-                    $rank .= '_professor';
-                }
-
                 $percentChangeCol = "ft_percent_change_{$rank}_{$contract}";
 
                 $change = $this->observation->get($percentChangeCol);
@@ -232,10 +242,15 @@ class FCSValidation
         }
     }
 
-    protected function getContracts()
+    protected function getContracts($nineMonthAsStandard = true)
     {
+        $nineMonth = '9_month';
+        if ($nineMonthAsStandard) {
+            $nineMonth = 'standard';
+        }
+
         return array(
-            'standard' => '9-Month',
+            $nineMonth => '9-Month',
             '12_month' => '12-Month'
         );
     }
@@ -243,11 +258,19 @@ class FCSValidation
     protected function getRanks() {
         return array(
             'professor' => 'Professor',
-            'associate' => 'Associate',
-            'assistant' => 'Assistant',
+            'associate_professor' => 'Associate',
+            'assistant_professor' => 'Assistant',
             'instructor' => 'Instructor',
             'lecturer' => 'Lecturer',
             'no_rank' => 'No Rank'
+        );
+    }
+
+    protected function getGenders()
+    {
+        return array(
+            'male' => 'Male',
+            'female' => 'Female'
         );
     }
 }
