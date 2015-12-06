@@ -140,7 +140,7 @@ class FCSValidation
         $benefitsToCheck = array(
             'retirement' => 50,
             'medical' => 50,
-            'tuition' => 50
+            //'tuition' => 50 // The tuition check should be more than
         );
 
         // Only check this if they don't aggregate their benefits
