@@ -6,6 +6,7 @@
 $tableConfig = $dataEntryLayout;
 $tableConfig2 = $this->currentStudy(false)->getConfig()->data_entry_layout->toArray();
 $tableConfig2 = $tableConfig2['4b'];
+$showValidationColumns = true;
 
 $this->layout()->setVariable('noWrapper', true);
 
@@ -64,7 +65,7 @@ $benefitRowClassesWithLabels = array(
 );
 $benefitRowClasses = array_values($benefitRowClassesWithLabels);
 
-$colSpan = 13;
+$colSpan = 15;
 ?>
 
 <?= $this->headLink()->appendStylesheet('/css/data-entry-grid.css') ?>
@@ -97,8 +98,12 @@ $this->headScript()->appendFile(
 
     $(function() {
         updateSalaryTotals();
+        updateBenefitPercents();
+        updateBenefitAverages();
         $('form input').change(function() {
-            updateSalaryTotals()
+            updateSalaryTotals();
+            updateBenefitPercents();
+            updateBenefitAverages();
         })
 
         updateAggregateToggle();
@@ -125,6 +130,64 @@ $this->headScript()->appendFile(
         } else if (benefitSetting == 'No') {
             rankedTable.show();
         }
+    }
+
+    function updateBenefitPercents()
+    {
+        $('.benefitsAsPercent').each(function() {
+            var cell = $(this);
+            var id = cell.attr('id');
+            var idParts = id.split(':');
+            var salaries = parseFloat(idParts.pop());
+
+            // Trash the first part of the id
+            idParts.shift();
+
+            var benefitClass = idParts.join('.');
+            benefitClass = '.' + benefitClass + '.exp input';
+            var benefitAmount = $(benefitClass).val();
+
+            var percent;
+            if (salaries && benefitAmount) {
+                percent = Math.round(benefitAmount / salaries * 100 * 100) / 100;
+                percent = percent + '%';
+            } else {
+                percent = '';
+            }
+
+            cell.html(percent);
+
+        })
+    }
+
+    function updateBenefitAverages()
+    {
+        $('.benefitsAverage').each(function() {
+            var cell = $(this);
+            var id = cell.attr('id');
+            var idParts = id.split(':');
+
+            // Trash the first part of the id
+            idParts.shift();
+
+            var benefitClass = idParts.join('.');
+            var countClass = benefitClass;
+            benefitClass = '.' + benefitClass + '.exp input';
+            countClass = '.' + countClass + '.cov input';
+
+            benefitCost = parseFloat($(benefitClass).val());
+            benefitCovered = parseFloat($(countClass).val());
+
+            var result;
+            if (benefitCost && benefitCovered) {
+                result = Math.round(benefitCost / benefitCovered);
+                result = '$' + result;
+            } else {
+                result = 'CHECK';
+            }
+
+            cell.html(result);
+        })
     }
 </script>
 
@@ -163,6 +226,14 @@ $this->headScript()->appendFile(
         <th colspan="2" class="data-entry-red">Lecturer</th>
         <th colspan="2" class="data-entry-blue">No Rank</th>
         <th colspan="2" class="data-entry-red">TOTAL</th>
+        <?php if ($showValidationColumns): ?>
+            <td></td>
+            <th colspan="8">Benefits as a Percent of Salary</th>
+
+            <td></td>
+            <th colspan="8">Benefits Average</th>
+
+        <?php endif ?>
     </tr>
     <tr class="smallHeading splitHeading data-entry-heading">
         <th></th>
@@ -180,6 +251,31 @@ $this->headScript()->appendFile(
         <th>Number Covered</th>
         <th>Total Expenditure</th>
         <th>Number Covered</th>
+
+        <?php if ($showValidationColumns): ?>
+            <td></td>
+            <td></td>
+            <th class="data-entry-red">Professor</th>
+            <th class="data-entry-blue">Associate</th>
+            <th class="data-entry-red">Assistant</th>
+            <th class="data-entry-blue">Instructor</th>
+            <th class="data-entry-red">Lecturer</th>
+            <th class="data-entry-blue">No Rank</th>
+            <th class="data-entry-red">All Ranks</th>
+
+            <td></td>
+            <td></td>
+            <th class="data-entry-red">Professor</th>
+            <th class="data-entry-blue">Associate</th>
+            <th class="data-entry-red">Assistant</th>
+            <th class="data-entry-blue">Instructor</th>
+            <th class="data-entry-red">Lecturer</th>
+            <th class="data-entry-blue">No Rank</th>
+            <th class="data-entry-red">All Ranks</th>
+
+        <?php endif ?>
+
+
     </tr>
 
     </thead>
@@ -211,6 +307,8 @@ $this->headScript()->appendFile(
 
                     <td class="column-total" id="exp_<?= $monthNumber ?>-month">0</td>
                     <td class="column-max" id="cov_<?= $monthNumber ?>-month">0</td>
+
+                    <?php showValidationColumnsTotal($monthNumber, $observation) ?>
 
                     <?php $colClassConfig = $colClassConfig2; ?>
                 <?php else: ?>
@@ -252,6 +350,8 @@ $this->headScript()->appendFile(
                 $totalId = implode('_', $classParts);
                 ?>
                 <td class="column-total max-target <?= $maxClass ?>" id="<?= $totalId ?>">0</td>
+                <?php $contract = $classParts[1]; ?>
+                <?php if ($showValidationColumns) displayValidationColumns($contract, $sectionRow, $observation); ?>
 
                 </tr>
 
@@ -467,3 +567,167 @@ $this->headScript()->appendFile(
 <?= $this->form()->closeTag() ?>
 </div>
 </div>
+
+
+<?php
+
+function displayValidationColumns($contract, $sectionRow, $observation)
+{
+    list($benefit, $benefitLabel) = getBenefit($sectionRow);
+    $benefitShort = shortenBenefit($benefit);
+
+    // First, the benefits as percent table
+
+    ?>
+
+    <td></td>
+    <td class="grid-category"><?= $benefitLabel ?></td>
+
+    <?php foreach (getRanks() as $rank => $rankLabel): ?>
+        <?php
+            $salaries = getSalaries($rank, $contract, $observation);
+            $rankShort = shortenRank($rank);
+        ?>
+
+        <td class="benefitsAsPercent" id="val1:<?= $rankShort ?>:<?= $benefitShort ?>:<?= $contract ?>:<?= $salaries ?>">
+
+        </td>
+    <?php endforeach ?>
+
+    <?php $salaries = getSalaries('faculty', $contract, $observation); ?>
+    <td class="benefitsAsPercent" id="val:<?= $benefitShort ?>:<?= $contract ?>:<?= $salaries ?>"></td>
+
+
+    <?php // Now the benefits average table ?>
+    <td></td>
+    <td class="grid-category"><?= $benefitLabel ?></td>
+    <?php foreach (getRanks() as $rank => $rankLabel): ?>
+        <?php
+        $rankShort = shortenRank($rank);
+        ?>
+
+        <td class="benefitsAverage" id="val2:<?= $rankShort ?>:<?= $benefitShort ?>:<?= $contract ?>">
+
+        </td>
+    <?php endforeach ?>
+
+
+    <?php
+}
+
+function showValidationColumnsTotal($monthNumber, $observation)
+{
+    $contract = "$monthNumber-month";
+
+    ?>
+
+        <td></td>
+        <td class="grid-category">TOTAL</td>
+
+        <?php foreach (getRanks() as $rank => $rankLabel): ?>
+            <?php
+            $salaries = getSalaries($rank, $contract, $observation);
+            $rankShort = shortenRank($rank);
+            ?>
+
+            <td class="benefitsAsPercent" id="val1:<?= $rankShort ?>:<?= $contract ?>:<?= $salaries ?>">
+
+            </td>
+        <?php endforeach ?>
+
+        <?php $salaries = getSalaries('faculty', $contract, $observation); ?>
+        <td class="benefitsAsPercent" id="val:<?= $contract ?>:<?= $salaries ?>"></td>
+
+
+    <?php
+}
+
+function shortenBenefit($benefit)
+{
+    $search = array(
+        'combined_medical_dental',
+        'group_life',
+        'worker_comp'
+    );
+
+    $replace = array(
+        'combined',
+        'group-life',
+        'workers-comp'
+    );
+
+    $shortened = str_replace($search, $replace, $benefit);
+
+    return $shortened;
+}
+
+function shortenRank($rank)
+{
+    $search = array(
+        'associate_professor',
+        'assistant_professor',
+        'no_rank'
+    );
+
+    $replace = array(
+        'associate',
+        'assistant',
+        'no-rank'
+    );
+
+    $shortened = str_replace($search, $replace, $rank);
+
+    return $shortened;
+}
+
+function getRanks() {
+    return array(
+        'professor' => 'Professor',
+        'associate_professor' => 'Associate',
+        'assistant_professor' => 'Assistant',
+        'instructor' => 'Instructor',
+        'lecturer' => 'Lecturer',
+        'no_rank' => 'No Rank'
+    );
+}
+
+function getBenefits()
+{
+    return array(
+        'retirement' => 'Retirement',
+        'medical' => 'Medical',
+        'dental' => 'Dental',
+        'combined_medical_dental' => 'Combined Medical/Dental',
+        'disability' => 'Disability',
+        'tuition' => 'Tuition',
+        'fica' => 'FICA',
+        'unemployment' => 'Unemployment',
+        'group_life' => 'Group Life',
+        'worker_comp' => 'Worker\'s Comp',
+        'other' => 'Other'
+    );
+}
+
+function getSalaries($rank, $contract, $observation)
+{
+    $contract = str_replace('-', '_', $contract);
+
+    $maleKey = "ft_male_{$rank}_salaries_$contract";
+    $femaleKey = "ft_female_{$rank}_salaries_$contract";
+
+    $total = $observation->get($maleKey) + $observation->get($femaleKey);
+
+    return $total;
+}
+
+function getBenefit($rowNumber)
+{
+    $i = 0;
+    foreach (getBenefits() as $key => $label) {
+        if ($i == $rowNumber) {
+            return array($key, $label);
+        }
+        $i++;
+    }
+}
+
