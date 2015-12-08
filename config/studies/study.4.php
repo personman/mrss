@@ -29,6 +29,12 @@ return array(
     ),
     'export_sheet_names' => array(
         // benchmarkGroup id => excel sheet name
+        2 => array(
+            'sheetName' => 'Form 1',
+            'sectionStartingCells' => array(
+                0 => 'C15'
+            )
+        ),
         3 => array(
             'sheetName' => 'Form 2',
             'sectionStartingCells' => array(
@@ -69,6 +75,51 @@ return array(
         )
     ),
     'data_entry_layout' => array(
+        // Form 1: Institutional information
+        2 => array(
+            array(
+                'rows' => array(
+                    // the null rows account for skipped rows in Excel from 1
+                    array('institution_control'),
+                    array(null),
+                    array('institution_sector'),
+                    array(null),
+                    array('institution_aaup_category'),
+                    array(null),
+                    array('carnegie_basic'),
+                    array(null),
+                    array('institution_system'),
+                    array(null),
+                    array('institution_highest_degree'),
+                    array(null),
+                    array('institution_grants_medical_degree'),
+                    array(null),
+                    array('institution_publication_footnote'),
+                    array(null),
+                    array('institution_conversion_factor'),
+                    array(null),
+                    array('institution_eligible_cip_codes'),
+                    array(null),
+                    array('institution_campuses'),
+                    array(null),
+                    array('institution_comments'),
+                    array(null),
+                    array('institution_add_comment'),
+                    array(null),
+                    array('institution_accurarcy_confirmation'),
+                    array(null),
+                    array('institution_deadline_change'),
+                    array(null),
+                    array('institution_non_submission'),
+                    array(null),
+                    array('institution_tenure_system'),
+                    array(null),
+                    array('institution_faculty_union'),
+                    array(null),
+                    array('institution_part_time_benefits'),
+                )
+            )
+        ),
         // Full-time Salary
         3 => array(
             // Faculty

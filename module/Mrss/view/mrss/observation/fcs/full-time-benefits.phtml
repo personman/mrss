@@ -73,7 +73,7 @@ $colSpan = 15;
 
 <?php
 $this->headScript()->appendFile(
-    '/js/data-entry.js?v=2',
+    '/js/data-entry.js?v=3',
     'text/javascript'
 ); ?>
 
@@ -93,7 +93,7 @@ $this->headScript()->appendFile(
 
 <script>
     // Conversion factor (set in form 1)
-    var conversionFactor = <?= $form->get('institution_conversion_factor')->getValue(); ?>;
+    var conversionFactor = <?= ($cf = $form->get('institution_conversion_factor')->getValue()) ? $cf : 1; ?>;
 
 
     $(function() {

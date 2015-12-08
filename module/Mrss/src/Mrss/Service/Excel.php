@@ -479,6 +479,11 @@ class Excel
 
             foreach ($sheetInfo['positions'] as $dbColumn => $coordinates) {
                 $value = $sheet->getCell($coordinates)->getValue();
+                $value = trim($value);
+                if ($value === '') {
+                    $value = null;
+                }
+
                 $data[$dbColumn] = $value;
             }
         }
@@ -998,6 +1003,10 @@ class Excel
                 foreach ($section['rows'] as $row) {
                     if (is_array($row)) {
                         foreach ($row as $dbColumn) {
+                            if (empty($dbColumn)) {
+                                continue;
+                            }
+
                             $cell = $currentColumn . $currentRow;
                             if ($cell) {
                                 $benchmarkPositions[$dbColumn] = $cell;

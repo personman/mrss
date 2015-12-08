@@ -486,7 +486,7 @@ function updateSalaryTotals()
         var idParts = id.split('_');
         var selector = '.' + idParts.join('.') + ' input';
         var sum = 0;
-        $(selector).each(function(i, e) {
+        totalTd.parents('table').find(selector).each(function(i, e) {
             if (totalTd.hasClass('apply-conversion')) {
                 var converted = applyConversionFactor($(e));
             } else {
@@ -572,7 +572,7 @@ function updateMaxFields()
         var selector = '.max-target.' + idParts.join('.');
 
         var max = 0;
-        $(selector).each(function(i, e) {
+        totalTd.parents('table').find(selector).each(function(i, e) {
             var maxTargetValue = Number($(this).html());
 
             if (maxTargetValue > max) {
@@ -593,7 +593,7 @@ function updateMaxFields()
         var selector = '.' + idParts.join('.') + ' input';
 
         var max = 0;
-        $(selector).each(function(i, e) {
+        totalTd.parents('table').find(selector).each(function(i, e) {
             var maxTargetValue = Number($(this).val());
 
             if (maxTargetValue > max) {
