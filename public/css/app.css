@@ -150,3 +150,8 @@ h1 {
 .issue-message {
     font-size: 120%;
 }
+
+
+td.no-border {
+    border: none !important;
+}

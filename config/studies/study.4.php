@@ -39,9 +39,9 @@ return array(
             'sheetName' => 'Form 2',
             'sectionStartingCells' => array(
                 0 => 'B7',
-                1 => 'G7',
-                2 => 'B15',
-                3 => 'G15',
+                //1 => 'G7',
+                1 => 'B15',
+                //3 => 'G15',
             ),
             'extra' => array(
                 //'institution_conversion_factor' => 'G14'

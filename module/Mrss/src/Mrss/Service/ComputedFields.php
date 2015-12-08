@@ -221,9 +221,14 @@ class ComputedFields
 
             // If any of the variables are null or '', bail out
             if ($value === null || $value === '') {
-                $errors[] = "Missing variable: $variable. ";
+                // As long as there's no division or multiplication involved, we can assume nulls are 0
+                if (strpos($equation, '/') === false && strpos($equation, '*') === false) {
+                    $value = 0;
+                } else {
+                    $errors[] = "Missing variable: $variable. ";
 
-                continue;
+                    continue;
+                }
             }
 
             $vars[$variable] = $value;
