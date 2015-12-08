@@ -411,11 +411,8 @@ class ObservationController extends AbstractActionController
                 if (empty($issues)) {
                     $this->flashMessenger()->addSuccessMessage('Data saved.');
                 } else {
-                    $count = count($issues);
-                    $noun = ($count == 1) ? 'problem' : 'problems';
                     $this->flashMessenger()->addErrorMessage(
-                        "Your data was saved but we identified $count potential $noun with it.
-                        <a href='/issues'>Please review</a>."
+                        $this->getValidationIssuesMessage($issues)
                     );
                 }
                 return $this->redirect()->toUrl($redirect);
@@ -446,6 +443,17 @@ class ObservationController extends AbstractActionController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    protected function getValidationIssuesMessage($issues)
+    {
+        $count = count($issues);
+        $noun = ($count == 1) ? 'problem' : 'problems';
+
+        $message = "Your data was saved but we identified $count potential $noun with it.
+                        <a href='/issues'>Please review</a>.";
+
+        return $message;
     }
 
     protected function getDataEntryLayout($benchmarkGroup)
@@ -762,12 +770,24 @@ class ObservationController extends AbstractActionController
                 }
 
                 // Log any changes
-                $this->getServiceLocator()->get('service.observationAudit')
+                $changeSet = $this->getServiceLocator()->get('service.observationAudit')
                     ->logChanges($oldObservation, $observation, 'excel');
+
+                // Validate against validation rule class
+                $validationService = $this->getServiceLocator()->get('service.validation');
+                $validationService->setChangeSet($changeSet);
+                $issues = $validationService->validate($observation);
 
                 // No errors, time to save to the db
                 $this->getServiceLocator()->get('em')->flush();
-                $this->flashMessenger()->addSuccessMessage("Data imported.");
+
+                if (empty($issues)) {
+                    $this->flashMessenger()->addSuccessMessage("Data imported.");
+                } else {
+                    $message = $this->getValidationIssuesMessage($issues);
+                    $this->flashMessenger()->addErrorMessage($message);
+                }
+
                 return $this->redirect()->toRoute('data-entry');
             } else {
                 // Something went wrong. We'll show the error messages
