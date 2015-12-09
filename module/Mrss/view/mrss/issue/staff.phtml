@@ -1,0 +1,56 @@
+<?php /** @var \Mrss\Entity\Issue[] $issues */ ?>
+<?php
+
+// Data Tables
+$this->headScript()->appendFile(
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+<script>
+    $(document).ready(function() {
+        $('#issues').dataTable({
+            "order": [[2, "asc"]],
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
+
+        $('.heatMapYear, .heatmapTd').css('width', '20px')
+
+        //$('.heatmapCell').tooltip()
+    });
+</script>
+
+<h1>Data Issues</h1>
+
+<table class="table table-bordered" id="issues">
+    <thead>
+        <tr>
+            <th>Institution</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>User Note</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($issues as $issue): ?>
+            <tr>
+                <td>
+                    <?= $issue->getCollege()->getName() ?>
+                </td>
+                <td>
+                    <?= $issue->getMessage() ?>
+                </td>
+                <td>
+                    <?= $issue->getStatus() ?>
+                </td>
+                <td>
+                    <?= $issue->getUserNote() ?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

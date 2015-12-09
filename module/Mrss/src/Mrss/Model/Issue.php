@@ -18,11 +18,19 @@ class Issue extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\Issue';
 
+    /**
+     * @param $id
+     * @return null|IssueEntity
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);
     }
 
+    /**
+     * @param $college
+     * @return IssueEntity[]
+     */
     public function findByCollege($college)
     {
         return $this->getRepository()->findBy(

@@ -197,6 +197,11 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['about']['pages']['partners']);
         }
 
+        // Hide data issues from all non-AAUP studies
+        if ($currentStudy->getId() != 4) {
+            unset($pages['admin']['pages']['issues/staff']);
+        }
+
         // MRSS
         if ($currentStudy->getId() == 2) {
             // Don't show best performers yet

@@ -151,6 +151,27 @@ h1 {
     font-size: 120%;
 }
 
+.issue .userNote {
+    display: none;
+}
+
+div.userNote .form-horizontal .control-group {
+    margin: 0 !important;
+    padding: 0;
+}
+
+div.userNote .form-horizontal .controls {
+    margin: 5px;
+}
+
+div.userNote .controls textarea {
+    width: 100%;
+    height: 80px;
+}
+
+div.userNote .well .control-group {
+    float: left;
+}
 
 td.no-border {
     border: none !important;

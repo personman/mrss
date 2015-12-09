@@ -73,7 +73,15 @@ class Issue
      */
     protected $status;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $userNote;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $staffNote;
 
     /**
      * @param $id
@@ -220,5 +228,43 @@ class Issue
     public function getErrorCode()
     {
         return $this->errorCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserNote()
+    {
+        return $this->userNote;
+    }
+
+    /**
+     * @param mixed $userNote
+     * @return Issue
+     */
+    public function setUserNote($userNote)
+    {
+        $this->userNote = $userNote;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStaffNote()
+    {
+        return $this->staffNote;
+    }
+
+    /**
+     * @param mixed $staffNote
+     * @return Issue
+     */
+    public function setStaffNote($staffNote)
+    {
+        $this->staffNote = $staffNote;
+
+        return $this;
     }
 }

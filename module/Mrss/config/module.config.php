@@ -364,6 +364,26 @@ return array(
                         'controller' => 'issues',
                         'action' => 'index'
                     )
+                ),
+                'child_routes' => array(
+                    'note' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/note',
+                            'defaults' => array(
+                                'action' => 'note'
+                            )
+                        )
+                    ),
+                    'staff' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/staff',
+                            'defaults' => array(
+                                'action' => 'staff'
+                            )
+                        )
+                    )
                 )
             ),
             'subscribe' => array(

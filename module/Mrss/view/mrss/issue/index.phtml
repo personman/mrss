@@ -1,18 +1,71 @@
 <?php /** @var \Mrss\Entity\Issue[] $issues */ ?>
+<?php /** @var \Mrss\Form\IssueUserNote[] $forms */ ?>
+
+
+<script>
+    $(function() {
+        $('a.confirmData').click(function() {
+            var issue = $(this).parents('.issue');
+
+            console.log(issue);
+
+            // Hide the buttons
+            issue.find('.issueButtons').hide();
+
+            // Show the form
+            issue.find('.userNote').show();
+
+            return false;
+        });
+
+        // Cancel button
+        $('.userNote .btn-danger').click(function() {
+            var issue = $(this).parents('.issue');
+
+            // Hide the form
+            issue.find('.userNote').hide();
+
+            // Show the buttons again
+            issue.find('.issueButtons').show();
+
+            return false;
+        });
+    })
+</script>
+
 
 <h1>Data Issues</h1>
 
 <?php foreach ($issues as $issue): ?>
+    <?php $form = $forms[$issue->getId()]; ?>
+    <?php $form->setAttribute('action', '/issues/note'); ?>
+
     <div class="issue row">
-        <div class="col-md-9 issue-message">
+        <div class="col-md-8 issue-message">
             <?= $issue->getMessage() ?>
         </div>
 
-        <div class="col-md-3">
-            <a href="/data-entry/<?= $issue->getFormUrl() ?>" class="btn btn-default">
-                <span class="icon-edit glyphicon glyphicon-edit"></span>
-                Go to Form <?= $issue->getFormUrl() ?>
-            </a>
+        <div class="col-md-4">
+            <div class="issueButtons">
+                <a href="/data-entry/<?= $issue->getFormUrl() ?>" class="btn btn-default">
+                    <span class="icon-edit glyphicon glyphicon-edit"></span>
+                    Go to Form <?= $issue->getFormUrl() ?>
+                </a>
+
+                <a href="#" class="btn btn-default confirmData">
+                    <span class="icon-edit glyphicon glyphicon-ok"></span>
+                    Confirm Data As Is
+                </a>
+
+            </div>
+
+            <div class="userNote">
+                <p>
+                    Let us know why you're sure the data is correct.
+                </p>
+
+                <?= $this->ztbForm($form->prepare()) ?>
+            </div>
         </div>
 
     </div>

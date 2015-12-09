@@ -730,9 +730,9 @@ function getAdminMenu()
         'controller' => 'studies',
         'route' => 'studies'
     ),
-    'reports/explore' => array(
-        'label' => 'Explore Data',
-        'route' => 'reports/explore'
+    'issues/staff' => array(
+        'label' => 'Data Issues',
+        'route' => 'issues/staff'
     ),
     'reports' => array(
         'label' => 'Report Calculations',

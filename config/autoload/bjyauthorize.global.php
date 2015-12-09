@@ -285,6 +285,12 @@ return array(
                     'action' => array('clearCache', 'rebuildCache', 'copy'),
                     'roles' => array('viewer')
                 ),
+                array(
+                    'controller' => 'issues',
+                    'actions' => array('staff'),
+                    'roles' => array('data')
+                ),
+
                 // Since the background action is fired by console, lift guard
                 array(
                     'controller' => 'import',
