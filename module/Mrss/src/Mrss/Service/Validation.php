@@ -78,7 +78,7 @@ class Validation
             }
 
             // Hold on to non-resolved issues to alert the user of them
-            if (empty($issue->getStatus())) {
+            if (!$issue->getStatus()) {
                 $this->issues[] = $issue;
             }
 
