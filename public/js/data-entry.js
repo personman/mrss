@@ -493,12 +493,13 @@ function updateSalaryTotals()
                 var converted = $(e).val();
             }
 
-            //sum += Number($(this).val());
             sum += Number(converted);
-        })
+        });
+
+        sum = Math.round(sum);
 
         $(this).html(sum);
-    })
+    });
 
     // Now update the max fields
     updateMaxFields();

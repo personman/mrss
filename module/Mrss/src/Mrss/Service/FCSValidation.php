@@ -64,6 +64,19 @@ class FCSValidation
         return $this->issues;
     }
 
+
+    public function validateConversionFactor()
+    {
+        $conversionFactor = $this->observation->get('institution_conversion_factor');
+        if ($conversionFactor) {
+            if ($conversionFactor > 1 || $conversionFactor < 0.75) {
+                $message = "Your 12- to 9-month conversion factor should fall in the range of 0.75 to 1";
+                $code = "conversion_factor";
+                $this->addIssue($message, $code, 1);
+            }
+        }
+    }
+
     public function validateSalariesEntered()
     {
         $code = 'salaries_entered';
@@ -140,7 +153,8 @@ class FCSValidation
         $benefitsToCheck = array(
             'retirement' => 50,
             'medical' => 50,
-            //'tuition' => 50 // The tuition check should be more than
+            'combined_medical_dental' => 50,
+            'tuition' => 50 // The tuition check should be more than
         );
 
         // Only check this if they don't aggregate their benefits
@@ -149,9 +163,7 @@ class FCSValidation
                 foreach ($this->getContracts(false) as $contract => $contractLabel) {
                     foreach ($this->getRanks() as $rank => $rankLabel) {
                         // First, sum up the male and female counts from form 2
-                        $maleCol = "ft_male_{$rank}_number_{$contract}";
-                        $femaleCol = "ft_female_{$rank}_number_{$contract}";
-                        $form2Total = $this->observation->get($maleCol) + $this->observation->get($femaleCol);
+                        $form2Total = $this->getFacultyTotalForRankAndContract($rank, $contract);
 
                         // Have they reported faculty count on form 2 yet?
                         if (!$form2Total) {
@@ -171,9 +183,17 @@ class FCSValidation
                         $percentage = ($benefitCount / $form2Total) * 100;
 
                         // Does that trigger an issue?
-                        if ($percentage < $minPercentage) {
-                            $benefitLabel = ucwords($benefit);
-                            $message = "Number covered for $benefitLabel is less than {$minPercentage}% " .
+                        if ($benefit == 'tuition') {
+                            $hasIssue = ($percentage > $minPercentage);
+                            $desc = 'more than';
+                        } else {
+                            $hasIssue = ($percentage < $minPercentage);
+                            $desc = 'less than';
+                        }
+
+                        if ($hasIssue) {
+                            $benefitLabel = ucwords(str_replace('_', ' ', $benefit));
+                            $message = "Number covered for $benefitLabel is $desc {$minPercentage}% " .
                                 "of the similar number of faculty in form 2 ({$contractLabel} {$rankLabel}).";
                             $code = "{ft_benefit_min_{$benefit}_{$rank}_{$contract}";
                             $this->addIssue($message, $code, 3);
@@ -182,6 +202,62 @@ class FCSValidation
                 }
             }
         }
+    }
+
+    public function validateBenefitsVsSalaries()
+    {
+        $minPercent = 5;
+        $maxPercent = 50;
+
+        if ($this->observation->get('institution_aggregate_benefits') == 'No') {
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getRanks() as $rank => $rankLabel) {
+                    // Total salaries
+                    $salaryTotal = $this->getSalaryTotalForRankAndContract($rank, $contract);
+
+                    // Get the total cost of benefits
+                    $benefitTotalCol = "ft_total_benefits_expenditure_{$rank}_{$contract}";
+                    $benefitTotal = $this->observation->get($benefitTotalCol);
+
+
+                    if ($salaryTotal && $benefitTotal) {
+                        $benefitsAsPercentOfSalary = ($benefitTotal / $salaryTotal) * 100;
+
+                        // Lower than min?
+                        if ($benefitsAsPercentOfSalary < $minPercent) {
+                            $message = "Total benefit expenditure is less than $minPercent% for $rankLabel $contractLabel.";
+                            $code = "total_benefit_exp_min_perc_salaries_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, 3);
+                        }
+
+                        // Higher than max?
+                        if ($benefitsAsPercentOfSalary > $maxPercent) {
+                            $message = "Total benefit expenditure is greater than $maxPercent% for $rankLabel $contractLabel.";
+                            $code = "total_benefit_exp_max_perc_salaries_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, 3);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    protected function getSalaryTotalForRankAndContract($rank, $contract)
+    {
+        $maleCol = "ft_male_{$rank}_salaries_{$contract}";
+        $femaleCol = "ft_female_{$rank}_salaries_{$contract}";
+        $form2Total = $this->observation->get($maleCol) + $this->observation->get($femaleCol);
+
+        return $form2Total;
+    }
+
+    protected function getFacultyTotalForRankAndContract($rank, $contract)
+    {
+        $maleCol = "ft_male_{$rank}_number_{$contract}";
+        $femaleCol = "ft_female_{$rank}_number_{$contract}";
+        $form2Total = $this->observation->get($maleCol) + $this->observation->get($femaleCol);
+
+        return $form2Total;
     }
 
     protected function getForm2Fields($gender = 'male')
