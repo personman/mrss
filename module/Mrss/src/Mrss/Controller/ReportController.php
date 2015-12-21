@@ -545,23 +545,25 @@ class ReportController extends AbstractActionController
                         ->findOneByCollegeAndName($college, $name);
 
                     if ($existingGroup) {
-                        $peerGroup->setId($existingGroup->getId());
-                        $peerGroup->setStudy($this->currentStudy());
-                        $this->getPeerGroupModel()->getEntityManager()
-                            ->merge($peerGroup);
+                        // Don't modify existing groups
+                        //$peerGroup->setId($existingGroup->getId());
+                        //$peerGroup->setStudy($this->currentStudy());
+                        //$this->getPeerGroupModel()->getEntityManager()
+                        //    ->merge($peerGroup);
                     } else {
                         //$groupToSave = clone $peerGroup;
                         $peerGroup->setStudy($this->currentStudy());
                         $this->getPeerGroupModel()->save($peerGroup);
+
+                        $this->getSessionContainer()->peerGroupName = $peerGroup->getName();
+
+                        $this->getPeerGroupModel()->getEntityManager()->flush();
+
+                        $this->flashMessenger()->addSuccessMessage(
+                            "The peer group $name has been saved."
+                        );
                     }
 
-                    $this->getSessionContainer()->peerGroupName = $peerGroup->getName();
-
-                    $this->getPeerGroupModel()->getEntityManager()->flush();
-
-                    $this->flashMessenger()->addSuccessMessage(
-                        "The peer group $name has been saved."
-                    );
                 }
 
                 //$this->savePeerGroupToSession($peerGroup);

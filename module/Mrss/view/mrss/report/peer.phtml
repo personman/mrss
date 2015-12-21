@@ -1,6 +1,6 @@
 <?php /** @var \Mrss\Entity\PeerGroup $peerGroup */ ?>
 
-<?= $this->headLink()->appendStylesheet('/css/peer-comparison.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/peer-comparison.css?v=2') ?>
 
 <?php
 $this->headLink()->appendStylesheet('/css/chosen.min.css');
@@ -11,7 +11,7 @@ $this->headScript()->appendFile(
 );
 
 $this->headScript()->appendFile(
-    '/js/peer-comparison.js?v=2',
+    '/js/peer-comparison.js?v=3',
     'text/javascript'
 );
 

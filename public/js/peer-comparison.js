@@ -211,5 +211,23 @@ function selectPeerGroup(group)
 
     // Put the name in the name field
     $('#controls-name input').val(group.name)
+
+    // Hide the peer selection element and peer group name element
+    $('#control-group-peers, #control-group-name').hide()
+
+    // Show a message about the selected peer group
+    var newControls = '<div class="control-group" id="control-group-selected-name">' +
+    '<label class="control-label">Selected Peer Group</label>' +
+    '<div class="controls">' + group.name + ' <span class="deleteLink">' +
+    '<a href="#">[change]</a></span></div>' +
+    '</div></div>';
+    $('#control-group-peers').before(newControls)
+
+    // Handle the change button
+    $('#control-group-selected-name a').click(function() {
+        $('#control-group-selected-name').remove()
+        $('#control-group-peers, #control-group-name').show()
+        $('#controls-name input').val('')
+    })
 }
 
