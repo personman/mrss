@@ -23,9 +23,13 @@
     width: 300px;
 }
 
-#savedPeerGroups .deleteLink a {
+#peerComparison .deleteLink a {
     font-size: 80%;
     color: black;
+}
+
+#control-group-selected-name p {
+
 }
 
 /* Indicia: */
