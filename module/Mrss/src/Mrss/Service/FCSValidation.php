@@ -192,7 +192,7 @@ class FCSValidation
                         }
 
                         if ($hasIssue) {
-                            $benefitLabel = ucwords(str_replace('_', ' ', $benefit));
+                            $benefitLabel = $this->getBenefitLabel($benefit);
                             $message = "Number covered for $benefitLabel is $desc {$minPercentage}% " .
                                 "of the similar number of faculty in form 2 ({$contractLabel} {$rankLabel}).";
                             $code = "{ft_benefit_min_{$benefit}_{$rank}_{$contract}";
@@ -202,6 +202,11 @@ class FCSValidation
                 }
             }
         }
+    }
+
+    protected function getBenefitLabel($benefit)
+    {
+        return ucwords(str_replace('_', ' ', $benefit));
     }
 
     public function validateBenefitsVsSalaries()
@@ -234,6 +239,58 @@ class FCSValidation
                         if ($benefitsAsPercentOfSalary > $maxPercent) {
                             $message = "Total benefit expenditure is greater than $maxPercent% for $rankLabel $contractLabel.";
                             $code = "total_benefit_exp_max_perc_salaries_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, 3);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Rules 140-146
+    public function validateSpecificBenefitCosts()
+    {
+        // If the rank/contract has fewer than x faculty, skip this validation rule
+        $facultyCountMin = 10;
+
+        $benefitRules = array(
+            'retirement' => array(
+                'min' => 5,
+                'max' => 25
+            )
+        );
+
+        if ($this->observation->get('institution_aggregate_benefits') == 'No') {
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getRanks() as $rank => $rankLabel) {
+
+                    $salaryTotal = $this->getSalaryTotalForRankAndContract($rank, $contract);
+                    $facultyCount = $this->getFacultyTotalForRankAndContract($rank, $contract);
+
+                    if ($facultyCount < $facultyCountMin || !$salaryTotal) {
+                        continue;
+                    }
+
+                    foreach ($benefitRules as $benefit => $rules) {
+                        $benefitCostKey = "ft_{$benefit}_expenditure_{$rank}_{$contract}";
+                        $benefitCost = $this->observation->get($benefitCostKey);
+                        $benefitLabel = $this->getBenefitLabel($benefit);
+
+                        $benefitPercent = ($benefitCost / $salaryTotal) * 100;
+
+                        // Compare to min
+                        if ($benefitPercent < $rules['min']) {
+                            $min = $rules['min'];
+                            $message = "Expenditure for $benefitLabel is less than $min% of salary for $rankLabel $contractLabel.";
+                            $code = "{$benefit}_expenditure_min_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, 3);
+                        }
+
+                        // Compare to max
+                        if ($benefitPercent > $rules['max']) {
+                            $max = $rules['max'];
+                            $message = "Expenditure for $benefitLabel is more than $max% of salary for $rankLabel $contractLabel.";
+                            $code = "{$benefit}_expenditure_max_{$rank}_{$contract}";
                             $this->addIssue($message, $code, 3);
                         }
                     }
