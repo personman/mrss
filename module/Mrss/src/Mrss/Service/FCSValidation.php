@@ -257,6 +257,24 @@ class FCSValidation
             'retirement' => array(
                 'min' => 5,
                 'max' => 25
+            ),
+            'medical' => array(
+                'max' => 30,
+            ),
+            'combined_medical_dental' => array(
+                'max' => 30,
+            ),
+            'tuition' => array(
+                'max' => 25
+            ),
+            'worker_comp' => array(
+                'max' => 2
+            ),
+            'unemployment' => array(
+                'max' => 3
+            ),
+            'fica' => array(
+                'max' => 7.65
             )
         );
 
@@ -271,15 +289,27 @@ class FCSValidation
                         continue;
                     }
 
+
                     foreach ($benefitRules as $benefit => $rules) {
-                        $benefitCostKey = "ft_{$benefit}_expenditure_{$rank}_{$contract}";
+                        // Handle long dbColumns
+                        if ($benefit == 'combined_medical_dental') {
+                            $shortenedRank = str_replace(
+                                array('associate_professor', 'assistant_professor'),
+                                array('associate_prof', 'assistant_prof'),
+                                $rank
+                            );
+                        } else {
+                            $shortenedRank = $rank;
+                        }
+
+                        $benefitCostKey = "ft_{$benefit}_expenditure_{$shortenedRank}_{$contract}";
                         $benefitCost = $this->observation->get($benefitCostKey);
                         $benefitLabel = $this->getBenefitLabel($benefit);
 
                         $benefitPercent = ($benefitCost / $salaryTotal) * 100;
 
                         // Compare to min
-                        if ($benefitPercent < $rules['min']) {
+                        if (!empty($rules['min']) && $benefitPercent < $rules['min']) {
                             $min = $rules['min'];
                             $message = "Expenditure for $benefitLabel is less than $min% of salary for $rankLabel $contractLabel.";
                             $code = "{$benefit}_expenditure_min_{$rank}_{$contract}";
@@ -287,7 +317,7 @@ class FCSValidation
                         }
 
                         // Compare to max
-                        if ($benefitPercent > $rules['max']) {
+                        if (!empty($rules['max']) && $benefitPercent > $rules['max']) {
                             $max = $rules['max'];
                             $message = "Expenditure for $benefitLabel is more than $max% of salary for $rankLabel $contractLabel.";
                             $code = "{$benefit}_expenditure_max_{$rank}_{$contract}";

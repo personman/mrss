@@ -1863,6 +1863,20 @@ return array(
                     )
                 )
             ),
+            // AAUP
+            'consultation' => array(
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/consultation',
+                    'defaults' => array(
+                        'controller' => 'PhlyContact\Controller\Contact',
+                        'action' => 'index',
+                        'subject' => 'Free Consultation',
+                        'body' => "I would like to schedule a free FCS consultation on (date and time)"
+                    )
+                )
+            ),
             // Workforce
             'free-webinar' => array(
                 'type' => 'Segment',
