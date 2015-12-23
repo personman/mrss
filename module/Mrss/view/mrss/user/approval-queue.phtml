@@ -1,6 +1,13 @@
 <?php /** @var \Mrss\Entity\User[] $users */ ?>
 <h1>User Approval Queue</h1>
 
+<?php if (empty($users)): ?>
+    <p>
+        No pending users.
+    </p>
+
+<?php else: ?>
+
 <form action="" class="form-horizontal" method="post">
     <table class="table">
         <thead>
@@ -42,3 +49,5 @@
         </div>
     </fieldset>
 </form>
+
+<?php endif ?>

@@ -38,8 +38,14 @@ class UserController extends AbstractActionController
             $user->setPassword('nothing');
             $user->setRole('data');
 
-            // @todo: decide how to handle this for AAUP
-            $user->setState(1);
+            $defaultState = $this->getStudyConfig()->default_user_state;
+
+            // Admin-created users are always approved.
+            if ($this->isAllowed('adminMenu', 'view')) {
+                $defaultState = 1;
+            }
+
+            $user->setState($defaultState);
 
             if ($collegeId = $this->params('college')) {
                 $college = $collegeModel->find($collegeId);
@@ -642,5 +648,12 @@ class UserController extends AbstractActionController
         }
 
         return $this->systemAdminSessionContainer;
+    }
+
+    protected function getStudyConfig()
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
     }
 }

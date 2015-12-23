@@ -149,6 +149,7 @@ a.login-btn, #headerLoginForm button {
 	padding: 6px;
 }
 
+
 /** Tabs **/
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
 	background-color: #262981;

@@ -16,6 +16,7 @@ return array(
     'css_print' => null,
     'validation_class' => 'FCSValidation',
 	'header_title' => 'Faculty<br>Compensation<br>Survey',
+    'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',
     'copyright' => "1915 - " . date('Y') . " American Association of University Professors",
     'footerLogo' => '',

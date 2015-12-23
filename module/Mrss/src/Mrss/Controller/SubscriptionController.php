@@ -999,9 +999,16 @@ class SubscriptionController extends AbstractActionController
         $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
     }
 
-    protected function notifyApprover(User $user)
+    protected function getStudyConfig()
     {
         $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
+    }
+
+    protected function notifyApprover(User $user)
+    {
+        $studyConfig = $this->getStudyConfig();
         $approverEmail = $studyConfig->approver_email;
         $fromEmail = $studyConfig->from_email;
 
