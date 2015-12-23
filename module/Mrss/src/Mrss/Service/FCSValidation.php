@@ -148,6 +148,115 @@ class FCSValidation
         }
     }
 
+    // Rules 31-35
+    public function validateAverageSalaries()
+    {
+        $minFaculty = 3;
+        $rankMaxes = $this->getAverageSalaryMax();
+
+        if (count($rankMaxes) == 0) {
+            return;
+        }
+
+        foreach ($this->getContracts(false) as $contract => $contractLabel) {
+            foreach ($this->getRanks() as $rank => $rankLabel) {
+                foreach ($this->getGenders() as $gender => $genderLabel) {
+                    $facultyCountKey = "ft_{$gender}_{$rank}_number_{$contract}";
+                    $facultyCount = $this->observation->get($facultyCountKey);
+
+                    if ($facultyCount < $minFaculty) {
+                        continue;
+                    }
+
+                    // Get the average salary
+                    $averageKey = "ft_average_{$gender}_{$rank}_salary_{$contract}";
+                    $average = $this->observation->get($averageKey);
+                    //pr($rank); pr($gender); pr($average);
+
+                    // Get the max
+                    if ($max = $rankMaxes[$rank]) {
+                        // Now the comparison
+                        if ($average > $max) {
+                            $maxFormatted = '$' . number_format($max);
+                            $message = "The average salary for $genderLabel $rankLabel $contractLabel is greater than $maxFormatted.";
+                            $code = "average_salary_max_{$gender}_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, 2);
+                        }
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    public function getAverageSalaryMax()
+    {
+        $maxes = array();
+
+        if ($category = $this->observation->get('institution_aaup_category')) {
+            $config = $this->getAverageSalaryMaxConfig();
+            if (!empty($config[$category])) {
+                $maxes = $config[$category];
+            }
+        }
+
+        return $maxes;
+    }
+
+    public function getAverageSalaryMaxConfig()
+    {
+        $maxInfo = array(
+            // Cat I
+            "Doctoral" => array(
+                'professor' => 250000,
+                'associate_professor' => 175000,
+                'assistant_professor' => 150000,
+                'instructor' => 100000,
+                'lecturer' => 100000,
+                'no_rank' => 100000
+            ),
+            // Cat IIA
+            "Master's" => array(
+                'professor' => 175000,
+                'associate_professor' => 150000,
+                'assistant_professor' => 100000,
+                'instructor' => 100000,
+                'lecturer' => 100000,
+                'no_rank' => 100000
+            ),
+            // Cat IIB
+            "Baccalaureate" => array(
+                'professor' => 175000,
+                'associate_professor' => 150000,
+                'assistant_professor' => 100000,
+                'instructor' => 150000,
+                'lecturer' => 150000,
+                'no_rank' => 100000
+            ),
+            // Cat III
+            "Associate's with Ranks" => array(
+                'professor' => 150000,
+                'associate_professor' => 100000,
+                'assistant_professor' => 100000,
+                'instructor' => 100000,
+                'lecturer' => 100000,
+                'no_rank' => 100000
+            ),
+            // Cat IV
+            "Associate's without Ranks" => array(
+                'professor' => 100000,
+                'associate_professor' => 100000,
+                'assistant_professor' => 100000,
+                'instructor' => 100000,
+                'lecturer' => 100000,
+                'no_rank' => 100000
+            )
+        );
+
+        return $maxInfo;
+    }
+
     public function validateBenefitPercentages()
     {
         $benefitsToCheck = array(
@@ -246,6 +355,41 @@ class FCSValidation
             }
         }
     }
+
+    // Rule 112
+    public function validateBenefitNumberCovered()
+    {
+        foreach ($this->getBenefits() as $benefit => $benefitLabel) {
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getRanks() as $rank => $rankLabel) {
+                    // First, sum up the male and female counts from form 2
+                    $form2Total = $this->getFacultyTotalForRankAndContract($rank, $contract);
+
+                    // Have they reported faculty count on form 2 yet?
+                    if (!$form2Total) {
+                        continue;
+                    }
+
+                    // Now how many of those folks get the benefit?
+                    $benefitCol = "ft_{$benefit}_covered_{$rank}_{$contract}";
+                    $benefitCount = $this->observation->get($benefitCol);
+
+                    // Skip if they haven't reported it yet
+                    if (!$benefitCount) {
+                        continue;
+                    }
+
+                    // Check to see if the number covered is greater than the number with salary
+                    if ($benefitCount > $form2Total) {
+                        $message = "The number covered for $benefitLabel is greater than the total number of faculty in Form 2: $rankLabel, $contractLabel";
+                        $code = "number_covered_greater_{$benefit}_{$rank}_{$contract}";
+                        $this->addIssue($message, $code, 3);
+                    }
+                }
+            }
+        }
+    }
+
 
     // Rules 140-146
     public function validateSpecificBenefitCosts()
@@ -484,5 +628,22 @@ class FCSValidation
             'male' => 'Male',
             'female' => 'Female'
         );
+    }
+
+    protected function getBenefits()
+    {
+        $benefits = array(
+            'retirement' => 'Retirement',
+            'medical' => 'Medical',
+            'combined_medical_dental' => 'Combined Medical w/ Dental',
+            'tuition' => 'Tuition',
+            'fica' => 'FICA',
+            'unemployment' => 'Unemployment',
+            'group_life' => 'Group Life',
+            'worker_comp' => "Worker's Comp",
+            'other' => 'Other'
+        );
+
+        return $benefits;
     }
 }
