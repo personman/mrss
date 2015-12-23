@@ -148,6 +148,124 @@ class FCSValidation
         }
     }
 
+    // Rule 24. Check for cat IV institutions that report data in wrong ranks
+    public function validateCategoryIV()
+    {
+        $categoryToCheck = "Associate's without Ranks";
+        $ranksToCheck = array(
+            'professor',
+            'associate_professor',
+            'assistant_professor'
+        );
+
+        if ($category = $this->observation->get('institution_aaup_category')) {
+            if ($category == $categoryToCheck) {
+
+                $total = 0;
+                foreach ($ranksToCheck as $rank) {
+                    foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                        $total += floatval($this->getFacultyTotalForRankAndContract($rank, $contract));
+                    }
+                }
+
+                if ($total > 0) {
+                    $message = "By definition, data for category IV ($categoryToCheck) institutions must " .
+                    "be reported in the No Rank rows and columns.";
+                    $code = "cat_4_no_rank";
+                    $this->addIssue($message, $code, 2);
+                }
+
+            }
+        }
+    }
+
+    // Rule 50
+    public function validateAssociateVsProfessorSalaries()
+    {
+        $percentDifferenceAllowed = 10;
+        $minimumFaculty = 5;
+
+        foreach ($this->getContracts(false) as $contract => $contractLabel) {
+            foreach ($this->getGenders() as $gender => $genderLabel) {
+                // Make sure we have enough faculty to even validate
+                $associateFacultyKey = "ft_{$gender}_associate_professor_number_{$contract}";
+                $associateFaculty = $this->observation->get($associateFacultyKey);
+
+                $professorFacultyKey = "ft_{$gender}_professor_number_{$contract}";
+                $professorFaculty = $this->observation->get($professorFacultyKey);
+
+                if ($associateFaculty < $minimumFaculty || $professorFaculty < $minimumFaculty) {
+                    continue;
+                }
+
+                // Look up the average salaries
+                $avgAssociateKey = "ft_average_{$gender}_associate_professor_salary_{$contract}";
+                $avgAssociateSalary = $this->observation->get($avgAssociateKey);
+
+                $avgProfKey = "ft_average_{$gender}_professor_salary_{$contract}";
+                $avgProfSalary = $this->observation->get($avgProfKey);
+
+                // Is the associate average bigger?
+                if ($avgAssociateSalary && $avgProfSalary && $avgAssociateSalary > $avgProfSalary) {
+                    // By how much?
+                    $percentDifference = ($avgAssociateSalary - $avgProfSalary) / $avgProfSalary * 100;
+
+                    if ($percentDifference >= $percentDifferenceAllowed) {
+                        $message = "The average salary for Associate ($genderLabel, $contractLabel) " .
+                            "is at least {$percentDifferenceAllowed}% greater than the average for Professor.";
+
+                        $code = "associate_vs_professor_{$gender}_{$contract}";
+                        $this->addIssue($message, $code, 2);
+                    }
+                }
+            }
+        }
+    }
+
+    // Rule 51
+    public function validateAssistantVsAssociateSalaries()
+    {
+        $percentDifferenceAllowed = 10;
+        $minimumFaculty = 5;
+
+        foreach ($this->getContracts(false) as $contract => $contractLabel) {
+            foreach ($this->getGenders() as $gender => $genderLabel) {
+                // Make sure we have enough faculty to even validate
+                $associateFacultyKey = "ft_{$gender}_associate_professor_number_{$contract}";
+                $associateFaculty = $this->observation->get($associateFacultyKey);
+
+                $assistantFacultyKey = "ft_{$gender}_assistant_professor_number_{$contract}";
+                $assistantFaculty = $this->observation->get($assistantFacultyKey);
+
+                if ($associateFaculty < $minimumFaculty || $assistantFaculty < $minimumFaculty) {
+                    continue;
+                }
+
+                // Look up the average salaries
+                $avgAssociateKey = "ft_average_{$gender}_associate_professor_salary_{$contract}";
+                $avgAssociateSalary = $this->observation->get($avgAssociateKey);
+
+                $avgAssistantKey = "ft_average_{$gender}_assistant_professor_salary_{$contract}";
+                $avgAssistantSalary = $this->observation->get($avgAssistantKey);
+
+                // Is the assistant average bigger?
+                if ($avgAssociateSalary && $avgAssistantSalary && $avgAssistantSalary > $avgAssociateSalary) {
+                    // By how much?
+                    $percentDifference = ($avgAssistantSalary - $avgAssociateSalary) / $avgAssociateSalary * 100;
+
+                    if ($percentDifference >= $percentDifferenceAllowed) {
+                        $message = "The average salary for Assistant ($genderLabel, $contractLabel) " .
+                            "is at least {$percentDifferenceAllowed}% greater than the average for Associate.";
+
+                        $code = "assistant_vs_associate_{$gender}_{$contract}";
+                        $this->addIssue($message, $code, 2);
+                    }
+                }
+            }
+        }
+    }
+
+
     // Rules 31-35
     public function validateAverageSalaries()
     {
@@ -255,6 +373,97 @@ class FCSValidation
         );
 
         return $maxInfo;
+    }
+
+    // Rule 60 - male vs female salaries
+    public function validateMaleVsFemaleSalaries()
+    {
+        $minFaculty = 5;
+        $allowedPercentDifference = 35;
+
+        foreach ($this->getContracts(false) as $contract => $contractLabel) {
+            foreach ($this->getRanks() as $rank => $rankLabel) {
+                $maleFacultyCountKey = "ft_male_{$rank}_number_{$contract}";
+                $maleFacultyCount = $this->observation->get($maleFacultyCountKey);
+
+                $femaleFacultyCountKey = "ft_female_{$rank}_number_{$contract}";
+                $femaleFacultyCount = $this->observation->get($femaleFacultyCountKey);
+
+                if ($maleFacultyCount < $minFaculty || $femaleFacultyCount < $minFaculty) {
+                    continue;
+                }
+
+                // Get the average salaries
+                $maleAverageKey = "ft_average_male_{$rank}_salary_{$contract}";
+                $maleAverage = $this->observation->get($maleAverageKey);
+
+                $femaleAverageKey = "ft_average_female_{$rank}_salary_{$contract}";
+                $femaleAverage = $this->observation->get($femaleAverageKey);
+
+                if ($maleAverage > $femaleAverage) {
+                    $larger = $maleAverage;
+                    $smaller = $femaleAverage;
+                } else {
+                    $larger = $femaleAverage;
+                    $smaller = $maleAverage;
+                }
+
+                // What's the percentage difference?
+                $percentDifference = ($larger - $smaller) / $smaller * 100;
+
+                // Is it too big?
+                if ($percentDifference > $allowedPercentDifference) {
+                    $message = "The average salaries of men and women differ by " .
+                        "more than {$allowedPercentDifference}% ($rankLabel $contractLabel).";
+                    $code = "avg_salary_men_vs_women_{$rank}_{$contract}";
+                    $this->addIssue($message, $code, 2);
+                }
+            }
+        }
+    }
+    
+    // Rule 51 - Just make sure they put SOMETHING in form 3
+    public function validateBenefitFormNotSkipped()
+    {
+        $form3Empty = false;
+        $aggregate = $this->observation->get('institution_aggregate_benefits');
+
+        if ($aggregate == 'No') {
+            $total = 0;
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getRanks() as $rank => $rankLabel) {
+                    foreach ($this->getBenefits() as $benefit => $benefitLabel) {
+                        $facultyKey = "ft_{$benefit}_covered_{$rank}_{$contract}";
+                        $faculty = $this->observation->get($facultyKey);
+                        $total += $faculty;
+                    }
+                }
+            }
+
+            if ($total == 0) {
+                $form3Empty = true;
+            }
+
+        } elseif ($aggregate == 'Yes') {
+            $total = 0;
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getBenefits() as $benefit => $benefitLabel) {
+                    $facultyKey = "ft_{$benefit}_covered_no_diff_{$contract}";
+                    $faculty = $this->observation->get($facultyKey);
+                    $total += $faculty;
+                }
+            }
+
+            if ($total == 0) {
+                $form3Empty = true;
+            }
+        }
+
+        if ($form3Empty) {
+            $message = "There are no data for Form 3: Benefits";
+            $code = "benefits_form_empty";
+            $this->addIssue($message, $code, 3);
+        }
     }
 
     public function validateBenefitPercentages()
