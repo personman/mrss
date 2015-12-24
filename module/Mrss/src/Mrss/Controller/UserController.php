@@ -181,20 +181,43 @@ class UserController extends AbstractActionController
         $mailer = $this->getServiceLocator()->get('mail.transport');
         $renderer = $this->getServiceLocator()->get('ViewRenderer');
 
-        $params = array(
-            'study' => $study,
-            'key' => $this->getPasswordResetKey($user->getId()),
-            'userId' => $user->getId()
+        $oneTimeLogin = $renderer->serverUrl(
+            $renderer->url('zfcuser/resetpassword', array(
+                'userId' => $user->getId(),
+                'token' => $this->getPasswordResetKey($user->getId()))
+            )
         );
 
-        $content = $renderer->render('mrss/email/added-user', $params);
+        $params = array(
+            //'study' => $study,
+            'fullName' => $user->getFullName(),
+            'userId' => $user->getId(),
+            'oneTimeLogin' => $oneTimeLogin,
+            'year' => $study->getCurrentYear(),
+            'studyUrl' => $renderer->serverUrl('/'),
+            'studyName' => $study->getDescription(),
+            'resetUrl' => $renderer->serverUrl('/reset-password'),
+            'contactUrl' => $renderer->serverUrl('/contact')
+        );
+
+        //prd($params);
+
+        $emailTemplate = 'mrss/email/added-user';
+        if ($configTemplate = $this->getStudyConfig()->welcome_email) {
+            $emailTemplate = 'mrss/email/' . $configTemplate;
+        }
+
+        $content = $renderer->render($emailTemplate, $params);
+
+        $fromEmail = $this->getStudyConfig()->from_email;
+        //echo $content; die;
 
         $message = new Message();
         $message->setTo($user->getEmail());
         $message->setSubject("Welcome to " . $study->getName());
-        $message->setFrom('no-reply@jccc.edu');
+        $message->setFrom($fromEmail);
         //$message->addBcc('michelletaylor@jccc.edu');
-        $message->addBcc('dfergu15@jccc.edu');
+        //$message->addBcc('dfergu15@jccc.edu');
 
         // make a header as html
         $html = new MimePart($content);
@@ -593,8 +616,8 @@ class UserController extends AbstractActionController
                     $user->setState($newState);
                     $this->getUserModel()->save($user);
 
-                    // @todo: send welcome email
-                    //$this->sendPasswordResetEmail($user);
+                    $this->sendWelcomeEmail($user);
+
                     $count++;
                 }
             }

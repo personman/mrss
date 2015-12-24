@@ -1,6 +1,18 @@
 Dear <?= $fullName ?>,<br>
 <br>
-Thank you very much for your participation in the <?= $year ?> <a href="<?= $studyUrl ?>"><?= $studyName ?></a>. Your username for the AAUP Faculty Compensation Survey is your email address. Anytime you need a new password you can reset simply by following the link here: <a href="<?= $resetUrl ?>"><?= $resetUrl ?></a><br>
+Thank you very much for your participation in the <?= $year ?> <a href="<?= $this->studyUrl ?>"><?= $studyName ?></a>. Your username for the AAUP Faculty Compensation Survey is your email address.<br>
+<br>
+
+<?php if (empty($oneTimeLogin)): ?>
+Anytime you need a new password you can reset simply by following the link here:<br>
+<br>
+<a href="<?= $resetUrl ?>"><?= $resetUrl ?></a><br>
+<?php else: ?>
+Follow the link below to set your password:<br>
+<br>
+<a href="<?= $oneTimeLogin ?>"><?= $oneTimeLogin ?></a><br>
+
+<?php endif ?>
 <br>
 If you are interested in purchasing peer compensation reports, complete datasets, or obtaining full access to the Faculty Compensation Survey Results Portal, please contact aaupfcs@aaup.org.<br>
 <br>
