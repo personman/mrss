@@ -679,6 +679,17 @@ class Module
 
                     return $service;
                 },
+                'service.import.users' => function ($sm) {
+                    $service = new Service\Import\User();
+
+                    $collegeModel = $sm->get('model.college');
+                    $service->setCollegeModel($collegeModel);
+
+                    $userModel = $sm->get('model.user');
+                    $service->setUserModel($userModel);
+
+                    return $service;
+                },
                 'service.formBuilder' => function ($sm) {
                     $service = new Service\FormBuilder;
 

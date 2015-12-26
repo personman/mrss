@@ -472,6 +472,39 @@ class UserController extends AbstractActionController
         $this->getServiceLocator()->get('em')->flush();
     }
 
+    public function importAction()
+    {
+        $service = $this->getServiceLocator()->get('service.import.users');
+        $form = $service->getForm();
+
+        // Handle the form
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $this->longRunningScript();
+
+            $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $filename = $data['file']['tmp_name'];
+
+                $stats = $service->import($filename);
+
+                $this->flashMessenger()->addSuccessMessage($stats);
+                return $this->redirect()->toRoute('users/import');
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
     /**
      * Generate a one-time login link for all users that haven't logged in.
      * Export to Excel.

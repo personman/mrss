@@ -1379,6 +1379,15 @@ return array(
                                 'org' => 'data-entry'
                             )
                         )
+                    ),
+                    'import' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import',
+                            'defaults' => array(
+                                'action' => 'import'
+                            )
+                        )
                     )
                 )
             ),
