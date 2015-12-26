@@ -13,6 +13,8 @@ class Import
     /** @var PHPExcel $excel */
     protected $excel;
 
+    protected $messages;
+
     public function getForm()
     {
         $form = new ImportData('import');
@@ -45,7 +47,7 @@ class Import
         $this->flush();
 
         $elapsed = round(microtime(true) - $start, 1);
-        $stats = "$count records processed in $elapsed seconds.";
+        $stats = "$count records processed in $elapsed seconds. " . implode('<br> ', $this->messages);
 
         return $stats;
     }
@@ -71,5 +73,10 @@ class Import
         $excel = PHPExcel_IOFactory::load($filename);
 
         return $excel;
+    }
+
+    protected function addMessage($message)
+    {
+        $this->messages[] = $message;
     }
 }

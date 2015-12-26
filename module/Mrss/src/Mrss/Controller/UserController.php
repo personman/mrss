@@ -481,7 +481,7 @@ class UserController extends AbstractActionController
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $this->longRunningScript();
+            takeYourTime();
 
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),

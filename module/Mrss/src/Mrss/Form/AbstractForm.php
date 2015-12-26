@@ -31,7 +31,7 @@ class AbstractForm extends Form
     ) {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
-        $buttons->setAttribute('class', 'well well-small');
+        $buttons->setAttribute('class', 'well well-small submit-fieldset');
 
         // Add the save button
         $save = new Element\Submit('submit');

@@ -688,6 +688,10 @@ class Module
                     $userModel = $sm->get('model.user');
                     $service->setUserModel($userModel);
 
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+                    $service->setStudy($currentStudy);
+
                     return $service;
                 },
                 'service.formBuilder' => function ($sm) {
