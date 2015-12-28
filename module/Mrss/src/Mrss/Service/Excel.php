@@ -316,18 +316,36 @@ class Excel
 
     public function download($spreadsheet)
     {
-        // redirect output to client browser
-        header(
-            'Content-Type: '.
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header('Content-Disposition: attachment;filename="data-export.xlsx"');
-        header('Cache-Control: max-age=0');
+        ob_end_clean();
 
-        $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
-        $objWriter->save('php://output');
+        if (true) {
+            // redirect output to client browser
+            header(
+                'Content-Type: '.
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            );
+            header('Content-Disposition: attachment;filename="data-export.xlsx"');
+            header('Cache-Control: max-age=0');
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
+            //$objWriter->setOffice2003Compatibility(true);
+            $objWriter->save('php://output');
+
+        } else {
+            $objWriter = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel5');
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="item_list.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter->save('php://output');
+        }
 
         die;
+    }
+
+    public function save($spreadsheet)
+    {
+        $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
+        $objWriter->save('test-export.xlsx');
     }
 
     /**
@@ -688,7 +706,7 @@ class Excel
         // Discard the generic version
         unset($spreadsheet);
 
-        // Open the template Excel  file (this takes some time)
+        // Open the template Excel file (this takes some time)
         $filename = 'data/imports/aaup-export.xlsx';
         $spreadsheet = PHPExcel_IOFactory::load($filename);
 
@@ -698,6 +716,8 @@ class Excel
         $spreadsheet->setActiveSheetIndex(0);
 
         $this->download($spreadsheet);
+        //$this->save($spreadsheet);
+        //die('saved');
     }
 
     protected function customizeForMrss(PHPExcel $spreadsheet, Subscription $subscription)
