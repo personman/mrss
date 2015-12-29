@@ -600,6 +600,77 @@ class FCSValidation
     }
 
 
+    // Rule 121, 123-124: Make sure some data are reported for medical or combined
+    public function validateMedicalBenefit()
+    {
+        $medicalTotal = 0;
+        $combinedTotal = 0;
+        $retirementTotal = 0;
+
+        $form = 3;
+
+        if ($this->observation->get('institution_aggregate_benefits') == 'No') {
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getRanks() as $rank => $rankLabel) {
+                    $medicalKey = "ft_medical_expenditure_{$rank}_{$contract}";
+                    $retirementKey = "ft_retirement_expenditure_{$rank}_{$contract}";
+
+                    $shortRank = $this->shortenRank($rank);
+                    $combinedKey = "ft_combined_medical_dental_expenditure_{$shortRank}_{$contract}";
+
+                    $medical = $this->observation->get($medicalKey);
+                    $medicalTotal += floatval($medical);
+
+                    $combined = $this->observation->get($combinedKey);
+                    $combinedTotal += floatval($combined);
+
+                    $retirement = $this->observation->get($retirementKey);
+                    $retirementTotal += floatval($retirement);
+                }
+            }
+        } else {
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                $rank = 'no_diff';
+                $medicalKey = "ft_medical_expenditure_{$rank}_{$contract}";
+                $retirementKey = "ft_retirement_expenditure_{$rank}_{$contract}";
+
+                $shortRank = $this->shortenRank($rank);
+                $combinedKey = "ft_combined_medical_dental_expenditure_{$shortRank}_{$contract}";
+
+                $medical = $this->observation->get($medicalKey);
+                $medicalTotal += floatval($medical);
+
+                $combined = $this->observation->get($combinedKey);
+                $combinedTotal += floatval($combined);
+
+                $retirement = $this->observation->get($retirementKey);
+                $retirementTotal += floatval($retirement);
+            }
+        }
+
+        // First, check to see if they're both empty
+        if ($medicalTotal + $combinedTotal == 0) {
+            $message = "There are no data reported for Medical benefit.";
+            $code = "no_medical";
+            $this->addIssue($message, $code, $form);
+        }
+
+        // Now check to see if they're both populated
+        if ($medicalTotal && $combinedTotal) {
+            $message = "Data are reported for both Medical and Combined Medical-Dental benefit items. " .
+                "Only one of these should be reported; please see instructions.";
+            $code = "both_medical";
+            $this->addIssue($message, $code, $form);
+        }
+
+        // Check retirement
+        if ($retirementTotal == 0) {
+            $message = "There are no data reported for Retirement benefit.";
+            $code = "no_retirement";
+            $this->addIssue($message, $code, $form);
+        }
+    }
+
     // Rules 140-146
     public function validateSpecificBenefitCosts()
     {
@@ -646,11 +717,7 @@ class FCSValidation
                     foreach ($benefitRules as $benefit => $rules) {
                         // Handle long dbColumns
                         if ($benefit == 'combined_medical_dental') {
-                            $shortenedRank = str_replace(
-                                array('associate_professor', 'assistant_professor'),
-                                array('associate_prof', 'assistant_prof'),
-                                $rank
-                            );
+                            $shortenedRank = $this->shortenRank($rank);
                         } else {
                             $shortenedRank = $rank;
                         }
@@ -680,6 +747,116 @@ class FCSValidation
                 }
             }
         }
+    }
+
+    // Rule 150-151
+    public function validateBenefitCountAndDollars()
+    {
+        $form = 3;
+
+        if ($this->observation->get('institution_aggregate_benefits') == 'No') {
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getRanks() as $rank => $rankLabel) {
+                    foreach ($this->getBenefits() as $benefit => $benefitLabel) {
+                        $facultyKey = "ft_{$benefit}_covered_{$rank}_{$contract}";
+                        $faculty = floatval($this->observation->get($facultyKey));
+
+                        if ($benefit == 'combined_medical_dental') {
+                            $shortenedRank = $this->shortenRank($rank);
+                        } else {
+                            $shortenedRank = $rank;
+                        }
+
+                        $dollarKey = "ft_{$benefit}_expenditure_{$shortenedRank}_{$contract}";
+                        $dollars = floatval($this->observation->get($dollarKey));
+
+                        // Now see if one is filled out and the other is missing
+                        if ($faculty > 0 && $dollars == 0) {
+                            $message = "Expenditure for {$benefitLabel} is 0, but the number covered is greater " .
+                                "than 0 ($rankLabel, $contractLabel).";
+                            $code = "faculty_no_expenditure_{$benefit}_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, $form);
+                        }
+
+                        // Next check the opposite case
+                        if ($dollars > 0 && $faculty == 0) {
+                            $message = "Expenditure for {$benefitLabel} is greater than 0, but the number " .
+                                "covered is 0 ($rankLabel, $contractLabel).";
+                            $code = "expenditure_no_faculty_{$benefit}_{$rank}_{$contract}";
+                            $this->addIssue($message, $code, $form);
+                        }
+                    }
+                }
+            }
+        } else {
+            $rank = 'no_diff';
+            $rankLabel = "Undifferentiated Rank";
+
+            foreach ($this->getContracts(false) as $contract => $contractLabel) {
+                foreach ($this->getBenefits() as $benefit => $benefitLabel) {
+                    $facultyKey = "ft_{$benefit}_covered_{$rank}_{$contract}";
+                    $faculty = floatval($this->observation->get($facultyKey));
+
+                    $dollarKey = "ft_{$benefit}_expenditure_{$rank}_{$contract}";
+                    $dollars = floatval($this->observation->get($dollarKey));
+
+                    // Now see if one is filled out and the other is missing
+                    if ($faculty > 0 && $dollars == 0) {
+                        $message = "Expenditure for {$benefitLabel} is 0, but the number covered is greater " .
+                            "than 0 ($rankLabel, $contractLabel).";
+                        $code = "faculty_no_expenditure_{$benefit}_{$rank}_{$contract}";
+                        $this->addIssue($message, $code, $form);
+                    }
+
+                    // Next check the opposite case
+                    if ($dollars > 0 && $faculty == 0) {
+                        $message = "Expenditure for {$benefitLabel} is greater than 0, but the number " .
+                            "covered is 0 ($rankLabel, $contractLabel).";
+                        $code = "expenditure_no_faculty_{$benefit}_{$rank}_{$contract}";
+                        $this->addIssue($message, $code, $form);
+                    }
+                }
+            }
+        }
+    }
+
+    // Rule 200, 210
+    public function validateContinuingFaculty()
+    {
+        $total = 0;
+
+        foreach ($this->getContracts() as $contract => $contractLabel) {
+            foreach ($this->getRanks() as $rank => $rankLabel) {
+                $faculty = floatval($this->observation->get("ft_number_continuing_{$rank}_{$contract}"));
+                $current = floatval($this->observation->get("ft_current_salary_{$rank}_{$contract}"));
+                $previous = floatval($this->observation->get("ft_previous_salary_{$rank}_{$contract}"));
+
+                $rankTotal = $faculty + $current + $previous;
+                $total += $rankTotal;
+
+                // Check for partial data
+                if ($rankTotal > 0 && ($faculty == 0 || $current == 0 || $previous == 0)) {
+                    $message = "At least one column is missing for $rankLabel, $contractLabel.";
+                    $code = "continuing_missing_{$rank}_{$contract}";
+                    $this->addIssue($message, $code, 4);
+                }
+            }
+        }
+
+        if ($total == 0) {
+            $message = "There are no data for form 4: Full-time Continuing Faculty Salaries.";
+            $code = "no_continuing_salaries";
+            $this->addIssue($message, $code, 4);
+        }
+    }
+
+    protected function shortenRank($rank)
+    {
+        return str_replace(
+            array('associate_professor', 'assistant_professor'),
+            array('associate_prof', 'assistant_prof'),
+            $rank
+        );
     }
 
     protected function getSalaryTotalForRankAndContract($rank, $contract)
@@ -741,6 +918,41 @@ class FCSValidation
         return $salaryFields;
     }
 
+    // Rule 400
+    public function validateExecNotEmpty()
+    {
+        $fields = array(
+            'ft_president_salary',
+            'ft_president_supplemental',
+            'ft_chief_academic_salary',
+            'ft_chief_academic_supplemental',
+            'ft_chief_financial_salary',
+            'ft_chief_financial_supplemental',
+            'ft_chief_development_salary',
+            'ft_chief_development_supplemental',
+            'ft_chief_administrative_salary',
+            'ft_chief_administrative_supplemental',
+            'ft_chief_counsel_salary',
+            'ft_chief_counsel_supplemental',
+            'ft_director_enrollment_management_salary',
+            'ft_director_enrollment_management_supplemental',
+            'ft_director_athletics_salary',
+            'ft_director_athletics_supplemental',
+        );
+
+        $total = 0;
+        foreach ($fields as $field) {
+            $total += floatval($this->observation->get($field));
+        }
+
+        if ($total == 0) {
+            $message = "There are no data for Form 5: Administrative Compensation.";
+            $code = "admin_comp_empty";
+            $this->addIssue($message, $code, 5);
+        }
+    }
+
+    // Rules 410-417
     public function validateExecCompensation()
     {
         $code = 'exec_compensation';
