@@ -3,6 +3,7 @@
 namespace Mrss\Controller;
 
 use PHPExcel;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\User as UserEntity;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -513,6 +514,9 @@ class UserController extends AbstractActionController
     {
         takeYourTime();
 
+        $sw = new Stopwatch();
+        $saveEvery = 20;
+
         // Get all users with NCCBP subscriptions who have never logged in
         $users = $this->getAllNewNCCBPUsers();
 
@@ -520,10 +524,9 @@ class UserController extends AbstractActionController
             array('email', 'name', 'college', 'loginLink')
         );
 
+        $i = 0;
         foreach ($users as $user) {
             $userId = $user->getId();
-
-
 
             $serverUrl = $this->getServiceLocator()
                 ->get('viewhelpermanager')->get('serverUrl');
@@ -532,7 +535,8 @@ class UserController extends AbstractActionController
                 ->get('viewhelpermanager')->get('url');
 
             // Build the one-time login url
-            $key = $this->getPasswordResetKey($userId);
+            $key = $this->getPasswordResetKey($userId, $user->getEmail());
+
 
             $url = $serverUrl->__invoke(
                 $urlHelper->__invoke(
@@ -548,7 +552,14 @@ class UserController extends AbstractActionController
                 $url
             );
 
+
+            $i++;
+
+            if ($i % $saveEvery == 0) {
+                $this->getServiceLocator()->get('em')->flush();
+            }
         }
+
         $this->getServiceLocator()->get('em')->flush();
 
         // Export to Excel
@@ -574,24 +585,28 @@ class UserController extends AbstractActionController
         die;
     }
 
-    protected function getPasswordResetKey($userId)
+    protected function getPasswordResetKey($userId, $email)
     {
         /** @var \GoalioForgotPassword\Service\Password $passwordService */
         $passwordService = $this->getServiceLocator()
             ->get('goalioforgotpassword_password_service');
 
-        $passwordService->cleanPriorForgotRequests($userId);
-        $class = $passwordService->getOptions()->getPasswordEntityClass();
+        if ($existing = $passwordService->getPasswordMapper()->findByUser($userId)) {
+            $key = $existing->getRequestKey();
+        } else {
+            $passwordService->cleanPriorForgotRequests($userId);
+            $class = $passwordService->getOptions()->getPasswordEntityClass();
 
-        /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
-        $model = new $class;
+            /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
+            $model = new $class;
 
-        $model->setUserId($userId);
-        $model->setRequestTime(new \DateTime('now'));
-        $model->generateRequestKey();
-        $passwordService->getPasswordMapper()->persist($model);
+            $model->setUserId($userId);
+            $model->setRequestTime(new \DateTime('now'));
+            $model->generateRequestKey();
+            $passwordService->getPasswordMapper()->persist($model);
 
-        $key = $model->getRequestKey();
+            $key = $model->getRequestKey();
+        }
 
         return $key;
     }
@@ -609,13 +624,13 @@ class UserController extends AbstractActionController
         $users = array();
         foreach ($colleges as $college) {
             foreach ($college->getUsers() as $user) {
-                if ($user->hasStudy($study)) {
+                //if ($user->hasStudy($study)) {
                     $lastAccess = $user->getLastAccess();
                     if (empty($lastAccess)) {
                         $users[] = $user;
                         //pr($user->getFullName() . ' ' . $user->getCollege()->getName());
                     }
-                }
+                //}
             }
         }
 
