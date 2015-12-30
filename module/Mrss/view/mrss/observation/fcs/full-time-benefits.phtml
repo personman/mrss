@@ -93,7 +93,7 @@ $this->headScript()->appendFile(
 
 <script>
     // Conversion factor (set in form 1)
-    var conversionFactor = <?= ($cf = $form->get('institution_conversion_factor')->getValue()) ? $cf : 1; ?>;
+    var conversionFactor = <?= getConversionFactor($observation) ?>;
 
 
     $(function() {
@@ -146,23 +146,56 @@ $this->headScript()->appendFile(
             idParts.shift();
 
             var benefitClass = idParts.join('.');
-            benefitClass = '.' + benefitClass + '.exp input';
+            if (benefitClass) benefitClass = '.' + benefitClass;
+            benefitClass = benefitClass + '.exp input';
             var benefitAmount = 0;
             cell.parents('table').find(benefitClass).each(function() {
-                benefitAmount = benefitAmount + Number($(this).val());
+                var amount = Number($(this).val());
+
+                if (conversionApplies(cell, $(this))) {
+                    amount = amount * getConversionFactor();
+                }
+
+                //console.log(benefitClass); console.log(amount)
+                benefitAmount = benefitAmount + amount;
+
             });
 
             var percent;
             if (salaries && benefitAmount) {
                 percent = Math.round(benefitAmount / salaries * 100 * 100) / 100;
                 percent = percent + '%';
+
+                //console.log(benefitAmount.toString() + ' / ' + salaries.toString() + ' = ' + percent);
             } else {
                 percent = '';
             }
 
+            if (false && salaries == 56135751) {
+                console.log(benefitClass)
+                console.log(benefitAmount)
+            }
             cell.html(percent);
 
         })
+    }
+
+    function conversionApplies(targetCell, sourceCell)
+    {
+        var applies = false;
+
+        var sourceWrap = sourceCell.parent().parent().parent().parent();
+        if (targetCell.hasClass('percentConversion')) {
+            if (sourceWrap.hasClass('12-month')) {
+                if (sourceWrap.hasClass('retirement') || sourceWrap.hasClass('fica') ||
+                    sourceWrap.hasClass('group-life') || sourceWrap.hasClass('workers-comp')) {
+
+                    applies = true;
+                }
+            }
+        }
+
+        return applies;
     }
 
     function updateBenefitAverages()
@@ -482,7 +515,7 @@ $this->headScript()->appendFile(
             <td class="column-total apply-conversion" id="exp_<?= $rowClass ?>">0</td>
             <td class="column-total max-target cov" id="cov_<?= $rowClass ?>">0</td>
 
-            <?php if ($showValidationColumns) displayValidationTotals($rowClass, $observation); ?>
+            <?php if ($showValidationColumns) displayValidationTotals($rowClass, $label, $observation); ?>
 
         </tr>
     <?php endforeach ?>
@@ -499,8 +532,31 @@ $this->headScript()->appendFile(
             <?php endif ?>
         <?php endforeach ?>
 
-        <td class="column-total apply-conversion" id="exp">0</td>
-        <td class="column-max" id="cov">0 @todo</td>
+        <td class="column-total apply-conversion" id="exp"></td>
+        <td class="column-max" id="cov"></td>
+
+
+
+        <?php if ($showValidationColumns): ?>
+            
+            <?php $totalSalaries = 0; ?>
+            <td class="no-border"></td>
+            <td class="grid-category">TOTAL</td>
+            <?php foreach (getRanks() as $rank => $rankLabel): ?>
+                <?php
+                $salaries = getSalariesCombined($rank, $observation);
+                $totalSalaries += $salaries;
+                $rankShort = shortenRank($rank);
+                $id = "val3:$rankShort:$salaries";
+                ?>
+
+                <td class="benefitsAsPercent percentConversion" id="<?= $id ?>"></td>
+
+            <?php endforeach ?>
+
+            <td class="benefitsAsPercent percentConversion" id="val3:<?= $totalSalaries ?>"></td>
+
+        <?php endif ?>
 
     </tr>
 
@@ -513,11 +569,9 @@ $this->headScript()->appendFile(
 
 
 
-
+<?php // Undifferentiated by rank: ?>
 
 <?php $colSpan = 3; ?>
-
-
 
 <table class="table table-condensed table-bordered data-entry-grid data-entry-compact" id="benefitsAggregate">
     <thead>
@@ -752,13 +806,31 @@ function showValidationColumnsTotal($monthNumber, $observation)
     <?php
 }
 
-function displayValidationTotals($rowClass, $observation)
+function displayValidationTotals($benefit, $label, $observation)
 {
-    return false;
+    //return false;
+
+    $totalSalaries = 0;
+
     ?>
 
     <td class="no-border"></td>
-    <td class="grid-category">Test<?//= $benefitLabel ?></td>
+    <td class="grid-category"><?= $label ?></td>
+
+    <?php foreach (getRanks() as $rank => $rankLabel): ?>
+        <?php
+            $salaries = getSalariesCombined($rank, $observation);
+            $totalSalaries += $salaries;
+            $rankShort = shortenRank($rank);
+            $id = "val3:$rankShort:$benefit:$salaries";
+        ?>
+
+        <td class="benefitsAsPercent percentConversion" id="<?= $id ?>"></td>
+
+    <?php endforeach ?>
+
+    <td class="benefitsAsPercent percentConversion" id="val3:<?= $benefit ?>:<?= $totalSalaries ?>"></td>
+
 
 <?php
 }
@@ -836,12 +908,48 @@ function getSalaries($rank, $contract, $observation)
     $maleKey = "ft_male_{$rank}_salaries_$contract";
     $femaleKey = "ft_female_{$rank}_salaries_$contract";
 
-    $total = $observation->get($maleKey) + $observation->get($femaleKey);
+    $total = floatval($observation->get($maleKey)) + floatval($observation->get($femaleKey));
 
     /*if ($rank == 'faculty') {
         pr($rank); pr($contract); pr($maleKey); pr($total); echo '<hr>';
     }*/
     return $total;
+}
+
+// Do both contracts added together and converted.
+function getSalariesCombined($rank, $observation)
+{
+    $nineMonth = getSalaries($rank, '9_month', $observation);
+    $twelveMonth = getSalaries($rank, '12_month', $observation);
+    $conversionFactor = getConversionFactor($observation);
+
+    $total = $nineMonth + ($twelveMonth * $conversionFactor);
+
+    return $total;
+}
+
+/*function getClassesToConvert()
+{
+    return array(
+        // Form 2
+        'salaries month-12',
+        // Form 3
+        'exp 12-month retirement',
+        'exp 12-month fica',
+        'exp 12-month group-life',
+        'exp 12-month workers-comp'
+    );
+}*/
+
+
+function getConversionFactor($observation)
+{
+    $cf = $observation->get('institution_conversion_factor');
+    if (empty($cf)) {
+        $cf = 1;
+    }
+
+    return $cf;
 }
 
 function getBenefit($rowNumber)
