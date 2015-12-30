@@ -199,12 +199,12 @@ $this->headScript()->appendFile(
                 }
             });
 
-            if (true && id == 'val2:9-month') {
+            /*if (true && id == 'val2:9-month') {
                 console.log(benefitClass);
                 console.log(benefitCost);
                 console.log(countClass);
                 console.log(benefitCovered);
-            }
+            }*/
 
 
             var result;
@@ -482,6 +482,8 @@ $this->headScript()->appendFile(
             <td class="column-total apply-conversion" id="exp_<?= $rowClass ?>">0</td>
             <td class="column-total max-target cov" id="cov_<?= $rowClass ?>">0</td>
 
+            <?php if ($showValidationColumns) displayValidationTotals($rowClass, $observation); ?>
+
         </tr>
     <?php endforeach ?>
 
@@ -748,6 +750,17 @@ function showValidationColumnsTotal($monthNumber, $observation)
         <td class="benefitsAverageAllRanks" id="val3:<?= $contract ?>"></td>
 
     <?php
+}
+
+function displayValidationTotals($rowClass, $observation)
+{
+    return false;
+    ?>
+
+    <td class="no-border"></td>
+    <td class="grid-category">Test<?//= $benefitLabel ?></td>
+
+<?php
 }
 
 function shortenBenefit($benefit)
