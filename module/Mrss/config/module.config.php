@@ -425,6 +425,15 @@ return array(
                             )
                         )
                     ),
+                    'free' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/free',
+                            'defaults' => array(
+                                'action' => 'free'
+                            )
+                        )
+                    ),
                     'system' => array(
                         'type' => 'segment',
                         'options' => array(

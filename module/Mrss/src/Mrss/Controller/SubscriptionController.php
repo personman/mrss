@@ -364,8 +364,13 @@ class SubscriptionController extends AbstractActionController
                     );
                 }
 
-                // Once they've agreed to the terms, redirect to the payment page
-                return $this->redirect()->toRoute('subscribe/payment');
+                if ($this->getStudyConfig()->free_to_join) {
+                    // Skip the payment page and complete them
+                    return $this->redirect()->toRoute('subscribe/free');
+                } else {
+                    // Once they've agreed to the terms, redirect to the payment page
+                    return $this->redirect()->toRoute('subscribe/payment');
+                }
             } else {
                 $this->flashMessenger()->addErrorMessage(
                     "Please correct the problems below."
@@ -653,6 +658,18 @@ class SubscriptionController extends AbstractActionController
             }
         }
     }
+
+    public function freeAction()
+    {
+        $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
+
+        return $this->completeSubscription(
+            $this->getDraftSubscription(),
+            array('paymentType' => 'free')
+        );
+    }
+
 
     public function pilotAction()
     {

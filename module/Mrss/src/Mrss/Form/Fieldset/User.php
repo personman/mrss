@@ -19,7 +19,8 @@ class User extends Fieldset implements InputFilterProviderInterface
         $adminControls = false,
         $em = null,
         $roleSubset = false,
-        $userRoleChoices = array('viewer', 'contact', 'data')
+        $userRoleChoices = array('viewer', 'contact', 'data'),
+        $editingSelf = false
     ) {
         $this->includeEmailConfirm = $includeEmailConfirm;
 
@@ -181,7 +182,7 @@ class User extends Fieldset implements InputFilterProviderInterface
                     )
                 );
             }
-        } elseif ($roleSubset) {
+        } elseif ($roleSubset && !$editingSelf) {
             $userRoles = array(
                 'data' => 'Data Manager',
                 'contact' => 'Membership Coordinator',

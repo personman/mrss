@@ -747,7 +747,7 @@ function getAdminMenu()
         'route' => 'criteria'
     ),
     array(
-        'label' => 'Colleges',
+        'label' => 'Institutions',
         'controller' => 'colleges',
         'action' => 'index',
         'route' => 'colleges'

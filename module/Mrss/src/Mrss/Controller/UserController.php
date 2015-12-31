@@ -382,7 +382,17 @@ class UserController extends AbstractActionController
         $roleChoices = $this->getServiceLocator()->get('study')->user_role_choices;
         $roleChoices = explode(',', $roleChoices);
 
-        $fieldset = new UserForm('user', false, $adminControls, $em, $roleSubset, $roleChoices);
+        // Is the user editing themselves?
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+        if ($user->getId() != $currentUser->getId()) {
+            $includeDelete = true;
+            $editingSelf = false;
+        } else {
+            $includeDelete = false;
+            $editingSelf = true;
+        }
+
+        $fieldset = new UserForm('user', false, $adminControls, $em, $roleSubset, $roleChoices, $editingSelf);
         $fieldset->add(
             array(
                 'name' => 'id',
@@ -390,13 +400,6 @@ class UserController extends AbstractActionController
             )
         );
 
-        // Is the user editing themselves?
-        $currentUser = $this->zfcUserAuthentication()->getIdentity();
-        if ($user->getId() != $currentUser->getId()) {
-            $includeDelete = true;
-        } else {
-            $includeDelete = false;
-        }
 
         $fieldset->setUseAsBaseFieldset(true);
         $form->add($fieldset);
