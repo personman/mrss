@@ -175,6 +175,10 @@ $this->headScript()->appendFile(
                 console.log(benefitClass)
                 console.log(benefitAmount)
             }
+
+            if (percent == '10.15%') {
+                console.log(benefitAmount + ' / ' + salaries)
+            }
             cell.html(percent);
 
         })
@@ -260,13 +264,14 @@ $this->headScript()->appendFile(
             }
         }
 
+        var benefitCovered = 0;
+
         // The all ranks column on the far right
         if (benefitAverageUseSum(cell.attr('id'))) {
             benefitCovered = getSumFaculty(countClass, cell);
         }
 
         // Use max
-        var benefitCovered = 0;
         cell.parents('table').find(countClass).each(function() {
             // Maximum
             var val = Number($(this).val());
@@ -358,7 +363,7 @@ $this->headScript()->appendFile(
                 var intResult = Math.round(benefitCost / benefitCovered);
                 result = '$' + intResult;
 
-                if (false && intResult == 22834) {
+                if (true && intResult == 18877) {
                     console.log(countClass)
                     console.log(cell.attr('id'))
                     console.log(result);
@@ -949,7 +954,7 @@ function showValidationColumnsTotal($monthNumber, $observation)
         <?php endforeach ?>
 
         <?php $salaries = getSalaries('faculty', $contract, $observation); ?>
-        <td class="benefitsA" id="val:<?= $contract ?>:<?= $salaries ?>"></td>
+        <td class="benefitsAsPercent" id="val:<?= $contract ?>:<?= $salaries ?>"></td>
 
         <?php // Now benefits average ?>
         <td class="no-border"></td>
