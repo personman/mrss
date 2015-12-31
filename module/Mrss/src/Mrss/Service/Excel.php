@@ -506,11 +506,37 @@ class Excel
             }
         }
 
+        $data = $this->removeNullForm1Data($data);
+
         // Add a key with the college's ipeds
         $ipeds = $this->getCurrentCollege()->getIpeds();
         $data = array(
             $ipeds => $data
         );
+
+        return $data;
+    }
+
+    /**
+     * For AAUP: Don't overwrite good form 1 data with nulls
+     * @param $data
+     */
+    protected function removeNullForm1Data($data)
+    {
+        $benchmarkGroups = $this->getCurrentStudy()->getBenchmarkGroups();
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            $formOne = $benchmarkGroup;
+            break;
+        }
+
+        foreach ($formOne->getBenchmarks() as $benchmark) {
+            $dbColumn = $benchmark->getDbColumn();
+
+            // If the data from Excel is null, just forget about it
+            if (empty($data[$dbColumn])) {
+                unset($data[$dbColumn]);
+            }
+        }
 
         return $data;
     }
