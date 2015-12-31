@@ -198,6 +198,24 @@ $this->headScript()->appendFile(
         return applies;
     }
 
+    function conversionAppliesTotal(targetCell, sourceCell)
+    {
+        var applies = false;
+
+        var sourceWrap = sourceCell;
+        if (targetCell.hasClass('percentConversion')) {
+            if (sourceWrap.hasClass('12-month')) {
+                if (sourceWrap.hasClass('retirement') || sourceWrap.hasClass('fica') ||
+                    sourceWrap.hasClass('group-life') || sourceWrap.hasClass('workers-comp')) {
+
+                    applies = true;
+                }
+            }
+        }
+
+        return applies;
+    }
+
     function getTotalMaxFaculty(countClass, cell)
     {
         var total = 0;
@@ -314,7 +332,15 @@ $this->headScript()->appendFile(
 
             var benefitCost = 0;
             cell.parents('table').find(benefitClass).each(function() {
-                benefitCost = benefitCost + Number($(this).val());
+                //benefitCost = benefitCost + Number($(this).val());
+
+                var amount = Number($(this).val());
+
+                if (conversionApplies(cell, $(this))) {
+                    amount = amount * getConversionFactor();
+                }
+
+                benefitCost = benefitCost + amount;
             });
 
             var benefitCovered = getMaxFaculty(countClass, cell);
@@ -332,7 +358,7 @@ $this->headScript()->appendFile(
                 var intResult = Math.round(benefitCost / benefitCovered);
                 result = '$' + intResult;
 
-                if (intResult == 17971) {
+                if (false && intResult == 22834) {
                     console.log(countClass)
                     console.log(cell.attr('id'))
                     console.log(result);
@@ -367,10 +393,22 @@ $this->headScript()->appendFile(
             }
 
 
-            var benefitCost = 0;
-            cell.parents('table').find(benefitClass).each(function() {
-                benefitCost = benefitCost + Number($(this).html());
-            });
+            // Get benefit total from the bottom left table
+            if (benefitClass == '.benefitsAverageTotal.exp') {
+                var benefitCost = Number($('#exp').html());
+            } else {
+                var benefitCost = 0;
+                cell.parents('table').find(benefitClass).each(function() {
+                    //benefitCost = benefitCost + Number($(this).html());
+                    var amount = Number($(this).html());
+
+                    if (conversionAppliesTotal(cell, $(this))) {
+                        amount = amount * getConversionFactor();
+                    }
+
+                    benefitCost = benefitCost + amount;
+                });
+            }
 
             var benefitCovered = 0;
             cell.parents('table').find(countClass).each(function() {
@@ -380,9 +418,17 @@ $this->headScript()->appendFile(
             var result = '';
             if (benefitCovered) {
                 result = benefitCost / benefitCovered;
-                result = Math.round(result);
-                result = '$' + result;
+                var intResult = Math.round(result);
+                result = '$' + intResult;
             }
+
+            if (true && intResult == 22834) {
+                console.log(benefitClass)
+                console.log(cell.attr('id'))
+                console.log(result);
+                console.log(benefitCost + ' / ' + benefitCovered)
+            }
+
 
             cell.html(result);
         })
@@ -664,12 +710,12 @@ $this->headScript()->appendFile(
                 $rankShort = shortenRank($rank);
                 ?>
 
-                <td class="benefitsAverage" id="val2:<?= $rankShort ?>">
+                <td class="benefitsAverage percentConversion" id="val2:<?= $rankShort ?>">
 
                 </td>
             <?php endforeach ?>
 
-            <td class="benefitsAverageAllRanks" id="val5"></td>
+            <td class="benefitsAverageAllRanks percentConversion" id="val5"></td>
 
 
 
@@ -959,12 +1005,12 @@ function displayValidationTotals($benefit, $label, $observation)
             $rankShort = shortenRank($rank);
         ?>
 
-        <td class="benefitsAverage" id="val2:<?= $rankShort ?>:<?= $benefitShort ?>">
+        <td class="benefitsAverage percentConversion" id="val2:<?= $rankShort ?>:<?= $benefitShort ?>">
 
         </td>
     <?php endforeach ?>
 
-<td class="benefitsAverage" id="val2:<?= $benefitShort ?>">
+<td class="benefitsAverage percentConversion" id="val2:<?= $benefitShort ?>">
 
 
 
