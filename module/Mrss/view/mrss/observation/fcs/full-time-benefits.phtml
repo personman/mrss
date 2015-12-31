@@ -198,6 +198,105 @@ $this->headScript()->appendFile(
         return applies;
     }
 
+    function getTotalMaxFaculty(countClass, cell)
+    {
+        var total = 0;
+
+        var contracts = ['9-month', '12-month'];
+        for (var i in contracts) {
+            var contract = contracts[i];
+            var newClass = '.' + contract + countClass;
+            var contractMax = getMaxFaculty(newClass, cell);
+            total = total + contractMax;
+        }
+
+        return total;
+    }
+
+    function getTotalSumFaculty(countClass, cell)
+    {
+        var total = 0;
+
+        var contracts = ['9-month', '12-month'];
+        for (var i in contracts) {
+            var contract = contracts[i];
+            var newClass = '.' + contract + countClass;
+            var contractSum= getSumFaculty(newClass, cell);
+            total = total + contractSum;
+        }
+
+        return total;
+    }
+
+    function getMaxFaculty(countClass, cell) {
+        // If no contract is specified...
+        if (countClass.indexOf('-month') == -1) {
+            // One rank, all contracts
+            if (hasRank(countClass)) {
+                return getTotalMaxFaculty(countClass, cell);
+            } else {
+                // All ranks, all contracts
+                var total = getTotalSumFaculty(countClass, cell);
+
+                return total;
+            }
+        }
+
+        // The all ranks column on the far right
+        if (benefitAverageUseSum(cell.attr('id'))) {
+            benefitCovered = getSumFaculty(countClass, cell);
+        }
+
+        // Use max
+        var benefitCovered = 0;
+        cell.parents('table').find(countClass).each(function() {
+            // Maximum
+            var val = Number($(this).val());
+            if (val > benefitCovered) {
+                benefitCovered = val;
+            }
+        });
+
+        return benefitCovered;
+    }
+
+    function getSumFaculty(countClass, cell)
+    {
+        var benefitCovered = 0;
+
+        cell.parents('table').find(countClass).each(function() {
+            benefitCovered = benefitCovered + Number($(this).val());
+        });
+
+        return benefitCovered;
+    }
+
+    function hasRank(countClass)
+    {
+        var hasRank = false;
+        var ranks = getRanks();
+        for (var i in ranks) {
+            var rank = ranks[i];
+            if (countClass.indexOf(rank) > -1) {
+                hasRank = true;
+            }
+        }
+
+        return hasRank;
+    }
+
+    function getRanks() {
+        return [
+            'professor',
+            'associate',
+            'assistant',
+            'instructor',
+            'lecturer',
+            'no-rank'
+        ];
+    }
+
+
     function updateBenefitAverages()
     {
         $('.benefitsAverage').each(function() {
@@ -213,24 +312,12 @@ $this->headScript()->appendFile(
             benefitClass = '.' + benefitClass + '.exp input';
             countClass = '.' + countClass + '.cov input';
 
-            benefitCost = 0;
+            var benefitCost = 0;
             cell.parents('table').find(benefitClass).each(function() {
                 benefitCost = benefitCost + Number($(this).val());
             });
 
-            // Use max unless it's the All Ranks column on the right.
-            benefitCovered = 0;
-            cell.parents('table').find(countClass).each(function() {
-                if (benefitAverageUseSum(id)) {
-                    benefitCovered = benefitCovered + Number($(this).val());
-                } else {
-                    // Maximum
-                    var val = Number($(this).val());
-                    if (val > benefitCovered) {
-                        benefitCovered = val;
-                    }
-                }
-            });
+            var benefitCovered = getMaxFaculty(countClass, cell);
 
             /*if (true && id == 'val2:9-month') {
                 console.log(benefitClass);
@@ -242,8 +329,15 @@ $this->headScript()->appendFile(
 
             var result;
             if (benefitCost && benefitCovered) {
-                result = Math.round(benefitCost / benefitCovered);
-                result = '$' + result;
+                var intResult = Math.round(benefitCost / benefitCovered);
+                result = '$' + intResult;
+
+                if (intResult == 17971) {
+                    console.log(countClass)
+                    console.log(cell.attr('id'))
+                    console.log(result);
+                    console.log(benefitCost + ' / ' + benefitCovered)
+                }
             } else {
                 //result = 'CHECK';
                 result = '';
@@ -263,10 +357,15 @@ $this->headScript()->appendFile(
             // Trash the first part of the id
             idParts.shift();
 
-            var benefitClass = idParts.join('.');
-            var countClass = benefitClass;
-            benefitClass = '.benefitsAverageTotal.' + benefitClass + '.exp';
-            countClass = '.benefitsAverageTotal.' + countClass + '.cov';
+            var benefit = idParts.join('.');
+            var benefitClass = '.benefitsAverageTotal.exp';
+            var countClass = '.benefitsAverageTotal.cov';
+
+            if (benefit) {
+                benefitClass = '.' + benefit + benefitClass;
+                countClass = '.' + benefit + countClass;
+            }
+
 
             var benefitCost = 0;
             cell.parents('table').find(benefitClass).each(function() {
@@ -282,6 +381,7 @@ $this->headScript()->appendFile(
             if (benefitCovered) {
                 result = benefitCost / benefitCovered;
                 result = Math.round(result);
+                result = '$' + result;
             }
 
             cell.html(result);
@@ -538,7 +638,7 @@ $this->headScript()->appendFile(
 
 
         <?php if ($showValidationColumns): ?>
-            
+
             <?php $totalSalaries = 0; ?>
             <td class="no-border"></td>
             <td class="grid-category">TOTAL</td>
@@ -555,6 +655,24 @@ $this->headScript()->appendFile(
             <?php endforeach ?>
 
             <td class="benefitsAsPercent percentConversion" id="val3:<?= $totalSalaries ?>"></td>
+
+            <?php // Average benefits ?>
+            <td class="no-border"></td>
+            <td class="grid-category">TOTAL</td>
+            <?php foreach (getRanks() as $rank => $rankLabel): ?>
+                <?php
+                $rankShort = shortenRank($rank);
+                ?>
+
+                <td class="benefitsAverage" id="val2:<?= $rankShort ?>">
+
+                </td>
+            <?php endforeach ?>
+
+            <td class="benefitsAverageAllRanks" id="val5"></td>
+
+
+
 
         <?php endif ?>
 
@@ -812,6 +930,8 @@ function displayValidationTotals($benefit, $label, $observation)
 
     $totalSalaries = 0;
 
+    $benefitShort = shortenBenefit($benefit);
+
     ?>
 
     <td class="no-border"></td>
@@ -831,8 +951,24 @@ function displayValidationTotals($benefit, $label, $observation)
 
     <td class="benefitsAsPercent percentConversion" id="val3:<?= $benefit ?>:<?= $totalSalaries ?>"></td>
 
+    <?php // Now the benefits average table ?>
+    <td class="no-border"></td>
+    <td class="grid-category"><?= $label ?></td>
+    <?php foreach (getRanks() as $rank => $rankLabel): ?>
+        <?php
+            $rankShort = shortenRank($rank);
+        ?>
 
-<?php
+        <td class="benefitsAverage" id="val2:<?= $rankShort ?>:<?= $benefitShort ?>">
+
+        </td>
+    <?php endforeach ?>
+
+<td class="benefitsAverage" id="val2:<?= $benefitShort ?>">
+
+
+
+    <?php
 }
 
 function shortenBenefit($benefit)
