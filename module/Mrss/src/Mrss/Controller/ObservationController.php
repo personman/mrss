@@ -117,12 +117,23 @@ class ObservationController extends AbstractActionController
         $completionPercentage = $currentStudy
             ->getCompletionPercentage($observation);
 
+        $issues = $this->getIssueModel()->findByCollege($this->currentCollege());
+
         return array(
             'currentStudy' => $currentStudy,
             'benchmarkGroups' => $benchmarkGroups,
             'observation' => $observation,
+            'issues' => $issues,
             'completionPercentage' => $completionPercentage
         );
+    }
+
+    /**
+     * @return \Mrss\Model\Issue
+     */
+    protected function getIssueModel()
+    {
+        return $this->getServiceLocator()->get('model.issue');
     }
 
     public function systemadminoverviewAction()
