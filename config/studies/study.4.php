@@ -53,7 +53,14 @@ return array(
             'sheetName' => 'Form 3',
             'sectionStartingCells' => array(
                 0 => 'B6',
-                1 => 'B19'
+                1 => 'B19',
+            ),
+        ),
+        '4b' => array(
+            'sheetName' => 'Form 3',
+            'sectionStartingCells' => array(
+                0 => 'P6',
+                1 => 'P19'
             ),
         ),
         5 => array(

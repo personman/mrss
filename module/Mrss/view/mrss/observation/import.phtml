@@ -32,6 +32,16 @@ $this->headScript()->appendFile(
 
 <?php endif ?>
 
+<?php
+$url = $this->url('data-entry/export');
+$downloadId = 'download';
+if ($useDirectDownloadLink) {
+    $url = 'http://www.aaup.org/file/AAUP%20Faculty%20Compensation%20Survey%20-%202015-2016%20-%20Final_0.xlsx';
+    $downloadId = 'download-direct';
+}
+
+?>
+
 <h2>Download Excel File</h2>
 
 <p>
@@ -42,9 +52,9 @@ $this->headScript()->appendFile(
 
 </p>
 <p>
-    <div class="form-horizontal" id="download">
+    <div class="form-horizontal" id="<?= $downloadId ?>">
     <div class="controls">
-        <a class="btn btn-primary" href="<?= $this->url('data-entry/export') ?>">Download</a>
+        <a class="btn btn-primary" href="<?= $url ?>">Download</a>
     </div>
     </div>
 </p>

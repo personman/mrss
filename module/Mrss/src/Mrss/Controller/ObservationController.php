@@ -798,10 +798,44 @@ class ObservationController extends AbstractActionController
             }
         }
 
+        $useDirectDownloadLink = $this->useDirectDownloadLink();
+
+
         return array(
             'form' => $form,
+            'useDirectDownloadLink' => $useDirectDownloadLink,
             'errorMessages' => $errorMessages
         );
+    }
+
+    /**
+     * For AAUP, if the institution hasn't entered any data beyond form 1
+     */
+    protected function useDirectDownloadLink()
+    {
+        $direct = false;
+        if ($this->currentStudy()->getId() == 4) {
+            foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
+                /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+
+                // Skip form 1
+                if ($benchmarkGroup->getId() == 2) {
+                    continue;
+                }
+
+                $observation = $this->getCurrentObservation();
+                $completion = $benchmarkGroup->getCompletionPercentageForObservation($observation);
+
+                if ($completion) {
+                    return false;
+                }
+            }
+
+            // If we made it this far, then there's no data
+            $direct = true;
+        }
+
+        return $direct;
     }
 
     public function saveSubObservations($data, Observation $observation)

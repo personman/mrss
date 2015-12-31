@@ -607,16 +607,18 @@ class FCSValidation
         $combinedTotal = 0;
         $retirementTotal = 0;
 
+        $expenditure = 'expenditure';
+
         $form = 3;
 
         if ($this->observation->get('institution_aggregate_benefits') == 'No') {
             foreach ($this->getContracts(false) as $contract => $contractLabel) {
                 foreach ($this->getRanks() as $rank => $rankLabel) {
-                    $medicalKey = "ft_medical_expenditure_{$rank}_{$contract}";
-                    $retirementKey = "ft_retirement_expenditure_{$rank}_{$contract}";
+                    $medicalKey = "ft_medical_{$expenditure}_{$rank}_{$contract}";
+                    $retirementKey = "ft_retirement_{$expenditure}_{$rank}_{$contract}";
 
                     $shortRank = $this->shortenRank($rank);
-                    $combinedKey = "ft_combined_medical_dental_expenditure_{$shortRank}_{$contract}";
+                    $combinedKey = "ft_combined_medical_dental_{$expenditure}_{$shortRank}_{$contract}";
 
                     $medical = $this->observation->get($medicalKey);
                     $medicalTotal += floatval($medical);
@@ -631,11 +633,12 @@ class FCSValidation
         } else {
             foreach ($this->getContracts(false) as $contract => $contractLabel) {
                 $rank = 'no_diff';
-                $medicalKey = "ft_medical_expenditure_{$rank}_{$contract}";
-                $retirementKey = "ft_retirement_expenditure_{$rank}_{$contract}";
+                $expenditure = 'expentirue';
+                $medicalKey = "ft_medical_{$expenditure}_{$rank}_{$contract}";
+                $retirementKey = "ft_retirement_{$expenditure}_{$rank}_{$contract}";
 
                 $shortRank = $this->shortenRank($rank);
-                $combinedKey = "ft_combined_medical_dental_expenditure_{$shortRank}_{$contract}";
+                $combinedKey = "ft_combined_medical_dental_{$expenditure}_{$shortRank}_{$contract}";
 
                 $medical = $this->observation->get($medicalKey);
                 $medicalTotal += floatval($medical);
@@ -797,7 +800,8 @@ class FCSValidation
                     $facultyKey = "ft_{$benefit}_covered_{$rank}_{$contract}";
                     $faculty = floatval($this->observation->get($facultyKey));
 
-                    $dollarKey = "ft_{$benefit}_expenditure_{$rank}_{$contract}";
+                    // Living with this misspelling:
+                    $dollarKey = "ft_{$benefit}_expentirue_{$rank}_{$contract}";
                     $dollars = floatval($this->observation->get($dollarKey));
 
                     // Now see if one is filled out and the other is missing

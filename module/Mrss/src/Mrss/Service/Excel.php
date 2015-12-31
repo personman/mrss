@@ -1009,6 +1009,8 @@ class Excel
 
             foreach ($gridLayout as $sectionKey => $section) {
 
+
+
                 if (empty($sheetInfo['sectionStartingCells'][$sectionKey])) {
                     continue;
                 }
@@ -1041,6 +1043,8 @@ class Excel
                     }
 
                 }
+
+
             }
 
             if (!empty($sheetInfo['extra'])) {
