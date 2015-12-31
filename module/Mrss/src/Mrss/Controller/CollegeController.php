@@ -223,7 +223,14 @@ class CollegeController extends AbstractActionController
 
     public function importAction()
     {
-        $service = $this->getServiceLocator()->get('service.import.colleges');
+        $altService = $this->params()->fromRoute('service');
+
+        if (!empty($altService)) {
+            $service = $this->getServiceLocator()->get('service.import.colleges.demo');
+        } else {
+            $service = $this->getServiceLocator()->get('service.import.colleges');
+        }
+
         $form = $service->getForm();
 
         // Handle the form

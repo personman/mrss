@@ -679,6 +679,17 @@ class Module
 
                     return $service;
                 },
+                'service.import.colleges.demo' => function ($sm) {
+                    $service = new Service\Import\CollegeDemographics();
+
+                    $collegeModel = $sm->get('model.college');
+                    $service->setCollegeModel($collegeModel);
+
+                    $model = $sm->get('model.observation');
+                    $service->setObservationModel($model);
+
+                    return $service;
+                },
                 'service.import.users' => function ($sm) {
                     $service = new Service\Import\User();
 

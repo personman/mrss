@@ -42,6 +42,10 @@ class Import
 
             $this->saveRow($row);
             $count++;
+
+            if ($count % 50) {
+                $this->flush();
+            }
         }
 
         $this->flush();

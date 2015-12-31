@@ -545,6 +545,16 @@ return array(
                                 'action' => 'import'
                             )
                         )
+                    ),
+                    'import-demo' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import-demo',
+                            'defaults' => array(
+                                'action' => 'import',
+                                'service' => 'demo'
+                            )
+                        )
                     )
                 )
             ),
