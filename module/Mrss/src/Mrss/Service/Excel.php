@@ -508,6 +508,8 @@ class Excel
 
         $data = $this->removeNullForm1Data($data);
 
+        $data = $this->mapForm1Values($data);
+
         // Add a key with the college's ipeds
         $ipeds = $this->getCurrentCollege()->getIpeds();
         $data = array(
@@ -536,6 +538,28 @@ class Excel
             if (empty($data[$dbColumn])) {
                 unset($data[$dbColumn]);
             }
+        }
+
+        return $data;
+    }
+
+    protected function mapForm1Values($data)
+    {
+        // Medical degree - normalize capitalization
+        if (!empty($data['institution_grants_medical_degree'])) {
+            $data['institution_grants_medical_degree'] = ucwords(
+                strtolower($data['institution_grants_medical_degree'])
+            );
+        }
+
+        // Carnegie - remove number prefix
+        if ($carnegie = $data['carnegie_basic']) {
+            $data['carnegie_basic'] = preg_replace('/(\d\d?  )/', '', $carnegie);
+        }
+
+        // Part time benefits had a double space
+        if ($pt = $data['institution_part_time_benefits']) {
+            $data['institution_part_time_benefits'] = preg_replace('/(  )/', ' ', $pt);
         }
 
         return $data;

@@ -50,7 +50,13 @@ a.login-btn, #headerLoginForm button {
 
 .renew-nav, .join-nav {
 	background: #618378;
+	color: white;
 }
+
+.renew-nav a, .renew-nav a:visited, .join-nav a, .join-nav a:visited {
+	color: white;
+}
+
 
 /** Homepage **/
 #homepage-slide-container {

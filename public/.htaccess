@@ -42,6 +42,8 @@ Redirect 301 /nccbp_home http://nccbp.org
 Redirect 301 /report/president http://nccbp.org/reports/executive
 Redirect 301 /member_home http://nccbp.org/members
 
+# Old AAUP url
+Redirect 301 /Pages/Index.aspx http://research.aaup.org
 
 # Some old NCCBP urls that are just gone for good
 RewriteRule ^sites/default/ - [G,L]
