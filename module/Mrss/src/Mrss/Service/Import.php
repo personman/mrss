@@ -26,6 +26,7 @@ class Import
     {
         $start = microtime(true);
         $count =  0;
+        $saveEvery = 20;
 
         $this->excel = $this->openFile($filename);
         $this->excel->setActiveSheetIndex(0);
@@ -43,9 +44,12 @@ class Import
             $this->saveRow($row);
             $count++;
 
-            if ($count % 50) {
+
+            if ($count % $saveEvery) {
                 $this->flush();
             }
+
+
         }
 
         $this->flush();

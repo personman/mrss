@@ -304,23 +304,4 @@ class CollegeDemographics extends Import
     {
         $this->getCollegeModel()->getEntityManager()->flush();
     }
-
-    protected function saveSystem($systemName)
-    {
-        if (!empty($systemName)) {
-            // First, see if the system exists
-            $system = $this->getSystemModel()->findByName($systemName);
-
-            // If not, build an empty one
-            if (empty($system)) {
-                $system = new System();
-                $system->setName($systemName);
-
-                $this->getSystemModel()->save($system);
-                $this->getSystemModel()->getEntityManager()->flush();
-            }
-
-            return $system;
-        }
-    }
 }
