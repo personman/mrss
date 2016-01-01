@@ -16,6 +16,8 @@ class CollegeDemographics extends Import
     /** @var \Mrss\Model\Observation $observationModel */
     protected $observationModel;
 
+    protected $skipCollegesWithExecTitle = true;
+
     protected function saveRow(PHPExcel_Worksheet_Row $row)
     {
         $data = $this->getDataFromRow($row);
@@ -26,11 +28,11 @@ class CollegeDemographics extends Import
             return false;
         }
 
-        $college = $this->getCollege($data);
+        if ($college = $this->getCollege($data)) {
+            $this->getCollegeModel()->save($college);
 
-        $this->getCollegeModel()->save($college);
-
-        $this->saveObservationData($college, $data);
+            $this->saveObservationData($college, $data);
+        }
     }
 
     protected function getDataFromRow(PHPExcel_Worksheet_Row $row)
@@ -90,6 +92,11 @@ class CollegeDemographics extends Import
         // If not, create a blank one
         if (empty($entity)) {
             $entity = new CollegeEntity();
+        }
+
+        // If this has been imported already, skip it.
+        if ($entity->getExecTitle() && $this->skipCollegesWithExecTitle) {
+            return null;
         }
 
         // Now plug in the data
