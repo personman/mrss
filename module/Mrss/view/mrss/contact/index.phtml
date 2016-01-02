@@ -104,10 +104,11 @@
     $form->get('from')->setLabel('Your Email');
     $form->get('subject')->setLabel('Subject');
 
+
     // Add some titles for accessibility
     $form->get('from')->setAttribute('title', 'Your email address.');
     $form->get('subject')->setAttribute('title', 'Subject');
-    $form->get('captcha[input]')->setAttribute('title', 'Captcha');
+    $form->get('captcha')->setAttribute('title', 'Captcha');
 
     ?>
 
