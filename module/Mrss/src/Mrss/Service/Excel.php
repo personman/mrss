@@ -553,12 +553,12 @@ class Excel
         }
 
         // Carnegie - remove number prefix
-        if ($carnegie = $data['carnegie_basic']) {
+        if (!empty($data['carnegie_basic']) && $carnegie = $data['carnegie_basic']) {
             $data['carnegie_basic'] = preg_replace('/(\d\d?  )/', '', $carnegie);
         }
 
         // Part time benefits had a double space
-        if ($pt = $data['institution_part_time_benefits']) {
+        if (!empty($data['institution_part_time_benefits']) && $pt = $data['institution_part_time_benefits']) {
             $data['institution_part_time_benefits'] = preg_replace('/(  )/', ' ', $pt);
         }
 
