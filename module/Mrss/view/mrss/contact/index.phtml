@@ -71,6 +71,12 @@
     }
 </script>
 
+<style>
+    #control-group-captcha {
+        display: none;
+    }
+</style>
+
 <section class="contact">
     <div class="page-header">
         <h2>Contact Us</h2>
@@ -111,9 +117,17 @@
     $form->get('body')->setAttribute('title', 'Message body');
     $form->get('captcha')->setAttribute('title', 'Captcha');
 
+    $formOutput = $this->ztbForm($form);
+
+    // Replace <b> with <strong> for WCAG
+    $formOutput = str_replace(
+        array('<b>', '</b>'),
+        array('<strong>', '</strong>'),
+        $formOutput
+    );
     ?>
 
-    <?= $this->ztbForm($form) ?>
+    <?= $formOutput ?>
 
     <p>
         Privacy Note: Your contact message will contain a return e-mail address. If you include other identifying information, we may use that information when we respond. Email may not be secure, so send only information that is necessary to respond to your request.
