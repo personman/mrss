@@ -611,7 +611,17 @@ class FCSValidation
 
         $form = 3;
 
-        if ($this->observation->get('institution_aggregate_benefits') == 'No') {
+        $aggregate = $this->observation->get('institution_aggregate_benefits');
+        $both = false;
+        if ($aggregate == 'No') {
+            $aggregate = false;
+        } elseif ($aggregate == 'Yes') {
+            $aggregate = true;
+        } else {
+            $both = true;
+        }
+
+        if (!$aggregate || $both) {
             foreach ($this->getContracts(false) as $contract => $contractLabel) {
                 foreach ($this->getRanks() as $rank => $rankLabel) {
                     $medicalKey = "ft_medical_{$expenditure}_{$rank}_{$contract}";
@@ -630,7 +640,7 @@ class FCSValidation
                     $retirementTotal += floatval($retirement);
                 }
             }
-        } else {
+        } elseif ($aggregate || $both) {
             foreach ($this->getContracts(false) as $contract => $contractLabel) {
                 $rank = 'no_diff';
                 $expenditure = 'expentirue';
