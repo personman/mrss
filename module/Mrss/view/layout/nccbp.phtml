@@ -107,7 +107,9 @@
                     <div id="headerLoginForm">
                         <? $form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
                         $form->get('identity')->setAttribute('placeHolder', 'Email');
+                        $form->get('identity')->setAttribute('title', 'Email');
                         $form->get('credential')->setAttribute('placeHolder', 'Password');
+                        $form->get('credential')->setAttribute('title', 'Password');
                         ?>
                         <?= $this->zfcUserLoginWidget() ?>
                     </div>
