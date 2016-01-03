@@ -845,16 +845,16 @@ return array(
                         'pt_male_salaries',
                         'pt_female_faculty',
                         'pt_female_salaries',
-                        'pt_total_faculty',
-                        'pt_total_salaries',
+                        //'pt_total_faculty',
+                        //'pt_total_salaries',
                     ),
                     'Graduate Teaching Assistant' => array(
                         'pt_male_graduate_teaching',
                         'pt_male_graduate_teaching_salaries',
                         'pt_female_graduate_teaching',
                         'pt_female_graduate_teaching_salaries',
-                        'pt_total_graduate_teaching',
-                        'pt_total_graduate_teaching_salaries',
+                        //'pt_total_graduate_teaching',
+                        //'pt_total_graduate_teaching_salaries',
                     )
                 )
             )
