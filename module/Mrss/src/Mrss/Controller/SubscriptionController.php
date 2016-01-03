@@ -1302,7 +1302,14 @@ class SubscriptionController extends AbstractActionController
 
             // Plug in the user's name
             $params['fullName'] = $user->getPrefix() . ' ' . $user->getLastName();
-            $content = $renderer->render('mrss/email/welcome', $params);
+
+            $emailTemplate = 'mrss/email/welcome';
+            if ($configTemplate = $this->getStudyConfig()->welcome_email) {
+                $emailTemplate = 'mrss/email/' . $configTemplate;
+            }
+
+            $content = $renderer->render($emailTemplate, $params);
+
 
             // make a header as html
             $html = new MimePart($content);

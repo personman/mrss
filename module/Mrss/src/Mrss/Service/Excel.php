@@ -545,6 +545,13 @@ class Excel
 
     protected function mapForm1Values($data)
     {
+        // Institution control
+        if (!empty($data['institution_control'])) {
+            if ($data['institution_control'] == 'Private Not-For-Profit') {
+                $data['institution_control'] = 'Private Not-For-Profit (No Religious Affiliation)';
+            }
+        }
+
         // Medical degree - normalize capitalization
         if (!empty($data['institution_grants_medical_degree'])) {
             $data['institution_grants_medical_degree'] = ucwords(
