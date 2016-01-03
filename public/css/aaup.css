@@ -31,6 +31,10 @@ a.schedule-btn, a:visited.schedule-btn {
 	color: white;
 }
 
+a#freeSignIn, a:visited#freeSignIn {
+    color: white;
+}
+
 .navbar-default .navbar-nav > li.renew-nav > a, .navbar-default .navbar-nav > li.join-nav > a {
 	background-color: #54766B;
 }

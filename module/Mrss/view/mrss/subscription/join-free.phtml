@@ -50,10 +50,10 @@
     {
         // handle form in error state (don't hide fields)
         if (formHasErrors) {
-            console.log('form has errors')
+            //console.log('form has errors')
             return false;
         } else {
-            console.log('no errors')
+            //console.log('no errors')
         }
 
         // Hide some stuff
@@ -85,6 +85,9 @@
     function newJoinFree()
     {
         $('.control-group, legend').show()
+
+        // Show a message
+        $('#subscription-free').before('<div class="well">You do not yet have a user account with us. Select your institution and complete the form below to create one.</div>');
     }
 
     /**
@@ -96,7 +99,10 @@
 
         // Remove event handler
         //$.off('submit', 'form#subscription-free')
-        form.off()
+        form.off();
+
+        // Hide the email field
+        $('#fieldset-user').hide()
 
         // Show a little message
         form.find('#fieldset-buttons').prepend('<p>You already have a user account with us, so you can reset your password if needed or just sign in.</p>')

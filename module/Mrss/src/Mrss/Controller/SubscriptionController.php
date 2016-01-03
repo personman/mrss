@@ -190,27 +190,15 @@ class SubscriptionController extends AbstractActionController
                     ->get('model.college')->find($collegeId);
 
                 if (!empty($college)) {
-                    //prd($form->getData());
-                    // Create the observation
-                    $observation = $this->createOrUpdateObservation($college);
-
-                    $subscription = $this->createOrUpdateSubscription(
-                        array('paymentType' => 'free'),
-                        $college,
-                        $observation
+                    $data = array(
+                        'renew' => false,
+                        'free' => true,
+                        'college_id' => $college->getId()
                     );
 
-                    // create the user. Send email now or wait for approval?
-                    // Set state to 0
-                    $defaultRole = 'data';
-                    $userData = $data['user'];
-                    $defaultState = 0;
-                    $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+                    $this->saveDraftSubscription($data);
 
-                    $this->getSubscriptionModel()->getEntityManager()->flush();
-
-                    // redirect
-                    return $this->redirect()->toRoute('joined');
+                    return $this->redirect()->toRoute('subscribe/user-agreement');
                 } else {
                     $this->flashMessenger()->addErrorMessage("Unable to find institution.");
                     return $this->redirect()->toUrl('/join-free');
@@ -227,6 +215,35 @@ class SubscriptionController extends AbstractActionController
             'allColleges' => $this->getAllColleges(),
             'formHasErrors' => $formHasErrors
         );
+    }
+
+    protected function joinFreeFinal()
+    {
+        $draft = $this->getDraftSubscription();
+        $data = $draft->getFormData();
+        $collegeId = $draft->getCollegeId();
+        $college = $this->getCollegeModel()->find($collegeId);
+
+        // Create the observation
+        $observation = $this->createOrUpdateObservation($college);
+
+        $subscription = $this->createOrUpdateSubscription(
+            array('paymentType' => 'free'),
+            $college,
+            $observation
+        );
+
+        // create the user.
+        // Set state to 0
+        $defaultRole = 'data';
+        $userData = $data['user'];
+        $defaultState = 0;
+        $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+
+        $this->getSubscriptionModel()->getEntityManager()->flush();
+
+        // redirect
+        return $this->redirect()->toRoute('joined');
     }
 
     public function findUserAction()
@@ -252,10 +269,19 @@ class SubscriptionController extends AbstractActionController
         return new JsonModel($response);
     }
 
+    /**
+     * @return \Mrss\Model\College
+     */
+    protected function getCollegeModel()
+    {
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        return $collegeModel;
+    }
+
     protected function getAllColleges()
     {
-        /** @var \Mrss\Model\College $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $collegeModel = $this->getCollegeModel();
         $colleges = $collegeModel->findAll();
 
         $allColleges = array();
@@ -365,8 +391,16 @@ class SubscriptionController extends AbstractActionController
                 }
 
                 if ($this->getStudyConfig()->free_to_join) {
-                    // Skip the payment page and complete them
-                    return $this->redirect()->toRoute('subscribe/free');
+                    $draft = $this->getDraftSubscription();
+                    $data = $draft->getFormData();
+
+                    if (!empty($data['renew'])) {
+                        // Skip the payment page and complete the free renewal
+                        return $this->redirect()->toRoute('subscribe/free');
+                    } else {
+                        // Complete the free join
+                        return $this->joinFreeFinal();
+                    }
                 } else {
                     // Once they've agreed to the terms, redirect to the payment page
                     return $this->redirect()->toRoute('subscribe/payment');
