@@ -18,6 +18,7 @@ return array(
     'export_sheet_names' => null,
     'validation_class' => null,
     'free_to_join' => false,
+    'agreement_template' => null,
     'welcome_email' => 'welcome',
     'default_user_state' => 1, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces

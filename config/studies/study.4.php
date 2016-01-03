@@ -17,6 +17,7 @@ return array(
     'validation_class' => 'FCSValidation',
 	'header_title' => 'Faculty<br>Compensation<br>Survey',
     'free_to_join' => true,
+    'agreement_template' => 'agreement-fcs',
     'welcome_email' => 'welcome-aaup',
     'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',

@@ -29,6 +29,7 @@ use Zend\Mime\Part as MimePart;
 use Zend\Mime\Message as MimeMessage;
 use DateTime;
 use PHPExcel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class SubscriptionController
@@ -412,10 +413,20 @@ class SubscriptionController extends AbstractActionController
             }
         }
 
-        return array(
-            'form' => $form,
-            'subscription' => $this->getDraftSubscription()->getFormData()
+        $viewModel = new ViewModel(
+            array(
+                'form' => $form,
+                'subscription' => $this->getDraftSubscription()->getFormData()
+            )
         );
+
+        // Set the template
+        $template = 'mrss/subscription/agreement';
+        if ($configTemplate = $this->getStudyConfig()->agreement_template) {
+            $template = 'mrss/subscription/' . $configTemplate;
+        }
+
+        return $viewModel->setTemplate($template);
     }
 
     /**
