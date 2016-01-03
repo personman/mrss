@@ -20,7 +20,7 @@ return array(
     'welcome_email' => 'welcome-aaup',
     'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',
-    'copyright' => "1915 - " . date('Y') . " American Association of University Professors",
+    'copyright' => date('Y') . " American Association of University Professors",
     'footerLogo' => '',
     'footerSocial' => '',
     'data_entry_templates' => array(
