@@ -149,7 +149,7 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'data' => 'Data Manager',
                 'contact' => 'Membership Coordinator',
                 'viewer' => 'View Reports Only',
-                'system_admin' => 'State System Administrator',
+                'system_admin' => 'System Administrator',
                 'admin' => 'NHEBI Staff'
             );
 

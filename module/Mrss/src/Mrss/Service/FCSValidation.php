@@ -524,7 +524,11 @@ class FCSValidation
 
     protected function getBenefitLabel($benefit)
     {
-        return ucwords(str_replace('_', ' ', $benefit));
+        $benefit = ucwords(str_replace('_', ' ', $benefit));
+
+        $benefit = str_replace('Fica', 'FICA', $benefit);
+
+        return $benefit;
     }
 
     public function validateBenefitsVsSalaries()
