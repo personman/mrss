@@ -194,7 +194,8 @@ class SubscriptionController extends AbstractActionController
                     $data = array(
                         'renew' => false,
                         'free' => true,
-                        'college_id' => $college->getId()
+                        'college_id' => $college->getId(),
+                        'user' => $data['user']
                     );
 
                     $this->saveDraftSubscription($data);
@@ -221,7 +222,7 @@ class SubscriptionController extends AbstractActionController
     protected function joinFreeFinal()
     {
         $draft = $this->getDraftSubscription();
-        $data = $draft->getFormData();
+        $data = json_decode($draft->getFormData(), true);
         $collegeId = $draft->getCollegeId();
         $college = $this->getCollegeModel()->find($collegeId);
 
@@ -239,6 +240,7 @@ class SubscriptionController extends AbstractActionController
         $defaultRole = 'data';
         $userData = $data['user'];
         $defaultState = 0;
+
         $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
 
         $this->getSubscriptionModel()->getEntityManager()->flush();
