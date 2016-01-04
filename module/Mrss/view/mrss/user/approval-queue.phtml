@@ -1,3 +1,24 @@
+<script>
+    $(function() {
+        // Confirmation for delete button
+        $('#deleteButton').click(function() {
+            var confirmed = confirm("Are you sure you want to delete the selected user(s)? There is no undo for this and the deleted users do not get notified.");
+
+            return confirmed;
+        });
+
+        // Check all
+        $('#checkAll').change(function() {
+            var checkbox = $(this);
+            var checked = checkbox[0].checked;
+
+            $('input[type=checkbox]').each(function() {
+                this.checked = checked;
+            })
+        })
+    })
+</script>
+
 <?php /** @var \Mrss\Entity\User[] $users */ ?>
 <h1>User Approval Queue</h1>
 
@@ -12,7 +33,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th></th>
+                <th>
+                    <input type="checkbox" id="checkAll" name="checkAll" title = "Check All" />
+                </th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Institution</th>
@@ -41,13 +64,21 @@
         </tbody>
     </table>
 
-    <fieldset id="fieldset-buttons" class="well well-small">
+    <fieldset id="fieldset-buttons" class="well well-small submit-fieldset">
         <div class="control-group" id="control-group-submitButton">
-            <div class="controls" id="controls-submitButton">
+            <div class="controls" id="controls-submitButton" style="margin-right: 20px">
                 <input type="submit" name="buttons[submit]" class="btn btn-primary" id="submitButton" value="Approve">
             </div>
         </div>
+
+        <div class="control-group" id="control-group-deleteButton">
+            <div class="controls" id="controls-deleteButton">
+                <input type="submit" name="buttons[delete]" class="btn btn-danger" id="deleteButton" value="Delete">
+            </div>
+        </div>
     </fieldset>
+
+
 </form>
 
 <?php endif ?>

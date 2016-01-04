@@ -619,6 +619,7 @@ class UserController extends AbstractActionController
      */
     protected function getAllNewNCCBPUsers()
     {
+
         $collegeModel = $this->getServiceLocator()->get('model.college');
         /** @var \Mrss\Entity\College[] $colleges */
         $colleges = $collegeModel->findAll();
@@ -661,13 +662,21 @@ class UserController extends AbstractActionController
             $usersToApprove = array_keys($usersToApprove);
             $newState = 1; // Approve = 1
 
+            $buttons = $this->params()->fromPost('buttons');
+            $delete = (!empty($buttons['delete']));
+
             $count = 0;
             foreach ($usersToApprove as $userId) {
                 if ($user = $this->getUserModel()->find($userId)) {
-                    $user->setState($newState);
-                    $this->getUserModel()->save($user);
+                    // Are we deleting or approving?
+                    if ($delete) {
+                        $this->getUserModel()->delete($user);
+                    } else {
+                        $user->setState($newState);
+                        $this->getUserModel()->save($user);
 
-                    $this->sendWelcomeEmail($user);
+                        $this->sendWelcomeEmail($user);
+                    }
 
                     $count++;
                 }
@@ -680,7 +689,12 @@ class UserController extends AbstractActionController
                 $noun .= 's';
             }
 
-            $this->flashMessenger()->addSuccessMessage("$count $noun approved.");
+            $verb = 'approved';
+            if ($delete) {
+                $verb = 'deleted';
+            }
+
+            $this->flashMessenger()->addSuccessMessage("$count $noun $verb.");
             return $this->redirect()->toRoute('users/queue');
         }
 
