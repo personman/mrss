@@ -12,6 +12,7 @@ return array(
     'layout' => 'nccbp.phtml',
     'navigation' => 'fcs_navigation',
     'contact_instructions' => null,
+    'contact_recipient' => array('jbarnshaw@aaup.org', 'sdunietz@aaup.org'),
     'css' => 'aaup.css',
     'css_print' => null,
     'validation_class' => 'FCSValidation',

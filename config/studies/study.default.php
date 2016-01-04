@@ -11,6 +11,7 @@ return array(
     'navigation' => 'navigation',
     'favicon' => '/favicon.ico',
     'contact_instructions' => '',
+    'contact_recipient' => null,
     'css' => null,
     'css_print' => null,
     'header_title' => null,
