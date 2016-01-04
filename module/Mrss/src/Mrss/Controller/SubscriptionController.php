@@ -236,12 +236,14 @@ class SubscriptionController extends AbstractActionController
         );
 
         // create the user.
-        // Set state to 0
-        $defaultRole = 'data';
-        $userData = $data['user'];
-        $defaultState = 0;
+        if (!empty($data['user'])) {
+            // Set state to 0
+            $defaultRole = 'data';
+            $userData = $data['user'];
+            $defaultState = 0;
 
-        $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+            $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+        }
 
         $this->getSubscriptionModel()->getEntityManager()->flush();
 
