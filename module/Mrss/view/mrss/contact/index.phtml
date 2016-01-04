@@ -55,7 +55,7 @@
 
         // Are we using the default captcha (reverse word)?
         if (captchaControls.html().search('backwards')) {
-            var word = captchaControls.find('b').html();
+            var word = captchaControls.find('strong').html();
             var reversed = reverse(word);
 
             // Fill in the input
@@ -72,9 +72,9 @@
 </script>
 
 <style>
-    #control-group-captcha {
+    /*#control-group-captcha {
         display: none;
-    }
+    }*/
 </style>
 
 <section class="contact">
