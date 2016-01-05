@@ -31,7 +31,7 @@ class AbstractForm extends Form
     ) {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
-        $buttons->setAttribute('class', 'well well-small submit-fieldset');
+        $buttons->setAttribute('class', 'well well-small');
 
         // Add the save button
         $save = new Element\Submit('submit');
@@ -180,7 +180,10 @@ class AbstractForm extends Form
             'WA' => 'Washington',
             'WV' => 'West Virginia',
             'WI' => 'Wisconsin',
-            'WY' => 'Wyoming'
+            'WY' => 'Wyoming',
+            'GU' => 'Guam',
+            'PR' => 'Puerto Rico',
+            'VI' => 'Virgin Islands of the U.S.'
         );
 
         if ($includeBlankOption) {
