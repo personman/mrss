@@ -219,7 +219,7 @@ return array(
                 array(
                     'controller' => 'users',
                     'action' => 'switch',
-                    'roles' => array('system_admin')
+                    'roles' => array('system_admin', 'system_viewer')
                 ),
                 // Admin stuff
                 array(
