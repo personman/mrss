@@ -375,6 +375,7 @@ class NavigationFactory extends DefaultNavigationFactory
             pr($study->getId());
             pr($year);
             pr($collegeId);
+            pr($_SESSION);
             prd($subscription->getId());
         }
 
