@@ -102,7 +102,7 @@ return array(
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'users',
-                    'action' => array('account', 'accountedit', 'definitions'),
+                    'action' => array('account', 'accountedit', 'definitions', 'unimpersonate'),
                     'roles' => array('user')
                 ),
                 array(

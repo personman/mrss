@@ -728,10 +728,21 @@ class UserController extends AbstractActionController
         return $userModel;
     }
 
+    public function unimpersonateAction()
+    {
+        // Clear the system admin session (fixes john's start loop bug)
+        $this->getSystemAdminSessionContainer()->getManager()->getStorage()->clear('system_admin');
+
+        // Redirect on to the vendor unimpersonate action
+        return $this->redirect()->toRoute('zfcuserimpersonate/unimpersonate');
+    }
+
     public function getSystemAdminSessionContainer()
     {
+        $containerName = 'system_admin';
+
         if (empty($this->systemAdminSessionContainer)) {
-            $container = new Container('system_admin');
+            $container = new Container($containerName);
             $this->systemAdminSessionContainer = $container;
         }
 

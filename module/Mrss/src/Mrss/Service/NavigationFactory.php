@@ -58,8 +58,7 @@ class NavigationFactory extends DefaultNavigationFactory
         // Alter the nav based on auth
         $auth = $serviceLocator->get('zfcuser_auth_service');
         $user = null;
-        $impersonationService = $serviceLocator
-            ->get('zfcuserimpersonate_user_service');
+        $impersonationService = $this->getImpersonationService();
 
         $system = null;
 
@@ -319,6 +318,12 @@ class NavigationFactory extends DefaultNavigationFactory
         return $pages;
     }
 
+    public function getImpersonationService()
+    {
+        return $this->serviceLocator
+            ->get('zfcuserimpersonate_user_service');
+    }
+
     public function setCurrentStudy(Study $study)
     {
         $this->currentStudy = $study;
@@ -370,7 +375,8 @@ class NavigationFactory extends DefaultNavigationFactory
 
         $subscription = $subModel->findOne($year, $collegeId, $study->getId());
 
-        if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
+        $force = false;
+        if ($force || $_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
             pr($user->getId());
             pr($study->getId());
             pr($year);
