@@ -210,8 +210,7 @@
         </div>
     <?php endif ?>
 <?php endif ?>
-
-<?= $this->systemAdmin() ?>
+<?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
 
 <?php if (empty($this->noWrapper)): ?>
     <div id="content">

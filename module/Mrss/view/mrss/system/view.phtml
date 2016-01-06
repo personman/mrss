@@ -22,8 +22,6 @@
 
 <h2>System Admin Users</h2>
 
-
-
 <table class="table table-striped table-hover">
     <?php foreach ($system->getAdmins() as $user): ?>
         <tr>
@@ -42,6 +40,44 @@
                     'systems/removeadmin',
                     array('user_id' => $user->getId())
                 ) ?>" title="Remove system admin role from this user">
+                    X
+                </a>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>
+
+
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url(
+        'systems/addadmin',
+        array('system_id' => $system->getId(), 'role' => 'system_viewer')
+    ) ?>">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add system viewer
+    </a>
+</div>
+
+<h2>System Viewer Users</h2>
+
+<table class="table table-striped table-hover">
+    <?php foreach ($system->getViewers() as $user): ?>
+        <tr>
+            <td>
+                <?php
+                $item = '<a title="Impersonate this user"
+                                href="/admin/user/impersonate/' . $user->getId()
+                    . '"><i class="icon icon-fire glyphicon glyphicon-transfer"></i></a> ';
+                $item .= "{$user->getFullName()}";
+                echo $item;
+                ?>
+
+            </td>
+            <td>
+                <a href="<?= $this->url(
+                    'systems/removeadmin',
+                    array('user_id' => $user->getId())
+                ) ?>" title="Remove system viewer role from this user">
                     X
                 </a>
             </td>

@@ -621,10 +621,11 @@ return array(
                     'addadmin' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/addadmin/:system_id',
+                            'route' => '/addadmin/:system_id[/:role]',
                             'defaults' => array(
                                 'action' => 'addadmin',
-                                'system_id' => 0
+                                'system_id' => 0,
+                                'role' => 'system_admin'
                             )
                         )
                     ),

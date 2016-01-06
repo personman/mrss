@@ -30,17 +30,17 @@ class SystemAdmin extends AbstractHelper
 
     protected $activeCollege;
 
-    public function __invoke()
+    public function __invoke($allowed)
     {
-        return $this->showCollegeSwitcher();
+        return $this->showCollegeSwitcher($allowed);
     }
 
-    public function showCollegeSwitcher()
+    public function showCollegeSwitcher($allowed)
     {
         $html = '';
 
         $user = $this->getUser();
-        if (!empty($user) && $user->getRole() == 'system_admin') {
+        if (!empty($user) && $allowed) {
             $activeCollege = $this->getActiveCollege();
 
             $collegeSelected = true;

@@ -180,19 +180,24 @@ class System
     /**
      * Return a list of system admins for this system
      */
-    public function getAdmins()
+    public function getAdmins($role = 'system_admin')
     {
         $systemAdmins = array();
 
         foreach ($this->getColleges() as $college) {
             foreach ($college->getUsers() as $user) {
-                if ($user->getRole() == 'system_admin') {
+                if ($user->getRole() == $role) {
                     $systemAdmins[] = $user;
                 }
             }
         }
 
         return $systemAdmins;
+    }
+
+    public function getViewers()
+    {
+        return $this->getAdmins('system_viewer');
     }
 
     public function getInputFilter()
