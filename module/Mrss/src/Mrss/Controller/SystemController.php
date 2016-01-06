@@ -168,6 +168,11 @@ class SystemController extends AbstractActionController
         $systemId = $this->params('system_id');
         $role = $this->params('role');
 
+        $roleLabel = 'admin';
+        if ($role == 'system_viewer') {
+            $roleLabel = 'viewer';
+        }
+
         $systemModel = $this->getServiceLocator()->get('model.system');
         $system = $systemModel->find($systemId);
 
@@ -198,11 +203,6 @@ class SystemController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 // Show a message and redirect
-                $roleLabel = 'admin';
-                if ($role == 'system_viewer') {
-                    $roleLabel = 'viewer';
-                }
-
                 $this->flashMessenger()->addSuccessMessage("System $roleLabel added.");
                 return $this->redirect()
                     ->toRoute('systems/view', array('id' => $system->getId()));
@@ -212,6 +212,7 @@ class SystemController extends AbstractActionController
         $viewModel = new ViewModel(
             array(
                 'form' => $form,
+                'roleLabel' => $roleLabel,
                 'system' => $system
             )
         );
