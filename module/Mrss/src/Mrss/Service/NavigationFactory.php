@@ -370,6 +370,16 @@ class NavigationFactory extends DefaultNavigationFactory
 
         $subscription = $subModel->findOne($year, $collegeId, $study->getId());
 
+        if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
+            pr($user->getId());
+            pr($study->getId());
+            pr($year);
+            pr($collegeId);
+            prd($subscription->getId());
+        }
+
+
+
         return (!empty($subscription));
     }
 
