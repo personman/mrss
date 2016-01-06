@@ -446,7 +446,7 @@ class UserController extends AbstractActionController
         $userSystem = $user->getCollege()->getSystem();
         $role = $user->getRole();
 
-        if (empty($targetSystem) || empty($userSystem) || $role != 'system_admin'
+        if (empty($targetSystem) || empty($userSystem) || !$this->isAllowed('systemSwitch', 'view')
             || $userSystem != $targetSystem) {
             throw new \Exception(
                 'You do not have permission to enter data for that college'
