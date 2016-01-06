@@ -166,6 +166,13 @@ class SystemController extends AbstractActionController
     public function addadminAction()
     {
         $systemId = $this->params('system_id');
+        $role = $this->params('role');
+
+        $roleLabel = 'admin';
+        if ($role == 'system_viewer') {
+            $roleLabel = 'viewer';
+        }
+
         $systemModel = $this->getServiceLocator()->get('model.system');
         $system = $systemModel->find($systemId);
 
@@ -173,7 +180,7 @@ class SystemController extends AbstractActionController
             throw new \Exception('System not found');
         }
 
-        $form = new \Mrss\Form\SystemAdmin($system);
+        $form = new \Mrss\Form\SystemAdmin($system, $role);
 
         // Process the form, promoting the user
         if ($this->getRequest()->isPost()) {
@@ -191,12 +198,12 @@ class SystemController extends AbstractActionController
                 }
 
                 // Set the role and save
-                $user->setRole('system_admin');
+                $user->setRole($data['role']);
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
 
                 // Show a message and redirect
-                $this->flashMessenger()->addSuccessMessage('System admin added');
+                $this->flashMessenger()->addSuccessMessage("System $roleLabel added.");
                 return $this->redirect()
                     ->toRoute('systems/view', array('id' => $system->getId()));
             }
@@ -205,6 +212,7 @@ class SystemController extends AbstractActionController
         $viewModel = new ViewModel(
             array(
                 'form' => $form,
+                'roleLabel' => $roleLabel,
                 'system' => $system
             )
         );
@@ -226,8 +234,15 @@ class SystemController extends AbstractActionController
         // What system were they in (for redirection)?
         $system = $user->getCollege()->getSystem();
 
+        // What should the new role be?
+        $oldRole = $user->getRole();
+        $newRole = 'data';
+        if ($oldRole == 'system_viewer') {
+            $newRole = 'viewer';
+        }
+
         // Remove the system admin role
-        $user->setRole('user');
+        $user->setRole($newRole);
         $userModel->save($user);
         $this->getServiceLocator()->get('em')->flush();
 

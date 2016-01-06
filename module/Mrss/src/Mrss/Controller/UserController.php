@@ -3,6 +3,7 @@
 namespace Mrss\Controller;
 
 use PHPExcel;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\User as UserEntity;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -38,8 +39,14 @@ class UserController extends AbstractActionController
             $user->setPassword('nothing');
             $user->setRole('data');
 
-            // @todo: decide how to handle this for AAUP
-            $user->setState(1);
+            $defaultState = $this->getStudyConfig()->default_user_state;
+
+            // Admin-created users are always approved.
+            if ($this->isAllowed('adminMenu', 'view')) {
+                $defaultState = 1;
+            }
+
+            $user->setState($defaultState);
 
             if ($collegeId = $this->params('college')) {
                 $college = $collegeModel->find($collegeId);
@@ -175,20 +182,43 @@ class UserController extends AbstractActionController
         $mailer = $this->getServiceLocator()->get('mail.transport');
         $renderer = $this->getServiceLocator()->get('ViewRenderer');
 
-        $params = array(
-            'study' => $study,
-            'key' => $this->getPasswordResetKey($user->getId()),
-            'userId' => $user->getId()
+        $oneTimeLogin = $renderer->serverUrl(
+            $renderer->url('zfcuser/resetpassword', array(
+                'userId' => $user->getId(),
+                'token' => $this->getPasswordResetKey($user->getId()))
+            )
         );
 
-        $content = $renderer->render('mrss/email/added-user', $params);
+        $params = array(
+            //'study' => $study,
+            'fullName' => $user->getFullName(),
+            'userId' => $user->getId(),
+            'oneTimeLogin' => $oneTimeLogin,
+            'year' => $study->getCurrentYear(),
+            'studyUrl' => $renderer->serverUrl('/'),
+            'studyName' => $study->getDescription(),
+            'resetUrl' => $renderer->serverUrl('/reset-password'),
+            'contactUrl' => $renderer->serverUrl('/contact')
+        );
+
+        //prd($params);
+
+        $emailTemplate = 'mrss/email/added-user';
+        if ($configTemplate = $this->getStudyConfig()->welcome_email) {
+            $emailTemplate = 'mrss/email/' . $configTemplate;
+        }
+
+        $content = $renderer->render($emailTemplate, $params);
+
+        $fromEmail = $this->getStudyConfig()->from_email;
+        //echo $content; die;
 
         $message = new Message();
         $message->setTo($user->getEmail());
         $message->setSubject("Welcome to " . $study->getName());
-        $message->setFrom('no-reply@jccc.edu');
+        $message->setFrom($fromEmail);
         //$message->addBcc('michelletaylor@jccc.edu');
-        $message->addBcc('dfergu15@jccc.edu');
+        //$message->addBcc('dfergu15@jccc.edu');
 
         // make a header as html
         $html = new MimePart($content);
@@ -352,7 +382,17 @@ class UserController extends AbstractActionController
         $roleChoices = $this->getServiceLocator()->get('study')->user_role_choices;
         $roleChoices = explode(',', $roleChoices);
 
-        $fieldset = new UserForm('user', false, $adminControls, $em, $roleSubset, $roleChoices);
+        // Is the user editing themselves?
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+        if ($user->getId() != $currentUser->getId()) {
+            $includeDelete = true;
+            $editingSelf = false;
+        } else {
+            $includeDelete = false;
+            $editingSelf = true;
+        }
+
+        $fieldset = new UserForm('user', false, $adminControls, $em, $roleSubset, $roleChoices, $editingSelf);
         $fieldset->add(
             array(
                 'name' => 'id',
@@ -360,13 +400,6 @@ class UserController extends AbstractActionController
             )
         );
 
-        // Is the user editing themselves?
-        $currentUser = $this->zfcUserAuthentication()->getIdentity();
-        if ($user->getId() != $currentUser->getId()) {
-            $includeDelete = true;
-        } else {
-            $includeDelete = false;
-        }
 
         $fieldset->setUseAsBaseFieldset(true);
         $form->add($fieldset);
@@ -413,7 +446,7 @@ class UserController extends AbstractActionController
         $userSystem = $user->getCollege()->getSystem();
         $role = $user->getRole();
 
-        if (empty($targetSystem) || empty($userSystem) || $role != 'system_admin'
+        if (empty($targetSystem) || empty($userSystem) || !$this->isAllowed('systemSwitch', 'view')
             || $userSystem != $targetSystem) {
             throw new \Exception(
                 'You do not have permission to enter data for that college'
@@ -443,6 +476,39 @@ class UserController extends AbstractActionController
         $this->getServiceLocator()->get('em')->flush();
     }
 
+    public function importAction()
+    {
+        $service = $this->getServiceLocator()->get('service.import.users');
+        $form = $service->getForm();
+
+        // Handle the form
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            takeYourTime();
+
+            $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $filename = $data['file']['tmp_name'];
+
+                $stats = $service->import($filename);
+
+                $this->flashMessenger()->addSuccessMessage($stats);
+                return $this->redirect()->toRoute('users/import');
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
     /**
      * Generate a one-time login link for all users that haven't logged in.
      * Export to Excel.
@@ -451,6 +517,9 @@ class UserController extends AbstractActionController
     {
         takeYourTime();
 
+        $sw = new Stopwatch();
+        $saveEvery = 20;
+
         // Get all users with NCCBP subscriptions who have never logged in
         $users = $this->getAllNewNCCBPUsers();
 
@@ -458,10 +527,9 @@ class UserController extends AbstractActionController
             array('email', 'name', 'college', 'loginLink')
         );
 
+        $i = 0;
         foreach ($users as $user) {
             $userId = $user->getId();
-
-
 
             $serverUrl = $this->getServiceLocator()
                 ->get('viewhelpermanager')->get('serverUrl');
@@ -470,7 +538,8 @@ class UserController extends AbstractActionController
                 ->get('viewhelpermanager')->get('url');
 
             // Build the one-time login url
-            $key = $this->getPasswordResetKey($userId);
+            $key = $this->getPasswordResetKey($userId, $user->getEmail());
+
 
             $url = $serverUrl->__invoke(
                 $urlHelper->__invoke(
@@ -486,7 +555,14 @@ class UserController extends AbstractActionController
                 $url
             );
 
+
+            $i++;
+
+            if ($i % $saveEvery == 0) {
+                $this->getServiceLocator()->get('em')->flush();
+            }
         }
+
         $this->getServiceLocator()->get('em')->flush();
 
         // Export to Excel
@@ -512,24 +588,28 @@ class UserController extends AbstractActionController
         die;
     }
 
-    protected function getPasswordResetKey($userId)
+    protected function getPasswordResetKey($userId, $email)
     {
         /** @var \GoalioForgotPassword\Service\Password $passwordService */
         $passwordService = $this->getServiceLocator()
             ->get('goalioforgotpassword_password_service');
 
-        $passwordService->cleanPriorForgotRequests($userId);
-        $class = $passwordService->getOptions()->getPasswordEntityClass();
+        if ($existing = $passwordService->getPasswordMapper()->findByUser($userId)) {
+            $key = $existing->getRequestKey();
+        } else {
+            $passwordService->cleanPriorForgotRequests($userId);
+            $class = $passwordService->getOptions()->getPasswordEntityClass();
 
-        /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
-        $model = new $class;
+            /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
+            $model = new $class;
 
-        $model->setUserId($userId);
-        $model->setRequestTime(new \DateTime('now'));
-        $model->generateRequestKey();
-        $passwordService->getPasswordMapper()->persist($model);
+            $model->setUserId($userId);
+            $model->setRequestTime(new \DateTime('now'));
+            $model->generateRequestKey();
+            $passwordService->getPasswordMapper()->persist($model);
 
-        $key = $model->getRequestKey();
+            $key = $model->getRequestKey();
+        }
 
         return $key;
     }
@@ -539,6 +619,7 @@ class UserController extends AbstractActionController
      */
     protected function getAllNewNCCBPUsers()
     {
+
         $collegeModel = $this->getServiceLocator()->get('model.college');
         /** @var \Mrss\Entity\College[] $colleges */
         $colleges = $collegeModel->findAll();
@@ -547,13 +628,13 @@ class UserController extends AbstractActionController
         $users = array();
         foreach ($colleges as $college) {
             foreach ($college->getUsers() as $user) {
-                if ($user->hasStudy($study)) {
+                //if ($user->hasStudy($study)) {
                     $lastAccess = $user->getLastAccess();
                     if (empty($lastAccess)) {
                         $users[] = $user;
                         //pr($user->getFullName() . ' ' . $user->getCollege()->getName());
                     }
-                }
+                //}
             }
         }
 
@@ -581,14 +662,22 @@ class UserController extends AbstractActionController
             $usersToApprove = array_keys($usersToApprove);
             $newState = 1; // Approve = 1
 
+            $buttons = $this->params()->fromPost('buttons');
+            $delete = (!empty($buttons['delete']));
+
             $count = 0;
             foreach ($usersToApprove as $userId) {
                 if ($user = $this->getUserModel()->find($userId)) {
-                    $user->setState($newState);
-                    $this->getUserModel()->save($user);
+                    // Are we deleting or approving?
+                    if ($delete) {
+                        $this->getUserModel()->delete($user);
+                    } else {
+                        $user->setState($newState);
+                        $this->getUserModel()->save($user);
 
-                    // @todo: send welcome email
-                    //$this->sendPasswordResetEmail($user);
+                        $this->sendWelcomeEmail($user);
+                    }
+
                     $count++;
                 }
             }
@@ -600,7 +689,12 @@ class UserController extends AbstractActionController
                 $noun .= 's';
             }
 
-            $this->flashMessenger()->addSuccessMessage("$count $noun approved.");
+            $verb = 'approved';
+            if ($delete) {
+                $verb = 'deleted';
+            }
+
+            $this->flashMessenger()->addSuccessMessage("$count $noun $verb.");
             return $this->redirect()->toRoute('users/queue');
         }
 
@@ -634,13 +728,31 @@ class UserController extends AbstractActionController
         return $userModel;
     }
 
+    public function unimpersonateAction()
+    {
+        // Clear the system admin session (fixes john's start loop bug)
+        $this->getSystemAdminSessionContainer()->getManager()->getStorage()->clear('system_admin');
+
+        // Redirect on to the vendor unimpersonate action
+        return $this->redirect()->toRoute('zfcuserimpersonate/unimpersonate');
+    }
+
     public function getSystemAdminSessionContainer()
     {
+        $containerName = 'system_admin';
+
         if (empty($this->systemAdminSessionContainer)) {
-            $container = new Container('system_admin');
+            $container = new Container($containerName);
             $this->systemAdminSessionContainer = $container;
         }
 
         return $this->systemAdminSessionContainer;
+    }
+
+    protected function getStudyConfig()
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
     }
 }

@@ -41,6 +41,19 @@ class ContactController extends PhlyController
             ->addReplyTo($from)
             ->setSubject($subject)
             ->setBody($body);
+
+        // Recipient
+        if ($recipient = $this->getStudyConfig()->contact_recipient) {
+            $this->message->setTo($recipient);
+        }
+
         $this->transport->send($this->message);
+    }
+
+    protected function getStudyConfig()
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
     }
 }

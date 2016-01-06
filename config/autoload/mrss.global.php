@@ -21,7 +21,9 @@ return array(
         'www.nccwtbp.org' => 3,
         'www.workforceproject.org' => 3,
         'fcs.workforceproject.org' => 4,
-        'fcs.dan.com' => 4
+        'fcs.dan.com' => 4,
+        'research.aaup.org' => 4,
+        'research-beta.aaup.org' => 4,
     ),
     // These templates override the default data entry view
     // Moved to study config

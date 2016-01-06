@@ -1,10 +1,14 @@
 <?php /** @var \Mrss\Entity\System[] $systems */ ?>
-<h2>Systems</h2>
 
-<a class="btn btn-default" href="<?= $this->url('systems/add') ?>">
-    <i class="icon-plus-sign"></i>
-    Add a system
-</a>
+
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('systems/add') ?>">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add a system
+    </a>
+</div>
+
+<h1>Systems</h1>
 
 <?php if (!empty($systems)): ?>
 

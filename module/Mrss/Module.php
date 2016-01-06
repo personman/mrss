@@ -59,8 +59,7 @@ class Module
         $eventManager->attach(MvcEvent::EVENT_ROUTE, function($e) {
             $sm = $e->getApplication()->getServiceManager();
             $auth = $sm->get('zfcuser_auth_service');
-            if ($auth->hasIdentity()) {
-                $user = $auth->getIdentity();
+            if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
                 $user->setLastAccess(new \DateTime('now'));
 
                 $userModel = $sm->get('model.user');
@@ -676,6 +675,32 @@ class Module
 
                     $systemModel = $sm->get('model.system');
                     $service->setSystemModel($systemModel);
+
+                    return $service;
+                },
+                'service.import.colleges.demo' => function ($sm) {
+                    $service = new Service\Import\CollegeDemographics();
+
+                    $collegeModel = $sm->get('model.college');
+                    $service->setCollegeModel($collegeModel);
+
+                    $model = $sm->get('model.observation');
+                    $service->setObservationModel($model);
+
+                    return $service;
+                },
+                'service.import.users' => function ($sm) {
+                    $service = new Service\Import\User();
+
+                    $collegeModel = $sm->get('model.college');
+                    $service->setCollegeModel($collegeModel);
+
+                    $userModel = $sm->get('model.user');
+                    $service->setUserModel($userModel);
+
+                    $currentStudy = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy')->getCurrentStudy();
+                    $service->setStudy($currentStudy);
 
                     return $service;
                 },

@@ -1,8 +1,14 @@
 <? /** @var \Mrss\Entity\College $college */ ?>
 
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('colleges/edit', array('id' => $college->getId())) ?>">
+        <i class="glyphicon glyphicon-pencil"></i>
+        Edit college</a>
+    </a>
+</div>
+
 <h1><?= $college->getName() ?></h1>
 
-<a href="<?= $this->url('colleges/edit', array('id' => $college->getId())) ?>">Edit college</a>
 
 <table class="style1">
     <tr>

@@ -18,8 +18,8 @@ class FcsNavigationFactory extends NavigationFactory
         $auth = $serviceLocator->get('zfcuser_auth_service');
         $user = null;
         $system = null;
-        if ($auth->hasIdentity()) {
-            $user = $auth->getIdentity();
+        if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
+
             if ($college = $user->getCollege()) {
                 $system = $college->getSystem();
             }
@@ -28,16 +28,19 @@ class FcsNavigationFactory extends NavigationFactory
             if ($user->getRole() == 'viewer') {
                 $pages['home']['uri'] = '/reports/executive';
             }
-        }
 
-        // If the user is logged in, hide some stuff
-        if ($auth->hasIdentity()) {
+            // If the user is logged in, hide some stuff
             unset($pages['join']);
             unset($pages['about']);
             unset($pages['start']);
             unset($pages['results']);
             unset($pages['resources']);
             unset($pages['contact']);
+
+            // Hide data entry if there's no subscription
+            if (!$this->hasSubscription($user)) {
+                unset($pages['data-collection']);
+            }
         } else {
             unset($pages['members-about']);
             unset($pages['data-collection']);
@@ -51,20 +54,22 @@ class FcsNavigationFactory extends NavigationFactory
         $dataEntryPages = array();
 
         // Now add each form
-        $currentStudy = $this->getCurrentStudy($serviceLocator);
-        foreach ($currentStudy->getBenchmarkGroups() as $bGroup) {
-            $dataEntryPages[] = array(
-                'label' => $bGroup->getName(),
-                'route' => 'data-entry/edit',
-                'params' => array(
-                    'benchmarkGroup' => $bGroup->getUrl()
-                )
-            );
+        if (isset($pages['data-collection'])) {
+            $currentStudy = $this->getCurrentStudy($serviceLocator);
+            foreach ($currentStudy->getBenchmarkGroups() as $bGroup) {
+                $dataEntryPages[] = array(
+                    'label' => $bGroup->getName(),
+                    'route' => 'data-entry/edit',
+                    'params' => array(
+                        'benchmarkGroup' => $bGroup->getUrl()
+                    )
+                );
+            }
+
+            $dataEntryPages = array_merge($pages['data-collection']['pages'], $dataEntryPages);
+
+            $pages['data-collection']['pages'] = $dataEntryPages;
         }
-
-        $dataEntryPages = array_merge($pages['data-collection']['pages'], $dataEntryPages);
-
-        $pages['data-collection']['pages'] = $dataEntryPages;
 
         // Hide data entry links, if needed
         if (!$this->getAuthorizeService()->isAllowed('dataEntry', 'view')) {

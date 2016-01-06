@@ -425,6 +425,15 @@ return array(
                             )
                         )
                     ),
+                    'free' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/free',
+                            'defaults' => array(
+                                'action' => 'free'
+                            )
+                        )
+                    ),
                     'system' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -536,6 +545,16 @@ return array(
                                 'action' => 'import'
                             )
                         )
+                    ),
+                    'import-demo' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import-demo',
+                            'defaults' => array(
+                                'action' => 'import',
+                                'service' => 'demo'
+                            )
+                        )
                     )
                 )
             ),
@@ -602,10 +621,11 @@ return array(
                     'addadmin' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/addadmin/:system_id',
+                            'route' => '/addadmin/:system_id[/:role]',
                             'defaults' => array(
                                 'action' => 'addadmin',
-                                'system_id' => 0
+                                'system_id' => 0,
+                                'role' => 'system_admin'
                             )
                         )
                     ),
@@ -1379,6 +1399,15 @@ return array(
                                 'org' => 'data-entry'
                             )
                         )
+                    ),
+                    'import' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import',
+                            'defaults' => array(
+                                'action' => 'import'
+                            )
+                        )
                     )
                 )
             ),
@@ -1863,6 +1892,20 @@ return array(
                     )
                 )
             ),
+            // AAUP
+            'consultation' => array(
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/consultation',
+                    'defaults' => array(
+                        'controller' => 'PhlyContact\Controller\Contact',
+                        'action' => 'index',
+                        'subject' => 'Free Consultation',
+                        'body' => "I would like to schedule a free FCS consultation on (date and time)"
+                    )
+                )
+            ),
             // Workforce
             'free-webinar' => array(
                 'type' => 'Segment',
@@ -1880,6 +1923,17 @@ return array(
                     )
                 )
             ),
+            'all-colleges.json' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/files/all-colleges.json',
+                    'defaults' => array(
+                        'controller' => 'colleges',
+                        'action' => 'cacheColleges'
+                    )
+                )
+            ),
+
             // CMS:
             'cmsPage' => array(
                 'type' => 'segment',

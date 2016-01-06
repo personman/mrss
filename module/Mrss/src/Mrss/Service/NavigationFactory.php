@@ -58,8 +58,7 @@ class NavigationFactory extends DefaultNavigationFactory
         // Alter the nav based on auth
         $auth = $serviceLocator->get('zfcuser_auth_service');
         $user = null;
-        $impersonationService = $serviceLocator
-            ->get('zfcuserimpersonate_user_service');
+        $impersonationService = $this->getImpersonationService();
 
         $system = null;
 
@@ -79,7 +78,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Do they belong to a system?
             $user = $auth->getIdentity();
-            if ($college = $user->getCollege()) {
+            if ($user && $college = $user->getCollege()) {
                 $system = $user->getCollege()->getSystem();
             }
         } else {
@@ -113,10 +112,10 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
 
-        if ($auth->hasIdentity()) {
+        if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
 
             // Add the data entry links (if they're logged in
-            $user = $auth->getIdentity();
+
             $name = $user->getPrefix() . ' ' . $user->getLastName();
             $pages['account']['label'] = $name;
 
@@ -317,6 +316,12 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         return $pages;
+    }
+
+    public function getImpersonationService()
+    {
+        return $this->serviceLocator
+            ->get('zfcuserimpersonate_user_service');
     }
 
     public function setCurrentStudy(Study $study)

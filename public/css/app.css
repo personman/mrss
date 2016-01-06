@@ -176,3 +176,28 @@ div.userNote .well .control-group {
 td.no-border {
     border: none !important;
 }
+
+.submit-fieldset .control-group {
+    float: left;
+}
+.submit-fieldset .controls {
+    width: 50px !important;
+}
+
+.form-horizontal .submit-fieldset .controls {
+    margin: 5px;
+}
+.submit-fieldset #control-group-submitButton {
+    width: auto !important;
+}
+
+ul.ui-autocomplete {
+    list-style: none;
+    padding: 3px;
+}
+
+.ui-autocomplete li.ui-state-focus
+{
+    background-color: #888;
+    color: white;
+}

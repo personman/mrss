@@ -180,7 +180,10 @@ class AbstractForm extends Form
             'WA' => 'Washington',
             'WV' => 'West Virginia',
             'WI' => 'Wisconsin',
-            'WY' => 'Wyoming'
+            'WY' => 'Wyoming',
+            'GU' => 'Guam',
+            'PR' => 'Puerto Rico',
+            'VI' => 'Virgin Islands of the U.S.'
         );
 
         if ($includeBlankOption) {

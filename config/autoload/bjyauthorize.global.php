@@ -21,6 +21,31 @@ return array(
         // Role providers to be used to load all available roles into Zend\Permissions\Acl\Acl
         // Keys are the provider service names, values are the options to be passed to the provider
         'role_providers'        => array(
+            'BjyAuthorize\Provider\Role\Config' => array(
+                'guest' => array(
+                    'children' => array(
+                        'user'  => array(
+                            'children' => array(
+                                'viewer' => array(
+                                    'children' => array(
+                                        'system_viewer' => array(),
+                                        'contact' => array(
+                                            'children' => array(
+                                                'data' => array(
+                                                    'children' => array(
+                                                        'system_admin' => array(),
+                                                        'admin' => array()
+                                                    )
+                                                ),
+                                            )
+                                        )
+                                    )
+                                ),
+                            )
+                        ),
+                    )
+                ),
+            ),
             // using an object repository (entity repository) to load all roles into our ACL
             'BjyAuthorize\Provider\Role\ObjectRepositoryProvider' => array(
                 'object_manager'    => 'doctrine.entitymanager.orm_default',
@@ -33,7 +58,7 @@ return array(
         'resource_providers'    => array(
             'BjyAuthorize\Provider\Resource\Config' => array(
                 'adminMenu' => array(),
-                'system_admin' => array(),
+                'systemSwitch' => array(),
                 'dataEntry' => array(),
                 'membership' => array()
             ),
@@ -48,6 +73,7 @@ return array(
                     // the "wear" privilege on the resource "pants"
                     array(array('admin'), 'adminMenu', 'view'),
                     array(array('data'), 'dataEntry', 'view'),
+                    array(array('system_admin', 'system_viewer'), 'systemSwitch', 'view'),
                     // 'membership' = editing yr college, users, renewing
                     array(array('contact'), 'membership', 'view'),
                 ),
@@ -90,7 +116,7 @@ return array(
                 ),
                 array(
                     'controller' => 'colleges',
-                    'action' => array('peers', 'search'),
+                    'action' => array('peers', 'search', 'cacheColleges'),
                     'roles' => array('guest')
                 ),
                 array(
@@ -102,7 +128,7 @@ return array(
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'users',
-                    'action' => array('account', 'accountedit', 'definitions'),
+                    'action' => array('account', 'accountedit', 'definitions', 'unimpersonate'),
                     'roles' => array('user')
                 ),
                 array(
@@ -193,7 +219,7 @@ return array(
                 array(
                     'controller' => 'users',
                     'action' => 'switch',
-                    'roles' => array('system_admin')
+                    'roles' => array('system_admin', 'system_viewer')
                 ),
                 // Admin stuff
                 array(

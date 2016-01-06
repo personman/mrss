@@ -8,7 +8,7 @@
 
     <?= $this->headTitle() ?>
 
-    <link rel="stylesheet" type="text/css" href="/css/app.css?v=7">
+    <link rel="stylesheet" type="text/css" href="/css/app.css?v=8">
     <link rel="stylesheet" type="text/css" href="/css/content.css">
     <link rel="stylesheet" type="text/css" href="/css/tooltipster.css">
 
@@ -18,7 +18,7 @@
     <link href="/css/content.css" rel="stylesheet" type="text/css" />
 
     <?php if ($cssFile = $this->currentStudy(false)->getConfig()->css): ?>
-        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=17">
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=18">
     <?php endif ?>
 
     <?php if ($cssPrintFile = $this->currentStudy(false)->getConfig()->css_print): ?>
@@ -55,7 +55,7 @@
     <script type="text/javascript" src="/js/jquery.fixwidows.js"></script>
 
     <!-- App-specific -->
-    <script type="text/javascript" src="/js/app.js"></script>
+    <script type="text/javascript" src="/js/app.js?v=2"></script>
     <script type="text/javascript" src="/js/theme.js"></script>
     <script type="text/javascript" src="/js/nccbp.js?v=2"></script>
 
@@ -77,7 +77,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-3 logo">
-                <a href="/"><img class="img-responsive" src="<?= $this->currentStudy()->getLogo() ?>" title="<?= $this->currentStudy()->getDescription() ?>" /></a>
+                <a href="/"><img class="img-responsive" alt="<?= $this->currentStudy()->getDescription() ?>" src="<?= $this->currentStudy()->getLogo() ?>" title="<?= $this->currentStudy()->getDescription() ?>" /></a>
             </div>
 
             <div class="col-xs-1 header-title">
@@ -107,7 +107,9 @@
                     <div id="headerLoginForm">
                         <? $form = $this->plugin('zfcUserLoginWidget')->getLoginForm();
                         $form->get('identity')->setAttribute('placeHolder', 'Email');
+                        $form->get('identity')->setAttribute('title', 'Email');
                         $form->get('credential')->setAttribute('placeHolder', 'Password');
+                        $form->get('credential')->setAttribute('title', 'Password');
                         ?>
                         <?= $this->zfcUserLoginWidget() ?>
                     </div>
@@ -199,7 +201,7 @@
 <?php if (empty($this->noWrapper)): ?>
     <?php if ($this->zfcUserImpersonatorDisplayName()): ?>
         <div class="impersonation">
-            <span><a title="Unimpersonate" href="<?= $this->url('zfcuserimpersonate/unimpersonate') ?>">
+            <span><a title="Unimpersonate" href="<?= $this->url('users/unimpersonate') ?>">
                     <?= $this->zfcUserImpersonatorDisplayName() ?></a> is impersonating
             </span>
 
@@ -208,8 +210,7 @@
         </div>
     <?php endif ?>
 <?php endif ?>
-
-<?= $this->systemAdmin() ?>
+<?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
 
 <?php if (empty($this->noWrapper)): ?>
     <div id="content">

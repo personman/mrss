@@ -12,12 +12,17 @@ return array(
     'layout' => 'nccbp.phtml',
     'navigation' => 'fcs_navigation',
     'contact_instructions' => null,
+    'contact_recipient' => array('jbarnshaw@aaup.org', 'sdunietz@aaup.org'),
     'css' => 'aaup.css',
     'css_print' => null,
     'validation_class' => 'FCSValidation',
 	'header_title' => 'Faculty<br>Compensation<br>Survey',
+    'free_to_join' => true,
+    'agreement_template' => 'agreement-fcs',
+    'welcome_email' => 'welcome-aaup',
+    'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',
-    'copyright' => "1915 - " . date('Y') . " American Association of University Professors",
+    'copyright' => date('Y') . " American Association of University Professors",
     'footerLogo' => '',
     'footerSocial' => '',
     'data_entry_templates' => array(
@@ -51,7 +56,14 @@ return array(
             'sheetName' => 'Form 3',
             'sectionStartingCells' => array(
                 0 => 'B6',
-                1 => 'B19'
+                1 => 'B19',
+            ),
+        ),
+        '4b' => array(
+            'sheetName' => 'Form 3',
+            'sectionStartingCells' => array(
+                0 => 'P6',
+                1 => 'P19'
             ),
         ),
         5 => array(
@@ -835,16 +847,16 @@ return array(
                         'pt_male_salaries',
                         'pt_female_faculty',
                         'pt_female_salaries',
-                        'pt_total_faculty',
-                        'pt_total_salaries',
+                        //'pt_total_faculty',
+                        //'pt_total_salaries',
                     ),
                     'Graduate Teaching Assistant' => array(
                         'pt_male_graduate_teaching',
                         'pt_male_graduate_teaching_salaries',
                         'pt_female_graduate_teaching',
                         'pt_female_graduate_teaching_salaries',
-                        'pt_total_graduate_teaching',
-                        'pt_total_graduate_teaching_salaries',
+                        //'pt_total_graduate_teaching',
+                        //'pt_total_graduate_teaching_salaries',
                     )
                 )
             )

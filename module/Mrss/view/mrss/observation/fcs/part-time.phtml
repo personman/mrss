@@ -122,6 +122,13 @@ $this->headScript()->appendFile(
                         <td class="emptyCell"></td>
                     <?php endif ?>
                 <?php endforeach ?>
+
+                <?php $rank = ($label == 'Part-time Faculty') ? 'part-time-faculty' : 'graduate-teaching-assistant'; ?>
+
+                <td class="column-total" id="<?= $rank ?>_faculty">0</td>
+                <td class="column-total" id="<?= $rank ?>_salaries">0</td>
+
+
                 </tr>
 
                 <tr class="help-text">
@@ -137,7 +144,10 @@ $this->headScript()->appendFile(
                     <?php endforeach ?>
 
                 </td>
+
+
             <?php endif ?>
+
             </tr>
         <?php endforeach ?>
     <?php endforeach ?>
@@ -147,8 +157,8 @@ $this->headScript()->appendFile(
             <td class="column-total" id="male_salaries">0</td>
             <td class="column-total" id="female_faculty">0</td>
             <td class="column-total" id="female_salaries">0</td>
-            <td class="column-total" id="total_faculty">0</td>
-            <td class="column-total" id="total_salaries">0</td>
+            <td class="column-total" id="faculty">0</td>
+            <td class="column-total" id="salaries">0</td>
         </tr>
     </tbody>
 </table>

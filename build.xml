@@ -186,6 +186,10 @@
     <target name="q" depends="codesniffer,phpunit" />
 
     <target name="ssh-git-deploy">
+        <exec command="ssh max@maximizingresources.org 'cd nccbp.org; bin/phing update'" passthru="true"/>
+    </target>
+
+    <target name="ssh-git-mrss">
         <exec command="ssh max@maximizingresources.org 'cd maximizingresources.org; bin/phing update'" passthru="true"/>
     </target>
 

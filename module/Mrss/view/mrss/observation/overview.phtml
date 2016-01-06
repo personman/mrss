@@ -2,9 +2,15 @@
 
 <div class="page-header">
     <?php if ($this->currentStudy()->getDataEntryOpen()): ?>
-        <h2>Data Entry</h2>
+        <h1>
+            <?php if ($this->currentStudy()->getId() == 4): ?>
+                Data Collection
+            <?php else: ?>
+                Data Entry
+            <?php endif ?>
+        </h1>
     <?php else: ?>
-        <h2>Submitted Values</h2>
+        <h1>Submitted Values</h1>
     <?php endif ?>
 </div>
 
@@ -48,6 +54,15 @@
     <p><strong>If  you prefer to upload your data in an Excel  spreadsheet please use the <a href="<?= $this->url('data-entry/import') ?>">Excel Spreadsheet</a>.</strong></p>
     <br>
 
+
+<?php endif ?>
+
+<?php if (!empty($issues)): ?>
+    <?php $noun = (count($issues) == 1) ? 'issue' : 'issues'; ?>
+
+    <p>
+        We have identified <?= count($issues) ?> <?= $noun ?> in your data. <a href="/issues">Please review</a>.
+    </p>
 
 <?php endif ?>
 

@@ -725,6 +725,12 @@ function getAdminMenu()
         'label' => 'Memberships',
         'route' => 'admin'
     ),
+    'institutions' => array(
+        'label' => 'Institutions',
+        'controller' => 'colleges',
+        'action' => 'index',
+        'route' => 'colleges'
+    ),
     'studies' => array(
         'label' => 'Studies',
         'controller' => 'studies',
@@ -745,12 +751,6 @@ function getAdminMenu()
     'demographic-criteria' => array(
         'label' => 'Demographic Criteria',
         'route' => 'criteria'
-    ),
-    array(
-        'label' => 'Colleges',
-        'controller' => 'colleges',
-        'action' => 'index',
-        'route' => 'colleges'
     ),
     array(
         'label' => 'Systems',

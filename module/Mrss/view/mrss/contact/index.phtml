@@ -55,7 +55,7 @@
 
         // Are we using the default captcha (reverse word)?
         if (captchaControls.html().search('backwards')) {
-            var word = captchaControls.find('b').html();
+            var word = captchaControls.find('strong').html();
             var reversed = reverse(word);
 
             // Fill in the input
@@ -70,6 +70,12 @@
         return s.split('').reverse().join('');
     }
 </script>
+
+<style>
+    /*#control-group-captcha {
+        display: none;
+    }*/
+</style>
 
 <section class="contact">
     <div class="page-header">
@@ -103,9 +109,25 @@
     $form->get('body')->setAttribute('rows', 8)->setLabel('Message');
     $form->get('from')->setLabel('Your Email');
     $form->get('subject')->setLabel('Subject');
+
+
+    // Add some titles for accessibility
+    $form->get('from')->setAttribute('title', 'Your email address.');
+    $form->get('subject')->setAttribute('title', 'Subject');
+    $form->get('body')->setAttribute('title', 'Message body');
+    $form->get('captcha')->setAttribute('title', 'Captcha');
+
+    $formOutput = $this->ztbForm($form);
+
+    // Replace <b> with <strong> for WCAG
+    $formOutput = str_replace(
+        array('<b>', '</b>'),
+        array('<strong>', '</strong>'),
+        $formOutput
+    );
     ?>
 
-    <?= $this->ztbForm($form) ?>
+    <?= $formOutput ?>
 
     <p>
         Privacy Note: Your contact message will contain a return e-mail address. If you include other identifying information, we may use that information when we respond. Email may not be secure, so send only information that is necessary to respond to your request.

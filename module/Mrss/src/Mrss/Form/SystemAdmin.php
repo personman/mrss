@@ -17,7 +17,7 @@ class SystemAdmin extends AbstractForm
 {
     protected $system;
 
-    public function __construct(System $system)
+    public function __construct(System $system, $role = 'system_admin')
     {
         $this->system = $system;
 
@@ -28,6 +28,13 @@ class SystemAdmin extends AbstractForm
             array(
                 'name' => 'system_id',
                 'type' => 'Hidden'
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'role',
+                'type' => 'Hidden',
             )
         );
 
@@ -45,6 +52,8 @@ class SystemAdmin extends AbstractForm
         );
 
         $this->add($this->getButtonFieldset());
+
+        $this->get('role')->setValue($role);
     }
 
     public function getUserOptions()

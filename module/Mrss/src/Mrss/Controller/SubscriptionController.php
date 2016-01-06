@@ -29,6 +29,7 @@ use Zend\Mime\Part as MimePart;
 use Zend\Mime\Message as MimeMessage;
 use DateTime;
 use PHPExcel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class SubscriptionController
@@ -190,27 +191,16 @@ class SubscriptionController extends AbstractActionController
                     ->get('model.college')->find($collegeId);
 
                 if (!empty($college)) {
-                    //prd($form->getData());
-                    // Create the observation
-                    $observation = $this->createOrUpdateObservation($college);
-
-                    $subscription = $this->createOrUpdateSubscription(
-                        array('paymentType' => 'free'),
-                        $college,
-                        $observation
+                    $data = array(
+                        'renew' => false,
+                        'free' => true,
+                        'college_id' => $college->getId(),
+                        'user' => $data['user']
                     );
 
-                    // create the user. Send email now or wait for approval?
-                    // Set state to 0
-                    $defaultRole = 'data';
-                    $userData = $data['user'];
-                    $defaultState = 0;
-                    $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+                    $this->saveDraftSubscription($data);
 
-                    $this->getSubscriptionModel()->getEntityManager()->flush();
-
-                    // redirect
-                    return $this->redirect()->toRoute('joined');
+                    return $this->redirect()->toRoute('subscribe/user-agreement');
                 } else {
                     $this->flashMessenger()->addErrorMessage("Unable to find institution.");
                     return $this->redirect()->toUrl('/join-free');
@@ -224,9 +214,41 @@ class SubscriptionController extends AbstractActionController
 
         return array(
             'form' => $form,
-            'allColleges' => $this->getAllColleges(),
+            //'allColleges' => $this->getAllColleges(),
             'formHasErrors' => $formHasErrors
         );
+    }
+
+    protected function joinFreeFinal()
+    {
+        $draft = $this->getDraftSubscription();
+        $data = json_decode($draft->getFormData(), true);
+        $collegeId = $draft->getCollegeId();
+        $college = $this->getCollegeModel()->find($collegeId);
+
+        // Create the observation
+        $observation = $this->createOrUpdateObservation($college);
+
+        $subscription = $this->createOrUpdateSubscription(
+            array('paymentType' => 'free'),
+            $college,
+            $observation
+        );
+
+        // create the user.
+        if (!empty($data['user'])) {
+            // Set state to 0
+            $defaultRole = 'data';
+            $userData = $data['user'];
+            $defaultState = 0;
+
+            $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+        }
+
+        $this->getSubscriptionModel()->getEntityManager()->flush();
+
+        // redirect
+        return $this->redirect()->toRoute('joined');
     }
 
     public function findUserAction()
@@ -252,10 +274,19 @@ class SubscriptionController extends AbstractActionController
         return new JsonModel($response);
     }
 
+    /**
+     * @return \Mrss\Model\College
+     */
+    protected function getCollegeModel()
+    {
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        return $collegeModel;
+    }
+
     protected function getAllColleges()
     {
-        /** @var \Mrss\Model\College $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $collegeModel = $this->getCollegeModel();
         $colleges = $collegeModel->findAll();
 
         $allColleges = array();
@@ -364,8 +395,21 @@ class SubscriptionController extends AbstractActionController
                     );
                 }
 
-                // Once they've agreed to the terms, redirect to the payment page
-                return $this->redirect()->toRoute('subscribe/payment');
+                if ($this->getStudyConfig()->free_to_join) {
+                    $draft = $this->getDraftSubscription();
+                    $data = $draft->getFormData();
+
+                    if (!empty($data['renew'])) {
+                        // Skip the payment page and complete the free renewal
+                        return $this->redirect()->toRoute('subscribe/free');
+                    } else {
+                        // Complete the free join
+                        return $this->joinFreeFinal();
+                    }
+                } else {
+                    // Once they've agreed to the terms, redirect to the payment page
+                    return $this->redirect()->toRoute('subscribe/payment');
+                }
             } else {
                 $this->flashMessenger()->addErrorMessage(
                     "Please correct the problems below."
@@ -373,10 +417,20 @@ class SubscriptionController extends AbstractActionController
             }
         }
 
-        return array(
-            'form' => $form,
-            'subscription' => $this->getDraftSubscription()->getFormData()
+        $viewModel = new ViewModel(
+            array(
+                'form' => $form,
+                'subscription' => $this->getDraftSubscription()->getFormData()
+            )
         );
+
+        // Set the template
+        $template = 'mrss/subscription/agreement';
+        if ($configTemplate = $this->getStudyConfig()->agreement_template) {
+            $template = 'mrss/subscription/' . $configTemplate;
+        }
+
+        return $viewModel->setTemplate($template);
     }
 
     /**
@@ -653,6 +707,18 @@ class SubscriptionController extends AbstractActionController
             }
         }
     }
+
+    public function freeAction()
+    {
+        $this->checkSubscriptionIsInProgress();
+        $this->checkEnrollmentIsOpen();
+
+        return $this->completeSubscription(
+            $this->getDraftSubscription(),
+            array('paymentType' => 'free')
+        );
+    }
+
 
     public function pilotAction()
     {
@@ -999,9 +1065,16 @@ class SubscriptionController extends AbstractActionController
         $pwService->sendProcessForgotRequest($user->getId(), $user->getEmail());
     }
 
-    protected function notifyApprover(User $user)
+    protected function getStudyConfig()
     {
         $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
+    }
+
+    protected function notifyApprover(User $user)
+    {
+        $studyConfig = $this->getStudyConfig();
         $approverEmail = $studyConfig->approver_email;
         $fromEmail = $studyConfig->from_email;
 
@@ -1278,7 +1351,14 @@ class SubscriptionController extends AbstractActionController
 
             // Plug in the user's name
             $params['fullName'] = $user->getPrefix() . ' ' . $user->getLastName();
-            $content = $renderer->render('mrss/email/welcome', $params);
+
+            $emailTemplate = 'mrss/email/welcome';
+            if ($configTemplate = $this->getStudyConfig()->welcome_email) {
+                $emailTemplate = 'mrss/email/' . $configTemplate;
+            }
+
+            $content = $renderer->render($emailTemplate, $params);
+
 
             // make a header as html
             $html = new MimePart($content);

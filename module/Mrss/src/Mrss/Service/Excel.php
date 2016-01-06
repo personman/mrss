@@ -316,18 +316,36 @@ class Excel
 
     public function download($spreadsheet)
     {
-        // redirect output to client browser
-        header(
-            'Content-Type: '.
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header('Content-Disposition: attachment;filename="data-export.xlsx"');
-        header('Cache-Control: max-age=0');
+        ob_end_clean();
 
-        $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
-        $objWriter->save('php://output');
+        if (true) {
+            // redirect output to client browser
+            header(
+                'Content-Type: '.
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            );
+            header('Content-Disposition: attachment;filename="data-export.xlsx"');
+            header('Cache-Control: max-age=0');
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
+            //$objWriter->setOffice2003Compatibility(true);
+            $objWriter->save('php://output');
+
+        } else {
+            $objWriter = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel5');
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="item_list.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter->save('php://output');
+        }
 
         die;
+    }
+
+    public function save($spreadsheet)
+    {
+        $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
+        $objWriter->save('test-export.xlsx');
     }
 
     /**
@@ -488,11 +506,68 @@ class Excel
             }
         }
 
+        $data = $this->removeNullForm1Data($data);
+
+        $data = $this->mapForm1Values($data);
+
         // Add a key with the college's ipeds
         $ipeds = $this->getCurrentCollege()->getIpeds();
         $data = array(
             $ipeds => $data
         );
+
+        return $data;
+    }
+
+    /**
+     * For AAUP: Don't overwrite good form 1 data with nulls
+     * @param $data
+     */
+    protected function removeNullForm1Data($data)
+    {
+        $benchmarkGroups = $this->getCurrentStudy()->getBenchmarkGroups();
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            $formOne = $benchmarkGroup;
+            break;
+        }
+
+        foreach ($formOne->getBenchmarks() as $benchmark) {
+            $dbColumn = $benchmark->getDbColumn();
+
+            // If the data from Excel is null, just forget about it
+            if (empty($data[$dbColumn])) {
+                unset($data[$dbColumn]);
+            }
+        }
+
+        return $data;
+    }
+
+    protected function mapForm1Values($data)
+    {
+        // Institution control
+        if (!empty($data['institution_control'])) {
+            if ($data['institution_control'] == 'Private Not-For-Profit') {
+                $data['institution_control'] = 'Private Not-For-Profit (No Religious Affiliation)';
+            }
+        }
+
+        // Medical degree - normalize capitalization
+        if (!empty($data['institution_grants_medical_degree'])) {
+            $data['institution_grants_medical_degree'] = ucwords(
+                strtolower($data['institution_grants_medical_degree'])
+            );
+        }
+
+        // Carnegie - remove number prefix
+        if (!empty($data['carnegie_basic']) && $carnegie = $data['carnegie_basic']) {
+            $data['carnegie_basic'] = preg_replace('/(\d\d?  )/', '', $carnegie);
+        }
+
+        // Part time benefits had a double space
+        if (!empty($data['institution_part_time_benefits']) && $pt = $data['institution_part_time_benefits']) {
+            $data['institution_part_time_benefits'] = preg_replace('/(  )/', ' ', $pt);
+        }
 
         return $data;
     }
@@ -688,7 +763,7 @@ class Excel
         // Discard the generic version
         unset($spreadsheet);
 
-        // Open the template Excel  file (this takes some time)
+        // Open the template Excel file (this takes some time)
         $filename = 'data/imports/aaup-export.xlsx';
         $spreadsheet = PHPExcel_IOFactory::load($filename);
 
@@ -698,6 +773,8 @@ class Excel
         $spreadsheet->setActiveSheetIndex(0);
 
         $this->download($spreadsheet);
+        //$this->save($spreadsheet);
+        //die('saved');
     }
 
     protected function customizeForMrss(PHPExcel $spreadsheet, Subscription $subscription)
@@ -989,6 +1066,8 @@ class Excel
 
             foreach ($gridLayout as $sectionKey => $section) {
 
+
+
                 if (empty($sheetInfo['sectionStartingCells'][$sectionKey])) {
                     continue;
                 }
@@ -1021,6 +1100,8 @@ class Excel
                     }
 
                 }
+
+
             }
 
             if (!empty($sheetInfo['extra'])) {
