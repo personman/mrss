@@ -214,7 +214,7 @@ class SubscriptionController extends AbstractActionController
 
         return array(
             'form' => $form,
-            'allColleges' => $this->getAllColleges(),
+            //'allColleges' => $this->getAllColleges(),
             'formHasErrors' => $formHasErrors
         );
     }

@@ -23,7 +23,6 @@
 </style>
 
 <script>
-    var allColleges = <?= $allColleges ?>;
     var findUserUrl = '/find-user/';
     var formHasErrors = <?= $formHasErrors ?>;
 
@@ -33,6 +32,17 @@
     })
 
     function setUpAutocomplete()
+    {
+        // Download the search list
+        $.get(allCollegesUrl, [], function(data)
+        {
+            allColleges = data;
+
+            finishAutocompleteSetup();
+        });
+    }
+
+    function finishAutocompleteSetup()
     {
         $('#search-field').autocomplete({
             //source: '/institution/search',
