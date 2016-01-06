@@ -190,3 +190,14 @@ td.no-border {
 .submit-fieldset #control-group-submitButton {
     width: auto !important;
 }
+
+ul.ui-autocomplete {
+    list-style: none;
+    padding: 3px;
+}
+
+.ui-autocomplete li.ui-state-focus
+{
+    background-color: #888;
+    color: white;
+}

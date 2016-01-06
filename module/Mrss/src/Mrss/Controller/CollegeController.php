@@ -9,6 +9,7 @@ use Zend\Debug\Debug;
 use Zend\Form\Form;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\JsonModel;
+use Zend\View\View;
 
 class CollegeController extends AbstractActionController
 {
@@ -260,6 +261,59 @@ class CollegeController extends AbstractActionController
             'form' => $form
         );
     }
+
+    public function cacheCollegesAction()
+    {
+        $cacheFile = '/public/files/all-colleges.json';
+        $json = $this->getAllCollegesAsJson();
+
+        $path = getcwd() . $cacheFile;
+
+        // Write to the cache
+        file_put_contents($path, $json);
+
+        // Send the file to the requestor
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->setContent($json);
+
+        return $response;
+
+    }
+
+    /**
+     * @return \Mrss\Model\College
+     */
+    protected function getCollegeModel()
+    {
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        return $collegeModel;
+    }
+
+    protected function getAllCollegesAsJson()
+    {
+        $collegeModel = $this->getCollegeModel();
+        $colleges = $collegeModel->findAll();
+
+        $allColleges = array();
+        foreach ($colleges as $college) {
+            $nameAndState = $college->getName() . ' (' . $college->getState() . ')';
+            if ($ipeds = $college->getIpeds()) {
+                $nameAndState .= ', IPEDS: ' . $ipeds;
+            }
+            if ($opeId = $college->getOpeId()) {
+                $nameAndState .= ', OPE: ' . $opeId;
+            }
+            $allColleges[] = array(
+                'label' => $nameAndState,
+                'id' => $college->getId()
+            );
+        }
+
+        return json_encode($allColleges);
+    }
+
 
     protected function longRunningScript()
     {

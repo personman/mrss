@@ -18,8 +18,8 @@ class FcsNavigationFactory extends NavigationFactory
         $auth = $serviceLocator->get('zfcuser_auth_service');
         $user = null;
         $system = null;
-        if ($auth->hasIdentity()) {
-            $user = $auth->getIdentity();
+        if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
+
             if ($college = $user->getCollege()) {
                 $system = $college->getSystem();
             }
@@ -28,10 +28,8 @@ class FcsNavigationFactory extends NavigationFactory
             if ($user->getRole() == 'viewer') {
                 $pages['home']['uri'] = '/reports/executive';
             }
-        }
 
-        // If the user is logged in, hide some stuff
-        if ($auth->hasIdentity()) {
+            // If the user is logged in, hide some stuff
             unset($pages['join']);
             unset($pages['about']);
             unset($pages['start']);

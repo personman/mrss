@@ -79,7 +79,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Do they belong to a system?
             $user = $auth->getIdentity();
-            if ($college = $user->getCollege()) {
+            if ($user && $college = $user->getCollege()) {
                 $system = $user->getCollege()->getSystem();
             }
         } else {
@@ -113,10 +113,10 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
 
-        if ($auth->hasIdentity()) {
+        if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
 
             // Add the data entry links (if they're logged in
-            $user = $auth->getIdentity();
+
             $name = $user->getPrefix() . ' ' . $user->getLastName();
             $pages['account']['label'] = $name;
 

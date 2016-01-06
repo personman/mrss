@@ -1922,6 +1922,17 @@ return array(
                     )
                 )
             ),
+            'all-colleges.json' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/files/all-colleges.json',
+                    'defaults' => array(
+                        'controller' => 'colleges',
+                        'action' => 'cacheColleges'
+                    )
+                )
+            ),
+
             // CMS:
             'cmsPage' => array(
                 'type' => 'segment',

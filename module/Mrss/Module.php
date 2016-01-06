@@ -59,8 +59,7 @@ class Module
         $eventManager->attach(MvcEvent::EVENT_ROUTE, function($e) {
             $sm = $e->getApplication()->getServiceManager();
             $auth = $sm->get('zfcuser_auth_service');
-            if ($auth->hasIdentity()) {
-                $user = $auth->getIdentity();
+            if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
                 $user->setLastAccess(new \DateTime('now'));
 
                 $userModel = $sm->get('model.user');
