@@ -234,8 +234,15 @@ class SystemController extends AbstractActionController
         // What system were they in (for redirection)?
         $system = $user->getCollege()->getSystem();
 
+        // What should the new role be?
+        $oldRole = $user->getRole();
+        $newRole = 'data';
+        if ($oldRole == 'system_viewer') {
+            $newRole = 'viewer';
+        }
+
         // Remove the system admin role
-        $user->setRole('user');
+        $user->setRole($newRole);
         $userModel->save($user);
         $this->getServiceLocator()->get('em')->flush();
 
