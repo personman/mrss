@@ -1123,6 +1123,10 @@ span.rollover {
         height: 40px;
     }
 
+    .navbar-nav > li > a {
+        padding: 10px 8px;
+    }
+
     #homepage-slide-container h1 { font-size: 30px; line-height: 36px;}
     #homepage-slide-container p { font-size: 15px; line-height: 20px; }
 
