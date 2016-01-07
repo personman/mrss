@@ -65,13 +65,11 @@
 
 <table class="table submittedValues">
 <?php foreach ($submittedValues as $benchmarkGroup): ?>
-    <thead>
         <tr>
-            <th colspan="2">
+            <td colspan="2">
                 <h2><?= $benchmarkGroup['benchmarkGroup'] ?></h2>
-            </th>
+            </td>
         </tr>
-    </thead>
 
     <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
         <tr>
