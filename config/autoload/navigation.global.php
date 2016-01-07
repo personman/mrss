@@ -415,6 +415,10 @@ return array(
                 'label' => 'Resources',
                 'uri' => '#',
                 'pages' => array(
+                    'help' => array(
+                        'label' => 'Help',
+                        'uri' => '/help'
+                    ),
                     'presentations' => array(
                         'label' => 'Presentations',
                         'uri' => '/presentations'
