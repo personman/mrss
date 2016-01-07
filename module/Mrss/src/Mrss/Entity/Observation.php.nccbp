@@ -279,6 +279,14 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $inst_fte_students_taught_by_pt;
 
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $best_practices;
+
+    /** @ORM\Column(type="text", nullable=true) */
+    protected $best_practices_desc;
+
+
+
 
 
     // NCCBP form 2
