@@ -215,7 +215,7 @@ class UserController extends AbstractActionController
 
         $message = new Message();
         $message->setTo($user->getEmail());
-        $message->setSubject("Welcome to " . $study->getName());
+        $message->setSubject("Welcome to " . $study->getDescription());
         $message->setFrom($fromEmail);
         //$message->addBcc('michelletaylor@jccc.edu');
         //$message->addBcc('dfergu15@jccc.edu');
