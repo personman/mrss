@@ -1340,7 +1340,7 @@ class SubscriptionController extends AbstractActionController
         );
 
         $message = new Message();
-        $message->setSubject("Welcome to " . $study->getName());
+        $message->setSubject("Welcome to " . $study->getDescription());
         $message->setFrom($from_email);
         $message->addBcc($cc_email);
 
