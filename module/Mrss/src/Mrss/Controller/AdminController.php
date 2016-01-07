@@ -28,13 +28,17 @@ class AdminController extends AbstractActionController
         // Recent changes
         $changeSets = $this->getChangeSetModel()->findByStudy(
             $this->getStudy()->getId(),
-            10
+            7
         );
+
+        // Users queue
+        $users = $this->getUserModel()->findByState(0);
 
         return array(
             'subscriptions' => $subscriptions,
             'subscriptionCount' => $subscriptionCount,
-            'changeSets' => $changeSets
+            'changeSets' => $changeSets,
+            'users' => $users
         );
     }
 
@@ -90,6 +94,14 @@ class AdminController extends AbstractActionController
         }
 
         return $year;
+    }
+
+    /**
+     * @return \Mrss\Model\User
+     */
+    protected function getUserModel()
+    {
+        return $this->getServiceLocator()->get('model.user');
     }
 
     /**

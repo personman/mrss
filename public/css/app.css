@@ -196,10 +196,17 @@ ul.ui-autocomplete {
     padding: 3px;
 }
 
-.ui-autocomplete li.ui-state-focus
-{
-    background-color: #888;
-    color: white;
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    font-weight: normal !important;
+    background: #888 !important;
+    color: white !important;
+    border: none !important;
 }
 
 .table > thead.thead-inverse > tr > th, table.table.dataTable > thead.thead-inverse > tr > th {
