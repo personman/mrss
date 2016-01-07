@@ -198,7 +198,7 @@
     </target>
 
     <target name="ssh-git-deploy-fcs">
-        <exec command="ssh max@maximizingresources.org 'cd reseach.aaup.org; bin/phing update'" passthru="true"/>
+        <exec command="ssh max@maximizingresources.org 'cd research.aaup.org; bin/phing update'" passthru="true"/>
     </target>
 
     <target name="sync-from-production-db">
