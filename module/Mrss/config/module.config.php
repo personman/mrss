@@ -1617,6 +1617,15 @@ return array(
                     )
                 ),
                 'child_routes' => array(
+                    'memberships' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/memberships',
+                            'defaults' => array(
+                                'action' => 'memberships'
+                            )
+                        )
+                    ),
                     'changes' => array(
                         'type' => 'segment',
                         'options' => array(

@@ -1,115 +1,31 @@
-<?php
+<h1>Admin Dashboard</h1>
 
-// Data Tables
-$this->headScript()->appendFile(
-'/js/jquery.dataTables.min.js',
-'text/javascript'
-);
-$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
-?>
+<div class="row">
+    <div class="col-md-5">
+        <h2>Memberships (<?= $subscriptionCount ?>)</h2>
 
-<script type="text/javascript">
-    // jquery extend function
-    $.extend(
-        {
-            redirectPost: function(location, args)
-            {
-                var form = '';
-                $.each( args, function( key, value ) {
-                    form += '<input type="hidden" name="'+key+'" value="'+value+'">';
-                });
-                $('<form action="'+location+'" method="POST">'+form+'</form>').appendTo('body').submit();
-            }
-        });
-
-    $(document).ready(function() {
-        // Send invoice
-        console.log('ok here')
-        $('.sendLink').click(function() {
-            console.log('in click')
-            var id = $(this).attr('id').split('-').pop()
-            var to = prompt('To whom?')
-
-            var redirect = '/memberships/invoice';
-            $.redirectPost(redirect, {id: id, to: to});
-
-            return false
-        })
-
-
-        $('#subscriptions').dataTable({
-            "order": [[1, "asc"]],
-            'aoColumnDefs': [
-                // Don't sort on the action column
-                {'bSortable': false, 'aTargets': [6]}
-            ],
-            // show X entries options
-            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-            'iDisplayLength': 25
-        });
-
-    } );
-
-
-
-</script>
-
-<?php /** @var \Mrss\Entity\Subscription[] $subscriptions */ ?>
-
-<p><a href="/admin/changes">Recent data changes</a></p>
-
-<h1>Memberships</h1>
-
-<ul class="nav nav-pills">
-    <?php foreach ($years as $year): ?>
-        <li<? if ($year == $currentYear) echo ' class="active"' ?>>
-            <a href="<?= $this->url('subscriptions', array('year' => $year)) ?>"><?= $year ?></a>
-        </li>
-    <?php endforeach ?>
-</ul>
-
-
-<?php if (count($subscriptions)): ?>
-<p>
-    <?= count($subscriptions) ?> subscriptions, $<?= number_format($total, 2) ?>.
-</p>
-
-
-<table class="table table-striped" id="subscriptions">
-    <thead>
-        <tr>
-            <th>Completion</th>
-            <th>Institution</th>
-            <th>Users</th>
-            <th>Subscription Date</th>
-            <th>Payment Method</th>
-            <th>Payment Amount</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($subscriptions as $subscription): ?>
+        <table class="table table-striped table-bordered" id="subscriptions">
+            <thead class="thead-inverse">
             <tr>
-                <td>
-                    <a href="<?= $this->url(
-                        'observation',
-                        array('id' => $subscription->getObservation()->getId())
-                    ) ?>">
-                        <?= $subscription->getCompletion() ?>%
-                    </a>
-                </td>
-                <td>
-                    <a href="<?= $this->url(
-                        'colleges/view',
-                        array('id' => $subscription->getCollege()->getId())
-                    ) ?>">
-                        <?= $subscription->getCollege()->getName() ?>
-                    </a>
-                    (<?= $subscription->getCollege()->getState() ?>)
-                </td>
+                <th>Institution</th>
+                <th>Users</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($subscriptions as $subscription): ?>
+                <tr>
+                    <td>
+                        <a href="<?= $this->url(
+                            'colleges/view',
+                            array('id' => $subscription->getCollege()->getId())
+                        ) ?>">
+                            <strong><?= $subscription->getCollege()->getNameAndState() ?></strong>
+                        </a>
+                    </td>
 
-                <td>
-                    <?php
+                    <td>
+                        <?php
                         $userList = array();
                         $users = $subscription->getCollege()
                             ->getUsersByStudy($this->currentStudy());
@@ -126,51 +42,96 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                                 . '"><i class="icon icon-fire glyphicon glyphicon-transfer"></i></a> ';
                             $item .= "<a href='$url'>$name</a>";
 
-                            if ($access = $user->getLastAccess()) {
-                                $date = $access->format('Y-m-d H:i');
-                                $item .= " ($date)";
-                            }
                             $userList[] = $item;
                         endforeach;
 
                         echo implode('<br>', $userList);
 
-                    ?>
+                        ?>
 
-                    <br>
-                    <a href="<?= $this->url(
-                        'users/edit',
-                        array(
-                            'id' => 'add',
-                            'college' => $subscription->getCollege()->getId()
-                        )
-                    ) ?>"><i class="icon icon-plus glyphicon glyphicon-plus"></i> Add User</a>
-                </td>
+                    </td>
 
-                <td>
-                    <?= $subscription->getCreated()->format('Y-m-d') ?>
-                </td>
-                <td>
-                    <?= $subscription->getPaymentMethodForDisplay() ?>
-                </td>
-                <td>
-                    $<?= number_format($subscription->getPaymentAmount(), 2) ?>
-                </td>
-                <td>
-                    <a href="<?= $this->url(
-                        'subscription-delete',
-                        array('id' => $subscription->getId())
-                    ) ?>" class="deleteLink" onclick="return confirm('Are you sure you want to delete this subscription and all of its data?')">
-                        delete
-                    </a><br>
-                    <a href="#" class="sendLink" id="invoice-<?= $subscription->getId() ?>">send invoice</a>
-                </td>
+                    <td>
+                        <?= $subscription->getCreated()->format('m/d/Y') ?><br>
+                        <?= $subscription->getCreated()->format('H:i') ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+
+        <a href="/admin/memberships"><h3>More...</h3></a>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="col-md-1">
+    </div>
+
+
+
+
+
+    <div class="col-md-5">
+        <h2>Recent Data Changes</h2>
+
+        <table class="table table-striped table-bordered observationChanges">
+            <thead class="thead-inverse">
+            <tr>
+                <th>Institution and User</th>
+                <th>Method</th>
+                <th>Changes</th>
+                <th>Date</th>
             </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+            <?php foreach ($changeSets as $changeSet): ?>
+                <?php /** \Mrss\Entity\ChangeSet $changeSet */
+                $changes = $changeSet->getChanges();
+                $field = (count($changeSet->getChanges()) == 1) ? 'field' : 'fields'; ?>
+                <tr class="changeSet">
+                    <td>
+
+                        <?php if ($changeSet->getUser()): ?>
+                            <?php $college = $changeSet->getUser()->getCollege() ?>
+                            <strong>
+                                <a href="<?= $this->url('colleges/view', array('id' => $college->getId())) ?>">
+                                    <?= $college->getName() ?>
+                                </a>
+                            </strong>
+                            <br>
+                            <?php if ($impersonator = $changeSet->getImpersonatingUser()): ?>
+                                <?= $impersonator->getFullName() ?>, impersonating
+                            <?php endif ?>
+                            <?= $changeSet->getUser()->getFullName() ?>
+
+                        <?php else: ?>
+                            Importer
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <?= $changeSet->getEditTypeLabel() ?>
+                    </td>
 
 
-<?php else: ?>
-    <p>No one has signed up yet.</p>
-<?php endif ?>
+                    <td>
+                        <?= count($changes); ?>
+                    </td>
+                    <td>
+                        <?= $changeSet->getDate()->format('m/d/Y H:i') ?>
+                    </td>
+
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+
+        <a href="/admin/changes"><h3>More...</h3></a>
+    </div>
+
+</div>

@@ -201,3 +201,8 @@ ul.ui-autocomplete {
     background-color: #888;
     color: white;
 }
+
+.table > thead.thead-inverse > tr > th, table.table.dataTable > thead.thead-inverse > tr > th {
+    color: #FFF;
+    background-color: #373a3c;
+}

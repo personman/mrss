@@ -7,19 +7,47 @@ use Zend\View\Model\ViewModel;
 
 class AdminController extends AbstractActionController
 {
+
     public function dashboardAction()
     {
+        // Total members
+        $subscriptionCount = $this->getSubscriptionModel()->countByStudyAndYear(
+            $this->getStudy()->getId(),
+            $this->getYear()
+        );
+
+        // Recent members
+        $subscriptions = $this->getSubscriptionModel()->findByStudyAndYear(
+            $this->getStudy()->getId(),
+            $this->getYear(),
+            false,
+            's.created DESC',
+            10
+        );
+
+        // Recent changes
+        $changeSets = $this->getChangeSetModel()->findByStudy(
+            $this->getStudy()->getId(),
+            10
+        );
+
+        return array(
+            'subscriptions' => $subscriptions,
+            'subscriptionCount' => $subscriptionCount,
+            'changeSets' => $changeSets
+        );
+    }
+
+    public function membershipsAction()
+    {
+
         //$this->emailTest();
 
         // Get a list of subscriptions to the current study
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-        $studyId = $this->currentStudy()->getId();
+        $subscriptionModel = $this->getSubscriptionModel();
+        $studyId = $this->getStudy()->getId();
 
-        $year = $this->params()->fromRoute('year');
-        if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
-        }
-
+        $year = $this->getYear();
         $subscriptions = $subscriptionModel->findByStudyAndYear(
             $studyId,
             $year
@@ -47,15 +75,47 @@ class AdminController extends AbstractActionController
 
     public function changesAction()
     {
-        $currentStudy = $this->currentStudy();
-
-        $changeSetModel = $this->getServiceLocator()->get('model.changeSet');
-        $changeSets = $changeSetModel->findByStudy($currentStudy->getId());
+        $changeSets = $this->getChangeSetModel()->findByStudy($this->getStudy()->getId());
 
         return array(
             'changeSets' => $changeSets
         );
     }
+
+    protected function getYear()
+    {
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        return $year;
+    }
+
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    protected function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
+    }
+
+    /**
+     * @return \Mrss\Model\ChangeSet
+     */
+    protected function getChangeSetModel()
+    {
+        return $this->getServiceLocator()->get('model.changeSet');
+    }
+
+    /**
+     * @return \Mrss\Entity\Study
+     */
+    protected function getStudy()
+    {
+        return $this->currentStudy();
+    }
+
 
     protected function emailTest()
     {

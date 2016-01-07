@@ -64,30 +64,47 @@ class Subscription extends AbstractModel
      * @param bool $eagerObservation
      * @return SubscriptionEntity[]
      */
-    public function findByStudyAndYear($studyId, $year, $eagerObservation = false)
+    public function findByStudyAndYear($studyId, $year, $eagerObservation = false, $order = 'c.name ASC', $limit = null)
     {
+        $entities = 's';
+        $joinOb = null;
         if ($eagerObservation) {
-            $query = $this->getEntityManager()->createQuery(
-                "SELECT s, o
-                FROM Mrss\Entity\Subscription s
-                JOIN s.college c
-                JOIN s.observation o
-                WHERE s.study = $studyId
-                AND s.year = $year
-                ORDER BY c.name ASC"
-            );
-        } else {
-            $query = $this->getEntityManager()->createQuery(
-                "SELECT s
-                FROM Mrss\Entity\Subscription s
-                JOIN s.college c
-                WHERE s.study = $studyId
-                AND s.year = $year
-                ORDER BY c.name ASC"
-            );
+            $joinOb = "JOIN s.observation o";
+            $entities = 's, o';
+        }
+
+        $dql = "SELECT $entities
+            FROM Mrss\Entity\Subscription s
+            JOIN s.college c
+            $joinOb
+            WHERE s.study = $studyId
+            AND s.year = $year
+            ORDER BY $order";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        if ($limit) {
+            $query->setMaxResults($limit);
         }
 
         return $query->getResult();
+    }
+
+    /**
+     * @param $studyId
+     * @param $year
+     * @return int
+     */
+    public function countByStudyAndYear($studyId, $year)
+    {
+        $dql = "SELECT COUNT(s)
+            FROM Mrss\Entity\Subscription s
+            WHERE s.study = $studyId
+            AND s.year = $year";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        return $query->getSingleScalarResult();
     }
 
     /**

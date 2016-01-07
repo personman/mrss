@@ -470,6 +470,11 @@ class College
         return $address;
     }
 
+    public function getNameAndState()
+    {
+        return $this->getName() . ' (' . $this->getState() . ')';
+    }
+
     public function getSubscriptionsForYear($year)
     {
         $subscriptions = $this->getSubscriptions();
