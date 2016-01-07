@@ -11,9 +11,22 @@
 <p>While the AAUP makes every effort to provide the most accurate data, the Faculty Compensation Survey may include inaccuracies and errors or omissions. Users assume the sole risk and responsibility of making use of these data; under no circumstances will the AAUP be liable to any user for damages arising from use of these data.</p>
 
 <p>The AAUP publishes additions and corrections to the Annual Report on the Economic Status of the Profes¬sion in the July–August issue of Academe (the Bulletin of the American Association of University Professors) and may make modifications to the content at any time.
-Should there be an error to the Faculty Compensation Survey, the AAUP will also notify Inside Higher Ed, which publishes data from the survey on its website.</p>
+    Should there be an error to the Faculty Compensation Survey, the AAUP will also notify Inside Higher Ed, which publishes data from the survey on its website.</p>
 
 <p><strong>Attribution.</strong> Users shall provide to the Faculty Compensation Survey Research Office an abstract and reference for any published research material resulting from the use of the Faculty Compensation Survey data. Users shall acknowledge in all publications and presentations based on Faculty Compensation Survey data, whether internal, or external, that the source of these data are the "Faculty Compensation Survey."</p>
 
 <p><strong>Acknowledgements of Faculty Compensation Survey Agreement.</strong> I agree that my institution will abide by the Terms and Conditions set out above --including the provision regarding the posting of Faculty Compensation Survey reports that makes them available to non-subscribers --and I understand that my institution will not pay an annual subscription fee for our participation in the Faculty Compensation Survey.</p>
 
+
+
+
+
+<?php
+// Add an action and submit button to the form
+$form->setAttribute('action', $this->url('subscribe/user-agreement'));
+$form->setAttribute('method', 'post');
+$form->setAttribute('class', 'form-horizontal');
+
+?>
+
+<?= $this->ztbForm($this->form->prepare()) ?>
