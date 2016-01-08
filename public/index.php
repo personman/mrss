@@ -5,7 +5,6 @@
  */
 chdir(dirname(__DIR__));
 
-
 define('REQUEST_MICROTIME', microtime(true));
 
 

@@ -215,14 +215,14 @@ class Module
     {
         return array(
             // This doesn't seem to help performance, oddly
-            /*'Zend\Loader\ClassMapAutoloader' => array(
+            'Zend\Loader\ClassMapAutoloader' => array(
                 dirname(dirname(__DIR__)) . '/autoload_classmap.php',
-            ),*/
-            'Zend\Loader\StandardAutoloader' => array(
+            ),
+            /*'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
-            ),
+            ),*/
         );
     }
 
