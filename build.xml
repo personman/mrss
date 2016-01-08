@@ -171,10 +171,17 @@
 
 
     <target name="update" description="Update suitable for production"
-            depends="gitpull,migrate" />
+            depends="gitpull,migrate,clear-caches" />
 
     <target name="test-db-teardown" description="Undo the changes made in the test-db task">
         <exec command="mv config/autoload/db.php.bak config/autoload/db.php" />
+
+    </target>
+
+    <target name="clear-caches" description="Delete some cache files.">
+        <exec command="rm data/cache/classes.php.cache" />
+        <exec command="rm data/cache/module-config-cache.config_cache.php" />
+        <exec command="./bin/classmap_generator.php" />
 
     </target>
 

@@ -3236,7 +3236,6 @@ return array(
   'NativePhpunitPrinter'                                                                                               => __DIR__ . '/vendor/doctrine/orm/tests/NativePhpunitTask.php',
   'Entities\Address'                                                                                                   => __DIR__ . '/vendor/doctrine/orm/tools/sandbox/Entities/Address.php',
   'Entities\User'                                                                                                      => __DIR__ . '/vendor/doctrine/orm/tools/sandbox/Entities/User.php',
-  'EdpSuperluminal\Module'                                                                                             => __DIR__ . '/vendor/evandotpro/edp-superluminal/Module.php',
   'Goutte\Client'                                                                                                      => __DIR__ . '/vendor/fabpot/goutte/Goutte/Client.php',
   'Goutte\Tests\ClientTest'                                                                                            => __DIR__ . '/vendor/fabpot/goutte/Goutte/Tests/ClientTest.php',
   'Entity\Category'                                                                                                    => __DIR__ . '/vendor/gedmo/doctrine-extensions/example/app/Entity/Category.php',
