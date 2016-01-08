@@ -38,7 +38,7 @@ class AdminController extends AbstractActionController
             'subscriptions' => $subscriptions,
             'subscriptionCount' => $subscriptionCount,
             'changeSets' => $changeSets,
-            'users' => $users
+            'userQueue' => $users
         );
     }
 

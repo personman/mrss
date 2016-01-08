@@ -139,6 +139,11 @@ class Module
 
         $studyName = $currentStudy->getDescription();
 
+        // Remove leading "the "
+        if (substr($studyName, 0, 4) == 'the ') {
+            $studyName = substr($studyName, 4);
+        }
+
         // Setting the action, controller, module and site name as title segments
         $headTitleHelper->append($studyName);
 
