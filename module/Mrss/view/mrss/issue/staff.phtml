@@ -39,7 +39,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <?php foreach ($issues as $issue): ?>
             <tr>
                 <td>
-                    <?= $issue->getCollege()->getName() ?>
+                    <a href="<?= $this->url('colleges/view', array('id' => $issue->getCollege()->getId())) ?>">
+                        <?= $issue->getCollege()->getName() ?>
+                    </a>
                 </td>
                 <td>
                     <?= $issue->getMessage() ?>
