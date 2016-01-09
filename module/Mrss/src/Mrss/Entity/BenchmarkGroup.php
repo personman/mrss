@@ -365,6 +365,10 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
      */
     public function getBenchmarkCount(Observation $observation)
     {
+        if ($count = $this->getCustomBenchmarkCount($observation)) {
+            return $count;
+        }
+
         if ($this->getUseSubObservation()) {
             $count = $this->getSubObservationBenchmarkCount(
                 $observation
@@ -380,6 +384,24 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         );
 
         return count($benchmarks);
+    }
+
+    public function getCustomBenchmarkCount(Observation $observation)
+    {
+        $count = null;
+
+        // Only do this for FCS form 3 benefits
+        if ($this->getId() == 4 && $observation->has('institution_aggregate_benefits')) {
+            $aggregate = $observation->get('institution_aggregate_benefits');
+
+            if (strtolower($aggregate) == 'yes') {
+                $count = 40;
+            } else {
+                $count = 240;
+            }
+        }
+
+        return $count;
     }
 
     public function getSubObservationBenchmarkCount(Observation $observation)
@@ -426,6 +448,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     {
         $total = $this->getBenchmarkCount($observation);
         $completed = $this->countCompleteFieldsInObservation($observation);
+
+
+        // debug it
+        if (false && $this->getId() == 4) {
+            pr($total);
+            pr($completed);
+        }
 
         if ($total > 0) {
             $percentage = round($completed / $total * 100, 3);
