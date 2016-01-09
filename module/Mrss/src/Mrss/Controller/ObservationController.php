@@ -117,6 +117,10 @@ class ObservationController extends AbstractActionController
         $completionPercentage = $currentStudy
             ->getCompletionPercentage($observation);
 
+        if ($completionPercentage > 100) {
+            $completionPercentage = 100;
+        }
+
         $issues = $this->getIssueModel()->findByCollege($this->currentCollege());
 
         return array(
