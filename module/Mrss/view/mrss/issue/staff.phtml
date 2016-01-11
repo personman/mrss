@@ -108,7 +108,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
                         <a href="<?= $this->url('observation/group', array('id' => $issue->getObservation()->getId(), 'benchmarkGroup' => $issue->getFormUrl())) ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Go to form <?= $issue->getFormUrl() ?></a>
                         <a href="mailto:<?= $issue->getCollege()->getDataEmails() ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-envelope"></span> Email User</a>
+                        <?php if ($user->getStatus() == 'userConfirmed'): ?>
                         <a href="#" class="btn btn-warning btn-xs update-issue" id="null-<?= $issue->getId() ?>"><span class="glyphicon glyphicon-arrow-left"></span> Send Back to User</a>
+                        <?php endif ?>
                        <a href="#" class="btn btn-success btn-xs update-issue" id="adminConfirmed-<?= $issue->getId() ?>"><span class="glyphicon glyphicon-ok"></span> Confirm As Is</a>
 
                     </div>
