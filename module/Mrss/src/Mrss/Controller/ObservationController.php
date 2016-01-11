@@ -377,6 +377,7 @@ class ObservationController extends AbstractActionController
         $form->setAttribute('class', $class);
 
         if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
+            pr($observation->getId());
             pr($observation->get('institution_grants_medical_degree'));
         }
 
@@ -385,7 +386,7 @@ class ObservationController extends AbstractActionController
 
         if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
             pr($form->get('institution_grants_medical_degree')->getValue());
-            pr($form->get('institution_grants_medical_degree')->getOption());
+            //pr($form->get('institution_grants_medical_degree')->getOption());
         }
 
         $form = $this->copyCampusInfoFromLastYear($form);
