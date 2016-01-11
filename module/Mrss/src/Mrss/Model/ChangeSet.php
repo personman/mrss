@@ -55,7 +55,6 @@ class ChangeSet extends AbstractModel
         );
         $query->setParameter('college', $college);
         $query->setParameter('study', $studyId);
-        $query->setMaxResults(10);
 
         $results = $query->getResult();
 
