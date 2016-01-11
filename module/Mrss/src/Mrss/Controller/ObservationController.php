@@ -332,18 +332,6 @@ class ObservationController extends AbstractActionController
         try {
             $observation = $this->getCurrentObservation();
 
-            if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
-                pr($observation->getId());
-                pr($observation->get('institution_grants_medical_degree'));
-
-                echo '<hr>';
-                /** @var \Mrss\Model\Observation $ObservationModel */
-                $ObservationModel = $this->getServiceLocator()->get('model.observation');
-
-                $o = $ObservationModel->find(441);
-                pr($o->get('institution_grants_medical_degree'));
-            }
-
         } catch (\Exception $e) {
             // If the observation is not found, check a prior year
             if (empty($observation)) {
@@ -389,20 +377,8 @@ class ObservationController extends AbstractActionController
 
         $form->setAttribute('class', $class);
 
-        if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
-            pr($observation->getId());
-            pr($observation->get('institution_grants_medical_degree'));
-            pr($observation->get('institution_control'));
-        }
-
         // bind observation to form, which will populate it with values
         $form->bind($observation);
-
-        if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
-            pr($form->get('institution_grants_medical_degree')->getValue());
-            pr($form->get('institution_control')->getValue());
-            //pr($form->get('institution_grants_medical_degree')->getOption());
-        }
 
         $form = $this->copyCampusInfoFromLastYear($form);
 
