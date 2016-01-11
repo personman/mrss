@@ -5,6 +5,8 @@ $(function() {
 
     trackFormChanges()
 
+    setupForm2Totals();
+
     // Type hints:
     // Dollars
     $('input.input-dollars').addClass('form-control')
@@ -607,3 +609,68 @@ function updateMaxFields()
 }
 
 
+// For NCCBP
+function setupForm2Totals()
+{
+    // Are we on the correct page?
+    if ($('#ft_f_yminus3_degr_cert').length == 0) {
+        return false;
+    }
+
+    var configs = getForm2TotalConfig();
+    var spanClass = 'data-entry-total-replace';
+
+    // Clear any previous totals
+    $('.' + spanClass).remove();
+
+    for (var i in configs) {
+        config = configs[i];
+
+        var totalId = config['total'];
+        var sources = config['sources'];
+
+        // Calculate the total of two fields
+        var total = 0;
+        for (var si in sources) {
+            var sourceId = sources[si];
+            var sourceField = $('#' + sourceId);
+            var val = sourceField.val();
+            if (val == '') {
+                val = 0;
+            }
+
+            total = total + parseInt(val);
+
+            // Now bind to the change event for this field
+            sourceField.change(function() {
+                setupForm2Totals();
+            })
+        }
+
+        // Replace the input with a span showing the total
+        var input = $('#' + totalId);
+        var span = $('<span>');
+        span.addClass(spanClass)
+
+        input.after(span);
+
+        // Show the total in the span
+        span.html(total.toString());
+
+        // And populate the value to the hidden input
+        input.val(total.toString());
+        input.hide();
+    }
+}
+
+function getForm2TotalConfig()
+{
+    var config = [
+        {
+            total: 'ft_f_yminus3_degr_cert',
+            sources: ['ft_f_yminus3_degr_not_transf', 'ft_f_yminus3_degr_and_transf']
+        }
+    ];
+
+    return config;
+}

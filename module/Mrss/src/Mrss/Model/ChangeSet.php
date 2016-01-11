@@ -48,13 +48,14 @@ class ChangeSet extends AbstractModel
         $query = $em->createQuery(
             "SELECT cs
             FROM Mrss\Entity\ChangeSet cs
-            INNER JOIN MRSS\Entity\User u
+            JOIN cs.user u
             WHERE u.college = :college
             AND cs.study = :study
             ORDER BY cs.date DESC"
         );
         $query->setParameter('college', $college);
         $query->setParameter('study', $studyId);
+        $query->setMaxResults(10);
 
         $results = $query->getResult();
 
