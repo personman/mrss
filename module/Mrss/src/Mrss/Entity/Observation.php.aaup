@@ -51,22 +51,22 @@ class Observation
     /** @ORM\Column(type="string", nullable=true) */
     protected $institution_control;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $institution_sector;
 
     /** @ORM\Column(type="string", nullable=true) */
     protected $institution_aaup_category;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $carnegie_basic;
 
     /** @ORM\Column(type="string", nullable=true) */
     protected $institution_system;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $institution_highest_degree;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $institution_grants_medical_degree;
 
     /** @ORM\Column(type="string", nullable=true) */
@@ -75,7 +75,7 @@ class Observation
     /** @ORM\Column(type="float", nullable=true) */
     protected $institution_conversion_factor;
 
-    /** @ORM\Column(type="integer", nullable=true) */
+    /** @ORM\Column(type="string", nullable=true) */
     protected $institution_eligible_cip_codes;
 
     /** @ORM\Column(type="string", nullable=true) */
