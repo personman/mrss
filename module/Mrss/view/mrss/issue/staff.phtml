@@ -19,7 +19,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 <script>
     $(document).ready(function() {
         $('#issues').dataTable({
-            "order": [[2, "asc"]],
+            "order": [[2, "desc"]],
             // show X entries options
             "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
             'iDisplayLength': 25
