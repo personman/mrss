@@ -184,6 +184,7 @@ return array(
                 // Data users:
                 array(
                     'controller' => 'observations',
+                    'action' => array('dataEntry', 'overview', 'import', 'export', 'submittedValues'),
                     'roles' => array('data')
                 ),
                 array(
@@ -232,6 +233,10 @@ return array(
                 ),
                 array(
                     'controller' => 'tool',
+                    'roles' => array('admin')
+                ),
+                array(
+                    'controller' => 'observations',
                     'roles' => array('admin')
                 ),
                 array(
@@ -313,7 +318,7 @@ return array(
                 ),
                 array(
                     'controller' => 'issues',
-                    'actions' => array('staff'),
+                    'actions' => array('staff', 'update'),
                     'roles' => array('data')
                 ),
 

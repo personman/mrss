@@ -40,6 +40,50 @@ class Issue extends AbstractModel
         );
     }
 
+    public function findByStatus($include = array(null), $exclude = array())
+    {
+        $where = '';
+        if ($include) {
+            $where = 'WHERE status IN (:include) ';
+        }
+
+        if ($exclude) {
+            if ($where) {
+                $where .= ' AND ';
+            } else {
+                $where .= 'WHERE ';
+            }
+
+            $where .= "(i.status NOT IN (:exclude) OR i.status IS NULL)";
+        }
+
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT i
+            FROM Mrss\Entity\Issue i
+            $where"
+        );
+
+        if ($include) {
+            $query->setParameter('include', $include);
+        }
+        if ($exclude) {
+            $query->setParameter('exclude', $exclude);
+        }
+
+        $results = $query->getResult();
+
+        /*
+        try {
+            $results = $query->getResult();
+
+        } catch (\Exception $e) {
+            return array();
+        }*/
+
+        return $results;
+    }
+
     /**
      * Find all pages, ordered by title
      */

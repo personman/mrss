@@ -267,4 +267,11 @@ class Issue
 
         return $this;
     }
+
+    public function getObservation()
+    {
+        $observation = $this->getCollege()->getObservationForYear($this->getYear());
+
+        return $observation;
+    }
 }

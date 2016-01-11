@@ -19,7 +19,7 @@
                     'observation/group',
                     array(
                         'id' => $this->observation->getId(),
-                        'benchmarkGroupId' => $benchmarkGroup->getId())
+                        'benchmarkGroup' => $benchmarkGroup->getUrl())
                 ) ?>">
                     <?= $benchmarkGroup->getName() ?>
                 </a> (<?= count($benchmarkGroup->getBenchmarks()) ?> benchmarks)
@@ -43,7 +43,7 @@
         'observation/group/edit',
         array(
             'id' => $this->observation->getId(),
-            'benchmarkGroupId' => $this->benchmarkGroup->getId()
+            'benchmarkGroup' => $this->benchmarkGroup->getUrl()
         )
     ) ?>">
         Edit

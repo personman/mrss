@@ -390,6 +390,18 @@ class College
         return $users;
     }
 
+    public function getDataEmails()
+    {
+        $emails = array();
+        foreach ($this->getUsers() as $user) {
+            if ($user->getRole() == 'data') {
+                $emails[] = $user->getEmail();
+            }
+        }
+
+        return implode(',', $emails);
+    }
+
     public function setSubscriptions($subscriptions)
     {
         $this->subscriptions = $subscriptions;

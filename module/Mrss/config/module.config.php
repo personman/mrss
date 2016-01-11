@@ -383,6 +383,15 @@ return array(
                                 'action' => 'staff'
                             )
                         )
+                    ),
+                    'update' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/update',
+                            'defaults' => array(
+                                'action' => 'update'
+                            )
+                        )
                     )
                 )
             ),
@@ -794,12 +803,12 @@ return array(
                     'group' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/:benchmarkGroupId',
+                            'route' => '/:benchmarkGroup',
                             'constraints' => array(
-                                'benchmarkGroupId' => '[0-9]+'
+                                'benchmarkGroup' => '[0-9]+'
                             ),
                             'defaults' => array(
-                                'benchmarkGroupId' => 0
+                                'benchmarkGroup' => 0
                             )
                         ),
                         'may_terminate' => true,
@@ -814,7 +823,7 @@ return array(
                                 )
                             )
                         )
-                    )
+                    ),
                 )
             ),
             'reports' => array(
