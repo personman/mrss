@@ -1,6 +1,11 @@
 <?php /** @var \Mrss\Entity\College $college */ ?>
 
-<h1>Renew Your Membership</h1>
+<?php if ($this->currentStudy(false)->getConfig()->free_to_join): ?>
+    <h1>Start the Survey</h1>
+<?php else: ?>
+    <h1>Renew Your Membership</h1>
+<?php endif ?>
+
 
 <p>Please review the information below and make any necessary changes before continuing.</p>
 

@@ -100,6 +100,8 @@
 
 
 <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
+    <?php /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */ ?>
+
     <div class="row row-fluid">
         <div class="span1 col-md-1">
 
@@ -130,7 +132,7 @@
             <?php $completes = $benchmarkGroup->getCompleteBenchmarksForObservation($observation) ?>
             <?php if (false && count($completes)): ?>
                 <div style="margin-left: 20px">
-                Complete fields:<br>
+                Complete fields (<?= count($completes) ?>):<br>
                 <?php foreach ($completes as $benchmark): ?>
                     <?= $benchmark->getName() ?> (<?= $benchmark->getDbColumn() ?>)<br>
                 <?php endforeach ?>

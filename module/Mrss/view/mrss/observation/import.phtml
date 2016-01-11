@@ -34,10 +34,14 @@ $this->headScript()->appendFile(
 
 <?php
 $url = $this->url('data-entry/export');
+$directLink  = 'http://www.aaup.org/file/AAUP%20Faculty%20Compensation%20Survey%20-%202015-2016%20-%20Final_0.xlsx';
 $downloadId = 'download';
+$downloadNote = "<strong>Note:</strong> This file can take several minutes to download because it is being pre-populated with your data. If you encounter problems downloading the pre-populated file, please try downloading the blank template <a href='$directLink'>here</a>.";
+
 if ($useDirectDownloadLink) {
-    $url = 'http://www.aaup.org/file/AAUP%20Faculty%20Compensation%20Survey%20-%202015-2016%20-%20Final_0.xlsx';
+    $url = $directLink;
     $downloadId = 'download-direct';
+    $downloadNote = '';
 }
 
 ?>
@@ -49,6 +53,10 @@ if ($useDirectDownloadLink) {
     If you prefer collecting your data in an Excel spreadsheet, download this file.<br>
 
     <strong>Step 2:</strong> Save the Excel spreadsheet to your computer. You should work exclusively on the website OR the Excel file.<br />
+
+    <?php if ($downloadNote): ?>
+        <?= $downloadNote ?><br>
+    <?php endif ?>
 
 </p>
 <p>

@@ -24,7 +24,6 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
     $(document).ready(function() {
         // Send invoice
-        console.log('ok here')
         $('.sendLink').click(function() {
             console.log('in click')
             var id = $(this).attr('id').split('-').pop()

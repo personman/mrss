@@ -1,3 +1,4 @@
+
 <?php /** @var \Mrss\Entity\Issue[] $issues */ ?>
 <?php
 
@@ -9,10 +10,16 @@ $this->headScript()->appendFile(
 $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
+<style>
+    a:visited.btn-success, a:visited.btn-warning {
+        color: white !important;
+    }
+</style>
+
 <script>
     $(document).ready(function() {
         $('#issues').dataTable({
-            "order": [[2, "asc"]],
+            "order": [[2, "desc"]],
             // show X entries options
             "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
             'iDisplayLength': 25
@@ -21,7 +28,50 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         $('.heatMapYear, .heatmapTd').css('width', '20px')
 
         //$('.heatmapCell').tooltip()
+        setUpIssueUpdates();
     });
+
+    function setUpIssueUpdates()
+    {
+        $('.update-issue').click(function() {
+            var url = '/issues/update';
+            var button = $(this);
+            var buttonId = button.attr('id');
+            var parts = buttonId.split('-');
+            var newStatus = parts[0];
+            var issueId = parts[1];
+
+            // Make a form
+            var inputs = {
+                status: newStatus,
+                id: issueId
+            };
+
+            submitPost(url, 'post', inputs);
+
+            return false;
+        })
+    }
+
+    function submitPost(action, method, input) {
+        'use strict';
+        var form;
+        form = $('<form />', {
+            action: action,
+            method: method,
+            style: 'display: none;'
+        });
+        if (typeof input !== 'undefined' && input !== null) {
+            $.each(input, function (name, value) {
+                $('<input />', {
+                    type: 'hidden',
+                    name: name,
+                    value: value
+                }).appendTo(form);
+            });
+        }
+        form.appendTo('body').submit();
+    }
 </script>
 
 <h1>Data Issues</h1>
@@ -33,13 +83,16 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             <th>Message</th>
             <th>Status</th>
             <th>User Note</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($issues as $issue): ?>
             <tr>
                 <td>
-                    <?= $issue->getCollege()->getName() ?>
+                    <a href="<?= $this->url('colleges/view', array('id' => $issue->getCollege()->getId())) ?>">
+                        <?= $issue->getCollege()->getName() ?>
+                    </a>
                 </td>
                 <td>
                     <?= $issue->getMessage() ?>
@@ -49,6 +102,18 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                 </td>
                 <td>
                     <?= $issue->getUserNote() ?>
+                </td>
+                <td>
+                    <div class="btn-group-vertical" role="group" aria-label="...">
+
+                        <a href="<?= $this->url('observation/group', array('id' => $issue->getObservation()->getId(), 'benchmarkGroup' => $issue->getFormUrl())) ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Go to Form <?= $issue->getFormUrl() ?></a>
+                        <a href="mailto:<?= $issue->getCollege()->getDataEmails() ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-envelope"></span> Email User</a>
+                        <?php if ($issue->getStatus() == 'userConfirmed'): ?>
+                        <a href="#" class="btn btn-warning btn-xs update-issue" id="null-<?= $issue->getId() ?>"><span class="glyphicon glyphicon-arrow-left"></span> Send Back to User</a>
+                        <?php endif ?>
+                       <a href="#" class="btn btn-success btn-xs update-issue" id="adminConfirmed-<?= $issue->getId() ?>"><span class="glyphicon glyphicon-ok"></span> Confirm As Is</a>
+
+                    </div>
                 </td>
             </tr>
         <?php endforeach ?>

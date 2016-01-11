@@ -42,6 +42,24 @@ class ChangeSet extends AbstractModel
         );
     }
 
+    public function findByStudyAndCollege($studyId, $college)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT cs
+            FROM Mrss\Entity\ChangeSet cs
+            INNER JOIN MRSS\Entity\User u
+            WHERE u.college = :college
+            AND cs.study = :study
+            ORDER BY cs.date DESC"
+        );
+        $query->setParameter('college', $college);
+        $query->setParameter('study', $studyId);
+
+        $results = $query->getResult();
+
+        return $results;
+    }
 
     public function save(ChangeSetEntity $changeSet)
     {

@@ -23,21 +23,36 @@ class ObservationController extends AbstractActionController
 {
     protected $systemAdminSessionContainer;
 
+    protected $currentObservation;
+
     public function viewAction()
     {
         $observationId = $this->params('id');
         $ObservationModel = $this->getServiceLocator()->get('model.observation');
 
-        $benchmarkGroupId = $this->params('benchmarkGroupId');
-        if (!empty($benchmarkGroupId)) {
-            $benchmarkGroup =  $this->getServiceLocator()
-                ->get('model.benchmarkGroup')
-                ->find($benchmarkGroupId);
+        $benchmarkGroupUrl = $this->params('benchmarkGroup');
+        if (!empty($benchmarkGroupUrl)) {
+            $benchmarkGroup = $this->getBenchmarkGroupModel()
+                ->findOneByUrlAndStudy($benchmarkGroupUrl, $this->currentStudy());
         } else {
             $benchmarkGroup = null;
         }
 
         $observation = $ObservationModel->find($observationId);
+
+        if (1 && !empty($benchmarkGroup)) {
+            // Don't allow saving
+            if ($this->getRequest()->isPost()) {
+                $this->flashMessenger()->addErrorMessage(
+                    'You are not allowed to save data in this view. Impersonate to make edits to data.'
+                );
+                return $this->redirect()->toRoute('observation', array('id' => $observationId));
+            }
+            $this->setCurrentObservation($observation);
+
+            return $this->dataEntryAction(true);
+        }
+
 
         return array(
             'observation' => $observation,
@@ -47,10 +62,18 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    /**
+     * @return \Mrss\Model\BenchmarkGroup
+     */
+    public function getBenchmarkGroupModel()
+    {
+        return $this->getServiceLocator()->get('model.benchmarkGroup');
+    }
+
     public function editAction()
     {
         $observationId = $this->params('id');
-        $benchmarkGroupId = $this->params('benchmarkGroupId');
+        $benchmarkGroupId = $this->params('benchmarkGroup');
 
         $ObservationModel = $this->getServiceLocator()->get('model.observation');
         $observation = $ObservationModel->find($observationId);
@@ -116,6 +139,10 @@ class ObservationController extends AbstractActionController
         $observation = $this->getCurrentObservation();
         $completionPercentage = $currentStudy
             ->getCompletionPercentage($observation);
+
+        if ($completionPercentage > 100) {
+            $completionPercentage = 100;
+        }
 
         $issues = $this->getIssueModel()->findByCollege($this->currentCollege());
 
@@ -224,6 +251,11 @@ class ObservationController extends AbstractActionController
         return $college;
     }
 
+    public function setCurrentObservation(Observation $observation)
+    {
+        $this->currentObservation = $observation;
+    }
+
     /**
      *
      * @return \Mrss\Entity\Observation
@@ -231,9 +263,11 @@ class ObservationController extends AbstractActionController
      */
     public function getCurrentObservation()
     {
-        $observation = $this->currentObservation();
+        if (empty($this->currentObservation)) {
+            $this->currentObservation = $this->currentObservation();
+        }
 
-        return $observation;
+        return $this->currentObservation;
     }
 
     public function getLastYearObservation()
@@ -271,7 +305,7 @@ class ObservationController extends AbstractActionController
         return $observation;
     }
 
-    public function dataEntryAction()
+    public function dataEntryAction($staffView = false)
     {
         // Fetch the form
         $benchmarkGroupUrl = $this->params('benchmarkGroup');
@@ -447,9 +481,12 @@ class ObservationController extends AbstractActionController
                 'nccbpSubscription' => $nccbpSubscription,
                 'variable' => $this->getVariableSubstitutionService(),
                 'dataDefinitionForm' => $this->getDataDefinitionForm(),
-                'dataEntryLayout' => $this->getDataEntryLayout($benchmarkGroup)
+                'dataEntryLayout' => $this->getDataEntryLayout($benchmarkGroup),
+                'staffView' => $staffView
             )
         );
+
+        $view->setTemplate('mrss/observation/data-entry.phtml');
 
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 

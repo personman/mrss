@@ -312,7 +312,13 @@ class SubscriptionController extends AbstractActionController
         $college = $this->currentCollege();
 
         $form = new AbstractForm('renew');
-        $form->add($form->getButtonFieldset('Renew'));
+
+        $button = 'Renew';
+        if ($this->getStudyConfig()->free_to_join) {
+            $button = 'Continue';
+        }
+
+        $form->add($form->getButtonFieldset($button));
 
         if ($this->getRequest()->isPost()) {
             $form->setData($this->params()->fromPost());

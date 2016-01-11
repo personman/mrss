@@ -72,9 +72,33 @@ class IssueController extends AbstractActionController
         return $this->redirect()->toRoute('issues');
     }
 
+    public function updateAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $id = $this->params()->fromPost('id');
+            $status = $this->params()->fromPost('status');
+            if ($status == 'null') {
+                $status = null;
+            }
+
+            $issue = $this->getIssueModel()->find($id);
+            if ($issue) {
+                $issue->setStatus($status);
+
+                $this->getIssueModel()->save($issue);
+                $this->getIssueModel()->getEntityManager()->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Issue updated.');
+
+            }
+        }
+
+        return $this->redirect()->toRoute('issues/staff');
+    }
+
     public function staffAction()
     {
-        $issues = $this->getIssueModel()->findAll();
+        $issues = $this->getIssueModel()->findByStatus(array(), array('adminConfirmed'));
 
         return array(
             'issues' => $issues
