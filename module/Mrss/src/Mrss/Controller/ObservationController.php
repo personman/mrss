@@ -334,7 +334,7 @@ class ObservationController extends AbstractActionController
 
             if ($_SERVER['REMOTE_ADDR'] == '108.238.235.80') {
                 pr($observation->getId();
-                pr($observation->get('institution_grants_medical_degree'));
+                pr($observation->get('institution_grants_medical_degree');
             }
 
         } catch (\Exception $e) {
