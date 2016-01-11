@@ -48,8 +48,8 @@ class ChangeSet extends AbstractModel
         $query = $em->createQuery(
             "SELECT cs
             FROM Mrss\Entity\ChangeSet cs
-            JOIN cs.user u
-            WHERE u.college = :college
+            JOIN cs.observation o
+            WHERE o.college = :college
             AND cs.study = :study
             ORDER BY cs.date DESC"
         );
