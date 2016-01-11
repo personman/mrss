@@ -106,7 +106,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                 <td>
                     <div class="btn-group-vertical" role="group" aria-label="...">
 
-                        <a href="<?= $this->url('observation/group', array('id' => $issue->getObservation()->getId(), 'benchmarkGroup' => $issue->getFormUrl())) ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Go to form <?= $issue->getFormUrl() ?></a>
+                        <a href="<?= $this->url('observation/group', array('id' => $issue->getObservation()->getId(), 'benchmarkGroup' => $issue->getFormUrl())) ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Go to Form <?= $issue->getFormUrl() ?></a>
                         <a href="mailto:<?= $issue->getCollege()->getDataEmails() ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-envelope"></span> Email User</a>
                         <?php if ($issue->getStatus() == 'userConfirmed'): ?>
                         <a href="#" class="btn btn-warning btn-xs update-issue" id="null-<?= $issue->getId() ?>"><span class="glyphicon glyphicon-arrow-left"></span> Send Back to User</a>
