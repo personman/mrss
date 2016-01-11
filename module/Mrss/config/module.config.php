@@ -1638,9 +1638,10 @@ return array(
                     'changes' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/changes',
+                            'route' => '/changes[/:college]',
                             'defaults' => array(
-                                'action' => 'changes'
+                                'action' => 'changes',
+                                'college' => null
                             )
                         )
                     ),

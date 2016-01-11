@@ -79,7 +79,16 @@ class AdminController extends AbstractActionController
 
     public function changesAction()
     {
-        $changeSets = $this->getChangeSetModel()->findByStudy($this->getStudy()->getId());
+        $collegeId = $this->params()->fromRoute('college');
+
+        if ($collegeId) {
+            $changeSets = $this->getChangeSetModel()->findByStudyAndCollege(
+                $this->getStudy()->getId(),
+                $collegeId
+            );
+        } else {
+            $changeSets = $this->getChangeSetModel()->findByStudy($this->getStudy()->getId());
+        }
 
         return array(
             'changeSets' => $changeSets
