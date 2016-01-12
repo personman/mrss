@@ -97,8 +97,8 @@
                 <tr class="changeSet">
                     <td>
 
-                        <?php if ($changeSet->getUser()): ?>
-                            <?php $college = $changeSet->getUser()->getCollege() ?>
+                        <?php if ($changeSet->getObservation()): ?>
+                            <?php $college = $changeSet->getObservation()->getCollege() ?>
                             <strong>
                                 <a href="<?= $this->url('colleges/view', array('id' => $college->getId())) ?>">
                                     <?= $college->getName() ?>

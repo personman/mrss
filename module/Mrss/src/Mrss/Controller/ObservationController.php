@@ -331,6 +331,7 @@ class ObservationController extends AbstractActionController
 
         try {
             $observation = $this->getCurrentObservation();
+
         } catch (\Exception $e) {
             // If the observation is not found, check a prior year
             if (empty($observation)) {

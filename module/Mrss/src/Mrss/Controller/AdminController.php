@@ -80,7 +80,7 @@ class AdminController extends AbstractActionController
     public function changesAction()
     {
         takeYourTime();
-        
+
         $collegeId = $this->params()->fromRoute('college');
 
         if ($collegeId) {
