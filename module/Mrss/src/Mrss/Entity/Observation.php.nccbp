@@ -285,6 +285,11 @@ class Observation
     /** @ORM\Column(type="text", nullable=true) */
     protected $best_practices_desc;
 
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pell_grant_eligble;
+
 
 
 
@@ -571,6 +576,32 @@ class Observation
      */
     protected $ft_minus3_perc_comp_and_transf;
 
+    // 2016 changes to form 2
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_f_yminus3_degr_not_transf;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_f_yminus4_degr_not_transf;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_f_yminus4_degr_not_transf;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_f_yminus7_degr_not_transf;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_f_yminus7_degr_not_transf;
+
 
 
     // NCCBP form 3
@@ -640,6 +671,78 @@ class Observation
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $fall_fall_pers;
+
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_cr_st;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_grad_bef_spr;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_enr_bef_spr;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_next_term_pers;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_grad_bef_fall;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_enr_fall;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $ft_fall_fall_pers;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_cr_st;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_grad_bef_spr;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_enr_bef_spr;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_next_term_pers;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_grad_bef_fall;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_enr_fall;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $pt_fall_fall_pers;
+
 
     // NCCBP form 5
 
@@ -1147,6 +1250,38 @@ class Observation
      * @ORM\Column(type="float", nullable=true)
      */
     protected $sp_comp_suc_rate;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $gm_abcpdfw;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $gm_abcpdf;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $gm_abcp;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $gm_retention_rate;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $gm_enr_suc_rate;
+
+    /**
+      * @ORM\Column(type="float", nullable=true)
+      */
+    protected $gm_comp_suc_rate;
+
+
 
 
     // NCCBP form 12

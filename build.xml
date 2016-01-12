@@ -181,6 +181,7 @@
     <target name="clear-caches" description="Delete some cache files.">
         <exec command="rm data/cache/classes.php.cache" />
         <exec command="rm data/cache/module-config-cache.config_cache.php" />
+        <exec command="rm -Rf data/DoctrineModule/cache/*" />
         <exec command="./bin/classmap_generator.php" />
 
     </target>
@@ -216,6 +217,14 @@
         <echo>Done.</echo>
     </target>
 
+    <target name="sync-nccbp-db">
+        <exec command="ssh max@maximizingresources.org 'shopt -s expand_aliases; ./nccbpdump; tar czf nccbp.production.tgz  nccbp.production.sql;'" passthru="true"/>
+        <exec command="scp max@maximizingresources.org:nccbp.production.tgz /tmp" passthru="true" />
+        <exec command="tar zxf /tmp/nccbp.production.tgz -C /tmp" passthru="true" />
+        <exec command="mysql -u root -proot mrss_test &lt; /tmp/nccbp.production.sql" passthru="true" />
+        <echo>Done.</echo>
+    </target>
+
     <target name="sync-aaup-db">
         <exec command="ssh max@maximizingresources.org 'shopt -s expand_aliases; ./aaupdump; tar czf aaup.production.tgz  aaup.production.sql;'" passthru="true"/>
         <exec command="scp max@maximizingresources.org:aaup.production.tgz /tmp" passthru="true" />
@@ -224,7 +233,7 @@
         <echo>Done.</echo>
     </target>
 
-    <target name="sync" depends="sync-from-production-db"/>
+    <target name="sync" depends="sync-nccbp-db"/>
 
     <target name="deploy" depends="ssh-git-deploy,slack-deploy-message" />
 
