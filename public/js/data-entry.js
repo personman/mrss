@@ -7,6 +7,8 @@ $(function() {
 
     setupForm2Totals();
 
+    addForm4Headings();
+
     // Type hints:
     // Dollars
     $('input.input-dollars').addClass('form-control')
@@ -689,4 +691,16 @@ function getForm2TotalConfig()
     ];
 
     return config;
+}
+
+function addForm4Headings()
+{
+    if ($('#ft_cr_st').length) {
+        // Add headings to form 4
+        var ft = $('<h2>').html('Full-time').css('margin-top', '30px');
+        $('form h3:nth-of-type(1)').before(ft)
+
+        var pt = $('<h2>').html('Part-time').css('margin-top', '30px');
+        $('form h3:nth-of-type(4)').before(pt)
+    }
 }
