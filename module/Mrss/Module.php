@@ -995,9 +995,9 @@ class Module
 
                     pr($userId);
                     pr($currentStudy->getId());
-                    pr($user->hasStudy($currentStudy));
+                    pr($user->getEmail());
                     //pr($user->getCollege()->getName());
-                    prd($user->getStudies());
+                    prd(count($user->getStudies()));
                     if (!$user->hasStudy($currentStudy)) {
                         $cpm->get('flashMessenger')->addErrorMessage(
                             'You do not have access to this study. If you believe
