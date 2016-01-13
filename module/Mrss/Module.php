@@ -993,11 +993,6 @@ class Module
                     $cpm = $serviceManager->get('ControllerPluginManager');
                     $currentStudy = $cpm->get('currentStudy')->getCurrentStudy();
 
-                    pr($userId);
-                    pr($currentStudy->getId());
-                    pr($user->getEmail());
-                    pr($user->getCollege()->getName());
-                    prd(count($user->getStudies()));
                     if (!$user->hasStudy($currentStudy)) {
                         $cpm->get('flashMessenger')->addErrorMessage(
                             'You do not have access to this study. If you believe
