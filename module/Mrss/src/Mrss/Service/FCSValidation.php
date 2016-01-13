@@ -715,7 +715,7 @@ class FCSValidation
                 'max' => 3
             ),
             'fica' => array(
-                'max' => 7.65
+                'max' => 7.66
             )
         );
 
