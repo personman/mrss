@@ -996,7 +996,7 @@ class Module
                     pr($userId);
                     pr($currentStudy->getId());
                     pr($user->hasStudy($currentStudy));
-                    //pr($user);
+                    pr($user->getCollege()->getName());
                     prd($user->getStudies());
                     if (!$user->hasStudy($currentStudy)) {
                         $cpm->get('flashMessenger')->addErrorMessage(
