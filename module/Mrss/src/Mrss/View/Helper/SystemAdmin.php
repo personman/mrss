@@ -30,7 +30,7 @@ class SystemAdmin extends AbstractHelper
 
     protected $activeCollege;
 
-    public function __invoke($allowed)
+    public function __invoke($allowed = false)
     {
         return $this->showCollegeSwitcher($allowed);
     }
