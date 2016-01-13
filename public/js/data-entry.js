@@ -669,6 +669,22 @@ function getForm2TotalConfig()
         {
             total: 'ft_f_yminus3_degr_cert',
             sources: ['ft_f_yminus3_degr_not_transf', 'ft_f_yminus3_degr_and_transf']
+        },
+        {
+            total: 'ft_f_yminus4_degr_cert',
+            sources: ['ft_f_yminus4_degr_not_transf', 'ft_f_yminus4_degr_and_transf']
+        },
+        {
+            total: 'pt_f_yminus4_degr_cert',
+            sources: ['pt_f_yminus4_degr_not_transf', 'pt_f_yminus4_degr_and_transf']
+        },
+        {
+            total: 'ft_yminus7_degr',
+            sources: ['ft_f_yminus7_degr_not_transf', 'ft_yminus7_degr_and_tranf']
+        },
+        {
+            total: 'pt_yminus7_degr',
+            sources: ['pt_f_yminus7_degr_not_transf', 'pt_yminus7_degr_and_tranf']
         }
     ];
 
