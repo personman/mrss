@@ -1638,9 +1638,10 @@ return array(
                     'memberships' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/memberships',
+                            'route' => '/memberships[/:year]',
                             'defaults' => array(
-                                'action' => 'memberships'
+                                'action' => 'memberships',
+                                'year' => null
                             )
                         )
                     ),

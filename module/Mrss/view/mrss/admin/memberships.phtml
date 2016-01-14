@@ -62,7 +62,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 <ul class="nav nav-pills">
     <?php foreach ($years as $year): ?>
         <li<? if ($year == $currentYear) echo ' class="active"' ?>>
-            <a href="<?= $this->url('subscriptions', array('year' => $year)) ?>"><?= $year ?></a>
+            <a href="<?= $this->url('admin/memberships', array('year' => $year)) ?>"><?= $year ?></a>
         </li>
     <?php endforeach ?>
 </ul>
