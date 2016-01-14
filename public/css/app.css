@@ -169,7 +169,7 @@ div.userNote .controls textarea {
     height: 80px;
 }
 
-div.userNote .well .control-group {
+/*div.userNote*/ .well .control-group {
     float: left;
 }
 

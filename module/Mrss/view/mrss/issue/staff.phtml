@@ -18,12 +18,21 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 <script>
     $(document).ready(function() {
-        $('#issues').dataTable({
-            "order": [[2, "desc"]],
+        var table = $('#issues').DataTable({
+            "order": [[3, "desc"]],
             // show X entries options
             "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
             'iDisplayLength': 25
         });
+
+        // Update tabindex for checkbox when sorting
+        table.on('draw.dt', function() {
+            table.column(0, {}).nodes().each( function (cell, i) {
+                $(cell).find('input').attr('tabindex', i + 1)
+
+            } );
+        })
+
 
         $('.heatMapYear, .heatmapTd').css('width', '20px')
 
@@ -76,9 +85,11 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 <h1>Data Issues</h1>
 
+<form action="/issues/mass-update" method="post">
 <table class="table table-bordered" id="issues">
     <thead>
         <tr>
+            <th></th>
             <th>Institution</th>
             <th>Message</th>
             <th>Status</th>
@@ -87,8 +98,12 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         </tr>
     </thead>
     <tbody>
+        <?php $i = 2 ?>
         <?php foreach ($issues as $issue): ?>
             <tr>
+                <td>
+                    <input type="checkbox" name="issue[<?= $issue->getId() ?>]" tabindex="<?= $i++ ?>">
+                </td>
                 <td>
                     <a href="<?= $this->url('colleges/view', array('id' => $issue->getCollege()->getId())) ?>">
                         <?= $issue->getCollege()->getName() ?>
@@ -119,3 +134,27 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <?php endforeach ?>
     </tbody>
 </table>
+
+
+    <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-buttons[submit]">
+            <div class="controls" id="controls-buttons[submit]">
+                <label for="sendBack" class="btn btn-warning">
+                    <span class='glyphicon glyphicon-arrow-left'></span> Send Back to User
+                </label>
+                <input type="submit" id="sendBack" name="buttons[sendBack]"
+                       value="Send Back" class="hidden">
+            </div>
+        </div>
+        <div class="control-group" id="control-group-buttons[save-edit]">
+            <div class="controls" id="controls-buttons[save-edit]">
+                <label for="confirmAsIs" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok"></span> Confirm As Is</a>
+                </label>
+                <input type="submit" id="confirmAsIs" name="buttons[confirm]" class="hidden" >
+            </div>
+        </div>
+
+    </fieldset>
+
+</form>

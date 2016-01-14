@@ -392,6 +392,15 @@ return array(
                                 'action' => 'update'
                             )
                         )
+                    ),
+                    'mass-update' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/mass-update',
+                            'defaults' => array(
+                                'action' => 'massUpdate'
+                            )
+                        )
                     )
                 )
             ),

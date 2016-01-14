@@ -96,6 +96,49 @@ class IssueController extends AbstractActionController
         return $this->redirect()->toRoute('issues/staff');
     }
 
+    public function massUpdateAction()
+    {
+        if ($this->getRequest()->isPost()) {
+
+            $buttons = $this->params()->fromPost('buttons');
+
+            if (!empty($buttons['sendBack'])) {
+                $status = null;
+            } elseif (!empty($buttons['confirm'])) {
+                $status = 'adminConfirmed';
+            } else {
+                $this->flashMessenger()->addErrorMessage('Problem updating issues. Be sure to click a button.');
+                return $this->redirect()->toRoute('issues/staff');
+            }
+
+            $issueCheckboxes = $this->params()->fromPost('issue', array());
+            $issueIds = array_keys($issueCheckboxes);
+
+            $count = 0;
+            foreach ($issueIds as $issueId) {
+                $issue = $this->getIssueModel()->find($issueId);
+                if ($issue) {
+                    $issue->setStatus($status);
+
+                    $this->getIssueModel()->save($issue);
+                    $count++;
+                }
+            }
+
+            $this->getIssueModel()->getEntityManager()->flush();
+
+            $noun = 'Issues';
+            if ($count == 1) {
+                $noun = 'Issue';
+            }
+
+            $this->flashMessenger()->addSuccessMessage("$count $noun updated.");
+
+        }
+
+        return $this->redirect()->toRoute('issues/staff');
+    }
+
     public function staffAction()
     {
         $issues = $this->getIssueModel()->findByStatus(array(), array('adminConfirmed'));

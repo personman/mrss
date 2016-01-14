@@ -40,11 +40,15 @@ class Issue extends AbstractModel
         );
     }
 
-    public function findByStatus($include = array(null), $exclude = array())
+    public function findByStatus($include = array(), $exclude = array(), $includeNull = true)
     {
         $where = '';
         if ($include) {
             $where = 'WHERE status IN (:include) ';
+        }
+
+        if ($includeNull) {
+            $includeNull = ' OR i.status IS NULL';
         }
 
         if ($exclude) {
@@ -54,14 +58,15 @@ class Issue extends AbstractModel
                 $where .= 'WHERE ';
             }
 
-            $where .= "(i.status NOT IN (:exclude) OR i.status IS NULL)";
+            $where .= "(i.status NOT IN (:exclude) $includeNull)";
         }
 
         $em = $this->getEntityManager();
         $query = $em->createQuery(
             "SELECT i
             FROM Mrss\Entity\Issue i
-            $where"
+            $where
+            ORDER BY i.status DESC"
         );
 
         if ($include) {
