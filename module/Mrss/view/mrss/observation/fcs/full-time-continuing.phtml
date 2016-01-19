@@ -32,6 +32,10 @@ $this->headScript()->appendFile(
 
 
 <script>
+    // Conversion factor (set in form 1)
+    var conversionFactor = <?= getConversionFactor($observation) ?>;
+
+
     $(function() {
         updateSalaryTotals();
         updatePercentageIncrease();
@@ -41,7 +45,7 @@ $this->headScript()->appendFile(
         })
     })
 
-    function updateSalaryTotals()
+    /*function updateSalaryTotals()
     {
         $('.column-total').each(function() {
             var id = $(this).attr('id')
@@ -56,7 +60,7 @@ $this->headScript()->appendFile(
 
             $(this).html(sum);
         })
-    }
+    }*/
 
     function updatePercentageIncrease()
     {
@@ -201,8 +205,8 @@ $this->headScript()->appendFile(
         <tr>
             <td class="grid-category"><?= ucwords(str_replace('-', ' ', $type)) ?></td>
             <td class="column-total faculty" id="faculty_<?= $type ?>">0</td>
-            <td class="column-total current" id="current_<?= $type ?>">0</td>
-            <td class="column-total previous" id="previous_<?= $type ?>">0</td>
+            <td class="column-total apply-conversion current" id="current_<?= $type ?>">0</td>
+            <td class="column-total apply-conversion previous" id="previous_<?= $type ?>">0</td>
             <td class="percentage-increase">0.00%</td>
         </tr>
         <?php endforeach ?>
@@ -210,8 +214,8 @@ $this->headScript()->appendFile(
         <tr>
             <td class="grid-category">TOTAL</td>
             <td class="column-total faculty" id="faculty">0</td>
-            <td class="column-total current" id="current">0</td>
-            <td class="column-total previous" id="previous">0</td>
+            <td class="column-total apply-conversion current" id="current">0</td>
+            <td class="column-total apply-conversion previous" id="previous">0</td>
             <td class="percentage-increase">0.00%</td>
         </tr>
 
@@ -235,3 +239,16 @@ $this->headScript()->appendFile(
 <?php endif ?>
 
 <?= $this->form()->closeTag() ?>
+
+
+<?php
+
+function getConversionFactor($observation)
+{
+    $cf = $observation->get('institution_conversion_factor');
+    if (empty($cf)) {
+        $cf = 1;
+    }
+
+    return $cf;
+}

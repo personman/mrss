@@ -562,7 +562,10 @@ function getClassesToConvert()
         'exp 12-month retirement',
         'exp 12-month fica',
         'exp 12-month group-life',
-        'exp 12-month workers-comp'
+        'exp 12-month workers-comp',
+        // Form 4
+        'current month-12',
+        'previous month-12'
     ];
 }
 
