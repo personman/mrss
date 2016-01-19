@@ -497,6 +497,10 @@ function updateSalaryTotals()
                 var converted = $(e).val();
             }
 
+            if (id == 'current_professor') {
+                console.log(converted)
+            }
+
             sum += Number(converted);
         });
 
