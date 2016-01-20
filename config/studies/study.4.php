@@ -23,7 +23,7 @@ return array(
     'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',
     'copyright' => date('Y') . " American Association of University Professors",
-    'footerLogo' => '',
+    'footerLogo' => '<span>Powered by</span> <br><a href="http://nccbp.org/benchmarking-institute" title="National Higher Eduction Benchmarking Institute @ Johnson County Community College"><img src="/images/benchmark_logo.png" /></a>',
     'footerSocial' => '',
     'data_entry_templates' => array(
         3 => 'fcs/full-time-salary.phtml',
