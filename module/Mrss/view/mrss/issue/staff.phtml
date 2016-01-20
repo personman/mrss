@@ -20,6 +20,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     $(document).ready(function() {
         var table = $('#issues').DataTable({
             "order": [[3, "desc"]],
+            columnDefs: [
+                {targets: 'no-sort', orderable: false}
+            ],
             // show X entries options
             "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
             'iDisplayLength': 25
@@ -33,12 +36,30 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             } );
         })
 
+        setUpCheckAll();
+
 
         $('.heatMapYear, .heatmapTd').css('width', '20px')
 
         //$('.heatmapCell').tooltip()
         setUpIssueUpdates();
     });
+
+    function setUpCheckAll()
+    {
+        $('#checkAll').change(function() {
+            var checkbox = $(this);
+            var checked = checkbox[0].checked;
+
+            $('input[type=checkbox]').each(function() {
+                // Only update checkboxes on the current page
+                if ($(this).is(':visible')) {
+                    this.checked = checked;
+                }
+            })
+        })
+
+    }
 
     function setUpIssueUpdates()
     {
@@ -89,7 +110,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 <table class="table table-bordered" id="issues">
     <thead>
         <tr>
-            <th></th>
+            <th class="no-sort">
+                <input type="checkbox" id="checkAll" name="checkAll" title = "Check All" />
+            </th>
             <th>Institution</th>
             <th>Message</th>
             <th>Status</th>
