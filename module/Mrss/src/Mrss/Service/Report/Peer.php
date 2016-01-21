@@ -208,7 +208,7 @@ class Peer extends Report
     public function getYourCollegeColor()
     {
         //return '#002C57';
-        return '#83A725';
+        return '#9cc03e';
     }
 
     public function getPeerColor()

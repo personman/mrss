@@ -933,7 +933,7 @@ class Report
     protected function getBarChartHighlightColor()
     {
         //$color = '#002C57';
-        $color = '#83A725';
+        $color = '#9cc03e';
 
         return $color;
     }
