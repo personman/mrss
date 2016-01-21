@@ -10,18 +10,13 @@ class IssueController extends AbstractActionController
 {
     public function indexAction()
     {
-        $issues = $this->getIssueModel()->findByCollege($this->currentCollege());
+        $issues = $this->getIssueModel()->findForCollege($this->currentCollege());
         $em = $this->getIssueModel()->getEntityManager();
 
         // Build a form for each issue
         $forms = array();
         $filteredIssues = array();
         foreach ($issues as $issue) {
-            // Skip any issue with a status
-            if ($issue->getStatus()) {
-                continue;
-            }
-
             $form = new IssueUserNote();
 
 

@@ -40,6 +40,29 @@ class Issue extends AbstractModel
         );
     }
 
+    /**
+     * Returns issues with null status for given college
+     * @param $college
+     * @return IssueEntity[]
+     */
+    public function findForCollege($college)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT i
+            FROM Mrss\Entity\Issue i
+            WHERE i.status IS NULL
+            AND i.college = :college
+            ORDER BY i.status DESC"
+        );
+
+        $query->setParameter('college', $college);
+
+        $results = $query->getResult();
+
+        return $results;
+    }
+
     public function findByStatus($include = array(), $exclude = array(), $includeNull = true)
     {
         $where = '';

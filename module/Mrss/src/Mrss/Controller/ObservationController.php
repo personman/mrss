@@ -144,7 +144,7 @@ class ObservationController extends AbstractActionController
             $completionPercentage = 100;
         }
 
-        $issues = $this->getIssueModel()->findByCollege($this->currentCollege());
+        $issues = $this->getIssueModel()->findForCollege($this->currentCollege());
 
         return array(
             'currentStudy' => $currentStudy,
