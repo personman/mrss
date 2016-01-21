@@ -205,6 +205,17 @@ class Peer extends Report
         return $dataWithLabels;
     }
 
+    public function getYourCollegeColor()
+    {
+        //return '#002C57';
+        return '#9cc03e';
+    }
+
+    public function getPeerColor()
+    {
+        return '#0065A1';
+    }
+
     public function getPeerBarChart(BenchmarkEntity $benchmark, $data)
     {
         $title = $benchmark->getPeerReportLabel();
@@ -223,11 +234,11 @@ class Peer extends Report
             // Your college
             if (strlen($name) > 5) {
                 $dataLabelEnabled = true;
-                $color = '#002C57';
+                $color = $this->getYourCollegeColor();
                 $label = 'Your College';
             } else {
                 $dataLabelEnabled = false;
-                $color = '#0065A1';
+                $color = $this->getPeerColor();
             }
 
             $chartXCategories[] = $label;
