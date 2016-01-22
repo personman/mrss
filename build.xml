@@ -182,8 +182,6 @@
         <exec command="rm data/cache/classes.php.cache" />
         <exec command="rm data/cache/module-config-cache.config_cache.php" />
         <exec command="rm -Rf data/DoctrineModule/cache/*" />
-        <exec command="./bin/classmap_generator.php" />
-
     </target>
 
     <target name="test" depends="codesniffer,phpunit"/>
