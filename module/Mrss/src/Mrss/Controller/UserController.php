@@ -185,7 +185,7 @@ class UserController extends AbstractActionController
         $oneTimeLogin = $renderer->serverUrl(
             $renderer->url('zfcuser/resetpassword', array(
                 'userId' => $user->getId(),
-                'token' => $this->getPasswordResetKey($user->getId()))
+                'token' => $this->getPasswordResetKey($user->getId(), $user->getEmail()))
             )
         );
 
