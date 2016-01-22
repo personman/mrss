@@ -1361,6 +1361,16 @@ return array(
                             )
                         )
                     ),
+                    'reset' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/reset/:id',
+                            'defaults' => array(
+                                'action' => 'reset',
+                                'id' => 0
+                            )
+                        )
+                    ),
                     'queue' => array(
                         'type' => 'segment',
                         'options' => array(

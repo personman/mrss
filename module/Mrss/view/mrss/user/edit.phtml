@@ -1,4 +1,12 @@
 <?php $action = ($user->getId() == 'add') ? 'Add' : 'Edit' ?>
+
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('users/reset', array('id' => $user->getId())) ?>">
+        Generate password reset url
+    </a>
+</div>
+
+
 <h1><?= $action ?> User</h1>
 <h2><?= $user->getCollege()->getName() ?></h2>
 

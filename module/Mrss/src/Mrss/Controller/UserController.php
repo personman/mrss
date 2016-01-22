@@ -185,7 +185,7 @@ class UserController extends AbstractActionController
         $oneTimeLogin = $renderer->serverUrl(
             $renderer->url('zfcuser/resetpassword', array(
                 'userId' => $user->getId(),
-                'token' => $this->getPasswordResetKey($user->getId(), $user->getEmail()))
+                'token' => $this->getPasswordResetKey($user->getId()))
             )
         );
 
@@ -538,7 +538,7 @@ class UserController extends AbstractActionController
                 ->get('viewhelpermanager')->get('url');
 
             // Build the one-time login url
-            $key = $this->getPasswordResetKey($userId, $user->getEmail());
+            $key = $this->getPasswordResetKey($userId);
 
 
             $url = $serverUrl->__invoke(
@@ -588,7 +588,18 @@ class UserController extends AbstractActionController
         die;
     }
 
-    protected function getPasswordResetKey($userId, $email)
+    public function resetAction()
+    {
+        $id = $this->params()->fromRoute('id');
+
+        $key = $this->getPasswordResetKey($id);
+
+        $this->flashMessenger()->addSuccessMessage("Password reset key generated.");
+
+        return $this->redirect()->toRoute('users/edit', array('id' => $id));
+    }
+
+    protected function getPasswordResetKey($userId)
     {
         /** @var \GoalioForgotPassword\Service\Password $passwordService */
         $passwordService = $this->getServiceLocator()
