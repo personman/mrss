@@ -182,6 +182,7 @@
         <exec command="rm data/cache/classes.php.cache" />
         <exec command="rm data/cache/module-config-cache.config_cache.php" />
         <exec command="rm -Rf data/DoctrineModule/cache/*" />
+        <exec command="rm -Rf public/files/all-colleges.json" />
     </target>
 
     <target name="test" depends="codesniffer,phpunit"/>
@@ -232,6 +233,8 @@
     </target>
 
     <target name="sync" depends="sync-nccbp-db"/>
+
+    <target name="cc" depends="clear-caches"/>
 
     <target name="deploy" depends="ssh-git-deploy,slack-deploy-message" />
 
