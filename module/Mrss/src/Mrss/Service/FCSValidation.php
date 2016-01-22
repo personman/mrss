@@ -408,6 +408,10 @@ class FCSValidation
                     $smaller = $maleAverage;
                 }
 
+                if ($smaller == 0) {
+                    continue;
+                }
+
                 // What's the percentage difference?
                 $percentDifference = ($larger - $smaller) / $smaller * 100;
 

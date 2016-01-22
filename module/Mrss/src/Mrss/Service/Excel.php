@@ -316,7 +316,9 @@ class Excel
 
     public function download($spreadsheet)
     {
-        ob_end_clean();
+        if (ob_get_contents()) {
+            ob_end_clean();
+        }
 
         if (true) {
             // redirect output to client browser
