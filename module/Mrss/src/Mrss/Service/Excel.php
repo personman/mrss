@@ -8,7 +8,7 @@ use Mrss\Entity\Subscription;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\BenchmarkHeading;
 use Mrss\Model\Benchmark as BenchmarkModel;
-use PHPExcel;
+use \PHPExcel as PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;

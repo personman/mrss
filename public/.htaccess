@@ -78,6 +78,11 @@ RewriteRule \.asp$ - [G,L]
 RewriteRule ^misc/ - [G,L]
 RewriteRule ^rss\.xml - [G,L]
 
+# Old AAUP urls
+RewriteRule ^CSS/Menu\.AAUP\.css - [G,L]
+RewriteRule ^Script/JScript\.js - [G,L]
+RewriteRule ^CSS/BaseStyle\.css - [G,L]
+
 # No Wordpress here. Begone, brute force bots
 RewriteRule wp-login\.php - [G,L]
 RewriteRule wp-admin - [G,L]
