@@ -7,7 +7,6 @@ nbproject
 .project
 .settings
 .ftpquota
-autoload_classmap.php
 bin
 vendor
 config/phinx.yml
