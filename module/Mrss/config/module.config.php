@@ -1772,6 +1772,15 @@ return array(
                             )
                         )
                     ),
+                    'fail' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/fail',
+                            'defaults' => array(
+                                'action' => 'fail',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

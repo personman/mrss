@@ -16,6 +16,7 @@ use Zend\Config\Config;
 
 class Module
 {
+
     public function onBootstrap(MvcEvent $e)
     {
         $eventManager = $e->getApplication()->getEventManager();

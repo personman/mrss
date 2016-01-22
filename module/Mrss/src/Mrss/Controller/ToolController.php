@@ -152,9 +152,13 @@ class ToolController extends AbstractActionController
 
     public function geocodeAction()
     {
+        takeYourTime();
+
         /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $subscriptionModel = $this->getServiceLocator()
             ->get('model.college');
+
+        $saveEvery = 100;
 
 
         $colleges = $collegeModel->findAll();
@@ -180,6 +184,10 @@ class ToolController extends AbstractActionController
             } else {
                 $notFound[] = "Not found: " . $college->getName() . "<br>" .
                     $address;
+            }
+
+            if ($found % $saveEvery == 0) {
+                $collegeModel->getEntityManager()->flush();
             }
         }
 
@@ -673,6 +681,16 @@ class ToolController extends AbstractActionController
         );
     }
 
+    /**
+     * Has a PHP error in the view file. For checking how server handles errors.
+     *
+     * @return array
+     */
+    public function failAction()
+    {
+        return array();
+    }
+
     protected function getObservationPropertyCode(Benchmark $benchmark)
     {
         $oldDbColumn = $benchmark->getDbColumn();
@@ -716,4 +734,6 @@ class ToolController extends AbstractActionController
             ->getConfiguration()
             ->setSQLLogger(null);
     }
+
+
 }
