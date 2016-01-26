@@ -1,5 +1,7 @@
 RewriteEngine On
 
+AddType application/x-httpd-php55 .php
+
 # Force https
 RewriteCond %{HTTP_HOST} ^research\.aaup\.org [NC]
 RewriteCond %{SERVER_PORT} 80
