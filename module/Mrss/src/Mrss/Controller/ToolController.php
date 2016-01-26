@@ -238,6 +238,11 @@ class ToolController extends AbstractActionController
         return false;
     }
 
+    public function infoAction()
+    {
+        return array();
+    }
+
     public function calcCompletionAction()
     {
         $this->longRunningScript();

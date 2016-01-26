@@ -1762,6 +1762,15 @@ return array(
                             )
                         )
                     ),
+                    'info' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/info',
+                            'defaults' => array(
+                                'action' => 'info'
+                            )
+                        )
+                    ),
                     'offsets' => array(
                         'type' => 'segment',
                         'options' => array(
