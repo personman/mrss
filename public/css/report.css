@@ -15,7 +15,7 @@ tr.topHeading th.benchmarkGroupTitle {
 
 .table > thead > tr.secondHeading th {
     background: #DCE6F1;
-    text-align: center;
+    text-align: right;
     color: #000;
 }
 

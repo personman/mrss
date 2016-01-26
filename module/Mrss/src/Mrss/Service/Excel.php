@@ -489,7 +489,7 @@ class Excel
         return $return;
     }
 
-    protected function getAaupDataFromExcel(PHPExel $excel)
+    protected function getAaupDataFromExcel(\PHPExel $excel)
     {
         $structure = $this->getAaupStructure();
         $data = array();

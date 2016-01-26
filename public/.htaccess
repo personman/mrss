@@ -82,6 +82,7 @@ RewriteRule ^rss\.xml - [G,L]
 RewriteRule ^CSS/Menu\.AAUP\.css - [G,L]
 RewriteRule ^Script/JScript\.js - [G,L]
 RewriteRule ^CSS/BaseStyle\.css - [G,L]
+RewriteRule ^CSS/MyStyleSheet\.css - [G,L]
 
 # No Wordpress here. Begone, brute force bots
 RewriteRule wp-login\.php - [G,L]
