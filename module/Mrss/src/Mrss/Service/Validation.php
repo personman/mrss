@@ -4,6 +4,7 @@ namespace Mrss\Service;
 
 use Mrss\Entity\Issue;
 use Mrss\Model\Issue as IssueModel;
+use Mrss\Entity\College;
 
 class Validation
 {
@@ -23,7 +24,7 @@ class Validation
 
     public function validate($observation, $priorObservation = null)
     {
-        $this->collectExistingIssues();
+        $this->collectExistingIssues($observation->getCollege());
 
         $validator = $this->getValidator();
         if (!empty($validator)) {
@@ -38,10 +39,10 @@ class Validation
         return $issues;
     }
 
-    protected function collectExistingIssues()
+    protected function collectExistingIssues(College $college)
     {
         // We want to key these with the error code
-        $issues = $this->getIssueModel()->findByCollege($this->getUser()->getCollege());
+        $issues = $this->getIssueModel()->findByCollege($college);
         $keyedIssues = array();
 
         foreach ($issues as $issue) {
