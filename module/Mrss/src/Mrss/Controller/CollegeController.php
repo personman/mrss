@@ -48,7 +48,7 @@ class CollegeController extends AbstractActionController
         $Colleges = $this->getServiceLocator()->get('model.college');
         $college = $Colleges->find($this->params('id'));
 
-        $Studies = $this->getServiceLocator()->get('model.study');
+        //$Studies = $this->getServiceLocator()->get('model.study');
 
         // Handle invalid id
         if (empty($college)) {
@@ -58,7 +58,7 @@ class CollegeController extends AbstractActionController
 
         return array(
             'college' => $college,
-            'study' => $Studies->find(1)
+            //'study' => $Studies->find(1)
         );
     }
 
