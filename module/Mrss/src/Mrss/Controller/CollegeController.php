@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\College;
 use Mrss\Form\AbstractForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -133,15 +134,32 @@ class CollegeController extends AbstractActionController
         );
     }
 
-    public function editAction()
+    public function getForm()
     {
-        /** @var \Mrss\Model\College $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $em = $this->getServiceLocator()->get('em');
+
         $form = new AbstractForm('college');
 
         $collegeFieldset = new \Mrss\Form\Fieldset\College(true);
 
         $collegeFieldset->setUseAsBaseFieldset(true);
+
+        $collegeFieldset->setHydrator(
+            new DoctrineHydrator($em, 'Mrss\Entity\College')
+        );
+
+        $form->add($collegeFieldset);
+        $form->add($form->getButtonFieldset());
+
+        return $form;
+    }
+
+    public function editAction()
+    {
+        $collegeModel = $this->getCollegeModel();
+
+
+        $form = $this->getForm();
 
         $collegeId = $this->params()->fromRoute('id');
         if (empty($collegeId)) {
@@ -149,6 +167,7 @@ class CollegeController extends AbstractActionController
                 $collegeId = $institution['id'];
             }
         }
+
 
         $isAdmin = $this->isAllowed('adminMenu', 'view');
 
@@ -161,15 +180,7 @@ class CollegeController extends AbstractActionController
 
         $redirect = $this->params()->fromRoute('redirect');
 
-        $em = $this->getServiceLocator()->get('em');
-        $collegeFieldset->setHydrator(
-            new DoctrineHydrator($em, 'Mrss\Entity\College')
-        );
-
-
-        $form->add($collegeFieldset);
         $form->bind($college);
-        $form->add($form->getButtonFieldset());
 
         // Redirect to renew if needed
         $form->addRedirect($redirect);
@@ -209,6 +220,37 @@ class CollegeController extends AbstractActionController
         return array(
             'form' => $form,
             'isAdmin' => $isAdmin
+        );
+    }
+
+    public function addAction()
+    {
+        $form = $this->getForm();
+
+        $college = new College();
+
+        $form->bind($college);
+
+        // Process the form
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $this->getCollegeModel()->save($college);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Institution saved.');
+
+                // Get the redirect
+                return $this->redirect()->toUrl('/colleges');
+            }
+
+        }
+
+        return array(
+            'form' => $form,
         );
     }
 
