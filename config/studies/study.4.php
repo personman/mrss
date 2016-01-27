@@ -841,7 +841,6 @@ return array(
         7 => array(
             array(
                 'rows' => array(
-                    'Section 1.  Faculty on 9-Month Contracts (i.e., regardless of number of salary installments)',
                     'Part-time Faculty' => array(
                         'pt_male_faculty',
                         'pt_male_salaries',
