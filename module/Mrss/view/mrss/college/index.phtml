@@ -23,8 +23,15 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     });
 </script>
 
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('colleges/add') ?>">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add Institution</a>
+    </a>
+</div>
 
-<h1>Colleges</h1>
+
+<h1>Institutions</h1>
 
 <table class="style1 table heatmap" id="colleges">
     <thead>
