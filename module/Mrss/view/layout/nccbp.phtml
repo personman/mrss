@@ -198,18 +198,17 @@
     <?php endif; ?>
 <?php endforeach; ?>
 
-<?php if (empty($this->noWrapper)): ?>
-    <?php if ($this->zfcUserImpersonatorDisplayName()): ?>
-        <div class="impersonation">
-            <span><a title="Unimpersonate" href="<?= $this->url('users/unimpersonate') ?>">
-                    <?= $this->zfcUserImpersonatorDisplayName() ?></a> is impersonating
-            </span>
+<?php if ($this->zfcUserImpersonatorDisplayName()): ?>
+    <div class="impersonation">
+        <span><a title="Unimpersonate" href="<?= $this->url('users/unimpersonate') ?>">
+                <?= $this->zfcUserImpersonatorDisplayName() ?></a> is impersonating
+        </span>
 
-            <?= $this->zfcUserDisplayName() ?>
-            (<?= $this->zfcUserIdentity()->getCollege()->getName() ?>)
-        </div>
-    <?php endif ?>
+        <?= $this->zfcUserDisplayName() ?>
+        (<?= $this->zfcUserIdentity()->getCollege()->getName() ?>)
+    </div>
 <?php endif ?>
+
 <?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
 
 <?php if (empty($this->noWrapper)): ?>
