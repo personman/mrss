@@ -194,12 +194,18 @@ class DataExport
         $dataStartingColumn = 2;
 
         // Get institutions that subscribed to any of the active studies for the year
+        $data = array();
         foreach ($this->getCollegesWithDataForYear($year) as $collegeInfo) {
+            $dataRow = array();
+
             $college = $collegeInfo['college'];
 
             // Add the ipeds and name
-            $sheet->setCellValueByColumnAndRow(0, $row, $college->getIpeds());
-            $sheet->setCellValueByColumnAndRow(1, $row, $college->getName());
+            $dataRow[] = $college->getIpeds();
+            $dataRow[] = $college->getName();
+
+            //$sheet->setCellValueByColumnAndRow(0, $row, $college->getIpeds());
+            //$sheet->setCellValueByColumnAndRow(1, $row, $college->getName());
 
             // Add the data
             $observation = $collegeInfo['observation'];
@@ -212,16 +218,20 @@ class DataExport
                     if ($observation->has($benchmark->getDbColumn())) {
                         $value = $observation->get($benchmark->getDbColumn());
 
-                        $sheet->setCellValueByColumnAndRow($column, $row, $value);
+                        $dataRow[] = $value;
+                        //$sheet->setCellValueByColumnAndRow($column, $row, $value);
                     }
 
                     $column++;
                 }
             }
 
+            $data[] = $dataRow;
 
             $row++;
         }
+
+        $sheet->fromArray($data, null, 'A4');
 
         // Add the benchmarks from each study
         /*foreach ($this->getStudies() as $study) {
