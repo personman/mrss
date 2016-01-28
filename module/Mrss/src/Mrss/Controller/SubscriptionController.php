@@ -1289,21 +1289,18 @@ class SubscriptionController extends AbstractActionController
         $amountDue = number_format($subscription->getPaymentAmount(), 2);
 
         $body =
-            "
-            Study: {$study->getName()}
-            Year: $year
-            Institution: {$college->getName()}
-            Amount Due: $amountDue
-            Payment Method: {$subscription->getPaymentMethodForDisplay()}
-            Date: $date
-            Address: {$college->getAddress()} {$college->getAddress2()}
-            City: {$college->getCity()}
-            State: {$college->getState()}
-            Zip: {$college->getZip()}
-            Digital Signature: {$subscription->getDigitalSignature()}
-            Title: {$subscription->getDigitalSignatureTitle()}
-
-            ";
+            "Study: {$study->getName()}\n" .
+            "Year: $year\n" .
+            "Institution: {$college->getName()}\n" .
+            "Amount Due: $amountDue\n" .
+            "Payment Method: {$subscription->getPaymentMethodForDisplay()}\n" .
+            "Date: $date\n" .
+            "Address: {$college->getAddress()} {$college->getAddress2()}\n" .
+            "City: {$college->getCity()}\n" .
+            "State: {$college->getState()}\n" .
+            "Zip: {$college->getZip()}\n" .
+            "Digital Signature: {$subscription->getDigitalSignature()}\n" .
+            "Title: {$subscription->getDigitalSignatureTitle()}\n";
 
         if ($adminUser && $dataUser) {
                 $body .= "
