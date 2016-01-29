@@ -104,6 +104,13 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     }
 </script>
 
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('issues/download-users') ?>">
+        <i class="glyphicon glyphicon-circle-arrow-down"></i>
+        Download Users
+    </a>
+</div>
+
 <h1>Data Issues</h1>
 
 <form action="/issues/mass-update" method="post">

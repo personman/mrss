@@ -143,6 +143,74 @@ class IssueController extends AbstractActionController
         );
     }
 
+    public function downloadUsersAction()
+    {
+        $colleges = array();
+        $allowedRoles = array('data', 'system_admin', 'staff');
+
+        $issues = $this->getIssueModel()->findByStatus(array(), array('adminConfirmed', 'userConfirmed'));
+
+        foreach ($issues as $issue) {
+            $college = $issue->getCollege();
+            if (empty($colleges[$college->getId()])) {
+                $users = $college->getUsersByStudy($this->currentStudy());
+
+                $userData = array();
+
+                foreach ($users as $user) {
+                    if (in_array($user->getRole(), $allowedRoles)) {
+                        $userData[] = array(
+                            $user->getEmail(),
+                            $user->getPrefix(),
+                            $user->getFirstName(),
+                            $user->getLastName(),
+                            $user->getTitle(),
+                            $college->getName()
+                        );
+                    }
+                }
+
+                $colleges[$college->getId()] = $userData;
+            }
+        }
+
+        // Flatten the array
+        $newArray = array(array('E-mail', 'Prefix', 'First Name', 'Last Name', 'Title', 'Institution'));
+        foreach ($colleges as $userData) {
+            $newArray = array_merge($newArray, $userData);
+        }
+
+        $excel = new \PHPExcel();
+        $sheet = $excel->getActiveSheet();
+
+        $sheet->fromArray($newArray, null, 'A1');
+
+        foreach (range(0, 5) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        $filename = 'users-with-data-issues.xlsx';
+
+        // redirect output to client browser
+        $this->downloadExcel($excel, $filename);
+    }
+
+    public function downloadExcel($excel, $filename)
+    {
+        header(
+            'Content-Type: '.
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+
+        die;
+    }
+
+
     /**
      * @return \Mrss\Model\Issue
      */

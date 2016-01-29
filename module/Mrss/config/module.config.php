@@ -384,6 +384,15 @@ return array(
                             )
                         )
                     ),
+                    'download-users' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/download-users',
+                            'defaults' => array(
+                                'action' => 'downloadUsers'
+                            )
+                        )
+                    ),
                     'update' => array(
                         'type' => 'segment',
                         'options' => array(
