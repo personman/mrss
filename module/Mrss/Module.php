@@ -1009,7 +1009,7 @@ class Module
 
     protected function getErrorLog($shortFormat = false)
     {
-        $formatter = new Simple('%message% %extra%' . PHP_EOL);
+        $formatter = new Simple('%message% -- %extra%' . PHP_EOL);
 
         $writer = new Stream('error.log');
 

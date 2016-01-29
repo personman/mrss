@@ -765,7 +765,7 @@ class Report
         if ($chartValues = array_combine($chartXCategories, $chartValues)) {
             asort($chartValues);
         }
-        
+
         $chartXCategories = array_keys($chartValues);
 
         if (isset($chartConfig['decimal_places'])) {
