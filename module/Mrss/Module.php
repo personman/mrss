@@ -16,7 +16,8 @@ use Zend\Config\Config;
 
 class Module
 {
-
+    static $registeredErrorHandler;
+    
     public function onBootstrap(MvcEvent $e)
     {
         $eventManager = $e->getApplication()->getEventManager();
@@ -35,8 +36,15 @@ class Module
             MvcEvent::EVENT_RENDER_ERROR,
             array($this, 'handleError')
         );
-        Logger::registerErrorHandler($this->getErrorLog());
 
+        $config = $sm->get('Config');
+
+        if (!empty($config['log_error_backtrace'])) {
+            self::registerErrorHandler($this->getErrorLog());
+        } else {
+            Logger::registerErrorHandler($this->getErrorLog());
+        }
+        
         // Touch the sql logger, so it works
         $collector = $sm->get('doctrine.sql_logger_collector.orm_default');
 
@@ -200,6 +208,73 @@ class Module
 
         $this->getErrorLog(true)->err($message);
     }
+
+    /**
+     * Register logging system as an error handler to log PHP errors
+     *
+     * @link http://www.php.net/manual/function.set-error-handler.php
+     * @param  Logger $logger
+     * @param  bool   $continueNativeHandler
+     * @return mixed  Returns result of set_error_handler
+     * @throws Exception\InvalidArgumentException if logger is null
+     */
+    public static function registerErrorHandler(Logger $logger, $continueNativeHandler = false)
+    {
+        // Only register once per instance
+        if (static::$registeredErrorHandler) {
+            return false;
+        }
+
+        $errorPriorityMap = static::$errorPriorityMap;
+
+        $previous = set_error_handler(function ($level, $message, $file, $line) use ($logger, $errorPriorityMap, $continueNativeHandler) {
+            $iniLevel = error_reporting();
+
+            if ($iniLevel & $level) {
+                if (isset($errorPriorityMap[$level])) {
+                    $priority = $errorPriorityMap[$level];
+                } else {
+                    $priority = Logger::INFO;
+                }
+
+                $trace = print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1);
+
+                $logger->log($priority, $message, array(
+                    'errno'   => $level,
+                    'file'    => $file,
+                    'line'    => $line,
+                    'trace'   => $trace
+                ));
+            }
+
+            return !$continueNativeHandler;
+        });
+
+        static::$registeredErrorHandler = true;
+        return $previous;
+    }
+
+
+    /**
+     * Map native PHP errors to priority
+     *
+     * @var array
+     */
+    public static $errorPriorityMap = array(
+        E_NOTICE            => Logger::NOTICE,
+        E_USER_NOTICE       => Logger::NOTICE,
+        E_WARNING           => Logger::WARN,
+        E_CORE_WARNING      => Logger::WARN,
+        E_USER_WARNING      => Logger::WARN,
+        E_ERROR             => Logger::ERR,
+        E_USER_ERROR        => Logger::ERR,
+        E_CORE_ERROR        => Logger::ERR,
+        E_RECOVERABLE_ERROR => Logger::ERR,
+        E_STRICT            => Logger::DEBUG,
+        E_DEPRECATED        => Logger::DEBUG,
+        E_USER_DEPRECATED   => Logger::DEBUG,
+    );
+
 
     public function getConfig()
     {
