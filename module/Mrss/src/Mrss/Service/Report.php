@@ -761,8 +761,11 @@ class Report
                 "Mismatched chart labels/data for $dbForLog, college: $collegeForLog, year: $logYear."
             );
         }
-        $chartValues = array_combine($chartXCategories, $chartValues);
-        asort($chartValues);
+
+        if ($chartValues = array_combine($chartXCategories, $chartValues)) {
+            asort($chartValues);
+        }
+        
         $chartXCategories = array_keys($chartValues);
 
         if (isset($chartConfig['decimal_places'])) {
