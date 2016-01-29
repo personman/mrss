@@ -44,7 +44,7 @@ class Module
         } else {
             Logger::registerErrorHandler($this->getErrorLog());
         }
-        
+
         // Touch the sql logger, so it works
         $collector = $sm->get('doctrine.sql_logger_collector.orm_default');
 
