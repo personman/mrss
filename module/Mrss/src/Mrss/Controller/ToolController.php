@@ -18,9 +18,9 @@ class ToolController extends AbstractActionController
 {
     public function indexAction()
     {
-        $array = array(5 => 'hi');
+        /*$array = array(5 => 'hi');
 
-        $b = $array[7];
+        $b = $array[7];*/
 
         $baseTime = round(microtime(1) - REQUEST_MICROTIME, 3);
 
