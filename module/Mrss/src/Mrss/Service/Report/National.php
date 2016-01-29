@@ -187,9 +187,9 @@ class National extends Report
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         // Set column widths
-        PHPExcel_Shared_Font::setAutoSizeMethod(
-            PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
-        );
+        //PHPExcel_Shared_Font::setAutoSizeMethod(
+        //    PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
+        //);
         foreach (range(0, 8) as $column) {
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         }
