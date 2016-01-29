@@ -512,7 +512,7 @@ return array(
                     ),
                     'faq' => array(
                         'label' => 'FAQ',
-                        'uri' => 'faq'
+                        'uri' => '/faq'
                     ),
                     /*'submitted-values' => array(
                         'label' => 'Submitted Values',
