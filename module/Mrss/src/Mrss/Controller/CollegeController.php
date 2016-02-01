@@ -241,6 +241,8 @@ class CollegeController extends AbstractActionController
                 $this->getCollegeModel()->save($college);
                 $this->getServiceLocator()->get('em')->flush();
 
+                $this->deleteCollegeCacheFile();
+
                 $this->flashMessenger()->addSuccessMessage('Institution saved.');
 
                 // Get the redirect
@@ -252,6 +254,11 @@ class CollegeController extends AbstractActionController
         return array(
             'form' => $form,
         );
+    }
+
+    public function deleteCollegeCacheFile()
+    {
+        unlink('public/files/all-colleges.json');
     }
 
     public function usersAction()
