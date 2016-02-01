@@ -14,6 +14,16 @@
     <?php endif ?>
 </div>
 
+<?php if (!empty($issues)): ?>
+    <?php $noun = (count($issues) == 1) ? 'issue' : 'issues'; ?>
+
+    <p>
+        We have identified <?= count($issues) ?> <?= $noun ?> in your data. <a href="/issues">Please review</a>.
+    </p>
+
+<?php endif ?>
+
+
 <?php if ($this->currentStudy()->getId() == 1): ?>
     <p>If you would like to print all forms, download the <a href="/files/nccbp-workbook-2016.pdf" target="_blank">print workbook (PDF - updated January 20, 2016)</a>.</p>
 <?php endif ?>
@@ -35,11 +45,9 @@
 
 
 <?php if ($this->currentStudy()->getId() == 4): ?>
-    <p><strong>Prefer to upload your data?</strong></p>
+    <p><strong>Prefer to upload your data?</strong> Please use the <a href="<?= $this->url('data-entry/import') ?>">Excel Spreadsheet</a>.</p>
 
-    <p>Please use the <a href="<?= $this->url('data-entry/import') ?>">Excel Spreadsheet</a>.</p>
-
-    <br>
+    <p><strong>The percentage completion bars indicate the number of cells entered relative to the total number of cells, not the progress of uploaded data.  An institution need not reach 100 percent completion overall, or on any single form as some institutions may not be able to provide all possible fields.</strong>  For example, an institution that does not employ any Graduate Teaching Assistants would not be able to complete any of the Graduate Teaching Assistant fields on Form 6: Part-Time Faculty Salary. <strong>Please do not enter zero values</strong> for cells that do not pertain to your institution.  Please leave them blank as leaving them blank will not contribute to norm values.</p>
 
 <?php endif ?>
 
@@ -57,14 +65,6 @@
 
 <?php endif ?>
 
-<?php if (!empty($issues)): ?>
-    <?php $noun = (count($issues) == 1) ? 'issue' : 'issues'; ?>
-
-    <p>
-        We have identified <?= count($issues) ?> <?= $noun ?> in your data. <a href="/issues">Please review</a>.
-    </p>
-
-<?php endif ?>
 
 
 <div class="well">
