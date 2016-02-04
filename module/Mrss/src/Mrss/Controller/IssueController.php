@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Service\Export\User as ExportUser;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\IssueUserNote;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -145,71 +146,37 @@ class IssueController extends AbstractActionController
 
     public function downloadUsersAction()
     {
-        $colleges = array();
         $allowedRoles = array('data', 'system_admin', 'staff');
 
         $issues = $this->getIssueModel()->findByStatus(array(), array('adminConfirmed', 'userConfirmed'));
 
+        $users = array();
+        $collegesProcessed = array();
+
         foreach ($issues as $issue) {
             $college = $issue->getCollege();
-            if (empty($colleges[$college->getId()])) {
-                $users = $college->getUsersByStudy($this->currentStudy());
 
-                $userData = array();
-
-                foreach ($users as $user) {
-                    if (in_array($user->getRole(), $allowedRoles)) {
-                        $userData[] = array(
-                            $user->getEmail(),
-                            $user->getPrefix(),
-                            $user->getFirstName(),
-                            $user->getLastName(),
-                            $user->getTitle(),
-                            $college->getName()
-                        );
-                    }
-                }
-
-                $colleges[$college->getId()] = $userData;
+            // Has this college been handled already?
+            if (!empty($collegesProcessed[$college->getId()])) {
+                continue;
             }
+
+            $collegeUsers = $college->getUsersByStudy($this->currentStudy());
+
+
+            foreach ($collegeUsers as $user) {
+                if (in_array($user->getRole(), $allowedRoles)) {
+                    $users[] = $user;
+                }
+            }
+
+            $collegesProcessed[$college->getId()] = true;
         }
 
-        // Flatten the array
-        $newArray = array(array('E-mail', 'Prefix', 'First Name', 'Last Name', 'Title', 'Institution'));
-        foreach ($colleges as $userData) {
-            $newArray = array_merge($newArray, $userData);
-        }
 
-        $excel = new \PHPExcel();
-        $sheet = $excel->getActiveSheet();
-
-        $sheet->fromArray($newArray, null, 'A1');
-
-        foreach (range(0, 5) as $column) {
-            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
-        }
-
-        $filename = 'users-with-data-issues.xlsx';
-
-        // redirect output to client browser
-        $this->downloadExcel($excel, $filename);
+        $exporter = new ExportUser();
+        $exporter->export($users);
     }
-
-    public function downloadExcel($excel, $filename)
-    {
-        header(
-            'Content-Type: '.
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
-
-        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-        $objWriter->save('php://output');
-
-        die;
-    }
-
 
     /**
      * @return \Mrss\Model\Issue

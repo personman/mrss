@@ -27,6 +27,13 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     <?php endforeach ?>
 </ul>
 
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('tools/zeros', array('year' => $year, 'format' => 'excel')) ?>">
+        <i class="glyphicon glyphicon-circle-arrow-down"></i>
+        Download Users
+    </a>
+</div>
+
 <h1>Zeros in the Data</h1>
 
 

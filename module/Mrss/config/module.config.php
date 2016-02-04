@@ -1802,10 +1802,11 @@ return array(
                     'zeros' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/zeros[/:year]',
+                            'route' => '/zeros[/:year][/:format]',
                             'defaults' => array(
                                 'action' => 'zeros',
-                                'year' => 0
+                                'year' => 0,
+                                'format' => 'html'
                             )
                         )
                     ),

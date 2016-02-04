@@ -13,6 +13,7 @@ use PHPExcel_Worksheet_Row;
 use PHPExcel_Style_Fill;
 use Mrss\Service\NccbpMigration;
 use Zend\Session\Container;
+use Mrss\Service\Export\User as ExportUser;
 
 class ToolController extends AbstractActionController
 {
@@ -644,6 +645,7 @@ class ToolController extends AbstractActionController
 
         // Now loop over the subscriptions
         $report = array();
+        $users = array();
         foreach ($subs as $subscription) {
             $observation = $subscription->getObservation();
 
@@ -667,6 +669,7 @@ class ToolController extends AbstractActionController
                 }
 
                 $emails[] = $user->getEmail();
+                $users[] = $user;
             }
 
             $reportRow = array(
@@ -675,6 +678,13 @@ class ToolController extends AbstractActionController
                 'zeros' => $zeros
             );
             $report[] = $reportRow;
+        }
+
+        // Download?
+        $format = $this->params()->fromRoute('format', 'html');
+        if ($format == 'excel') {
+            $exporter = new ExportUser();
+            $exporter->export($users);
         }
 
         // Years for tabs
