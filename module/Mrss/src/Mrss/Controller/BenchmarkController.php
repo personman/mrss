@@ -105,7 +105,7 @@ class BenchmarkController extends AbstractActionController
     {
         $benchmarkGroupId = $this->params('benchmarkGroup');
         $benchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmarkGroup');
+            ->get('model.benchmark.group');
 
         $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
 
@@ -257,7 +257,7 @@ class BenchmarkController extends AbstractActionController
 
         /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
         $benchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmarkGroup');
+            ->get('model.benchmark.group');
 
         $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
 

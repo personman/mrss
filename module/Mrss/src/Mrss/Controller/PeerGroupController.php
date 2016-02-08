@@ -132,7 +132,7 @@ class PeerGroupController extends ReportController
      */
     public function getPeerGroupModel()
     {
-        return $this->getServiceLocator()->get('model.peerGroup');
+        return $this->getServiceLocator()->get('model.peer.group');
     }
 
     public function getPeerGroup($id = null)

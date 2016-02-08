@@ -67,7 +67,7 @@ class ObservationController extends AbstractActionController
      */
     public function getBenchmarkGroupModel()
     {
-        return $this->getServiceLocator()->get('model.benchmarkGroup');
+        return $this->getServiceLocator()->get('model.benchmark.group');
     }
 
     public function editAction()
@@ -79,7 +79,7 @@ class ObservationController extends AbstractActionController
         $observation = $ObservationModel->find($observationId);
 
         $benchmarkGroup = $this->getServiceLocator()
-            ->get('model.benchmarkGroup')
+            ->get('model.benchmark.group')
             ->find($benchmarkGroupId);
 
         $formService = $this->getServiceLocator()
@@ -312,7 +312,7 @@ class ObservationController extends AbstractActionController
 
         /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
         $benchmarkGroup = $this->getServiceLocator()
-            ->get('model.benchmarkGroup')
+            ->get('model.benchmark.group')
             ->findOneByUrlAndStudy($benchmarkGroupUrl, $this->currentStudy());
 
         /** @var \Mrss\Model\Subscription $subscriptionModel */

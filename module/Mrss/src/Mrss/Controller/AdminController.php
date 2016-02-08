@@ -128,7 +128,7 @@ class AdminController extends AbstractActionController
      */
     protected function getChangeSetModel()
     {
-        return $this->getServiceLocator()->get('model.changeSet');
+        return $this->getServiceLocator()->get('model.change.set');
     }
 
     /**

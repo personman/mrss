@@ -82,7 +82,7 @@ class HeadingController extends AbstractActionController
      */
     protected function getModel()
     {
-        return $this->getServiceLocator()->get('model.benchmarkHeading');
+        return $this->getServiceLocator()->get('model.benchmark.heading');
     }
 
     /**
@@ -90,6 +90,6 @@ class HeadingController extends AbstractActionController
      */
     protected function getBenchmarkGroupModel()
     {
-        return $this->getServiceLocator()->get('model.benchmarkGroup');
+        return $this->getServiceLocator()->get('model.benchmark.group');
     }
 }

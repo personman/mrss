@@ -32,7 +32,7 @@ class ImportNccbp implements FactoryInterface
         $importer->setBenchmarkModel($benchmarkModel);
 
         // Inject the benchmarkGroup model
-        $benchmarkGroupModel = $sm->get('model.benchmarkGroup');
+        $benchmarkGroupModel = $sm->get('model.benchmark.group');
         $importer->setBenchmarkGroupModel($benchmarkGroupModel);
 
         // Inject the study model
@@ -52,7 +52,7 @@ class ImportNccbp implements FactoryInterface
         $importer->setSettingModel($settingModel);
 
         // Inject the peer group model
-        $peerGroupModel = $sm->get('model.peerGroup');
+        $peerGroupModel = $sm->get('model.peer.group');
         $importer->setPeerGroupModel($peerGroupModel);
 
         // Inject the observation logger

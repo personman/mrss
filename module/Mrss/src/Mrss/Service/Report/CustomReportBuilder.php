@@ -50,6 +50,6 @@ class CustomReportBuilder extends Report
      */
     protected function getReportItemModel()
     {
-        return $this->getServiceManager()->get('model.reportItem');
+        return $this->getServiceManager()->get('model.report.item');
     }
 }

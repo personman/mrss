@@ -35,7 +35,7 @@ class ObservationAudit implements FactoryInterface
         $service->setBenchmarkModel($sm->get('model.benchmark'));
 
         // Changeset model
-        $service->setChangeSetModel($sm->get('model.changeSet'));
+        $service->setChangeSetModel($sm->get('model.change.set'));
 
         return $service;
     }

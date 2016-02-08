@@ -311,7 +311,8 @@ class Module
     {
         return array(
             'abstract_factories' => array(
-                'Factory' => 'Mrss\Service\Report\Factory'
+                'Factory' => 'Mrss\Service\Report\Factory',
+                'ModelFactory' => 'Mrss\Service\Factory\Model'
             ),
             'aliases' => array(
                 'em' => 'doctrine.entitymanager.orm_default',
@@ -342,6 +343,8 @@ class Module
                 'service.observationAudit' => 'Mrss\Service\Factory\ObservationAudit',
                 'computedFields' => 'Mrss\Service\Factory\ComputedFields',
                 'service.validation' => 'Mrss\Service\Factory\Validation',
+                'import.csv' => 'Mrss\Service\Factory\ImportBenchmarks',
+                'export' => 'Mrss\Service\Factory\Export',
                 'service.variableSubstitution' => function ($sm) {
                     $service = new Service\VariableSubstitution();
                     $currentStudy = $sm->get('ControllerPluginManager')
@@ -355,34 +358,7 @@ class Module
 
                     return $nccwtp;
                 },
-                'import.csv' => function ($sm) {
-                    $importer = new Service\ImportBenchmarks();
 
-                    // Models
-                    $benchmarkModel = $sm->get('model.benchmark');
-                    $importer->setBenchmarkModel($benchmarkModel);
-
-                    $benchmarkGroupModel = $sm->get('model.benchmarkGroup');
-                    $importer->setBenchmarkGroupModel($benchmarkGroupModel);
-
-                    $computedFieldsService = $sm->get('computedFields');
-                    $importer->setComputedFieldsService($computedFieldsService);
-
-                    $importer->setEntityManager($sm->get('em'));
-
-                    return $importer;
-                },
-                'export' => function ($sm) {
-                    $exportService = new Service\DataExport();
-
-                    $studyModel = $sm->get('model.study');
-                    $exportService->setStudyModel($studyModel);
-
-                    $subscriptionModel = $sm->get('model.subscription');
-                    $exportService->setSubscriptionModel($subscriptionModel);
-
-                    return $exportService;
-                },
                 'export.nccbp' => function ($sm) {
                     $nccbpDb = $sm->get('nccbp-db');
                     $exporter = new Service\ExportNccbp($nccbpDb);
@@ -404,228 +380,6 @@ class Module
                     );
 
                     return $validator;
-                },
-                /*'doctrine.entity_manager.orm_default' => function ($sm) {
-                    return $sm->get('doctrine.entitymanager.orm_default');
-                },*/
-
-                // Perhaps there should be a generic model factory
-                // That injects the em
-                'model.user' => function ($sm) {
-                    $userModel = new Model\User();
-                    $em = $sm->get('em');
-
-                    $userModel->setEntityManager($em);
-
-                    return $userModel;
-                },
-                'model.college' => function ($sm) {
-                    $collegeModel = new Model\College;
-                    $em = $sm->get('em');
-
-                    $collegeModel->setEntityManager($em);
-
-                    return $collegeModel;
-                },
-                'model.ipedsInstitution' => function ($sm) {
-                    $model = new Model\IpedsInstitution;
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.system' => function ($sm) {
-                    $systemModel = new Model\System;
-                    $em = $sm->get('em');
-
-                    $systemModel->setEntityManager($em);
-
-                    return $systemModel;
-                },
-                'model.observation' => function ($sm) {
-                    $observationModel = new Model\Observation();
-                    $em = $sm->get('em');
-
-                    $observationModel->setEntityManager($em);
-
-                    return $observationModel;
-                },
-                'model.subobservation' => function ($sm) {
-                    $model = new Model\SubObservation();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.changeSet' => function ($sm) {
-                    $model = new Model\ChangeSet();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.benchmark' => function ($sm) {
-                    $benchmarkModel = new Model\Benchmark();
-                    $em = $sm->get('em');
-
-                    $benchmarkModel->setEntityManager($em);
-
-                    return $benchmarkModel;
-                },
-                'model.benchmarkHeading' => function ($sm) {
-                    $model = new Model\BenchmarkHeading();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.benchmarkGroup' => function ($sm) {
-                    $benchmarkGroupkModel = new Model\BenchmarkGroup();
-                    $em = $sm->get('em');
-
-                    $benchmarkGroupkModel->setEntityManager($em);
-
-                    return $benchmarkGroupkModel;
-                },
-                'model.criterion' => function ($sm) {
-                    $model = new Model\Criterion();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.study' => function ($sm) {
-                    $studyModel = new Model\Study();
-                    $em = $sm->get('em');
-
-                    $studyModel->setEntityManager($em);
-
-                    return $studyModel;
-                },
-                'model.offerCode' => function ($sm) {
-                    $offerCodeModel = new Model\OfferCode();
-                    $em = $sm->get('em');
-
-                    $offerCodeModel->setEntityManager($em);
-
-                    return $offerCodeModel;
-                },
-                'model.peerGroup' => function ($sm) {
-                    $model = new Model\PeerGroup();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.peerBenchmark' => function ($sm) {
-                    $model = new Model\PeerBenchmark();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.subscription' => function ($sm) {
-                    $subscriptionModel = new Model\Subscription();
-                    $em = $sm->get('em');
-
-                    $subscriptionModel->setEntityManager($em);
-
-                    return $subscriptionModel;
-                },
-                'model.subscriptionDraft' => function ($sm) {
-                    $model = new Model\SubscriptionDraft();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.setting' => function ($sm) {
-                    $settingModel = new Model\Setting();
-                    $em = $sm->get('em');
-
-                    $settingModel->setEntityManager($em);
-
-                    return $settingModel;
-                },
-                'model.report' => function ($sm) {
-                    $model = new Model\Report();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.reportItem' => function ($sm) {
-                    $model = new Model\ReportItem();
-                    $em = $sm->get('em');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.page' => function ($sm) {
-                    $pageModel = new Model\Page;
-                    $em = $sm->get('doctrine.entitymanager.orm_default');
-
-                    $pageModel->setEntityManager($em);
-
-                    return $pageModel;
-                },
-                'model.percentile' => function ($sm) {
-                    $model = new Model\Percentile;
-                    $em = $sm->get('doctrine.entitymanager.orm_default');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.percentileRank' => function ($sm) {
-                    $model = new Model\PercentileRank;
-                    $em = $sm->get('doctrine.entitymanager.orm_default');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.outlier' => function ($sm) {
-                    $model = new Model\Outlier;
-                    $em = $sm->get('doctrine.entitymanager.orm_default');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.payment' => function ($sm) {
-                    $paymentModel = new Model\Payment;
-                    $em = $sm->get('doctrine.entitymanager.orm_default');
-
-                    $paymentModel->setEntityManager($em);
-
-                    return $paymentModel;
-                },
-                'model.chart' => function ($sm) {
-                    $model = new Model\Chart;
-                    $em = $sm->get('doctrine.entitymanager.orm_default');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
-                },
-                'model.issue' => function ($sm) {
-                    $model = new Model\Issue;
-                    $em = $sm->get('doctrine.entitymanager.orm_default');
-
-                    $model->setEntityManager($em);
-
-                    return $model;
                 },
                 'service.routeCache' => function ($sm) {
                     $routeCacheService = new Service\RouteCache;
@@ -713,29 +467,6 @@ class Module
 
                     return $service;
                 },
-                /*'service.report' => function ($sm) {
-                    $currentStudy = $sm->get('ControllerPluginManager')
-                        ->get('currentStudy')->getCurrentStudy();
-
-                    $service = new Service\Report();
-
-                    $service->setSubscriptionModel($sm->get('model.subscription'));
-                    $service->setStudy($currentStudy);
-                    $service->setCalculator($sm->get('service.report.calculator'));
-                    $service->setPercentileModel($sm->get('model.percentile'));
-                    $service->setPercentileRankModel(
-                        $sm->get('model.percentileRank')
-                    );
-                    $service->setBenchmarkModel($sm->get('model.benchmark'));
-                    $service->setCollegeModel($sm->get('model.college'));
-                    $service->setSettingModel($sm->get('model.setting'));
-                    $service->setOutlierModel($sm->get('model.outlier'));
-                    $service->setSystemModel($sm->get('model.system'));
-                    $service->setComputedFieldsService($sm->get('computedFields'));
-                    $service->setMailTransport($sm->get('mail.transport'));
-
-                    return $service;
-                },*/
                 'mail.transport' => function ($sm) {
                     //return new \Zend\Mail\Transport\Sendmail();
                     // @todo: Consider merging this with the GoalioMailService

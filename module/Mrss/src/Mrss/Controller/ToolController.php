@@ -494,7 +494,7 @@ class ToolController extends AbstractActionController
         $fieldsToCopy = array();
 
         /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
-        $benchmarkGroupModel = $this->getServiceLocator()->get('model.benchmarkGroup');
+        $benchmarkGroupModel = $this->getServiceLocator()->get('model.benchmark.group');
 
         /** @var \Mrss\Model\Benchmark $benchmarkModel */
         $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');

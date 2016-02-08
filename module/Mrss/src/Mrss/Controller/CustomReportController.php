@@ -178,7 +178,7 @@ class CustomReportController extends ReportController
      */
     protected function getReportItemModel()
     {
-        return $this->getServiceLocator()->get('model.reportItem');
+        return $this->getServiceLocator()->get('model.report.item');
     }
 
 

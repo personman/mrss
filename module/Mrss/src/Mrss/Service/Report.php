@@ -541,7 +541,7 @@ class Report
      */
     protected function getPeerGroupModel()
     {
-        return $this->getServiceManager()->get('model.peerGroup');
+        return $this->getServiceManager()->get('model.peer.group');
     }
 
     /**

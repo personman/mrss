@@ -1677,7 +1677,7 @@ class SubscriptionController extends AbstractActionController
     {
         if (empty($this->subscriptionDraftModel)) {
             $this->subscriptionDraftModel = $this->getServiceLocator()
-                ->get('model.subscriptionDraft');
+                ->get('model.subscription.draft');
         }
 
         return $this->subscriptionDraftModel;
