@@ -316,28 +316,15 @@ class Module
             ),
             'aliases' => array(
                 'em' => 'doctrine.entitymanager.orm_default',
-                //'doctrine.entity_manager.orm_default' => 'doctrine.entitymanager.orm_default',
             ),
             'invokables' => array(),
             'services' => array(),
             'factories' => array(
                 'navigation' => 'Mrss\Service\NavigationFactory',
                 'footer_navigation' => 'Mrss\Service\FooterNavigationFactory',
-                'admin_navigation' =>
-                'Mrss\Service\AdminNavigationFactory',
-                'nccbp_navigation' =>
-                'Mrss\Service\NccbpNavigationFactory',
-                'fcs_navigation' =>
-                'Mrss\Service\FcsNavigationFactory',
-                //'service.report.percentile' => 'Mrss\Service\Report\Factory',
-                /*'doctrine.cache.my_memcache' => function ($sm) {
-                        $cache = new \Doctrine\Common\Cache\MemcacheCache();
-                        //$memcache = new \Memcached();
-                        //$memcache->
-                        //$memcache->connect('localhost', 11211);
-                        $cache->setMemcache($memcache);
-                        return $cache;
-                },*/
+                'admin_navigation' => 'Mrss\Service\AdminNavigationFactory',
+                'nccbp_navigation' => 'Mrss\Service\NccbpNavigationFactory',
+                'fcs_navigation' => 'Mrss\Service\FcsNavigationFactory',
                 'study' => 'Mrss\Service\Factory\Study',
                 'import.nccbp' => 'Mrss\Service\Factory\ImportNccbp',
                 'service.observationAudit' => 'Mrss\Service\Factory\ObservationAudit',
@@ -345,6 +332,13 @@ class Module
                 'service.validation' => 'Mrss\Service\Factory\Validation',
                 'import.csv' => 'Mrss\Service\Factory\ImportBenchmarks',
                 'export' => 'Mrss\Service\Factory\Export',
+                'import.nccwtp' => 'Mrss\Service\Factory\ImportNccwtp',
+                'export.nccbp' => 'Mrss\Service\Factory\ExportNccbp',
+                'export.users' => 'Mrss\Service\Factory\ExportUsers',
+                'validator.equation' => 'Mrss\Service\Factory\EquationValidator',
+                'service.import.colleges' => 'Mrss\Service\Factory\ImportColleges',
+                'service.import.colleges.demo' => 'Mrss\Service\Factory\ImportCollegeDemographics',
+                'service.import.users' => 'Mrss\Service\Factory\ImportUsers',
                 'service.variableSubstitution' => function ($sm) {
                     $service = new Service\VariableSubstitution();
                     $currentStudy = $sm->get('ControllerPluginManager')
@@ -352,34 +346,6 @@ class Module
                     $service->setStudyYear($currentStudy->getCurrentYear());
 
                     return $service;
-                },
-                'import.nccwtp' => function ($sm) {
-                    $nccwtp = new Service\ImportNccwtp();
-
-                    return $nccwtp;
-                },
-
-                'export.nccbp' => function ($sm) {
-                    $nccbpDb = $sm->get('nccbp-db');
-                    $exporter = new Service\ExportNccbp($nccbpDb);
-
-                    return $exporter;
-                },
-                'export.users' => function ($sm) {
-                    $exporter = new Service\UserExport();
-
-                    $subscriptionModel = $sm->get('model.subscription');
-                    $exporter->setSubscriptionModel($subscriptionModel);
-
-                    return $exporter;
-                },
-                'validator.equation' => function ($sm) {
-                    $validator = new Validator\Equation(
-                        $sm->get('computedFields'),
-                        $sm->get('model.benchmark')
-                    );
-
-                    return $validator;
                 },
                 'service.routeCache' => function ($sm) {
                     $routeCacheService = new Service\RouteCache;
@@ -395,43 +361,6 @@ class Module
                     }
 
                     return $routeCacheService;
-                },
-                'service.import.colleges' => function ($sm) {
-                    $service = new Service\Import\College();
-                    
-                    $collegeModel = $sm->get('model.college');
-                    $service->setCollegeModel($collegeModel);
-
-                    $systemModel = $sm->get('model.system');
-                    $service->setSystemModel($systemModel);
-
-                    return $service;
-                },
-                'service.import.colleges.demo' => function ($sm) {
-                    $service = new Service\Import\CollegeDemographics();
-
-                    $collegeModel = $sm->get('model.college');
-                    $service->setCollegeModel($collegeModel);
-
-                    $model = $sm->get('model.observation');
-                    $service->setObservationModel($model);
-
-                    return $service;
-                },
-                'service.import.users' => function ($sm) {
-                    $service = new Service\Import\User();
-
-                    $collegeModel = $sm->get('model.college');
-                    $service->setCollegeModel($collegeModel);
-
-                    $userModel = $sm->get('model.user');
-                    $service->setUserModel($userModel);
-
-                    $currentStudy = $sm->get('ControllerPluginManager')
-                        ->get('currentStudy')->getCurrentStudy();
-                    $service->setStudy($currentStudy);
-
-                    return $service;
                 },
                 'service.formBuilder' => function ($sm) {
                     $service = new Service\FormBuilder;
