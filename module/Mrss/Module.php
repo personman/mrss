@@ -337,104 +337,16 @@ class Module
                         $cache->setMemcache($memcache);
                         return $cache;
                 },*/
-                'study' => function ($sm) {
-                    // Load the default study config
-                    $studyConfig = new Config(include 'config/studies/study.default.php', true);
-
-                    // Override with study-specivic config
-                    $currentStudy = $sm->get('ControllerPluginManager')
-                        ->get('currentStudy')->getCurrentStudy();
-                    $studyId = $currentStudy->getId();
-
-                    if ($studyConfigArray = include "config/studies/study.$studyId.php") {
-                        $specificStudyConfig = new Config($studyConfigArray);
-                        $studyConfig->merge($specificStudyConfig);
-                    }
-
-                    return $studyConfig;
-                },
-                'import.nccbp' => function ($sm) {
-                    // Prepare the importer with the db to import from and the em
-                    $nccbpDb = $sm->get('nccbp-db');
-                    $em = $sm->get('em');
-                    $importer = new Service\ImportNccbp($nccbpDb, $em);
-
-                    // Inject the college Model
-                    $collegeModel = $sm->get('model.college');
-                    $importer->setCollegeModel($collegeModel);
-
-                    // Inject the user Model
-                    $userModel = $sm->get('model.user');
-                    $importer->setUserModel($userModel);
-
-                    // Inject the observation model
-                    $observationModel = $sm->get('model.observation');
-                    $importer->setObservationModel($observationModel);
-
-                    // Inject the benchmark model
-                    $benchmarkModel = $sm->get('model.benchmark');
-                    $importer->setBenchmarkModel($benchmarkModel);
-
-                    // Inject the benchmarkGroup model
-                    $benchmarkGroupModel = $sm->get('model.benchmarkGroup');
-                    $importer->setBenchmarkGroupModel($benchmarkGroupModel);
-
-                    // Inject the study model
-                    $studyModel = $sm->get('model.study');
-                    $importer->setStudyModel($studyModel);
-
-                    // Inject the subscription model
-                    $subscriptionModel = $sm->get('model.subscription');
-                    $importer->setSubscriptionModel($subscriptionModel);
-
-                    // Inject the system model
-                    $systemModel = $sm->get('model.system');
-                    $importer->setSystemModel($systemModel);
-
-                    // Inject settings
-                    $settingModel = $sm->get('model.setting');
-                    $importer->setSettingModel($settingModel);
-
-                    // Inject the peer group model
-                    $peerGroupModel = $sm->get('model.peerGroup');
-                    $importer->setPeerGroupModel($peerGroupModel);
-
-                    // Inject the observation logger
-                    $logger = $sm->get('service.observationAudit');
-                    $importer->setObservationAudit($logger);
-
-                    return $importer;
-                },
+                'study' => 'Mrss\Service\Factory\Study',
+                'import.nccbp' => 'Mrss\Service\Factory\ImportNccbp',
+                'service.observationAudit' => 'Mrss\Service\Factory\ObservationAudit',
+                'computedFields' => 'Mrss\Service\Factory\ComputedFields',
+                'service.validation' => 'Mrss\Service\Factory\Validation',
                 'service.variableSubstitution' => function ($sm) {
                     $service = new Service\VariableSubstitution();
                     $currentStudy = $sm->get('ControllerPluginManager')
                         ->get('currentStudy')->getCurrentStudy();
                     $service->setStudyYear($currentStudy->getCurrentYear());
-
-                    return $service;
-                },
-                'service.validation' => function ($sm) {
-                    $service = new Service\Validation();
-                    $currentStudy = $sm->get('ControllerPluginManager')
-                        ->get('currentStudy')->getCurrentStudy();
-                    $service->setStudy($currentStudy);
-
-                    // Find the validator class in the study config
-                    $studyConfig = $sm->get('study');
-                    if ($class = $studyConfig->validation_class) {
-                        $class = "Mrss\\Service\\$class";
-                        $validator = new $class;
-                        $service->setValidator($validator);
-                    }
-
-                    // Set the user
-                    $userService = $sm->get('zfcuser_auth_service');
-                    $user = $userService->getIdentity();
-                    $service->setUser($user);
-
-                    // Set the issue model
-                    $issueModel = $sm->get('model.issue');
-                    $service->setIssueModel($issueModel);
 
                     return $service;
                 },
@@ -484,24 +396,6 @@ class Module
                     $exporter->setSubscriptionModel($subscriptionModel);
 
                     return $exporter;
-                },
-                'computedFields' => function ($sm) {
-                    $computedFields = new Service\ComputedFields();
-
-                    $benchmarkModel = $sm->get('model.benchmark');
-                    $computedFields->setBenchmarkModel($benchmarkModel);
-
-                    $observationModel = $sm->get('model.observation');
-                    $computedFields->setObservationModel($observationModel);
-
-                    $subObservationModel = $sm->get('model.subObservation');
-                    $computedFields->setSubObservationModel($subObservationModel);
-
-                    $currentStudy = $sm->get('ControllerPluginManager')
-                        ->get('currentStudy')->getCurrentStudy();
-                    $computedFields->setStudy($currentStudy);
-
-                    return $computedFields;
                 },
                 'validator.equation' => function ($sm) {
                     $validator = new Validator\Equation(
@@ -790,37 +684,6 @@ class Module
 
                     $variable = $sm->get('service.variableSubstitution');
                     $service->setVariableSubstitutionService($variable);
-
-                    return $service;
-                },
-                'service.observationAudit' => function ($sm) {
-                    $service = new Service\ObservationAudit;
-                    $userService = $sm->get('zfcuser_auth_service');
-                    $impersonationService = $sm->get('zfcuserimpersonate_user_service');
-                    
-                    // Set the current User
-                    $user = $userService->getIdentity();
-                    $service->setUser($user);
-
-                    // If there's an admin impersonating this user, pass that
-                    if ($impersonationService->isImpersonated()) {
-                        $impersonator = $impersonationService
-                            ->getStorageForImpersonator()->read();
-                        //prd($impersonator);
-
-                        $service->setImpersonator($impersonator);
-                    }
-
-                    // The current study
-                    $currentStudy = $sm->get('ControllerPluginManager')
-                        ->get('currentStudy')->getCurrentStudy();
-                    $service->setStudy($currentStudy);
-
-                    // The benchmark model
-                    $service->setBenchmarkModel($sm->get('model.benchmark'));
-
-                    // Changeset model
-                    $service->setChangeSetModel($sm->get('model.changeSet'));
 
                     return $service;
                 },
