@@ -19,9 +19,15 @@ class Peer extends Report
 {
     protected $peerBenchmarkModel;
 
+    /**
+     * @var \Mrss\Entity\College
+     */
+    protected $currentCollege;
+
     public function getPeerReport($benchmarks, $colleges, $currentCollege, $year, $peerGroupName)
     {
         $minPeers = 5;
+        $this->currentCollege = $currentCollege;
 
         $report = array(
             'skipped' => array(),
@@ -185,14 +191,39 @@ class Peer extends Report
 
     }
 
+    /**
+     * @return \Zend\Config\Config
+     */
+    protected function getStudyConfig()
+    {
+        return $this->getServiceManager()->get('study');
+    }
+
+    private function shortenCollegeName($name)
+    {
+        $maxLength = 25;
+        $suffix = "...";
+
+        if (strlen($name) > $maxLength) {
+            $name = substr($name, 0, $maxLength) . $suffix;
+        }
+
+        return $name;
+    }
+
     public function sortAndLabelPeerData($data, College $currentCollege)
     {
+        $anonymous = $this->getStudyConfig()->anonymous_peers;
+
         arsort($data);
         $dataWithLabels = array();
 
         $i = 1;
         foreach ($data as $collegeId => $value) {
-            if ($collegeId == $currentCollege->getId()) {
+            if (!$anonymous) {
+                $college = $this->getCollegeModel()->find($collegeId);
+                $label = $college->getName();
+            } elseif ($collegeId == $currentCollege->getId()) {
                 $label = $currentCollege->getName();
             } else {
                 $label = $this->numberToLetter($i);
@@ -218,6 +249,7 @@ class Peer extends Report
 
     public function getPeerBarChart(BenchmarkEntity $benchmark, $data)
     {
+        $anonymous = $this->getStudyConfig()->anonymous_peers;
         $title = $benchmark->getPeerReportLabel();
         $decimalPlaces = $this->getDecimalPlaces($benchmark);
         //prd($data);
@@ -229,13 +261,16 @@ class Peer extends Report
         foreach ($data as $name => $value) {
             $value = round($value, $decimalPlaces);
 
-            $label = $name;
+            $label = $this->shortenCollegeName($name);
 
             // Your college
-            if (strlen($name) > 5) {
+            if ($name == $this->currentCollege->getName()) {
                 $dataLabelEnabled = true;
                 $color = $this->getYourCollegeColor();
-                $label = 'Your College';
+
+                if ($anonymous) {
+                    $label = 'Your College';
+                }
             } else {
                 $dataLabelEnabled = false;
                 $color = $this->getPeerColor();
