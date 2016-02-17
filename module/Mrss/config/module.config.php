@@ -585,7 +585,7 @@ return array(
                     'import-demo' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/import-demo',
+                            'route' => '/import-demo[/:service]',
                             'defaults' => array(
                                 'action' => 'import',
                                 'service' => 'demo'

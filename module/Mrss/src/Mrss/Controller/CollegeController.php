@@ -275,10 +275,15 @@ class CollegeController extends AbstractActionController
     {
         $altService = $this->params()->fromRoute('service');
 
-        $redirectRoute = 'colleges/import';
+        $redirectRoute = '/colleges/import';
         if (!empty($altService)) {
-            $service = $this->getServiceLocator()->get('service.import.colleges.demo');
-            $redirectRoute = 'colleges/import-demo';
+            if ($altService == 'demo') {
+                $service = $this->getServiceLocator()->get('service.import.colleges.demo');
+                $redirectRoute = '/colleges/import-demo';
+            } elseif ($altService == 'category') {
+                $service = $this->getServiceLocator()->get('service.import.colleges.category');
+                $redirectRoute = '/colleges/import-demo/category';
+            }
         } else {
             $service = $this->getServiceLocator()->get('service.import.colleges');
         }
@@ -304,7 +309,7 @@ class CollegeController extends AbstractActionController
                 $stats = $service->import($filename);
 
                 $this->flashMessenger()->addSuccessMessage($stats);
-                return $this->redirect()->toRoute($redirectRoute);
+                return $this->redirect()->toUrl($redirectRoute);
             }
         }
 
