@@ -126,6 +126,18 @@ class ObservationController extends AbstractActionController
 
     public function overviewAction()
     {
+        // Do they have a membership?
+        $year = $this->currentStudy()->getCurrentYear();
+        $membership = $this->getSubscriptionModel()->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
+
+        if (empty($membership)) {
+            $this->flashMessenger()
+                ->addErrorMessage("You need to renew your membership before you can enter data.");
+
+            return $this->redirect()->toUrl('/renew');
+        }
+
+
         // Handle system admins
         $user = $this->zfcUserAuthentication()->getIdentity();
         if ($user->getRole() == 'system_admin'
@@ -305,6 +317,17 @@ class ObservationController extends AbstractActionController
         return $observation;
     }
 
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    protected function getSubscriptionModel()
+    {
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        return $subscriptionModel;
+    }
+
     public function dataEntryAction($staffView = false)
     {
         // Fetch the form
@@ -315,8 +338,7 @@ class ObservationController extends AbstractActionController
             ->get('model.benchmark.group')
             ->findOneByUrlAndStudy($benchmarkGroupUrl, $this->currentStudy());
 
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
 
         if (empty($benchmarkGroup)) {
             throw new \Exception('Benchmark group not found');
@@ -925,7 +947,7 @@ class ObservationController extends AbstractActionController
     {
         $collegeId = $this->getActiveCollege()->getId();
 
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
         $subscription = $subscriptionModel->findCurrentSubscription(
             $this->currentStudy(),
             $collegeId
@@ -1083,8 +1105,7 @@ class ObservationController extends AbstractActionController
         }
 
         // Get the observation
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
         $subscription = $subscriptionModel
             ->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
 
