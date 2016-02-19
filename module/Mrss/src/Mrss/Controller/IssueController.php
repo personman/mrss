@@ -176,7 +176,7 @@ class IssueController extends AbstractActionController
 
     public function staffAction()
     {
-        $issues = $this->getIssueModel()->findByStatus(array(), array('adminConfirmed'));
+        $issues = $this->getIssueModel()->findByStatus(array(), array('adminConfirmed', 'suppressed'));
 
         return array(
             'issues' => $issues
@@ -187,7 +187,8 @@ class IssueController extends AbstractActionController
     {
         $allowedRoles = array('data', 'system_admin', 'staff');
 
-        $issues = $this->getIssueModel()->findByStatus(array(), array('adminConfirmed', 'userConfirmed'));
+        $issues = $this->getIssueModel()
+            ->findByStatus(array(), array('adminConfirmed', 'userConfirmed', 'suppressed'));
 
         $users = array();
         $collegesProcessed = array();
