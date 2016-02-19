@@ -5,6 +5,7 @@ namespace Mrss\Controller;
 use Mrss\Service\Export\User as ExportUser;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\IssueUserNote;
+use Mrss\Entity\Suppression;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class IssueController extends AbstractActionController
@@ -78,6 +79,13 @@ class IssueController extends AbstractActionController
             }
 
             $issue = $this->getIssueModel()->find($id);
+
+            // Suppress form?
+            if ($status == 'suppressed') {
+                $this->suppressForm($issue);
+            }
+
+            // Save the issue
             if ($issue) {
                 $issue->setStatus($status);
 
@@ -85,11 +93,36 @@ class IssueController extends AbstractActionController
                 $this->getIssueModel()->getEntityManager()->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Issue updated.');
-
             }
         }
 
         return $this->redirect()->toRoute('issues/staff');
+    }
+
+    /**
+     * @param \Mrss\Entity\Issue $issue
+     */
+    public function suppressForm($issue)
+    {
+        $formUrl = $issue->getFormUrl();
+        $benchmarkGroup = $this->getBenchmarkGroupModel()->findOneByUrlAndStudy($formUrl, $this->currentStudy());
+        $subscription = $this->getSubscriptionModel()->findOne(
+            $issue->getYear(),
+            $issue->getCollege()->getId(),
+            $this->currentStudy()->getId()
+        );
+
+        // Does it exist already?
+        $existing = $this->getSuppressionModel()->findBySubscriptionAndBenchmarkGroup($subscription, $benchmarkGroup);
+        if (!$existing) {
+            $suppression = new Suppression();
+            $suppression->setSubscription($subscription);
+            $suppression->setBenchmarkGroup($benchmarkGroup);
+
+            $this->getSuppressionModel()->save($suppression);
+
+            // Flush happens later
+        }
     }
 
     public function massUpdateAction()
@@ -100,6 +133,8 @@ class IssueController extends AbstractActionController
 
             if (!empty($buttons['sendBack'])) {
                 $status = null;
+            } elseif (!empty($buttons['suppress'])) {
+                $status = 'suppressed';
             } elseif (!empty($buttons['confirm'])) {
                 $status = 'adminConfirmed';
             } else {
@@ -115,6 +150,10 @@ class IssueController extends AbstractActionController
                 $issue = $this->getIssueModel()->find($issueId);
                 if ($issue) {
                     $issue->setStatus($status);
+
+                    if ($status == 'suppressed') {
+                        $this->suppressForm($issue);
+                    }
 
                     $this->getIssueModel()->save($issue);
                     $count++;
@@ -184,5 +223,29 @@ class IssueController extends AbstractActionController
     protected function getIssueModel()
     {
         return $this->getServiceLocator()->get('model.issue');
+    }
+
+    /**
+     * @return \Mrss\Model\BenchmarkGroup
+     */
+    protected function getBenchmarkGroupModel()
+    {
+        return $this->getServiceLocator()->get('model.benchmark.group');
+    }
+
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    protected function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
+    }
+
+    /**
+     * @return \Mrss\Model\Suppression
+     */
+    protected function getSuppressionModel()
+    {
+        return $this->getServiceLocator()->get('model.suppression');
     }
 }

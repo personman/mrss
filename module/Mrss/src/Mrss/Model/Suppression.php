@@ -6,13 +6,23 @@ use Mrss\Entity\Suppression as SuppressionEntity;
 
 class Suppression extends AbstractModel
 {
-    protected $entity = 'Mrss\Entity\Percentile';
+    protected $entity = 'Mrss\Entity\Suppression';
 
     public function findBySubscription($subscription)
     {
         return $this->getRepository()->findBy(
             array(
                 'subscription' => $subscription,
+            )
+        );
+    }
+
+    public function findBySubscriptionAndBenchmarkGroup($subscription, $benchmarkGroup)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'subscription' => $subscription,
+                'benchmarkGroup' => $benchmarkGroup
             )
         );
     }
