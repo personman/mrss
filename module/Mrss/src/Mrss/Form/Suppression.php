@@ -49,4 +49,13 @@ class Suppression extends AbstractForm
 
         return $options;
     }
+
+    public function getInputFilter()
+    {
+        $filter = parent::getInputFilter();
+        $filter->get('suppressions')->setRequired(false);
+
+        //pr($filter);
+        return $filter;
+    }
 }
