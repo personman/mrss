@@ -1584,6 +1584,27 @@ return array(
                     )
                 )
             ),
+            'suppressions' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/suppressions',
+                    'defaults' => array(
+                        'controller' => 'suppressions',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/[:subscription]',
+                            'defaults' => array(
+                                'action' => 'edit',
+                            )
+                        ),
+                    )
+                )
+            ),
             'glossary' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -2160,7 +2181,8 @@ return array(
             'reportItems' => 'Mrss\Controller\ReportItemController',
             'users' => 'Mrss\Controller\UserController',
             'issues' => 'Mrss\Controller\IssueController',
-            'EquationValidator' => '\Mrss\Validator\Equation'
+            'suppressions' => '\Mrss\Controller\SuppressionController',
+            'EquationValidator' => '\Mrss\Validator\Equation',
         ),
         'factories' => array(
             // Override the contact controller

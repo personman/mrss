@@ -50,27 +50,50 @@
             Subscriptions:
         </td>
         <td>
-            <ul>
-                <?php foreach ($college->getSubscriptions() as $subscription): ?>
-                    <li>
-                        <?php if ($observation = $subscription->getObservation()): ?>
-                        <a href="<?= $this->url(
-                            'observation',
-                            array('id' => $subscription->getObservation()->getId())
-                        ) ?>">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Study</th>
+                        <th>Completion</th>
+                        <th>Suppressions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($college->getSubscriptions() as $subscription): ?>
+                    <tr>
+                        <td>
                             <?= $subscription->getYear() ?>
+                        </td>
+                        <td>
                             <?= $subscription->getStudy()->getName() ?>
-                        </a>
-                        (<?= $subscription->getStudy()->getCompletionPercentage(
-                            $subscription->getObservation()
-                        ) ?>%)
-                        <?php else: ?>
-                            No observation for <?= $subscription->getYear() ?>
-                            <?= $subscription->getStudy()->getName() ?>
-                        <?php endif ?>
-                    </li>
-                <?php endforeach ?>
-            </ul>
+                        </td>
+                        <td>
+                            <a href="<?= $this->url(
+                                'observation',
+                                array('id' => $subscription->getObservation()->getId())
+                            ) ?>">
+                            <?= $subscription->getStudy()->getCompletionPercentage(
+                                $subscription->getObservation()
+                            ) ?>%
+                            </a>
+                        </td>
+                        <td>
+                            <?php if ($suppressions = $subscription->getSuppressionList()): ?>
+
+                                <?= $suppressions ?>
+
+                            <?php endif ?>
+                            &nbsp;&nbsp;
+                            <a href="<?= $this->url('suppressions/edit', array('subscription' => $subscription->getId())) ?>">
+                                Manage Suppressions
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+
+            </table>
 
             <a href="/admin/changes/<?= $college->getId() ?>">Recent Data Changes</a>
         </td>

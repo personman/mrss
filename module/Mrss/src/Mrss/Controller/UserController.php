@@ -183,9 +183,12 @@ class UserController extends AbstractActionController
         $renderer = $this->getServiceLocator()->get('ViewRenderer');
 
         $oneTimeLogin = $renderer->serverUrl(
-            $renderer->url('zfcuser/resetpassword', array(
-                'userId' => $user->getId(),
-                'token' => $this->getPasswordResetKey($user->getId()))
+            $renderer->url(
+                'zfcuser/resetpassword',
+                array(
+                    'userId' => $user->getId(),
+                    'token' => $this->getPasswordResetKey($user->getId())
+                )
             )
         );
 
@@ -639,13 +642,11 @@ class UserController extends AbstractActionController
         $users = array();
         foreach ($colleges as $college) {
             foreach ($college->getUsers() as $user) {
-                //if ($user->hasStudy($study)) {
-                    $lastAccess = $user->getLastAccess();
-                    if (empty($lastAccess)) {
-                        $users[] = $user;
-                        //pr($user->getFullName() . ' ' . $user->getCollege()->getName());
-                    }
-                //}
+                $lastAccess = $user->getLastAccess();
+                if (empty($lastAccess)) {
+                    $users[] = $user;
+                    //pr($user->getFullName() . ' ' . $user->getCollege()->getName());
+                }
             }
         }
 

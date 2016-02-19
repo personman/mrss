@@ -753,6 +753,4 @@ class ToolController extends AbstractActionController
             ->getConfiguration()
             ->setSQLLogger(null);
     }
-
-
 }

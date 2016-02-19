@@ -91,10 +91,6 @@ class ComputedFields
         // If the result is meant to be a percentage, multiply by 100
         if (!is_null($result) && $benchmark->isPercent()) {
             $result = $result * 100;
-            if ($equationWithVariables == '1 - ({{ft_previous_salary_lecturer_standard}} / {{ft_current_salary_lecturer_standard}})') {
-                //pr($equationWithVariables);
-                //prd($result);
-            }
         }
 
         if ($this->debug) {

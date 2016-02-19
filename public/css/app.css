@@ -213,3 +213,7 @@ ul.ui-autocomplete {
     color: #FFF;
     background-color: #373a3c;
 }
+
+#controls-suppressions {
+    padding-left: 15px;
+}

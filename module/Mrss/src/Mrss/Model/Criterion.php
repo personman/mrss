@@ -67,5 +67,4 @@ class Criterion extends AbstractModel
         $this->getEntityManager()->remove($criterion);
         $this->getEntityManager()->flush();
     }
-
 }

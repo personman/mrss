@@ -126,6 +126,12 @@ class Subscription
      */
     protected $created;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Suppression", mappedBy="subscription")
+     */
+    protected $suppressions;
+
+
     public function getId()
     {
         return $this->id;
@@ -312,6 +318,24 @@ class Subscription
     public function getCompletion()
     {
         return $this->completion;
+    }
+
+    /**
+     * @return Suppression[]
+     */
+    public function getSuppressions()
+    {
+        return $this->suppressions;
+    }
+
+    public function getSuppressionList()
+    {
+        $formUrls = array();
+        foreach ($this->getSuppressions() as $suppression) {
+            $formUrls[] = $suppression->getBenchmarkGroup()->getUrl();
+        }
+
+        return implode(', ', $formUrls);
     }
 
     public function __toString()

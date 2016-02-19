@@ -128,7 +128,11 @@ class ObservationController extends AbstractActionController
     {
         // Do they have a membership?
         $year = $this->currentStudy()->getCurrentYear();
-        $membership = $this->getSubscriptionModel()->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
+        $membership = $this->getSubscriptionModel()->findOne(
+            $year,
+            $this->currentCollege()->getId(),
+            $this->currentStudy()->getId()
+        );
 
         if (empty($membership)) {
             $this->flashMessenger()
@@ -462,8 +466,8 @@ class ObservationController extends AbstractActionController
                     ->findOne(
                         $observation->getYear(),
                         $observation->getCollege(),
-                        $this->currentStudy()->getId())
-                ;
+                        $this->currentStudy()->getId()
+                    );
                 $subscription->setCompletion($completion);
 
                 $this->getServiceLocator()->get('em')->flush();

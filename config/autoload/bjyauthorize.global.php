@@ -319,7 +319,11 @@ return array(
                 array(
                     'controller' => 'issues',
                     'actions' => array('staff', 'update'),
-                    'roles' => array('data')
+                    'roles' => array('admin')
+                ),
+                array(
+                    'controller' => 'suppressions',
+                    'roles' => array('admin')
                 ),
 
                 // Since the background action is fired by console, lift guard
