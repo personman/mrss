@@ -192,25 +192,34 @@ class Report
         $subscriptions = $this->getSubscriptions($year, $system);
         //prd(count($subscriptions));
 
+        $benchmarkGroupId = $benchmark->getBenchmarkGroup()->getId();
+
         $data = array();
         $iData = array();
         $skipped = 0;
         /** @var $subscription /Mrss/Entity/Subscription */
         foreach ($subscriptions as $subscription) {
+            $suppressions = $subscription->getSuppressions();
+            $suppressed = array();
+            foreach ($suppressions as $suppression) {
+                $suppressed[] = $suppression->getBenchmarkGroup()->getId();
+            }
+
             /** @var /Mrss/Entity/Observation $observation */
             if ($observation = $subscription->getObservation()) {
                 $dbColumn = $benchmark->getDbColumn();
                 $value = $observation->get($dbColumn);
                 $collegeId = $subscription->getCollege()->getId();
 
-                /*$isDebug = $this->params()->fromQuery('debug');
-                if (!empty($isDebug)
 
-                    && $benchmark->getDbColumn() == $this->params()->fromQuery('debug')) {
-                    //pr($value);
-                }*/
                 // Leave out null values
                 if ($skipNull && $value === null) {
+                    $skipped++;
+                    continue;
+                }
+
+                // Also skip suppressed data
+                if (in_array($benchmarkGroupId, $suppressed)) {
                     $skipped++;
                     continue;
                 }
