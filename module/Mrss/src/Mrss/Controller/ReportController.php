@@ -267,9 +267,9 @@ class ReportController extends AbstractActionController
             return $this->redirect()->toUrl('/reports/national/2014');
         }
 
-        $observation = $this->currentObservation($year);
-        $reportData = $this->getServiceLocator()->get('service.report.national')
-            ->getData($observation, $system);
+        /** @var \Mrss\Service\Report\National $reportService */
+        $reportService = $this->getServiceLocator()->get('service.report.national');
+        $reportData = $reportService->getData($subscription, $system);
 
 
         // Download?
@@ -288,7 +288,7 @@ class ReportController extends AbstractActionController
             'subscriptions' => $subscriptions,
             'year' => $year,
             'reportData' => $reportData,
-            'college' => $observation->getCollege(),
+            'college' => $subscription->getCollege(),
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels(),
             'system' => $system,
@@ -1035,10 +1035,12 @@ class ReportController extends AbstractActionController
 
         $year = $this->getYearFromRouteOrStudy();
 
-        /** @var \Mrss\Entity\Observation $observation */
-        $observation = $this->currentObservation($year);
+        $collegeId = $this->currentCollege()->getId();
+        $studyId = $this->currentStudy()->getId();
 
-        $reportData = $report->getData($observation);
+        $subscription = $this->getSubscriptionModel()->findOne($year, $collegeId, $studyId);
+
+        $reportData = $report->getData($subscription);
 
         $view = new ViewModel(
             array(

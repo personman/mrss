@@ -3,6 +3,7 @@
 namespace Mrss\Service\Report;
 
 use Mrss\Entity\Observation;
+use Mrss\Entity\Subscription;
 use Mrss\Entity\Study;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\System;
@@ -29,8 +30,10 @@ class National extends Report
     protected $system;
 
 
-    public function getData(Observation $observation, $system = null, $benchmarkGroupId = null)
+    public function getData(Subscription $subscription, $system = null, $benchmarkGroupId = null)
     {
+        $observation = $subscription->getObservation();
+
         $this->setObservation($observation);
         $this->setSystem($system);
         $year = $observation->getYear();
@@ -45,6 +48,8 @@ class National extends Report
             if (!empty($benchmarkGroupId) && $benchmarkGroup->getId() != $benchmarkGroupId) {
                 continue;
             }
+
+            $suppressed = $subscription->hasSuppressionFor($benchmarkGroup->getId());
 
             $groupData = array(
                 'benchmarkGroup' => $benchmarkGroup->getName(),
@@ -71,7 +76,14 @@ class National extends Report
                     continue;
                 }
 
-                $groupData['benchmarks'][] = $this->getBenchmarkData($benchmark);
+                $benchmarkData = $this->getBenchmarkData($benchmark);
+
+                // Don't show them their own data if it's suppressed
+                if ($suppressed) {
+                    $benchmarkData['reported'] = null;
+                }
+
+                $groupData['benchmarks'][] = $benchmarkData;
             }
 
             $reportData[] = $groupData;

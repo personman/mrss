@@ -55,6 +55,11 @@ class Report
     protected $subscriptionModel;
 
     /**
+     * @var \Mrss\Entity\Subscription
+     */
+    protected $subscription;
+
+    /**
      * @var \Mrss\Model\Benchmark
      */
     protected $benchmarkModel;
@@ -1421,6 +1426,21 @@ class Report
     public function getObservationModel()
     {
         return $this->observationModel;
+    }
+
+    public function setSubscription($subscription)
+    {
+        $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Entity\Subscription
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
     }
 
     public function getYear()

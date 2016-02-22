@@ -338,6 +338,19 @@ class Subscription
         return implode(', ', $formUrls);
     }
 
+    public function hasSuppressionFor($benchmarkGroupId)
+    {
+        $has = false;
+        foreach ($this->getSuppressions() as $suppression) {
+            if ($suppression->getBenchmarkGroup()->getId() == $benchmarkGroupId) {
+                $has = true;
+                break;
+            }
+        }
+
+        return $has;
+    }
+
     public function __toString()
     {
         return "Subscription id: {$this->getId()}";
