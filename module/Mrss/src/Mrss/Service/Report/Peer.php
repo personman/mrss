@@ -391,6 +391,7 @@ class Peer extends Report
         $onlyIncludePeersReportingAllBenchmarks = false;
 
         $benchmarkCols = array();
+        $benchmarkGroupIds = array();
         foreach ($benchmarkIds as $benchmarkId) {
             $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
 
@@ -399,6 +400,7 @@ class Peer extends Report
             }
 
             $benchmarkCols[] = $benchmark->getDbColumn();
+            $benchmarkGroupIds[] = $benchmark->getBenchmarkGroup()->getId();
         }
 
         $collegeIds = array();
@@ -412,7 +414,8 @@ class Peer extends Report
                 $year,
                 $benchmarkCols,
                 false,
-                $onlyIncludePeersReportingAllBenchmarks
+                $onlyIncludePeersReportingAllBenchmarks,
+                $benchmarkGroupIds
             );
 
         $filteredColleges = array();

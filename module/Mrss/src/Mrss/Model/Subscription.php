@@ -120,8 +120,14 @@ class Subscription extends AbstractModel
      * @param boolean $excludeOutliers
      * @return SubscriptionEntity[]
      */
-    public function findWithPartialObservations($study, $year, $benchmarks, $excludeOutliers = true, $notNull = true)
-    {
+    public function findWithPartialObservations(
+        $study,
+        $year,
+        $benchmarks,
+        $excludeOutliers = true,
+        $notNull = true,
+        $benchmarkGroupIds = array()
+    ) {
         $rsm = new ResultSetMapping;
 
         $rsm->addEntityResult('Mrss\Entity\Subscription', 's');
@@ -140,19 +146,23 @@ class Subscription extends AbstractModel
         $notNulls = array();
 
         foreach ($benchmarks as $benchmark) {
-                $rsm->addFieldResult('o', $benchmark, $benchmark);
+            $rsm->addFieldResult('o', $benchmark, $benchmark);
+
+            if ($excludeOutliers) {
                 $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
+            }
+
             if ($notNull) {
                 $notNulls[] = " AND $benchmark IS NOT NULL ";
             }
         }
         $notNulls = implode(' ', $notNulls);
 
+        // Suppression subquery
+        $subQueries[] = $this->getSuppressionSubquery($benchmarkGroupIds);
+
         $benchmarkList = implode(', ', $benchmarks);
         $subQueries = implode("\n", $subQueries);
-        if (!$excludeOutliers) {
-            $subQueries = '';
-        }
 
         $sql = "SELECT s.id, c.id college_id, c.name, o.id o_id, $benchmarkList
         FROM subscriptions s
@@ -186,6 +196,20 @@ class Subscription extends AbstractModel
             AND b2.dbColumn = '$dbColumn'
             AND l.college_id = c.id
         )";
+    }
+
+    protected function getSuppressionSubquery($benchmarkGroupIds)
+    {
+        if (count($benchmarkGroupIds)) {
+            $ids = implode(', ', $benchmarkGroupIds);
+
+            return " AND NOT EXISTS (
+                SELECT sp.id
+                FROM suppressions sp
+                WHERE sp.subscription_id = s.id
+                AND benchmarkGroup_id IN ($ids)
+            )";
+        }
     }
 
     /**

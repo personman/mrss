@@ -44,15 +44,23 @@ class BubbleBuilder extends ChartBuilder
             $dbColumns[] = $size;
         }
 
-        $subscriptions = $this->getSubscriptionModel()
-            ->findWithPartialObservations($study, $year, $dbColumns);
+        $benchmarkGroupIds = array();
 
+        // Fetch the benchmark configs
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);
 
+        $benchmarkGroupIds[] = $xBenchmark->getBenchmarkGroup()->getId();
+        $benchmarkGroupIds[] = $yBenchmark->getBenchmarkGroup()->getId();
+
         if ($size) {
             $zBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($size);
+            $benchmarkGroupIds[] = $zBenchmark->getBenchmarkGroup()->getId();
         }
+
+
+        $subscriptions = $this->getSubscriptionModel()
+            ->findWithPartialObservations($study, $year, $dbColumns, true, true, $benchmarkGroupIds);
 
         $xFormat = $this->getFormat($xBenchmark);
         $yFormat = $this->getFormat($yBenchmark);
