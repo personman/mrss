@@ -6,6 +6,7 @@ var startTime;
 
 $(function() {
     setUpCalculation();
+    setUpCompute();
 });
 
 
@@ -43,7 +44,44 @@ function setUpCalculation()
         // Now the url stack is built. Kick it off.
         progressBar.parent().show();
         getProgressLabel().html('Starting...');
-        processUrlStack()
+        processUrlStack();
+
+        return false;
+    })
+}
+
+function setUpCompute()
+{
+    var baseUrl = '/reports/compute-one/';
+
+    $('.calculate-compute').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+
+        progressBar = $('#compute-progress-' + year + ' .progress-bar');
+
+        // Get the observation Ids
+        var observationsYear = observations[year];
+
+        originalTotal = observationsYear.length;
+
+        // Build the url stack
+        urlStack = [];
+        for (var i in observationsYear) {
+            var observation = observationsYear[i];
+
+            var url = baseUrl + observation;
+
+            urlStack.push(url);
+        }
+
+        // Now the url stack is built. Kick it off.
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
     })
 }
 
@@ -71,6 +109,8 @@ function processUrlStack()
             // On to the next one...
             processUrlStack();
         });
+    } else {
+        getProgressLabel().html('Complete.')
     }
 }
 
@@ -120,5 +160,5 @@ function getTimeRemaining()
 
 function getProgressLabel()
 {
-    return progressBar.parent().parent().parent().parent().find('.progress-label');
+    return progressBar.parent().parent().parent().find('.progress-label');
 }

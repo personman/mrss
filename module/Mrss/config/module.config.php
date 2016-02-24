@@ -873,6 +873,17 @@ return array(
                             )
                         )
                     ),
+                    'compute-one' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/compute-one/:observation',
+                            'defaults' => array(
+                                'action' => 'computeOne',
+                                'year' => null,
+                                'observation' => 0
+                            )
+                        )
+                    ),
                     'calculate' => array(
                         'type' => 'segment',
                         'options' => array(

@@ -71,9 +71,30 @@ class ReportController extends AbstractActionController
             return $this->redirect()->toRoute('reports/calculate');
         }
 
+        // Get observation ids
+        $observationIds = array();
+        foreach ($years as $year => $yearInfo) {
+            $yearIds = array();
+            $subs = $this->getSubscriptionModel()->findWithPartialObservations(
+                $this->currentStudy(),
+                $year,
+                array(),
+                false,
+                true
+            );
+
+            foreach ($subs as $sub) {
+                $yearIds[] = $sub->getObservation()->getId();
+            }
+
+            $observationIds[$year] = $yearIds;
+        }
+
+
         return array(
             'years' => $years,
-            'study' => $this->currentStudy()
+            'study' => $this->currentStudy(),
+            'observationIds' => $observationIds
         );
     }
 
@@ -94,6 +115,25 @@ class ReportController extends AbstractActionController
 
             return $this->redirect()->toRoute('reports/calculate');
         }
+    }
+
+    public function computeOneAction()
+    {
+        $observationId = $this->params()->fromRoute('observation');
+
+        $observation = $this->getObservationModel()->find($observationId);
+
+        $service = $this->getPercentileService()->getComputedFieldsService();
+        $service->calculateAllForObservation($observation);
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'observation' => $observationId
+            )
+        );
+
+        return $view;
     }
 
     public function calculateSystemsAction()
@@ -1375,11 +1415,18 @@ class ReportController extends AbstractActionController
         return $count;
     }
 
+    /**
+     * @return \Mrss\Model\Observation
+     */
+    public function getObservationModel()
+    {
+        return $this->getServiceLocator()->get('model.observation');
+    }
+
     public function getObservations($year)
     {
         if (empty($this->observations[$year])) {
-            /** @var \Mrss\Model\Observation $observationModel */
-            $observationModel = $this->getServiceLocator()->get('model.observation');
+            $observationModel = $this->getObservationModel();
 
             $this->observations[$year] = $observationModel
                 ->findByYearAndStudy($year, $this->currentStudy());

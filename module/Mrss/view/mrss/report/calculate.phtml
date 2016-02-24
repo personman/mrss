@@ -1,6 +1,6 @@
 <?php
 $this->headScript()->appendFile(
-    '/js/report-calculation.js',
+    '/js/report-calculation.js?v=2',
     'text/javascript'
 ); ?>
 
@@ -16,6 +16,9 @@ $this->headScript()->appendFile(
         benchmarks[<?= $year ?>] = <?= json_encode($benchmarkIdsForYear) ?>;
 
     <?php } ?>
+
+    var observations = <?= json_encode($observationIds) ?>;
+
 </script>
 
 <style>
@@ -83,14 +86,31 @@ $this->headScript()->appendFile(
 
     <h3>Compute Benchmarks</h3>
     <div class="row-fluid row">
-        <div class="span6 col-md-10">
+        <div class="span6 col-md-4">
             <p>
                 Run equations for computed benchmarks and store results.
             </p>
 
         </div>
+
+        <div class="span6 col-md-5" id="compute-progress-<?= $year ?>">
+            <div class="progress calculation-progress">
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: 0%;"></div>
+            </div>
+
+        </div>
+
+        <div class="col-md-1">
+            <span class="progress-label"></span>
+        </div>
+
         <div class="span6 col-md-2">
-            <a class="btn btn-default" href="/reports/compute/<?= $year ?>">Compute Benchmarks</a>
+            <a class="btn btn-default calculate-compute" id="compute-<?= $year ?>" href="#">Compute Benchmarks</a>
             <br>
             <?php /* if (!empty($calculationDates['report'])): ?>
                 Prepared on <?= $calculationDates['report'] ?>

@@ -163,8 +163,11 @@ class Subscription extends AbstractModel
 
         $benchmarkList = implode(', ', $benchmarks);
         $subQueries = implode("\n", $subQueries);
+        if ($benchmarkList) {
+            $benchmarkList = ', ' . $benchmarkList;
+        }
 
-        $sql = "SELECT s.id, c.id college_id, c.name, o.id o_id, $benchmarkList
+        $sql = "SELECT s.id, c.id college_id, c.name, o.id o_id $benchmarkList
         FROM subscriptions s
         INNER JOIN colleges c ON s.college_id = c.id
         INNER JOIN observations o ON s.observation_id = o.id
