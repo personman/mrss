@@ -166,12 +166,26 @@ class ReportController extends AbstractActionController
 
     public function calculateOutlierAction()
     {
+        takeYourTime();
+
         $benchmarkId = $this->params()->fromRoute('benchmark');
         $year = $this->params()->fromRoute('year');
-        $clear = $this->params()->fromRoute('clear');
+        $position = $this->params()->fromRoute('clear');
 
-        $this->getServiceLocator()->get('service.report.outliers');
+        // First?
+        if ($position == 'first') {
+            $this->getOutlierService()->clearOutliers($year);
+        }
 
+        // Calculate them
+        if ($benchmark = $this->getBenchmarkModel()->find($benchmarkId)) {
+            $this->getOutlierService()->calculateOutlier($benchmark, $year);
+        }
+
+        // Last?
+        if ($position == 'last') {
+            $this->getOutlierService()->saveReportCalculationDate($year);
+        }
 
         $view = new JsonModel(
             array(
@@ -1477,5 +1491,18 @@ class ReportController extends AbstractActionController
             'Unable to find membership.'
         );
         return $this->redirect()->toUrl('/members');
+    }
+
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        if (empty($this->benchmarkModel)) {
+            $this->benchmarkModel = $this->getServiceLocator()
+                ->get('model.benchmark');
+        }
+
+        return $this->benchmarkModel;
     }
 }

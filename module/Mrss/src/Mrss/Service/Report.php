@@ -19,6 +19,7 @@ use PHPExcel_Shared_Font;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Log\Formatter\Simple;
+use \DateTime;
 
 class Report
 {
@@ -138,19 +139,27 @@ class Report
             $yearsWithCalculationDates[$year] = array();
 
             $key = $this->getReportCalculatedSettingKey($year);
-            $yearsWithCalculationDates[$year]['report'] = $this->getSettingModel()
-                ->getValueForIdentifier($key);
+            $yearsWithCalculationDates[$year]['report'] = $this->getDateForSettingKey($key);
 
             $key = $this->getReportCalculatedSettingKey($year, true);
-            $yearsWithCalculationDates[$year]['system'] = $this->getSettingModel()
-                ->getValueForIdentifier($key);
+            $yearsWithCalculationDates[$year]['system'] = $this->getDateForSettingKey($key);
 
             $key = $this->getOutliersCalculatedSettingKey($year);
-            $yearsWithCalculationDates[$year]['outliers'] = $this->getSettingModel()
-                ->getValueForIdentifier($key);
+            $yearsWithCalculationDates[$year]['outliers'] = $this->getDateForSettingKey($key);
         }
 
         return $yearsWithCalculationDates;
+    }
+
+    protected function getDateForSettingKey($key, $format = 'Y-m-d H:i')
+    {
+        $date = $this->getSettingModel()->getValueForIdentifier($key);
+        if ($date) {
+            $date = new DateTime($date);
+            $date = $date->format($format);
+        }
+
+        return $date;
     }
 
     /**
@@ -194,7 +203,22 @@ class Report
         $skipNull = true,
         $system = null
     ) {
-        $subscriptions = $this->getSubscriptions($year, $system);
+        if (false) {
+            $subscriptions = $this->getSubscriptions($year, $system);
+        } else {
+            $dbColumn = $benchmark->getDbColumn();
+            $ob = new \Mrss\Entity\Observation;
+            if ($ob->has($dbColumn)) {
+                $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
+                    $this->getStudy(),
+                    $year,
+                    array($dbColumn),
+                    false
+                );
+            } else {
+                $subscriptions = array();
+            }
+        }
         //prd(count($subscriptions));
 
         $benchmarkGroupId = $benchmark->getBenchmarkGroup()->getId();
@@ -213,7 +237,13 @@ class Report
             /** @var /Mrss/Entity/Observation $observation */
             if ($observation = $subscription->getObservation()) {
                 $dbColumn = $benchmark->getDbColumn();
-                $value = $observation->get($dbColumn);
+
+                try {
+                    $value = $observation->get($dbColumn);
+                } catch (\Exception $e) {
+                    $value = null;
+                }
+
                 $collegeId = $subscription->getCollege()->getId();
 
 
