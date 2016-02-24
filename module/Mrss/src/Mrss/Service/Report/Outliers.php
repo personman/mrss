@@ -15,7 +15,7 @@ class Outliers extends Report
 {
     public function calculateOutliersForYear($year)
     {
-        $this->calculateAllComputedFields($year);
+        //$this->calculateAllComputedFields($year);
 
         $stats = array(
             'high' => 0,
@@ -109,6 +109,11 @@ class Outliers extends Report
         $stats['time'] = round($end - $start, 1) . ' seconds';
 
         return $stats;
+    }
+
+    public function calculateOutlier($benchmark, $year)
+    {
+
     }
 
     /**

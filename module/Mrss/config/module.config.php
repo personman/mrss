@@ -903,6 +903,18 @@ return array(
                             )
                         )
                     ),
+                    'calculate-outlier' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-outlier/:benchmark/:year[/:clear]',
+                            'defaults' => array(
+                                'action' => 'calculateOutlier',
+                                'benchmark' => 0,
+                                'clear' => false,
+                                'year' => null
+                            )
+                        )
+                    ),
                     'emailOutliers' => array(
                         'type' => 'segment',
                         'options' => array(

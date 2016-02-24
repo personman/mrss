@@ -72,7 +72,8 @@ class ReportController extends AbstractActionController
         }
 
         return array(
-            'years' => $years
+            'years' => $years,
+            'study' => $this->currentStudy()
         );
     }
 
@@ -133,13 +134,21 @@ class ReportController extends AbstractActionController
         }
     }
 
+    /**
+     * @return \Mrss\Service\Report\Outliers
+     */
+    protected function getOutlierService()
+    {
+        return $this->getServiceLocator()->get('service.report.outliers');
+    }
+
     public function calculateOutliersAction()
     {
         $this->longRunningScript();
 
         $yearToPrepare = $this->params()->fromRoute('year');
 
-        $stats = $this->getServiceLocator()->get('service.report.outliers')
+        $stats = $this->getOutlierService()
             ->calculateOutliersForYear($yearToPrepare);
         $low = $stats['low'];
         $high = $stats['high'];
@@ -155,8 +164,29 @@ class ReportController extends AbstractActionController
         return $this->redirect()->toRoute('reports/calculate');
     }
 
+    public function calculateOutlierAction()
+    {
+        $benchmarkId = $this->params()->fromRoute('benchmark');
+        $year = $this->params()->fromRoute('year');
+        $clear = $this->params()->fromRoute('clear');
+
+        $this->getServiceLocator()->get('service.report.outliers');
+
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'benchmark' => $benchmarkId
+            )
+        );
+
+        return $view;
+    }
+
     public function adminOutliersAction()
     {
+        takeYourTime();
+
         $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
             ->getAdminOutlierReport();
 
