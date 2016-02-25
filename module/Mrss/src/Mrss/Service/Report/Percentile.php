@@ -5,9 +5,12 @@ namespace Mrss\Service\Report;
 use Mrss\Service\Report;
 use Mrss\Entity\Percentile as PercentileEntity;
 use Mrss\Entity\PercentileRank;
+use Mrss\Entity\Benchmark;
 
 class Percentile extends Report
 {
+    protected $stats;
+
     public function calculateForYear($year, $system = null)
     {
         $baseMemory = memory_get_usage();
@@ -27,20 +30,12 @@ class Percentile extends Report
         $computeElapsed = microtime(1) - $start;
 
         $study = $this->getStudy();
-
-        $calculator = $this->getCalculator();
-        $breakpoints = $this->getPercentileBreakpoints();
         $percentileModel = $this->getPercentileModel();
-        $percentileRankModel = $this->getPercentileRankModel();
 
-        // Clear the stored values
-        $this->debugTimer('About to clear values');
-        $percentileModel->deleteByStudyAndYear($study->getId(), $year, $system);
-        $percentileRankModel->deleteByStudyAndYear($study->getId(), $year, $system);
-        $this->debugTimer('cleared values');
+        $this->clearPercentiles($year, $system);
 
         // Take note of some stats
-        $stats = array(
+        $this->stats = array(
             'benchmarks' => 0,
             'percentiles' => 0,
             'percentileRanks' => 0,
@@ -55,92 +50,12 @@ class Percentile extends Report
 
         foreach ($benchmarks as $benchmark) {
             /** @var Benchmark $benchmark */
-
-            // Get all data points for this benchmark
-            // Can't just pull from observations. have to consider subscriptions, too
-            $data = $this->collectDataForBenchmark($benchmark, $year, true, $system);
-
-            if (empty($data)) {
-                $stats['noData']++;
-                continue;
-            }
-
-            // Debug
-            //prd($data);
-
-            $calculator->setData($data);
-
-            // Percentiles
-            foreach ($breakpoints as $breakpoint) {
-                $value = $calculator->getValueForPercentile($breakpoint);
-
-                $percentileEntity = new PercentileEntity;
-                $percentileEntity->setStudy($study);
-                $percentileEntity->setYear($year);
-                $percentileEntity->setBenchmark($benchmark);
-                $percentileEntity->setPercentile($breakpoint);
-                $percentileEntity->setValue($value);
-
-                if ($system) {
-                    $percentileEntity->setSystem($system);
-                }
-
-                $percentileModel->save($percentileEntity);
-                $stats['percentiles']++;
-            }
-
-            // Save the N (count) as a percentile
-            $n = count($data);
-            $percentileEntity = new PercentileEntity;
-            $percentileEntity->setStudy($study);
-            $percentileEntity->setYear($year);
-            $percentileEntity->setBenchmark($benchmark);
-            $percentileEntity->setPercentile('N');
-            $percentileEntity->setValue($n);
-            if ($system) {
-                $percentileEntity->setSystem($system);
-            }
-
-            $percentileModel->save($percentileEntity);
-
-            // Percentile ranks
-            foreach ($data as $collegeId => $datum) {
-                $percentile = $calculator->getPercentileForValue($datum);
-
-                /*if (false && $collegeId == 101 && $benchmark->getId() == 1) {
-                    var_dump($data);
-                    var_dump($datum);
-                    var_dump($percentile);
-                    die;
-                }*/
-
-                $percentileRank = new PercentileRank;
-                $percentileRank->setStudy($study);
-                $percentileRank->setYear($year);
-                $percentileRank->setBenchmark($benchmark);
-                $percentileRank->setRank($percentile);
-
-                if ($system) {
-                    $percentileRank->setSystem($system);
-                }
-
-                $college = $percentileRankModel->getEntityManager()
-                    ->getReference('Mrss\Entity\College', $collegeId);
-                $percentileRank->setCollege($college);
-
-                $percentileRankModel->save($percentileRank);
-                $stats['percentileRanks']++;
-            }
-
-            $stats['benchmarks']++;
+            $this->calculateForBenchmark($benchmark, $year, $system);
 
             // Flush periodically
-            if ($stats['benchmarks'] % 50 == 0) {
-                $i = $stats['benchmarks'];
-                //pr($stats['benchmarks']);
-                //echo sprintf( '%8d: ', $i ), memory_get_usage() - $baseMemory, "\n<br>";
+            if ($this->stats['benchmarks'] % 50 == 0) {
+                $i = $this->stats['benchmarks'];
                 $percentileModel->getEntityManager()->flush();
-                //echo sprintf( '%8d: ', $i ), memory_get_usage() - $baseMemory, "\n<br>";
             }
         }
 
@@ -152,7 +67,100 @@ class Percentile extends Report
         $percentileModel->getEntityManager()->flush();
 
         // Return some stats
-        return $stats;
+        return $this->stats;
+    }
+
+    public function calculateForBenchmark(Benchmark $benchmark, $year, $system = null)
+    {
+        $study = $this->getStudy();
+
+        $calculator = $this->getCalculator();
+        $breakpoints = $this->getPercentileBreakpoints();
+        $percentileModel = $this->getPercentileModel();
+        $percentileRankModel = $this->getPercentileRankModel();
+
+
+        // Get all data points for this benchmark
+        // Can't just pull from observations. have to consider subscriptions, too
+        $data = $this->collectDataForBenchmark($benchmark, $year, true, $system);
+
+        if (empty($data)) {
+            $this->stats['noData']++;
+            return false;
+        }
+
+        $calculator->setData($data);
+
+        // Percentiles
+        foreach ($breakpoints as $breakpoint) {
+            $value = $calculator->getValueForPercentile($breakpoint);
+
+            $percentileEntity = new PercentileEntity;
+            $percentileEntity->setStudy($study);
+            $percentileEntity->setYear($year);
+            $percentileEntity->setBenchmark($benchmark);
+            $percentileEntity->setPercentile($breakpoint);
+            $percentileEntity->setValue($value);
+
+            if ($system) {
+                $percentileEntity->setSystem($system);
+            }
+
+            $percentileModel->save($percentileEntity);
+            $this->stats['percentiles']++;
+        }
+
+        // Save the N (count) as a percentile
+        $n = count($data);
+        $percentileEntity = new PercentileEntity;
+        $percentileEntity->setStudy($study);
+        $percentileEntity->setYear($year);
+        $percentileEntity->setBenchmark($benchmark);
+        $percentileEntity->setPercentile('N');
+        $percentileEntity->setValue($n);
+        if ($system) {
+            $percentileEntity->setSystem($system);
+        }
+
+        $percentileModel->save($percentileEntity);
+
+        // Percentile ranks
+        foreach ($data as $collegeId => $datum) {
+            $percentile = $calculator->getPercentileForValue($datum);
+
+            $percentileRank = new PercentileRank;
+            $percentileRank->setStudy($study);
+            $percentileRank->setYear($year);
+            $percentileRank->setBenchmark($benchmark);
+            $percentileRank->setRank($percentile);
+
+            if ($system) {
+                $percentileRank->setSystem($system);
+            }
+
+            $college = $percentileRankModel->getEntityManager()
+                ->getReference('Mrss\Entity\College', $collegeId);
+            $percentileRank->setCollege($college);
+
+            $percentileRankModel->save($percentileRank);
+            $this->stats['percentileRanks']++;
+        }
+
+        $this->stats['benchmarks']++;
+
+    }
+
+    public function clearPercentiles($year, $system = null)
+    {
+        $percentileModel = $this->getPercentileModel();
+        $percentileRankModel = $this->getPercentileRankModel();
+        $study = $this->getStudy();
+
+        // Clear the stored values
+        $this->debugTimer('About to clear values');
+        $percentileModel->deleteByStudyAndYear($study->getId(), $year, $system);
+        $percentileRankModel->deleteByStudyAndYear($study->getId(), $year, $system);
+        $this->debugTimer('cleared values');
     }
 
     public function calculateSystems($year)

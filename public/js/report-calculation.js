@@ -7,6 +7,7 @@ var startTime;
 $(function() {
     setUpCalculation();
     setUpCompute();
+    setUpPercentiles();
 });
 
 
@@ -85,6 +86,46 @@ function setUpCompute()
     })
 }
 
+
+function setUpPercentiles()
+{
+    var baseUrl = '/reports/calculate-one/';
+
+    $('.calculate-percentile').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+
+        progressBar = $('#percentile-progress-' + year + ' .progress-bar');
+
+        // Get the benchmark Ids
+        var benchmarkIds = benchmarks[year];
+
+        originalTotal = benchmarkIds.length;
+
+        // Build the url stack
+        urlStack = [];
+        for (var i in benchmarkIds) {
+            var benchmarkId = benchmarkIds[i];
+
+            var url = baseUrl + benchmarkId + '/' + year;
+
+            if (i == 0) {
+                url = url + '/last';
+            } else if (i == benchmarkIds.length - 1) {
+                url = url + '/first';
+            }
+            urlStack.push(url);
+        }
+
+        // Now the url stack is built. Kick it off.
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
+    })
+}
 // Take a url off the top of the stack, run the ajax, update the progress bar, call the function again
 function processUrlStack()
 {

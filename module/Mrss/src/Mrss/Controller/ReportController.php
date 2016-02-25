@@ -49,7 +49,7 @@ class ReportController extends AbstractActionController
         $years = $percentileService->getCalculationInfo();
         $yearToPrepare = $this->params()->fromRoute('year');
 
-        if (!empty($yearToPrepare)) {
+        /*if (!empty($yearToPrepare)) {
             // Now calculate percentiles
             //$stats = $this->getReportService()->calculateForYear($yearToPrepare);
             $stats = $percentileService->calculateForYear($yearToPrepare);
@@ -69,7 +69,7 @@ class ReportController extends AbstractActionController
             );
 
             return $this->redirect()->toRoute('reports/calculate');
-        }
+        }*/
 
         // Get observation ids
         $observationIds = array();
@@ -96,6 +96,40 @@ class ReportController extends AbstractActionController
             'study' => $this->currentStudy(),
             'observationIds' => $observationIds
         );
+    }
+
+    /**
+     * Calculate national report percentiles and ranks for a single benchmark/year
+     */
+    public function calculateOneAction()
+    {
+        $benchmarkId = $this->params()->fromRoute('benchmark');
+        $year = $this->params()->fromRoute('year');
+        $position = $this->params()->fromRoute('position');
+
+        $percentileService = $this->getPercentileService();
+        $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+
+        // If this is the first benchmark, clear existing percentiles
+        if ($position == 'first') {
+            $percentileService->clearPercentiles($year);
+        }
+
+        // Now actually calculate and save percentiles
+        $percentileService->calculateForBenchmark($benchmark, $year);
+
+        // Flush
+        $percentileService->getPercentileModel()->getEntityManager()->flush();
+
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'benchmark' => $benchmark
+            )
+        );
+
+        return $view;
     }
 
     public function computeAction()

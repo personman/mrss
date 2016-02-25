@@ -894,6 +894,18 @@ return array(
                             )
                         )
                     ),
+                    'calculate-one' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-one/:benchmark/:year[/:position]',
+                            'defaults' => array(
+                                'action' => 'calculateOne',
+                                'year' => null,
+                                'benchmark' => null,
+                                'position' => null
+                            )
+                        )
+                    ),
                     'calculateSystems' => array(
                         'type' => 'segment',
                         'options' => array(
