@@ -118,6 +118,15 @@ function updateFormForChartType()
         percentiles.show()
         populateDefaultBreakpoints()
     }
+
+    // Peer comparison
+    if (chartType == 'peer') {
+        title.show();
+        subtitle.show()
+        benchmark1.show()
+        yearField.show()
+        peerGroup.show()
+    }
 }
 
 function exploreFormSubmit()

@@ -74,7 +74,9 @@ class DataExport
             }
         }
 
-        //$years = array(2015 => array($studyId), 2014 => array($studyId));
+        if ($studyId == 1) {
+            $years = array(2015 => array($studyId), 2014 => array($studyId));
+        }
 
         return $years;
     }
