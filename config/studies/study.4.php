@@ -3,6 +3,7 @@
 // AAUP - FCS
 return array(
     'from_email' => 'jbarnshaw@aaup.org',
+    'from_email_name' => 'John Barnshaw',
     //'cc_email' => 'jbarnshaw@aaup.org',
     'cc_email' => 'dfergu15@jccc.edu',
     //'approver_email' => 'jbarnshaw@aaup.org',

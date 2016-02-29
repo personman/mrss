@@ -344,6 +344,9 @@ class Outliers extends Report
             //$deadline = "July 10, " . date('Y');
             //$url = "maximizingresources.org";
 
+            $replyTo = $this->getStudyConfig()->from_email;
+            $replyToName = $this->getStudyConfig()->from_email_name;
+
             $viewParams = array(
                 'year' => $year,
                 'studyName' => $studyName,
@@ -394,7 +397,7 @@ class Outliers extends Report
 
                 // Get recipients
                 if (!$devOnly) {
-                    foreach ($college->getUsersByStudy($this->getStudy()) as $user) {
+                    foreach ($college->getDataUsers($this->getStudy()) as $user) {
                         // @todo: make this more dynamic
                         if ($college->getIpeds() == '155210'
                             && $user->getEmail() != 'jhoyer@jccc.edu') {
@@ -415,7 +418,7 @@ class Outliers extends Report
                 }
             } else {
                 $to = array();
-                foreach ($college->getUsers() as $user) {
+                foreach ($college->getDataUsers($this->getStudy()) as $user) {
                     // @todo: make this more dynamic
                     if ($college->getIpeds() == '155210'
                         && $user->getEmail() != 'jhoyer@jccc.edu') {

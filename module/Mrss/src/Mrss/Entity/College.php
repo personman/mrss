@@ -393,13 +393,34 @@ class College
     public function getDataEmails()
     {
         $emails = array();
-        foreach ($this->getUsers() as $user) {
-            if ($user->getRole() == 'data') {
-                $emails[] = $user->getEmail();
-            }
+        foreach ($this->getDataUsers() as $user) {
+            $emails[] = $user->getEmail();
         }
 
         return implode(',', $emails);
+    }
+
+    /**
+     * @return \Mrss\Entity\User[]
+     */
+    public function getDataUsers($study = null)
+    {
+        $dataRoles = array('data', 'system_admin');
+
+        if ($study) {
+            $users = $this->getUsersByStudy($study);
+        } else {
+            $users = $this->getUsers();
+        }
+
+        $dataUsers = array();
+        foreach ($users as $user) {
+            if (in_array($user->getRole(), $dataRoles)) {
+                $dataUsers[] = $user;
+            }
+        }
+
+        return $dataUsers;
     }
 
     public function setSubscriptions($subscriptions)
