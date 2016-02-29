@@ -21,6 +21,8 @@ return array(
     'free_to_join' => true,
     'agreement_template' => 'agreement-fcs',
     'welcome_email' => 'welcome-aaup',
+    'outlier_email' => 'outliers.email.aaup',
+    'outlier_email_none' => false, // Send all AAUP users the same email
     'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',
     'anonymous_peers' => false,

@@ -33,6 +33,7 @@ class Factory implements AbstractFactoryInterface
 
         $report->setSubscriptionModel($sm->get('model.subscription'));
         $report->setStudy($currentStudy);
+        $report->setStudyConfig($sm->get('study'));
         $report->setCalculator($sm->get('service.report.calculator'));
         $report->setPercentileModel($sm->get('model.percentile'));
         $report->setPercentileRankModel(

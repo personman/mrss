@@ -356,12 +356,16 @@ class Outliers extends Report
             );
 
             // Select a view for the email body
-            if (!empty($outliers)) {
-                $view = 'mrss/report/outliers.email.phtml';
+            $outlierEmail = $this->getStudyConfig()->outlier_email;
+            $outlierEmailNone = $this->getStudyConfig()->outlier_email_none;
 
-            } else {
-                $view = 'mrss/report/outliers.email.none.phtml';
+            $view = $outlierEmail;
+
+            if (empty($outliers) && $outlierEmailNone) {
+                $view = $outlierEmailNone;
             }
+
+            $view = "mrss/report/$view.phtml";
 
             // Build the email body with the view
             $body = $renderer->render($view, $viewParams);
@@ -441,10 +445,6 @@ class Outliers extends Report
     public function getExcludedCollegeIds()
     {
         // Don't email these colleges outlier reports (applies to NCCBP 2015)
-        return array(
-            1121, // Henry Ford
-            437, // Wyoming CCC
-            1116, // Vance-Granville
-        );
+        return array();
     }
 }

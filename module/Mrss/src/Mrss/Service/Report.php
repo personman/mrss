@@ -28,6 +28,8 @@ class Report
      */
     protected $study;
 
+    protected $studyConfig;
+
     /**
      * @var array
      */
@@ -1587,5 +1589,17 @@ class Report
                 }
             }
         }
+    }
+
+    public function setStudyConfig($config)
+    {
+        $this->studyConfig = $config;
+
+        return $this;
+    }
+
+    public function getStudyConfig()
+    {
+        return $this->studyConfig;
     }
 }
