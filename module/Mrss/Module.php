@@ -340,6 +340,7 @@ class Module
                 'service.import.colleges.demo' => 'Mrss\Service\Factory\ImportCollegeDemographics',
                 'service.import.colleges.category' => 'Mrss\Service\Factory\ImportCollegeCategory',
                 'service.import.users' => 'Mrss\Service\Factory\ImportUsers',
+                'service.generator' => 'Mrss\Service\Factory\ObservationGenerator',
                 'service.variableSubstitution' => function ($sm) {
                     $service = new Service\VariableSubstitution();
                     $currentStudy = $sm->get('ControllerPluginManager')

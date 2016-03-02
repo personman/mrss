@@ -97,6 +97,18 @@ class AdminController extends AbstractActionController
         );
     }
 
+    /**
+     * Build a new Observation entity based on benchmark config
+     */
+    public function generateAction()
+    {
+        $generator = $this->getServiceLocator()->get('service.generator');
+
+        $generator->generate();
+    }
+
+
+
     protected function getYear()
     {
         $year = $this->params()->fromRoute('year');

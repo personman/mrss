@@ -1748,6 +1748,16 @@ return array(
                                 'action' => 'adminOutliers'
                             )
                         )
+                    ),
+                    'generate-observation' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/generate',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'generate'
+                            )
+                        )
                     )
                 )
             ),
