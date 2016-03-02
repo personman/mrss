@@ -97,6 +97,35 @@ class AdminController extends AbstractActionController
         );
     }
 
+    public function equationsAction()
+    {
+        $results = array();
+
+        foreach ($this->currentStudy()->getAllBenchmarks() as $benchmark) {
+            /** @var \Mrss\Entity\Benchmark $benchmark */
+            if ($benchmark->getComputed()) {
+                $equation = $benchmark->getEquation();
+                if (!$this->getComputedFieldsService()->checkEquation($equation)) {
+                    $base = "Equation error for " . $benchmark->getDbColumn() . ". ";
+                    $editLink = " <a href='/benchmark/study/0/edit/{$benchmark->getId()}'>Edit</a>";
+                    $results[] = $base . $this->getComputedFieldsService()->getError() . $editLink;
+                }
+            }
+        }
+
+        return array(
+            'errors' => $results
+        );
+    }
+
+    /**
+     * @return \Mrss\Service\ComputedFields
+     */
+    public function getComputedFieldsService()
+    {
+        return $this->getServiceLocator()->get('computedFields');
+    }
+
     /**
      * Build a new Observation entity based on benchmark config
      */

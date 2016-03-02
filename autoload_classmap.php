@@ -232,6 +232,7 @@ return array(
   'DoctrineMigrations\Version20160106153440'                                                                           => __DIR__ . '/data/migrations/Version20160106153440.php',
   'DoctrineMigrations\Version20160112161728'                                                                           => __DIR__ . '/data/migrations/Version20160112161728.php',
   'DoctrineMigrations\Version20160219095241'                                                                           => __DIR__ . '/data/migrations/Version20160219095241.php',
+  'DoctrineMigrations\Version20160302162507'                                                                           => __DIR__ . '/data/migrations/Version20160302162507.php',
   'FeatureContext'                                                                                                     => __DIR__ . '/vendor/behat/behat/features/bootstrap/FeatureContext.php',
   'Mrss\Module'                                                                                                        => __DIR__ . '/module/Mrss/Module.php',
   'Mrss\Controller\AdminController'                                                                                    => __DIR__ . '/module/Mrss/src/Mrss/Controller/AdminController.php',

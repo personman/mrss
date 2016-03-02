@@ -1758,6 +1758,16 @@ return array(
                                 'action' => 'generate'
                             )
                         )
+                    ),
+                    'equations' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/equations',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'equations'
+                            )
+                        )
                     )
                 )
             ),

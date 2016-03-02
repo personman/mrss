@@ -195,8 +195,10 @@ class ObservationGenerator
     {
         $colType = 'float';
 
-        if ($inputType == 'radio') {
+        if ($inputType == 'radio' || $inputType == 'text') {
             $colType = 'string';
+        } elseif ($inputType == 'textarea') {
+            $colType = 'text';
         } elseif ($inputType == 'number') {
             $colType = 'integer';
         }

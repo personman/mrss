@@ -35,6 +35,8 @@ class ImportBenchmarks
 
     protected $headings = array();
 
+    protected $addOnly = true;
+
     /**
      * Doesn't currently modify benchmark sequence
      *
@@ -114,10 +116,12 @@ class ImportBenchmarks
             $this->addHeading($row, $benchmarkGroup);
         } else {
             // Update or create the benchmark
-            $benchmark = $this->updateOrCreateBenchmark($row, $benchmarkGroup);
 
-            // See if it exists in the observation entity
-            $this->checkObservation($benchmark);
+            if ($benchmark = $this->updateOrCreateBenchmark($row, $benchmarkGroup)) {
+                // See if it exists in the observation entity
+                $this->checkObservation($benchmark);
+            }
+
 
         }
 
@@ -191,6 +195,8 @@ class ImportBenchmarks
 
         if (empty($benchmark)) {
             $benchmark = new Benchmark;
+        } elseif ($this->addOnly) {
+            return false;
         }
 
         // Remove colon from name
