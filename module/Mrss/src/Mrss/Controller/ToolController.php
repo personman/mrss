@@ -710,6 +710,25 @@ class ToolController extends AbstractActionController
         return array();
     }
 
+    public function repairSequencesAction()
+    {
+        foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
+            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+
+            $i = 1;
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                $benchmark->setSequence($i);
+                $this->getBenchmarkModel()->save($benchmark);
+                $i++;
+            }
+        }
+
+        $this->getBenchmarkModel()->getEntityManager()->flush();
+
+        $this->flashMessenger()->addSuccessMessage('Sequences repaired.');
+        return $this->redirect()->toRoute('tools');
+    }
+
     protected function getObservationPropertyCode(Benchmark $benchmark)
     {
         $oldDbColumn = $benchmark->getDbColumn();
@@ -741,7 +760,6 @@ class ToolController extends AbstractActionController
         return $colType;
     }
 
-
     protected function longRunningScript()
     {
         takeYourTime();
@@ -752,5 +770,18 @@ class ToolController extends AbstractActionController
             ->getConnection()
             ->getConfiguration()
             ->setSQLLogger(null);
+    }
+
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        if (empty($this->benchmarkModel)) {
+            $this->benchmarkModel = $this->getServiceLocator()
+                ->get('model.benchmark');
+        }
+
+        return $this->benchmarkModel;
     }
 }

@@ -1895,6 +1895,15 @@ return array(
                             )
                         )
                     ),
+                    'repair-sequences' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/repair-sequences',
+                            'defaults' => array(
+                                'action' => 'repairSequences',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
