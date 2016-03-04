@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3208ddd299550774881feb8fb582dffb",
-    "content-hash": "955b995935934fc730f31a314c11d01f",
+    "hash": "d53cc7db1ebeb0a93a57366d85b417fc",
+    "content-hash": "f2027b315379e7387ef7a6f78355e963",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2449,20 +2449,20 @@
         },
         {
             "name": "zf-commons/zfc-user",
-            "version": "1.x-dev",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUser.git",
-                "reference": "d8f83a33ee61516feb059f86ea2eb2c8a23c88d5"
+                "reference": "6bc1372f1198e01fed3a187bbeeba007356fae9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/d8f83a33ee61516feb059f86ea2eb2c8a23c88d5",
-                "reference": "d8f83a33ee61516feb059f86ea2eb2c8a23c88d5",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/6bc1372f1198e01fed3a187bbeeba007356fae9e",
+                "reference": "6bc1372f1198e01fed3a187bbeeba007356fae9e",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3|~7.0",
+                "php": ">=5.3.3",
                 "zendframework/zend-authentication": "~2.1",
                 "zendframework/zend-crypt": "~2.1",
                 "zendframework/zend-form": "~2.1",
@@ -2522,7 +2522,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2015-12-21 21:09:54"
+            "time": "2015-08-17 11:49:46"
         },
         {
             "name": "zf-commons/zfc-user-doctrine-orm",
