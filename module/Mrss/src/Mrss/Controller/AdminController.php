@@ -105,7 +105,10 @@ class AdminController extends AbstractActionController
             /** @var \Mrss\Entity\Benchmark $benchmark */
             if ($benchmark->getComputed()) {
                 $equation = $benchmark->getEquation();
-                if (!$this->getComputedFieldsService()->checkEquation($equation)) {
+
+                if (empty($equation)) {
+                    $results[] = $benchmark->getDbColumn() . " is computed but has no equation.";
+                } elseif (!$this->getComputedFieldsService()->checkEquation($equation)) {
                     $base = "Equation error for " . $benchmark->getDbColumn() . ". ";
                     $editLink = " <a href='/benchmark/study/0/edit/{$benchmark->getId()}'>Edit</a>";
                     $results[] = $base . $this->getComputedFieldsService()->getError() . $editLink;
