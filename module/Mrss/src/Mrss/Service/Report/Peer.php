@@ -194,7 +194,7 @@ class Peer extends Report
     /**
      * @return \Zend\Config\Config
      */
-    protected function getStudyConfig()
+    public function getStudyConfig()
     {
         return $this->getServiceManager()->get('study');
     }
