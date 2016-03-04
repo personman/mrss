@@ -2258,11 +2258,12 @@ return array(
             //'CurrentStudy' => 'Mrss\Controller\Plugin\CurrentStudy',
         )
     ),
-    /*'view_manager' => array(
+    'view_manager' => array(
         'template_path_stack' => array(
-            'mrss' => __DIR__ . '/../view'
+            'mrss' => __DIR__ . '/../view',
+            'zfc-user' => __DIR__ . '/../view',
         ),
-    ),*/
+    ),
     'view_manager' => array(
         // Hide error details by default. Use a local override in dev to show them
         'display_not_found_reason' => false,
