@@ -185,13 +185,15 @@ class Benchmark extends AbstractForm
         $this->add(
             array(
                 'name' => 'equation',
-                'type' => 'Text',
+                'type' => 'Textarea',
                 'options' => array(
                     'label' => 'Equation',
                     'help-block' => $this->getEquationHelp()
                 ),
                 'attributes' => array(
-                    'id' => 'equation'
+                    'id' => 'equation',
+                    'rows' => 8,
+                    'cols' => 80,
                 )
             )
         );
