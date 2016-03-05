@@ -310,7 +310,7 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation)
     {
-        $flushEvery = 30;
+        $flushEvery = 10000;
         if (empty($observation)) {
             throw new \Exception('Observation missing.');
 

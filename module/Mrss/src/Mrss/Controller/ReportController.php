@@ -153,6 +153,8 @@ class ReportController extends AbstractActionController
 
     public function computeOneAction()
     {
+        takeYourTime();
+
         $observationId = $this->params()->fromRoute('observation');
         $status = 'ok';
 
