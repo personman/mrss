@@ -166,8 +166,9 @@ class ReportController extends AbstractActionController
                 $service->calculateAllForObservation($observation);
             } catch (\Exception $e) {
                 $message = $e->getMessage();
-                echo "! " . $message;
-                die();
+                //echo "! " . $message;
+                $status = $message;
+
             }
         } else {
             $status = '404';
