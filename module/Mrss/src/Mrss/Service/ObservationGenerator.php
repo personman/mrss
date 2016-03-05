@@ -2,6 +2,7 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\Observation;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\PropertyGenerator;
@@ -12,6 +13,8 @@ class ObservationGenerator
 
     public function generate()
     {
+        $this->checkForMissingFields();
+
         $properties = $this->getProperties();
 
         $docblock = DocBlockGenerator::fromArray(array(
@@ -43,6 +46,24 @@ class ObservationGenerator
         pr($class->generate());
 
         die('test');
+    }
+
+    protected function checkForMissingFields()
+    {
+        $observation = new Observation;
+        $props = array_keys(get_object_vars($observation));
+
+        $dbColumns = array();
+        foreach ($this->getStudy()->getAllBenchmarks() as $benchmark) {
+            $dbColumns[] = $benchmark->getDbColumn();
+        }
+
+        $diff = array_diff($dbColumns, $props);
+
+        if ($diff) {
+            echo 'Props in database, but not Observation:';
+            pr($diff);
+        }
     }
 
     public function setStudy($study)
