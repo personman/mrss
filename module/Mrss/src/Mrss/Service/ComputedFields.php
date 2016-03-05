@@ -322,7 +322,6 @@ class ComputedFields
             }
 
             try {
-                die('about to try');
                 $this->calculate($benchmark, $observation, false);
             } catch (\Exception $e) {
                 //pr($e->getMessage());
