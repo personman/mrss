@@ -310,6 +310,7 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation)
     {
+        $flushEvery = 100;
         if (empty($observation)) {
             throw new \Exception('Observation missing.');
 
@@ -317,6 +318,7 @@ class ComputedFields
 
         $benchmarks = $this->getComputedBenchmarks($observation->getYear());
 
+        $i = 0;
         foreach ($benchmarks as $benchmark) {
             if ($this->debug) {
                 pr($benchmark->getName());
@@ -329,6 +331,10 @@ class ComputedFields
                 //pr($e->getMessage());
                 //prd($e);
                 continue;
+            }
+
+            if ($i % $flushEvery == 0) {
+                $this->getObservationModel()->getEntityManager()->flush();
             }
         }
 
