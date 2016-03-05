@@ -232,6 +232,10 @@
         <echo>Done.</echo>
     </target>
 
+    <target name="copy-aaup-ob">
+        <exec command="cp module/Mrss/src/Mrss/Entity/Observation.php.aaup module/Mrss/src/Mrss/Entity/Observation.php" />
+    </target>
+
     <target name="sync" depends="sync-nccbp-db"/>
 
     <target name="cc" depends="clear-caches"/>
