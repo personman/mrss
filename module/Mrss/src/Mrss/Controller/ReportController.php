@@ -156,6 +156,9 @@ class ReportController extends AbstractActionController
         takeYourTime();
 
         $observationId = $this->params()->fromRoute('observation');
+        $debug = $this->params()->fromRoute('debug');
+        $debugColumn = $this->params()->fromRoute('benchmark');
+
         $status = 'ok';
 
         $observation = $this->getObservationModel()->find($observationId);
@@ -163,6 +166,8 @@ class ReportController extends AbstractActionController
 
         if ($observation) {
             $service = $this->getPercentileService()->getComputedFieldsService();
+            $service->setDebug($debug);
+            $service->setDebugDbColumn($debugColumn);
 
             try {
                 $service->calculateAllForObservation($observation);

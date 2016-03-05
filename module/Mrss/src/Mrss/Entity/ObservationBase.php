@@ -273,4 +273,9 @@ class ObservationBase
     {
         return "Observation id: {$this->getId()}";
     }
+
+    public function getAllProperties()
+    {
+        return get_object_vars($this);
+    }
 }

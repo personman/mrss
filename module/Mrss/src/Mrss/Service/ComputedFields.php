@@ -41,6 +41,10 @@ class ComputedFields
 
     protected $debug = false;
 
+    protected $debugDbColumn = null;
+
+    protected $skipEmpty = false;
+
     protected $error;
 
     protected $keyedBenchmarks = array();
@@ -53,13 +57,13 @@ class ComputedFields
     ) {
         //$this->debug = true;
 
-        if ($this->debug) {
+        if ($this->getDebug()) {
             $start = microtime(1);
         }
 
         $equationWithVariables = $benchmark->getEquation();
         $benchmarkColumn = $benchmark->getDbColumn();
-        if ($this->debug) {
+        if ($this->getDebug()) {
             echo "equation prepared: " . round(microtime(1) - $start, 3) . "s<br>";
         }
 
@@ -95,7 +99,7 @@ class ComputedFields
             $result = $result * 100;
         }
 
-        if ($this->debug) {
+        if ($this->getDebug()) {
             echo "Result = $result. About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
         }
 
@@ -110,7 +114,7 @@ class ComputedFields
 
         if ($flush) {
             $this->getObservationModel()->getEntityManager()->flush();
-            if ($this->debug) {
+            if ($this->getDebug()) {
                 echo "flushed: " . round(microtime(1) - $start, 3) . "s<br>";
             }
         }
@@ -220,7 +224,7 @@ class ComputedFields
             // If any of the variables are null or '', bail out
             if ($value === null || $value === '') {
                 // As long as there's no division or multiplication involved, we can assume nulls are 0
-                if (strpos($equation, '/') === false && strpos($equation, '*') === false) {
+                if (!$this->skipEmpty || (strpos($equation, '/') === false && strpos($equation, '*') === false)) {
                     $value = 0;
                 } else {
                     $errors[] = "Missing variable: $variable. ";
@@ -237,7 +241,7 @@ class ComputedFields
         }
 
 
-        if ($this->debug) {
+        if ($this->getDebug()) {
             pr($observation->getId());
             pr($variables);
             pr($errors);
@@ -254,7 +258,7 @@ class ComputedFields
 
 
         if (empty($preparedEquation)) {
-            if ($this->debug) {
+            if ($this->getDebug()) {
                 throw new \Exception(
                     'Invalid equation: ' .
                     "<br>" .
@@ -326,13 +330,18 @@ class ComputedFields
 
         }
 
+        $col = $this->debugDbColumn;
         $benchmarks = $this->getComputedBenchmarks($observation->getYear());
 
         $i = 0;
         foreach ($benchmarks as $benchmark) {
             $i++;
 
-            if ($this->debug) {
+            if ($col && $benchmark->getDbColumn() != $col) {
+                continue;
+            }
+
+            if ($this->getDebug()) {
                 pr($benchmark->getName());
             }
 
@@ -523,5 +532,24 @@ class ComputedFields
         }
 
         return $this->computedBenchmarks;
+    }
+
+    public function setDebugDbColumn($dbColumn)
+    {
+        $this->debugDbColumn = $dbColumn;
+
+        return $this;
+    }
+
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+
+        return $this;
+    }
+
+    public function getDebug()
+    {
+        return $this->debug;
     }
 }

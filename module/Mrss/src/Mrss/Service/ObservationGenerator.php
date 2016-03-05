@@ -51,7 +51,8 @@ class ObservationGenerator
     protected function checkForMissingFields()
     {
         $observation = new Observation;
-        $props = array_keys(get_object_vars($observation));
+        $props = $observation->getAllProperties();
+        $props = array_keys($props);
 
         $dbColumns = array();
         foreach ($this->getStudy()->getAllBenchmarks() as $benchmark) {
@@ -63,6 +64,8 @@ class ObservationGenerator
         if ($diff) {
             echo 'Props in database, but not Observation:';
             pr($diff);
+        } else {
+            echo "Observation appears to be up-to-date already.";
         }
     }
 

@@ -876,11 +876,13 @@ return array(
                     'compute-one' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/compute-one/:observation',
+                            'route' => '/compute-one/:observation[/:debug][/:benchmark]',
                             'defaults' => array(
                                 'action' => 'computeOne',
                                 'year' => null,
-                                'observation' => 0
+                                'observation' => 0,
+                                'debug' => false,
+                                'benchmark' => false
                             )
                         )
                     ),
