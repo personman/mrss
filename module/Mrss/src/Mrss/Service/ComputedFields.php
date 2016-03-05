@@ -325,6 +325,7 @@ class ComputedFields
             try {
                 $this->calculate($benchmark, $observation, false);
             } catch (\Exception $e) {
+                throw new \Exception('calculation problem');
                 //pr($e->getMessage());
                 //prd($e);
             }
