@@ -3704,6 +3704,61 @@ class Observation extends ObservationBase
     /**
      * @ORM\Column(type="float", nullable=true)
      */
+    protected $ft_average_medical_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_dental_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_combined_medical_dental_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_disability_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_tuition_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_fica_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_unemployment_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_group_life_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_worker_comp_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_averge_other_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_combined_per_all_ranks = null;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
     protected $ft_continuing_average_professor_salary = null;
 
     /**
