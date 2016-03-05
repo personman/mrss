@@ -161,7 +161,7 @@ class ReportController extends AbstractActionController
 
         if ($observation) {
             $service = $this->getPercentileService()->getComputedFieldsService();
-            prd(get_class($service));
+
             try {
                 $service->calculateAllForObservation($observation);
             } catch (\Exception $e) {

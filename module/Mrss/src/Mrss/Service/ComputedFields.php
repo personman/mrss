@@ -309,6 +309,7 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation)
     {
+        die('test1');
         if (empty($observation)) {
             throw new \Exception('Observation missing.');
 
