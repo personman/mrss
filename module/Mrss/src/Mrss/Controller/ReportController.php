@@ -158,7 +158,15 @@ class ReportController extends AbstractActionController
         $observation = $this->getObservationModel()->find($observationId);
 
         $service = $this->getPercentileService()->getComputedFieldsService();
-        $service->calculateAllForObservation($observation);
+
+        try {
+            $service->calculateAllForObservation($observation);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            echo "! " . $message;
+            die();
+        }
+
 
         $view = new JsonModel(
             array(
