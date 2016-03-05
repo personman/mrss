@@ -154,23 +154,29 @@ class ReportController extends AbstractActionController
     public function computeOneAction()
     {
         $observationId = $this->params()->fromRoute('observation');
+        $status = 'ok';
 
         $observation = $this->getObservationModel()->find($observationId);
 
-        $service = $this->getPercentileService()->getComputedFieldsService();
+        if ($observation) {
+            $service = $this->getPercentileService()->getComputedFieldsService();
 
-        try {
-            //$service->calculateAllForObservation($observation);
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            echo "! " . $message;
-            die();
+            try {
+                $service->calculateAllForObservation($observation);
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+                echo "! " . $message;
+                die();
+            }
+        } else {
+            $status = '404';
         }
+
 
 
         $view = new JsonModel(
             array(
-                'status' => 'ok',
+                'status' => $status,
                 'observation' => $observationId
             )
         );
