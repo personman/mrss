@@ -66,6 +66,7 @@ class ComputedFields
         if (empty($equationWithVariables)) {
             $result = null;
         } else {
+
             // Populate variables
             $equationWithVariables = $this
                 ->nestComputedEquations(
@@ -270,6 +271,8 @@ class ComputedFields
         return $preparedEquation;
     }
 
+    protected $recursionLevel = 0;
+
     /**
      * If an equation includes a benchmark that's computed, drop in the equation
      * rather than the current value. This is so we don't have to worry about
@@ -281,6 +284,8 @@ class ComputedFields
      */
     public function nestComputedEquations($equation, $year)
     {
+        $this->recursionLevel++;
+
         $variables = $this->getVariables($equation);
         $computed = $this->getComputedBenchmarks($year);
 
@@ -295,7 +300,11 @@ class ComputedFields
                 }
 
                 // Recurse in case the inside equation contains other computed ones
-                $insideEquation = $this->nestComputedEquations($insideEquation, $year);
+                if ($this->recursionLevel > 15) {
+                    return '';
+                } else {
+                    $insideEquation = $this->nestComputedEquations($insideEquation, $year);
+                }
 
                 $equation = str_replace(
                     '{{' . $variable . '}}',
@@ -305,12 +314,13 @@ class ComputedFields
             }
         }
 
+        $this->recursionLevel--;
         return $equation;
     }
 
     public function calculateAllForObservation(Observation $observation)
     {
-        $flushEvery = 10000;
+        $flushEvery = 3000;
         if (empty($observation)) {
             throw new \Exception('Observation missing.');
 
@@ -320,6 +330,8 @@ class ComputedFields
 
         $i = 0;
         foreach ($benchmarks as $benchmark) {
+            $i++;
+
             if ($this->debug) {
                 pr($benchmark->getName());
             }
@@ -333,7 +345,11 @@ class ComputedFields
                 continue;
             }
 
-            //$this->getObservationModel()->getEntityManager()->flush();
+            if ($i % $flushEvery == 0) {
+                $this->getObservationModel()->getEntityManager()->flush();
+            }
+
+            //if ($i > 50) break;
         }
 
         $this->getObservationModel()->getEntityManager()->flush();
