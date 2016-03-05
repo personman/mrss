@@ -1,3 +1,5 @@
+<?php
+
 namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
