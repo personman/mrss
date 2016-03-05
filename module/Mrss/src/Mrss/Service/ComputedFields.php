@@ -310,12 +310,10 @@ class ComputedFields
     public function calculateAllForObservation(Observation $observation)
     {
         if (empty($observation)) {
-            die('empty');
             throw new \Exception('Observation missing.');
 
         }
 
-        die('pre fetch');
         $benchmarks = $this->getComputedBenchmarks($observation->getYear());
 
         foreach ($benchmarks as $benchmark) {
@@ -324,6 +322,7 @@ class ComputedFields
             }
 
             try {
+                die('about to try');
                 $this->calculate($benchmark, $observation, false);
             } catch (\Exception $e) {
                 //pr($e->getMessage());
