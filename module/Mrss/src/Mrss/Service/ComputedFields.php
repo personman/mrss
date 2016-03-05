@@ -51,6 +51,7 @@ class ComputedFields
         $flush = true,
         SubObservation $subObservation = null
     ) {
+        $this->debug = true;
 
         if ($this->debug) {
             $start = microtime(1);
