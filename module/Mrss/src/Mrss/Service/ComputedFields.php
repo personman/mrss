@@ -333,9 +333,7 @@ class ComputedFields
                 continue;
             }
 
-            if (true) {
-                $this->getObservationModel()->getEntityManager()->flush();
-            }
+            //$this->getObservationModel()->getEntityManager()->flush();
         }
 
         $this->getObservationModel()->getEntityManager()->flush();
