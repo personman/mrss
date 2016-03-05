@@ -160,7 +160,7 @@ class ReportController extends AbstractActionController
         $service = $this->getPercentileService()->getComputedFieldsService();
 
         try {
-            $service->calculateAllForObservation($observation);
+            //$service->calculateAllForObservation($observation);
         } catch (\Exception $e) {
             $message = $e->getMessage();
             echo "! " . $message;
