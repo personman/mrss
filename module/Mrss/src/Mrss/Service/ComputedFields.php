@@ -333,7 +333,7 @@ class ComputedFields
                 continue;
             }
 
-            if ($flushEvery % $i == 0) {
+            if (true) {
                 $this->getObservationModel()->getEntityManager()->flush();
             }
         }
