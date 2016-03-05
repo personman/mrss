@@ -158,6 +158,7 @@ class ReportController extends AbstractActionController
 
         $observation = $this->getObservationModel()->find($observationId);
 
+        prd(get_class($observation));
         if ($observation) {
             $service = $this->getPercentileService()->getComputedFieldsService();
 
