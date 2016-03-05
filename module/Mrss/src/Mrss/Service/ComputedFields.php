@@ -310,7 +310,7 @@ class ComputedFields
 
     public function calculateAllForObservation(Observation $observation)
     {
-        $flushEvery = 100;
+        $flushEvery = 30;
         if (empty($observation)) {
             throw new \Exception('Observation missing.');
 
@@ -333,7 +333,7 @@ class ComputedFields
                 continue;
             }
 
-            if ($i % $flushEvery == 0) {
+            if ($flushEvery % $i == 0) {
                 $this->getObservationModel()->getEntityManager()->flush();
             }
         }
