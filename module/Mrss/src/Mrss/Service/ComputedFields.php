@@ -72,6 +72,10 @@ class ComputedFields
         } else {
 
             if ($this->getDebug()) {
+                $collegeName = $observation->getCollege()->getName();
+                echo 'Institution:';
+                pr($collegeName);
+
                 echo 'Equation:';
                 pr($equationWithVariables);
             }
@@ -118,6 +122,19 @@ class ComputedFields
             echo "Result = $result. ";
             //echo "About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
             echo '<hr>';
+
+            if ($this->debugDbColumn) {
+
+                $oids = array();
+                foreach ($this->getStudy()->getSubscriptionsForYear($this->getStudy()->getCurrentYear()) as $sub) {
+                    $collegeName = $sub->getCollege()->getName();
+                    $obId = $sub->getObservation()->getId();
+
+                    echo "<a href='/reports/compute-one/$obId/1/{$benchmark->getDbColumn()}'>$collegeName</a><br>";
+                }
+
+
+            }
         }
 
         // Save the computed value
