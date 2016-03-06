@@ -3759,6 +3759,11 @@ class Observation extends ObservationBase
     /**
      * @ORM\Column(type="float", nullable=true)
      */
+    protected $ft_average_total_compensation_all_ranks;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
     protected $ft_continuing_average_professor_salary;
 
     /**
