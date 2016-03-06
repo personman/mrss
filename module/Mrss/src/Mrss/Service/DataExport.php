@@ -136,18 +136,6 @@ class DataExport
             $benchmarks = $study->getBenchmarksForYear($year);
 
             foreach ($benchmarks as $benchmark) {
-                if ($year == '2013') {
-                    // find duplicate names
-                    $name = $benchmark->getName();
-                    if (empty($names[$name])) {
-                        $names[$name] = array();
-                    }
-
-                    $names[$name][] = $benchmark->getDbColumn();
-                }
-
-
-
                 $sheet->setCellValueByColumnAndRow(
                     $column,
                     $row,
@@ -219,10 +207,11 @@ class DataExport
                 foreach ($benchmarks as $benchmark) {
                     if ($observation->has($benchmark->getDbColumn())) {
                         $value = $observation->get($benchmark->getDbColumn());
-
-                        $dataRow[] = $value;
-                        //$sheet->setCellValueByColumnAndRow($column, $row, $value);
+                    } else {
+                        $value = '';
                     }
+
+                    $dataRow[] = $value;
 
                     $column++;
                 }
