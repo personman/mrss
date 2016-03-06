@@ -64,12 +64,17 @@ class ComputedFields
         $equationWithVariables = $benchmark->getEquation();
         $benchmarkColumn = $benchmark->getDbColumn();
         if ($this->getDebug()) {
-            echo "equation prepared: " . round(microtime(1) - $start, 3) . "s<br>";
+            //echo "equation prepared: " . round(microtime(1) - $start, 3) . "s<br>";
         }
 
         if (empty($equationWithVariables)) {
             $result = null;
         } else {
+
+            if ($this->getDebug()) {
+                echo 'Equation:';
+                pr($equationWithVariables);
+            }
 
             // Populate variables
             $equationWithVariables = $this
@@ -77,6 +82,16 @@ class ComputedFields
                     $equationWithVariables,
                     $observation->getYear()
                 );
+
+            if ($this->getDebug()) {
+                echo 'Expanded equation:';
+                pr($equationWithVariables);
+
+                $equationWithNumbers = $this->getEquationWithNumbers($benchmark, $observation);
+
+                echo 'Equation with numbers:';
+                pr($equationWithNumbers);
+            }
 
             $equation = $this->prepareEquation($equationWithVariables, $observation, $subObservation);
 
@@ -100,7 +115,9 @@ class ComputedFields
         }
 
         if ($this->getDebug()) {
-            echo "Result = $result. About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
+            echo "Result = $result. ";
+            //echo "About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
+            echo '<hr>';
         }
 
         // Save the computed value
@@ -242,9 +259,12 @@ class ComputedFields
 
 
         if ($this->getDebug()) {
-            pr($observation->getId());
-            pr($variables);
+            //pr($observation->getId());
+            //pr($variables);
+
+            echo 'Errors:';
             pr($errors);
+
             pr($vars);
             echo 'Observation id:';
             pr($observation->getId());
