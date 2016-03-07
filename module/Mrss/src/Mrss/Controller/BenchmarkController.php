@@ -130,7 +130,9 @@ class BenchmarkController extends AbstractActionController
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
-                $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
+                $extraMessage = $this->generateObservation();
+
+                $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
                 return $this->redirect()->toRoute(
                     'benchmark',
                     array('study' => $benchmarkGroup->getStudy()->getId())
@@ -176,7 +178,10 @@ class BenchmarkController extends AbstractActionController
             if ($form->isValid()) {
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
-                $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
+
+                $extraMessage = $this->generateObservation();
+
+                $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
 
                 // Check equation
                 /** @var \Mrss\Service\ComputedFields $computedFields */
@@ -433,5 +438,23 @@ class BenchmarkController extends AbstractActionController
         }
 
         return $this->benchmarkModel;
+    }
+
+    public function generateObservation()
+    {
+        $generator = $this->getObservationGenerator();
+        $generator->generate();
+
+        $extraMessage = $generator->summarizeStats();
+
+        return $extraMessage;
+    }
+
+    /**
+     * @return \Mrss\Service\ObservationGenerator
+     */
+    public function getObservationGenerator()
+    {
+        return $this->getServiceLocator()->get('service.generator');
     }
 }

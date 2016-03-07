@@ -16,6 +16,9 @@ class ObservationGenerator implements FactoryInterface
             ->get('currentStudy')->getCurrentStudy();
         $generator->setStudy($currentStudy);
 
+        $connection = $sm->get('em')->getConnection();
+        $generator->setConnection($connection);
+
         return $generator;
     }
 }

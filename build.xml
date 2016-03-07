@@ -246,5 +246,6 @@
         <exec command="CODECLIMATE_REPO_TOKEN=20d04d7f8c05342e458a8e527165c8be679817726e50e38dea49a23a5eeaabb5 ./bin/test-reporter --coverage-report=build/log/clover.xml" passthru="true"/>
     </target>
 
-    <target name="cc" depends="phpunit,code-climate" />
+    <target name="codec" depends="phpunit,code-climate" />
+    <target name="cs" depends="codesniffer" />
 </project>

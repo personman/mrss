@@ -139,9 +139,11 @@ class AdminController extends AbstractActionController
         $generator = $this->getServiceLocator()->get('service.generator');
 
         $generator->generate();
+
+        $stats = $generator->getStats();
+
+        prd($stats);
     }
-
-
 
     protected function getYear()
     {
