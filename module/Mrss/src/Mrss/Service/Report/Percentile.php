@@ -9,7 +9,12 @@ use Mrss\Entity\Benchmark;
 
 class Percentile extends Report
 {
-    protected $stats;
+    protected $stats = array(
+            'benchmarks' => 0,
+            'percentiles' => 0,
+            'percentileRanks' => 0,
+            'noData' => 0,
+        );
 
     public function calculateForYear($year, $system = null)
     {
@@ -35,13 +40,7 @@ class Percentile extends Report
         $this->clearPercentiles($year, $system);
 
         // Take note of some stats
-        $this->stats = array(
-            'benchmarks' => 0,
-            'percentiles' => 0,
-            'percentileRanks' => 0,
-            'noData' => 0,
-            'computeElapsed' => $computeElapsed
-        );
+        $this->stats['computeElapsed'] = $computeElapsed;
 
         // Loop over benchmarks
         $benchmarks = $study->getBenchmarksForYear($year);
