@@ -258,7 +258,7 @@ class ComputedFields
             // If any of the variables are null or '', bail out
             if ($value === null || $value === '') {
                 // As long as there's no division or multiplication involved, we can assume nulls are 0
-                if (!$this->skipEmpty || (strpos($equation, '/') === false && strpos($equation, '*') === false)) {
+                if (!$this->skipEmpty || ((strpos($equation, '/') === false && strpos($equation, '*') === false))) {
                     $value = 0;
                 } else {
                     $errors[] = "Missing variable: $variable. ";
@@ -467,7 +467,11 @@ class ComputedFields
             //$fieldName = "<span class='fieldName'>$fieldName</span>";
             $value = $observation->get($variable);
             if ($value === null) {
-                $value = 'null';
+                if ($this->skipEmpty) {
+                    $value = 'null';
+                } else {
+                    $value = 0;
+                }
             }
 
             // Replace the dbColumn in the equation with a value

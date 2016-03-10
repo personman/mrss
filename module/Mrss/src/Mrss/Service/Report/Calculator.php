@@ -95,10 +95,6 @@ class Calculator
         $counter = $counter + 1;
         $percentile = (($n - $counter) / $n);
 
-        //echo "\n\n(($n - $counter) / $n)\n";
-        //echo $percentile;
-
-
         return  $percentile * (100);
     }
 

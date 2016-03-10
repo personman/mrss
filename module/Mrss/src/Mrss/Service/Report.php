@@ -208,6 +208,7 @@ class Report
         if (false) {
             $subscriptions = $this->getSubscriptions($year, $system);
         } else {
+            // @todo: This new way doesn't handle systems
             $dbColumn = $benchmark->getDbColumn();
             $ob = new \Mrss\Entity\Observation;
             if ($ob->has($dbColumn)) {
@@ -779,7 +780,7 @@ class Report
 
         unset($percentileData['N']);
 
-        $chartXCategories =$this->getPercentileBreakPointLabels();
+        $chartXCategories = $this->getPercentileBreakPointLabels();
         $chartValues = $percentileData;
 
         // Only add Your College to the chart if the reported value is not null
@@ -829,6 +830,9 @@ class Report
             prd($roundTo);
         }
 
+        if (!empty($chartValues) && is_array($chartValues)) {
+
+        }
         $chartData = array();
         foreach ($chartValues as $i => $value) {
             $value = round($value, $roundTo);
