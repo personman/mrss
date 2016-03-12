@@ -1,6 +1,4 @@
-<?php
-
-namespace Mrss\Entity;
+<?php namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mrss\Entity\Exception;
@@ -152,11 +150,6 @@ class Observation extends ObservationBase
     protected $ft_average_instructor_salary;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $ft_male_professor_number_9_month;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_lecturer_salary;
@@ -164,22 +157,32 @@ class Observation extends ObservationBase
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    protected $ft_male_professor_salaries_9_month;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
     protected $ft_average_no_rank_salary;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $ft_male_professor_ntt_9_month;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_all_ranks_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_salary_historical;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_professor_number_9_month;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_male_professor_salaries_9_month;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_professor_ntt_9_month;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -1125,6 +1128,91 @@ class Observation extends ObservationBase
      * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_salaries_12_month;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_male_professor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_male_associate_professor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_male_assistant_professor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_male_instructor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_male_lecturer_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_male_no_rank_salary;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_male_all_ranks_salary_historical;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_female_professor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_female_associate_professor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_female_assistant_professor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_female_instructor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_female_lecturer_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_female_no_rank_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_female_all_ranks_salary_historical;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $percent_professor_tenured;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_all_ranks_salary_w_instructor;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_faculty_all_ranks;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -3627,7 +3715,7 @@ class Observation extends ObservationBase
     protected $ft_average_professor_combined_medical_dental_benefit;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_professor_disability_benefit;
 
@@ -3759,12 +3847,87 @@ class Observation extends ObservationBase
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    protected $ft_average_total_compensation_all_ranks;
+    protected $ft_average_total_benefit_all_ranks;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
     protected $average_total_dental_benefit;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_retirement_benefit;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_retirement_benefit_all_ranks;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_disability_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_tuition_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_unemployment_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_other_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_combined_medical_dental_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_group_life_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_worker_comp_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_medical_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_dental_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_fica_expenditure;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_benefit_all_ranks;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefits_total_covered;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_benefits_percent_salary_all_ranks;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -4451,8 +4614,5 @@ class Observation extends ObservationBase
      */
     protected $pt_average_graduate_teaching_salaries;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    protected $ft_average_all_ranks_retirement_benefit;
+
 }
