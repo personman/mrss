@@ -158,6 +158,10 @@ class DataExport
             }
         }
 
+        // Add the state
+        $sheet->setCellValueByColumnAndRow($column, $row, 'State');
+        $sheet->setCellValueByColumnAndRow($column, $row + 1, 'state');
+
         if (false && $year == '2013') {
             $dupes = array();
             foreach ($names as $name => $dbColumns) {
@@ -216,6 +220,8 @@ class DataExport
                     $column++;
                 }
             }
+
+            $dataRow = $observation->getCollege()->getState();
 
             $data[] = $dataRow;
 

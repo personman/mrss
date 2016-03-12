@@ -343,10 +343,10 @@ class ComputedFieldsTest extends TestCase
 
         // Two maxes
         $equation = "(max(3, 4, 5)) + (max(7, 8, 9))";
-        //$parsedEquation = $this->computedFields->buildEquation($equation);
-        //$result = $parsedEquation->evaluate();
+        $parsedEquation = $this->computedFields->buildEquation($equation);
+        $result = $parsedEquation->evaluate();
 
-        //$this->assertEquals(14, $result);
+        $this->assertEquals(14, $result);
 
     }
 }
