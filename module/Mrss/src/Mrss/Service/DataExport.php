@@ -126,9 +126,10 @@ class DataExport
 
         $sheet->setCellValue('A1', 'IPEDS');
         $sheet->setCellValue('B1', 'Institution');
+        $sheet->setCellValue('C1', 'State');
 
         $row = 1;
-        $column = 2;
+        $column = 3;
         $names = array();
 
         // Add the benchmarks from each study
@@ -157,10 +158,6 @@ class DataExport
                 $column++;
             }
         }
-
-        // Add the state
-        $sheet->setCellValueByColumnAndRow($column, $row, 'State');
-        $sheet->setCellValueByColumnAndRow($column, $row + 1, 'state');
 
         if (false && $year == '2013') {
             $dupes = array();
@@ -197,6 +194,7 @@ class DataExport
             // Add the ipeds and name
             $dataRow[] = $college->getIpeds();
             $dataRow[] = $college->getName();
+            $dataRow[] = $college->getState();
 
             //$sheet->setCellValueByColumnAndRow(0, $row, $college->getIpeds());
             //$sheet->setCellValueByColumnAndRow(1, $row, $college->getName());
@@ -220,8 +218,6 @@ class DataExport
                     $column++;
                 }
             }
-
-            $dataRow = $observation->getCollege()->getState();
 
             $data[] = $dataRow;
 
