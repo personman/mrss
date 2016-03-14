@@ -256,6 +256,7 @@ class BenchmarkController extends AbstractActionController
             ->fromPost('headings');
         $newBenchmarkSequences = array_flip($newBenchmarkSequences);
         $newBenchmarkHeadingSequences = array_flip($newBenchmarkHeadingSequences);
+        $benchmarkIds = array_keys($newBenchmarkSequences);
 
         //pr($newBenchmarkSequences);
         //pr($newBenchmarkHeadingSequences);
@@ -270,7 +271,8 @@ class BenchmarkController extends AbstractActionController
         $organization = $user->getAdminBenchmarkSorting();
 
         if (!empty($benchmarkGroup)) {
-            $benchmarks = $benchmarkGroup->getBenchmarks();
+            //$benchmarks = $benchmarkGroup->getBenchmarks();
+            $benchmarks = $this->getBenchmarkModel()->findByIds($benchmarkIds);
 
             foreach ($benchmarks as $benchmark) {
                 if (isset($newBenchmarkSequences[$benchmark->getId()])) {
@@ -281,6 +283,8 @@ class BenchmarkController extends AbstractActionController
                     } else {
                         $benchmark->setSequence($sequence);
                     }
+
+                    $benchmark->setBenchmarkGroup($benchmarkGroup);
                 }
             }
 
@@ -290,6 +294,7 @@ class BenchmarkController extends AbstractActionController
                     $heading->setSequence(
                         $newBenchmarkHeadingSequences[$heading->getId()]
                     );
+                    $heading->setBenchmarkGroup($benchmarkGroup);
                 }
             }
 

@@ -79,6 +79,11 @@ class Benchmark extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function findByIds($ids)
+    {
+        return $this->getRepository()->findBy(array('id' => $ids));
+    }
+
     /**
      * Find all benchmarks, ordered by sequence
      */
