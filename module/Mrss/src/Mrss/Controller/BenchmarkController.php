@@ -251,9 +251,9 @@ class BenchmarkController extends AbstractActionController
     public function reorderAction()
     {
         $benchmarkGroupId = $this->params()->fromPost('benchmarkGroupId');
-        $newBenchmarkSequences = $this->params()->fromPost('benchmarks');
+        $newBenchmarkSequences = $this->params()->fromPost('benchmarks', array());
         $newBenchmarkHeadingSequences = $this->params()
-            ->fromPost('headings');
+            ->fromPost('headings', array());
         $newBenchmarkSequences = array_flip($newBenchmarkSequences);
         $newBenchmarkHeadingSequences = array_flip($newBenchmarkHeadingSequences);
         $benchmarkIds = array_keys($newBenchmarkSequences);
