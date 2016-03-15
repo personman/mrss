@@ -11,6 +11,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Element;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class BenchmarkController extends AbstractActionController
 {
@@ -184,8 +185,8 @@ class BenchmarkController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
 
                 // Check equation
-                /** @var \Mrss\Service\ComputedFields $computedFields */
-                $computedFields = $this->getServiceLocator()->get('computedFields');
+                $computedFields = $this->getcComputedFieldsService();
+
                 $equationOk = $computedFields
                     ->checkEquation($benchmark->getEquation());
                 if (!$equationOk) {
@@ -211,6 +212,16 @@ class BenchmarkController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Service\ComputedFields
+     */
+    public function getComputedFieldsService()
+    {
+        $computedFields = $this->getServiceLocator()->get('computedFields');
+
+        return $computedFields;
+    }
+
+    /**
      * Show a list of benchmarks that can be added to the equation
      *
      * @return ViewModel
@@ -218,14 +229,31 @@ class BenchmarkController extends AbstractActionController
     public function equationAction()
     {
         // Get the studies
-        $studies = $this->getServiceLocator()->get('model.study')->findAll();
+        //$studies = $this->getServiceLocator()->get('model.study')->findAll();
 
         $viewModel = new ViewModel(
             array(
-                'studies' => $studies
+                'studies' => array($this->currentStudy())
             )
         );
         $viewModel->setTerminal(true);
+
+        return $viewModel;
+    }
+
+    public function checkEquationAction()
+    {
+        $equation = $this->params()->fromPost('equation');
+        $service = $this->getComputedFieldsService();
+        $result = $service->checkEquation($equation);
+        $error = $service->getError();
+
+        $viewModel = new JsonModel(
+            array(
+                'result' => $result,
+                'error' => $error
+            )
+        );
 
         return $viewModel;
     }

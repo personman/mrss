@@ -728,6 +728,15 @@ return array(
                             )
                         )
                     ),
+                    'check-equation' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/check-equation',
+                            'defaults' => array(
+                                'action' => 'checkEquation'
+                            )
+                        )
+                    ),
                     'reorder' => array(
                         'type' => 'segment',
                         'options' => array(

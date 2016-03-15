@@ -5,7 +5,12 @@ $(function() {
     $('#control-group-computed input').change(function() {
         toggleEquationDisplay()
     })
-})
+
+    validateEquation();
+    $('#equation').keyup(function() {
+        validateEquation();
+    });
+});
 
 function toggleEquationDisplay()
 {
@@ -18,4 +23,29 @@ function toggleEquationDisplay()
     } else {
         equationControl.hide()
     }
+}
+
+function validateEquation()
+{
+    var url = '/benchmark/check-equation';
+
+    var equation = $('#equation').val();
+
+    var data = {equation: equation};
+
+    $.post(url, data, function(results) {
+        var message = '';
+        var color;
+
+        if (results.result) {
+            message = 'Equation is valid.'
+            color = 'green';
+        } else {
+            message = 'Invalid equation: ' + results.error;
+            color = 'red';
+        }
+
+        $('#equationValidationMessage').css('color', color).html(message);
+    });
+    //console.log(equation);
 }

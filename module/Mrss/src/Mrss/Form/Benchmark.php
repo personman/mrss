@@ -291,19 +291,16 @@ class Benchmark extends AbstractForm
 
     protected function getEquationHelp()
     {
-        return '<a href="/benchmark/equation"
+        return '<div id="equationValidationMessage"></div><a href="/benchmark/equation"
                     data-toggle="modal" data-target="#myModal">
                         Add a benchmark to the equation
                     </a>.
-                    <div class="modal fade" id="myModal" tabindex="-1"
-                    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Select a Benchmark</h3>
-      </div>
-      <div class="modal-body">
-        <!-- content will be loaded here -->
-      </div>
+                    <div id="myModal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
     </div>';
     }
 }
