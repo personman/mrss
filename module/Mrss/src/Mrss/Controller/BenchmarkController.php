@@ -185,7 +185,7 @@ class BenchmarkController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
 
                 // Check equation
-                $computedFields = $this->getcComputedFieldsService();
+                $computedFields = $this->getComputedFieldsService();
 
                 $equationOk = $computedFields
                     ->checkEquation($benchmark->getEquation());
