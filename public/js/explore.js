@@ -52,6 +52,7 @@ function updateFormForChartType()
     var hideMine = $('#control-group-hideMine')
     var hideNational = $('#control-group-hideNational')
     var previewButton = $('#previewButton')
+    var regression = $('#control-group-regression')
 
     // Hide all by default
     $('#explore .control-group').hide()
@@ -71,7 +72,7 @@ function updateFormForChartType()
         previewButton.show()
     }
 
-    // Buble
+    // Bubble
     if (chartType == 'bubble') {
         title.show()
         subtitle.show()
@@ -82,6 +83,7 @@ function updateFormForChartType()
         peerGroup.show()
         hideMine.show()
         hideNational.show()
+        regression.show()
     }
 
     // Scatter
@@ -94,6 +96,7 @@ function updateFormForChartType()
         peerGroup.show()
         hideMine.show()
         hideNational.show()
+        regression.show()
     }
 
     // Line

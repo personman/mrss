@@ -101,6 +101,25 @@ class Bubble extends AbstractChart
         $config['yAxis']['gridLineWidth'] = 0;
 
         $this->setConfig($config);
+
+        return $this;
+    }
+
+    public function setRegression($regression)
+    {
+        $config = $this->getConfig();
+
+        $regression = !empty($regression);
+
+        $config['series'][0]['regression'] = $regression;
+        $config['series'][0]['regressionSettings'] = array(
+            'type' => 'linear',
+            'color' => 'rgba(0, 0, 0, .9)'
+        );
+
+        $this->setConfig($config);
+
+        return $this;
     }
 
     public function setZLabel($label)

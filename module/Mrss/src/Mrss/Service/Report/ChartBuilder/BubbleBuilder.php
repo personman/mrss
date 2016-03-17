@@ -27,7 +27,7 @@ class BubbleBuilder extends ChartBuilder
             $subtitle = $config['subtitle'];
         }
 
-        //$regression = $config['regression'];
+        $regression = $config['regression'];
         $peerGroup = $config['peerGroup'];
         $collegeId = $this->getCollege()->getId();
 
@@ -220,6 +220,7 @@ class BubbleBuilder extends ChartBuilder
             ->setYFormat($yFormat)
             ->setXLabel($xLabel)
             ->setYLabel($yLabel)
+            ->setRegression($regression)
             ->addMedianLines($xMedian, $yMedian);
 
         if (!empty($zBenchmark)) {
