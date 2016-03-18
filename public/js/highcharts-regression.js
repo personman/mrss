@@ -43,8 +43,9 @@
                 if (regressionType == "linear") {
                     regression = _linear(s.data,s.regressionSettings.decimalPlaces) ;
                     extraSerie.type = "line";
-                }else if (regressionType == "exponential") {
+                    console.log('Data:')
                     console.log(s.data);
+                }else if (regressionType == "exponential") {
                     regression = _exponential(s.data)
                 }
                 else if (regressionType == "polynomial"){
