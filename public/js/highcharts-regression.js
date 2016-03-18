@@ -44,6 +44,7 @@
                     regression = _linear(s.data,s.regressionSettings.decimalPlaces) ;
                     extraSerie.type = "line";
                 }else if (regressionType == "exponential") {
+                    console.log(s.data);
                     regression = _exponential(s.data)
                 }
                 else if (regressionType == "polynomial"){
@@ -65,6 +66,15 @@
                 regression.rValue = Math.sqrt(regression.rSquared).toFixed(s.regressionSettings.decimalPlaces);
                 regression.rSquared = regression.rSquared.toFixed(s.regressionSettings.decimalPlaces);
                 regression.standardError = standardError(s.data, regression.points).toFixed(s.regressionSettings.decimalPlaces);
+
+                if (true) {
+                    console.log('rSquared:')
+                    console.log(regression.rSquared)
+                    console.log('rValue:')
+                    console.log(regression.rValue)
+
+                }
+
                 extraSerie.data = regression.points ;
                 extraSerie.name = extraSerie.name.replace("%r2",regression.rSquared);
                 extraSerie.name = extraSerie.name.replace("%r",regression.rValue);
@@ -504,3 +514,4 @@
 
 
 }(Highcharts));
+
