@@ -174,6 +174,12 @@
         var intercept = (sum[1] / N) - (gradient * sum[0]) / N;
         // var correlation = (N * sum[3] - sum[0] * sum[1]) / Math.sqrt((N * sum[2] - sum[0] * sum[0]) * (N * sum[4] - sum[1] * sum[1]));
 
+
+        console.log('gradient:')
+        console.log(gradient)
+        console.log('intercept:')
+        console.log(intercept)
+
         for (var i = 0, len = data.length; i < len; i++) {
             var coorY = data[i][0] * gradient + intercept;
             if (decimalPlaces)
