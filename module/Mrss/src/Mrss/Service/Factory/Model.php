@@ -71,6 +71,7 @@ class Model implements AbstractFactoryInterface
             'model.percentile.rank' => 'Mrss\Model\PercentileRank',
             'model.outlier' => 'Mrss\Model\Outlier',
             'model.suppression' => 'Mrss\Model\Suppression',
+            'model.datum' => 'Mrss\Model\Datum',
         );
     }
 }

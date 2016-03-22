@@ -131,4 +131,43 @@ class Datum
         $this->stringValue = $stringValue;
         return $this;
     }
+
+    public function setValue($value)
+    {
+        if ($this->usesString()) {
+            $this->setStringValue($value);
+        } else {
+            if ($value) {
+                $value = floatval($value);
+            }
+            $this->setFloatValue($value);
+        }
+    }
+
+    public function getValue()
+    {
+        $value = null;
+
+        if ($this->usesString()) {
+            $value = $this->getStringValue();
+        } else {
+            $value = $this->getFloatValue();
+        }
+
+        return $value;
+    }
+
+    protected function usesString()
+    {
+        $usesString = false;
+
+        if ($benchmark = $this->getBenchmark()) {
+            $stringInputTypes = array('radio', 'text', 'textarea');
+            if (in_array($benchmark->getInputType(), $stringInputTypes)) {
+                $usesString = true;
+            }
+        }
+
+        return $usesString;
+    }
 }
