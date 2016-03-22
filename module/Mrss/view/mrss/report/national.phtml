@@ -71,6 +71,10 @@ $this->headScript()->appendFile(
 
         <?php if (empty($system)) {
             $heading = 'National Percentiles';
+
+            if ($this->currentStudy()->getId() == 4) {
+                $heading = 'National Median Percentiles';
+            }
         } else {
             $heading = 'System Percentiles';
         }?>
