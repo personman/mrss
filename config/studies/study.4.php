@@ -10,6 +10,7 @@ return array(
     'approver_email' => 'dfergu15@jccc.edu',
     'favicon' => '/images/aaup-favicon.ico',
     'breakpoints' => '20,40,60,80',
+    'show_peer_data_you_did_not_submit' => true,
     'layout' => 'nccbp.phtml',
     'navigation' => 'fcs_navigation',
     'contact_instructions' => null,

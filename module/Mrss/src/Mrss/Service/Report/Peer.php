@@ -19,6 +19,8 @@ class Peer extends Report
 {
     protected $peerBenchmarkModel;
 
+    protected $showPeerDataYouDidNotSubmit = false;
+
     /**
      * @var \Mrss\Entity\College
      */
@@ -88,7 +90,7 @@ class Peer extends Report
             }
 
             // Also skip benchmarks where the current college didn't report
-            if (!isset($data[$currentCollege->getId()])) {
+            if (!isset($data[$currentCollege->getId()]) && !$this->getShowPeerDataYouDidNotSubmit()) {
                 $report['youHaveNoData'][] = $benchmark->getPeerReportLabel();
                 continue;
             }
@@ -467,5 +469,17 @@ class Peer extends Report
     public function getPeerBenchmarkModel()
     {
         return $this->peerBenchmarkModel;
+    }
+
+    public function setShowPeerDataYouDidNotSubmit($show)
+    {
+        $this->showPeerDataYouDidNotSubmit = $show;
+
+        return $this;
+    }
+
+    public function getShowPeerDataYouDidNotSubmit()
+    {
+        return $this->showPeerDataYouDidNotSubmit;
     }
 }

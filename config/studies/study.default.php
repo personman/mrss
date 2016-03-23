@@ -8,6 +8,7 @@ return array(
     'approver_email' => 'dfergu15@jccc.edu',
     'data_entry_templates' => array(),
     'breakpoints' => '10,25,50,75,90',
+    'show_peer_data_you_did_not_submit' => false,
     'layout' => 'layout.phtml',
     'navigation' => 'navigation',
     'favicon' => '/favicon.ico',

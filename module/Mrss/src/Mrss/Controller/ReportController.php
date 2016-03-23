@@ -786,6 +786,7 @@ class ReportController extends AbstractActionController
         $year = $this->getSessionContainer()->year;
 
         $peerGroupName = $this->getSessionContainer()->peerGroupName;
+        $peerService->setShowPeerDataYouDidNotSubmit($this->getStudyConfig()->show_peer_data_you_did_not_submit);
 
         $report = $peerService->getPeerReport($benchmarks, $peers, $this->currentCollege(), $year, $peerGroupName);
 
@@ -1608,5 +1609,12 @@ class ReportController extends AbstractActionController
         }
 
         return $this->benchmarkModel;
+    }
+
+    protected function getStudyConfig()
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
     }
 }
