@@ -134,7 +134,7 @@ class Subscription
     /**
      * @ORM\Column(type="boolean", options={"default": false})
      */
-    protected $reportAccess;
+    protected $reportAccess = false;
 
 
 
