@@ -132,7 +132,7 @@ class Subscription
     protected $suppressions;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default": false})
      */
     protected $reportAccess;
 
