@@ -877,9 +877,11 @@ class Excel
 
         $i = 0;
         foreach ($observation->getSubObservations() as $subOb) {
-            $sheetIndex = $subObSheets[$i];
-            $sheet = $spreadsheet->setActiveSheetIndex($sheetIndex);
-            $this->populateMrssSubObservation($sheet, $subOb);
+            if (!empty($subObSheets[$i])) {
+                $sheetIndex = $subObSheets[$i];
+                $sheet = $spreadsheet->setActiveSheetIndex($sheetIndex);
+                $this->populateMrssSubObservation($sheet, $subOb);
+            }
 
             $i++;
         }
