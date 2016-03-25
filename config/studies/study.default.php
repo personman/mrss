@@ -9,6 +9,7 @@ return array(
     'data_entry_templates' => array(),
     'breakpoints' => '10,25,50,75,90',
     'show_peer_data_you_did_not_submit' => false,
+    'college_report_access_checkbox' => false,
     'layout' => 'layout.phtml',
     'navigation' => 'navigation',
     'favicon' => '/favicon.ico',

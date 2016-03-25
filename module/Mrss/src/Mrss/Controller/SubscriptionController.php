@@ -1743,4 +1743,25 @@ class SubscriptionController extends AbstractActionController
         $objWriter->save('php://output');
         die;
     }
+
+    public function reportAccessAction()
+    {
+        $subscriptionId = $this->params()->fromPost('subscriptionId');
+        $enabled = $this->params()->fromPost('checked');
+
+        if ($subscriptionId && $subscription = $this->getSubscriptionModel()->find($subscriptionId)) {
+            $enabled = !empty($enabled);
+            $subscription->setReportAccess($enabled);
+
+            $this->getSubscriptionModel()->save($subscription);
+            $this->getSubscriptionModel()->getEntityManager()->flush();
+
+            $responseText = 'ok';
+        } else {
+            $responseText = 'Membership not found.';
+        }
+
+        $response = $this->getResponse()->setContent($responseText);
+        return $response;
+    }
 }

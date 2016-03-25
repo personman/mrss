@@ -58,10 +58,19 @@ class CollegeController extends AbstractActionController
         }
 
         return array(
+            'studyConfig' => $this->getStudyConfig(),
             'college' => $college,
             //'study' => $Studies->find(1)
         );
     }
+
+    protected function getStudyConfig()
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
+    }
+
 
     /**
      * This is very slow. Need to store the lat/lng of each college instead of

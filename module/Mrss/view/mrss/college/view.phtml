@@ -1,5 +1,39 @@
 <? /** @var \Mrss\Entity\College $college */ ?>
 
+<script>
+    $(function() {
+        $('.reportAccess').click(function() {
+            var checked = $(this)[0].checked;
+
+            if (checked) {
+                checked = '1';
+            } else {
+                checked = '0';
+            }
+
+            var id = $(this).attr('id').split('_')
+            var subscriptionId = id.pop()
+
+            var url = '/memberships/report-access'
+            var data = {
+                subscriptionId: subscriptionId,
+                checked: checked
+            }
+
+
+            $.post(url, data, function(data) {
+                 if (data != 'ok') {
+                     alert('Error saving report access setting.')
+                 }
+             })
+
+
+        })
+    })
+
+
+</script>
+
 <div class="btn-group heading-btns">
     <a class="btn btn-default" href="<?= $this->url('colleges/edit', array('id' => $college->getId())) ?>">
         <i class="glyphicon glyphicon-pencil"></i>
@@ -57,6 +91,9 @@
                         <th>Study</th>
                         <th>Completion</th>
                         <th>Suppressions</th>
+                        <?php if (!empty($studyConfig->college_report_access_checkbox)): ?>
+                            <th>Report Access</th>
+                        <?php endif ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,6 +126,14 @@
                                 Manage Suppressions
                             </a>
                         </td>
+
+                        <?php if (!empty($studyConfig->college_report_access_checkbox)): ?>
+                            <?php $id = $subscription->getId(); ?>
+
+                            <td style="text-align:center">
+                                <input type="checkbox" name="report_access[<?= $id ?>]" title="Saves automatically." id="reportAccess_<?= $id ?>" class="reportAccess" <?php if ($subscription->getReportAccess()) echo 'checked="checked"' ?> />
+                            </td>
+                        <?php endif ?>
                     </tr>
                     <?php endforeach ?>
                 </tbody>

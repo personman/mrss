@@ -131,6 +131,12 @@ class Subscription
      */
     protected $suppressions;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $reportAccess;
+
+
 
     public function getId()
     {
@@ -319,6 +325,25 @@ class Subscription
     {
         return $this->completion;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReportAccess()
+    {
+        return $this->reportAccess;
+    }
+
+    /**
+     * @param mixed $reportAccess
+     * @return Subscription
+     */
+    public function setReportAccess($reportAccess)
+    {
+        $this->reportAccess = $reportAccess;
+        return $this;
+    }
+
 
     /**
      * @return Suppression[]

@@ -1715,6 +1715,16 @@ return array(
                                 'action' => 'sendinvoice'
                             )
                         )
+                    ),
+                    // Ajax handler to turn report access on/off (AAUP)
+                    'report-access' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/report-access',
+                            'defaults' => array(
+                                'action' => 'reportAccess'
+                            )
+                        )
                     )
                 )
             ),

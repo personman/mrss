@@ -11,6 +11,7 @@ return array(
     'favicon' => '/images/aaup-favicon.ico',
     'breakpoints' => '20,40,60,80',
     'show_peer_data_you_did_not_submit' => true,
+    'college_report_access_checkbox' => true,
     'layout' => 'nccbp.phtml',
     'navigation' => 'fcs_navigation',
     'contact_instructions' => null,
