@@ -303,7 +303,7 @@ return array(
                 ),
                 array(
                     'controller' => 'subscription',
-                    //'action' => array('delete', 'sendinvoice'),
+                    'action' => array('delete', 'sendinvoice', 'reportAccess'),
                     'roles' => array('admin')
                 ),
                 array(
