@@ -830,9 +830,10 @@ class Report
             prd($roundTo);
         }
 
-        if (!empty($chartValues) && is_array($chartValues)) {
-
+        if (empty($chartValues) || !is_array($chartValues)) {
+            return null;
         }
+
         $chartData = array();
         foreach ($chartValues as $i => $value) {
             $value = round($value, $roundTo);
