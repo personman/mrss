@@ -407,7 +407,7 @@ return array(
                     ),
                     'order' => array(
                         'label' => 'Order',
-                        'uri' => '/order-results'
+                        'uri' => '/order'
                     ),
                 )
             ),
@@ -542,7 +542,7 @@ return array(
                     ),
                     'order' => array(
                         'label' => 'Order',
-                        'uri' => '/order-results'
+                        'uri' => '/order'
                     ),
                     'consultation' => array(
                         'label' => 'Free Consultation',
