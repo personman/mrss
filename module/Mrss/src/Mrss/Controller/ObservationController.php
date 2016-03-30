@@ -499,6 +499,11 @@ class ObservationController extends AbstractActionController
             1 // NCCBP
         );
 
+        $conversionFactor = 1;
+        if ($observation->has('institution_conversion_factor')) {
+            $conversionFactor = $observation->get('institution_conversion_factor');
+        }
+
         $view = new ViewModel(
             array(
                 'form' => $form,
@@ -509,7 +514,8 @@ class ObservationController extends AbstractActionController
                 'variable' => $this->getVariableSubstitutionService(),
                 'dataDefinitionForm' => $this->getDataDefinitionForm(),
                 'dataEntryLayout' => $this->getDataEntryLayout($benchmarkGroup),
-                'staffView' => $staffView
+                'staffView' => $staffView,
+                'conversionFactor' => $conversionFactor
             )
         );
 
