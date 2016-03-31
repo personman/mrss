@@ -550,6 +550,7 @@ return array(
                     ),
                 )
             ),
+            //'reports' => getReportMenu(),
             'members-resources' => array(
                 'label' => 'Resources',
                 'uri' => '#',
