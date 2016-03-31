@@ -550,7 +550,7 @@ return array(
                     ),
                 )
             ),
-            //'reports' => getReportMenu(),
+            'reports' => getAAUPReportMenu(),
             'members-resources' => array(
                 'label' => 'Resources',
                 'uri' => '#',
@@ -666,6 +666,44 @@ function getReportMenu()
             )
         )
     );
+}
+
+function getAAUPReportMenu()
+{
+    $menu = getReportMenu();
+
+    // Change the label
+    $menu['label'] = 'Results';
+
+    // Remove reports AAUP doesn't use
+    unset($menu['pages']['executive']);
+    unset($menu['pages']['best-performers']);
+    unset($menu['pages']['strengths']);
+    unset($menu['pages']['summary']);
+
+    // Add some stuff
+    $newReportsPages = array();
+    $newReportsPages['results-instructions'] = array(
+        'label' => 'Results Instructions',
+        'uri' => '/results-instructions'
+    );
+
+    $newReportsPages['sample-results'] = array(
+        'label' => 'Sample Results',
+        'uri' => '/sample-results'
+    );
+
+    $newReportsPages = array_merge($newReportsPages, $menu['pages']);
+
+    $newReportsPages['free-consultation'] = array(
+        'label' => 'Free Consultation',
+        'uri' => '/consultation'
+    );
+
+    $menu['pages'] = $newReportsPages;
+
+
+    return $menu;
 }
 
 function getAccountMenu()

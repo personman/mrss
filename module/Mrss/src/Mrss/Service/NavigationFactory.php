@@ -201,6 +201,18 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['admin']['pages']['issues/staff']);
         }
 
+        // Since it's the first year of aaup, don't show the report menu until open and paid
+        if ($currentStudy->getId() == 4) {
+            $sub = $this->getSubscription();
+            if ($currentStudy->getReportsOpen() && $sub && $sub->getReportAccess()) {
+                // Allow the reports menu to show (hide the public results menu)
+                unset($pages['members-results']);
+            } else {
+                // Hide it.
+                unset($pages['reports']);
+            }
+        }
+
         // MRSS
         if ($currentStudy->getId() == 2) {
             // Don't show best performers yet
@@ -363,17 +375,27 @@ class NavigationFactory extends DefaultNavigationFactory
         return $this->subscriptionModel;
     }
 
-    protected function hasSubscription(User $user)
+    protected function getSubscription()
     {
         $subModel = $this->getSubscriptionModel();
         $study = $this->getCurrentStudy();
         $year = $study->getCurrentYear();
 
+        $subscription = null;
+
         if (!$collegeId = $this->getSystemCollegeId()) {
-            $collegeId = $user->getCollege()->getId();
+            if ($user = $this->getUser()) {
+                $collegeId = $user->getCollege()->getId();
+                $subscription = $subModel->findOne($year, $collegeId, $study->getId());
+            }
         }
 
-        $subscription = $subModel->findOne($year, $collegeId, $study->getId());
+        return $subscription;
+    }
+
+    protected function hasSubscription()
+    {
+        $subscription = $this->getSubscription();
 
         return (!empty($subscription));
     }
@@ -395,5 +417,28 @@ class NavigationFactory extends DefaultNavigationFactory
         $authorizeService = $this->serviceLocator->get('BjyAuthorizeServiceAuthorize');
 
         return $authorizeService;
+    }
+
+    /**
+     * @return
+     */
+    protected function getAuthService()
+    {
+        return $this->serviceLocator->get('zfcuser_auth_service');
+    }
+
+    protected function getUser()
+    {
+        $user = null;
+        $auth = $this->getAuthService();
+
+        //pr(get_class($auth));
+        //pr($auth->hasIdentity());
+
+        if ($auth->hasIdentity()) {
+            $user = $auth->getIdentity();
+        }
+
+        return $user;
     }
 }
