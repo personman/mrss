@@ -131,7 +131,9 @@ $this->headScript()->appendFile(
                             <td>-</td>
                             <td>-</td>
                         <?php endif ?>
-                        <td><?= $benchmark['N'] ?></td>
+                        <td>
+                            <?= $benchmark['N'] ?>
+                        </td>
                         <?php foreach ($benchmark['percentiles'] as $percentile): ?>
                         <td>
                             <?php if (!is_null($percentile)): ?>
@@ -144,7 +146,11 @@ $this->headScript()->appendFile(
                     <tr class="nationalReportChart <?= $rowClass ?>" id="benchmark_<?= $benchmark['dbColumn'] ?>">
                         <td></td>
                         <td colspan="9">
-                            <?= $this->chart($benchmark['chart']) ?>
+                            <?php pr($benchmark['chart']) ?>
+
+                            <?php if (!empty($benchmark['chart'])): ?>
+                                <?= $this->chart($benchmark['chart']) ?>
+                            <?php endif ?>
 
                             <?php if (!empty($benchmark['description'])): ?>
                             <p class="nationalDataDefinition">

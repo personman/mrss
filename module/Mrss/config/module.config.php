@@ -1925,6 +1925,15 @@ return array(
                             )
                         )
                     ),
+                    'repair-report-sequences' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/repair-report-sequences',
+                            'defaults' => array(
+                                'action' => 'repairReportSequences',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

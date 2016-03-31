@@ -659,7 +659,10 @@ class Report
 
         // Pad the array if it's empty
         if (empty($percentileData)) {
-            $percentileData = array(null, null, null, null, null);
+            $percentileData = array();
+            foreach ($this->getPercentileBreakpointsForStudy() as $breakpoint) {
+                $percentileData[] = null;
+            }
         }
 
         if (!empty($percentileData['N'])) {

@@ -58,6 +58,16 @@ class Benchmark extends AbstractModel
         return $benchmark;
     }
 
+    public function findByGroupForReport($benchmarkGroup)
+    {
+        $benchmarks = $this->getRepository()->findBy(
+            array('benchmarkGroup' => $benchmarkGroup),
+            array('reportSequence' => 'ASC')
+        );
+
+        return $benchmarks;
+    }
+
     public function findOneByDbColumnAndStudy($dbColumn, $studyId)
     {
         /** @var \Mrss\Entity\Benchmark[] $benchmarks */

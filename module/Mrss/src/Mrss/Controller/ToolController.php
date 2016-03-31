@@ -729,6 +729,29 @@ class ToolController extends AbstractActionController
         return $this->redirect()->toRoute('tools');
     }
 
+    public function repairReportSequencesAction()
+    {
+        $benchmarkModel = $this->getBenchmarkModel();
+
+        foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
+            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+
+            $benchmarks = $benchmarkModel->findByGroupForReport($benchmarkGroup);
+
+            $i = 1;
+            foreach ($benchmarks as $benchmark) {
+                $benchmark->setReportSequence($i);
+                $this->getBenchmarkModel()->save($benchmark);
+                $i++;
+            }
+        }
+
+        $this->getBenchmarkModel()->getEntityManager()->flush();
+
+        $this->flashMessenger()->addSuccessMessage('Report sequences repaired.');
+        return $this->redirect()->toRoute('tools');
+    }
+
     protected function getObservationPropertyCode(Benchmark $benchmark)
     {
         $oldDbColumn = $benchmark->getDbColumn();
