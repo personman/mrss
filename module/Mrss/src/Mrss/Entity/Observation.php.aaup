@@ -147,6 +147,11 @@ class Observation extends ObservationBase
     /**
      * @ORM\Column(type="float", nullable=true)
      */
+    protected $ft_average_male_assistant_professor_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
     protected $ft_average_instructor_salary;
 
     /**
@@ -162,7 +167,7 @@ class Observation extends ObservationBase
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    protected $ft_average_all_ranks_salary;
+    protected $ft_average_all_ranks_salary_pr_ao_ai;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -243,6 +248,11 @@ class Observation extends ObservationBase
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $ft_male_associate_professor_t_9_month;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_professor_number;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -525,92 +535,92 @@ class Observation extends ObservationBase
     protected $ft_total_faculty_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_associate_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_associate_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_associate_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_assistant_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_assistant_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_assistant_professor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_instructor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_instructor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_instructor_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_lecturer_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_lecturer_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_lecturer_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_no_rank_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_no_rank_salary_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_no_rank_salary_9_month;
 
@@ -985,92 +995,92 @@ class Observation extends ObservationBase
     protected $ft_total_faculty_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_associate_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_associate_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_associate_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_assistant_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_assistant_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_assistant_professor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_instructor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_instructor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_instructor_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_lecturer_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_lecturer_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_lecturer_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_no_rank_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_female_no_rank_salary_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_combined_no_rank_salary_12_month;
 
@@ -1142,11 +1152,6 @@ class Observation extends ObservationBase
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    protected $ft_average_male_assistant_professor_salary;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
     protected $ft_average_male_instructor_salary;
 
     /**
@@ -1160,7 +1165,7 @@ class Observation extends ObservationBase
     protected $ft_average_male_no_rank_salary;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_male_all_ranks_salary_historical;
 
@@ -1205,7 +1210,7 @@ class Observation extends ObservationBase
     protected $percent_professor_tenured;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_all_ranks_salary_w_instructor;
 
@@ -1213,6 +1218,161 @@ class Observation extends ObservationBase
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $ft_total_faculty_all_ranks;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_salary_associate_professor;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_salary_assistant_professor;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_salary_instructor;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_salary_lecturer;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_salary_no_rank;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_cost_instructor;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $percent_assistant_professor_tenured;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $percent_associate_professor_tenured;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $percent_instructor_tenured;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_female_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_female_associate_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_associate_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_female_assistant_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_assistant_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_female_instructor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_instructor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_female_lecturer_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_lecturer_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_female_no_rank_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_male_no_rank_number;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_salary_professor;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_associate_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_assistant_professor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_instructor_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_lecturer_number;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_no_rank_number;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_male_all_ranks_salary_historical;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_all_ranks_number;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_percent_no_rank_tenured;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -1223,6 +1383,11 @@ class Observation extends ObservationBase
      * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_average_professor_tuition_benefit;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_cost_assistant_professor;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -2485,7 +2650,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_professor_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_professor_9_month;
 
@@ -2495,7 +2660,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_associate_professor_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_associate_professor_9_month;
 
@@ -2505,7 +2670,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_assistant_professor_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_assistant_professor_9_month;
 
@@ -2515,7 +2680,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_instructor_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_instructor_9_month;
 
@@ -2525,7 +2690,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_lecturer_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_lecturer_9_month;
 
@@ -2535,7 +2700,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_no_rank_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_no_rank_9_month;
 
@@ -2545,7 +2710,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expentirue_no_diff_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_no_diff_9_month;
 
@@ -2555,7 +2720,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_total_expenditure_9_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_total_covered_9_month;
 
@@ -3445,7 +3610,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_professor_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_professor_12_month;
 
@@ -3455,7 +3620,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_associate_professor_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_associate_professor_12_month;
 
@@ -3465,7 +3630,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_assistant_professor_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_assistant_professor_12_month;
 
@@ -3475,7 +3640,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_instructor_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_instructor_12_month;
 
@@ -3485,7 +3650,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_lecturer_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_lecturer_12_month;
 
@@ -3495,7 +3660,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expenditure_no_rank_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_no_rank_12_month;
 
@@ -3505,7 +3670,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_expentirue_no_diff_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_covered_no_diff_12_month;
 
@@ -3515,7 +3680,7 @@ class Observation extends ObservationBase
     protected $ft_worker_comp_total_expenditure_12_month;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_worker_comp_total_covered_12_month;
 
@@ -3740,7 +3905,7 @@ class Observation extends ObservationBase
     protected $ft_total_benefits_expenditure_instructor_converted;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $ft_total_benefits_expenditure_lecturer_converted;
 
@@ -3925,9 +4090,224 @@ class Observation extends ObservationBase
     protected $ft_total_benefits_total_covered;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $ft_benefits_percent_salary_all_ranks;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_cost_associate_professor;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_cost_lecturer;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_total_cost_no_rank;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_professor_compensation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_associate_professor_compensation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_assistant_professor_compensation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_instructor_compensation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_lecturer_compensation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_rank_compensation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_all_ranks_compensation;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefits_no_diff_covered;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_benefit_proportion_no_diff;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefits_covered_no_diff_9_and_12;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_total_benefit_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefit_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_no_diff_benefits_as_percent_salary;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_diff_professor_compensation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_professor_compensation_final;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_associate_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefit_associate_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_total_benefit_associate_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_diff_associate_professor_compensation;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_assistant_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefit_assistant_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_total_benefit_assistant_professor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_diff_assistant_professor_compensation;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_instructor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefit_instructor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_total_benefit_instructor_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_diff_instructor_compensation;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_lecturer_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefit_lecturer_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_total_benefit_lecturer_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_diff_lecturer_compensation;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_no_rank_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefit_no_rank_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_total_benefit_no_rank_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_diff_no_rank_compensation;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_all_ranks_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_total_benefit_all_ranks_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $ft_average_total_benefit_all_ranks_no_diff_estimate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    protected $ft_average_no_diff_all_ranks_compensation;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -4545,7 +4925,7 @@ class Observation extends ObservationBase
     protected $pt_average_female_faculty;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $pt_average_female_salaries;
 
@@ -4555,7 +4935,7 @@ class Observation extends ObservationBase
     protected $pt_average_total_faculty;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $pt_average_total_salaries;
 
@@ -4565,7 +4945,7 @@ class Observation extends ObservationBase
     protected $pt_average_male_graduate_teaching;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $pt_average_male_graduate_teaching_salaries;
 
@@ -4575,7 +4955,7 @@ class Observation extends ObservationBase
     protected $pt_average_female_graduate_teaching;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $pt_average_female_graduate_teaching_salaries;
 
@@ -4585,7 +4965,7 @@ class Observation extends ObservationBase
     protected $pt_average_total_graduate_teaching;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $pt_average_total_graduate_teaching_salaries;
 
