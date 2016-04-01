@@ -193,6 +193,7 @@ return array(
                 ),
                 array(
                     'controller' => 'issues',
+                    'action' => array('index', 'note', 'update'),
                     'roles' => array('data')
                 ),
 

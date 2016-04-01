@@ -1934,6 +1934,15 @@ return array(
                             )
                         )
                     ),
+                    'equation-graph' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/equation-graph',
+                            'defaults' => array(
+                                'action' => 'equationGraph',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

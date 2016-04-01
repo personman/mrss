@@ -765,6 +765,38 @@ class ToolController extends AbstractActionController
         return $property;
     }
 
+    public function equationGraphAction()
+    {
+
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+
+        /** @var \Mrss\Service\ComputedFields $computedFields */
+        $computedFields = $this->getServiceLocator()->get('computedFields');
+
+
+        $dotMarkup = '';
+        foreach ($study->getAllBenchmarks() as $benchmark) {
+            if ($benchmark->getComputed() && $equation = $benchmark->getEquation()) {
+
+                $variables = $computedFields->getVariables($equation);
+
+                $dbColumn = $benchmark->getDbColumn();
+                foreach ($variables as $variable) {
+                    $newLine = "$variable -> $dbColumn<br>\n";
+
+                    $dotMarkup .= $newLine;
+                }
+            }
+        }
+
+        echo $dotMarkup;
+
+        die(' test');
+    }
+
     protected function getSeparationPrefix()
     {
         return 'max_res_';
