@@ -768,6 +768,13 @@ class ToolController extends AbstractActionController
     public function equationGraphAction()
     {
 
+        $benchmarkGroupId = $this->params()->fromRoute('benchmarkGroup');
+        $benchmarkGroupName = null;
+        if ($benchmarkGroupId) {
+            $groups = array($benchmarkGroupId);
+            $benchmarkGroupName = $this->getBenchmarkGroupModel()->find($benchmarkGroupId)->getName();
+        }
+
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
@@ -777,8 +784,30 @@ class ToolController extends AbstractActionController
         $computedFields = $this->getServiceLocator()->get('computedFields');
 
 
+
+        $allBenchmarks = $study->getAllBenchmarks();
+
+
+        $exclude = array('institution_conversion_factor');
+
         $dotMarkup = '';
-        foreach ($study->getAllBenchmarks() as $benchmark) {
+        $benchmarksForVis = array();
+        $edgesForVis = array();
+        $benchmarkIdsWithEdges = array();
+        foreach ($allBenchmarks as $benchmark) {
+            //if (!$benchmark->getComputed()) continue;
+
+
+
+
+
+            $benchmarksForVis[] = array(
+                'id' => $benchmark->getId(),
+                'label' => $benchmark->getDbColumn(),
+                //'label' => $benchmark->getId(),
+                'group' => $benchmark->getBenchmarkGroup()->getId()
+            );
+
             if ($benchmark->getComputed() && $equation = $benchmark->getEquation()) {
 
                 $variables = $computedFields->getVariables($equation);
@@ -788,13 +817,62 @@ class ToolController extends AbstractActionController
                     $newLine = "$variable -> $dbColumn<br>\n";
 
                     $dotMarkup .= $newLine;
+
+
+
+
+                    //$groups = array(5, 6, 7);
+                    $groups = array(2);
+                    //$groups = array(4);
+
+                    if ($benchmarkGroupId) {
+                        $groups = array($benchmarkGroupId);
+                    }
+
+                    if (!in_array($benchmark->getBenchmarkGroup()->getId(), $groups)) continue;
+
+
+                    $fromCol = $benchmark->getDbColumn();
+                    $toCol = $variable;
+
+                    $from = $benchmark->getId();
+                    $to = $allBenchmarks[$variable]->getId();
+
+                    if (in_array($fromCol, $exclude) || in_array($toCol, $exclude)) {
+                        continue;
+                    }
+
+                    $benchmarkIdsWithEdges[$from] = true;
+                    $benchmarkIdsWithEdges[$to] = true;
+
+                    $edgesForVis[] = array(
+                        'from' => $from,
+                        'to' => $to,
+                        'arrows' => 'from'
+                    );
                 }
             }
         }
 
-        echo $dotMarkup;
+        //pr(count($benchmarksForVis));
+        $withEdges = array();
+        foreach ($benchmarksForVis as $b) {
+            if (!empty($benchmarkIdsWithEdges[$b['id']])) {
+                $withEdges[] = $b;
+            }
+        }
 
-        die(' test');
+        $benchmarksForVis = $withEdges;
+
+        //pr(count($benchmarksForVis));
+        //echo $dotMarkup;
+
+        return array(
+            'nodes' => $benchmarksForVis,
+            'edges' => $edgesForVis,
+            'benchmarkGroups' => $study->getBenchmarkGroups(),
+            'benchmarkGroupName' => $benchmarkGroupName
+        );
     }
 
     protected function getSeparationPrefix()
@@ -838,5 +916,13 @@ class ToolController extends AbstractActionController
         }
 
         return $this->benchmarkModel;
+    }
+
+    /**
+     * @return \Mrss\Model\BenchmarkGroup
+     */
+    protected function getBenchmarkGroupModel()
+    {
+        return $this->getServiceLocator()->get('model.benchmark.group');
     }
 }

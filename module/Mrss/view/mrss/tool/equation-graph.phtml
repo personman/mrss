@@ -1,0 +1,75 @@
+<?php
+$this->headLink()->appendStylesheet('/vendor/visjs/vis.min.css');
+
+$this->headScript()->appendFile(
+    '/vendor/visjs/vis.min.js?v=1',
+    'text/javascript'
+);
+?>
+
+<style>
+    #equation-network {
+        width: 100%;
+        height: 1200px;
+    }
+</style>
+
+
+<h1>
+    Equation Graph
+    <?php if (!empty($benchmarkGroupName)) echo ' for ' . $benchmarkGroupName ?>
+</h1>
+
+<div id="equation-network"></div>
+
+<script>
+    var nodes = new vis.DataSet(<?= json_encode($nodes) ?>);
+
+    // create an array with edges
+    var edges = new vis.DataSet(<?= json_encode($edges) ?>);
+
+    // create a network
+    var container = document.getElementById('equation-network');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        layout: {
+            //improvedLayout: false
+            //hierarchical: true
+        },
+        physics: {
+            //enabled: false
+        },
+        nodes: {
+            shape: 'dot',
+            size: 10,
+            scaling: {
+                label: {
+                    enabled: true
+                }
+
+            },
+            font: {
+                size: 8
+            }
+        },
+        interaction: {
+            navigationButtons: true
+        },
+        edges: {
+            arrowStrikethrough: false,
+            arrows: {
+                from: {
+                    scaleFactor: 0.5
+                }
+            }
+        }
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+</script>

@@ -1937,9 +1937,10 @@ return array(
                     'equation-graph' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/equation-graph',
+                            'route' => '/equation-graph[/:benchmarkGroup]',
                             'defaults' => array(
                                 'action' => 'equationGraph',
+                                'benchmarkGroup' => null
                             )
                         )
                     ),

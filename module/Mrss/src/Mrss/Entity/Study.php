@@ -558,7 +558,7 @@ class Study
         foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
             $benchmarks = $benchmarkGroup->getBenchmarks();
             foreach ($benchmarks as $benchmark) {
-                $allBenchmarks[] = $benchmark;
+                $allBenchmarks[$benchmark->getDbColumn()] = $benchmark;
             }
         }
 
