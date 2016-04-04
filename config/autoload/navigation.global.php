@@ -700,8 +700,21 @@ function getAAUPReportMenu()
         'uri' => '/consultation'
     );
 
-    $menu['pages'] = $newReportsPages;
 
+
+    // Reorder
+    $reorderedPages = array();
+
+    $reorderedPages['results-instructions'] = $newReportsPages['results-instructions'];
+    $reorderedPages['sample-results'] = $newReportsPages['sample-results'];
+    $reorderedPages['peer'] = $newReportsPages['peer'];
+    $reorderedPages['custom'] = $newReportsPages['custom'];
+    $reorderedPages['national'] = $newReportsPages['national'];
+    $reorderedPages['free-consultation'] = $newReportsPages['free-consultation'];
+
+    $newReportsPages = $reorderedPages;
+
+    $menu['pages'] = $newReportsPages;
 
     return $menu;
 }
