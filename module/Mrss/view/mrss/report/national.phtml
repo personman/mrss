@@ -146,7 +146,6 @@ $this->headScript()->appendFile(
                     <tr class="nationalReportChart <?= $rowClass ?>" id="benchmark_<?= $benchmark['dbColumn'] ?>">
                         <td></td>
                         <td colspan="9">
-                            <?php pr($benchmark['chart']) ?>
 
                             <?php if (!empty($benchmark['chart'])): ?>
                                 <?= $this->chart($benchmark['chart']) ?>
