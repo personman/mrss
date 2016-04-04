@@ -20,7 +20,11 @@ $this->headScript()->appendFile(
     <?php if (!empty($benchmarkGroupName)) echo ' for ' . $benchmarkGroupName ?>
 </h1>
 
+<?php if (count($edges)): ?>
+
+
 <div id="equation-network"></div>
+
 
 <script>
     var nodes = new vis.DataSet(<?= json_encode($nodes) ?>);
@@ -43,6 +47,9 @@ $this->headScript()->appendFile(
         },
         physics: {
             //enabled: false
+            stabilization: {
+                iterations: 300
+            }
         },
         nodes: {
             shape: 'dot',
@@ -73,3 +80,8 @@ $this->headScript()->appendFile(
     // initialize your network!
     var network = new vis.Network(container, data, options);
 </script>
+
+
+<?php else: ?>
+    <p>No related equations for this form.</p>
+<?php endif ?>
