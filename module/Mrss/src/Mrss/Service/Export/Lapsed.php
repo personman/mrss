@@ -14,12 +14,63 @@ class Lapsed extends Export
 
     protected $subscriptionModel;
 
+    // Keyed by id
+    protected $allColleges = array();
+
     public function export()
     {
+        $filename = 'lapsed-institutions.xlsx';
+        $startingCell = 'A1';
+
         $colleges = $this->getLapsedColleges();
-        die('ok');
+
+        $exportData = array();
+
+        // Add the header
+        $exportData[] = array('Institution', 'Name', 'Phone', 'Email', 'Memberships');
+
+        // Loop over the colleges
+        foreach ($colleges as $college) {
+
+            $firstUser = true;
+            foreach ($college->getDataUsers() as $user) {
+
+                $collegeName = $college->getName();
+                $yearsSubscribed = implode(', ', $college->getYearsWithSubscriptions($this->getStudy(), false));
+                if (!$firstUser) {
+                    $collegeName = null;
+                    $yearsSubscribed = null;
+                }
+
+                $exportData[] = array(
+                    $collegeName,
+                    $user->getFullName(),
+                    $user->getFullPhone(),
+                    $user->getEmail(),
+                    $yearsSubscribed
+                );
+
+                $firstUser = false;
+            }
+        }
+
+
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+
+        $sheet->fromArray($exportData, null, $startingCell);
+
+        foreach (range(0, 5) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        // redirect output to client browser
+        $this->downloadExcel($excel, $filename);
     }
 
+    /**
+     * @return \Mrss\Entity\College[]
+     */
     protected function getLapsedColleges()
     {
         $priorColleges = $this->getPriorYearColleges();
@@ -27,8 +78,12 @@ class Lapsed extends Export
 
         $lapsedCollegeIds = array_diff($priorColleges, $currentColleges);
 
-        pr(count($lapsedCollegeIds));
-        pr($lapsedCollegeIds);
+        $lapsedColleges = array();
+        foreach ($lapsedCollegeIds as $id) {
+            $lapsedColleges[] = $this->allColleges[$id];
+        }
+
+        return $lapsedColleges;
     }
 
     protected function getPriorYearColleges()
@@ -58,6 +113,7 @@ class Lapsed extends Export
         $collegeIds = array();
         foreach ($subscriptions as $subscription) {
             $collegeIds[] = $subscription->getCollege()->getId();
+            $this->allColleges[$subscription->getCollege()->getId()] = $subscription->getCollege();
         }
 
         return $collegeIds;
