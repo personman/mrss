@@ -1944,6 +1944,15 @@ return array(
                             )
                         )
                     ),
+                    'lapsed' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/lapsed',
+                            'defaults' => array(
+                                'action' => 'lapsed',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

@@ -4,6 +4,8 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\Observation;
+use Mrss\Service\Export\Lapsed;
+use Mrss\Service\NhebiSubscriptions\Mrss;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Exceldiff;
 use PHPExcel;
@@ -873,6 +875,17 @@ class ToolController extends AbstractActionController
             'benchmarkGroups' => $study->getBenchmarkGroups(),
             'benchmarkGroupName' => $benchmarkGroupName
         );
+    }
+
+    public function lapsedAction()
+    {
+
+        $lapsedService = new Lapsed;
+        $lapsedService->setStudy($this->currentStudy());
+        $lapsedService->setSubscriptionModel($this->getServiceLocator()->get('model.subscription'));
+        $lapsedService->export();
+
+        die('hello there');
     }
 
     protected function getSeparationPrefix()
