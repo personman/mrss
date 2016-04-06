@@ -16,6 +16,8 @@ abstract class AbstractChart
 
     protected $yKey = 1;
 
+    protected $zKey = 2;
+
     public function __construct()
     {
         $config = array(
@@ -145,6 +147,16 @@ abstract class AbstractChart
         return $this->setFormat($format, $this->yKey);
     }
 
+    public function setZFormat($format)
+    {
+        return $this->setFormat($format, $this->zKey);
+    }
+
+    public function getZFormat()
+    {
+        return $this->getFormat($this->zKey);
+    }
+
     public function getYFormat()
     {
         return $this->getFormat($this->yKey);
@@ -168,6 +180,13 @@ abstract class AbstractChart
     public function getYLabel()
     {
         $label = $this->getLabel($this->yKey);
+
+        return $label;
+    }
+
+    public function getZLabel()
+    {
+        $label = $this->getLabel($this->zKey);
 
         return $label;
     }

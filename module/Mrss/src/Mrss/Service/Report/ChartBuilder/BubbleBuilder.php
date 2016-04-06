@@ -56,6 +56,7 @@ class BubbleBuilder extends ChartBuilder
         if ($size) {
             $zBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($size);
             $benchmarkGroupIds[] = $zBenchmark->getBenchmarkGroup()->getId();
+            $zFormat = $this->getFormat($zBenchmark);
         }
 
 
@@ -108,10 +109,16 @@ class BubbleBuilder extends ChartBuilder
             if ($xVal && $yVal && $sizeVal) {
                 $subCount++;
 
+                $name = null;
+                if (empty($this->getStudyConfig()->anonymous_peers)) {
+                    $name = $subscription->getCollege()->getName();
+                }
+
                 $datum = array(
-                    floatval($xVal),
-                    floatval($yVal),
-                    floatval($sizeVal)
+                    'x' => floatval($xVal),
+                    'y' => floatval($yVal),
+                    'z' => floatval($sizeVal),
+                    'name' => $name
                 );
 
                 // Highlight the college?
@@ -226,8 +233,12 @@ class BubbleBuilder extends ChartBuilder
         if (!empty($zBenchmark)) {
             $sizeLabel = $zBenchmark->getDescriptiveReportLabel();
             $bubbleChart->setZLabel($sizeLabel);
-        }
 
+            $bubbleChart->setZFormat($zFormat);
+
+            $bubbleChart->updateAllFormats();
+            $bubbleChart->updateAllLabels();
+        }
 
         $chart = $bubbleChart->getConfig();
 
