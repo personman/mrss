@@ -203,7 +203,7 @@ class SubscriptionController extends AbstractActionController
                     return $this->redirect()->toRoute('subscribe/user-agreement');
                 } else {
                     $this->flashMessenger()->addErrorMessage("Unable to find institution.");
-                    return $this->redirect()->toUrl('/join-free');
+                    return $this->redirect()->toUrl('/participate');
                 }
 
 

@@ -29,6 +29,8 @@ return array(
     'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',
     'anonymous_peers' => false,
+    'head_logo_url' => 'http://www.aaup.org',
+    'logged_out_header_button' => '<a href="/consultation" class="btn schedule-btn" role="button" id="schedule-demo">FREE CONSULTATION</a>',
     'copyright' => date('Y') . " American Association of University Professors",
     'footerLogo' => '<span>Powered by</span> <br><a href="http://nccbp.org/benchmarking-institute" title="National Higher Eduction Benchmarking Institute @ Johnson County Community College"><img src="/images/benchmark_logo.png" /></a>',
     'footerSocial' => '',

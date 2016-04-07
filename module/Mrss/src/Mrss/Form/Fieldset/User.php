@@ -266,6 +266,9 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'validators' => array(
                     new EmailValidator()
                 )
+            ),
+            'studies' => array(
+                'required' => false,
             )
         );
 

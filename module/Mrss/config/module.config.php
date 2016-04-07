@@ -326,7 +326,7 @@ return array(
                 'type' => 'segment',
                 'priority' => 10,
                 'options' => array(
-                    'route' => '/join-free',
+                    'route' => '/participate',
                     'defaults' => array(
                         'controller' => 'subscription',
                         'action' => 'joinFree'

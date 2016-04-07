@@ -281,6 +281,11 @@ class UserController extends AbstractActionController
 
             // Hand the POST data to the form for validation
             $post = $this->params()->fromPost();
+
+            if (!isset($post['user']['studies'])) {
+                $post['user']['studies'] = array();
+            }
+
             $form->setData($post);
 
             if ($form->isValid()) {
@@ -307,6 +312,20 @@ class UserController extends AbstractActionController
 
                     return $this->redirect()->toRoute('institution/users');
                 }
+
+
+                /*prd($post);
+                if (empty($post['studies'])) {
+                    $user->removeStudy($this->currentStudy());
+                } else {
+                    pr($post);
+                    foreach ($post['studies'] as $id) {
+                        $study = $this->getStudyModel()->find($id);
+                        pr($id);
+                        $user->addStudy($study);
+                    }
+                }*/
+
 
                 // Save 'em
                 $userModel->save($user);
@@ -337,6 +356,11 @@ class UserController extends AbstractActionController
             'someoneElse' => $someoneElse,
             'user' => $user
         );
+    }
+
+    protected function getStudyModel()
+    {
+        return $this->getServiceLocator()->get('model.study');
     }
 
     public function accountAction()

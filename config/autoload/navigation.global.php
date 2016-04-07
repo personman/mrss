@@ -385,16 +385,11 @@ return array(
                         'label' => 'Research',
                         'uri' => '/research'
                     ),
-                    'contact' => array(
-                        'label' => 'Contact',
-                        'uri' => '/contact'
-                    )
-
                 )
             ),
             'start' => array(
                 'label' => 'Start',
-                'uri' => '/join-free',
+                'uri' => '/participate',
                 'class' => 'renew-nav'
             ),
             'results' => array(

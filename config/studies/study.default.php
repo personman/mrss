@@ -29,6 +29,8 @@ return array(
     'default_user_state' => 1, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
     'anonymous_peers' => true,
+    'head_logo_url' => '/',
+    'logged_out_header_button' => '<a href="/schedule-demo" class="btn schedule-btn" role="button" id="schedule-demo">SCHEDULE DEMO</a>',
     'copyright' => "2004 - " . date('Y') . " Johnson County Community College",
     'footerLogo' => '<a href="/benchmarking-institute"><img src="/images/benchmark_logo.png" /></a>',
     'footerSocial' => '<a href="http://twitter.com/EdBenchmark" title="Follow us on Twitter" target="_blank">

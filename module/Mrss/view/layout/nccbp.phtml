@@ -77,7 +77,8 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-3 logo">
-                <a href="/"><img class="img-responsive" alt="<?= $this->currentStudy()->getDescription() ?>" src="<?= $this->currentStudy()->getLogo() ?>" title="<?= $this->currentStudy()->getDescription() ?>" /></a>
+                <?php $logoUrl = $this->currentStudy(false)->getConfig()->head_logo_url ?>
+                <a href="<?= $logoUrl ?>"><img class="img-responsive" alt="<?= $this->currentStudy()->getDescription() ?>" src="<?= $this->currentStudy()->getLogo() ?>" title="<?= $this->currentStudy()->getDescription() ?>" /></a>
             </div>
 
             <div class="col-xs-1 header-title">
@@ -95,7 +96,10 @@
                         <a href="#" class="btn login-btn" role="button" id="loginButton">SIGN IN</a>
 
                         <?php if (!$this->zfcUserIdentity()): ?>
-                            <a href="/schedule-demo" class="btn schedule-btn" role="button" id="schedule-demo">SCHEDULE DEMO</a>
+                            <?php if ($headerButton = $this->currentStudy(false)->getConfig()->logged_out_header_button): ?>
+                                <?= $headerButton ?>
+                            <?php endif ?>
+
                         <?php endif ?>
 
                         <?php if ($webinar): ?>
