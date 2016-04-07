@@ -143,7 +143,13 @@ class Peer extends Report
         foreach ($report['sections'] as $section) {
             $row = 1;
             $sheet = $excel->createSheet($sheetIndex);
-            $sheet->setTitle($section['benchmark']);
+
+            $sheetName = $section['benchmark'];
+            if (strlen($sheetName) > 30) {
+                $sheetName = substr($sheetName, 0, 30);
+            }
+
+            $sheet->setTitle($sheetName);
 
             $headerRow = array(
                 $section['benchmark'],
