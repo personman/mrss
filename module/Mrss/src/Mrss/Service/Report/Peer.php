@@ -128,7 +128,7 @@ class Peer extends Report
 
         $excel = new PHPExcel();
         $sheet = $excel->getActiveSheet();
-        $row = 1;
+
 
         // Format for header row
         $blueBar = array(
@@ -139,7 +139,12 @@ class Peer extends Report
         );
 
         // Peer comparison results
+        $sheetIndex = 1;
         foreach ($report['sections'] as $section) {
+            $row = 1;
+            $sheet = $excel->createSheet($sheetIndex);
+            $sheet->setTitle($section['benchmark']);
+
             $headerRow = array(
                 $section['benchmark'],
                 null
@@ -159,38 +164,35 @@ class Peer extends Report
                 $row++;
             }
 
-            // Blank line:
-            $row++;
+
+            // Align right
+            $sheet->getStyle('B1:B400')->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+            foreach (range(0, 1) as $column) {
+                $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+            }
+
+            if ($this->getStudyConfig()->anonymous_peers) {
+                // Peer institutions
+                $row++;
+                $sheet->setCellValue('A' . $row, 'Peer Institutions:');
+                $row++;
+
+                foreach ($report['colleges'] as $college) {
+                    $sheet->setCellValue('A' . $row, $college);
+                    $row++;
+                }
+            }
+
+            $sheetIndex++;
         }
 
-        // Align right
-        $sheet->getStyle('B1:B400')->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-
-        // Set column widths
-        //PHPExcel_Shared_Font::setAutoSizeMethod(
-        //    PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
-        //);
-        foreach (range(0, 1) as $column) {
-            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
-        }
-
-
-        // Peer institutions
-        $row++;
-        $sheet->setCellValue('A' . $row, 'Peer Institutions:');
-        $row++;
-
-        foreach ($report['colleges'] as $college) {
-            $sheet->setCellValue('A' . $row, $college);
-            $row++;
-        }
-
-
+        // Remove blank sheet
+        $excel->removeSheetByIndex(0);
 
         // redirect output to client browser
         $this->downloadExcel($excel, $filename);
-
     }
 
     /**
