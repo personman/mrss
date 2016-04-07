@@ -29,6 +29,7 @@ class UserController extends AbstractActionController
         $id = $this->params('id');
         $postUser = $this->params()->fromPost('user', array());
 
+
         $userModel = $this->getUserModel();
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $redirect = $this->params('redirect');
@@ -85,6 +86,13 @@ class UserController extends AbstractActionController
 
             // Hand the POST data to the form for validation
             $post = $this->params()->fromPost();
+
+            if (!isset($post['user']['studies'])) {
+                $post['user']['studies'] = array();
+            }
+
+
+
             $form->setData($post);
 
             if ($form->isValid()) {
