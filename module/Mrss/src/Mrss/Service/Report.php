@@ -326,7 +326,7 @@ class Report
             $decimalPlaces = 2;
         } else {
             //All NCCBP percentages should use 2 decimal places
-            if ($this->getStudy()->getId() == 1 && $benchmark->isPercent()) {
+            if (/*$this->getStudy()->getId() == 1 && */$benchmark->isPercent()) {
                 $decimalPlaces = 2;
             }
         }
