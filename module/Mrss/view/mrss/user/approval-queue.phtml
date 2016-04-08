@@ -49,7 +49,7 @@
                         <input type="checkbox" name="users[<?= $user->getId() ?>]" />
                     </td>
                     <td>
-                        <a href="<?= $this->url('account/edit', array('id' => $user->getId(), 'redirect' => null)) ?>">
+                        <a href="<?= $this->url('users/edit', array('id' => $user->getId(), 'redirect' => null)) ?>">
                             <?= $user->getFullName() ?>
                         </a>
                     </td>
