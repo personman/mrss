@@ -37,6 +37,16 @@ class PeerGroup extends AbstractModel
         );
     }
 
+    public function findOneByUserAndName($user, $name)
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+                'user' => $user,
+                'name' => $name
+            )
+        );
+    }
+
     /**
      * @param $college
      * @param $study

@@ -678,12 +678,15 @@ class ReportController extends AbstractActionController
                 if ($name = $data['name']) {
                     $college = $this->currentCollege();
                     $peerGroup->setName($name);
-                    $peerGroup->setCollege($college);
+                    //$peerGroup->setCollege($college);
+
+                    $currentUser = $this->zfcUserAuthentication()->getIdentity();
+                    $peerGroup->setUser($currentUser);
 
 
                     // See if it exists
                     $existingGroup = $this->getPeerGroupModel()
-                        ->findOneByCollegeAndName($college, $name);
+                        ->findOneByUserAndName($currentUser, $name);
 
                     if ($existingGroup) {
                         // Don't modify existing groups
