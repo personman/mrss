@@ -11,8 +11,10 @@
 
     H.wrap(H.Chart.prototype, 'init', function (proceed) {
         var series = arguments[1].series ;
+
         var extraSeries = [];
         var i = 0 ;
+
         for (i = 0 ; i < series.length ; i++){
             var s = series[i];
             if ( s.regression && !s.rendered ) {
@@ -20,6 +22,7 @@
                 s.regressionSettings.tooltip = s.regressionSettings.tooltip || {} ;
                 s.regressionSettings.dashStyle = s.regressionSettings.dashStyle || 'solid';
                 s.regressionSettings.decimalPlaces = s.regressionSettings.decimalPlaces || 2;
+                s.regressionSettings.useAllSeries = s.regressionSettings.useAllSeries || false;
 
                 var regressionType = s.regressionSettings.type || "linear" ;
                 var regression;
@@ -40,35 +43,45 @@
                 };
 
 
+                var mergedData = s.data;
+                if (s.regressionSettings.useAllSeries) {
+
+                    mergedData = [];
+                    for (di = 0 ; di < series.length ; di++) {
+                        var seriesToMerge = series[di]
+                        mergedData = mergedData.concat(seriesToMerge.data)
+                    }
+                }
+
+
+
                 if (regressionType == "linear") {
-                    regression = _linear(s.data,s.regressionSettings.decimalPlaces) ;
+                    regression = _linear(mergedData,s.regressionSettings.decimalPlaces) ;
                     extraSerie.type = "line";
-                    console.log('Data:')
-                    console.log(s.data);
                 }else if (regressionType == "exponential") {
-                    regression = _exponential(s.data)
+                    regression = _exponential(mergedData)
                 }
                 else if (regressionType == "polynomial"){
                     var order = s.regressionSettings.order || 2;
                     var extrapolate = s.regressionSettings.extrapolate || 0;
-                    regression = _polynomial(s.data, order, extrapolate) ;
+                    regression = _polynomial(mergedData, order, extrapolate) ;
                 }else if (regressionType == "logarithmic"){
-                    regression = _logarithmic(s.data) ;
+                    regression = _logarithmic(mergedData) ;
                 }else if (regressionType == "loess"){
                     var loessSmooth = s.regressionSettings.loessSmooth || 25
-                    regression = _loess(s.data, loessSmooth/100) ;
+                    regression = _loess(mergedData, loessSmooth/100) ;
                 }else {
                     console.error("Invalid regression type: " , regressionType) ;
                     break;
                 }
 
 
-                regression.rSquared =  coefficientOfDetermination(s.data, regression.points);
+                regression.rSquared =  coefficientOfDetermination(mergedData, regression.points);
                 regression.rValue = Math.sqrt(regression.rSquared).toFixed(s.regressionSettings.decimalPlaces);
                 regression.rSquared = regression.rSquared.toFixed(s.regressionSettings.decimalPlaces);
-                regression.standardError = standardError(s.data, regression.points).toFixed(s.regressionSettings.decimalPlaces);
+                regression.standardError = standardError(mergedData, regression.points).toFixed(s.regressionSettings.decimalPlaces);
 
-                if (true) {
+                if (false) {
                     console.log('rSquared:')
                     console.log(regression.rSquared)
                     console.log('rValue:')
@@ -175,10 +188,12 @@
         // var correlation = (N * sum[3] - sum[0] * sum[1]) / Math.sqrt((N * sum[2] - sum[0] * sum[0]) * (N * sum[4] - sum[1] * sum[1]));
 
 
-        console.log('gradient:')
-        console.log(gradient)
-        console.log('intercept:')
-        console.log(intercept)
+        if (false) {
+            console.log('gradient:')
+            console.log(gradient)
+            console.log('intercept:')
+            console.log(intercept)
+        }
 
         for (var i = 0, len = data.length; i < len; i++) {
             var coorY = data[i][0] * gradient + intercept;
@@ -435,7 +450,7 @@
             var alpha = meanY - beta * meanX;
             res[i] = beta * x + alpha;
         }
-        console.debug(res);
+        //console.debug(res);
         return {
             equation: "" ,
             points: xval.map(function(x,i){return [x, res[i]]}),

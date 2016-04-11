@@ -126,7 +126,8 @@ class Bubble extends AbstractChart
         $config['series'][0]['regression'] = $regression;
         $config['series'][0]['regressionSettings'] = array(
             'type' => 'linear',
-            'color' => 'rgba(0, 0, 0, .9)'
+            'color' => 'rgba(0, 0, 0, .9)',
+            'useAllSeries' => true
         );
 
         $this->setConfig($config);

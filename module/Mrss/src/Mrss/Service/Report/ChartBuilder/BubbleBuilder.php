@@ -170,6 +170,7 @@ class BubbleBuilder extends ChartBuilder
                 'type' => $type,
                 'name' => 'Institutions',
                 'color' => $this->getNationalColor(),
+                //'showInLegend' => false,
                 'data' => $data,
             );
         }

@@ -96,7 +96,7 @@ class Explore extends AbstractForm
 
         $this->addPeerGroupDropdown($peerGroups);
 
-        if (false) {
+        if (true) {
             $this->add(
                 array(
                     'name' => 'regression',
