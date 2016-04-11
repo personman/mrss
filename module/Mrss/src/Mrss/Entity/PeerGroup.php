@@ -37,6 +37,12 @@ class PeerGroup
     protected $college;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @var User
+     */
+    protected $user;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Study")
      */
     protected $study;
@@ -80,12 +86,27 @@ class PeerGroup
     {
         return $this->college;
     }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+
     public function setStudy($study)
     {
         $this->study = $study;
 
         return $this;
     }
+
 
     public function getStudy()
     {

@@ -1953,6 +1953,15 @@ return array(
                             )
                         )
                     ),
+                    'copy-peer-groups' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/copy-peer-groups',
+                            'defaults' => array(
+                                'action' => 'copyPeerGroups',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

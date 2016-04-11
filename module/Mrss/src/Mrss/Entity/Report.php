@@ -43,6 +43,17 @@ class Report
     protected $college;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(
+     * name="user_id",
+     * referencedColumnName="id",
+     * onDelete="CASCADE",
+     * nullable=true
+     * )
+     */
+    protected $user;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $description;
@@ -67,11 +78,28 @@ class Report
     }
 
     /**
-     * @return mixed
+     * @return \Mrss\Entity\College
      */
     public function getCollege()
     {
         return $this->college;
+    }
+
+
+    /**
+     * @param \Mrss\Entity\User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return null|\Mrss\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**

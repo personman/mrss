@@ -237,7 +237,8 @@ class ReportItemController extends CustomReportController
     protected function getPeerGroups()
     {
         $model = $this->getPeerGroupModel();
-        $groups = $model->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy());
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+        $groups = $model->findByUserAndStudy($currentUser, $this->currentStudy());
 
         $peerGroups = array();
         foreach ($groups as $group) {

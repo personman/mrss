@@ -96,19 +96,21 @@ class Explore extends AbstractForm
 
         $this->addPeerGroupDropdown($peerGroups);
 
-        $this->add(
-            array(
-                'name' => 'regression',
-                'type' => 'Zend\Form\Element\Checkbox',
-                'options' => array(
-                    'label' => 'Show Regression Line'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'regression'
+        if (false) {
+            $this->add(
+                array(
+                    'name' => 'regression',
+                    'type' => 'Zend\Form\Element\Checkbox',
+                    'options' => array(
+                        'label' => 'Show Regression Line'
+                    ),
+                    'attributes' => array(
+                        'options' => $benchmarks,
+                        'id' => 'regression'
+                    )
                 )
-            )
-        );
+            );
+        }
 
         $this->add(
             array(

@@ -56,6 +56,24 @@ class PeerGroup extends AbstractModel
     }
 
     /**
+     * @param $user
+     * @param $study
+     * @return \Mrss\Entity\PeerGroup[]
+     */
+    public function findByUserAndStudy($user, $study)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'user' => $user,
+                'study' => $study
+            ),
+            array(
+                'name' => 'ASC'
+            )
+        );
+    }
+
+    /**
      * Find all, ordered by name
      */
     public function findAll()

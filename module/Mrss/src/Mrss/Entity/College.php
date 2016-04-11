@@ -445,6 +445,9 @@ class College
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\PeerGroup[]
+     */
     public function getPeerGroups()
     {
         return $this->peerGroups;

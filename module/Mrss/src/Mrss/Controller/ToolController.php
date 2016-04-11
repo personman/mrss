@@ -4,6 +4,9 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\Observation;
+use Mrss\Entity\PeerGroup;
+use Mrss\Entity\Report as ReportEntity;
+use Mrss\Entity\ReportItem;
 use Mrss\Service\Export\Lapsed;
 use Mrss\Service\NhebiSubscriptions\Mrss;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -875,6 +878,124 @@ class ToolController extends AbstractActionController
             'benchmarkGroups' => $study->getBenchmarkGroups(),
             'benchmarkGroupName' => $benchmarkGroupName
         );
+    }
+
+    /**
+     * Copy peer groups attached to colleges, changing the attachment to users.
+     * report_item->config needs to be updated to point at new peer group.
+     * Also handle copying reports and report items?
+     */
+    public function copyPeerGroupsAction()
+    {
+        takeYourTime();
+
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        /** @var \Mrss\Model\PeerGroup $peerGroupModel */
+        $peerGroupModel = $this->getServiceLocator()->get('model.peer.group');
+
+        $peerGroupMap = array();
+
+        $copiedCount = 0;
+        $copiedReportCount = 0;
+
+        foreach ($collegeModel->findAll() as $college) {
+            foreach ($college->getPeerGroups() as $peerGroup) {
+                $peerGroupMap[$peerGroup->getId()] = array();
+
+                foreach ($college->getUsers() as $user) {
+                    $newGroup = new PeerGroup();
+
+                    $newGroup->setUser($user);
+                    $newGroup->setYear($peerGroup->getYear());
+                    $newGroup->setName($peerGroup->getName());
+                    $newGroup->setStudy($peerGroup->getStudy());
+                    $newGroup->setPeers($peerGroup->getPeers());
+                    $newGroup->setBenchmarks($peerGroup->getBenchmarks());
+
+                    $peerGroupModel->save($newGroup);
+                    $peerGroupModel->getEntityManager()->flush();
+
+                    // Remember ids for newly created groups and their
+                    $peerGroupMap[$peerGroup->getId()][$user->getId()] = $newGroup->getId();
+
+
+                    $copiedCount++;
+
+                }
+                //pr($peerGroup->getName());
+            }
+        }
+
+        $peerGroupModel->getEntityManager()->flush();
+
+
+
+        // Now reports
+        /** @var \Mrss\Model\Report $reportModel */
+        $reportModel = $this->getServiceLocator()->get('model.report');
+
+        /** @var \Mrss\Model\ReportItem $reportItemModel */
+        $reportItemModel = $this->getServiceLocator()->get('model.report.item');
+
+        foreach ($reportModel->findAll() as $report) {
+            $college = $report->getCollege();
+
+            if ($college) {
+                foreach ($college->getUsers() as $user) {
+                    $newReport = new ReportEntity();
+
+                    $newReport->setUser($user);
+                    $newReport->setStudy($report->getStudy());
+                    $newReport->setName($report->getName());
+                    $newReport->setDescription($report->getDescription());
+
+                    $reportModel->save($newReport);
+                    $copiedReportCount++;
+
+                    // Flush so that $newReport->getId() works
+                    $reportModel->getEntityManager()->flush();
+
+                    // Report items
+                    foreach ($report->getItems() as $item) {
+                        $newItem = new ReportItem();
+
+                        $newItem->setReport($newReport);
+                        $newItem->setHighlightedCollege($item->getHighlightedCollege());
+                        $newItem->setBenchmark1($item->getBenchmark1());
+                        $newItem->setBenchmark2($item->getBenchmark2());
+                        $newItem->setBenchmark3($item->getBenchmark3());
+                        $newItem->setName($item->getName());
+                        $newItem->setSubtitle($item->getSubtitle());
+                        $newItem->setDescription($item->getDescription());
+                        $newItem->setType($item->getType());
+                        $newItem->setYear($item->getYear());
+                        $newItem->setSequence($item->getSequence());
+
+                        $config = $item->getConfig();
+                        if ($oldGroupId = $config['peerGroup']) {
+                            if ($newGroupId = $peerGroupMap[$oldGroupId][$user->getId()]) {
+                                $config['peerGroup'] = $newGroupId;
+                            }
+                        }
+
+                        $newItem->setConfig($config);
+
+                        $reportItemModel->save($newItem);
+                        $reportItemModel->getEntityManager()->flush();
+
+                    }
+                }
+            }
+
+        }
+
+
+        pr($copiedCount);
+        pr($copiedReportCount);
+
+        die('test');
     }
 
     public function lapsedAction()

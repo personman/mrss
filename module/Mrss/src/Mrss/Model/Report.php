@@ -28,6 +28,8 @@ class Report extends AbstractModel
 
     /**
      * Find all benchmark groups, ordered by sequence
+     *
+     * @return \Mrss\Entity\Report[]
      */
     public function findAll()
     {
@@ -45,6 +47,24 @@ class Report extends AbstractModel
         return $this->getRepository()->findBy(
             array(
                 'college' => $college,
+                'study' => $study
+            ),
+            array(
+                'name' => 'ASC'
+            )
+        );
+    }
+
+    /**
+     * @param $user
+     * @param $study
+     * @return ReportEntity[]
+     */
+    public function findByUserAndStudy($user, $study)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'user' => $user,
                 'study' => $study
             ),
             array(

@@ -13,8 +13,8 @@ class PeerGroupController extends ReportController
 {
     public function indexAction()
     {
-        $peerGroups = $this->getPeerGroupModel()->findByCollegeAndStudy(
-            $this->currentCollege(),
+        $peerGroups = $this->getPeerGroupModel()->findByUserAndStudy(
+            $this->getCurrentUser(),
             $this->currentStudy()
         );
 
@@ -111,6 +111,8 @@ class PeerGroupController extends ReportController
 
         $peerGroup = $this->getPeerGroupModel()->find($groupId);
 
+        $this->checkPeerGroupOwnership($peerGroup);
+
         if ($peerGroup) {
             $this->getPeerGroupModel()->delete($peerGroup);
         }
@@ -139,23 +141,29 @@ class PeerGroupController extends ReportController
     {
         if (empty($id)) {
             $peerGroup = new PeerGroup();
-            $peerGroup->setCollege($this->currentCollege());
+            //$peerGroup->setCollege($this->currentCollege());
+            $peerGroup->setUser($this->getCurrentUser());
             $peerGroup->setStudy($this->currentStudy());
             $peerGroup->setYear($this->currentStudy()->getCurrentYear());
         } else {
             $peerGroup = $this->getPeerGroupModel()->find($id);
 
-            // Make sure it belongs to the logged-in user
-            if ($this->currentCollege()->getId() != $peerGroup->getCollege()->getId()) {
-                $collegeId = $this->currentCollege()->getId();
-                $peerId = $peerGroup->getId();
-                throw new \Exception(
-                    "User from college $collegeId tried editing peer group $peerId, but it does not belong to them."
-                );
-            }
+            $this->checkPeerGroupOwnership($peerGroup);
         }
 
         return $peerGroup;
+    }
+
+    protected function checkPeerGroupOwnership($peerGroup)
+    {
+        // Make sure it belongs to the logged-in user
+        if ($this->getCurrentUser()->getId() != $peerGroup->getUser()->getId()) {
+            $userId = $this->getCurrentUser()->getId();
+            $peerId = $peerGroup->getId();
+            throw new \Exception(
+                "User $userId tried editing peer group $peerId, but it does not belong to them."
+            );
+        }
     }
 
     public function getForm()
@@ -300,5 +308,15 @@ class PeerGroupController extends ReportController
         return array(
             'form' => $form
         );
+    }
+
+    /**
+     * @return \Mrss\Entity\User
+     */
+    public function getCurrentUser()
+    {
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+
+        return $currentUser;
     }
 }

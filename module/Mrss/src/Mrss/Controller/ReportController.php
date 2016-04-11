@@ -715,7 +715,8 @@ class ReportController extends AbstractActionController
 
         // Prepare saved peer groups for javascript
         $peerGroups = array();
-        $groups = $this->getPeerGroupModel()->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy());
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $groups = $this->getPeerGroupModel()->findByUserAndStudy($user, $this->currentStudy());
         foreach ($groups as $group) {
             $peerGroups[] = array(
                 'name' => $group->getName(),

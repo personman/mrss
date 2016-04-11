@@ -24,7 +24,8 @@ class CustomReportBuilder extends Report
 
                 $builder = $this
                     ->getChartBuilder($item->getConfig());
-                $builder->setCollege($report->getCollege());
+                //$builder->setCollege($report->getCollege());
+                $builder->setCollege($report->getUser()->getCollege());
 
                 $chart = $builder->getChart();
                 $footnotes = $builder->getFootnotes();
