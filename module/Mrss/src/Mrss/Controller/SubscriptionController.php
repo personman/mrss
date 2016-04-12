@@ -1685,38 +1685,42 @@ class SubscriptionController extends AbstractActionController
 
     public function downloadAction()
     {
+        takeYourTime();
+
         $model = $this->getSubscriptionModel();
+
+        $subscriptionsInfo = array();
+
+        /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
         $year = $this->params()->fromRoute('year');
 
         $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
 
-        $subscriptionsInfo[] = array(
-            'Institution',
-            'State',
-            'IPEDS',
-            'Campus Type',
-            'Calendar',
-            'Campus Environment',
-            'Faculty Unionized',
-            'Staff Unionized',
-            'Control'
-        );
+
+        $headers = array('Institution', 'State', 'IPEDS Unit ID');
+        foreach ($study->getCriteria() as $criterion) {
+            $headers[] = $criterion->getName();
+        }
+
+        $subscriptionsInfo[] = $headers;
+
+
         foreach ($subscriptions as $sub) {
             $college = $sub->getCollege();
             $observation = $sub->getObservation();
 
-            $subscriptionsInfo[] = array(
+            $exportRow = array(
                 $college->getName(),
                 $college->getState(),
                 $college->getIpeds(),
-                $observation->get('institutional_type'),
-                $observation->get('institutional_demographics_calendar'),
-                $observation->get('institutional_demographics_campus_environment'),
-                $observation->get('institutional_demographics_faculty_unionized'),
-                $observation->get('institutional_demographics_staff_unionized'),
-                $observation->get('institutional_control'),
             );
+
+            foreach ($study->getCriteria() as $criterion) {
+                $exportRow[] = $observation->get($criterion->getBenchmark()->getDbColumn());
+            }
+
+            $subscriptionsInfo[] = $exportRow;
         }
 
         $excel = new PHPExcel();
@@ -1728,7 +1732,7 @@ class SubscriptionController extends AbstractActionController
         }
 
         // Make the first row bold
-        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:Z1')->getFont()->setBold(true);
 
         $filename = $this->currentStudy()->getName() . '-Members-' . $year;
 
