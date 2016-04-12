@@ -74,6 +74,15 @@ function setUpCompute()
 
             var url = baseUrl + observation;
 
+            if (i == 0) {
+                url = url + '/last';
+            } else if (i == observationsYear.length - 1) {
+                url = url + '/first';
+            }
+
+            urlStack.push(url);
+
+
             urlStack.push(url);
         }
 

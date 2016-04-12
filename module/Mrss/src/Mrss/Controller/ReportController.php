@@ -115,6 +115,13 @@ class ReportController extends AbstractActionController
             $percentileService->clearPercentiles($year);
         }
 
+        // Last?
+        if ($position == 'last') {
+            $settingKey = $this->getReportService()->getReportCalculatedSettingKey($year);
+            $this->getReportService()->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
+        }
+
+
         // Now actually calculate and save percentiles
         $percentileService->calculateForBenchmark($benchmark, $year);
 
