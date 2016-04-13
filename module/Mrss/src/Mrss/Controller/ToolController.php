@@ -930,7 +930,10 @@ class ToolController extends AbstractActionController
 
         $peerGroupModel->getEntityManager()->flush();
 
+        pr(json_encode($peerGroupMap));
 
+        pr($copiedCount);
+        die('peer groups copied');
 
         // Now reports
         /** @var \Mrss\Model\Report $reportModel */
