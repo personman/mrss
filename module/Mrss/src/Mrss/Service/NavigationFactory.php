@@ -383,20 +383,20 @@ class NavigationFactory extends DefaultNavigationFactory
 
         $subscription = null;
 
-        if (!$collegeId = $this->getSystemCollegeId()) {
+        //if (!$collegeId = $this->getSystemCollegeId()) {
             if ($user = $this->getUser()) {
                 $collegeId = $user->getCollege()->getId();
                 $subscription = $subModel->findOne($year, $collegeId, $study->getId());
             }
-        }
+        //}
 
-        if ($_SERVER['REMOTE_ADDR'] == '23.112.140.8') {
+        /*if ($_SERVER['REMOTE_ADDR'] == '23.112.140.8') {
             pr($collegeId);
             pr($this->getSystemCollegeId());
             pr($year);
             pr($study->getId());
             pr($subscription);
-        }
+        }*/
 
         return $subscription;
     }
