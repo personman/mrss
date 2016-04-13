@@ -392,6 +392,10 @@ class NavigationFactory extends DefaultNavigationFactory
 
         if ($_SERVER['REMOTE_ADDR'] == '23.112.140.8') {
             pr($collegeId);
+            pr($this->getSystemCollegeId());
+            pr($year);
+            pr($study->getId());
+            pr($subscription);
         }
 
         return $subscription;
