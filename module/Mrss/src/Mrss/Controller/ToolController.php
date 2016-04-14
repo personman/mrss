@@ -888,6 +888,8 @@ class ToolController extends AbstractActionController
     public function copyPeerGroupsAction()
     {
         takeYourTime();
+        $start = microtime(true);
+
 
         /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $this->getServiceLocator()->get('model.college');
@@ -895,18 +897,18 @@ class ToolController extends AbstractActionController
         /** @var \Mrss\Model\PeerGroup $peerGroupModel */
         $peerGroupModel = $this->getServiceLocator()->get('model.peer.group');
 
-        $peerGroupMap = array();
 
         $copiedCount = 0;
-        $copiedReportCount = 0;
+
 
         $start = microtime(true);
 
-        prd($start);
-        die('ok');
-
 
         $colleges = $collegeModel->findAll();
+
+        $flushEvery = 50;
+        $i = 0;
+
         foreach ($colleges as $college) {
             foreach ($college->getPeerGroups() as $peerGroup) {
                 $peerGroupMap[$peerGroup->getId()] = array();
@@ -922,10 +924,9 @@ class ToolController extends AbstractActionController
                     $newGroup->setBenchmarks($peerGroup->getBenchmarks());
 
                     $peerGroupModel->save($newGroup);
-                    $peerGroupModel->getEntityManager()->flush();
 
                     // Remember ids for newly created groups and their
-                    $peerGroupMap[$peerGroup->getId()][$user->getId()] = $newGroup->getId();
+                    //$peerGroupMap[$peerGroup->getId()][$user->getId()] = $newGroup->getId();
 
 
                     $copiedCount++;
@@ -934,25 +935,49 @@ class ToolController extends AbstractActionController
                 //pr($peerGroup->getName());
             }
 
-            $elapsed = microtime(true) - $start;
-            prd($elapsed);
+
+            $i++;
+
+
+            if ($i % $flushEvery == 0) {
+                $peerGroupModel->getEntityManager()->flush();
+            }
+
+            if ($i == 100) {
+                //$elapsed = microtime(true) - $start;
+                //prd($elapsed);
+            }
         }
 
         $peerGroupModel->getEntityManager()->flush();
 
-        pr(json_encode($peerGroupMap));
 
         pr($copiedCount);
-        die('peer groups copied');
+
+        $elapsed = microtime(true) - $start;
+        pr($elapsed);
+
+
+
+
+
+
+
 
         // Now reports
+        $copiedReportCount = 0;
+        $flushEvery = 100;
+
         /** @var \Mrss\Model\Report $reportModel */
         $reportModel = $this->getServiceLocator()->get('model.report');
 
         /** @var \Mrss\Model\ReportItem $reportItemModel */
         $reportItemModel = $this->getServiceLocator()->get('model.report.item');
 
-        foreach ($reportModel->findAll() as $report) {
+        $reports = $reportModel->findAll();
+
+        $i = 0;
+        foreach ($reports as $report) {
             $college = $report->getCollege();
 
             if ($college) {
@@ -968,7 +993,7 @@ class ToolController extends AbstractActionController
                     $copiedReportCount++;
 
                     // Flush so that $newReport->getId() works
-                    $reportModel->getEntityManager()->flush();
+                    //$reportModel->getEntityManager()->flush();
 
                     // Report items
                     foreach ($report->getItems() as $item) {
@@ -988,7 +1013,8 @@ class ToolController extends AbstractActionController
 
                         $config = $item->getConfig();
                         if ($oldGroupId = $config['peerGroup']) {
-                            if ($newGroupId = $peerGroupMap[$oldGroupId][$user->getId()]) {
+                            //if ($newGroupId = $peerGroupMap[$oldGroupId][$user->getId()]) {
+                            if ($newGroupId = $this->getNewPeerGroupId($oldGroupId, $user)) {
                                 $config['peerGroup'] = $newGroupId;
                             }
                         }
@@ -996,19 +1022,48 @@ class ToolController extends AbstractActionController
                         $newItem->setConfig($config);
 
                         $reportItemModel->save($newItem);
-                        $reportItemModel->getEntityManager()->flush();
+                        //$reportItemModel->getEntityManager()->flush();
 
                     }
                 }
             }
 
+            $i++;
+
+
+            if ($i % $flushEvery == 0) {
+                $reportModel->getEntityManager()->flush();
+            }
+
         }
 
+        $reportModel->getEntityManager()->flush();
 
-        pr($copiedCount);
+        //pr($copiedCount);
         pr($copiedReportCount);
 
+        $elapsed = microtime(true) - $start;
+        prd($elapsed);
+
         die('test');
+    }
+
+    protected function getNewPeerGroupId($oldGroupId, $user)
+    {
+        /** @var \Mrss\Model\PeerGroup $model */
+        $model = $this->getServiceLocator()->get('model.peer.group');
+
+        $id = null;
+
+
+        if ($oldGroup = $model->find($oldGroupId)) {
+
+            if ($newGroup = $model->findOneByUserAndName($user, $oldGroup->getName())) {
+                $id = $newGroup->getId();
+            }
+        }
+
+        return $id;
     }
 
     public function lapsedAction()

@@ -18,7 +18,7 @@ class Version20160411100601 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE peer_groups DROP test');
+        //$this->addSql('ALTER TABLE peer_groups DROP test');
     }
 
     /**
@@ -29,6 +29,6 @@ class Version20160411100601 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE peer_groups ADD test VARCHAR(255) NOT NULL');
+        //$this->addSql('ALTER TABLE peer_groups ADD test VARCHAR(255) NOT NULL');
     }
 }
