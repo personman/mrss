@@ -149,6 +149,8 @@ class Peer extends Report
                 $sheetName = substr($sheetName, 0, 30);
             }
 
+            // Get rid of invalid characters
+            $sheetName = str_replace(array('*', ':', '/', '\\', '?', '[', ']'), '', $sheetName);
             $sheet->setTitle($sheetName);
 
             $headerRow = array(
