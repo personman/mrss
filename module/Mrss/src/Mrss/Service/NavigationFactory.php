@@ -204,6 +204,7 @@ class NavigationFactory extends DefaultNavigationFactory
         // Since it's the first year of aaup, don't show the report menu until open and paid
         if ($currentStudy->getId() == 4) {
             $sub = $this->getSubscription();
+            pr($sub->getReportAccess());
             if ($currentStudy->getReportsOpen() && $sub && $sub->getReportAccess()) {
                 // Allow the reports menu to show (hide the public results menu)
                 unset($pages['members-results']);

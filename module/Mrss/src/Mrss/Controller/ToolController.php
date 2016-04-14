@@ -900,7 +900,14 @@ class ToolController extends AbstractActionController
         $copiedCount = 0;
         $copiedReportCount = 0;
 
-        foreach ($collegeModel->findAll() as $college) {
+        $start = microtime(true);
+
+        prd($start);
+        die('ok');
+
+
+        $colleges = $collegeModel->findAll();
+        foreach ($colleges as $college) {
             foreach ($college->getPeerGroups() as $peerGroup) {
                 $peerGroupMap[$peerGroup->getId()] = array();
 
@@ -926,6 +933,9 @@ class ToolController extends AbstractActionController
                 }
                 //pr($peerGroup->getName());
             }
+
+            $elapsed = microtime(true) - $start;
+            prd($elapsed);
         }
 
         $peerGroupModel->getEntityManager()->flush();
