@@ -205,25 +205,20 @@ class Report
         $skipNull = true,
         $system = null
     ) {
-        if (false) {
-            $subscriptions = $this->getSubscriptions($year, $system);
+        $dbColumn = $benchmark->getDbColumn();
+        $ob = new Observation;
+        if ($ob->has($dbColumn)) {
+            $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
+                $this->getStudy(),
+                $year,
+                array($dbColumn),
+                false,
+                true,
+                array(),
+                $system
+            );
         } else {
-            // @todo: This new way doesn't handle systems
-            $dbColumn = $benchmark->getDbColumn();
-            $ob = new \Mrss\Entity\Observation;
-            if ($ob->has($dbColumn)) {
-                $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
-                    $this->getStudy(),
-                    $year,
-                    array($dbColumn),
-                    false,
-                    true,
-                    array(),
-                    $system
-                );
-            } else {
-                $subscriptions = array();
-            }
+            $subscriptions = array();
         }
 
         $benchmarkGroupId = $benchmark->getBenchmarkGroup()->getId();
