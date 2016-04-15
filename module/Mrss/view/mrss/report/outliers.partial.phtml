@@ -1,25 +1,32 @@
 <?php /** @var \Mrss\Entity\Outlier[] $outliers */ ?>
 <?php /** @var boolean $admin */ ?>
 <?php
-    $tdStyle = "padding: 5px; border: 1px solid #DDD; ";
-    $thStyle = "$tdStyle background: #DDD; color: #000";
-    $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
+$tdStyle = "padding: 5px; border: 1px solid #DDD; ";
+$thStyle = "$tdStyle background: #DDD; color: #000";
+$tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
 ?>
+
+
+<style>
+    .sourceHeading {
+        width: 50%;
+    }
+</style>
 
 <?php if (count($outliers)): ?>
     <table class="00table 00table-bordered outliers" style="<?= $tStyle ?>">
         <thead>
-            <tr>
-                <th style="<?= $thStyle ?>">Benchmark</th>
-                <?php if (empty($admin)): ?>
-                    <th style="<?= $thStyle ?>">Source Benchmarks</th>
-                <?php endif ?>
-                <th style="<?= $thStyle ?>">Value</th>
-                <th style="<?= $thStyle ?>">Problem</th>
-                <?php if (empty($admin)): ?>
+        <tr>
+            <th style="<?= $thStyle ?>">Benchmark</th>
+            <?php if ($showDetails): ?>
+                <th style="<?= $thStyle ?>" class="sourceHeading">Source Benchmarks</th>
+            <?php endif ?>
+            <th style="<?= $thStyle ?>">Value</th>
+            <th style="<?= $thStyle ?>">Problem</th>
+            <?php if (empty($admin)): ?>
                 <th style="<?= $thStyle ?>">Action</th>
-                <?php endif ?>
-            </tr>
+            <?php endif ?>
+        </tr>
         </thead>
         <tbody>
 
@@ -29,45 +36,45 @@
                     <strong><?= $outlier['benchmark'] ?></strong>
                 </td>
 
-                <?php if (empty($admin)): ?>
+                <?php if ($showDetails): ?>
 
-                <td style="<?= $tdStyle ?>">
-                    <?php if ($outlier['computed']): ?>
-                        <table class="00table 00table-bordered" style="<?= $tStyle ?>">
-                            <tbody>
+                    <td style="<?= $tdStyle ?>">
+                        <?php if ($outlier['computed']): ?>
+                            <table class="00table 00table-bordered" style="<?= $tStyle ?>">
+                                <tbody>
                                 <?php foreach ($outlier['baseBenchmarks'] as $baseBenchmark): ?>
-                                <tr>
-                                    <td style="<?= $tdStyle ?>"><?= $baseBenchmark['benchmark'] ?></td>
-                                    <td style="<?= $tdStyle ?> text-align:right"><?= $baseBenchmark['value'] ?></td>
+                                    <tr>
+                                        <td style="<?= $tdStyle ?>"><?= $baseBenchmark['benchmark'] ?></td>
+                                        <td style="<?= $tdStyle ?> text-align:right"><?= $baseBenchmark['value'] ?></td>
 
-                                    <?php if (empty($admin)): ?>
-                                        <?php
-                                        $url = $this->url(
-                                            'data-entry/edit',
-                                            array(
-                                                'benchmarkGroup' => $baseBenchmark['benchmarkGroup']
-                                            ),
-                                            array('force_canonical' => true)
-                                        );
+                                        <?php if (empty($admin)): ?>
+                                            <?php
+                                            $url = $this->url(
+                                                'data-entry/edit',
+                                                array(
+                                                    'benchmarkGroup' => $baseBenchmark['benchmarkGroup']
+                                                ),
+                                                array('force_canonical' => true)
+                                            );
 
-                                        $url .= '#' . $baseBenchmark['dbColumn'];
-                                        ?>
+                                            $url .= '#' . $baseBenchmark['dbColumn'];
+                                            ?>
 
-                                        <td style="<?= $tdStyle ?>"><a href="<?= $url ?>">Edit</a></td>
+                                            <td style="min-width: 92px; <?= $tdStyle ?>"><a class="underline" href="<?= $url ?>">Edit Form <?= $baseBenchmark['benchmarkGroup'] ?></a></td>
 
-                                    <?php endif ?>
-                                </tr>
+                                        <?php endif ?>
+                                    </tr>
                                 <?php endforeach ?>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                        <a href="#" class="showOutlierEquation" style="display:none">Show formula</a>
-                        <div class="outlierEquation">
-                            <?= $outlier['equation'] ?>
-                        </div>
+                            <a href="#" class="showOutlierEquation" style="display:none">Show formula</a>
+                            <div class="outlierEquation">
+                                <?= $outlier['equation'] ?>
+                            </div>
 
-                    <?php endif ?>
-                </td>
+                        <?php endif ?>
+                    </td>
 
                 <?php endif ?>
 
@@ -81,7 +88,7 @@
                 <?php if (empty($admin)): ?>
                     <td style="<?= $tdStyle ?>">
                         <?php if (!$outlier['computed']): ?>
-                        <?php
+                            <?php
                             $url = $this->url(
                                 'data-entry/edit',
                                 array(
@@ -91,8 +98,8 @@
                             );
 
                             $url .= '#' . $outlier['dbColumn'];
-                        ?>
-                        <a href="<?= $url ?>">Edit</a>
+                            ?>
+                            <a href="<?= $url ?>">Edit Form <?= $outlier['benchmarkGroupId'] ?></a>
                         <?php endif ?>
                     </td>
                 <?php endif ?>

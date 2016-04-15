@@ -410,11 +410,13 @@ class ReportController extends AbstractActionController
     {
         takeYourTime();
 
+        $collegeId = $this->params()->fromRoute('college_id');
         $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
-            ->getAdminOutlierReport();
+            ->getAdminOutlierReport($collegeId);
 
         return array(
-            'report' => $outlierReport
+            'report' => $outlierReport,
+            'showDetails' => !empty($collegeId)
         );
     }
 

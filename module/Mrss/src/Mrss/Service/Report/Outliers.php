@@ -118,17 +118,27 @@ class Outliers extends Report
     /**
      * Get the outliers for the study/year, grouped by college
      */
-    public function getAdminOutlierReport($excludeNonReported = true)
+    public function getAdminOutlierReport($collegeId = null)
     {
+        $excludeNonReported = true;
+
         $report = array();
         $study = $this->getStudy();
         $year = $study->getCurrentYear();
 
-        // Get colleges subscribed to the study for the year
-        $colleges = $this->getCollegeModel()->findByStudyAndYear(
-            $study,
-            $year
-        );
+        if ($collegeId) {
+            $college = $this->getCollegeModel()->find($collegeId);
+            $colleges = array($college);
+            $includeDetails = true;
+        } else {
+            // Get colleges subscribed to the study for the year
+            $colleges = $this->getCollegeModel()->findByStudyAndYear(
+                $study,
+                $year
+            );
+            $includeDetails = false;
+        }
+
 
         foreach ($colleges as $college) {
             // Skip
@@ -159,7 +169,7 @@ class Outliers extends Report
             $observation = $this->getSubscriptionModel()->findOne($year, $college->getId(), $study)->getObservation();
             $this->setObservation($observation);
 
-            $outliers = $this->prepareOutlierRows($outliers);
+            $outliers = $this->prepareOutlierRows($outliers, $includeDetails);
 
             $report[] = array(
                 'college' => $college,
@@ -191,7 +201,7 @@ class Outliers extends Report
      * @param Outlier[] $outliers
      * @return array
      */
-    protected function prepareOutlierRows($outliers)
+    protected function prepareOutlierRows($outliers, $includeBaseBenchmarks = true)
     {
         $newOutliers = array();
         foreach ($outliers as $outlier) {
@@ -209,6 +219,11 @@ class Outliers extends Report
 
             }
 
+            $baseBenchmarks = array();
+            if ($includeBaseBenchmarks) {
+                $baseBenchmarks = $this->getBaseBenchmarks($benchmark);
+            }
+
             $newOutliers[] = array(
                 'benchmark' => $benchmark->getDescriptiveReportLabel(),
                 'computed' => $benchmark->getComputed(),
@@ -217,7 +232,7 @@ class Outliers extends Report
                 'benchmarkGroupId' => $benchmark->getBenchmarkGroup()->getUrl(),
                 'dbColumn' => $benchmark->getDbColumn(),
                 'equation' => $this->getEquation($benchmark),
-                'baseBenchmarks' => null //$this->getBaseBenchmarks($benchmark)
+                'baseBenchmarks' => $baseBenchmarks
             );
         }
 

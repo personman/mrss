@@ -19,11 +19,17 @@
 
     <h2><?= $college->getName() ?></h2>
 
+    <?php if (!$showDetails): ?>
+        <p><a href="<?= $this->url('admin/outliers', array('college_id' => $college->getId())) ?>">Detailed Outlier report</a></p>
+
+    <?php endif ?>
+
     <?= $this->partial(
         'mrss/report/outliers.partial.phtml',
         array(
             'outliers' => $outliers,
-            'admin' => true
+            'admin' => true,
+            'showDetails' => $showDetails
         )
     ) ?>
 

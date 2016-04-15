@@ -1776,9 +1776,10 @@ return array(
                     'outliers' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/outliers',
+                            'route' => '/outliers[/:college_id]',
                             'defaults' => array(
                                 'controller' => 'reports',
+                                'college_id' => null,
                                 'action' => 'adminOutliers'
                             )
                         )
