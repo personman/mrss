@@ -103,7 +103,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
         // Rename or hide system report link (only show for NCCBP)
-        if ($system && $currentStudy->getId() == 1) {
+        if ($system && in_array($currentStudy->getId(), array(1, 4))) {
             $label = $system->getName() . ' Report';
             $pages['reports']['pages']['system']['label'] = $label;
         } else {
@@ -204,7 +204,6 @@ class NavigationFactory extends DefaultNavigationFactory
         // Since it's the first year of aaup, don't show the report menu until open and paid
         if ($currentStudy->getId() == 4) {
             $sub = $this->getSubscription();
-            pr($sub->getReportAccess());
             if ($currentStudy->getReportsOpen() && $sub && $sub->getReportAccess()) {
                 // Allow the reports menu to show (hide the public results menu)
                 unset($pages['members-results']);
@@ -384,20 +383,18 @@ class NavigationFactory extends DefaultNavigationFactory
 
         $subscription = null;
 
-        //if (!$collegeId = $this->getSystemCollegeId()) {
-            if ($user = $this->getUser()) {
-                $collegeId = $user->getCollege()->getId();
-                $subscription = $subModel->findOne($year, $collegeId, $study->getId());
-            }
-        //}
+        if ($user = $this->getUser()) {
+            $systemId = $this->getSystemCollegeId();
+            $user = $this->getUser();
+            $collegeId = $user->getCollege()->getId();
 
-        /*if ($_SERVER['REMOTE_ADDR'] == '23.112.140.8') {
-            pr($collegeId);
-            pr($this->getSystemCollegeId());
-            pr($year);
-            pr($study->getId());
-            pr($subscription);
-        }*/
+            if ($systemId && $systemId != $collegeId) {
+                $collegeId = $systemId;
+            }
+
+
+            $subscription = $subModel->findOne($year, $collegeId, $study->getId());
+        }
 
         return $subscription;
     }

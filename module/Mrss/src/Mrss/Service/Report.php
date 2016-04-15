@@ -216,13 +216,15 @@ class Report
                     $this->getStudy(),
                     $year,
                     array($dbColumn),
-                    false
+                    false,
+                    true,
+                    array(),
+                    $system
                 );
             } else {
                 $subscriptions = array();
             }
         }
-        //prd(count($subscriptions));
 
         $benchmarkGroupId = $benchmark->getBenchmarkGroup()->getId();
 

@@ -90,11 +90,20 @@ class ReportController extends AbstractActionController
             $observationIds[$year] = $yearIds;
         }
 
+        // Get System ids
+        $currentYear = $this->currentStudy()->getCurrentYear();
+        $systemIds = array();
+        //foreach ($this->getSystemModel()->findAll() as $system) {
+        foreach ($this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId()) as $system) {
+            $systemIds[] = $system->getId();
+        }
+
 
         return array(
             'years' => $years,
             'study' => $this->currentStudy(),
-            'observationIds' => $observationIds
+            'observationIds' => $observationIds,
+            'systemIds' => $systemIds
         );
     }
 
@@ -200,6 +209,69 @@ class ReportController extends AbstractActionController
         return $view;
     }
 
+    /**
+     * @return \Mrss\Model\System
+     */
+    protected function getSystemModel()
+    {
+        return $this->getServiceLocator()->get('model.system');
+    }
+
+    public function calculateOneSystemAction()
+    {
+        takeYourTime();
+        $start = microtime(true);
+
+        $systemId = $this->params()->fromRoute('system');
+        $system = $this->getSystemModel()->find($systemId);
+        if (empty($system)) {
+            throw new \Exception(
+                'Valid system id required to calculate system reports.'
+            );
+        }
+
+        $yearToPrepare = $this->params()->fromRoute('year');
+        if (empty($yearToPrepare)) {
+            throw new \Exception(
+                'Year parameter required to calculate system reports.'
+            );
+        }
+
+        $benchmarkId = $this->params()->fromRoute('benchmark');
+        $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+        if (empty($benchmark)) {
+            throw new \Exception(
+                'Year parameter required to calculate system reports.'
+            );
+        }
+
+
+        $position = $this->params()->fromRoute('position');
+
+        if ($position == 'first') {
+            $this->getPercentileService()->clearPercentiles($yearToPrepare, $system);
+        } elseif ($position == 'last') {
+            $this->getPercentileService()->updateCalculationDate($yearToPrepare, $system);
+        }
+
+        $this->getPercentileService()->calculateForBenchmark($benchmark, $yearToPrepare, $system);
+
+        $this->getPercentileService()->getPercentileModel()->getEntityManager()->flush();
+
+
+        $elapsed = microtime(true) - $start;
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'elapsed' => $elapsed
+            )
+        );
+
+        return $view;
+
+    }
+
     public function calculateSystemsAction()
     {
         $this->longRunningScript();
@@ -217,7 +289,7 @@ class ReportController extends AbstractActionController
 
         if (!empty($yearToPrepare)) {
             // Now calculate percentiles
-            $stats = $this->getServiceLocator()->get('service.report.percentile')
+            $stats = $this->getPercentileService()
                 ->calculateSystems($yearToPrepare);
             $benchmarks = $stats['benchmarks'];
             $percentiles = $stats['percentiles'];

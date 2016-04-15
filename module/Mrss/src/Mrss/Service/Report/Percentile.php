@@ -59,14 +59,19 @@ class Percentile extends Report
         }
 
         // Update the settings table with the calculation date
-        $settingKey = $this->getReportCalculatedSettingKey($year, $system);
-        $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
+        $this->updateCalculationDate($year, $system);
 
         // Flush
         $percentileModel->getEntityManager()->flush();
 
         // Return some stats
         return $this->stats;
+    }
+
+    public function updateCalculationDate($year, $system = null)
+    {
+        $settingKey = $this->getReportCalculatedSettingKey($year, $system);
+        $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
     }
 
     public function calculateForBenchmark(Benchmark $benchmark, $year, $system = null)

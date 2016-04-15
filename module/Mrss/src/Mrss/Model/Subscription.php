@@ -126,7 +126,8 @@ class Subscription extends AbstractModel
         $benchmarks,
         $excludeOutliers = true,
         $notNull = true,
-        $benchmarkGroupIds = array()
+        $benchmarkGroupIds = array(),
+        $system = null
     ) {
         $rsm = new ResultSetMapping;
 
@@ -141,6 +142,12 @@ class Subscription extends AbstractModel
 
         $rsm->addJoinedEntityResult('Mrss\Entity\Observation', 'o', 's', 'observation');
         $rsm->addFieldResult('o', 'o_id', 'id');
+
+        $systemWhere = '';
+        if ($system) {
+            //$systemJoin = " INNER JOIN systems sy ON c.sytem_id = sy.id";
+            $systemWhere = " AND c.system_id = :system_id ";
+        }
 
         $subQueries = array();
         $notNulls = array();
@@ -173,6 +180,7 @@ class Subscription extends AbstractModel
         INNER JOIN observations o ON s.observation_id = o.id
         WHERE s.year = :year
         AND s.study_id = :study_id
+        $systemWhere
         $notNulls
         $subQueries
         ";
@@ -180,6 +188,10 @@ class Subscription extends AbstractModel
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('year', $year);
         $query->setParameter('study_id', $study->getId());
+
+        if ($system) {
+            $query->setParameter('system_id', $system->getId());
+        }
 
         // Force refresh so it doesn't serve stale entities (when multiple charts are built on one page)
         $query->setHint(Query::HINT_REFRESH, true);

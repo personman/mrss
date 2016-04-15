@@ -705,6 +705,7 @@ function getAAUPReportMenu()
     $reorderedPages['peer'] = $newReportsPages['peer'];
     $reorderedPages['custom'] = $newReportsPages['custom'];
     $reorderedPages['national'] = $newReportsPages['national'];
+    $reorderedPages['system'] = $newReportsPages['system'];
     $reorderedPages['free-consultation'] = $newReportsPages['free-consultation'];
 
     $newReportsPages = $reorderedPages;

@@ -8,6 +8,7 @@ $(function() {
     setUpCalculation();
     setUpCompute();
     setUpPercentiles();
+    setUpSystems();
 });
 
 
@@ -135,10 +136,63 @@ function setUpPercentiles()
         return false;
     })
 }
+
+
+function setUpSystems()
+{
+    var baseUrl = '/reports/calculate-one-system/';
+
+    $('.calculate-systems').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+        urlStack = [];
+
+        // Get the benchmark Ids
+        var benchmarkIds = benchmarks[year];
+
+        var lastSystemId = systemIds.length - 1;
+        var lastBenchmarkId = benchmarkIds.length - 1;
+
+        for (var si in systemIds) {
+            var systemId = systemIds[si];
+
+            for (var bi in benchmarkIds) {
+                var benchmarkId = benchmarkIds[bi];
+
+                var url = baseUrl + systemId + '/' + benchmarkId + '/' + year;
+
+                // First and last
+                if (si == 0 && bi == 0) {
+                    url = url + '/last';
+                } else if ((si == lastSystemId) && (bi == lastBenchmarkId)) {
+                    url = url + '/first';
+                }
+
+
+
+                urlStack.push(url);
+            }
+        }
+
+        progressBar = $('#system-progress-' + year + ' .progress-bar');
+
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
+    })
+}
+
 // Take a url off the top of the stack, run the ajax, update the progress bar, call the function again
 function processUrlStack()
 {
     var url;
+
+    if (originalTotal == 0) {
+        originalTotal = urlStack.length;
+    }
 
     if (url = urlStack.pop()) {
         // Send the benchmark id and year to the server

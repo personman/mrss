@@ -19,13 +19,15 @@ $this->headScript()->appendFile(
 
     var observations = <?= json_encode($observationIds) ?>;
 
+    var systemIds = <?= json_encode($systemIds) ?>;
+
 </script>
 
 <style>
     h3 {
        margin-top: 25px;
     }
-    .calculation-progress {
+    .calculation-progress, .system-progress {
         display: none;
     }
 </style>
@@ -169,14 +171,33 @@ $this->headScript()->appendFile(
 
     <h3>System Reports</h3>
     <div class="row-fluid row">
-        <div class="span6 col-md-10">
+        <div class="span6 col-md-4">
             <p>
                 Calculate percentiles for System Reports.
             </p>
 
         </div>
+
+        <div class="span6 col-md-5" id="system-progress-<?= $year ?>">
+            <div class="progress system-progress">
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: 0%;"></div>
+            </div>
+
+        </div>
+
+        <div class="col-md-1">
+            <span class="progress-label"></span>
+        </div>
+
+
+
         <div class="span6 col-md-2">
-            <a class="btn btn-default" href="/reports/calculateSystems/year/<?= $year ?>">Prepare System Reports</a>
+            <a class="btn btn-default calculate-systems" id="calculate-systems-<?= $year ?>" href="#<?php /*/reports/calculateSystems/year/<?= $year ?> */ ?>">Prepare System Reports</a>
             <br>
             <?php if (!empty($calculationDates['system'])): ?>
                 Prepared on <?= $calculationDates['system'] ?>

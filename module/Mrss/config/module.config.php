@@ -917,6 +917,19 @@ return array(
                             )
                         )
                     ),
+                    'calculate-one-system' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-one-system/:system/:benchmark/:year[/:position]',
+                            'defaults' => array(
+                                'action' => 'calculateOneSystem',
+                                'year' => null,
+                                'system' => null,
+                                'benchmark' => null,
+                                'position' => null
+                            )
+                        )
+                    ),
                     'calculateSystems' => array(
                         'type' => 'segment',
                         'options' => array(

@@ -3,6 +3,8 @@
 namespace Mrss\Model;
 
 use \Mrss\Entity\System as SystemEntity;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query;
 use Zend\Debug\Debug;
 
 /**
@@ -35,6 +37,22 @@ class System extends AbstractModel
     {
         $c = $this->getRepository()->findBy(array(), array('name' => 'ASC'));
         return $c;
+    }
+
+    public function findWithSubscription($year, $studyId)
+    {
+        $dql = "SELECT sy
+            FROM Mrss\Entity\System sy
+            JOIN Mrss\Entity\College c WITH sy = c.system
+            JOIN Mrss\Entity\Subscription s WITH c = s.college
+            AND s.year = $year
+        ";
+
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
+
+        return $query->getResult();
     }
 
 
