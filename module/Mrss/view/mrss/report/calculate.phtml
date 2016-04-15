@@ -1,6 +1,6 @@
 <?php
 $this->headScript()->appendFile(
-    '/js/report-calculation.js?v=3',
+    '/js/report-calculation.js?v=4',
     'text/javascript'
 ); ?>
 
@@ -10,9 +10,14 @@ $this->headScript()->appendFile(
 
     <?php foreach ($years as $year => $calculationDates) {
         $benchmarkIdsForYear = array();
-        foreach ($study->getBenchmarksForYear($year) as $benchmark) {
+        /*foreach ($study->getBenchmarksForYear($year) as $benchmark) {
             $benchmarkIdsForYear[] = $benchmark->getId();
-        } ?>
+        }*/
+
+        $benchmarkIdsForYear = $benchmarkIds[$year];
+
+
+    ?>
         benchmarks[<?= $year ?>] = <?= json_encode($benchmarkIdsForYear) ?>;
 
     <?php } ?>

@@ -126,6 +126,13 @@ class Benchmark extends AbstractModel
         return $benchmarksFromStudy;
     }
 
+    public function findOnReport()
+    {
+        return $this->getRepository()->findBy(
+            array('includeInNationalReport' => true)
+        );
+    }
+
     public function save(BenchmarkEntity $benchmark)
     {
         // Confirm that the sequence is set

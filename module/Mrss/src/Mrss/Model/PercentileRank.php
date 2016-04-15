@@ -246,7 +246,7 @@ class PercentileRank extends AbstractModel
             AND p.study = ?2';
 
         if ($system) {
-            $dql .= ' AND p.system = ?3';
+            $dql .= ' AND p.system IS NOT NULL';
         } else {
             $dql .= ' AND p.system IS NULL';
         }
@@ -258,7 +258,7 @@ class PercentileRank extends AbstractModel
         $query->setParameter(2, $studyId);
 
         if ($system) {
-            $query->setParameter(3, $system);
+            //$query->setParameter(3, $system);
         }
 
         $query->execute();

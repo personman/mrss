@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use DoctrineORMModule\Proxy\__CG__\Mrss\Entity\Benchmark;
 use Mrss\Entity\Chart;
 use Mrss\Form\Explore;
 use Mrss\Form\PeerComparisonDemographics;
@@ -73,6 +74,7 @@ class ReportController extends AbstractActionController
 
         // Get observation ids
         $observationIds = array();
+        $benchmarkIds = array();
         foreach ($years as $year => $yearInfo) {
             $yearIds = array();
             $subs = $this->getSubscriptionModel()->findWithPartialObservations(
@@ -88,6 +90,13 @@ class ReportController extends AbstractActionController
             }
 
             $observationIds[$year] = $yearIds;
+
+
+            // Get the Ids of benchmarks on the report
+            foreach ($this->getBenchmarkModel()->findOnReport() as $benchmark) {
+                $benchmarkIds[$year][] = $benchmark->getId();
+            }
+
         }
 
         // Get System ids
@@ -99,11 +108,15 @@ class ReportController extends AbstractActionController
         }
 
 
+
+
+
         return array(
             'years' => $years,
             'study' => $this->currentStudy(),
             'observationIds' => $observationIds,
-            'systemIds' => $systemIds
+            'systemIds' => $systemIds,
+            'benchmarkIds' => $benchmarkIds
         );
     }
 
