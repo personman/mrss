@@ -1,7 +1,12 @@
+<style>
+    h2 {
+        margin-top: 30px;
+    }
+</style>
 
-<h2>Admin Outlier Report</h2>
+<h1>Admin Outlier Report</h1>
 
-<? //pr($report) ?>
+
 
 <?php foreach ($report as $collegeInfo): ?>
     <?php
@@ -12,7 +17,7 @@
         $outliers = $collegeInfo['outliers']
     ?>
 
-    <h3><?= $college->getName() ?></h3>
+    <h2><?= $college->getName() ?></h2>
 
     <?= $this->partial(
         'mrss/report/outliers.partial.phtml',
