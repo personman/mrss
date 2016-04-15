@@ -11,7 +11,9 @@
         <thead>
             <tr>
                 <th style="<?= $thStyle ?>">Benchmark</th>
-                <th style="<?= $thStyle ?>">Source Benchmarks</th>
+                <?php if (empty($admin)): ?>
+                    <th style="<?= $thStyle ?>">Source Benchmarks</th>
+                <?php endif ?>
                 <th style="<?= $thStyle ?>">Value</th>
                 <th style="<?= $thStyle ?>">Problem</th>
                 <?php if (empty($admin)): ?>
@@ -26,6 +28,9 @@
                 <td style="<?= $tdStyle ?>">
                     <strong><?= $outlier['benchmark'] ?></strong>
                 </td>
+
+                <?php if (empty($admin)): ?>
+
                 <td style="<?= $tdStyle ?>">
                     <?php if ($outlier['computed']): ?>
                         <table class="00table 00table-bordered" style="<?= $tStyle ?>">
@@ -63,6 +68,9 @@
 
                     <?php endif ?>
                 </td>
+
+                <?php endif ?>
+
                 <td class="text-right" style="<?= $tdStyle ?> text-align: right">
                     <?= $outlier['value'] ?>
                 </td>

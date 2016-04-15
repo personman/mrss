@@ -18,6 +18,7 @@ class Percentile extends Report
 
     public function calculateForYear($year, $system = null)
     {
+        die('calculateForYear is deprecated.');
         $baseMemory = memory_get_usage();
 
         $start = microtime(1);
@@ -167,8 +168,17 @@ class Percentile extends Report
         $this->debugTimer('cleared values');
     }
 
+    /**
+     * @param $year
+     * @return array
+     * @throws \Exception
+     * @deprecated
+     */
     public function calculateSystems($year)
     {
+        throw new \Exception("calculateSystem is dprecated.");
+
+
         $statTotals = array(
             'benchmarks' => 0,
             'percentiles' => 0,

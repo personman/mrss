@@ -120,11 +120,25 @@ class ReportController extends AbstractActionController
         );
     }
 
+    public function debug($message, $var)
+    {
+        $seconds = microtime(true) - REQUEST_MICROTIME;
+
+        echo "$seconds since request started.<h3>$message</h3>";
+
+        if ($var) {
+            pr($var);
+        }
+
+    }
+
     /**
      * Calculate national report percentiles and ranks for a single benchmark/year
      */
     public function calculateOneAction()
     {
+        $this->debug("Start", null);
+
         $benchmarkId = $this->params()->fromRoute('benchmark');
         $year = $this->params()->fromRoute('year');
         $position = $this->params()->fromRoute('position');
@@ -144,12 +158,18 @@ class ReportController extends AbstractActionController
         }
 
 
+        $this->debug("About to calculate", $benchmarkId);
+
         // Now actually calculate and save percentiles
         $percentileService->calculateForBenchmark($benchmark, $year);
+
+        $this->debug("Preflush", null);
 
         // Flush
         $percentileService->getPercentileModel()->getEntityManager()->flush();
 
+
+        $this->debug("Postflush", null);
 
         $view = new JsonModel(
             array(

@@ -140,11 +140,24 @@ class Outliers extends Report
                 continue;
             }
 
-            $outliers = $this->getOutlierModel()
-                ->findByCollegeStudyAndYear($college, $study, $year);
+            $start = microtime(true);
+            if (!$excludeNonReported) {
+                $outliers = $this->getOutlierModel()
+                    ->findByCollegeStudyAndYear($college, $study, $year);
 
-            if ($excludeNonReported) {
-                $outliers = $this->removeNonReportedOutliers($outliers);
+                /*if ($excludeNonReported) {
+                    $outliers = $this->removeNonReportedOutliers($outliers);
+                }*/
+            } else {
+                $outliers = $this->getOutlierModel()
+                    ->findReportedByCollegStudyAndYear($college, $study, $year);
+            }
+
+
+            if (false && count($outliers) > 20) {
+                $elapsed = microtime(true) - $start;
+                pr(count($outliers));
+                prd($elapsed);
             }
 
             $observation = $this->getSubscriptionModel()->findOne($year, $college->getId(), $study)->getObservation();
@@ -193,8 +206,11 @@ class Outliers extends Report
             }
 
             $value = $outlier->getValue();
-            if ($value !== null) {
+            if ($benchmark->getInputType() != 'radio' && $value !== null && $value !== '') {
+                $value = floatval($value);
+
                 $value = $benchmark->getPrefix() . number_format($value) . $benchmark->getSuffix();
+
             }
 
             $newOutliers[] = array(
@@ -205,7 +221,7 @@ class Outliers extends Report
                 'benchmarkGroupId' => $benchmark->getBenchmarkGroup()->getUrl(),
                 'dbColumn' => $benchmark->getDbColumn(),
                 'equation' => $this->getEquation($benchmark),
-                'baseBenchmarks' => $this->getBaseBenchmarks($benchmark)
+                'baseBenchmarks' => null //$this->getBaseBenchmarks($benchmark)
             );
         }
 
