@@ -13,19 +13,15 @@ use Zend\View\Renderer\RendererInterface;
 
 class Outliers extends Report
 {
-    protected $stats;
+    protected $stats = array(
+        'high' => 0,
+        'low' => 0,
+        'missing' => 0
+    );;
 
     public function calculateOutliersForYear($year)
     {
         $this->year = $year;
-
-        //$this->calculateAllComputedFields($year);
-
-        $this->stats = array(
-            'high' => 0,
-            'low' => 0,
-            'missing' => 0
-        );
 
         $start = microtime(1);
 
