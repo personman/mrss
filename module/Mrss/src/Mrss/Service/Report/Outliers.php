@@ -17,7 +17,7 @@ class Outliers extends Report
         'high' => 0,
         'low' => 0,
         'missing' => 0
-    );;
+    );
 
     public function calculateOutliersForYear($year)
     {
