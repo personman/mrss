@@ -153,6 +153,7 @@ class Peer extends Report
             $sheetName = str_replace(array('*', ':', '/', '\\', '?', '[', ']'), '', $sheetName);
 
             try {
+                $sheetName = 'test';
                 $sheet->setTitle($sheetName);
             } catch ( \Exception $e) {
                 //pr($sheetName);
