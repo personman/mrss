@@ -145,15 +145,14 @@ class Peer extends Report
             $sheet = $excel->createSheet($sheetIndex);
 
             $sheetName = $section['benchmark'];
-            if (strlen($sheetName) > 30) {
-                $sheetName = substr($sheetName, 0, 30);
+            if (strlen($sheetName) > 20) {
+                $sheetName = substr($sheetName, 0, 20);
             }
 
             // Get rid of invalid characters
             $sheetName = str_replace(array('*', ':', '/', '\\', '?', '[', ']'), '', $sheetName);
 
             try {
-                $sheetName = 'test';
                 $sheet->setTitle($sheetName);
             } catch ( \Exception $e) {
                 //pr($sheetName);
