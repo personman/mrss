@@ -151,7 +151,13 @@ class Peer extends Report
 
             // Get rid of invalid characters
             $sheetName = str_replace(array('*', ':', '/', '\\', '?', '[', ']'), '', $sheetName);
-            $sheet->setTitle($sheetName);
+
+            try {
+                $sheet->setTitle($sheetName);
+            } catch ( \Exception $e) {
+                pr($sheetName);
+            }
+
 
             $headerRow = array(
                 $section['benchmark'],

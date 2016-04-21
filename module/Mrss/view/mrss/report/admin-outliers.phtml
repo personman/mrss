@@ -2,6 +2,10 @@
     h2 {
         margin-top: 30px;
     }
+
+    p a {
+        font-size: 80%;
+    }
 </style>
 
 <h1>Admin Outlier Report</h1>
@@ -20,7 +24,7 @@
     <h2><?= $college->getName() ?></h2>
 
     <?php if (!$showDetails): ?>
-        <p><a href="<?= $this->url('admin/outliers', array('college_id' => $college->getId())) ?>">Detailed Outlier report</a></p>
+        <p><a href="<?= $this->url('admin/outliers', array('college_id' => $college->getId())) ?>">Detailed Outlier Report</a></p>
 
     <?php endif ?>
 
