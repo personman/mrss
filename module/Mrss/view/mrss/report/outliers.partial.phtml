@@ -36,7 +36,7 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
                     <strong><?= $outlier['benchmark'] ?></strong>
                 </td>
 
-                <?php if ($showDetails): ?>
+                <?php if (!empty($showDetails)): ?>
 
                     <td style="<?= $tdStyle ?>">
                         <?php if ($outlier['computed']): ?>

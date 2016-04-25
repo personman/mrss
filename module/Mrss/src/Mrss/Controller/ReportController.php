@@ -429,7 +429,8 @@ class ReportController extends AbstractActionController
         return array(
             'report' => $outlierReport,
             'studyName' => $this->currentStudy()->getName(),
-            'year' => $this->currentStudy()->getCurrentYear()
+            'year' => $this->currentStudy()->getCurrentYear(),
+            'showDetails' => true
         );
     }
 
