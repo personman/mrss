@@ -37,6 +37,8 @@ class ContactController extends PhlyController
         $subject = $data['subject'] . ', ' . $from . " [$study]";
         $body    = "From: $from\n\n" . $data['body'];
 
+        $from = 'info@benchmarkinginstitute.org';
+
         $this->message->addFrom($from)
             ->addReplyTo($from)
             ->setSubject($subject)

@@ -17,12 +17,16 @@ $settings = array(
     'options_class' => 'Zend\Mail\Transport\SmtpOptions',
     
     'transport_options' => array(
-        'host' => 'smtp.mandrillapp.com',
+        //'host' => 'smtp.mandrillapp.com',
+        'host' => 'email-smtp.us-east-1.amazonaws.com',
         'connection_class' => 'login',
         'connection_config' => array(
             'ssl' => 'tls',
-            'username' => 'dfergu15@jccc.edu',
-            'password' => '3vheGQZghNh6NoReuj6d2w'
+            //'username' => 'dfergu15@jccc.edu',
+            //'password' => '3vheGQZghNh6NoReuj6d2w'
+            'username' => 'AKIAIUF47ASNCWSQDVLQ',
+            'password' => 'AjPpbP5b3FTELvX6c169M7cwQnuTfQzS4R9nrkkUzhwQ'
+
         ),
         'port' => 587
     ),
