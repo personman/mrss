@@ -18,7 +18,7 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
         <thead>
         <tr>
             <th style="<?= $thStyle ?>">Benchmark</th>
-            <?php if ($showDetails): ?>
+            <?php if (!empty($showDetails)): ?>
                 <th style="<?= $thStyle ?>" class="sourceHeading">Source Benchmarks</th>
             <?php endif ?>
             <th style="<?= $thStyle ?>">Value</th>
