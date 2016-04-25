@@ -701,11 +701,11 @@ function getAAUPReportMenu()
     $reorderedPages = array();
 
     $reorderedPages['results-instructions'] = $newReportsPages['results-instructions'];
-    $reorderedPages['sample-results'] = $newReportsPages['sample-results'];
     $reorderedPages['peer'] = $newReportsPages['peer'];
     $reorderedPages['custom'] = $newReportsPages['custom'];
     $reorderedPages['national'] = $newReportsPages['national'];
     $reorderedPages['system'] = $newReportsPages['system'];
+    $reorderedPages['sample-results'] = $newReportsPages['sample-results'];
     $reorderedPages['free-consultation'] = $newReportsPages['free-consultation'];
 
     $newReportsPages = $reorderedPages;
