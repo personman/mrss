@@ -111,7 +111,7 @@ class BubbleBuilder extends ChartBuilder
 
                 $name = null;
                 if (empty($this->getStudyConfig()->anonymous_peers)) {
-                    $name = $subscription->getCollege()->getName();
+                    $name = $subscription->getCollege()->getNameAndState();
                 }
 
                 $datum = array(
@@ -126,7 +126,7 @@ class BubbleBuilder extends ChartBuilder
                 if (!$hideMine && $college->getId() == $collegeId) {
                     $yourCollege[] = $datum;
                 } elseif (!empty($peerIds) && in_array($college->getId(), $peerIds)) {
-                    $includedPeers[] = $college->getName();
+                    $includedPeers[] = $college->getNameAndState();
                     $peerData[] = $datum;
                 } else {
                     $data[] = $datum;
@@ -178,7 +178,7 @@ class BubbleBuilder extends ChartBuilder
         // Highlight a college?
         if (count($yourCollege)) {
             $series[] = array(
-                'name' => $this->getCollege()->getName(),
+                'name' => $this->getCollege()->getNameAndState(),
                 'type' => $type,
                 'color' => $this->getYourColor(),
                 'data' => $yourCollege,

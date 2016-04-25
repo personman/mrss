@@ -36,7 +36,7 @@ class Peer extends Report
             'youHaveNoData' => array(),
             'sections' => array(),
             'colleges' => array(),
-            'currentCollege' => $currentCollege->getName(),
+            'currentCollege' => $currentCollege->getNameAndState(),
             'year' => $year
         );
 
@@ -57,7 +57,7 @@ class Peer extends Report
             $observations[$collegeId] = $college->getObservationForYear($year);
 
             if ($college->getId() != $currentCollege->getId()) {
-                $report['colleges'][] = $college->getName();
+                $report['colleges'][] = $college->getNameAndState();
             } elseif (!empty($observations[$collegeId])) {
                 $this->setObservation($observations[$collegeId]);
             }
@@ -240,9 +240,9 @@ class Peer extends Report
         foreach ($data as $collegeId => $value) {
             if (!$anonymous) {
                 $college = $this->getCollegeModel()->find($collegeId);
-                $label = $college->getName();
+                $label = $college->getNameAndState();
             } elseif ($collegeId == $currentCollege->getId()) {
-                $label = $currentCollege->getName();
+                $label = $currentCollege->getNameAndState();
             } else {
                 $label = $this->numberToLetter($i);
                 $i++;
@@ -282,7 +282,7 @@ class Peer extends Report
             $label = $this->shortenCollegeName($name);
 
             // Your college
-            if ($name == $this->currentCollege->getName()) {
+            if ($name == $this->currentCollege->getNameAndState()) {
                 $dataLabelEnabled = true;
                 $color = $this->getYourCollegeColor();
 
@@ -399,6 +399,8 @@ class Peer extends Report
     /**
      * Returns colleges that reported at least one of the benchmarks
      *
+     * This method expects the college name to be unique, so it includes the state as well.
+     *
      * @param College[] $colleges
      * @param array $benchmarkIds
      * @param $year
@@ -450,7 +452,7 @@ class Peer extends Report
                     $college = $subscription->getCollege();
 
                     if (in_array($college->getId(), $collegeIds)) {
-                        $filteredColleges[$college->getName()] = $college;
+                        $filteredColleges[$college->getNameAndState()] = $college;
                         continue 2;
                     }
                 }
