@@ -2,7 +2,6 @@
 
 // AAUP - FCS
 return array(
-    //'from_email' => 'jbarnshaw@aaup.org',
     'from_email' => 'info@benchmarkinginstitute.org',
     'from_email_name' => 'John Barnshaw',
     //'cc_email' => 'jbarnshaw@aaup.org',
@@ -16,8 +15,8 @@ return array(
     'layout' => 'nccbp.phtml',
     'navigation' => 'fcs_navigation',
     'contact_instructions' => null,
-    //'contact_recipient' => array('jbarnshaw@aaup.org', 'sdunietz@aaup.org'),
-    'contact_recipient' => array('dfergu15@jccc.edu'),
+    'contact_recipient' => array('jbarnshaw@aaup.org', 'sdunietz@aaup.org'),
+    //'contact_recipient' => array('dfergu15@jccc.edu'),
     'css' => 'aaup.css',
     'css_print' => null,
     'validation_class' => 'FCSValidation',
