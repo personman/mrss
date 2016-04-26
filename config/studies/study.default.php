@@ -2,7 +2,7 @@
 
 // Default study config
 return array(
-    'from_email' => 'no-reply@jccc.edu',
+    'from_email' => 'info@benchmarkinginstitute.org',
     'from_email_name' => 'Michelle Taylor',
     'cc_email' => 'michelletaylor@jccc.edu',
     'approver_email' => 'dfergu15@jccc.edu',

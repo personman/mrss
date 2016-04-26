@@ -13,7 +13,7 @@ $settings = array(
      * Default: empty
      */
     'email_from_address' => array(
-    	'email' => 'dfergu15@jccc.edu',
+    	'email' => 'info@benchmarkinginstitute.org',
     	'name' => 'NHEBI Staff',
 	),
 

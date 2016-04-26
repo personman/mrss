@@ -416,14 +416,14 @@ class Module
                         )*/
                         array(
                             //'host' => 'smtp.mandrillapp.com',
-                            'host' => 'email-smtp.us-east-1.amazonaws.com',
+                            'host' => 'email-smtp.us-west-2.amazonaws.com',
                             'connection_class' => 'login',
                             'connection_config' => array(
                                 'ssl' => 'tls',
                                 //'username' => 'dfergu15@jccc.edu',
                                 //'password' => '3vheGQZghNh6NoReuj6d2w'
-                                'username' => 'AKIAIUF47ASNCWSQDVLQ',
-                                'password' => 'AjPpbP5b3FTELvX6c169M7cwQnuTfQzS4R9nrkkUzhwQ'
+                                'username' => 'AKIAJWKBUWWGMQJ2QZUQ',
+                                'password' => 'AqtPCY2L7TQAohN+ak5zS1BtleDmynUQ4ApOmdNqpCB9'
                             ),
                             'port' => 587
                         )

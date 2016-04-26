@@ -39,7 +39,7 @@ class ContactController extends PhlyController
 
         $from = 'info@benchmarkinginstitute.org';
 
-        $this->message->addFrom($from)
+        $this->message->setFrom($from)
             ->addReplyTo($from)
             ->setSubject($subject)
             ->setBody($body);
@@ -48,6 +48,9 @@ class ContactController extends PhlyController
         if ($recipient = $this->getStudyConfig()->contact_recipient) {
             $this->message->setTo($recipient);
         }
+
+        //pr($this->message);
+        //prd($this->transport);
 
         $this->transport->send($this->message);
     }
