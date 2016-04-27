@@ -34,8 +34,8 @@ class ContactController extends PhlyController
         $study = $currentStudy->getName();
 
         $replyTo    = $data['from'];
-        $subject = $data['subject'] . ', ' . $from . " [$study]";
-        $body    = "From: $from\n\n" . $data['body'];
+        $subject = $data['subject'] . ', ' . $data['from'] . " [$study]";
+        $body    = "From: " . $data['from'] . "\n\n" . $data['body'];
 
         $from = 'info@benchmarkinginstitute.org';
 
