@@ -13,7 +13,7 @@ $settings = array(
      * Default: empty
      */
     'email_from_address' => array(
-    	'email' => 'dfergu15@jccc.edu',
+    	'email' => 'info@benchmarkinginstitute.org',
     	'name' => 'NHEBI Staff',
 	),
 
@@ -58,14 +58,14 @@ $settings = array(
 );
 
 // Study-specific email config
-if (!empty($_SERVER['HTTP_HOST'])) {
+/*if (!empty($_SERVER['HTTP_HOST'])) {
     if ($_SERVER['HTTP_HOST'] == 'workforceproject.org') {
         $settings['email_from_address']['email'] = 'no-reply@workforceproject.org';
     } elseif (strpos($_SERVER['HTTP_HOST'], 'maximizingresources.org') !== false) {
         $settings['email_from_address']['email'] = 'no-reply@maximizingresources.org';
     }
 }
-
+*/
 
 /**
  * You do not need to edit below this line

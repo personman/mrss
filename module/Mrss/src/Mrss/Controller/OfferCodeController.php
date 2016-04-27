@@ -127,6 +127,6 @@ class OfferCodeController extends AbstractActionController
 
     public function getOfferCodeModel()
     {
-        return $this->getServiceLocator()->get('model.offerCode');
+        return $this->getServiceLocator()->get('model.offer.code');
     }
 }

@@ -203,7 +203,7 @@ class SubscriptionController extends AbstractActionController
                     return $this->redirect()->toRoute('subscribe/user-agreement');
                 } else {
                     $this->flashMessenger()->addErrorMessage("Unable to find institution.");
-                    return $this->redirect()->toUrl('/join-free');
+                    return $this->redirect()->toUrl('/participate');
                 }
 
 
@@ -1254,7 +1254,7 @@ class SubscriptionController extends AbstractActionController
         $college = $subscription->getCollege();
 
         $invoice = new Message();
-        $invoice->addFrom('dfergu15@jccc.edu', 'Danny Ferguson');
+        $invoice->setFrom('info@benchmarkinginstitute.org', 'NHEBI Staff');
 
         if ($to) {
             $invoice->addTo($to);
@@ -1289,21 +1289,18 @@ class SubscriptionController extends AbstractActionController
         $amountDue = number_format($subscription->getPaymentAmount(), 2);
 
         $body =
-            "
-            Study: {$study->getName()}
-            Year: $year
-            Institution: {$college->getName()}
-            Amount Due: $amountDue
-            Payment Method: {$subscription->getPaymentMethodForDisplay()}
-            Date: $date
-            Address: {$college->getAddress()} {$college->getAddress2()}
-            City: {$college->getCity()}
-            State: {$college->getState()}
-            Zip: {$college->getZip()}
-            Digital Signature: {$subscription->getDigitalSignature()}
-            Title: {$subscription->getDigitalSignatureTitle()}
-
-            ";
+            "Study: {$study->getName()}\n" .
+            "Year: $year\n" .
+            "Institution: {$college->getName()}\n" .
+            "Amount Due: $amountDue\n" .
+            "Payment Method: {$subscription->getPaymentMethodForDisplay()}\n" .
+            "Date: $date\n" .
+            "Address: {$college->getAddress()} {$college->getAddress2()}\n" .
+            "City: {$college->getCity()}\n" .
+            "State: {$college->getState()}\n" .
+            "Zip: {$college->getZip()}\n" .
+            "Digital Signature: {$subscription->getDigitalSignature()}\n" .
+            "Title: {$subscription->getDigitalSignatureTitle()}\n";
 
         if ($adminUser && $dataUser) {
                 $body .= "
@@ -1680,7 +1677,7 @@ class SubscriptionController extends AbstractActionController
     {
         if (empty($this->subscriptionDraftModel)) {
             $this->subscriptionDraftModel = $this->getServiceLocator()
-                ->get('model.subscriptionDraft');
+                ->get('model.subscription.draft');
         }
 
         return $this->subscriptionDraftModel;
@@ -1688,38 +1685,42 @@ class SubscriptionController extends AbstractActionController
 
     public function downloadAction()
     {
+        takeYourTime();
+
         $model = $this->getSubscriptionModel();
+
+        $subscriptionsInfo = array();
+
+        /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
         $year = $this->params()->fromRoute('year');
 
         $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
 
-        $subscriptionsInfo[] = array(
-            'Institution',
-            'State',
-            'IPEDS',
-            'Campus Type',
-            'Calendar',
-            'Campus Environment',
-            'Faculty Unionized',
-            'Staff Unionized',
-            'Control'
-        );
+
+        $headers = array('Institution', 'State', 'IPEDS Unit ID');
+        foreach ($study->getCriteria() as $criterion) {
+            $headers[] = $criterion->getName();
+        }
+
+        $subscriptionsInfo[] = $headers;
+
+
         foreach ($subscriptions as $sub) {
             $college = $sub->getCollege();
             $observation = $sub->getObservation();
 
-            $subscriptionsInfo[] = array(
+            $exportRow = array(
                 $college->getName(),
                 $college->getState(),
                 $college->getIpeds(),
-                $observation->get('institutional_type'),
-                $observation->get('institutional_demographics_calendar'),
-                $observation->get('institutional_demographics_campus_environment'),
-                $observation->get('institutional_demographics_faculty_unionized'),
-                $observation->get('institutional_demographics_staff_unionized'),
-                $observation->get('institutional_control'),
             );
+
+            foreach ($study->getCriteria() as $criterion) {
+                $exportRow[] = $observation->get($criterion->getBenchmark()->getDbColumn());
+            }
+
+            $subscriptionsInfo[] = $exportRow;
         }
 
         $excel = new PHPExcel();
@@ -1731,7 +1732,7 @@ class SubscriptionController extends AbstractActionController
         }
 
         // Make the first row bold
-        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:Z1')->getFont()->setBold(true);
 
         $filename = $this->currentStudy()->getName() . '-Members-' . $year;
 
@@ -1745,5 +1746,26 @@ class SubscriptionController extends AbstractActionController
         $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
         $objWriter->save('php://output');
         die;
+    }
+
+    public function reportAccessAction()
+    {
+        $subscriptionId = $this->params()->fromPost('subscriptionId');
+        $enabled = $this->params()->fromPost('checked');
+
+        if ($subscriptionId && $subscription = $this->getSubscriptionModel()->find($subscriptionId)) {
+            $enabled = !empty($enabled);
+            $subscription->setReportAccess($enabled);
+
+            $this->getSubscriptionModel()->save($subscription);
+            $this->getSubscriptionModel()->getEntityManager()->flush();
+
+            $responseText = 'ok';
+        } else {
+            $responseText = 'Membership not found.';
+        }
+
+        $response = $this->getResponse()->setContent($responseText);
+        return $response;
     }
 }

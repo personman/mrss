@@ -27,10 +27,12 @@ class CustomReportController extends ReportController
             $webinarLink = '/free-webinar';
         }
 
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+
         return array(
             'webinarLink' => $webinarLink,
             'reports' => $this->getReportModel()
-                    ->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy())
+                    ->findByUserAndStudy($currentUser, $this->currentStudy())
         );
     }
 
@@ -178,7 +180,7 @@ class CustomReportController extends ReportController
      */
     protected function getReportItemModel()
     {
-        return $this->getServiceLocator()->get('model.reportItem');
+        return $this->getServiceLocator()->get('model.report.item');
     }
 
 
@@ -198,9 +200,13 @@ class CustomReportController extends ReportController
             }
         }
 
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+
         if (empty($report)) {
             $report = new Report;
-            $report->setCollege($this->currentCollege());
+            //$report->setCollege($this->currentCollege());
+            $report->setUser($currentUser);
+            $report->setCollege($currentUser->getCollege());
             $report->setStudy($this->currentStudy());
         }
 
@@ -291,6 +297,8 @@ class CustomReportController extends ReportController
 
     protected function copyCustomReport(Report $sourceReport, $college)
     {
+        return false;
+
         $peerGroupIdToCopy = 3465; // Peer group for sample reports
         //$peerGroupIdToCopy = null; // Peer group for sample reports
         $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $college);

@@ -1,0 +1,16 @@
+<h1>Add an Institution</h1>
+
+<?php
+$form->setAttribute('action', $this->url('colleges/add'));
+?>
+
+<?
+// Hack in a legend (we don't actually want two fieldsets
+$form = $this->ztbForm($this->form->prepare());
+$form = str_replace(
+    '<div class="control-group" id="control-group-institution[execTitle]">',
+    '<legend>Executive Contact</legend><div class="control-group" id="control-group-institution[execTitle]">',
+    $form
+);
+echo $form;
+?>

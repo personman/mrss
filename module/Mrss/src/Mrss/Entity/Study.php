@@ -549,6 +549,22 @@ class Study
         return $allBenchmarks;
     }
 
+    /**
+     * @return \Mrss\Entity\Benchmark[]
+     */
+    public function getAllBenchmarks()
+    {
+        $allBenchmarks = array();
+        foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+            $benchmarks = $benchmarkGroup->getBenchmarks();
+            foreach ($benchmarks as $benchmark) {
+                $allBenchmarks[$benchmark->getDbColumn()] = $benchmark;
+            }
+        }
+
+        return $allBenchmarks;
+    }
+
     public function getAllBenchmarkKeys()
     {
         $allKeys = array();

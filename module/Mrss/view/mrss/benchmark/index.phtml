@@ -1,7 +1,7 @@
 <? /** @var \Mrss\Entity\BenchmarkGroup[] $benchmarkGroups */ ?>
 <link rel="stylesheet" href="/css/benchmarks.css"/>
 <script type="text/javascript" src="/js/jquery.sparkline.min.js"></script>
-<script type="text/javascript" src="/js/benchmark.js"></script>
+<script type="text/javascript" src="/js/benchmark.js?v=2"></script>
 
 <h2><?= $study->getName() ?> Benchmarks</h2>
 
@@ -39,6 +39,16 @@
         ">
             <span class="icon-upload glyphicon glyphicon-upload"></span>
             Import benchmark setup from csv
+        </a>
+    </li>
+
+    <li>
+        <a href="<?= $this->url(
+            'admin/equations',
+            array('id' => $study->getId())
+        ) ?>">
+            <span class="icon-upload glyphicon glyphicon-ok"></span>
+            Check all Equations
         </a>
     </li>
 
@@ -92,6 +102,14 @@
                 'data-entry/edit',
                 array('benchmarkGroup' => $benchmarkGroup->getUrl())
             ) ?>">Data entry</a>
+        </li>
+        <li>
+            <span class="icon-edit glyphicon glyphicon-circle-arrow-right
+"></span>
+            <a href="<?= $this->url(
+                'tools/equation-graph',
+                array('benchmarkGroup' => $benchmarkGroup->getId())
+            ) ?>">Equation Graph</a>
         </li>
     </ul>
 

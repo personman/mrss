@@ -1,7 +1,16 @@
+<style>
+    h2 {
+        margin-top: 30px;
+    }
 
-<h2>Admin Outlier Report</h2>
+    p a {
+        font-size: 80%;
+    }
+</style>
 
-<? //pr($report) ?>
+<h1>Admin Outlier Report</h1>
+
+
 
 <?php foreach ($report as $collegeInfo): ?>
     <?php
@@ -12,13 +21,19 @@
         $outliers = $collegeInfo['outliers']
     ?>
 
-    <h4><?= $college->getName() ?></h4>
+    <h2><?= $college->getName() ?></h2>
+
+    <?php if (!$showDetails): ?>
+        <p><a href="<?= $this->url('admin/outliers', array('college_id' => $college->getId())) ?>">Detailed Outlier Report</a></p>
+
+    <?php endif ?>
 
     <?= $this->partial(
         'mrss/report/outliers.partial.phtml',
         array(
             'outliers' => $outliers,
-            'admin' => true
+            'admin' => true,
+            'showDetails' => $showDetails
         )
     ) ?>
 

@@ -67,13 +67,37 @@ class Outlier extends AbstractModel
         StudyEntity $study,
         $year
     ) {
-        return $this->getRepository()->findBy(
-            array(
-                'college' => $college,
-                'study' => $study,
-                'year' => $year
-            )
+        $criteria = array(
+            'college' => $college,
+            'study' => $study,
+            'year' => $year
         );
+
+        return $this->getRepository()->findBy($criteria);
+    }
+
+    public function findReportedByCollegStudyAndYear(
+        CollegeEntity $college,
+        StudyEntity $study,
+        $year
+
+    ) {
+        $collegeId = $college->getId();
+        $studyId = $study->getId();
+
+        $dql = "SELECT o
+            FROM Mrss\Entity\Outlier o
+            JOIN Mrss\Entity\Benchmark b WITH o.benchmark = b
+            WHERE o.college = $collegeId
+            AND o.year = $year
+            AND o.study = $studyId
+            AND b.includeInNationalReport = true
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
+
+        return $query->getResult();
     }
 
     public function findByCollegeStudyBenchmarkAndYear(

@@ -4,6 +4,11 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\Observation;
+use Mrss\Entity\PeerGroup;
+use Mrss\Entity\Report as ReportEntity;
+use Mrss\Entity\ReportItem;
+use Mrss\Service\Export\Lapsed;
+use Mrss\Service\NhebiSubscriptions\Mrss;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Exceldiff;
 use PHPExcel;
@@ -13,11 +18,16 @@ use PHPExcel_Worksheet_Row;
 use PHPExcel_Style_Fill;
 use Mrss\Service\NccbpMigration;
 use Zend\Session\Container;
+use Mrss\Service\Export\User as ExportUser;
 
 class ToolController extends AbstractActionController
 {
     public function indexAction()
     {
+        /*$array = array(5 => 'hi');
+
+        $b = $array[7];*/
+
         $baseTime = round(microtime(1) - REQUEST_MICROTIME, 3);
 
         return array(
@@ -236,6 +246,11 @@ class ToolController extends AbstractActionController
         }
 
         return false;
+    }
+
+    public function infoAction()
+    {
+        return array();
     }
 
     public function calcCompletionAction()
@@ -484,7 +499,7 @@ class ToolController extends AbstractActionController
         $fieldsToCopy = array();
 
         /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
-        $benchmarkGroupModel = $this->getServiceLocator()->get('model.benchmarkGroup');
+        $benchmarkGroupModel = $this->getServiceLocator()->get('model.benchmark.group');
 
         /** @var \Mrss\Model\Benchmark $benchmarkModel */
         $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
@@ -635,6 +650,7 @@ class ToolController extends AbstractActionController
 
         // Now loop over the subscriptions
         $report = array();
+        $users = array();
         foreach ($subs as $subscription) {
             $observation = $subscription->getObservation();
 
@@ -658,6 +674,7 @@ class ToolController extends AbstractActionController
                 }
 
                 $emails[] = $user->getEmail();
+                $users[] = $user;
             }
 
             $reportRow = array(
@@ -666,6 +683,13 @@ class ToolController extends AbstractActionController
                 'zeros' => $zeros
             );
             $report[] = $reportRow;
+        }
+
+        // Download?
+        $format = $this->params()->fromRoute('format', 'html');
+        if ($format == 'excel') {
+            $exporter = new ExportUser();
+            $exporter->export($users);
         }
 
         // Years for tabs
@@ -691,6 +715,48 @@ class ToolController extends AbstractActionController
         return array();
     }
 
+    public function repairSequencesAction()
+    {
+        foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
+            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+
+            $i = 1;
+            foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
+                $benchmark->setSequence($i);
+                $this->getBenchmarkModel()->save($benchmark);
+                $i++;
+            }
+        }
+
+        $this->getBenchmarkModel()->getEntityManager()->flush();
+
+        $this->flashMessenger()->addSuccessMessage('Sequences repaired.');
+        return $this->redirect()->toRoute('tools');
+    }
+
+    public function repairReportSequencesAction()
+    {
+        $benchmarkModel = $this->getBenchmarkModel();
+
+        foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
+            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+
+            $benchmarks = $benchmarkModel->findByGroupForReport($benchmarkGroup);
+
+            $i = 1;
+            foreach ($benchmarks as $benchmark) {
+                $benchmark->setReportSequence($i);
+                $this->getBenchmarkModel()->save($benchmark);
+                $i++;
+            }
+        }
+
+        $this->getBenchmarkModel()->getEntityManager()->flush();
+
+        $this->flashMessenger()->addSuccessMessage('Report sequences repaired.');
+        return $this->redirect()->toRoute('tools');
+    }
+
     protected function getObservationPropertyCode(Benchmark $benchmark)
     {
         $oldDbColumn = $benchmark->getDbColumn();
@@ -702,6 +768,313 @@ class ToolController extends AbstractActionController
         $property .= "protected \${$newDbColumn};\n";
 
         return $property;
+    }
+
+    public function equationGraphAction()
+    {
+
+        $benchmarkGroupId = $this->params()->fromRoute('benchmarkGroup');
+        $benchmarkGroupName = null;
+        if ($benchmarkGroupId) {
+            $groups = array($benchmarkGroupId);
+            $benchmarkGroupName = $this->getBenchmarkGroupModel()->find($benchmarkGroupId)->getName();
+        }
+
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+
+        /** @var \Mrss\Service\ComputedFields $computedFields */
+        $computedFields = $this->getServiceLocator()->get('computedFields');
+
+
+
+        $allBenchmarks = $study->getAllBenchmarks();
+
+
+        $exclude = array('institution_conversion_factor');
+
+        $dotMarkup = '';
+        $benchmarksForVis = array();
+        $edgesForVis = array();
+        $benchmarkIdsWithEdges = array();
+        foreach ($allBenchmarks as $benchmark) {
+            //if (!$benchmark->getComputed()) continue;
+
+
+
+
+
+            $benchmarksForVis[] = array(
+                'id' => $benchmark->getId(),
+                'label' => $benchmark->getDbColumn(),
+                //'label' => $benchmark->getId(),
+                'group' => $benchmark->getBenchmarkGroup()->getId()
+            );
+
+            if ($benchmark->getComputed() && $equation = $benchmark->getEquation()) {
+
+                $variables = $computedFields->getVariables($equation);
+
+                $dbColumn = $benchmark->getDbColumn();
+                foreach ($variables as $variable) {
+                    $newLine = "$variable -> $dbColumn<br>\n";
+
+                    $dotMarkup .= $newLine;
+
+
+
+
+                    //$groups = array(5, 6, 7);
+                    $groups = array();
+                    //$groups = array(4);
+
+                    if ($benchmarkGroupId) {
+                        $groups = array($benchmarkGroupId);
+                    }
+
+                    if (count($groups) && !in_array($benchmark->getBenchmarkGroup()->getId(), $groups)) continue;
+
+
+                    $fromCol = $benchmark->getDbColumn();
+                    $toCol = $variable;
+
+                    $from = $benchmark->getId();
+                    $to = $allBenchmarks[$variable]->getId();
+
+                    if (in_array($fromCol, $exclude) || in_array($toCol, $exclude)) {
+                        continue;
+                    }
+
+                    $benchmarkIdsWithEdges[$from] = true;
+                    $benchmarkIdsWithEdges[$to] = true;
+
+                    $edgesForVis[] = array(
+                        'from' => $from,
+                        'to' => $to,
+                        'arrows' => 'from'
+                    );
+                }
+            }
+        }
+
+        //pr(count($benchmarksForVis));
+        $withEdges = array();
+        foreach ($benchmarksForVis as $b) {
+            if (!empty($benchmarkIdsWithEdges[$b['id']])) {
+                $withEdges[] = $b;
+            }
+        }
+
+        $benchmarksForVis = $withEdges;
+
+        //pr(count($benchmarksForVis));
+        //echo $dotMarkup;
+
+        return array(
+            'nodes' => $benchmarksForVis,
+            'edges' => $edgesForVis,
+            'benchmarkGroups' => $study->getBenchmarkGroups(),
+            'benchmarkGroupName' => $benchmarkGroupName
+        );
+    }
+
+    /**
+     * Copy peer groups attached to colleges, changing the attachment to users.
+     * report_item->config needs to be updated to point at new peer group.
+     * Also handle copying reports and report items?
+     */
+    public function copyPeerGroupsAction()
+    {
+        takeYourTime();
+        $start = microtime(true);
+
+
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        /** @var \Mrss\Model\PeerGroup $peerGroupModel */
+        $peerGroupModel = $this->getServiceLocator()->get('model.peer.group');
+
+
+        $copiedCount = 0;
+
+
+        $start = microtime(true);
+
+
+        $colleges = $collegeModel->findAll();
+
+        $flushEvery = 50;
+        $i = 0;
+
+        foreach ($colleges as $college) {
+            foreach ($college->getPeerGroups() as $peerGroup) {
+                $peerGroupMap[$peerGroup->getId()] = array();
+
+                foreach ($college->getUsers() as $user) {
+                    $newGroup = new PeerGroup();
+
+                    $newGroup->setUser($user);
+                    $newGroup->setYear($peerGroup->getYear());
+                    $newGroup->setName($peerGroup->getName());
+                    $newGroup->setStudy($peerGroup->getStudy());
+                    $newGroup->setPeers($peerGroup->getPeers());
+                    $newGroup->setBenchmarks($peerGroup->getBenchmarks());
+
+                    $peerGroupModel->save($newGroup);
+
+                    // Remember ids for newly created groups and their
+                    //$peerGroupMap[$peerGroup->getId()][$user->getId()] = $newGroup->getId();
+
+
+                    $copiedCount++;
+
+                }
+                //pr($peerGroup->getName());
+            }
+
+
+            $i++;
+
+
+            if ($i % $flushEvery == 0) {
+                $peerGroupModel->getEntityManager()->flush();
+            }
+
+            if ($i == 100) {
+                //$elapsed = microtime(true) - $start;
+                //prd($elapsed);
+            }
+        }
+
+        $peerGroupModel->getEntityManager()->flush();
+
+
+        pr($copiedCount);
+
+        $elapsed = microtime(true) - $start;
+        pr($elapsed);
+
+
+
+
+
+
+
+
+        // Now reports
+        $copiedReportCount = 0;
+        $flushEvery = 100;
+
+        /** @var \Mrss\Model\Report $reportModel */
+        $reportModel = $this->getServiceLocator()->get('model.report');
+
+        /** @var \Mrss\Model\ReportItem $reportItemModel */
+        $reportItemModel = $this->getServiceLocator()->get('model.report.item');
+
+        $reports = $reportModel->findAll();
+
+        $i = 0;
+        foreach ($reports as $report) {
+            $college = $report->getCollege();
+
+            if ($college) {
+                foreach ($college->getUsers() as $user) {
+                    $newReport = new ReportEntity();
+
+                    $newReport->setUser($user);
+                    $newReport->setStudy($report->getStudy());
+                    $newReport->setName($report->getName());
+                    $newReport->setDescription($report->getDescription());
+
+                    $reportModel->save($newReport);
+                    $copiedReportCount++;
+
+                    // Flush so that $newReport->getId() works
+                    //$reportModel->getEntityManager()->flush();
+
+                    // Report items
+                    foreach ($report->getItems() as $item) {
+                        $newItem = new ReportItem();
+
+                        $newItem->setReport($newReport);
+                        $newItem->setHighlightedCollege($item->getHighlightedCollege());
+                        $newItem->setBenchmark1($item->getBenchmark1());
+                        $newItem->setBenchmark2($item->getBenchmark2());
+                        $newItem->setBenchmark3($item->getBenchmark3());
+                        $newItem->setName($item->getName());
+                        $newItem->setSubtitle($item->getSubtitle());
+                        $newItem->setDescription($item->getDescription());
+                        $newItem->setType($item->getType());
+                        $newItem->setYear($item->getYear());
+                        $newItem->setSequence($item->getSequence());
+
+                        $config = $item->getConfig();
+                        if ($oldGroupId = $config['peerGroup']) {
+                            //if ($newGroupId = $peerGroupMap[$oldGroupId][$user->getId()]) {
+                            if ($newGroupId = $this->getNewPeerGroupId($oldGroupId, $user)) {
+                                $config['peerGroup'] = $newGroupId;
+                            }
+                        }
+
+                        $newItem->setConfig($config);
+
+                        $reportItemModel->save($newItem);
+                        //$reportItemModel->getEntityManager()->flush();
+
+                    }
+                }
+            }
+
+            $i++;
+
+
+            if ($i % $flushEvery == 0) {
+                $reportModel->getEntityManager()->flush();
+            }
+
+        }
+
+        $reportModel->getEntityManager()->flush();
+
+        //pr($copiedCount);
+        pr($copiedReportCount);
+
+        $elapsed = microtime(true) - $start;
+        prd($elapsed);
+
+        die('test');
+    }
+
+    protected function getNewPeerGroupId($oldGroupId, $user)
+    {
+        /** @var \Mrss\Model\PeerGroup $model */
+        $model = $this->getServiceLocator()->get('model.peer.group');
+
+        $id = null;
+
+
+        if ($oldGroup = $model->find($oldGroupId)) {
+
+            if ($newGroup = $model->findOneByUserAndName($user, $oldGroup->getName())) {
+                $id = $newGroup->getId();
+            }
+        }
+
+        return $id;
+    }
+
+    public function lapsedAction()
+    {
+
+        $lapsedService = new Lapsed;
+        $lapsedService->setStudy($this->currentStudy());
+        $lapsedService->setSubscriptionModel($this->getServiceLocator()->get('model.subscription'));
+        $lapsedService->export();
+
+        die('hello there');
     }
 
     protected function getSeparationPrefix()
@@ -722,7 +1095,6 @@ class ToolController extends AbstractActionController
         return $colType;
     }
 
-
     protected function longRunningScript()
     {
         takeYourTime();
@@ -735,5 +1107,24 @@ class ToolController extends AbstractActionController
             ->setSQLLogger(null);
     }
 
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        if (empty($this->benchmarkModel)) {
+            $this->benchmarkModel = $this->getServiceLocator()
+                ->get('model.benchmark');
+        }
 
+        return $this->benchmarkModel;
+    }
+
+    /**
+     * @return \Mrss\Model\BenchmarkGroup
+     */
+    protected function getBenchmarkGroupModel()
+    {
+        return $this->getServiceLocator()->get('model.benchmark.group');
+    }
 }

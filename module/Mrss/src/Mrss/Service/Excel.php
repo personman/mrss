@@ -8,7 +8,7 @@ use Mrss\Entity\Subscription;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\BenchmarkHeading;
 use Mrss\Model\Benchmark as BenchmarkModel;
-use PHPExcel;
+use \PHPExcel as PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
@@ -316,7 +316,9 @@ class Excel
 
     public function download($spreadsheet)
     {
-        ob_end_clean();
+        if (ob_get_contents()) {
+            ob_end_clean();
+        }
 
         if (true) {
             // redirect output to client browser
@@ -487,7 +489,7 @@ class Excel
         return $return;
     }
 
-    protected function getAaupDataFromExcel(PHPExel $excel)
+    protected function getAaupDataFromExcel($excel)
     {
         $structure = $this->getAaupStructure();
         $data = array();
@@ -875,9 +877,11 @@ class Excel
 
         $i = 0;
         foreach ($observation->getSubObservations() as $subOb) {
-            $sheetIndex = $subObSheets[$i];
-            $sheet = $spreadsheet->setActiveSheetIndex($sheetIndex);
-            $this->populateMrssSubObservation($sheet, $subOb);
+            if (!empty($subObSheets[$i])) {
+                $sheetIndex = $subObSheets[$i];
+                $sheet = $spreadsheet->setActiveSheetIndex($sheetIndex);
+                $this->populateMrssSubObservation($sheet, $subOb);
+            }
 
             $i++;
         }

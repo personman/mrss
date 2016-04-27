@@ -3,14 +3,19 @@
 namespace Mrss\Service\Report\Max;
 
 use Mrss\Entity\Observation;
+use Mrss\Entity\Subscription;
 
 abstract class ActivityReport extends National
 {
     abstract protected function getTopLevelBenchmarkKey($activity);
     abstract protected function getDetailColumns($activity);
 
-    public function getData(Observation $observation)
+    public function getData(Subscription $subscription)
     {
+        $this->setSubscription($subscription);
+
+        $observation = $subscription->getObservation();
+
         $this->setObservation($observation);
 
         $activities = $this->getActivities();

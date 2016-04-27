@@ -29,6 +29,7 @@ class UserController extends AbstractActionController
         $id = $this->params('id');
         $postUser = $this->params()->fromPost('user', array());
 
+
         $userModel = $this->getUserModel();
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $redirect = $this->params('redirect');
@@ -85,6 +86,13 @@ class UserController extends AbstractActionController
 
             // Hand the POST data to the form for validation
             $post = $this->params()->fromPost();
+
+            if (!isset($post['user']['studies'])) {
+                $post['user']['studies'] = array();
+            }
+
+
+
             $form->setData($post);
 
             if ($form->isValid()) {
@@ -183,9 +191,12 @@ class UserController extends AbstractActionController
         $renderer = $this->getServiceLocator()->get('ViewRenderer');
 
         $oneTimeLogin = $renderer->serverUrl(
-            $renderer->url('zfcuser/resetpassword', array(
-                'userId' => $user->getId(),
-                'token' => $this->getPasswordResetKey($user->getId()))
+            $renderer->url(
+                'zfcuser/resetpassword',
+                array(
+                    'userId' => $user->getId(),
+                    'token' => $this->getPasswordResetKey($user->getId())
+                )
             )
         );
 
@@ -278,6 +289,11 @@ class UserController extends AbstractActionController
 
             // Hand the POST data to the form for validation
             $post = $this->params()->fromPost();
+
+            if (!isset($post['user']['studies'])) {
+                $post['user']['studies'] = array();
+            }
+
             $form->setData($post);
 
             if ($form->isValid()) {
@@ -304,6 +320,20 @@ class UserController extends AbstractActionController
 
                     return $this->redirect()->toRoute('institution/users');
                 }
+
+
+                /*prd($post);
+                if (empty($post['studies'])) {
+                    $user->removeStudy($this->currentStudy());
+                } else {
+                    pr($post);
+                    foreach ($post['studies'] as $id) {
+                        $study = $this->getStudyModel()->find($id);
+                        pr($id);
+                        $user->addStudy($study);
+                    }
+                }*/
+
 
                 // Save 'em
                 $userModel->save($user);
@@ -334,6 +364,11 @@ class UserController extends AbstractActionController
             'someoneElse' => $someoneElse,
             'user' => $user
         );
+    }
+
+    protected function getStudyModel()
+    {
+        return $this->getServiceLocator()->get('model.study');
     }
 
     public function accountAction()
@@ -538,7 +573,7 @@ class UserController extends AbstractActionController
                 ->get('viewhelpermanager')->get('url');
 
             // Build the one-time login url
-            $key = $this->getPasswordResetKey($userId, $user->getEmail());
+            $key = $this->getPasswordResetKey($userId);
 
 
             $url = $serverUrl->__invoke(
@@ -588,7 +623,18 @@ class UserController extends AbstractActionController
         die;
     }
 
-    protected function getPasswordResetKey($userId, $email)
+    public function resetAction()
+    {
+        $id = $this->params()->fromRoute('id');
+
+        $key = $this->getPasswordResetKey($id);
+
+        $this->flashMessenger()->addSuccessMessage("Password reset key generated.");
+
+        return $this->redirect()->toRoute('users/edit', array('id' => $id));
+    }
+
+    protected function getPasswordResetKey($userId)
     {
         /** @var \GoalioForgotPassword\Service\Password $passwordService */
         $passwordService = $this->getServiceLocator()
@@ -628,13 +674,11 @@ class UserController extends AbstractActionController
         $users = array();
         foreach ($colleges as $college) {
             foreach ($college->getUsers() as $user) {
-                //if ($user->hasStudy($study)) {
-                    $lastAccess = $user->getLastAccess();
-                    if (empty($lastAccess)) {
-                        $users[] = $user;
-                        //pr($user->getFullName() . ' ' . $user->getCollege()->getName());
-                    }
-                //}
+                $lastAccess = $user->getLastAccess();
+                if (empty($lastAccess)) {
+                    $users[] = $user;
+                    //pr($user->getFullName() . ' ' . $user->getCollege()->getName());
+                }
             }
         }
 

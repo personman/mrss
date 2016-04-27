@@ -2,17 +2,21 @@
 
 // AAUP - FCS
 return array(
-    'from_email' => 'jbarnshaw@aaup.org',
+    'from_email' => 'info@benchmarkinginstitute.org',
+    'from_email_name' => 'John Barnshaw',
     //'cc_email' => 'jbarnshaw@aaup.org',
     'cc_email' => 'dfergu15@jccc.edu',
     //'approver_email' => 'jbarnshaw@aaup.org',
     'approver_email' => 'dfergu15@jccc.edu',
     'favicon' => '/images/aaup-favicon.ico',
     'breakpoints' => '20,40,60,80',
+    'show_peer_data_you_did_not_submit' => true,
+    'college_report_access_checkbox' => true,
     'layout' => 'nccbp.phtml',
     'navigation' => 'fcs_navigation',
     'contact_instructions' => null,
     'contact_recipient' => array('jbarnshaw@aaup.org', 'sdunietz@aaup.org'),
+    //'contact_recipient' => array('dfergu15@jccc.edu'),
     'css' => 'aaup.css',
     'css_print' => null,
     'validation_class' => 'FCSValidation',
@@ -20,8 +24,13 @@ return array(
     'free_to_join' => true,
     'agreement_template' => 'agreement-fcs',
     'welcome_email' => 'welcome-aaup',
+    'outlier_email' => 'outliers.email.aaup',
+    'outlier_email_none' => 'outliers.email.none.aaup', // Send all AAUP users the same email
     'default_user_state' => 0, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer',
+    'anonymous_peers' => false,
+    'head_logo_url' => 'http://www.aaup.org',
+    'logged_out_header_button' => '<a href="/consultation" class="btn schedule-btn" role="button" id="schedule-demo">FREE CONSULTATION</a>',
     'copyright' => date('Y') . " American Association of University Professors",
     'footerLogo' => '<span>Powered by</span> <br><a href="http://nccbp.org/benchmarking-institute" title="National Higher Eduction Benchmarking Institute @ Johnson County Community College"><img src="/images/benchmark_logo.png" /></a>',
     'footerSocial' => '',
@@ -841,7 +850,6 @@ return array(
         7 => array(
             array(
                 'rows' => array(
-                    'Section 1.  Faculty on 9-Month Contracts (i.e., regardless of number of salary installments)',
                     'Part-time Faculty' => array(
                         'pt_male_faculty',
                         'pt_male_salaries',

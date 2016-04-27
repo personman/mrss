@@ -97,6 +97,54 @@ class AdminController extends AbstractActionController
         );
     }
 
+    public function equationsAction()
+    {
+        $results = array();
+
+        foreach ($this->currentStudy()->getAllBenchmarks() as $benchmark) {
+            /** @var \Mrss\Entity\Benchmark $benchmark */
+            if ($benchmark->getComputed()) {
+                $equation = $benchmark->getEquation();
+                $editLink = " <a href='/benchmark/study/0/edit/{$benchmark->getId()}'>Edit</a>";
+
+                if (empty($equation)) {
+                    $results[] = $benchmark->getDbColumn() . " is computed but has no equation. " . $editLink;
+                } elseif (!$this->getComputedFieldsService()->checkEquation($equation)) {
+                    $base = "Equation error for " . $benchmark->getDbColumn() . ". ";
+
+                    $results[] = $base . $this->getComputedFieldsService()->getError() . $editLink;
+                }
+            }
+        }
+
+        return array(
+            'errors' => $results
+        );
+    }
+
+    /**
+     * @return \Mrss\Service\ComputedFields
+     */
+    public function getComputedFieldsService()
+    {
+        return $this->getServiceLocator()->get('computedFields');
+    }
+
+    /**
+     * Build a new Observation entity based on benchmark config
+     */
+    public function generateAction()
+    {
+        /** @var \Mrss\Service\ObservationGenerator $generator */
+        $generator = $this->getServiceLocator()->get('service.generator');
+
+        $generator->generate();
+
+        $stats = $generator->getStats();
+
+        prd($stats);
+    }
+
     protected function getYear()
     {
         $year = $this->params()->fromRoute('year');
@@ -128,7 +176,7 @@ class AdminController extends AbstractActionController
      */
     protected function getChangeSetModel()
     {
-        return $this->getServiceLocator()->get('model.changeSet');
+        return $this->getServiceLocator()->get('model.change.set');
     }
 
     /**

@@ -1,7 +1,7 @@
 <?= $this->headLink()->appendStylesheet('/css/report.css') ?>
 <?php
 $this->headScript()->appendFile(
-    '/js/report.js?v=5',
+    '/js/report.js?v=6',
     'text/javascript'
 ); ?>
 
@@ -71,6 +71,10 @@ $this->headScript()->appendFile(
 
         <?php if (empty($system)) {
             $heading = 'National Percentiles';
+
+            if ($this->currentStudy()->getId() == 4) {
+                $heading = 'National Median Percentiles';
+            }
         } else {
             $heading = 'System Percentiles';
         }?>
@@ -127,7 +131,9 @@ $this->headScript()->appendFile(
                             <td>-</td>
                             <td>-</td>
                         <?php endif ?>
-                        <td><?= $benchmark['N'] ?></td>
+                        <td>
+                            <?= $benchmark['N'] ?>
+                        </td>
                         <?php foreach ($benchmark['percentiles'] as $percentile): ?>
                         <td>
                             <?php if (!is_null($percentile)): ?>
@@ -140,7 +146,10 @@ $this->headScript()->appendFile(
                     <tr class="nationalReportChart <?= $rowClass ?>" id="benchmark_<?= $benchmark['dbColumn'] ?>">
                         <td></td>
                         <td colspan="9">
-                            <?= $this->chart($benchmark['chart']) ?>
+
+                            <?php if (!empty($benchmark['chart'])): ?>
+                                <?= $this->chart($benchmark['chart']) ?>
+                            <?php endif ?>
 
                             <?php if (!empty($benchmark['description'])): ?>
                             <p class="nationalDataDefinition">

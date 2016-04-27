@@ -78,6 +78,12 @@ RewriteRule \.asp$ - [G,L]
 RewriteRule ^misc/ - [G,L]
 RewriteRule ^rss\.xml - [G,L]
 
+# Old AAUP urls
+RewriteRule ^CSS/Menu\.AAUP\.css - [G,L]
+RewriteRule ^Script/JScript\.js - [G,L]
+RewriteRule ^CSS/BaseStyle\.css - [G,L]
+RewriteRule ^CSS/MyStyleSheet\.css - [G,L]
+
 # No Wordpress here. Begone, brute force bots
 RewriteRule wp-login\.php - [G,L]
 RewriteRule wp-admin - [G,L]
@@ -126,3 +132,7 @@ AddOutputFilterByType DEFLATE application/xhtml+xml
 AddOutputFilterByType DEFLATE application/rss+xml
 AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/x-javascript
+
+Order Deny,Allow
+Deny from 93.113.125.12
+Deny from 208.69.108.108

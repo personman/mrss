@@ -96,19 +96,21 @@ class Explore extends AbstractForm
 
         $this->addPeerGroupDropdown($peerGroups);
 
-        $this->add(
-            array(
-                'name' => 'regression',
-                'type' => 'Zend\Form\Element\Checkbox',
-                'options' => array(
-                    'label' => 'Show Regression Line'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'regression'
+        if (true) {
+            $this->add(
+                array(
+                    'name' => 'regression',
+                    'type' => 'Zend\Form\Element\Checkbox',
+                    'options' => array(
+                        'label' => 'Show Regression Line'
+                    ),
+                    'attributes' => array(
+                        'options' => $benchmarks,
+                        'id' => 'regression'
+                    )
                 )
-            )
-        );
+            );
+        }
 
         $this->add(
             array(
@@ -292,6 +294,7 @@ class Explore extends AbstractForm
             'bar' => 'Percentile Bar Chart',
             'scatter' => 'Scatter Plot',
             'bubble' => 'Bubble Plot',
+            //'peer' =>'Peer Comparison',
             'text' => 'Text'
         );
 

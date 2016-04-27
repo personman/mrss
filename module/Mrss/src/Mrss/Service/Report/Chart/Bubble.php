@@ -35,12 +35,23 @@ class Bubble extends AbstractChart
         $xLabel = $this->getXLabel();
         $yLabel = $this->getYLabel();
 
+
         $xFormat = $this->getXFormat();
         $yFormat = $this->getYFormat();
 
-        $pointFormat = "<strong>$xLabel:</strong> {point.x}<br> <strong>$yLabel</strong>: {point.y}";
+
+        $pointFormat = "<strong>{point.name}</strong><br><strong>$xLabel:</strong> {point.x}<br> <strong>$yLabel</strong>: {point.y}";
         $pointFormat = str_replace('{point.x}', str_replace('y', 'point.x', $xFormat), $pointFormat);
         $pointFormat = str_replace('{point.y}', str_replace('y', 'point.y', $yFormat), $pointFormat);
+
+
+        if ($zFormat = $this->getZFormat()) {
+            $zLabel = $this->getZLabel();
+            $zFormat = str_replace('y', 'point.z', $zFormat);
+
+            $pointFormat .= "<br> <strong>$zLabel:</strong> $zFormat";
+        }
+
 
         return $pointFormat;
     }
@@ -53,6 +64,7 @@ class Bubble extends AbstractChart
 
             // Tooltip
             $config['plotOptions']['scatter']['tooltip']['pointFormat'] = $this->getPointFormat();
+            $config['plotOptions']['bubble']['tooltip']['pointFormat'] = $this->getPointFormat();
 
             // X axis
             $config['xAxis']['labels']['format'] = $this->convertFormatForAxisLabel($this->getXFormat());
@@ -101,15 +113,36 @@ class Bubble extends AbstractChart
         $config['yAxis']['gridLineWidth'] = 0;
 
         $this->setConfig($config);
+
+        return $this;
+    }
+
+    public function setRegression($regression)
+    {
+        $config = $this->getConfig();
+
+        $regression = !empty($regression);
+
+        $config['series'][0]['regression'] = $regression;
+        $config['series'][0]['regressionSettings'] = array(
+            'type' => 'linear',
+            'color' => 'rgba(0, 0, 0, .9)',
+            'useAllSeries' => true
+        );
+
+        $this->setConfig($config);
+
+        return $this;
     }
 
     public function setZLabel($label)
     {
-        $config = $this->getConfig();
+        return $this->setLabel($label, $this->zKey);
+        /*$config = $this->getConfig();
 
         $config['zLabel'] = $label;
         $config['series'][0]['zLabel'] = $label;
 
-        return $config;
+        return $config;*/
     }
 }

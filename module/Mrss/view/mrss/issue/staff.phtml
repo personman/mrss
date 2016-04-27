@@ -11,7 +11,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
 <style>
-    a:visited.btn-success, a:visited.btn-warning {
+    a:visited.btn-success, a:visited.btn-warning, a:visited.btn-danger {
         color: white !important;
     }
 </style>
@@ -104,6 +104,13 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     }
 </script>
 
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('issues/download-users') ?>">
+        <i class="glyphicon glyphicon-circle-arrow-down"></i>
+        Download Users
+    </a>
+</div>
+
 <h1>Data Issues</h1>
 
 <form action="/issues/mass-update" method="post">
@@ -146,6 +153,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
                         <a href="<?= $this->url('observation/group', array('id' => $issue->getObservation()->getId(), 'benchmarkGroup' => $issue->getFormUrl())) ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Go to Form <?= $issue->getFormUrl() ?></a>
                         <a href="mailto:<?= $issue->getCollege()->getDataEmails() ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-envelope"></span> Email User</a>
+                        <a href="#" class="btn btn-danger btn-xs update-issue" id="suppressed-<?= $issue->getId() ?>"><span class="glyphicon glyphicon-ban-circle"></span> Suppress Form <?= $issue->getFormUrl() ?></a>
+
                         <?php if ($issue->getStatus() == 'userConfirmed'): ?>
                         <a href="#" class="btn btn-warning btn-xs update-issue" id="null-<?= $issue->getId() ?>"><span class="glyphicon glyphicon-arrow-left"></span> Send Back to User</a>
                         <?php endif ?>
@@ -160,6 +169,15 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 
     <fieldset id="fieldset-buttons" class="well well-small">
+        <div class="control-group" id="control-group-buttons[suppress]">
+            <div class="controls" id="controls-buttons[suppress]">
+                <label for="suppress" class="btn btn-danger">
+                    <span class='glyphicon glyphicon-ban-circle'></span> Suppress Form
+                </label>
+                <input type="submit" id="suppress" name="buttons[suppress]"
+                       value="Suppress" class="hidden">
+            </div>
+        </div>
         <div class="control-group" id="control-group-buttons[submit]">
             <div class="controls" id="controls-buttons[submit]">
                 <label for="sendBack" class="btn btn-warning">

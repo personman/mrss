@@ -23,7 +23,7 @@ class IpedsInstitutionController extends AbstractActionController
     public function searchAction()
     {
         $term = $this->params()->fromQuery('term');
-        $model = $this->getServiceLocator()->get('model.ipedsInstitution');
+        $model = $this->getServiceLocator()->get('model.ipeds.institution');
 
         $institutions = $model->searchByName($term);
         $json = array();
@@ -50,7 +50,7 @@ class IpedsInstitutionController extends AbstractActionController
     public function importAction()
     {
         $file = 'data/imports/ipeds_institutions.csv';
-        $model = $this->getServiceLocator()->get('model.ipedsInstitution');
+        $model = $this->getServiceLocator()->get('model.ipeds.institution');
         $collegeModel = $this->getServiceLocator()->get('model.college');
 
         if (($handle = fopen($file, "r")) !== false) {

@@ -103,7 +103,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
         // Rename or hide system report link (only show for NCCBP)
-        if ($system && $currentStudy->getId() == 1) {
+        if ($system && in_array($currentStudy->getId(), array(1, 4))) {
             $label = $system->getName() . ' Report';
             $pages['reports']['pages']['system']['label'] = $label;
         } else {
@@ -199,6 +199,18 @@ class NavigationFactory extends DefaultNavigationFactory
         // Hide data issues from all non-AAUP studies
         if ($currentStudy->getId() != 4) {
             unset($pages['admin']['pages']['issues/staff']);
+        }
+
+        // Since it's the first year of aaup, don't show the report menu until open and paid
+        if ($currentStudy->getId() == 4) {
+            $sub = $this->getSubscription();
+            if ($currentStudy->getReportsOpen() && $sub && $sub->getReportAccess()) {
+                // Allow the reports menu to show (hide the public results menu)
+                unset($pages['members-results']);
+            } else {
+                // Hide it.
+                unset($pages['reports']);
+            }
         }
 
         // MRSS
@@ -363,17 +375,33 @@ class NavigationFactory extends DefaultNavigationFactory
         return $this->subscriptionModel;
     }
 
-    protected function hasSubscription(User $user)
+    protected function getSubscription()
     {
         $subModel = $this->getSubscriptionModel();
         $study = $this->getCurrentStudy();
         $year = $study->getCurrentYear();
 
-        if (!$collegeId = $this->getSystemCollegeId()) {
+        $subscription = null;
+
+        if ($user = $this->getUser()) {
+            $systemId = $this->getSystemCollegeId();
+            $user = $this->getUser();
             $collegeId = $user->getCollege()->getId();
+
+            if ($systemId && $systemId != $collegeId) {
+                $collegeId = $systemId;
+            }
+
+
+            $subscription = $subModel->findOne($year, $collegeId, $study->getId());
         }
 
-        $subscription = $subModel->findOne($year, $collegeId, $study->getId());
+        return $subscription;
+    }
+
+    protected function hasSubscription()
+    {
+        $subscription = $this->getSubscription();
 
         return (!empty($subscription));
     }
@@ -395,5 +423,28 @@ class NavigationFactory extends DefaultNavigationFactory
         $authorizeService = $this->serviceLocator->get('BjyAuthorizeServiceAuthorize');
 
         return $authorizeService;
+    }
+
+    /**
+     * @return
+     */
+    protected function getAuthService()
+    {
+        return $this->serviceLocator->get('zfcuser_auth_service');
+    }
+
+    protected function getUser()
+    {
+        $user = null;
+        $auth = $this->getAuthService();
+
+        //pr(get_class($auth));
+        //pr($auth->hasIdentity());
+
+        if ($auth->hasIdentity()) {
+            $user = $auth->getIdentity();
+        }
+
+        return $user;
     }
 }

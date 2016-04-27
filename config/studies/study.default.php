@@ -2,11 +2,14 @@
 
 // Default study config
 return array(
-    'from_email' => 'no-reply@jccc.edu',
+    'from_email' => 'info@benchmarkinginstitute.org',
+    'from_email_name' => 'Michelle Taylor',
     'cc_email' => 'michelletaylor@jccc.edu',
     'approver_email' => 'dfergu15@jccc.edu',
     'data_entry_templates' => array(),
     'breakpoints' => '10,25,50,75,90',
+    'show_peer_data_you_did_not_submit' => false,
+    'college_report_access_checkbox' => false,
     'layout' => 'layout.phtml',
     'navigation' => 'navigation',
     'favicon' => '/favicon.ico',
@@ -21,8 +24,13 @@ return array(
     'free_to_join' => false,
     'agreement_template' => null,
     'welcome_email' => 'welcome',
+    'outlier_email' => 'outliers.email',
+    'outlier_email_none' => 'outliers.email.none',
     'default_user_state' => 1, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
+    'anonymous_peers' => true,
+    'head_logo_url' => '/',
+    'logged_out_header_button' => '<a href="/schedule-demo" class="btn schedule-btn" role="button" id="schedule-demo">SCHEDULE DEMO</a>',
     'copyright' => "2004 - " . date('Y') . " Johnson County Community College",
     'footerLogo' => '<a href="/benchmarking-institute"><img src="/images/benchmark_logo.png" /></a>',
     'footerSocial' => '<a href="http://twitter.com/EdBenchmark" title="Follow us on Twitter" target="_blank">

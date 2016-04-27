@@ -97,7 +97,7 @@ class ObservationControllerTest extends AbstractControllerTestCase
         $sm = $this->getServiceLocator();
         $sm->setService('model.observation', $observationModelMock);
         $sm->setService('model.benchmark', $benchmarkModelMock);
-        $sm->setService('model.benchmarkGroup', $benchmarkGroupModelMock);
+        $sm->setService('model.benchmark.group', $benchmarkGroupModelMock);
 
         $this->dispatch('/observations/5');
         //print($this->getResponse()->getContent());die('viewActionCan');
@@ -188,7 +188,7 @@ class ObservationControllerTest extends AbstractControllerTestCase
         $sm = $this->getServiceLocator();
         $sm->setService('model.observation', $observationModelMock);
         $sm->setService('model.benchmark', $benchmarkModelMock);
-        $sm->setService('model.benchmarkGroup', $benchmarkGroupModelMock);
+        $sm->setService('model.benchmark.group', $benchmarkGroupModelMock);
         $sm->setService('service.formBuilder', $formServiceMock);
         $this->dispatch('/observations/edit/5');
 

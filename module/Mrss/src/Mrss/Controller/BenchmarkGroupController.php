@@ -113,7 +113,7 @@ class BenchmarkGroupController extends AbstractActionController
     {
         if (empty($this->benchmarkGroupModel)) {
             $this->benchmarkGroupModel = $this->getServiceLocator()
-                ->get('model.benchmarkGroup');
+                ->get('model.benchmark.group');
         }
 
         return $this->benchmarkGroupModel;

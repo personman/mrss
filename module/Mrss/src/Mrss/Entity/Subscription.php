@@ -126,6 +126,18 @@ class Subscription
      */
     protected $created;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Suppression", mappedBy="subscription")
+     */
+    protected $suppressions;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    protected $reportAccess = false;
+
+
+
     public function getId()
     {
         return $this->id;
@@ -312,6 +324,56 @@ class Subscription
     public function getCompletion()
     {
         return $this->completion;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReportAccess()
+    {
+        return $this->reportAccess;
+    }
+
+    /**
+     * @param mixed $reportAccess
+     * @return Subscription
+     */
+    public function setReportAccess($reportAccess)
+    {
+        $this->reportAccess = $reportAccess;
+        return $this;
+    }
+
+
+    /**
+     * @return Suppression[]
+     */
+    public function getSuppressions()
+    {
+        return $this->suppressions;
+    }
+
+    public function getSuppressionList()
+    {
+        $formUrls = array();
+        foreach ($this->getSuppressions() as $suppression) {
+            $formUrls[] = $suppression->getBenchmarkGroup()->getUrl();
+        }
+
+        return implode(', ', $formUrls);
+    }
+
+    public function hasSuppressionFor($benchmarkGroupId)
+    {
+        $has = false;
+        foreach ($this->getSuppressions() as $suppression) {
+            if ($suppression->getBenchmarkGroup()->getId() == $benchmarkGroupId) {
+                $has = true;
+                break;
+            }
+        }
+
+        return $has;
     }
 
     public function __toString()

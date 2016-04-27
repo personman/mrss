@@ -13,96 +13,28 @@ use Zend\View\Renderer\RendererInterface;
 
 class Outliers extends Report
 {
+    protected $stats = array(
+        'high' => 0,
+        'low' => 0,
+        'missing' => 0
+    );
+
     public function calculateOutliersForYear($year)
     {
-        $this->calculateAllComputedFields($year);
-
-        $stats = array(
-            'high' => 0,
-            'low' => 0,
-            'missing' => 0
-        );
+        $this->year = $year;
 
         $start = microtime(1);
 
-        $calculator = $this->getCalculator();
-
-        // Clear any existing outliers for the year/study
-        $studyId = $this->getStudy()->getId();
-        $this->getOutlierModel()
-            ->deleteByStudyAndYear($studyId, $year);
-        $this->getOutlierModel()->getEntityManager()->flush();
+        $this->clearOutliers($year);
 
         // Loop over the benchmarks
         foreach ($this->getStudy()->getBenchmarksForYear($year) as $benchmark) {
             /** @var Benchmark $benchmark */
-
-            // Skip over computed benchmarks
-            /*if ($benchmark->getComputed()) {
-                continue;
-            }*/
-
-            // Get the data for all subscribers (skip nulls)
-            $data = $this->collectDataForBenchmark($benchmark, $year);
-
-            // If there's no data, move on
-            if (empty($data)) {
-                continue;
-            }
-
-            $calculator->setData($data);
-
-            // Here's the key bit, where the outliers are actually calculated
-            $outliers = $calculator->getOutliers();
-
-            // Now save them
-            foreach ($outliers as $outlierInfo) {
-                $outlier = new Outlier;
-                $outlier->setValue($outlierInfo['value']);
-                $outlier->setBenchmark($benchmark);
-                $outlier->setStudy($this->getStudy());
-                $outlier->setYear($year);
-                $problem = $outlierInfo['problem'];
-                $outlier->setProblem($problem);
-                $college = $this->getOutlierModel()->getEntityManager()
-                    ->getReference('Mrss\Entity\College', $outlierInfo['college']);
-                $outlier->setCollege($college);
-
-                $this->getOutlierModel()->save($outlier);
-
-                // Some stats
-                $stats[$problem]++;
-            }
-
-            // Handle missing outliers
-            if ($benchmark->getRequired()) {
-                $data = $this->collectDataForBenchmark($benchmark, $year, false);
-
-                foreach ($data as $collegeId => $datum) {
-                    if ($datum === null) {
-                        $outlier = new Outlier;
-                        $outlier->setBenchmark($benchmark);
-                        $outlier->setStudy($this->getStudy());
-                        $outlier->setYear($year);
-                        $problem = 'missing';
-                        $outlier->setProblem($problem);
-                        $college = $this->getOutlierModel()->getEntityManager()
-                            ->getReference('Mrss\Entity\College', $collegeId);
-                        $outlier->setCollege($college);
-
-                        $this->getOutlierModel()->save($outlier);
-
-                        // Some stats
-                        $stats[$problem]++;
-                    }
-                }
-            }
+            $this->calculateOutlier($benchmark, $year);
         }
 
         // Save the new report calculation date
-        $settingKey = $this->getOutliersCalculatedSettingKey($year);
-        $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
-        $this->getSettingModel()->getEntityManager()->flush();
+        $this->saveReportCalculationDate($year);
 
         // Timer
         $end = microtime(1);
@@ -111,20 +43,102 @@ class Outliers extends Report
         return $stats;
     }
 
+    public function clearOutliers($year)
+    {
+        // Clear any existing outliers for the year/study
+        $studyId = $this->getStudy()->getId();
+        $this->getOutlierModel()
+            ->deleteByStudyAndYear($studyId, $year);
+        $this->getOutlierModel()->getEntityManager()->flush();
+    }
+
+    public function calculateOutlier($benchmark, $year)
+    {
+        $calculator = $this->getCalculator();
+
+        // Get the data for all subscribers (skip nulls)
+        $data = $this->collectDataForBenchmark($benchmark, $year);
+
+        // If there's no data, move on
+        if (empty($data)) {
+            return false;
+        }
+
+        $calculator->setData($data);
+
+        // Here's the key bit, where the outliers are actually calculated
+        $outliers = $calculator->getOutliers();
+
+        // Now save them
+        foreach ($outliers as $outlierInfo) {
+            $outlier = new Outlier;
+            $outlier->setValue($outlierInfo['value']);
+            $outlier->setBenchmark($benchmark);
+            $outlier->setStudy($this->getStudy());
+            $outlier->setYear($year);
+            $problem = $outlierInfo['problem'];
+            $outlier->setProblem($problem);
+            $college = $this->getOutlierModel()->getEntityManager()
+                ->getReference('Mrss\Entity\College', $outlierInfo['college']);
+            $outlier->setCollege($college);
+
+            $this->getOutlierModel()->save($outlier);
+
+            // Some stats
+            $this->stats[$problem]++;
+        }
+
+        // Handle missing outliers
+        if ($benchmark->getRequired()) {
+            $data = $this->collectDataForBenchmark($benchmark, $year, false);
+
+            foreach ($data as $collegeId => $datum) {
+                if ($datum === null) {
+                    $outlier = new Outlier;
+                    $outlier->setBenchmark($benchmark);
+                    $outlier->setStudy($this->getStudy());
+                    $outlier->setYear($year);
+                    $problem = 'missing';
+                    $outlier->setProblem($problem);
+                    $college = $this->getOutlierModel()->getEntityManager()
+                        ->getReference('Mrss\Entity\College', $collegeId);
+                    $outlier->setCollege($college);
+
+                    $this->getOutlierModel()->save($outlier);
+
+                    // Some stats
+                    $this->stats[$problem]++;
+                }
+            }
+        }
+
+        $this->getOutlierModel()->getEntityManager()->flush();
+    }
+
     /**
      * Get the outliers for the study/year, grouped by college
      */
-    public function getAdminOutlierReport($excludeNonReported = true)
+    public function getAdminOutlierReport($collegeId = null)
     {
+        $excludeNonReported = true;
+
         $report = array();
         $study = $this->getStudy();
         $year = $study->getCurrentYear();
 
-        // Get colleges subscribed to the study for the year
-        $colleges = $this->getCollegeModel()->findByStudyAndYear(
-            $study,
-            $year
-        );
+        if ($collegeId) {
+            $college = $this->getCollegeModel()->find($collegeId);
+            $colleges = array($college);
+            $includeDetails = true;
+        } else {
+            // Get colleges subscribed to the study for the year
+            $colleges = $this->getCollegeModel()->findByStudyAndYear(
+                $study,
+                $year
+            );
+            $includeDetails = false;
+        }
+
 
         foreach ($colleges as $college) {
             // Skip
@@ -132,17 +146,30 @@ class Outliers extends Report
                 continue;
             }
 
-            $outliers = $this->getOutlierModel()
-                ->findByCollegeStudyAndYear($college, $study, $year);
+            $start = microtime(true);
+            if (!$excludeNonReported) {
+                $outliers = $this->getOutlierModel()
+                    ->findByCollegeStudyAndYear($college, $study, $year);
 
-            if ($excludeNonReported) {
-                $outliers = $this->removeNonReportedOutliers($outliers);
+                /*if ($excludeNonReported) {
+                    $outliers = $this->removeNonReportedOutliers($outliers);
+                }*/
+            } else {
+                $outliers = $this->getOutlierModel()
+                    ->findReportedByCollegStudyAndYear($college, $study, $year);
+            }
+
+
+            if (false && count($outliers) > 20) {
+                $elapsed = microtime(true) - $start;
+                pr(count($outliers));
+                prd($elapsed);
             }
 
             $observation = $this->getSubscriptionModel()->findOne($year, $college->getId(), $study)->getObservation();
             $this->setObservation($observation);
 
-            $outliers = $this->prepareOutlierRows($outliers);
+            $outliers = $this->prepareOutlierRows($outliers, $includeDetails);
 
             $report[] = array(
                 'college' => $college,
@@ -174,7 +201,7 @@ class Outliers extends Report
      * @param Outlier[] $outliers
      * @return array
      */
-    protected function prepareOutlierRows($outliers)
+    protected function prepareOutlierRows($outliers, $includeBaseBenchmarks = true)
     {
         $newOutliers = array();
         foreach ($outliers as $outlier) {
@@ -185,8 +212,16 @@ class Outliers extends Report
             }
 
             $value = $outlier->getValue();
-            if ($value !== null) {
+            if ($benchmark->getInputType() != 'radio' && $value !== null && $value !== '') {
+                $value = floatval($value);
+
                 $value = $benchmark->getPrefix() . number_format($value) . $benchmark->getSuffix();
+
+            }
+
+            $baseBenchmarks = array();
+            if ($includeBaseBenchmarks) {
+                $baseBenchmarks = $this->getBaseBenchmarks($benchmark);
             }
 
             $newOutliers[] = array(
@@ -197,7 +232,7 @@ class Outliers extends Report
                 'benchmarkGroupId' => $benchmark->getBenchmarkGroup()->getUrl(),
                 'dbColumn' => $benchmark->getDbColumn(),
                 'equation' => $this->getEquation($benchmark),
-                'baseBenchmarks' => $this->getBaseBenchmarks($benchmark)
+                'baseBenchmarks' => $baseBenchmarks
             );
         }
 
@@ -336,6 +371,9 @@ class Outliers extends Report
             //$deadline = "July 10, " . date('Y');
             //$url = "maximizingresources.org";
 
+            $replyTo = $this->getStudyConfig()->from_email;
+            $replyToName = $this->getStudyConfig()->from_email_name;
+
             $viewParams = array(
                 'year' => $year,
                 'studyName' => $studyName,
@@ -348,12 +386,16 @@ class Outliers extends Report
             );
 
             // Select a view for the email body
-            if (!empty($outliers)) {
-                $view = 'mrss/report/outliers.email.phtml';
+            $outlierEmail = $this->getStudyConfig()->outlier_email;
+            $outlierEmailNone = $this->getStudyConfig()->outlier_email_none;
 
-            } else {
-                $view = 'mrss/report/outliers.email.none.phtml';
+            $view = $outlierEmail;
+
+            if (empty($outliers) && $outlierEmailNone) {
+                $view = $outlierEmailNone;
             }
+
+            $view = "mrss/report/$view.phtml";
 
             // Build the email body with the view
             $body = $renderer->render($view, $viewParams);
@@ -382,7 +424,7 @@ class Outliers extends Report
 
                 // Get recipients
                 if (!$devOnly) {
-                    foreach ($college->getUsersByStudy($this->getStudy()) as $user) {
+                    foreach ($college->getDataUsers($this->getStudy()) as $user) {
                         // @todo: make this more dynamic
                         if ($college->getIpeds() == '155210'
                             && $user->getEmail() != 'jhoyer@jccc.edu') {
@@ -403,7 +445,7 @@ class Outliers extends Report
                 }
             } else {
                 $to = array();
-                foreach ($college->getUsers() as $user) {
+                foreach ($college->getDataUsers($this->getStudy()) as $user) {
                     // @todo: make this more dynamic
                     if ($college->getIpeds() == '155210'
                         && $user->getEmail() != 'jhoyer@jccc.edu') {
@@ -423,13 +465,16 @@ class Outliers extends Report
         return $stats;
     }
 
+    public function saveReportCalculationDate($year)
+    {
+        $settingKey = $this->getOutliersCalculatedSettingKey($year);
+        $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
+        $this->getSettingModel()->getEntityManager()->flush();
+    }
+
     public function getExcludedCollegeIds()
     {
         // Don't email these colleges outlier reports (applies to NCCBP 2015)
-        return array(
-            1121, // Henry Ford
-            437, // Wyoming CCC
-            1116, // Vance-Granville
-        );
+        return array();
     }
 }

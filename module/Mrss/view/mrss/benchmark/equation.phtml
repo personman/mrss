@@ -1,15 +1,6 @@
-<ul class="nav nav-pills">
-    <?php foreach ($studies as $study): ?>
-        <li>
-            <a href="#<?= $study->getName() ?>" data-toggle="tab">
-                <?= $study->getName() ?>
-            </a>
-        </li>
-    <?php endforeach ?>
 
-</ul>
 
-<div class="tab-content">
+<div>
     <?php foreach ($studies as $study): ?>
         <div class="tab-pane" id="<?= $study->getName() ?>">
             <h4><?= $study->getDescription() ?></h4>

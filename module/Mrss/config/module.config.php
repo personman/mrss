@@ -326,7 +326,7 @@ return array(
                 'type' => 'segment',
                 'priority' => 10,
                 'options' => array(
-                    'route' => '/join-free',
+                    'route' => '/participate',
                     'defaults' => array(
                         'controller' => 'subscription',
                         'action' => 'joinFree'
@@ -381,6 +381,15 @@ return array(
                             'route' => '/staff',
                             'defaults' => array(
                                 'action' => 'staff'
+                            )
+                        )
+                    ),
+                    'download-users' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/download-users',
+                            'defaults' => array(
+                                'action' => 'downloadUsers'
                             )
                         )
                     ),
@@ -545,6 +554,15 @@ return array(
                             )
                         )
                     ),
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add',
+                            'defaults' => array(
+                                'action' => 'add',
+                            )
+                        )
+                    ),
                     'edit' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -567,7 +585,7 @@ return array(
                     'import-demo' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/import-demo',
+                            'route' => '/import-demo[/:service]',
                             'defaults' => array(
                                 'action' => 'import',
                                 'service' => 'demo'
@@ -707,6 +725,15 @@ return array(
                             'route' => '/equation',
                             'defaults' => array(
                                 'action' => 'equation'
+                            )
+                        )
+                    ),
+                    'check-equation' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/check-equation',
+                            'defaults' => array(
+                                'action' => 'checkEquation'
                             )
                         )
                     ),
@@ -855,6 +882,19 @@ return array(
                             )
                         )
                     ),
+                    'compute-one' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/compute-one/:observation[/:debug][/:benchmark]',
+                            'defaults' => array(
+                                'action' => 'computeOne',
+                                'year' => null,
+                                'observation' => 0,
+                                'debug' => false,
+                                'benchmark' => false
+                            )
+                        )
+                    ),
                     'calculate' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -862,6 +902,31 @@ return array(
                             'defaults' => array(
                                 'action' => 'calculate',
                                 'year' => null
+                            )
+                        )
+                    ),
+                    'calculate-one' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-one/:benchmark/:year[/:position]',
+                            'defaults' => array(
+                                'action' => 'calculateOne',
+                                'year' => null,
+                                'benchmark' => null,
+                                'position' => null
+                            )
+                        )
+                    ),
+                    'calculate-one-system' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-one-system/:system/:benchmark/:year[/:position]',
+                            'defaults' => array(
+                                'action' => 'calculateOneSystem',
+                                'year' => null,
+                                'system' => null,
+                                'benchmark' => null,
+                                'position' => null
                             )
                         )
                     ),
@@ -881,6 +946,18 @@ return array(
                             'route' => '/calculateOutliers[/year/:year]',
                             'defaults' => array(
                                 'action' => 'calculateOutliers',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'calculate-outlier' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-outlier/:benchmark/:year[/:clear]',
+                            'defaults' => array(
+                                'action' => 'calculateOutlier',
+                                'benchmark' => 0,
+                                'clear' => false,
                                 'year' => null
                             )
                         )
@@ -1361,6 +1438,16 @@ return array(
                             )
                         )
                     ),
+                    'reset' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/reset/:id',
+                            'defaults' => array(
+                                'action' => 'reset',
+                                'id' => 0
+                            )
+                        )
+                    ),
                     'queue' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -1556,6 +1643,27 @@ return array(
                     )
                 )
             ),
+            'suppressions' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/suppressions',
+                    'defaults' => array(
+                        'controller' => 'suppressions',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/[:subscription]',
+                            'defaults' => array(
+                                'action' => 'edit',
+                            )
+                        ),
+                    )
+                )
+            ),
             'glossary' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -1620,6 +1728,16 @@ return array(
                                 'action' => 'sendinvoice'
                             )
                         )
+                    ),
+                    // Ajax handler to turn report access on/off (AAUP)
+                    'report-access' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/report-access',
+                            'defaults' => array(
+                                'action' => 'reportAccess'
+                            )
+                        )
                     )
                 )
             ),
@@ -1658,10 +1776,31 @@ return array(
                     'outliers' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/outliers',
+                            'route' => '/outliers[/:college_id]',
                             'defaults' => array(
                                 'controller' => 'reports',
+                                'college_id' => null,
                                 'action' => 'adminOutliers'
+                            )
+                        )
+                    ),
+                    'generate-observation' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/generate',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'generate'
+                            )
+                        )
+                    ),
+                    'equations' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/equations',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'equations'
                             )
                         )
                     )
@@ -1752,6 +1891,15 @@ return array(
                             )
                         )
                     ),
+                    'info' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/info',
+                            'defaults' => array(
+                                'action' => 'info'
+                            )
+                        )
+                    ),
                     'offsets' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -1765,10 +1913,11 @@ return array(
                     'zeros' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/zeros[/:year]',
+                            'route' => '/zeros[/:year][/:format]',
                             'defaults' => array(
                                 'action' => 'zeros',
-                                'year' => 0
+                                'year' => 0,
+                                'format' => 'html'
                             )
                         )
                     ),
@@ -1778,6 +1927,52 @@ return array(
                             'route' => '/fail',
                             'defaults' => array(
                                 'action' => 'fail',
+                            )
+                        )
+                    ),
+                    'repair-sequences' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/repair-sequences',
+                            'defaults' => array(
+                                'action' => 'repairSequences',
+                            )
+                        )
+                    ),
+                    'repair-report-sequences' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/repair-report-sequences',
+                            'defaults' => array(
+                                'action' => 'repairReportSequences',
+                            )
+                        )
+                    ),
+                    'equation-graph' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/equation-graph[/:benchmarkGroup]',
+                            'defaults' => array(
+                                'action' => 'equationGraph',
+                                'benchmarkGroup' => null
+                            )
+                        )
+                    ),
+                    'lapsed' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/lapsed',
+                            'defaults' => array(
+                                'action' => 'lapsed',
+                            )
+                        )
+                    ),
+                    'copy-peer-groups' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/copy-peer-groups',
+                            'defaults' => array(
+                                'action' => 'copyPeerGroups',
                             )
                         )
                     ),
@@ -2122,7 +2317,8 @@ return array(
             'reportItems' => 'Mrss\Controller\ReportItemController',
             'users' => 'Mrss\Controller\UserController',
             'issues' => 'Mrss\Controller\IssueController',
-            'EquationValidator' => '\Mrss\Validator\Equation'
+            'suppressions' => '\Mrss\Controller\SuppressionController',
+            'EquationValidator' => '\Mrss\Validator\Equation',
         ),
         'factories' => array(
             // Override the contact controller
@@ -2134,11 +2330,12 @@ return array(
             //'CurrentStudy' => 'Mrss\Controller\Plugin\CurrentStudy',
         )
     ),
-    /*'view_manager' => array(
+    'view_manager' => array(
         'template_path_stack' => array(
-            'mrss' => __DIR__ . '/../view'
+            'mrss' => __DIR__ . '/../view',
+            'zfc-user' => __DIR__ . '/../view',
         ),
-    ),*/
+    ),
     'view_manager' => array(
         // Hide error details by default. Use a local override in dev to show them
         'display_not_found_reason' => false,

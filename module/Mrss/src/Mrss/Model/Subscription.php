@@ -120,8 +120,15 @@ class Subscription extends AbstractModel
      * @param boolean $excludeOutliers
      * @return SubscriptionEntity[]
      */
-    public function findWithPartialObservations($study, $year, $benchmarks, $excludeOutliers = true, $notNull = true)
-    {
+    public function findWithPartialObservations(
+        $study,
+        $year,
+        $benchmarks,
+        $excludeOutliers = true,
+        $notNull = true,
+        $benchmarkGroupIds = array(),
+        $system = null
+    ) {
         $rsm = new ResultSetMapping;
 
         $rsm->addEntityResult('Mrss\Entity\Subscription', 's');
@@ -136,30 +143,44 @@ class Subscription extends AbstractModel
         $rsm->addJoinedEntityResult('Mrss\Entity\Observation', 'o', 's', 'observation');
         $rsm->addFieldResult('o', 'o_id', 'id');
 
+        $systemWhere = '';
+        if ($system) {
+            //$systemJoin = " INNER JOIN systems sy ON c.sytem_id = sy.id";
+            $systemWhere = " AND c.system_id = :system_id ";
+        }
+
         $subQueries = array();
         $notNulls = array();
 
         foreach ($benchmarks as $benchmark) {
-                $rsm->addFieldResult('o', $benchmark, $benchmark);
+            $rsm->addFieldResult('o', $benchmark, $benchmark);
+
+            if ($excludeOutliers) {
                 $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
+            }
+
             if ($notNull) {
                 $notNulls[] = " AND $benchmark IS NOT NULL ";
             }
         }
         $notNulls = implode(' ', $notNulls);
 
+        // Suppression subquery
+        $subQueries[] = $this->getSuppressionSubquery($benchmarkGroupIds);
+
         $benchmarkList = implode(', ', $benchmarks);
         $subQueries = implode("\n", $subQueries);
-        if (!$excludeOutliers) {
-            $subQueries = '';
+        if ($benchmarkList) {
+            $benchmarkList = ', ' . $benchmarkList;
         }
 
-        $sql = "SELECT s.id, c.id college_id, c.name, o.id o_id, $benchmarkList
+        $sql = "SELECT s.id, c.id college_id, c.name, c.state, o.id o_id $benchmarkList
         FROM subscriptions s
         INNER JOIN colleges c ON s.college_id = c.id
         INNER JOIN observations o ON s.observation_id = o.id
         WHERE s.year = :year
         AND s.study_id = :study_id
+        $systemWhere
         $notNulls
         $subQueries
         ";
@@ -167,6 +188,10 @@ class Subscription extends AbstractModel
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('year', $year);
         $query->setParameter('study_id', $study->getId());
+
+        if ($system) {
+            $query->setParameter('system_id', $system->getId());
+        }
 
         // Force refresh so it doesn't serve stale entities (when multiple charts are built on one page)
         $query->setHint(Query::HINT_REFRESH, true);
@@ -186,6 +211,20 @@ class Subscription extends AbstractModel
             AND b2.dbColumn = '$dbColumn'
             AND l.college_id = c.id
         )";
+    }
+
+    protected function getSuppressionSubquery($benchmarkGroupIds)
+    {
+        if (count($benchmarkGroupIds)) {
+            $ids = implode(', ', $benchmarkGroupIds);
+
+            return " AND NOT EXISTS (
+                SELECT sp.id
+                FROM suppressions sp
+                WHERE sp.subscription_id = s.id
+                AND benchmarkGroup_id IN ($ids)
+            )";
+        }
     }
 
     /**

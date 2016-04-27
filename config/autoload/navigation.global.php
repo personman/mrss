@@ -385,16 +385,11 @@ return array(
                         'label' => 'Research',
                         'uri' => '/research'
                     ),
-                    'contact' => array(
-                        'label' => 'Contact',
-                        'uri' => '/contact'
-                    )
-
                 )
             ),
             'start' => array(
                 'label' => 'Start',
-                'uri' => '/join-free',
+                'uri' => '/participate',
                 'class' => 'renew-nav'
             ),
             'results' => array(
@@ -407,7 +402,7 @@ return array(
                     ),
                     'order' => array(
                         'label' => 'Order',
-                        'uri' => '/order-results'
+                        'uri' => '/order'
                     ),
                 )
             ),
@@ -512,7 +507,7 @@ return array(
                     ),
                     'faq' => array(
                         'label' => 'FAQ',
-                        'uri' => 'faq'
+                        'uri' => '/faq'
                     ),
                     /*'submitted-values' => array(
                         'label' => 'Submitted Values',
@@ -542,7 +537,7 @@ return array(
                     ),
                     'order' => array(
                         'label' => 'Order',
-                        'uri' => '/order-results'
+                        'uri' => '/order'
                     ),
                     'consultation' => array(
                         'label' => 'Free Consultation',
@@ -550,6 +545,7 @@ return array(
                     ),
                 )
             ),
+            'reports' => getAAUPReportMenu(),
             'members-resources' => array(
                 'label' => 'Resources',
                 'uri' => '#',
@@ -665,6 +661,58 @@ function getReportMenu()
             )
         )
     );
+}
+
+function getAAUPReportMenu()
+{
+    $menu = getReportMenu();
+
+    // Change the label
+    $menu['label'] = 'Results';
+
+    // Remove reports AAUP doesn't use
+    unset($menu['pages']['executive']);
+    unset($menu['pages']['best-performers']);
+    unset($menu['pages']['strengths']);
+    unset($menu['pages']['summary']);
+
+    // Add some stuff
+    $newReportsPages = array();
+    $newReportsPages['results-instructions'] = array(
+        'label' => 'Results Instructions',
+        'uri' => '/results-instructions'
+    );
+
+    $newReportsPages['sample-results'] = array(
+        'label' => 'Sample Results',
+        'uri' => '/sample-results'
+    );
+
+    $newReportsPages = array_merge($newReportsPages, $menu['pages']);
+
+    $newReportsPages['free-consultation'] = array(
+        'label' => 'Free Consultation',
+        'uri' => '/consultation'
+    );
+
+
+
+    // Reorder
+    $reorderedPages = array();
+
+    $reorderedPages['results-instructions'] = $newReportsPages['results-instructions'];
+    $reorderedPages['peer'] = $newReportsPages['peer'];
+    $reorderedPages['custom'] = $newReportsPages['custom'];
+    $reorderedPages['national'] = $newReportsPages['national'];
+    $reorderedPages['system'] = $newReportsPages['system'];
+    $reorderedPages['sample-results'] = $newReportsPages['sample-results'];
+    $reorderedPages['free-consultation'] = $newReportsPages['free-consultation'];
+
+    $newReportsPages = $reorderedPages;
+
+    $menu['pages'] = $newReportsPages;
+
+    return $menu;
 }
 
 function getAccountMenu()

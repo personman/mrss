@@ -19,16 +19,24 @@ class Peer extends Report
 {
     protected $peerBenchmarkModel;
 
+    protected $showPeerDataYouDidNotSubmit = false;
+
+    /**
+     * @var \Mrss\Entity\College
+     */
+    protected $currentCollege;
+
     public function getPeerReport($benchmarks, $colleges, $currentCollege, $year, $peerGroupName)
     {
         $minPeers = 5;
+        $this->currentCollege = $currentCollege;
 
         $report = array(
             'skipped' => array(),
             'youHaveNoData' => array(),
             'sections' => array(),
             'colleges' => array(),
-            'currentCollege' => $currentCollege->getName(),
+            'currentCollege' => $currentCollege->getNameAndState(),
             'year' => $year
         );
 
@@ -49,7 +57,7 @@ class Peer extends Report
             $observations[$collegeId] = $college->getObservationForYear($year);
 
             if ($college->getId() != $currentCollege->getId()) {
-                $report['colleges'][] = $college->getName();
+                $report['colleges'][] = $college->getNameAndState();
             } elseif (!empty($observations[$collegeId])) {
                 $this->setObservation($observations[$collegeId]);
             }
@@ -82,7 +90,7 @@ class Peer extends Report
             }
 
             // Also skip benchmarks where the current college didn't report
-            if (!isset($data[$currentCollege->getId()])) {
+            if (!isset($data[$currentCollege->getId()]) && !$this->getShowPeerDataYouDidNotSubmit()) {
                 $report['youHaveNoData'][] = $benchmark->getPeerReportLabel();
                 continue;
             }
@@ -120,7 +128,7 @@ class Peer extends Report
 
         $excel = new PHPExcel();
         $sheet = $excel->getActiveSheet();
-        $row = 1;
+
 
         // Format for header row
         $blueBar = array(
@@ -131,7 +139,26 @@ class Peer extends Report
         );
 
         // Peer comparison results
+        $sheetIndex = 1;
         foreach ($report['sections'] as $section) {
+            $row = 1;
+            $sheet = $excel->createSheet($sheetIndex);
+
+            $sheetName = $section['benchmark'];
+            if (strlen($sheetName) > 20) {
+                $sheetName = substr($sheetName, 0, 20);
+            }
+
+            // Get rid of invalid characters
+            $sheetName = str_replace(array('*', ':', '/', '\\', '?', '[', ']'), '', $sheetName);
+
+            try {
+                $sheet->setTitle($sheetName);
+            } catch ( \Exception $e) {
+                //pr($sheetName);
+            }
+
+
             $headerRow = array(
                 $section['benchmark'],
                 null
@@ -151,49 +178,71 @@ class Peer extends Report
                 $row++;
             }
 
-            // Blank line:
-            $row++;
+
+            // Align right
+            $sheet->getStyle('B1:B400')->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+            foreach (range(0, 1) as $column) {
+                $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+            }
+
+            if ($this->getStudyConfig()->anonymous_peers) {
+                // Peer institutions
+                $row++;
+                $sheet->setCellValue('A' . $row, 'Peer Institutions:');
+                $row++;
+
+                foreach ($report['colleges'] as $college) {
+                    $sheet->setCellValue('A' . $row, $college);
+                    $row++;
+                }
+            }
+
+            $sheetIndex++;
         }
 
-        // Align right
-        $sheet->getStyle('B1:B400')->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-
-        // Set column widths
-        //PHPExcel_Shared_Font::setAutoSizeMethod(
-        //    PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
-        //);
-        foreach (range(0, 1) as $column) {
-            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
-        }
-
-
-        // Peer institutions
-        $row++;
-        $sheet->setCellValue('A' . $row, 'Peer Institutions:');
-        $row++;
-
-        foreach ($report['colleges'] as $college) {
-            $sheet->setCellValue('A' . $row, $college);
-            $row++;
-        }
-
-
+        // Remove blank sheet
+        $excel->removeSheetByIndex(0);
 
         // redirect output to client browser
         $this->downloadExcel($excel, $filename);
+    }
 
+    /**
+     * @return \Zend\Config\Config
+     */
+    public function getStudyConfig()
+    {
+        return $this->getServiceManager()->get('study');
+    }
+
+    private function shortenCollegeName($name)
+    {
+        $maxLength = 25;
+        $suffix = "...";
+
+        if (strlen($name) > $maxLength) {
+            $name = substr($name, 0, $maxLength) . $suffix;
+        }
+
+        return $name;
     }
 
     public function sortAndLabelPeerData($data, College $currentCollege)
     {
+        $anonymous = $this->getStudyConfig()->anonymous_peers;
+
         arsort($data);
         $dataWithLabels = array();
 
         $i = 1;
         foreach ($data as $collegeId => $value) {
-            if ($collegeId == $currentCollege->getId()) {
-                $label = $currentCollege->getName();
+            if (!$anonymous) {
+                $college = $this->getCollegeModel()->find($collegeId);
+                $label = $college->getNameAndState();
+            } elseif ($collegeId == $currentCollege->getId()) {
+                $label = $currentCollege->getNameAndState();
             } else {
                 $label = $this->numberToLetter($i);
                 $i++;
@@ -218,6 +267,7 @@ class Peer extends Report
 
     public function getPeerBarChart(BenchmarkEntity $benchmark, $data)
     {
+        $anonymous = $this->getStudyConfig()->anonymous_peers;
         $title = $benchmark->getPeerReportLabel();
         $decimalPlaces = $this->getDecimalPlaces($benchmark);
         //prd($data);
@@ -229,13 +279,16 @@ class Peer extends Report
         foreach ($data as $name => $value) {
             $value = round($value, $decimalPlaces);
 
-            $label = $name;
+            $label = $this->shortenCollegeName($name);
 
             // Your college
-            if (strlen($name) > 5) {
+            if ($name == $this->currentCollege->getNameAndState()) {
                 $dataLabelEnabled = true;
                 $color = $this->getYourCollegeColor();
-                $label = 'Your College';
+
+                if ($anonymous) {
+                    $label = 'Your College';
+                }
             } else {
                 $dataLabelEnabled = false;
                 $color = $this->getPeerColor();
@@ -346,6 +399,8 @@ class Peer extends Report
     /**
      * Returns colleges that reported at least one of the benchmarks
      *
+     * This method expects the college name to be unique, so it includes the state as well.
+     *
      * @param College[] $colleges
      * @param array $benchmarkIds
      * @param $year
@@ -356,6 +411,7 @@ class Peer extends Report
         $onlyIncludePeersReportingAllBenchmarks = false;
 
         $benchmarkCols = array();
+        $benchmarkGroupIds = array();
         foreach ($benchmarkIds as $benchmarkId) {
             $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
 
@@ -364,6 +420,7 @@ class Peer extends Report
             }
 
             $benchmarkCols[] = $benchmark->getDbColumn();
+            $benchmarkGroupIds[] = $benchmark->getBenchmarkGroup()->getId();
         }
 
         $collegeIds = array();
@@ -377,7 +434,8 @@ class Peer extends Report
                 $year,
                 $benchmarkCols,
                 false,
-                $onlyIncludePeersReportingAllBenchmarks
+                $onlyIncludePeersReportingAllBenchmarks,
+                $benchmarkGroupIds
             );
 
         $filteredColleges = array();
@@ -394,7 +452,7 @@ class Peer extends Report
                     $college = $subscription->getCollege();
 
                     if (in_array($college->getId(), $collegeIds)) {
-                        $filteredColleges[$college->getName()] = $college;
+                        $filteredColleges[$college->getNameAndState()] = $college;
                         continue 2;
                     }
                 }
@@ -429,5 +487,17 @@ class Peer extends Report
     public function getPeerBenchmarkModel()
     {
         return $this->peerBenchmarkModel;
+    }
+
+    public function setShowPeerDataYouDidNotSubmit($show)
+    {
+        $this->showPeerDataYouDidNotSubmit = $show;
+
+        return $this;
+    }
+
+    public function getShowPeerDataYouDidNotSubmit()
+    {
+        return $this->showPeerDataYouDidNotSubmit;
     }
 }

@@ -33,10 +33,11 @@ class Factory implements AbstractFactoryInterface
 
         $report->setSubscriptionModel($sm->get('model.subscription'));
         $report->setStudy($currentStudy);
+        $report->setStudyConfig($sm->get('study'));
         $report->setCalculator($sm->get('service.report.calculator'));
         $report->setPercentileModel($sm->get('model.percentile'));
         $report->setPercentileRankModel(
-            $sm->get('model.percentileRank')
+            $sm->get('model.percentile.rank')
         );
         $report->setBenchmarkModel($sm->get('model.benchmark'));
         $report->setCollegeModel($sm->get('model.college'));
@@ -104,7 +105,7 @@ class Factory implements AbstractFactoryInterface
     protected function addExtraDependencies($report, $name, $sm)
     {
         if ($name == 'service.report.peer') {
-            $report->setPeerBenchmarkModel($sm->get('model.peerBenchmark'));
+            $report->setPeerBenchmarkModel($sm->get('model.peer.benchmark'));
         }
 
         return $report;

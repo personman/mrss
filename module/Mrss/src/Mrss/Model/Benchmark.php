@@ -58,6 +58,16 @@ class Benchmark extends AbstractModel
         return $benchmark;
     }
 
+    public function findByGroupForReport($benchmarkGroup)
+    {
+        $benchmarks = $this->getRepository()->findBy(
+            array('benchmarkGroup' => $benchmarkGroup),
+            array('reportSequence' => 'ASC')
+        );
+
+        return $benchmarks;
+    }
+
     public function findOneByDbColumnAndStudy($dbColumn, $studyId)
     {
         /** @var \Mrss\Entity\Benchmark[] $benchmarks */
@@ -77,6 +87,11 @@ class Benchmark extends AbstractModel
     public function find($id)
     {
         return $this->getRepository()->find($id);
+    }
+
+    public function findByIds($ids)
+    {
+        return $this->getRepository()->findBy(array('id' => $ids));
     }
 
     /**
@@ -109,6 +124,13 @@ class Benchmark extends AbstractModel
         }
 
         return $benchmarksFromStudy;
+    }
+
+    public function findOnReport()
+    {
+        return $this->getRepository()->findBy(
+            array('includeInNationalReport' => true)
+        );
     }
 
     public function save(BenchmarkEntity $benchmark)

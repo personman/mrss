@@ -24,7 +24,8 @@ class CustomReportBuilder extends Report
 
                 $builder = $this
                     ->getChartBuilder($item->getConfig());
-                $builder->setCollege($report->getCollege());
+                //$builder->setCollege($report->getCollege());
+                $builder->setCollege($report->getUser()->getCollege());
 
                 $chart = $builder->getChart();
                 $footnotes = $builder->getFootnotes();
@@ -50,6 +51,6 @@ class CustomReportBuilder extends Report
      */
     protected function getReportItemModel()
     {
-        return $this->getServiceManager()->get('model.reportItem');
+        return $this->getServiceManager()->get('model.report.item');
     }
 }

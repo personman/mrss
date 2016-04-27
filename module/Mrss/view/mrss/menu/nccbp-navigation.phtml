@@ -10,7 +10,7 @@
         <?php if( ! $hasChildren): ?>
             <li class="<?= $page->getClass() ?>">
             <a href="<?php echo $page->getHref() ?>" <?php echo ($page->isActive()) ? 'class="active"' : '' ?>  title="<?php echo $page->getTitle() ?>">
-                <?php echo $this->translate($page->getLabel()) ?>
+                <?php echo $page->getLabel() ?>
             </a>
         <?php else: ?>
             <li class="dropdown <?= $page->getClass() ?>">

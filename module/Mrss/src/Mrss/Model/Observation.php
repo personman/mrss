@@ -29,7 +29,7 @@ class Observation extends AbstractModel
      * Find an observation by its id
      *
      * @param $id
-     * @return null|object
+     * @return null|\Mrss\Entity\Observation
      */
     public function find($id)
     {

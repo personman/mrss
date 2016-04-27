@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreStart
 
 namespace Mrss\Service;
 
@@ -12,7 +13,8 @@ namespace Mrss\Service;
  *
  * @url https://github.com/joshfraser/PHP-Name-Parser
  */
-class FullNameParser {
+class FullNameParser
+{
 
 
 
@@ -36,7 +38,8 @@ class FullNameParser {
             'Sir' => array('sir'),
             ' ' => array('the')
         ),
-        'compound' => array('da','de','del','della','der','di','du','la','pietro','st.','st','ter','van','vanden','vere','von'),
+        'compound' => array('da','de','del','della','der','di','du','la',
+            'pietro','st.','st','ter','van','vanden','vere','von'),
         'suffixes' => array(
             'line' => array('I','II','III','IV','V','1st','2nd','3rd','4th','5th','Senior','Junior','Jr','Sr'),
             'prof' => array('PhD','APR','RPh','PE','MD','MA','DMD','CME', 'Ed.D', 'EdD', 'RN')
@@ -52,7 +55,8 @@ class FullNameParser {
      * @param string $name the full name you wish to parse
      * @return array returns associative array of name parts
      */
-    public function parse_name($full_name) {
+    public function parse_name($full_name)
+    {
 
         # Remove leading/trailing whitespace
         $full_name = trim($full_name);
@@ -176,7 +180,8 @@ class FullNameParser {
      * @param string $name the full name you wish to parse
      * @return array full list of words broken down by spaces
      */
-    public function break_words($name) {
+    public function break_words($name)
+    {
         return explode(' ', $name);
     }
 
@@ -188,7 +193,8 @@ class FullNameParser {
      * @param string $name the name you wish to test
      * @return mixed returns the suffix if exists, false otherwise
      */
-    protected function get_pro_suffix($name) {
+    protected function get_pro_suffix($name)
+    {
         foreach ($this->dict['suffixes']['prof'] as $suffix) {
             if (preg_match("/,[\s]*$suffix\b/i", $name, $matches)) {
                 return $matches[0];
@@ -211,7 +217,8 @@ class FullNameParser {
      * @param string $name the name you wish to test against
      * @return mixed returns nickname if exists, false otherwise
      */
-    protected function get_nickname($name) {
+    protected function get_nickname($name)
+    {
         if (preg_match("/[\(|\"].*?[\)|\"]/", $name, $matches)) {
             return $matches[0];
         }
@@ -227,7 +234,8 @@ class FullNameParser {
      * @param string $name full name for context in determining edge-cases
      * @return mixed boolean if false, string if true (returns suffix)
      */
-    protected function is_suffix($word, $name) {
+    protected function is_suffix($word, $name)
+    {
 
         # Ignore periods, normalize case
         $word = str_replace('.', '', strtolower($word));
@@ -388,3 +396,4 @@ class FullNameParser {
     }
 
 }
+// @codingStandardsIgnoreEnd

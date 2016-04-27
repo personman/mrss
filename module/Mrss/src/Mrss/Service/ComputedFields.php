@@ -41,6 +41,10 @@ class ComputedFields
 
     protected $debug = false;
 
+    protected $debugDbColumn = null;
+
+    protected $skipEmpty = false;
+
     protected $error;
 
     protected $keyedBenchmarks = array();
@@ -51,26 +55,47 @@ class ComputedFields
         $flush = true,
         SubObservation $subObservation = null
     ) {
+        //$this->debug = true;
 
-        if ($this->debug) {
+        if ($this->getDebug()) {
             $start = microtime(1);
         }
 
         $equationWithVariables = $benchmark->getEquation();
         $benchmarkColumn = $benchmark->getDbColumn();
-        if ($this->debug) {
-            echo "equation prepared: " . round(microtime(1) - $start, 3) . "s<br>";
+        if ($this->getDebug()) {
+            //echo "equation prepared: " . round(microtime(1) - $start, 3) . "s<br>";
         }
 
         if (empty($equationWithVariables)) {
             $result = null;
         } else {
+
+            if ($this->getDebug()) {
+                $collegeName = $observation->getCollege()->getName();
+                echo 'Institution:';
+                pr($collegeName);
+
+                echo 'Equation:';
+                pr($equationWithVariables);
+            }
+
             // Populate variables
             $equationWithVariables = $this
                 ->nestComputedEquations(
                     $equationWithVariables,
                     $observation->getYear()
                 );
+
+            if ($this->getDebug()) {
+                echo 'Expanded equation:';
+                pr($equationWithVariables);
+
+                $equationWithNumbers = $this->getEquationWithNumbers($benchmark, $observation);
+
+                echo 'Equation with numbers:';
+                pr($equationWithNumbers);
+            }
 
             $equation = $this->prepareEquation($equationWithVariables, $observation, $subObservation);
 
@@ -91,14 +116,25 @@ class ComputedFields
         // If the result is meant to be a percentage, multiply by 100
         if (!is_null($result) && $benchmark->isPercent()) {
             $result = $result * 100;
-            if ($equationWithVariables == '1 - ({{ft_previous_salary_lecturer_standard}} / {{ft_current_salary_lecturer_standard}})') {
-                //pr($equationWithVariables);
-                //prd($result);
-            }
         }
 
-        if ($this->debug) {
-            echo "Result = $result. About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
+        if ($this->getDebug()) {
+            echo "Result = $result. ";
+            //echo "About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
+            echo '<hr>';
+
+            if ($this->debugDbColumn) {
+
+                $oids = array();
+                foreach ($this->getStudy()->getSubscriptionsForYear($this->getStudy()->getCurrentYear()) as $sub) {
+                    $collegeName = $sub->getCollege()->getName();
+                    $obId = $sub->getObservation()->getId();
+
+                    echo "<a href='/reports/compute-one/$obId/1/{$benchmark->getDbColumn()}'>$collegeName</a><br>";
+                }
+
+
+            }
         }
 
         // Save the computed value
@@ -112,7 +148,7 @@ class ComputedFields
 
         if ($flush) {
             $this->getObservationModel()->getEntityManager()->flush();
-            if ($this->debug) {
+            if ($this->getDebug()) {
                 echo "flushed: " . round(microtime(1) - $start, 3) . "s<br>";
             }
         }
@@ -222,7 +258,7 @@ class ComputedFields
             // If any of the variables are null or '', bail out
             if ($value === null || $value === '') {
                 // As long as there's no division or multiplication involved, we can assume nulls are 0
-                if (strpos($equation, '/') === false && strpos($equation, '*') === false) {
+                if (!$this->skipEmpty || ((strpos($equation, '/') === false && strpos($equation, '*') === false))) {
                     $value = 0;
                 } else {
                     $errors[] = "Missing variable: $variable. ";
@@ -239,10 +275,13 @@ class ComputedFields
         }
 
 
-        if ($this->debug) {
-            pr($observation->getId());
-            pr($variables);
+        if ($this->getDebug()) {
+            //pr($observation->getId());
+            //pr($variables);
+
+            echo 'Errors:';
             pr($errors);
+
             pr($vars);
             echo 'Observation id:';
             pr($observation->getId());
@@ -256,7 +295,7 @@ class ComputedFields
 
 
         if (empty($preparedEquation)) {
-            if ($this->debug) {
+            if ($this->getDebug()) {
                 throw new \Exception(
                     'Invalid equation: ' .
                     "<br>" .
@@ -273,6 +312,8 @@ class ComputedFields
         return $preparedEquation;
     }
 
+    protected $recursionLevel = 0;
+
     /**
      * If an equation includes a benchmark that's computed, drop in the equation
      * rather than the current value. This is so we don't have to worry about
@@ -284,6 +325,8 @@ class ComputedFields
      */
     public function nestComputedEquations($equation, $year)
     {
+        $this->recursionLevel++;
+
         $variables = $this->getVariables($equation);
         $computed = $this->getComputedBenchmarks($year);
 
@@ -298,7 +341,11 @@ class ComputedFields
                 }
 
                 // Recurse in case the inside equation contains other computed ones
-                $insideEquation = $this->nestComputedEquations($insideEquation, $year);
+                if ($this->recursionLevel > 15) {
+                    return '';
+                } else {
+                    $insideEquation = $this->nestComputedEquations($insideEquation, $year);
+                }
 
                 $equation = str_replace(
                     '{{' . $variable . '}}',
@@ -308,28 +355,47 @@ class ComputedFields
             }
         }
 
+        $this->recursionLevel--;
         return $equation;
     }
 
     public function calculateAllForObservation(Observation $observation)
     {
+        $flushEvery = 3000;
         if (empty($observation)) {
             throw new \Exception('Observation missing.');
 
         }
+
+        $col = $this->debugDbColumn;
         $benchmarks = $this->getComputedBenchmarks($observation->getYear());
 
+        $i = 0;
         foreach ($benchmarks as $benchmark) {
-            if ($this->debug) {
+            $i++;
+
+            if ($col && $benchmark->getDbColumn() != $col) {
+                continue;
+            }
+
+            if ($this->getDebug()) {
                 pr($benchmark->getName());
             }
 
             try {
                 $this->calculate($benchmark, $observation, false);
             } catch (\Exception $e) {
+                //throw new \Exception('calculation problem');
                 //pr($e->getMessage());
                 //prd($e);
+                continue;
             }
+
+            if ($i % $flushEvery == 0) {
+                $this->getObservationModel()->getEntityManager()->flush();
+            }
+
+            //if ($i > 50) break;
         }
 
         $this->getObservationModel()->getEntityManager()->flush();
@@ -401,7 +467,11 @@ class ComputedFields
             //$fieldName = "<span class='fieldName'>$fieldName</span>";
             $value = $observation->get($variable);
             if ($value === null) {
-                $value = 'null';
+                if ($this->skipEmpty) {
+                    $value = 'null';
+                } else {
+                    $value = 0;
+                }
             }
 
             // Replace the dbColumn in the equation with a value
@@ -503,5 +573,24 @@ class ComputedFields
         }
 
         return $this->computedBenchmarks;
+    }
+
+    public function setDebugDbColumn($dbColumn)
+    {
+        $this->debugDbColumn = $dbColumn;
+
+        return $this;
+    }
+
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+
+        return $this;
+    }
+
+    public function getDebug()
+    {
+        return $this->debug;
     }
 }

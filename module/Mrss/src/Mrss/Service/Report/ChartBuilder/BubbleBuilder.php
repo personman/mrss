@@ -27,7 +27,7 @@ class BubbleBuilder extends ChartBuilder
             $subtitle = $config['subtitle'];
         }
 
-        //$regression = $config['regression'];
+        $regression = $config['regression'];
         $peerGroup = $config['peerGroup'];
         $collegeId = $this->getCollege()->getId();
 
@@ -44,15 +44,24 @@ class BubbleBuilder extends ChartBuilder
             $dbColumns[] = $size;
         }
 
-        $subscriptions = $this->getSubscriptionModel()
-            ->findWithPartialObservations($study, $year, $dbColumns);
+        $benchmarkGroupIds = array();
 
+        // Fetch the benchmark configs
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $yBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($y);
 
+        $benchmarkGroupIds[] = $xBenchmark->getBenchmarkGroup()->getId();
+        $benchmarkGroupIds[] = $yBenchmark->getBenchmarkGroup()->getId();
+
         if ($size) {
             $zBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($size);
+            $benchmarkGroupIds[] = $zBenchmark->getBenchmarkGroup()->getId();
+            $zFormat = $this->getFormat($zBenchmark);
         }
+
+
+        $subscriptions = $this->getSubscriptionModel()
+            ->findWithPartialObservations($study, $year, $dbColumns, true, true, $benchmarkGroupIds);
 
         $xFormat = $this->getFormat($xBenchmark);
         $yFormat = $this->getFormat($yBenchmark);
@@ -100,10 +109,16 @@ class BubbleBuilder extends ChartBuilder
             if ($xVal && $yVal && $sizeVal) {
                 $subCount++;
 
+                $name = null;
+                if (empty($this->getStudyConfig()->anonymous_peers)) {
+                    $name = $subscription->getCollege()->getNameAndState();
+                }
+
                 $datum = array(
-                    floatval($xVal),
-                    floatval($yVal),
-                    floatval($sizeVal)
+                    'x' => floatval($xVal),
+                    'y' => floatval($yVal),
+                    'z' => floatval($sizeVal),
+                    'name' => $name
                 );
 
                 // Highlight the college?
@@ -111,7 +126,7 @@ class BubbleBuilder extends ChartBuilder
                 if (!$hideMine && $college->getId() == $collegeId) {
                     $yourCollege[] = $datum;
                 } elseif (!empty($peerIds) && in_array($college->getId(), $peerIds)) {
-                    $includedPeers[] = $college->getName();
+                    $includedPeers[] = $college->getNameAndState();
                     $peerData[] = $datum;
                 } else {
                     $data[] = $datum;
@@ -155,6 +170,7 @@ class BubbleBuilder extends ChartBuilder
                 'type' => $type,
                 'name' => 'Institutions',
                 'color' => $this->getNationalColor(),
+                //'showInLegend' => false,
                 'data' => $data,
             );
         }
@@ -162,7 +178,7 @@ class BubbleBuilder extends ChartBuilder
         // Highlight a college?
         if (count($yourCollege)) {
             $series[] = array(
-                'name' => $this->getCollege()->getName(),
+                'name' => $this->getCollege()->getNameAndState(),
                 'type' => $type,
                 'color' => $this->getYourColor(),
                 'data' => $yourCollege,
@@ -212,13 +228,18 @@ class BubbleBuilder extends ChartBuilder
             ->setYFormat($yFormat)
             ->setXLabel($xLabel)
             ->setYLabel($yLabel)
+            ->setRegression($regression)
             ->addMedianLines($xMedian, $yMedian);
 
         if (!empty($zBenchmark)) {
             $sizeLabel = $zBenchmark->getDescriptiveReportLabel();
             $bubbleChart->setZLabel($sizeLabel);
-        }
 
+            $bubbleChart->setZFormat($zFormat);
+
+            $bubbleChart->updateAllFormats();
+            $bubbleChart->updateAllLabels();
+        }
 
         $chart = $bubbleChart->getConfig();
 

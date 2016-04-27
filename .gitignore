@@ -7,8 +7,9 @@ nbproject
 .project
 .settings
 .ftpquota
+all-colleges.json
 bin
-vendor
+/vendor
 config/phinx.yml
 config/autoload/db.php
 config/autoload/db.php.bak
@@ -23,3 +24,4 @@ public/.ftpquota
 nohup.out
 module/Mrss/src/Mrss/Entity/Observation.php
 public/files/all-colleges.json
+public/Debugbar

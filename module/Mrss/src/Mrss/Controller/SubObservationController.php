@@ -51,7 +51,7 @@ class SubObservationController extends AbstractActionController
 
         /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
         $benchmarkGroup = $this->getServiceLocator()
-            ->get('model.benchmarkGroup')
+            ->get('model.benchmark.group')
             ->find($benchmarkGroupId);
 
         if (empty($benchmarkGroup)) {
@@ -188,7 +188,7 @@ class SubObservationController extends AbstractActionController
 
         /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
         $benchmarkGroup = $this->getServiceLocator()
-            ->get('model.benchmarkGroup')
+            ->get('model.benchmark.group')
             ->find($benchmarkGroupId);
 
         // We'll need the observation

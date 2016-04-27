@@ -63,6 +63,12 @@ class Issue extends AbstractModel
         return $results;
     }
 
+    /**
+     * @param array $include
+     * @param array $exclude
+     * @param bool|true $includeNull
+     * @return IssueEntity[]
+     */
     public function findByStatus($include = array(), $exclude = array(), $includeNull = true)
     {
         $where = '';

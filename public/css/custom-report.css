@@ -95,7 +95,7 @@ select {
     display: none;
 }
 
-#control-group-regression, #control-group-content {
+/*#control-group-regression,*/ #control-group-content {
     display: none;
 }
 

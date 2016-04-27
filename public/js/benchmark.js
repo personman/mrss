@@ -3,6 +3,7 @@ $(function() {
     // Make benchmrks sortable
     $('tbody.sortable').sortable({
         handle: '.sortHandle',
+        connectWith: '.sortable',
         update: function(event, ui) {
             parent = ui.item.parent()
 

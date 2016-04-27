@@ -232,6 +232,10 @@
         <echo>Done.</echo>
     </target>
 
+    <target name="copy-aaup-ob">
+        <exec command="cp module/Mrss/src/Mrss/Entity/Observation.php.aaup module/Mrss/src/Mrss/Entity/Observation.php" />
+    </target>
+
     <target name="sync" depends="sync-nccbp-db"/>
 
     <target name="cc" depends="clear-caches"/>
@@ -242,5 +246,6 @@
         <exec command="CODECLIMATE_REPO_TOKEN=20d04d7f8c05342e458a8e527165c8be679817726e50e38dea49a23a5eeaabb5 ./bin/test-reporter --coverage-report=build/log/clover.xml" passthru="true"/>
     </target>
 
-    <target name="cc" depends="phpunit,code-climate" />
+    <target name="codec" depends="phpunit,code-climate" />
+    <target name="cs" depends="codesniffer" />
 </project>

@@ -11,6 +11,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Element;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class BenchmarkController extends AbstractActionController
 {
@@ -105,7 +106,7 @@ class BenchmarkController extends AbstractActionController
     {
         $benchmarkGroupId = $this->params('benchmarkGroup');
         $benchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmarkGroup');
+            ->get('model.benchmark.group');
 
         $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
 
@@ -130,7 +131,9 @@ class BenchmarkController extends AbstractActionController
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
-                $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
+                $extraMessage = $this->generateObservation();
+
+                $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
                 return $this->redirect()->toRoute(
                     'benchmark',
                     array('study' => $benchmarkGroup->getStudy()->getId())
@@ -176,11 +179,14 @@ class BenchmarkController extends AbstractActionController
             if ($form->isValid()) {
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
-                $this->flashMessenger()->addSuccessMessage('Benchmark saved.');
+
+                $extraMessage = $this->generateObservation();
+
+                $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
 
                 // Check equation
-                /** @var \Mrss\Service\ComputedFields $computedFields */
-                $computedFields = $this->getServiceLocator()->get('computedFields');
+                $computedFields = $this->getComputedFieldsService();
+
                 $equationOk = $computedFields
                     ->checkEquation($benchmark->getEquation());
                 if (!$equationOk) {
@@ -206,6 +212,16 @@ class BenchmarkController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Service\ComputedFields
+     */
+    public function getComputedFieldsService()
+    {
+        $computedFields = $this->getServiceLocator()->get('computedFields');
+
+        return $computedFields;
+    }
+
+    /**
      * Show a list of benchmarks that can be added to the equation
      *
      * @return ViewModel
@@ -213,14 +229,31 @@ class BenchmarkController extends AbstractActionController
     public function equationAction()
     {
         // Get the studies
-        $studies = $this->getServiceLocator()->get('model.study')->findAll();
+        //$studies = $this->getServiceLocator()->get('model.study')->findAll();
 
         $viewModel = new ViewModel(
             array(
-                'studies' => $studies
+                'studies' => array($this->currentStudy())
             )
         );
         $viewModel->setTerminal(true);
+
+        return $viewModel;
+    }
+
+    public function checkEquationAction()
+    {
+        $equation = $this->params()->fromPost('equation');
+        $service = $this->getComputedFieldsService();
+        $result = $service->checkEquation($equation);
+        $error = $service->getError();
+
+        $viewModel = new JsonModel(
+            array(
+                'result' => $result,
+                'error' => $error
+            )
+        );
 
         return $viewModel;
     }
@@ -246,18 +279,19 @@ class BenchmarkController extends AbstractActionController
     public function reorderAction()
     {
         $benchmarkGroupId = $this->params()->fromPost('benchmarkGroupId');
-        $newBenchmarkSequences = $this->params()->fromPost('benchmarks');
+        $newBenchmarkSequences = $this->params()->fromPost('benchmarks', array());
         $newBenchmarkHeadingSequences = $this->params()
-            ->fromPost('headings');
+            ->fromPost('headings', array());
         $newBenchmarkSequences = array_flip($newBenchmarkSequences);
         $newBenchmarkHeadingSequences = array_flip($newBenchmarkHeadingSequences);
+        $benchmarkIds = array_keys($newBenchmarkSequences);
 
         //pr($newBenchmarkSequences);
         //pr($newBenchmarkHeadingSequences);
 
         /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
         $benchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmarkGroup');
+            ->get('model.benchmark.group');
 
         $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
 
@@ -265,7 +299,8 @@ class BenchmarkController extends AbstractActionController
         $organization = $user->getAdminBenchmarkSorting();
 
         if (!empty($benchmarkGroup)) {
-            $benchmarks = $benchmarkGroup->getBenchmarks();
+            //$benchmarks = $benchmarkGroup->getBenchmarks();
+            $benchmarks = $this->getBenchmarkModel()->findByIds($benchmarkIds);
 
             foreach ($benchmarks as $benchmark) {
                 if (isset($newBenchmarkSequences[$benchmark->getId()])) {
@@ -276,6 +311,8 @@ class BenchmarkController extends AbstractActionController
                     } else {
                         $benchmark->setSequence($sequence);
                     }
+
+                    $benchmark->setBenchmarkGroup($benchmarkGroup);
                 }
             }
 
@@ -285,6 +322,7 @@ class BenchmarkController extends AbstractActionController
                     $heading->setSequence(
                         $newBenchmarkHeadingSequences[$heading->getId()]
                     );
+                    $heading->setBenchmarkGroup($benchmarkGroup);
                 }
             }
 
@@ -433,5 +471,23 @@ class BenchmarkController extends AbstractActionController
         }
 
         return $this->benchmarkModel;
+    }
+
+    public function generateObservation()
+    {
+        $generator = $this->getObservationGenerator();
+        $generator->generate();
+
+        $extraMessage = $generator->summarizeStats();
+
+        return $extraMessage;
+    }
+
+    /**
+     * @return \Mrss\Service\ObservationGenerator
+     */
+    public function getObservationGenerator()
+    {
+        return $this->getServiceLocator()->get('service.generator');
     }
 }

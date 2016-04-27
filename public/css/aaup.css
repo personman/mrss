@@ -194,3 +194,13 @@ table.data-entry-compact .input-group .form-control, table.data-entry-compact .i
 }
 .footer-logo span {
 }
+
+
+/* Reports */
+.table > thead > tr.topHeading th {
+	background: #C50C46 !important;
+}
+
+.table > thead > tr.secondHeading th {
+	background: #DDDDDD !important;
+}

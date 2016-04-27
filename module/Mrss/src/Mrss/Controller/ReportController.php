@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use DoctrineORMModule\Proxy\__CG__\Mrss\Entity\Benchmark;
 use Mrss\Entity\Chart;
 use Mrss\Form\Explore;
 use Mrss\Form\PeerComparisonDemographics;
@@ -49,7 +50,7 @@ class ReportController extends AbstractActionController
         $years = $percentileService->getCalculationInfo();
         $yearToPrepare = $this->params()->fromRoute('year');
 
-        if (!empty($yearToPrepare)) {
+        /*if (!empty($yearToPrepare)) {
             // Now calculate percentiles
             //$stats = $this->getReportService()->calculateForYear($yearToPrepare);
             $stats = $percentileService->calculateForYear($yearToPrepare);
@@ -69,11 +70,115 @@ class ReportController extends AbstractActionController
             );
 
             return $this->redirect()->toRoute('reports/calculate');
+        }*/
+
+        // Get observation ids
+        $observationIds = array();
+        $benchmarkIds = array();
+        foreach ($years as $year => $yearInfo) {
+            $yearIds = array();
+            $subs = $this->getSubscriptionModel()->findWithPartialObservations(
+                $this->currentStudy(),
+                $year,
+                array(),
+                false,
+                true
+            );
+
+            foreach ($subs as $sub) {
+                $yearIds[] = $sub->getObservation()->getId();
+            }
+
+            $observationIds[$year] = $yearIds;
+
+
+            // Get the Ids of benchmarks on the report
+            foreach ($this->getBenchmarkModel()->findOnReport() as $benchmark) {
+                $benchmarkIds[$year][] = $benchmark->getId();
+            }
+
         }
 
+        // Get System ids
+        $currentYear = $this->currentStudy()->getCurrentYear();
+        $systemIds = array();
+        //foreach ($this->getSystemModel()->findAll() as $system) {
+        foreach ($this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId()) as $system) {
+            $systemIds[] = $system->getId();
+        }
+
+
+
+
+
         return array(
-            'years' => $years
+            'years' => $years,
+            'study' => $this->currentStudy(),
+            'observationIds' => $observationIds,
+            'systemIds' => $systemIds,
+            'benchmarkIds' => $benchmarkIds
         );
+    }
+
+    public function debug($message, $var)
+    {
+        $seconds = microtime(true) - REQUEST_MICROTIME;
+
+        echo "$seconds since request started.<h3>$message</h3>";
+
+        if ($var) {
+            pr($var);
+        }
+
+    }
+
+    /**
+     * Calculate national report percentiles and ranks for a single benchmark/year
+     */
+    public function calculateOneAction()
+    {
+        $this->debug("Start", null);
+
+        $benchmarkId = $this->params()->fromRoute('benchmark');
+        $year = $this->params()->fromRoute('year');
+        $position = $this->params()->fromRoute('position');
+
+        $percentileService = $this->getPercentileService();
+        $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+
+        // If this is the first benchmark, clear existing percentiles
+        if ($position == 'first') {
+            $percentileService->clearPercentiles($year);
+        }
+
+        // Last?
+        if ($position == 'last') {
+            $settingKey = $this->getReportService()->getReportCalculatedSettingKey($year);
+            $this->getReportService()->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
+        }
+
+
+        $this->debug("About to calculate", $benchmarkId);
+
+        // Now actually calculate and save percentiles
+        $percentileService->calculateForBenchmark($benchmark, $year);
+
+        $this->debug("Preflush", null);
+
+        // Flush
+        $percentileService->getPercentileModel()->getEntityManager()->flush();
+
+
+        $this->debug("Postflush", null);
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'benchmark' => $benchmark
+            )
+        );
+
+        return $view;
     }
 
     public function computeAction()
@@ -95,6 +200,111 @@ class ReportController extends AbstractActionController
         }
     }
 
+    public function computeOneAction()
+    {
+        takeYourTime();
+
+        $observationId = $this->params()->fromRoute('observation');
+        $debug = $this->params()->fromRoute('debug');
+        $debugColumn = $this->params()->fromRoute('benchmark');
+
+        $status = 'ok';
+
+        $observation = $this->getObservationModel()->find($observationId);
+
+
+        if ($observation) {
+            $service = $this->getPercentileService()->getComputedFieldsService();
+            $service->setDebug($debug);
+            $service->setDebugDbColumn($debugColumn);
+
+            try {
+                $service->calculateAllForObservation($observation);
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+                //echo "! " . $message;
+                $status = $message;
+
+            }
+        } else {
+            $status = '404';
+        }
+
+
+
+        $view = new JsonModel(
+            array(
+                'status' => $status,
+                'observation' => $observationId
+            )
+        );
+
+        return $view;
+    }
+
+    /**
+     * @return \Mrss\Model\System
+     */
+    protected function getSystemModel()
+    {
+        return $this->getServiceLocator()->get('model.system');
+    }
+
+    public function calculateOneSystemAction()
+    {
+        takeYourTime();
+        $start = microtime(true);
+
+        $systemId = $this->params()->fromRoute('system');
+        $system = $this->getSystemModel()->find($systemId);
+        if (empty($system)) {
+            throw new \Exception(
+                'Valid system id required to calculate system reports.'
+            );
+        }
+
+        $yearToPrepare = $this->params()->fromRoute('year');
+        if (empty($yearToPrepare)) {
+            throw new \Exception(
+                'Year parameter required to calculate system reports.'
+            );
+        }
+
+        $benchmarkId = $this->params()->fromRoute('benchmark');
+        $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+        if (empty($benchmark)) {
+            throw new \Exception(
+                'Year parameter required to calculate system reports.'
+            );
+        }
+
+
+        $position = $this->params()->fromRoute('position');
+
+        if ($position == 'first') {
+            $this->getPercentileService()->clearPercentiles($yearToPrepare, $system);
+        } elseif ($position == 'last') {
+            $this->getPercentileService()->updateCalculationDate($yearToPrepare, $system);
+        }
+
+        $this->getPercentileService()->calculateForBenchmark($benchmark, $yearToPrepare, $system);
+
+        $this->getPercentileService()->getPercentileModel()->getEntityManager()->flush();
+
+
+        $elapsed = microtime(true) - $start;
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'elapsed' => $elapsed
+            )
+        );
+
+        return $view;
+
+    }
+
     public function calculateSystemsAction()
     {
         $this->longRunningScript();
@@ -112,7 +322,7 @@ class ReportController extends AbstractActionController
 
         if (!empty($yearToPrepare)) {
             // Now calculate percentiles
-            $stats = $this->getServiceLocator()->get('service.report.percentile')
+            $stats = $this->getPercentileService()
                 ->calculateSystems($yearToPrepare);
             $benchmarks = $stats['benchmarks'];
             $percentiles = $stats['percentiles'];
@@ -133,13 +343,21 @@ class ReportController extends AbstractActionController
         }
     }
 
+    /**
+     * @return \Mrss\Service\Report\Outliers
+     */
+    protected function getOutlierService()
+    {
+        return $this->getServiceLocator()->get('service.report.outliers');
+    }
+
     public function calculateOutliersAction()
     {
         $this->longRunningScript();
 
         $yearToPrepare = $this->params()->fromRoute('year');
 
-        $stats = $this->getServiceLocator()->get('service.report.outliers')
+        $stats = $this->getOutlierService()
             ->calculateOutliersForYear($yearToPrepare);
         $low = $stats['low'];
         $high = $stats['high'];
@@ -155,13 +373,50 @@ class ReportController extends AbstractActionController
         return $this->redirect()->toRoute('reports/calculate');
     }
 
+    public function calculateOutlierAction()
+    {
+        takeYourTime();
+
+        $benchmarkId = $this->params()->fromRoute('benchmark');
+        $year = $this->params()->fromRoute('year');
+        $position = $this->params()->fromRoute('clear');
+
+        // First?
+        if ($position == 'first') {
+            $this->getOutlierService()->clearOutliers($year);
+        }
+
+        // Calculate them
+        if ($benchmark = $this->getBenchmarkModel()->find($benchmarkId)) {
+            $this->getOutlierService()->calculateOutlier($benchmark, $year);
+        }
+
+        // Last?
+        if ($position == 'last') {
+            $this->getOutlierService()->saveReportCalculationDate($year);
+        }
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'benchmark' => $benchmarkId
+            )
+        );
+
+        return $view;
+    }
+
     public function adminOutliersAction()
     {
+        takeYourTime();
+
+        $collegeId = $this->params()->fromRoute('college_id');
         $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
-            ->getAdminOutlierReport();
+            ->getAdminOutlierReport($collegeId);
 
         return array(
-            'report' => $outlierReport
+            'report' => $outlierReport,
+            'showDetails' => !empty($collegeId)
         );
     }
 
@@ -174,7 +429,8 @@ class ReportController extends AbstractActionController
         return array(
             'report' => $outlierReport,
             'studyName' => $this->currentStudy()->getName(),
-            'year' => $this->currentStudy()->getCurrentYear()
+            'year' => $this->currentStudy()->getCurrentYear(),
+            'showDetails' => true
         );
     }
 
@@ -267,9 +523,9 @@ class ReportController extends AbstractActionController
             return $this->redirect()->toUrl('/reports/national/2014');
         }
 
-        $observation = $this->currentObservation($year);
-        $reportData = $this->getServiceLocator()->get('service.report.national')
-            ->getData($observation, $system);
+        /** @var \Mrss\Service\Report\National $reportService */
+        $reportService = $this->getServiceLocator()->get('service.report.national');
+        $reportData = $reportService->getData($subscription, $system);
 
 
         // Download?
@@ -288,7 +544,7 @@ class ReportController extends AbstractActionController
             'subscriptions' => $subscriptions,
             'year' => $year,
             'reportData' => $reportData,
-            'college' => $observation->getCollege(),
+            'college' => $subscription->getCollege(),
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels(),
             'system' => $system,
@@ -537,12 +793,15 @@ class ReportController extends AbstractActionController
                 if ($name = $data['name']) {
                     $college = $this->currentCollege();
                     $peerGroup->setName($name);
-                    $peerGroup->setCollege($college);
+                    //$peerGroup->setCollege($college);
+
+                    $currentUser = $this->zfcUserAuthentication()->getIdentity();
+                    $peerGroup->setUser($currentUser);
 
 
                     // See if it exists
                     $existingGroup = $this->getPeerGroupModel()
-                        ->findOneByCollegeAndName($college, $name);
+                        ->findOneByUserAndName($currentUser, $name);
 
                     if ($existingGroup) {
                         // Don't modify existing groups
@@ -574,7 +833,8 @@ class ReportController extends AbstractActionController
 
         // Prepare saved peer groups for javascript
         $peerGroups = array();
-        $groups = $this->getPeerGroupModel()->findByCollegeAndStudy($this->currentCollege(), $this->currentStudy());
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $groups = $this->getPeerGroupModel()->findByUserAndStudy($user, $this->currentStudy());
         foreach ($groups as $group) {
             $peerGroups[] = array(
                 'name' => $group->getName(),
@@ -645,6 +905,7 @@ class ReportController extends AbstractActionController
         $year = $this->getSessionContainer()->year;
 
         $peerGroupName = $this->getSessionContainer()->peerGroupName;
+        $peerService->setShowPeerDataYouDidNotSubmit($this->getStudyConfig()->show_peer_data_you_did_not_submit);
 
         $report = $peerService->getPeerReport($benchmarks, $peers, $this->currentCollege(), $year, $peerGroupName);
 
@@ -1035,10 +1296,12 @@ class ReportController extends AbstractActionController
 
         $year = $this->getYearFromRouteOrStudy();
 
-        /** @var \Mrss\Entity\Observation $observation */
-        $observation = $this->currentObservation($year);
+        $collegeId = $this->currentCollege()->getId();
+        $studyId = $this->currentStudy()->getId();
 
-        $reportData = $report->getData($observation);
+        $subscription = $this->getSubscriptionModel()->findOne($year, $collegeId, $studyId);
+
+        $reportData = $report->getData($subscription);
 
         $view = new ViewModel(
             array(
@@ -1329,11 +1592,18 @@ class ReportController extends AbstractActionController
         return $count;
     }
 
+    /**
+     * @return \Mrss\Model\Observation
+     */
+    public function getObservationModel()
+    {
+        return $this->getServiceLocator()->get('model.observation');
+    }
+
     public function getObservations($year)
     {
         if (empty($this->observations[$year])) {
-            /** @var \Mrss\Model\Observation $observationModel */
-            $observationModel = $this->getServiceLocator()->get('model.observation');
+            $observationModel = $this->getObservationModel();
 
             $this->observations[$year] = $observationModel
                 ->findByYearAndStudy($year, $this->currentStudy());
@@ -1436,7 +1706,7 @@ class ReportController extends AbstractActionController
      */
     public function getPeerGroupModel()
     {
-        return $this->getServiceLocator()->get('model.peerGroup');
+        return $this->getServiceLocator()->get('model.peer.group');
     }
 
     public function observationNotFound()
@@ -1445,5 +1715,25 @@ class ReportController extends AbstractActionController
             'Unable to find membership.'
         );
         return $this->redirect()->toUrl('/members');
+    }
+
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        if (empty($this->benchmarkModel)) {
+            $this->benchmarkModel = $this->getServiceLocator()
+                ->get('model.benchmark');
+        }
+
+        return $this->benchmarkModel;
+    }
+
+    protected function getStudyConfig()
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
     }
 }

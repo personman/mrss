@@ -193,6 +193,7 @@ return array(
                 ),
                 array(
                     'controller' => 'issues',
+                    'action' => array('index', 'note', 'update'),
                     'roles' => array('data')
                 ),
 
@@ -303,7 +304,7 @@ return array(
                 ),
                 array(
                     'controller' => 'subscription',
-                    'action' => array('delete', 'sendinvoice'),
+                    'action' => array('delete', 'sendinvoice', 'reportAccess'),
                     'roles' => array('admin')
                 ),
                 array(
@@ -319,7 +320,11 @@ return array(
                 array(
                     'controller' => 'issues',
                     'actions' => array('staff', 'update'),
-                    'roles' => array('data')
+                    'roles' => array('admin')
+                ),
+                array(
+                    'controller' => 'suppressions',
+                    'roles' => array('admin')
                 ),
 
                 // Since the background action is fired by console, lift guard

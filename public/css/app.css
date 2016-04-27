@@ -213,3 +213,15 @@ ul.ui-autocomplete {
     color: #FFF;
     background-color: #373a3c;
 }
+
+#controls-suppressions {
+    padding-left: 15px;
+}
+
+
+.calculation-progress .progress-bar {
+    overflow-x:visible;
+    white-space:nowrap;
+    text-align: center;
+    color:black; /* color is for demo purposes */
+}

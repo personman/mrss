@@ -19,6 +19,7 @@ use PHPExcel_Shared_Font;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Log\Formatter\Simple;
+use \DateTime;
 
 class Report
 {
@@ -26,6 +27,8 @@ class Report
      * @var Study
      */
     protected $study;
+
+    protected $studyConfig;
 
     /**
      * @var array
@@ -53,6 +56,11 @@ class Report
      * @var \Mrss\Model\Subscription
      */
     protected $subscriptionModel;
+
+    /**
+     * @var \Mrss\Entity\Subscription
+     */
+    protected $subscription;
 
     /**
      * @var \Mrss\Model\Benchmark
@@ -133,19 +141,27 @@ class Report
             $yearsWithCalculationDates[$year] = array();
 
             $key = $this->getReportCalculatedSettingKey($year);
-            $yearsWithCalculationDates[$year]['report'] = $this->getSettingModel()
-                ->getValueForIdentifier($key);
+            $yearsWithCalculationDates[$year]['report'] = $this->getDateForSettingKey($key);
 
             $key = $this->getReportCalculatedSettingKey($year, true);
-            $yearsWithCalculationDates[$year]['system'] = $this->getSettingModel()
-                ->getValueForIdentifier($key);
+            $yearsWithCalculationDates[$year]['system'] = $this->getDateForSettingKey($key);
 
             $key = $this->getOutliersCalculatedSettingKey($year);
-            $yearsWithCalculationDates[$year]['outliers'] = $this->getSettingModel()
-                ->getValueForIdentifier($key);
+            $yearsWithCalculationDates[$year]['outliers'] = $this->getDateForSettingKey($key);
         }
 
         return $yearsWithCalculationDates;
+    }
+
+    protected function getDateForSettingKey($key, $format = 'Y-m-d H:i')
+    {
+        $date = $this->getSettingModel()->getValueForIdentifier($key);
+        if ($date) {
+            $date = new DateTime($date);
+            $date = $date->format($format);
+        }
+
+        return $date;
     }
 
     /**
@@ -189,28 +205,56 @@ class Report
         $skipNull = true,
         $system = null
     ) {
-        $subscriptions = $this->getSubscriptions($year, $system);
-        //prd(count($subscriptions));
+        $dbColumn = $benchmark->getDbColumn();
+        $ob = new Observation;
+        if ($ob->has($dbColumn)) {
+            $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
+                $this->getStudy(),
+                $year,
+                array($dbColumn),
+                false,
+                true,
+                array(),
+                $system
+            );
+        } else {
+            $subscriptions = array();
+        }
+
+        $benchmarkGroupId = $benchmark->getBenchmarkGroup()->getId();
 
         $data = array();
         $iData = array();
         $skipped = 0;
         /** @var $subscription /Mrss/Entity/Subscription */
         foreach ($subscriptions as $subscription) {
+            $suppressions = $subscription->getSuppressions();
+            $suppressed = array();
+            foreach ($suppressions as $suppression) {
+                $suppressed[] = $suppression->getBenchmarkGroup()->getId();
+            }
+
             /** @var /Mrss/Entity/Observation $observation */
             if ($observation = $subscription->getObservation()) {
                 $dbColumn = $benchmark->getDbColumn();
-                $value = $observation->get($dbColumn);
+
+                try {
+                    $value = $observation->get($dbColumn);
+                } catch (\Exception $e) {
+                    $value = null;
+                }
+
                 $collegeId = $subscription->getCollege()->getId();
 
-                /*$isDebug = $this->params()->fromQuery('debug');
-                if (!empty($isDebug)
 
-                    && $benchmark->getDbColumn() == $this->params()->fromQuery('debug')) {
-                    //pr($value);
-                }*/
                 // Leave out null values
                 if ($skipNull && $value === null) {
+                    $skipped++;
+                    continue;
+                }
+
+                // Also skip suppressed data
+                if (in_array($benchmarkGroupId, $suppressed)) {
                     $skipped++;
                     continue;
                 }
@@ -279,7 +323,7 @@ class Report
             $decimalPlaces = 2;
         } else {
             //All NCCBP percentages should use 2 decimal places
-            if ($this->getStudy()->getId() == 1 && $benchmark->isPercent()) {
+            if (/*$this->getStudy()->getId() == 1 && */$benchmark->isPercent()) {
                 $decimalPlaces = 2;
             }
         }
@@ -541,7 +585,7 @@ class Report
      */
     protected function getPeerGroupModel()
     {
-        return $this->getServiceManager()->get('model.peerGroup');
+        return $this->getServiceManager()->get('model.peer.group');
     }
 
     /**
@@ -612,7 +656,10 @@ class Report
 
         // Pad the array if it's empty
         if (empty($percentileData)) {
-            $percentileData = array(null, null, null, null, null);
+            $percentileData = array();
+            foreach ($this->getPercentileBreakpointsForStudy() as $breakpoint) {
+                $percentileData[] = null;
+            }
         }
 
         if (!empty($percentileData['N'])) {
@@ -726,6 +773,11 @@ class Report
         $reportedValue,
         $chartConfig
     ) {
+        if (empty($percentileData)) {
+            return false;
+        }
+
+
         if (empty($chartConfig['title'])) {
             $chartConfig['title'] = $this->getVariableSubstitution()
                 ->substitute($benchmark->getDescriptiveReportLabel());
@@ -733,7 +785,7 @@ class Report
 
         unset($percentileData['N']);
 
-        $chartXCategories =$this->getPercentileBreakPointLabels();
+        $chartXCategories = $this->getPercentileBreakPointLabels();
         $chartValues = $percentileData;
 
         // Only add Your College to the chart if the reported value is not null
@@ -761,8 +813,11 @@ class Report
                 "Mismatched chart labels/data for $dbForLog, college: $collegeForLog, year: $logYear."
             );
         }
-        $chartValues = array_combine($chartXCategories, $chartValues);
-        asort($chartValues);
+
+        if ($chartValues = array_combine($chartXCategories, $chartValues)) {
+            asort($chartValues);
+        }
+
         $chartXCategories = array_keys($chartValues);
 
         if (isset($chartConfig['decimal_places'])) {
@@ -778,6 +833,10 @@ class Report
             pr($benchmark->getInputType());
             pr($benchmark->getDbColumn());
             prd($roundTo);
+        }
+
+        if (empty($chartValues) || !is_array($chartValues)) {
+            return null;
         }
 
         $chartData = array();
@@ -1411,6 +1470,21 @@ class Report
         return $this->observationModel;
     }
 
+    public function setSubscription($subscription)
+    {
+        $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Entity\Subscription
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
+    }
+
     public function getYear()
     {
         return $this->getObservation()->getYear();
@@ -1525,5 +1599,17 @@ class Report
                 }
             }
         }
+    }
+
+    public function setStudyConfig($config)
+    {
+        $this->studyConfig = $config;
+
+        return $this;
+    }
+
+    public function getStudyConfig()
+    {
+        return $this->studyConfig;
     }
 }

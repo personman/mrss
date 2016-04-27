@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\College;
 use Mrss\Form\AbstractForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -48,7 +49,7 @@ class CollegeController extends AbstractActionController
         $Colleges = $this->getServiceLocator()->get('model.college');
         $college = $Colleges->find($this->params('id'));
 
-        $Studies = $this->getServiceLocator()->get('model.study');
+        //$Studies = $this->getServiceLocator()->get('model.study');
 
         // Handle invalid id
         if (empty($college)) {
@@ -57,10 +58,19 @@ class CollegeController extends AbstractActionController
         }
 
         return array(
+            'studyConfig' => $this->getStudyConfig(),
             'college' => $college,
-            'study' => $Studies->find(1)
+            //'study' => $Studies->find(1)
         );
     }
+
+    protected function getStudyConfig()
+    {
+        $studyConfig = $this->getServiceLocator()->get('study');
+
+        return $studyConfig;
+    }
+
 
     /**
      * This is very slow. Need to store the lat/lng of each college instead of
@@ -133,15 +143,32 @@ class CollegeController extends AbstractActionController
         );
     }
 
-    public function editAction()
+    public function getForm()
     {
-        /** @var \Mrss\Model\College $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $em = $this->getServiceLocator()->get('em');
+
         $form = new AbstractForm('college');
 
         $collegeFieldset = new \Mrss\Form\Fieldset\College(true);
 
         $collegeFieldset->setUseAsBaseFieldset(true);
+
+        $collegeFieldset->setHydrator(
+            new DoctrineHydrator($em, 'Mrss\Entity\College')
+        );
+
+        $form->add($collegeFieldset);
+        $form->add($form->getButtonFieldset());
+
+        return $form;
+    }
+
+    public function editAction()
+    {
+        $collegeModel = $this->getCollegeModel();
+
+
+        $form = $this->getForm();
 
         $collegeId = $this->params()->fromRoute('id');
         if (empty($collegeId)) {
@@ -149,6 +176,7 @@ class CollegeController extends AbstractActionController
                 $collegeId = $institution['id'];
             }
         }
+
 
         $isAdmin = $this->isAllowed('adminMenu', 'view');
 
@@ -161,15 +189,7 @@ class CollegeController extends AbstractActionController
 
         $redirect = $this->params()->fromRoute('redirect');
 
-        $em = $this->getServiceLocator()->get('em');
-        $collegeFieldset->setHydrator(
-            new DoctrineHydrator($em, 'Mrss\Entity\College')
-        );
-
-
-        $form->add($collegeFieldset);
         $form->bind($college);
-        $form->add($form->getButtonFieldset());
 
         // Redirect to renew if needed
         $form->addRedirect($redirect);
@@ -212,6 +232,44 @@ class CollegeController extends AbstractActionController
         );
     }
 
+    public function addAction()
+    {
+        $form = $this->getForm();
+
+        $college = new College();
+
+        $form->bind($college);
+
+        // Process the form
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $this->getCollegeModel()->save($college);
+                $this->getServiceLocator()->get('em')->flush();
+
+                $this->deleteCollegeCacheFile();
+
+                $this->flashMessenger()->addSuccessMessage('Institution saved.');
+
+                // Get the redirect
+                return $this->redirect()->toUrl('/colleges');
+            }
+
+        }
+
+        return array(
+            'form' => $form,
+        );
+    }
+
+    public function deleteCollegeCacheFile()
+    {
+        unlink('public/files/all-colleges.json');
+    }
+
     public function usersAction()
     {
         $college = $this->currentCollege();
@@ -226,10 +284,15 @@ class CollegeController extends AbstractActionController
     {
         $altService = $this->params()->fromRoute('service');
 
-        $redirectRoute = 'colleges/import';
+        $redirectRoute = '/colleges/import';
         if (!empty($altService)) {
-            $service = $this->getServiceLocator()->get('service.import.colleges.demo');
-            $redirectRoute = 'colleges/import-demo';
+            if ($altService == 'demo') {
+                $service = $this->getServiceLocator()->get('service.import.colleges.demo');
+                $redirectRoute = '/colleges/import-demo';
+            } elseif ($altService == 'category') {
+                $service = $this->getServiceLocator()->get('service.import.colleges.category');
+                $redirectRoute = '/colleges/import-demo/category';
+            }
         } else {
             $service = $this->getServiceLocator()->get('service.import.colleges');
         }
@@ -255,7 +318,7 @@ class CollegeController extends AbstractActionController
                 $stats = $service->import($filename);
 
                 $this->flashMessenger()->addSuccessMessage($stats);
-                return $this->redirect()->toRoute($redirectRoute);
+                return $this->redirect()->toUrl($redirectRoute);
             }
         }
 

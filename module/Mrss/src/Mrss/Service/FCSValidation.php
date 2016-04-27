@@ -139,7 +139,8 @@ class FCSValidation
                     }
 
                     if ($total && $total != $sum) {
-                        $message = "The number of faculty entered for $genderLabel $contractLabel $rankLabel does not equal the sum of the non-tenure track, on tenure-track, and tenured fields.";
+                        $message = "The number of faculty entered for $genderLabel $contractLabel $rankLabel
+                         does not equal the sum of the non-tenure track, on tenure-track, and tenured fields.";
                         $code = "ft_faculty_sum_mismatch_{$gender}_{$rank}_{$contract}";
                         $this->addIssue($message, $code, 2);
                     }
@@ -296,7 +297,8 @@ class FCSValidation
                         // Now the comparison
                         if ($average > $max) {
                             $maxFormatted = '$' . number_format($max);
-                            $message = "The average salary for $genderLabel $rankLabel $contractLabel is greater than $maxFormatted.";
+                            $message = "The average salary for $genderLabel $rankLabel $contractLabel
+                            is greater than $maxFormatted.";
                             $code = "average_salary_max_{$gender}_{$rank}_{$contract}";
                             $this->addIssue($message, $code, 2);
                         }
@@ -406,6 +408,10 @@ class FCSValidation
                 } else {
                     $larger = $femaleAverage;
                     $smaller = $maleAverage;
+                }
+
+                if ($smaller == 0) {
+                    continue;
                 }
 
                 // What's the percentage difference?
@@ -552,14 +558,16 @@ class FCSValidation
 
                         // Lower than min?
                         if ($benefitsAsPercentOfSalary < $minPercent) {
-                            $message = "Total benefit expenditure is less than $minPercent% for $rankLabel $contractLabel.";
+                            $message = "Total benefit expenditure is less than $minPercent%
+                            for $rankLabel $contractLabel.";
                             $code = "total_benefit_exp_min_perc_salaries_{$rank}_{$contract}";
                             $this->addIssue($message, $code, 3);
                         }
 
                         // Higher than max?
                         if ($benefitsAsPercentOfSalary > $maxPercent) {
-                            $message = "Total benefit expenditure is greater than $maxPercent% for $rankLabel $contractLabel.";
+                            $message = "Total benefit expenditure is greater than
+                            $maxPercent% for $rankLabel $contractLabel.";
                             $code = "total_benefit_exp_max_perc_salaries_{$rank}_{$contract}";
                             $this->addIssue($message, $code, 3);
                         }
@@ -594,7 +602,8 @@ class FCSValidation
 
                     // Check to see if the number covered is greater than the number with salary
                     if ($benefitCount > $form2Total) {
-                        $message = "The number covered for $benefitLabel is greater than the total number of faculty in Form 2: $rankLabel, $contractLabel";
+                        $message = "The number covered for $benefitLabel is greater than the total number
+                        of faculty in Form 2: $rankLabel, $contractLabel";
                         $code = "number_covered_greater_{$benefit}_{$rank}_{$contract}";
                         $this->addIssue($message, $code, 3);
                     }
@@ -748,7 +757,8 @@ class FCSValidation
                         // Compare to min
                         if (!empty($rules['min']) && $benefitPercent < $rules['min']) {
                             $min = $rules['min'];
-                            $message = "Expenditure for $benefitLabel is less than $min% of salary for $rankLabel $contractLabel.";
+                            $message = "Expenditure for $benefitLabel is less than $min% of salary for
+                            $rankLabel $contractLabel.";
                             $code = "{$benefit}_expenditure_min_{$rank}_{$contract}";
                             $this->addIssue($message, $code, 3);
                         }
@@ -756,7 +766,8 @@ class FCSValidation
                         // Compare to max
                         if (!empty($rules['max']) && $benefitPercent > $rules['max']) {
                             $max = $rules['max'];
-                            $message = "Expenditure for $benefitLabel is more than $max% of salary for $rankLabel $contractLabel.";
+                            $message = "Expenditure for $benefitLabel is more than $max% of salary for
+                            $rankLabel $contractLabel.";
                             $code = "{$benefit}_expenditure_max_{$rank}_{$contract}";
                             $this->addIssue($message, $code, 3);
                         }
@@ -991,12 +1002,21 @@ class FCSValidation
 
         // Too high?
         if ($total && $total > $max) {
-            $this->addIssue("Total compensation for President/Chancellor is greater than $$formattedMax.", $code . '_max', 5);
+            $this->addIssue(
+                "Total compensation for President/Chancellor is greater than $$formattedMax.",
+                $code . '_max',
+                5
+            );
         }
 
         // Too low?
         if ($total && $total < $min) {
-            $this->addIssue("Total compensation for President/Chancellor is less than $$formattedMin. Please verify that this is an annual amount.", $code . '_min', 5);
+            $this->addIssue(
+                "Total compensation for President/Chancellor is less than $$formattedMin.
+                Please verify that this is an annual amount.",
+                $code . '_min',
+                5
+            );
         }
     }
 
@@ -1050,7 +1070,8 @@ class FCSValidation
         );
     }
 
-    protected function getRanks() {
+    protected function getRanks()
+    {
         return array(
             'professor' => 'Professor',
             'associate_professor' => 'Associate',
