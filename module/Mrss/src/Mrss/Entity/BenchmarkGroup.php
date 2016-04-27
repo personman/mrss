@@ -527,6 +527,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
             }
         }
 
+
         return $complete;
     }
 

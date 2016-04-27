@@ -97,7 +97,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($college->getSubscriptions() as $subscription): ?>
+                    <?php foreach ($college->getSubscriptionsForStudy($this->currentStudy()) as $subscription): ?>
                     <tr>
                         <td>
                             <?= $subscription->getYear() ?>
