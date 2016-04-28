@@ -193,9 +193,10 @@ class CustomReportController extends ReportController
     {
         if (!empty($id)) {
             $report = $this->getReportModel()->find($id);
-
             $admin = $this->isAllowed('adminMenu', 'view');
-            if (!$admin && $report->getCollege()->getId() != $this->currentCollege()->getId()) {
+            $college = $report->getUser()->getCollege();
+
+            if (!$admin && $college->getId() != $this->currentCollege()->getId()) {
                 throw new \Exception('You cannot edit reports that do not belong to your college.');
             }
         }

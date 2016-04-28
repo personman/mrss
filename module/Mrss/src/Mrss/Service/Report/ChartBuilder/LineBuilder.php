@@ -143,7 +143,7 @@ class LineBuilder extends ChartBuilder
             }
         }
 
-        if (!empty($peerGroup) && count($peerIds) >= $this->minimumPeers) {
+        if (!empty($peerGroup) && !empty($peerIds) && count($peerIds) >= $this->minimumPeers) {
             foreach ($peerMediansData as $percentile => $peerMedianData) {
                 if ($percentile == 50) {
                     $label = 'Median';
