@@ -17,6 +17,10 @@ $this->headScript()->appendFile(
     We understand that the reported values may be correct, but we would appreciate it if you would either confirm the values or provide corrected raw data. Additionally, you may revise any data even if it is not flagged as an outlier or add additional data during the data verification process.
 </p>
 
+<p>
+    The Detailed Outlier Report provides additional information about the outlier identified, which may be helpful for identifying as many benchmarks are computed using multiple inputs.  Not all imputed values of a calculation are outliers, but rather the final calculation is reported as an outlier.  The outlier report serves as a final check of Faculty Compensation Survey data where data elements listed below are unusually large or small relative to mean values in the dataset.  Outliers have been defined fairly conservatively such that only mean values that are two standard deviations above or below are reported.
+</p>
+
 <?php foreach ($report as $collegeInfo): ?>
     <?php
     /** @var \Mrss\Entity\College $college */
