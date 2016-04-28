@@ -1,0 +1,9 @@
+<h1>Data Suppressions</h1>
+
+<ul>
+<?php foreach ($subsWithSuppressions as $info): ?>
+    <li>
+        <?= $info['college'] ?>: <?= $info['suppressions'] ?>
+    </li>
+<?php endforeach ?>
+</ul>

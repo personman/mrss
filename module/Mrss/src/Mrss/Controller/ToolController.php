@@ -1048,6 +1048,34 @@ class ToolController extends AbstractActionController
         die('test');
     }
 
+    public function suppressionsAction()
+    {
+
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $subscriptions = $subscriptionModel->findByStudyAndYear($study->getId(), $study->getCurrentYear());
+
+        $subsWithSuppressions = array();
+
+        foreach ($subscriptions as $subscription) {
+            if ($suppressions = $subscription->getSuppressionList()) {
+                $subsWithSuppressions[] = array(
+                    'college' => $subscription->getCollege()->getNameAndState(),
+                    'suppressions' => $suppressions
+                );
+            }
+
+        }
+
+        return array(
+            'subWithSuppressions' => $subsWithSuppressions
+        );
+    }
+
     protected function getNewPeerGroupId($oldGroupId, $user)
     {
         /** @var \Mrss\Model\PeerGroup $model */

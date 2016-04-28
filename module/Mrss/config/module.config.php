@@ -1976,6 +1976,15 @@ return array(
                             )
                         )
                     ),
+                    'suppressions' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/suppressions',
+                            'defaults' => array(
+                                'action' => 'suppressions',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
