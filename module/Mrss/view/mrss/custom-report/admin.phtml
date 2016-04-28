@@ -36,7 +36,7 @@
 <ul>
 <?php foreach ($recentReports as $report): ?>
     <li>
-        <strong><?= $report->getName() ?></strong> - <?= $report->getCollege()->getName() ?>
+        <strong><?= $report->getName() ?></strong> - <?= $report->getUser()->getCollege()->getName() ?>
     </li>
 <?php endforeach ?>
 </ul>
