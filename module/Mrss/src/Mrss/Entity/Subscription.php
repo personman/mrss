@@ -360,6 +360,8 @@ class Subscription
             $formUrls[] = $suppression->getBenchmarkGroup()->getUrl();
         }
 
+        $formUrls = array_unique($formUrls);
+
         return implode(', ', $formUrls);
     }
 

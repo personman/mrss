@@ -1,9 +1,22 @@
 <h1>Data Suppressions</h1>
 
-<ul>
-<?php foreach ($subsWithSuppressions as $info): ?>
-    <li>
-        <?= $info['college'] ?>: <?= $info['suppressions'] ?>
-    </li>
-<?php endforeach ?>
-</ul>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Institution</th>
+        <th>Suppressed Forms</th>
+    </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($subsWithSuppressions as $info): ?>
+            <tr>
+                <td>
+                    <?= $info['college'] ?>
+                </td>
+                <td>
+                    <?= $info['suppressions'] ?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

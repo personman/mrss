@@ -1063,6 +1063,7 @@ class ToolController extends AbstractActionController
 
         foreach ($subscriptions as $subscription) {
             if ($suppressions = $subscription->getSuppressionList()) {
+
                 $subsWithSuppressions[] = array(
                     'college' => $subscription->getCollege()->getNameAndState(),
                     'suppressions' => $suppressions
@@ -1072,7 +1073,7 @@ class ToolController extends AbstractActionController
         }
 
         return array(
-            'subWithSuppressions' => $subsWithSuppressions
+            'subsWithSuppressions' => $subsWithSuppressions
         );
     }
 
