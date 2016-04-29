@@ -1114,6 +1114,10 @@ class ToolController extends AbstractActionController
         $row++;
         $sheet->fromArray($usersWithSuppressions, null, 'A' . $row);
 
+        foreach (range(0, count($headers) - 1) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
         $this->downloadExcel($excel, 'users-with-suppressed-forms.xlsx');
     }
 
