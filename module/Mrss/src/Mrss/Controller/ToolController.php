@@ -392,6 +392,11 @@ class ToolController extends AbstractActionController
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         }
 
+        $this->downloadExcel($excel, $filename);
+    }
+
+    public function downloadExcel($excel, $filename)
+    {
         header(
             'Content-Type: '.
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -401,7 +406,6 @@ class ToolController extends AbstractActionController
 
         $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
         $objWriter->save('php://output');
-
         die;
     }
 
@@ -1050,17 +1054,9 @@ class ToolController extends AbstractActionController
 
     public function suppressionsAction()
     {
-
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-
-        /** @var \Mrss\Entity\Study $study */
-        $study = $this->currentStudy();
-
-        $subscriptions = $subscriptionModel->findByStudyAndYear($study->getId(), $study->getCurrentYear());
+        $subscriptions = $this->getSubscriptions();
 
         $subsWithSuppressions = array();
-
         foreach ($subscriptions as $subscription) {
             if ($suppressions = $subscription->getSuppressionList()) {
 
@@ -1075,6 +1071,63 @@ class ToolController extends AbstractActionController
         return array(
             'subsWithSuppressions' => $subsWithSuppressions
         );
+    }
+
+    public function downloadSuppressionsAction()
+    {
+        $subscriptions = $this->getSubscriptions();
+
+        $usersWithSuppressions = array();
+        foreach ($subscriptions as $subscription) {
+            if ($suppressions = $subscription->getSuppressionList()) {
+
+                foreach ($subscription->getCollege()->getDataUsers() as $user) {
+                    $usersWithSuppressions[] = array(
+                        'email' => $user->getEmail(),
+                        'prefix' => $user->getPrefix(),
+                        'firstName' => $user->getFirstName(),
+                        'lastName' => $user->getLastName(),
+                        'title' => $user->getTitle(),
+                        'college' => $subscription->getCollege()->getNameAndState(),
+                        'suppressions' => $suppressions,
+                    );
+                }
+            }
+        }
+
+        $headers = array(
+            'Email',
+            'Prefix',
+            'First Name',
+            'Last Name',
+            'Title',
+            'Institution',
+            'Suppressed Forms'
+        );
+
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $row = 1;
+
+        $sheet->fromArray($headers, null, 'A' . $row);
+
+        $row++;
+        $sheet->fromArray($usersWithSuppressions, null, 'A' . $row);
+
+        $this->downloadExcel($excel, 'users-with-suppressed-forms.xlsx');
+    }
+
+    public function getSubscriptions()
+    {
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $subscriptions = $subscriptionModel->findByStudyAndYear($study->getId(), $study->getCurrentYear());
+
+        return $subscriptions;
     }
 
     protected function getNewPeerGroupId($oldGroupId, $user)

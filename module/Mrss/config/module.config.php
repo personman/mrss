@@ -1985,6 +1985,15 @@ return array(
                             )
                         )
                     ),
+                    'download-suppressions' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/download-suppressions',
+                            'defaults' => array(
+                                'action' => 'downloadSuppressions',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
