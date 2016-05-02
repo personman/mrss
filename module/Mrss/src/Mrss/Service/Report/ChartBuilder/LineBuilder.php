@@ -22,7 +22,12 @@ class LineBuilder extends ChartBuilder
         }
 
         $title = $config['title'];
-        $subtitle = $config['subtitle'];
+
+        $subtitle = null;
+        if (!empty($config['subtitle'])) {
+            $subtitle = $config['subtitle'];
+        }
+
 
         if (empty($title)) {
             $title = $benchmark->getDescriptiveReportLabel();
