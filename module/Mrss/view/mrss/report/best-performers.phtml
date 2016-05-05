@@ -2,6 +2,13 @@
 
 <script type="text/javascript">
     $(function() {
+
+        // Show all
+        $('#showAllBestPerformers').click(function() {
+            showAllBestPerformers()
+            return false;
+        })
+
         // Show/hide benchmarks
         $('a.best-performers-form').click(function() {
             $(this).find('.glyphicon-plus').toggle()
@@ -32,6 +39,13 @@
             return false
         })
     })
+
+    function showAllBestPerformers()
+    {
+        $('a.best-performers-form').click()
+        $('.show-results').click()
+
+    }
 </script>
 
 
@@ -49,6 +63,9 @@
 
 <p><em>Best performers are institutions reporting data above 90th percentile (or below the 10th percentile for benchmarks like cost where lower values are better). Click a form name below to see its benchmarks, then click a benchmark to display the best performers. The institutions are presented in a alphabetical order.</em></p>
 
+<div style="text-align: right">
+    <a href="#" id="showAllBestPerformers">Show all</a>
+</div>
 
 <div id="best-performers">
     <?php foreach ($reportData as $benchmarkGroup): ?>
