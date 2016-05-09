@@ -38,6 +38,11 @@ class PeerGroup
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(
+     * name="user_id",
+     * referencedColumnName="id",
+     * onDelete="CASCADE"
+     * )
      * @var User
      */
     protected $user;
