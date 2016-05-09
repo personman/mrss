@@ -56,7 +56,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                     <?php if ($impersonator = $changeSet->getImpersonatingUser()): ?>
                         <?= $impersonator->getFullName() ?>, impersonating
                     <?php endif ?>
-                        <?= $changeSet->getUser()->getFullName() ?>
+                        <?php if ($user = $changeSet->getUser()): ?>
+                            <?= $changeSet->getUser()->getFullName() ?>
+                        <?php endif ?>
 
                 <?php else: ?>
                     Importer
