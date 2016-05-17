@@ -419,6 +419,8 @@ class ObservationController extends AbstractActionController
                 $v = $observation->get('best_practices');
                 pr($bpValue);
                 pr($v);
+                pr($observation->getId());
+                pr($observation->get('total_pop'));
             }
         }
 
