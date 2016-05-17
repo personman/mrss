@@ -411,8 +411,13 @@ class ObservationController extends AbstractActionController
         // Hard-coded binding of best practices. @todo: make this more elegant
         if ($form->has('best_practices')) {
             $bp = $form->get('best_practices');
-            $bp->setValue(explode("\n", $bp->getValue()));
+            $bpValue = explode("\n", $bp->getValue());
+            $bp->setValue($bpValue);
             //prd($_POST);
+
+            if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
+                pr($bpValue);
+            }
         }
 
         /*$this->df($benchmarkGroupUrl);
