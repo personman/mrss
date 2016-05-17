@@ -82,9 +82,6 @@ function setUpCompute()
             }
 
             urlStack.push(url);
-
-
-            urlStack.push(url);
         }
 
         // Now the url stack is built. Kick it off.
@@ -204,6 +201,14 @@ function processUrlStack()
             var remaining = urlStack.length;
             var completed = originalTotal - remaining;
             var completion = completed / originalTotal * 100;
+
+            /*debugger;
+
+            console.log("Original total: " + originalTotal);
+            console.log("Remaining: " + remaining);
+            console.log("Completed: " + completed);
+            console.log("Completion: " + completion);*/
+
             progressBar.css('width', completion + '%').attr('aria-valuenow', completion);
             getProgressLabel()
                 .html(Math.round(completion) + '%');
