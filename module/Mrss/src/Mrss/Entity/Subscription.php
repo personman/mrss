@@ -136,6 +136,15 @@ class Subscription
      */
     protected $reportAccess = false;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    protected $paid = false;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $paidNotes;
 
 
     public function getId()
@@ -341,6 +350,44 @@ class Subscription
     public function setReportAccess($reportAccess)
     {
         $this->reportAccess = $reportAccess;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+
+    /**
+     * @param mixed $paid
+     * @return $this
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaidNotes()
+    {
+        return $this->paidNotes;
+    }
+
+    /**
+     * @param mixed $paidNotes
+     * @return $this
+     */
+    public function setPaidNotes($paidNotes)
+    {
+        $this->paidNotes = $paidNotes;
+
         return $this;
     }
 

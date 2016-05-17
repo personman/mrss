@@ -1994,6 +1994,25 @@ return array(
                             )
                         )
                     ),
+                    'audit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/audit[/:year]',
+                            'defaults' => array(
+                                'action' => 'audit',
+                                'year' => null
+                            )
+                        )
+                    ),
+                    'audit-update' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/audit-update',
+                            'defaults' => array(
+                                'action' => 'auditUpdate',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

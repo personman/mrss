@@ -19,6 +19,7 @@ use PHPExcel_Style_Fill;
 use Mrss\Service\NccbpMigration;
 use Zend\Session\Container;
 use Mrss\Service\Export\User as ExportUser;
+use Zend\View\Model\JsonModel;
 
 class ToolController extends AbstractActionController
 {
@@ -42,8 +43,7 @@ class ToolController extends AbstractActionController
 
     public function getMembersWithNoExec()
     {
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
         $studyId = $this->currentStudy()->getId();
 
         $year = $this->params()->fromRoute('year');
@@ -253,6 +253,17 @@ class ToolController extends AbstractActionController
         return array();
     }
 
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    public function getSubscriptionModel()
+    {
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+
+        return $subscriptionModel;
+    }
+
     public function calcCompletionAction()
     {
         $this->longRunningScript();
@@ -260,8 +271,7 @@ class ToolController extends AbstractActionController
         $start = microtime(1);
         $subscriptions = 0;
 
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
@@ -337,8 +347,7 @@ class ToolController extends AbstractActionController
         $row++;
 
         // Get the subscriptions
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
         $studyId = $this->currentStudy()->getId();
 
         $year = $this->params()->fromRoute('year');
@@ -422,8 +431,7 @@ class ToolController extends AbstractActionController
         $subObservationModel = $this->getServiceLocator()->get('model.subObservation');
 
         // This assumes we've already moved the subscriptions to the new correct year.
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
         $subscriptions = $subscriptionModel->findByStudyAndYear($this->currentStudy()->getId(), $to);
 
         /** @var \Mrss\Entity\Study $study */
@@ -508,8 +516,7 @@ class ToolController extends AbstractActionController
         /** @var \Mrss\Model\Benchmark $benchmarkModel */
         $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
 
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
 
         /** @var \Mrss\Model\Observation $observationModel */
         $observationModel = $this->getServiceLocator()->get('model.observation');
@@ -640,8 +647,7 @@ class ToolController extends AbstractActionController
             $year = $study->getCurrentYear();
         }
 
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
         $subs = $subscriptionModel->findByStudyAndYear($study->getId(), $year);
 
         // Get all the collected benchmark keys
@@ -1121,10 +1127,117 @@ class ToolController extends AbstractActionController
         $this->downloadExcel($excel, 'users-with-suppressed-forms.xlsx');
     }
 
+    public function auditAction()
+    {
+        // Years for tabs
+        $years = $this->getServiceLocator()->get('model.subscription')
+            ->getYearsWithSubscriptions($this->currentStudy());
+        rsort($years);
+
+
+        $study = $this->currentStudy();
+        $year = $this->getYearFromRouteOrStudy();
+
+        $subscriptions = $this->getSubscriptionModel()->findByStudyAndYear($study->getId(), $year);
+
+        $totalCount = count($subscriptions);
+        $paidCount = 0;
+        $totalAmount = 0;
+        $paidAmount = 0;
+        foreach ($subscriptions as $subscription) {
+            $totalAmount += $subscription->getPaymentAmount();
+
+            if ($subscription->getPaid()) {
+                $paidCount++;
+                $paidAmount += $subscription->getPaymentAmount();
+            }
+        }
+
+        return array(
+            'years' => $years,
+            'year' => $year,
+            'subscriptions' => $subscriptions,
+            'totalCount' => $totalCount,
+            'paidCount' => $paidCount,
+            'totalAmount' => $totalAmount,
+            'paidAmount' => $paidAmount
+        );
+    }
+
+    public function auditUpdateAction()
+    {
+        $subscriptionId = $this->params()->fromPost('subscriptionId');
+
+        if ($subscription = $this->getSubscriptionModel()->find($subscriptionId)) {
+            $paid = $this->params()->fromPost('paid');
+            $note = $this->params()->fromPost('note');
+
+            if ($paid) {
+                $paid = true;
+            } else {
+                $paid = false;
+            }
+
+            $subscription->setPaid($paid);
+            $subscription->setPaidNotes($note);
+
+            $this->getSubscriptionModel()->save($subscription);
+            $this->getSubscriptionModel()->getEntityManager()->flush();
+
+            $responseText = 'ok';
+        } else {
+            $responseText = 'Membership not found for id ' . $subscriptionId;
+        }
+
+
+        $response = $this->getResponse()->setContent($responseText);
+        return $response;
+
+    }
+
+    public function getYearFromRouteOrStudy($college = null)
+    {
+        if (empty($college)) {
+            $college = $this->currentCollege();
+        }
+
+        $year = $this->params()->fromRoute('year');
+
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+
+            // But if reports aren't open yet, show them last year's by default
+            $impersonationService = $this->getServiceLocator()
+                ->get('zfcuserimpersonate_user_service');
+            $isJCCC = (!empty($college) && ($college->getId() == 101) || $impersonationService->isImpersonated());
+            $isMax = $this->currentStudy()->getId() == 2;
+
+            // Allow access to Max reports for user feedback
+            if (!$isMax && !$isJCCC && !$this->currentStudy()->getReportsOpen()) {
+                $year = $year - 1;
+            }
+
+            // New
+            $subModel = $this->getSubscriptionModel();
+
+            $before = null;
+            if (!$this->currentStudy()->getReportsOpen()) {
+                $before = $this->currentStudy()->getCurrentYear();
+            }
+
+            $latestSubscription = $subModel->getLatestSubscription($this->currentStudy(), $college->getId(), $before);
+
+            if (!empty($latestSubscription)) {
+                $year = $latestSubscription->getYear();
+            }
+        }
+
+        return $year;
+    }
+
     public function getSubscriptions()
     {
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $subscriptionModel = $this->getSubscriptionModel();
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
