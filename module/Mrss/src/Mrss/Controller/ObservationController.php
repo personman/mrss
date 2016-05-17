@@ -283,11 +283,6 @@ class ObservationController extends AbstractActionController
             $this->currentObservation = $this->currentObservation();
         }
 
-        if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
-            pr($this->currentObservation->get('best_practices'));
-            pr($this->currentObservation->getId());
-        }
-
         return $this->currentObservation;
     }
 
@@ -419,14 +414,6 @@ class ObservationController extends AbstractActionController
             $bpValue = explode("\n", $bp->getValue());
             $bp->setValue($bpValue);
             //prd($_POST);
-
-            if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
-                $v = $observation->get('best_practices');
-                pr($bpValue);
-                pr($v);
-                pr($observation->getId());
-                pr($observation->get('total_pop'));
-            }
         }
 
         /*$this->df($benchmarkGroupUrl);
