@@ -285,6 +285,7 @@ class ObservationController extends AbstractActionController
 
         if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
             pr($this->currentObservation->get('best_practices'));
+            pr($this->currentObservation->getId());
         }
 
         return $this->currentObservation;
