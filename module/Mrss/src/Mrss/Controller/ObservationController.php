@@ -416,7 +416,9 @@ class ObservationController extends AbstractActionController
             //prd($_POST);
 
             if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
+                $v = $observation->get('best_practices');
                 pr($bpValue);
+                pr($v);
             }
         }
 
