@@ -225,7 +225,7 @@
     </target>
 
     <target name="sync-wf-db">
-        <exec command="ssh max@maximizingresources.org 'shopt -s expand_aliases; ./wfdump; tar czf wf.production.tgz  nccbp.production.sql;'" passthru="true"/>
+        <exec command="ssh max@maximizingresources.org 'shopt -s expand_aliases; ./wfpdump; tar czf wf.production.tgz  nccbp.production.sql;'" passthru="true"/>
         <exec command="scp max@maximizingresources.org:wf.production.tgz /tmp" passthru="true" />
         <exec command="tar zxf /tmp/wf.production.tgz -C /tmp" passthru="true" />
         <exec command="mysql -u root -proot workforce &lt; /tmp/wf.production.sql" passthru="true" />
