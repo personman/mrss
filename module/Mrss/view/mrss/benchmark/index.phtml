@@ -11,111 +11,111 @@
 
 
 <div class="benchmarkSetup">
-<ul class="studyControls">
-    <li>
-        <a href="<?= $this->url(
-            'benchmarkgroups/add',
-            array('study' => $study->getId())
-        )?>">
-            <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
-            Add a benchmark group
-        </a>
-    </li>
-    <li>
-        <a href="<?= $this->url(
-            'studies/export',
-            array('id' => $study->getId())
-        ) ?>">
-            <span class="icon-download glyphicon glyphicon-download"></span>
-            Export benchmark setup to csv
-        </a>
-    </li>
-    <li>
-        <a href="<?= $this->url(
-            'studies/import',
-            array('id' => $study->getId())
-        ) ?>" onclick="return confirm(
+    <ul class="studyControls">
+        <li>
+            <a href="<?= $this->url(
+                'benchmarkgroups/add',
+                array('study' => $study->getId())
+            )?>">
+                <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
+                Add a benchmark group
+            </a>
+        </li>
+        <li>
+            <a href="<?= $this->url(
+                'studies/export',
+                array('id' => $study->getId())
+            ) ?>">
+                <span class="icon-download glyphicon glyphicon-download"></span>
+                Export benchmark setup to csv
+            </a>
+        </li>
+        <li>
+            <a href="<?= $this->url(
+                'studies/import',
+                array('id' => $study->getId())
+            ) ?>" onclick="return confirm(
         'This will make permanent changes to the data. Are you sure you want to do this?')
         ">
-            <span class="icon-upload glyphicon glyphicon-upload"></span>
-            Import benchmark setup from csv
-        </a>
-    </li>
-
-    <li>
-        <a href="<?= $this->url(
-            'admin/equations',
-            array('id' => $study->getId())
-        ) ?>">
-            <span class="icon-upload glyphicon glyphicon-ok"></span>
-            Check all Equations
-        </a>
-    </li>
-
-    <?php $orgs = array('data-entry' => 'Data entry', 'report' => 'Reports'); ?>
-    <li>
-        Organize for:
-        <?php foreach ($orgs as $key => $label): ?>
-            <a href="<?= $this->url('users/benchmarkorg', array('org' => $key)) ?>"<?php if ($key == $organization) echo ' class="active"'?>><?= $label ?></a>
-        <?php endforeach ?>
-    </li>
-</ul>
-
-<h3>Forms</h3>
-<?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
-<ul class="benchmarkContents">
-    <li><a href="#benchmarkGroup<?= $benchmarkGroup->getId() ?>"><?= $benchmarkGroup->getName() ?></a></li>
-</ul>
-<?php endforeach ?>
-
-<?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
-    <h3 class="benchmarkGroupSection" id="benchmarkGroup<?= $benchmarkGroup->getId() ?>"><?= $benchmarkGroup->getName() ?></h3>
-
-    <ul class="benchmarkGroupControls">
-        <li>
-            <span class="icon-cog glyphicon glyphicon-cog"></span>
-            <a href="<?= $this->url(
-                'benchmarkgroups/edit',
-                array('id' => $benchmarkGroup->getId())
-            ) ?>">Benchmark group settings</a>
+                <span class="icon-upload glyphicon glyphicon-upload"></span>
+                Import benchmark setup from csv
+            </a>
         </li>
 
         <li>
-            <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
             <a href="<?= $this->url(
-                'benchmark/add',
-                array('benchmarkGroup' => $benchmarkGroup->getId())
-            ) ?>">Add benchmark</a>
+                'admin/equations',
+                array('id' => $study->getId())
+            ) ?>">
+                <span class="icon-upload glyphicon glyphicon-ok"></span>
+                Check all Equations
+            </a>
         </li>
 
+        <?php $orgs = array('data-entry' => 'Data entry', 'report' => 'Reports'); ?>
         <li>
-            <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
-            <a href="<?= $this->url(
-                'benchmarkheadings/edit',
-                array('benchmarkGroup' => $benchmarkGroup->getId(), 'id' => 'add')
-            ) ?>">Add heading</a>
-        </li>
-
-        <li>
-            <span class="icon-edit glyphicon glyphicon-edit"></span>
-            <a href="<?= $this->url(
-                'data-entry/edit',
-                array('benchmarkGroup' => $benchmarkGroup->getUrl())
-            ) ?>">Data entry</a>
-        </li>
-        <li>
-            <span class="icon-edit glyphicon glyphicon-circle-arrow-right
-"></span>
-            <a href="<?= $this->url(
-                'tools/equation-graph',
-                array('benchmarkGroup' => $benchmarkGroup->getId())
-            ) ?>">Equation Graph</a>
+            Organize for:
+            <?php foreach ($orgs as $key => $label): ?>
+                <a href="<?= $this->url('users/benchmarkorg', array('org' => $key)) ?>"<?php if ($key == $organization) echo ' class="active"'?>><?= $label ?></a>
+            <?php endforeach ?>
         </li>
     </ul>
 
+    <h3>Forms</h3>
+    <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
+        <ul class="benchmarkContents">
+            <li><a href="#benchmarkGroup<?= $benchmarkGroup->getId() ?>"><?= $benchmarkGroup->getName() ?></a></li>
+        </ul>
+    <?php endforeach ?>
 
-    <table class="table heatmap">
-        <thead>
+    <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
+        <h3 class="benchmarkGroupSection" id="benchmarkGroup<?= $benchmarkGroup->getId() ?>"><?= $benchmarkGroup->getName() ?></h3>
+
+        <ul class="benchmarkGroupControls">
+            <li>
+                <span class="icon-cog glyphicon glyphicon-cog"></span>
+                <a href="<?= $this->url(
+                    'benchmarkgroups/edit',
+                    array('id' => $benchmarkGroup->getId())
+                ) ?>">Benchmark group settings</a>
+            </li>
+
+            <li>
+                <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
+                <a href="<?= $this->url(
+                    'benchmark/add',
+                    array('benchmarkGroup' => $benchmarkGroup->getId())
+                ) ?>">Add benchmark</a>
+            </li>
+
+            <li>
+                <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
+                <a href="<?= $this->url(
+                    'benchmarkheadings/edit',
+                    array('benchmarkGroup' => $benchmarkGroup->getId(), 'id' => 'add')
+                ) ?>">Add heading</a>
+            </li>
+
+            <li>
+                <span class="icon-edit glyphicon glyphicon-edit"></span>
+                <a href="<?= $this->url(
+                    'data-entry/edit',
+                    array('benchmarkGroup' => $benchmarkGroup->getUrl())
+                ) ?>">Data entry</a>
+            </li>
+            <li>
+            <span class="icon-edit glyphicon glyphicon-circle-arrow-right
+"></span>
+                <a href="<?= $this->url(
+                    'tools/equation-graph',
+                    array('benchmarkGroup' => $benchmarkGroup->getId())
+                ) ?>">Equation Graph</a>
+            </li>
+        </ul>
+
+
+        <table class="table heatmap">
+            <thead>
             <tr>
                 <th></th>
                 <th>Variable Name</th>
@@ -129,100 +129,103 @@
                     <th><?= $year ?></th>
                 <?php endforeach ?>
             </tr>
-        </thead>
-        <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
-        <?php foreach ($benchmarkGroup->getChildren(null, true, $organization) as $row): ?>
-            <? //pr(get_class($row)) ?>
-            <?php if (get_class($row) == 'Mrss\Entity\Benchmark'): ?>
-                <?php $benchmark = $row; ?>
-                <?php /** @var $benchmark \Mrss\Entity\Benchmark */ ?>
-                <tr id="benchmark_<?= $benchmark->getId() ?>">
-                    <td class="sortHandle">
-                        <span class="icon-move glyphicon glyphicon-move"></span>
-                    </td>
-                    <td>
-                        <?= $benchmark->getDbColumn() ?>
-                    </td>
+            </thead>
+            <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
+            <?php foreach ($benchmarkGroup->getChildren(null, true, $organization) as $row): ?>
+                <? //pr(get_class($row)) ?>
+                <?php if (get_class($row) == 'Mrss\Entity\Benchmark'): ?>
+                    <?php $benchmark = $row; ?>
+                    <?php /** @var $benchmark \Mrss\Entity\Benchmark */ ?>
+                    <tr id="benchmark_<?= $benchmark->getId() ?>">
+                        <td class="sortHandle">
+                            <span class="icon-move glyphicon glyphicon-move"></span>
+                        </td>
+                        <td>
+                            <?= $benchmark->getDbColumn() ?>
+                        </td>
 
-                    <td class="inputTypeAbbr">
-                        <?= $benchmark->getInputTypeAbbr() ?>
-                    </td>
+                        <td class="inputTypeAbbr">
+                            <?= $benchmark->getInputTypeAbbr() ?>
+                        </td>
 
-                    <td style="text-align:center">
-                        <?php if ($benchmark->getComputed()): ?>
-                            <i class="icon-ok glyphicon glyphicon-ok infotip" title="<?= $benchmark->getEquation() ?>"></i>
-                        <?php endif ?>
-                    </td>
+                        <td style="text-align:center">
+                            <?php if ($benchmark->getComputed()): ?>
+                                <i class="icon-ok glyphicon glyphicon-ok infotip" title="<?= $benchmark->getEquation() ?>"></i>
+                            <?php endif ?>
+                        </td>
 
-                    <td style="text-align:center">
-                        <?php if ($benchmark->getIncludeInNationalReport()): ?>
-                            <i class="icon-ok glyphicon glyphicon-ok onReportIcon"></i>
-                        <?php endif ?>
-                        <div class="onReportEditable">
-                            <input class="onReportCheckbox" type="checkbox" name="benchmark[<?= $benchmark->getId() ?>]" id="b<?= $benchmark->getId() ?>" <?php if ($benchmark->getIncludeInNationalReport()) echo 'checked="checked"'; ?> />
-                        </div>
-                    </td>
+                        <td style="text-align:center">
+                            <?php if ($benchmark->getIncludeInNationalReport()): ?>
+                                <i class="icon-ok glyphicon glyphicon-ok onReportIcon"></i>
+                            <?php endif ?>
+                            <div class="onReportEditable">
+                                <input class="onReportCheckbox" type="checkbox" name="benchmark[<?= $benchmark->getId() ?>]" id="b<?= $benchmark->getId() ?>" <?php if ($benchmark->getIncludeInNationalReport()) echo 'checked="checked"'; ?> />
+                            </div>
+                        </td>
 
-                    <td>
-                        <?php
+                        <td>
+                            <?php
                             if ($organization == 'report') {
                                 $name = $benchmark->getReportLabel();
                             } else {
                                 $name = $benchmark->getName();
                             }
-                        ?>
-                        <a href="<?= $this->url(
-                            'benchmark/edit',
-                            array(
-                                'id' => $benchmark->getId()
-                            )
-                        ) ?>"><?= $name ?></a>
-                    </td>
+                            ?>
+                            <a href="<?= $this->url(
+                                'benchmark/edit',
+                                array(
+                                    'id' => $benchmark->getId()
+                                )
+                            ) ?>"><?= $name ?></a>
+                        </td>
 
-                    <td class="trends">
-                        <a title="Showing <?= $activeCollege->getName() ?> values. Click for more trend data." href="<?= $this->url(
-                            'benchmark/view',
-                            array(
-                                'id' => $benchmark->getId()
-                            )
-                        ) ?>">
-                            <span class="inlinesparkline"><?= $sparklines[$benchmark->getId()] ?></span>
-                        </a>
-                    </td>
+                        <td class="trends">
+                            <a title="Showing <?= $activeCollege->getName() ?> values. Click for more trend data." href="<?= $this->url(
+                                'benchmark/view',
+                                array(
+                                    'id' => $benchmark->getId()
+                                )
+                            ) ?>">
+                                <span class="inlinesparkline"><?= $sparklines[$benchmark->getId()] ?></span>
+                            </a>
+                        </td>
 
 
-                    <?php foreach ($this->yearsToShow as $year): ?>
-                        <?php if ($benchmark->isAvailableForYear($year)): ?>
-                            <? $percentage = round(
-                                $benchmark->getCompletionPercentage($year)
-                            )?>
-                            <td class="heatmapCell heatmapCellBlue" style="opacity: <?= ($percentage / 120) + .2 ?>">
-                                <?= $percentage ?>%
-                            </td>
-                        <?php else: ?>
-                            <td style="color:#CCC; text-align:center">
-                                N/A
-                            </td>
+                        <?php foreach ($this->yearsToShow as $year): ?>
+                            <?php if ($benchmark->isAvailableForYear($year)): ?>
+                                <? $percentage = round(
+                                    $benchmark->getCompletionPercentage($year)
+                                )?>
+                                <td class="heatmapCell heatmapCellBlue" style="opacity: <?= ($percentage / 120) + .2 ?>">
+                                    <?= $percentage ?>%
+                                </td>
+                            <?php else: ?>
+                                <td style="color:#CCC; text-align:center">
+                                    N/A
+                                </td>
 
-                        <?php endif ?>
-                    <?php endforeach ?>
-                </tr>
-            <?php else: ?>
-                <?php $heading = $row ?>
-                <tr class="subGroup" id="heading_<?= $heading->getId() ?>">
-                    <td class="sortHandle">
-                        <span class="icon-move glyphicon glyphicon-move"></span>
-                    </td>
-                    <td colspan="<?= (5 + count($this->yearsToShow)) ?>">
-                        <h4><?= $heading->getName() ?></h4>
-                    </td>
-                    <td>
-                        <a href="<?= $this->url('benchmarkheadings/edit', array('id' => $heading->getId(), 'benchmarkGroup' => $heading->getBenchmarkGroup()->getId())) ?>">Edit</a>
-                    </td>
-                </tr>
-            <?php endif ?>
-        <?php endforeach ?>
-        </tbody>
-    </table>
-<?php endforeach ?>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                    </tr>
+                <?php elseif (get_class($row) == 'Mrss\Entity\BenchmarkHeading'): ?>
+                    <?php $heading = $row ?>
+                    <tr class="subGroup" id="heading_<?= $heading->getId() ?>">
+                        <td class="sortHandle">
+                            <span class="icon-move glyphicon glyphicon-move"></span>
+                        </td>
+                        <td colspan="<?= (5 + count($this->yearsToShow)) ?>">
+                            <h4><?= $heading->getName() ?></h4>
+                        </td>
+                        <td>
+                            <a href="<?= $this->url('benchmarkheadings/edit', array('id' => $heading->getId(), 'benchmarkGroup' => $heading->getBenchmarkGroup()->getId())) ?>">Edit</a>
+                        </td>
+                    </tr>
+                <? else: ?>
+                    <? //pr($row) ?>
+
+                <?php endif ?>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    <?php endforeach ?>
 </div>
