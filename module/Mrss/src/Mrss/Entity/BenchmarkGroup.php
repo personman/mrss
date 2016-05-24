@@ -651,6 +651,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
             $benchmarks = $this->getNonComputedBenchmarksForYear($year);
         }
 
+        $duplicates = array();
         foreach ($benchmarks as $benchmark) {
             if ($filterBy == 'best-performers' && !$benchmark->getIncludeInBestPerformer()) {
                 continue;
@@ -670,16 +671,33 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
                 $sequence = $benchmark->getSequence();
             }
 
+            if (isset($children[$sequence])) {
+                $duplicates[] = array(
+                    'sequence' => $sequence,
+                    'item' => $benchmark
+                );
+            }
             $children[$sequence] = $benchmark;
         }
 
         foreach ($this->getBenchmarkHeadings($organization) as $heading) {
             $sequence = $heading->getSequence();
 
+            if (isset($children[$sequence])) {
+                $duplicates[] = array(
+                    'sequence' => $sequence,
+                    'item' => $heading
+                );
+            }
+
             $children[$sequence] = $heading;
         }
 
         ksort($children, SORT_NUMERIC);
+
+        foreach ($duplicates as $duplicateInfo) {
+            array_splice($children, $duplicateInfo['sequence'], 0, $duplicateInfo['item']);
+        }
 
         $children = $this->removeEmptySections($children);
 
