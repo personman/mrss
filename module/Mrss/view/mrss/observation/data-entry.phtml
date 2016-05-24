@@ -58,6 +58,9 @@ $this->headScript()->appendFile(
         <?php endif ?>
 
     <?php else: ?>
+        <?php if (!is_object($benchmark)): ?>
+            <?php pr($benchmark); ?>
+        <?php endif ?>
         <?= $this->ztbFormElement($form->get($benchmark->getDbColumn())) ?>
     <?php endif ?>
 

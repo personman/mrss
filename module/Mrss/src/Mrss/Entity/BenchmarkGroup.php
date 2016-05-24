@@ -676,8 +676,10 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
                     'sequence' => $sequence,
                     'item' => $benchmark
                 );
+            } else {
+                $children[$sequence] = $benchmark;
             }
-            $children[$sequence] = $benchmark;
+
         }
 
         foreach ($this->getBenchmarkHeadings($organization) as $heading) {
@@ -688,15 +690,15 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
                     'sequence' => $sequence,
                     'item' => $heading
                 );
+            } else {
+                $children[$sequence] = $heading;
             }
-
-            $children[$sequence] = $heading;
         }
 
         ksort($children, SORT_NUMERIC);
 
         foreach ($duplicates as $duplicateInfo) {
-            array_splice($children, $duplicateInfo['sequence'], 0, $duplicateInfo['item']);
+            array_splice($children, $duplicateInfo['sequence'], 0, array($duplicateInfo['item']));
         }
 
         $children = $this->removeEmptySections($children);
