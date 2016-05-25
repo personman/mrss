@@ -161,7 +161,7 @@
                         (<?= $user->getRole() ?>)
 
                         <?php if ($user->getLastAccess()): ?>
-                            (<?= $user->getLastAccess() ?>)
+                            (<?= $user->getLastAccess()->format('Y-m-d') ?>)
                         <?php endif ?>
                     </li>
                 <?php endforeach ?>
