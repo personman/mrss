@@ -159,6 +159,10 @@
                             array('id' => $user->getId())
                         ) ?>"><?= $user->getFullName() ?></a>
                         (<?= $user->getRole() ?>)
+
+                        <?php if ($user->getLastAccess()): ?>
+                            (<?= $user->getLastAccess() ?>)
+                        <?php endif ?>
                     </li>
                 <?php endforeach ?>
             </ul>
