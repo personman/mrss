@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# No access to the IP address
+RewriteCond %{HTTP_HOST} ^192\.232\.207\.42 [NC,OR]
+RewriteRule .* - [F]
+
 # Force https
 RewriteCond %{HTTP_HOST} ^research\.aaup\.org [NC]
 RewriteCond %{SERVER_PORT} 80

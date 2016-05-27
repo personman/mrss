@@ -42,10 +42,6 @@ class CurrentStudy extends AbstractPlugin
 
             $url = $this->getUrl();
 
-            if ($url == '192.232.207.42') {
-                die;
-            }
-
             // Does the url match a config option?
             if (!empty($studiesConfig[$url])) {
                 $studyId = $studiesConfig[$url];
