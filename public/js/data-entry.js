@@ -262,7 +262,7 @@ function workforceFormFormatting()
 function workforceRevenueTotal()
 {
     //var earnedRevGroup = $('#control-group-revenue_earned_revenue');
-    var earnedRevGroup = $('#control-group-revenue_contract_training');
+    var earnedRevGroup = $('#control-group-revenue_earned_ct');
 
     if (earnedRevGroup.length) {
         earnedRevGroup.after('<div class="control-group">' +
