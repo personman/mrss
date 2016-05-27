@@ -10,12 +10,12 @@
         <?php if( ! $hasChildren): ?>
             <li class="<?= $page->getClass() ?>">
             <a href="<?php echo $page->getHref() ?>" <?php echo ($page->isActive()) ? 'class="active"' : '' ?>  title="<?php echo $page->getTitle() ?>">
-                <?php echo $this->translate($page->getLabel()) ?>
+                <?php echo $page->getLabel() ?>
             </a>
         <?php else: ?>
             <li class="dropdown <?= $page->getClass() ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <span><?php echo $this->translate($page->getLabel()) ?></span>
+                <span><?php echo $page->getLabel() ?></span>
                 <strong class="caret"></strong>
             </a>
             <ul class="dropdown-menu" id="page_<?php echo $count ?>_<?php echo
@@ -25,7 +25,7 @@
                     <?php if( ! $child->isVisible() || !$this->navigation()->accept($child)) continue; ?>
                     <li class="<?= $child->getClass() ?>">
                         <a href="<?php echo $child->getHref() ?>" title="<?php echo $child->getTitle() ?>">
-                            <?php echo $this->translate($child->getLabel()) ?>
+                            <?php echo $child->getLabel() ?>
                         </a>
                     </li>
                 <?php endforeach ?>
