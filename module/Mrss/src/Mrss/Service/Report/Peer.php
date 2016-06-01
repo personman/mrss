@@ -317,7 +317,7 @@ class Peer extends Report
         );
 
         $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
-        $dataDefinition = $this->getChartFooter($benchmark);
+        $dataDefinition = $this->getChartFooter($benchmark, $year);
 
         $chart = array(
             'id' => 'chart_' . $benchmark->getDbColumn(),

@@ -1524,10 +1524,19 @@ class Report
 
     protected function getChartFooter(Benchmark $benchmark)
     {
-        $dataDefinition = $this->getVariableSubstitution()
-            ->substitute($benchmark->getReportDescription(1));
+        $subService = $this->getVariableSubstitution();
+
+        $tempYear = $subService->getStudyYear();
+        $subService->setStudyYear($this->getYear());
+
+        $dataDefinition = $subService->substitute($benchmark->getReportDescription(1));
 
         $dataDefinition .= ' [' . $this->getYear() . ' ' . $this->getStudy()->getName() . ']';
+
+        // Put the year back
+        if ($tempYear) {
+            $subService->setStudyYear($tempYear);
+        }
 
         return $dataDefinition;
     }
