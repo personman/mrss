@@ -240,6 +240,14 @@
         <echo>Done.</echo>
     </target>
 
+    <target name="sync-nccbp-ob">
+        <exec command="scp max@maximizingresources.org:nccbp.org/module/Mrss/src/Mrss/Entity/Observation.php /tmp" passthru="true" />
+        <exec command="mv /tmp/Observation.php module/Mrss/src/Mrss/Entity/" passthru="true" />
+        <phingcall target="cc" />
+        <echo>Done.</echo>
+    </target>
+
+
     <target name="copy-aaup-ob">
         <exec command="cp module/Mrss/src/Mrss/Entity/Observation.php.aaup module/Mrss/src/Mrss/Entity/Observation.php" />
     </target>
