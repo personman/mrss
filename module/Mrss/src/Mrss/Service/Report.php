@@ -1526,7 +1526,7 @@ class Report
     {
         $subService = $this->getVariableSubstitution();
 
-        $tempYear = $subService->getStudyYear();
+        $oldYear = $subService->getStudyYear();
         $subService->setStudyYear($this->getYear());
 
         $dataDefinition = $subService->substitute($benchmark->getReportDescription(1));
@@ -1534,8 +1534,8 @@ class Report
         $dataDefinition .= ' [' . $this->getYear() . ' ' . $this->getStudy()->getName() . ']';
 
         // Put the year back
-        if ($tempYear) {
-            $subService->setStudyYear($tempYear);
+        if ($oldYear) {
+            $subService->setStudyYear($oldYear);
         }
 
         return $dataDefinition;
