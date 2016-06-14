@@ -70,7 +70,6 @@ return array(
             'reports' => getReportMenu(),
             'reports_preview' => array(
                 'label' => 'Reports',
-                'uri' => '/Membership-Benefits',
                 'pages' => array(
                     'overview' => array(
                         'label' => 'Overview',
