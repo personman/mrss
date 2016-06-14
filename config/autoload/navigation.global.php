@@ -70,6 +70,7 @@ return array(
             'reports' => getReportMenu(),
             'reports_preview' => array(
                 'label' => 'Reports',
+                'uri' => '/overview',
                 'pages' => array(
                     'overview' => array(
                         'label' => 'Overview',
