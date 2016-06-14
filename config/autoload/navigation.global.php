@@ -70,7 +70,17 @@ return array(
             'reports' => getReportMenu(),
             'reports_preview' => array(
                 'label' => 'Reports',
-                'uri' => '/Membership-Benefits'
+                'uri' => '/Membership-Benefits',
+                'pages' => array(
+                    'overview' => array(
+                        'label' => 'Overview',
+                        'uri' => '/overview',
+                    ),
+                    'research' => array(
+                        'label' => 'Research',
+                        'uri' => '/research',
+                    ),
+                )
             ),
             'subscribe' => array(
                 'label' => 'Join',
