@@ -108,7 +108,13 @@
                             <?php if ($impersonator = $changeSet->getImpersonatingUser()): ?>
                                 <?= $impersonator->getFullName() ?>, impersonating
                             <?php endif ?>
-                            <?= $changeSet->getUser()->getFullName() ?>
+
+                            <?php if (!empty($changeSet->getUser())): ?>
+                                <?= $changeSet->getUser()->getFullName() ?>
+
+                            <?php else: ?>
+                                [unknown user]
+                            <?php endif ?>
 
                         <?php else: ?>
                             Importer
