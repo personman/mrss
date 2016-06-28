@@ -1195,6 +1195,29 @@ class ToolController extends AbstractActionController
 
     }
 
+    public function mergeMCCAction()
+    {
+        //$mergeService = new \Mrss\Service\MergeData();
+
+        /** @var \Mrss\Service\MergeData $mergeService */
+        $mergeService = $this->getServiceLocator()->get('service.merge.data');
+
+        $mergeService->setYear(2009);
+
+        $from = array(
+            713, // 440305,
+            579, // 178129,
+            705, // 178022
+        );
+
+        $to = 137; // 177995;
+
+        $mergeService->merge($from, $to);
+
+        //pr($mergeService);
+        die('test');
+    }
+
     public function getYearFromRouteOrStudy($college = null)
     {
         if (empty($college)) {

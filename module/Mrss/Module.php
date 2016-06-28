@@ -307,6 +307,11 @@ class Module
         );
     }
 
+    /**
+     * Remember to run php bin/classmap_generator.php after adding a new class
+     *
+     * @return array
+     */
     public function getServiceConfig()
     {
         return array(
@@ -395,6 +400,20 @@ class Module
                 },
                 'service.report.calculator' => function ($sm) {
                     $service = new Service\Report\Calculator();
+
+                    return $service;
+                },
+                'service.merge.data' => function ($sm) {
+                    $service = new Service\MergeData();
+                    $service->setObservationModel($sm->get('model.observation'));
+                    $service->setCollegeModel($sm->get('model.college'));
+                    $plugin = $sm->get('ControllerPluginManager')
+                        ->get('currentStudy');
+                    $study = $plugin->getCurrentStudy();
+
+                    $service->setStudy($study);
+
+                    //$service = new Service\Report\Calculator();
 
                     return $service;
                 },

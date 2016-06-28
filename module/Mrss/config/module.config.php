@@ -2013,6 +2013,15 @@ return array(
                             )
                         )
                     ),
+                    'merge-mcc' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/merge-mcc',
+                            'defaults' => array(
+                                'action' => 'mergeMCC',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
