@@ -1,5 +1,5 @@
 #backgrounds{
-	margin-top:70px;
+	margin-top: 70px;
 }
 #backgrounds .row{
 	margin-bottom: 30px;
@@ -41,7 +41,7 @@
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) { 
 	#backgrounds .photo .circle{
-		top:12%;
+		top: 12%;
 	}
 }	
 /* Landscape phone to portrait tablet */

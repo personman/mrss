@@ -32,7 +32,7 @@ a.schedule-btn, a:visited.schedule-btn {
 }
 
 a#freeSignIn, a:visited#freeSignIn {
-    color: white;
+	color: white;
 }
 
 .navbar-default .navbar-nav > li.renew-nav > a, .navbar-default .navbar-nav > li.join-nav > a {

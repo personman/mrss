@@ -220,8 +220,8 @@ ul.ui-autocomplete {
 
 
 .calculation-progress .progress-bar {
-    overflow-x:visible;
-    white-space:nowrap;
+    overflow-x: visible;
+    white-space: nowrap;
     text-align: center;
-    color:black; /* color is for demo purposes */
+    color: black; /* color is for demo purposes */
 }
