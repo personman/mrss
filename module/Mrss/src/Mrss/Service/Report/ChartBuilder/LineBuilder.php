@@ -174,6 +174,13 @@ class LineBuilder extends ChartBuilder
             ->setCategories($xCategories)
             ->setSeries($series);
 
+        // Percentages should have the axis as 0-100
+        if ($benchmark->isPercent()) {
+            $chart->setYAxisMax(100);
+            $chart->setYAxisMin(0);
+        }
+
+
         return $chart->getConfig();
     }
 
