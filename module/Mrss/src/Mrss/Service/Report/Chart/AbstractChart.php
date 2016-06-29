@@ -264,4 +264,22 @@ abstract class AbstractChart
 
         return $this;
     }
+
+    public function setYAxisMax($max)
+    {
+        $config = $this->getConfig();
+
+        $config['yAxis']['max'] = $max;
+
+        $this->setConfig($config);
+    }
+
+    public function setYAxisMin($min)
+    {
+        $config = $this->getConfig();
+
+        $config['yAxis']['min'] = $min;
+
+        $this->setConfig($config);
+    }
 }

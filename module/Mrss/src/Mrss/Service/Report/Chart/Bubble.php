@@ -27,6 +27,7 @@ class Bubble extends AbstractChart
             'width' => '300px',
         );
 
+
         $this->setConfig($config);
     }
 

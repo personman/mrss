@@ -241,6 +241,12 @@ class BubbleBuilder extends ChartBuilder
             $bubbleChart->updateAllLabels();
         }
 
+        // Percentages should have the axis as 0-100
+        if ($yBenchmark->isPercent()) {
+            $bubbleChart->setYAxisMax(100);
+            $bubbleChart->setYAxisMin(0);
+        }
+
         $chart = $bubbleChart->getConfig();
 
         return $chart;
