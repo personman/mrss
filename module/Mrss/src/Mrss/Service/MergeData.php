@@ -121,9 +121,9 @@ class MergeData
             $dbColumn = $benchmark->getDbColumn();
 
             // Skip computed fields
-            if ($benchmark->getComputed()) {
+            /*if ($benchmark->getComputed()) {
                 $mergedData[$dbColumn] = null;
-            }
+            }*/
 
 
             // Sum
@@ -151,6 +151,10 @@ class MergeData
     {
         $should = false;
         if ($benchmark->getBenchmarkGroup()->getId() == 1) {
+            $should = true;
+        }
+
+        if ($benchmark->isPercent()) {
             $should = true;
         }
 
