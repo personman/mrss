@@ -105,6 +105,15 @@ class MergeData
         $this->displayData($observations, $mergedData);
 
 
+        // Get the target observation
+        $targetObservation = $this->getObservationModel()->findOne($to, $this->getYear());
+
+        // Save the merged data
+        foreach ($mergedData as $dbColumn=> $value) {
+            $targetObservation->set($dbColumn, $value);
+        }
+        $this->getObservationModel()->getEntityManager()->flush();
+
 
     }
 
@@ -149,7 +158,9 @@ class MergeData
 
     protected function shouldAverage(Benchmark $benchmark)
     {
-        $should = false;
+        return true;
+
+        /*$should = false;
         if ($benchmark->getBenchmarkGroup()->getId() == 1) {
             $should = true;
         }
@@ -158,7 +169,7 @@ class MergeData
             $should = true;
         }
 
-        return $should;
+        return $should;*/
     }
 
     public function displayData($observations, $mergedData)
