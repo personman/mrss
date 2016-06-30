@@ -2,6 +2,8 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\Benchmark;
+
 class MergeData
 {
     protected $study;
@@ -97,14 +99,65 @@ class MergeData
             $observations[$collegeId] = $observation;
         }
 
+        $mergedData = $this->mergeData($benchmarks, $observations);
+
         // Analysis first.
-        $this->displayData($observations);
+        $this->displayData($observations, $mergedData);
 
 
 
     }
 
-    public function displayData($observations)
+    /**
+     * @param Benchmark[] $benchmarks
+     * @param $observations
+     * @return array
+     */
+    public function mergeData($benchmarks, $observations)
+    {
+        $mergedData = array();
+
+        foreach ($benchmarks as $benchmark) {
+            $dbColumn = $benchmark->getDbColumn();
+
+            // Skip computed fields
+            if ($benchmark->getComputed()) {
+                $mergedData[$dbColumn] = null;
+            }
+
+
+            // Sum
+            $sum = null;
+
+            $count = 0;
+            foreach ($observations as $observation) {
+                if ($value = $observation->get($dbColumn)) {
+                    $sum += $value;
+                    $count++;
+                }
+            }
+
+            if ($this->shouldAverage($benchmark)) {
+                $sum = $sum / $count;
+            }
+
+            $mergedData[$dbColumn] = $sum;
+        }
+
+        return $mergedData;
+    }
+
+    protected function shouldAverage(Benchmark $benchmark)
+    {
+        $should = false;
+        if ($benchmark->getBenchmarkGroup()->getId() == 1) {
+            $should = true;
+        }
+
+        return $should;
+    }
+
+    public function displayData($observations, $mergedData)
     {
         $html = "<table>\n";
         $html .= "<tr><th></th>";
@@ -114,6 +167,9 @@ class MergeData
             $college = $this->getCollegeModel()->find($collegeId);
             $html .= "<th>" . $college->getName() . "</th>";
         }
+
+        $html .= "<th>Merged</th>";
+
         $html .= "</tr>\n";
 
         // Data
@@ -122,7 +178,8 @@ class MergeData
             $html .= "<td>" . $benchmark->getName() . "</td>";
 
             foreach ($observations as $collegeId => $observation) {
-                $value = $observation->get($benchmark->getDbColumn());
+                $dbColumn = $benchmark->getDbColumn();
+                $value = $observation->get($dbColumn);
 
                 $class = 'normal';
                 if ($value === null) {
@@ -130,6 +187,8 @@ class MergeData
                 }
                 $html .= "<td class='$class'>" . $value . "</td>";
             }
+
+            $html .= "<td>" . $mergedData[$dbColumn] . "</td>";
 
             $html .= "</tr>";
         }
