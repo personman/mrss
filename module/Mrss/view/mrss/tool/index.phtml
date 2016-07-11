@@ -41,8 +41,8 @@
     <li>
         <a href="<?= $this->url(
             'tools/geocode'
-        ) ?>">Geocode Colleges</a> - Use Google Maps API to look up and save latitude and longitude
-        based on each college's address.
+        ) ?>">Geocode Institutions</a> - Use Google Maps API to look up and save latitude and longitude
+        based on each institution's address.
     </li>
 
     <li>
@@ -60,7 +60,7 @@
     <li>
         <a href="<?= $this->url(
             'reports/executive-list'
-        ) ?>">List of Executive Reports</a> - One for each college. Paste this list into Automator to print all reports to PDF
+        ) ?>">List of Executive Reports</a> - One for each institution. Paste this list into Automator to print all reports to PDF
     </li>
 
     <li>
@@ -128,7 +128,7 @@
 </dl>
 
 <?php if ($collegesWithNoExec): ?>
-    <h3>Colleges With No Executive</h3>
+    <h3>Institutions With No Executive</h3>
     <ul>
         <?php foreach ($collegesWithNoExec as $college): ?>
             <li>
