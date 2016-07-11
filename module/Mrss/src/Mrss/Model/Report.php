@@ -89,7 +89,7 @@ class Report extends AbstractModel
         return $results;
     }
 
-    public function findRecent($study)
+    public function findRecent($study, $limit = 10)
     {
         return $this->getRepository()->findBy(
             array(
@@ -98,7 +98,7 @@ class Report extends AbstractModel
             array(
                 'id' => 'DESC'
             ),
-            10
+            $limit
         );
     }
 
