@@ -1,3 +1,8 @@
+<?php /**
+ *
+ * @var \Mrss\Entity\Report[] $recentReports
+ */ ?>
+
 <h1>Custom Report Admin</h1>
 
 <h2>Chart Cache</h2>
@@ -36,7 +41,12 @@
 <ul>
 <?php foreach ($recentReports as $report): ?>
     <li>
-        <strong><?= $report->getName() ?></strong> - <?= $report->getUser()->getCollege()->getName() ?>
+        <strong><?= $report->getName() ?></strong> -
+        <?= $report->getUser()->getCollege()->getName() ?> -
+        <a title="Impersonate this user"
+           href="/admin/user/impersonate/<?= $report->getUser()->getId() ?>">
+            <i class="icon icon-fire glyphicon glyphicon-transfer"></i></a>
+        <?= $report->getUser()->getFullName() ?>
     </li>
 <?php endforeach ?>
 </ul>
