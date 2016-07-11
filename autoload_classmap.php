@@ -315,6 +315,7 @@ return array(
   'Mrss\Form\BenchmarkGroup'                                                                                           => __DIR__ . '/module/Mrss/src/Mrss/Form/BenchmarkGroup.php',
   'Mrss\Form\BenchmarkHeading'                                                                                         => __DIR__ . '/module/Mrss/src/Mrss/Form/BenchmarkHeading.php',
   'Mrss\Form\Criterion'                                                                                                => __DIR__ . '/module/Mrss/src/Mrss/Form/Criterion.php',
+  'Mrss\Form\Email'                                                                                                    => __DIR__ . '/module/Mrss/src/Mrss/Form/Email.php',
   'Mrss\Form\Exceldiff'                                                                                                => __DIR__ . '/module/Mrss/src/Mrss/Form/Exceldiff.php',
   'Mrss\Form\Explore'                                                                                                  => __DIR__ . '/module/Mrss/src/Mrss/Form/Explore.php',
   'Mrss\Form\Fieldset\Agreement'                                                                                       => __DIR__ . '/module/Mrss/src/Mrss/Form/Fieldset/Agreement.php',

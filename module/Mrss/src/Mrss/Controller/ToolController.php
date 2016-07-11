@@ -7,8 +7,10 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\PeerGroup;
 use Mrss\Entity\Report as ReportEntity;
 use Mrss\Entity\ReportItem;
+use Mrss\Form\Email;
 use Mrss\Service\Export\Lapsed;
 use Mrss\Service\NhebiSubscriptions\Mrss;
+use Zend\Mail\Message;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Exceldiff;
 use PHPExcel;
@@ -1193,6 +1195,48 @@ class ToolController extends AbstractActionController
         $response = $this->getResponse()->setContent($responseText);
         return $response;
 
+    }
+
+    public function emailTestAction()
+    {
+        $form = new Email();
+
+        if ($this->getRequest()->isPost()) {
+            $post = $this->params()->fromPost();
+            $form->setData($post);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                // Build the email
+                $studyConfig = $this->getServiceLocator()->get('study');
+                $from_email = $studyConfig->from_email;
+
+                $message = new Message();
+                $message->setSubject($data['subject']);
+                $message->setFrom($from_email);
+                $message->addTo($data['to']);
+                $message->setBody($data['body']);
+
+
+                // Send the email
+                $mailer = $this->getServiceLocator()->get('mail.transport');
+                $result = $mailer->send($message);
+
+
+                //if ($result) {
+                    $this->flashMessenger()->addSuccessMessage("Message sent.");
+                /*} else {
+                    $this->flashMessenger()->addErrorMessage("Problem sending message.");
+                }*/
+
+                return $this->redirect()->toUrl('/tools/email-test');
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
     }
 
     public function mergeMCCAction()

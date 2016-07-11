@@ -111,6 +111,7 @@ class MergeData
         // Save the merged data
         foreach ($mergedData as $dbColumn=> $value) {
             $targetObservation->set($dbColumn, $value);
+            echo "Saving $dbColumn: $value<br>\n";
         }
         $this->getObservationModel()->getEntityManager()->flush();
 

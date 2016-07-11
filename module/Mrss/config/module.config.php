@@ -2022,6 +2022,15 @@ return array(
                             )
                         )
                     ),
+                    'email-test' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/email-test',
+                            'defaults' => array(
+                                'action' => 'emailTest',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
