@@ -213,6 +213,7 @@
         <exec command="scp max@maximizingresources.org:mrss.production.tgz /tmp" passthru="true" />
         <exec command="tar zxf /tmp/mrss.production.tgz -C /tmp" passthru="true" />
         <exec command="mysql -u root -proot mrss_test &lt; /tmp/mrss.production.sql" passthru="true" />
+        <exec command="scp max@maximizingresources.org:module/Mrss/src/Mrss/Entity/Observation.php module/Mrss/src/Mrss/Entity" passthru="true" />
         <echo>Done.</echo>
     </target>
 
