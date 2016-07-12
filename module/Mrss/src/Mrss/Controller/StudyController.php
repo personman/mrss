@@ -102,8 +102,15 @@ class StudyController extends AbstractActionController
         );
     }
 
+    /**
+     * @deprecated
+     * @return array
+     * @throws \Exception
+     */
     public function importAction()
     {
+        return array();
+
         takeYourTime();
 
         $studyId = $this->params()->fromRoute('id');

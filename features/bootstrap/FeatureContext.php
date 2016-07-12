@@ -90,6 +90,12 @@ class FeatureContext extends MinkContext
         unlink($destination);
     }
 
+    protected function clearCaches()
+    {
+        unlink('data/cache/classes.php.cache');
+        unlink('data/cache/module-config-cache.config_cache.php');
+    }
+
 
     protected static function getZfDbAdapter()
     {
