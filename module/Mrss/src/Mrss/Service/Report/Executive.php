@@ -6,6 +6,10 @@ use Mrss\Service\Report;
 
 class Executive extends Report
 {
+    protected $yourCollegeLabel = 'Your College';
+    protected $seriesColors;
+    protected $yourCollegeColors;
+
     public function getData()
     {
         $reportData = array();
@@ -96,123 +100,135 @@ class Executive extends Report
 
     public function getExecutiveImportant()
     {
-        $importantBenchmarkCharts = array();
+        $importantCharts = array();
 
         $config = $this->getExecutiveReportConfig(
             $this->getObservation()->getYear()
         );
 
         foreach ($config as $importantConfig) {
-            $importantBenchmarkCharts[] = $this
+            $importantCharts[] = $this
                 ->getExecutiveBarChart($importantConfig);
         }
 
-        return $importantBenchmarkCharts;
+        return $importantCharts;
     }
 
     public function getExecutiveBarChart($config)
     {
-        $yourCollegeLabel = 'Your College';
         $chartXCategories = array();
 
-        $colorConfig = $colors = array(
-            'seriesColors' => array(
-                '#9cc03e', // '#005595' lightened 40%
-                '#3366B4', // '#519548' lightened 30%
-            ),
-            'yourCollegeColors' => array(
-                '#507400',
-                '#001A68'
-            )
-        );
-        // What color will the bar be?
-        $seriesColors = $colorConfig['seriesColors'];
-        $yourCollegeColors = $colorConfig['yourCollegeColors'];
-
+        $this->setUpSeriesColors();
 
 
         $series = array();
-        $i = 0;
+        $iteration = 0;
         foreach ($config['benchmarks'] as $dbColumn => $label) {
-            $benchmark = $this->getBenchmarkModel()
-                ->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
-
-            // Get the college's reported value
-            $reportedValue = $this->getObservation()->get($dbColumn);
-
-            $format = $this->getFormat($benchmark);
-            $roundedFormat = $this->getFormat($benchmark, 0);
-
-            $chartValues = array($yourCollegeLabel => $reportedValue);
-
-            // Load the percentiles
-            $breakpoints = $this->getPercentileBreakpointsForStudy();
-            $percentiles = $this->getPercentileModel()
-                ->findByBenchmarkAndYear($benchmark, $this->getYear(), $breakpoints);
-
-            $percentileData = array();
-            foreach ($percentiles as $percentile) {
-                $percentileData[$percentile->getPercentile()] =
-                    floatval($percentile->getValue());
-            }
-            unset($percentileData['N']);
-
-            $chartValues = $chartValues + $percentileData;
-
-            $chartData = array();
-
-            foreach ($chartValues as $key => $value) {
-                $dataPoint = array(
-                    'name' => $label,
-                    'y' => floatval($value),
-                    'color' => $seriesColors[$i],
-                    'dataLabels' => array(
-                        'format' => $roundedFormat,
-                        'enabled' => false
-                    )
-                );
-
-                // The First bar: your college
-                if ($key == $yourCollegeLabel) {
-                    // Show the value as a dataLabel for Your College
-                    $dataPoint['dataLabels']['enabled'] = true;
-                    $dataPoint['color'] = $yourCollegeColors[$i];
-
-                    // Don't show them for stacked bars (we'll show the total)
-                    if (!empty($config['stacked'])) {
-                        $dataPoint['dataLabels']['enabled'] = false;
-                    }
-                }
-
-                $chartData[] = $dataPoint;
-            }
-
-
+            list($seriesItem, $format, $roundedFormat, $chartValues) = $this->buildBarChart(
+                $config,
+                $dbColumn,
+                $label,
+                $iteration
+            );
+            $series[] = $seriesItem;
 
             // Set up the categories
             if (empty($chartXCategories)) {
                 foreach ($chartValues as $key => $chartValue) {
-                    //$label = nccbp_report_presidents_x_label($key);
                     $chartXCategories[] = $key;
                 }
             }
 
-            $series[] = array(
-                'name' => $config['benchmarks'][$dbColumn],
-                //'data' => $chartValues,
-                'data' => $chartData,
-                'color' => $seriesColors[$i]
-            );
-
-            //pr($series);
-            $i++;
+            $iteration++;
 
         }
 
         $chartTitle = $config['title'];
 
+        $highChartsConfig = $this->getHighchartsConfig(
+            $config,
+            $dbColumn,
+            $chartTitle,
+            $chartXCategories,
+            $series,
+            $format,
+            $roundedFormat
+        );
+
+        return array(
+            'chart' => $highChartsConfig,
+            'description' => $config['description']
+        );
+    }
+
+    protected function buildBarChart($config, $dbColumn, $label, $iteration)
+    {
+        $benchmark = $this->getBenchmarkModel()
+            ->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
+
+        // Get the college's reported value
+        $reportedValue = $this->getObservation()->get($dbColumn);
+
+        $format = $this->getFormat($benchmark);
+        $roundedFormat = $this->getFormat($benchmark, 0);
+
+        $chartValues = array($this->yourCollegeLabel => $reportedValue);
+
+        // Load the percentiles
+        $breakpoints = $this->getPercentileBreakpointsForStudy();
+        $percentiles = $this->getPercentileModel()
+            ->findByBenchmarkAndYear($benchmark, $this->getYear(), $breakpoints);
+
+        $percentileData = array();
+        foreach ($percentiles as $percentile) {
+            $percentileData[$percentile->getPercentile()] =
+                floatval($percentile->getValue());
+        }
+        unset($percentileData['N']);
+
+        $chartValues = $chartValues + $percentileData;
+
+        $chartData = array();
+
+        foreach ($chartValues as $key => $value) {
+            $dataPoint = array(
+                'name' => $label,
+                'y' => floatval($value),
+                'color' => $this->seriesColors[$iteration],
+                'dataLabels' => array(
+                    'format' => $roundedFormat,
+                    'enabled' => false
+                )
+            );
+
+            // The First bar: your college
+            if ($key == $this->yourCollegeLabel) {
+                // Show the value as a dataLabel for Your College
+                $dataPoint['dataLabels']['enabled'] = true;
+                $dataPoint['color'] = $this->yourCollegeColors[$iteration];
+
+                // Don't show them for stacked bars (we'll show the total)
+                if (!empty($config['stacked'])) {
+                    $dataPoint['dataLabels']['enabled'] = false;
+                }
+            }
+
+            $chartData[] = $dataPoint;
+        }
+
+        $seriesItem = array(
+            'name' => $config['benchmarks'][$dbColumn],
+            'data' => $chartData,
+            'color' => $this->seriesColors[$iteration]
+        );
+
+        return array($seriesItem, $format, $roundedFormat, $chartValues);
+    }
+
+    protected function getHighchartsConfig($config, $id, $title, $chartXCategories, $series, $format, $roundedFormat)
+    {
         $highChartsConfig = array(
-            'id' => $dbColumn,
+            'id' => $id,
             'chart' => array(
                 'type' => 'column',
                 'events' => array(
@@ -220,7 +236,7 @@ class Executive extends Report
                 )
             ),
             'title' => array(
-                'text' => $chartTitle,
+                'text' => $title,
                 'style' => array(
                     'color' => '#336699'
                 )
@@ -280,10 +296,24 @@ class Executive extends Report
             $highChartsConfig['yAxis']['labels']['format'] =  '${value}';
         }
 
-        return array(
-            'chart' => $highChartsConfig,
-            'description' => $config['description']
+        return $highChartsConfig;
+    }
+
+    protected function setUpSeriesColors()
+    {
+        $colorConfig = $colors = array(
+            'seriesColors' => array(
+                '#9cc03e', // '#005595' lightened 40%
+                '#3366B4', // '#519548' lightened 30%
+            ),
+            'yourCollegeColors' => array(
+                '#507400',
+                '#001A68'
+            )
         );
+        // What color will the bar be?
+        $this->seriesColors = $colorConfig['seriesColors'];
+        $this->yourCollegeColors = $colorConfig['yourCollegeColors'];
     }
 
     public function getStrengths($weaknesses = false, $threshold = 75)
