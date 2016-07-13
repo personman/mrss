@@ -474,3 +474,16 @@ html .form-nav .form-nav-head {
     font-size: 20px;
     line-height: 30px;
 }
+
+
+
+
+/* Navbar width */
+@media (max-width: 1090px) {
+  a.brand img {
+    width: 350px !important;
+  }
+  a.brand {
+    height: 66px;
+  }
+}
