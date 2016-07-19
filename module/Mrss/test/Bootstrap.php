@@ -62,6 +62,8 @@ class Bootstrap
 
         static::$serviceManager = $serviceManager;
         static::$config = $config;
+
+        date_default_timezone_set('America/Chicago');
     }
 
     public static function getServiceManager()
