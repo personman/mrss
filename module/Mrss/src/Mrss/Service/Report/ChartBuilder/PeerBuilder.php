@@ -4,6 +4,7 @@ namespace Mrss\Service\Report\ChartBuilder;
 
 use Mrss\Service\Report\ChartBuilder;
 use Mrss\Service\Report\Chart\Bar;
+use Mrss\Entity\College;
 
 /**
  * Class PeerBuilder
@@ -15,12 +16,14 @@ use Mrss\Service\Report\Chart\Bar;
  */
 class PeerBuilder extends BarBuilder
 {
+    protected $peerService;
+
     public function getChart()
     {
         $config = $this->getConfig();
 
         $x = $config['benchmark1'];
-
+        $year = $config['year'];
 
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
         $xFormat = $this->getFormat($xBenchmark);
@@ -38,12 +41,34 @@ class PeerBuilder extends BarBuilder
         // @todo
         $series = array();
         $reportedValue = $this->getReportedValue($x);
-        $percentileData[] = $reportedValue;
+        $peerData[$this->getCollege()->getId()] = $reportedValue;
         $chartXCategories[] = $this->getYourCollegeLabel();
 
-        $chartValues = array_combine($chartXCategories, $percentileData);
+
+        // Get peer group
+        $peerGroupId = $config['peerGroup'];
+        $peerGroup = $this->getPeerGroupModel()->find($peerGroupId);
+
+        // Loop over peers
+        foreach ($peerGroup->getPeers() as $collegeId) {
+            $observation = $this->getObservationModel()->findOne($collegeId, $year);
+            if ($value = $observation->get($x)) {
+                $chartXCategories[] = 'blah';
+                $peerData[$collegeId] = $value;
+            }
+
+        }
+
+        /*$chartValues = array_combine($chartXCategories, $peerData);
         asort($chartValues);
         $chartXCategories = array_keys($chartValues);
+*/
+
+        $this->getPeerService()->setCurrentCollege($this->getCollege());
+        $this->getPeerService()->setYear($year);
+        $chartValues = $this->getPeerService()->sortAndLabelPeerData($peerData, $this->getCollege());
+        $chartXCategories = array_keys($chartValues);
+        //prd($chartValues);
 
         $series = $this->buildSeries($chartValues, $xBenchmark);
 
@@ -52,6 +77,7 @@ class PeerBuilder extends BarBuilder
         }
 
         $barChart = new Bar;
+        $barChart->setOrientationHorizontal();
         $barChart->setTitle($title)
             ->setSubtitle($subtitle)
             ->setSeries($series)
@@ -59,7 +85,9 @@ class PeerBuilder extends BarBuilder
             ->setXLabel($xLabel)
             ->setCategories($chartXCategories);
 
-        return $barChart->getConfig();
+        //return $barChart->getConfig();
+
+        return $this->getPeerService()->getPeerBarChart($xBenchmark, $chartValues);
     }
 
     public function buildSeries($chartValues, $benchmark)
@@ -68,6 +96,7 @@ class PeerBuilder extends BarBuilder
         $format = $this->getFormat($benchmark);
 
         $chartData = array();
+        pr($chartValues);
         foreach ($chartValues as $i => $value) {
             $value = round($value, $roundTo);
 
@@ -107,5 +136,20 @@ class PeerBuilder extends BarBuilder
         );
 
         return $series;
+    }
+
+    public function setPeerService($service)
+    {
+        $this->peerService = $service;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Service\Report\Peer
+     */
+    public function getPeerService()
+    {
+        return $this->peerService;
     }
 }

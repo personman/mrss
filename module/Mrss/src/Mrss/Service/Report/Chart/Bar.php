@@ -48,4 +48,13 @@ class Bar extends AbstractChart
 
         $this->setConfig($config);
     }
+
+    public function setOrientationHorizontal()
+    {
+        $config = $this->getConfig();
+
+        $config['chart']['type'] = 'bar';
+
+        $this->setConfig($config);
+    }
 }

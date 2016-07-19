@@ -26,6 +26,8 @@ class Peer extends Report
      */
     protected $currentCollege;
 
+    protected $year;
+
     public function getPeerReport($benchmarks, $colleges, $currentCollege, $year, $peerGroupName)
     {
         $minPeers = 5;
@@ -499,5 +501,28 @@ class Peer extends Report
     public function getShowPeerDataYouDidNotSubmit()
     {
         return $this->showPeerDataYouDidNotSubmit;
+    }
+
+    public function setCurrentCollege($college)
+    {
+        $this->currentCollege = $college;
+
+        return $this;
+    }
+
+    public function setYear($year)
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getYear()
+    {
+        if (empty($this->year)) {
+            $this->year = parent::getYear();
+        }
+
+        return $this->year;
     }
 }
