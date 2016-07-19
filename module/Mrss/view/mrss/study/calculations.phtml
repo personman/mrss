@@ -28,11 +28,11 @@
 <h1>Benchmark Calculations</h1>
 
 <div id="calculations">
-<?php foreach ($computedBenchmarks as $benchmarkGroup => $benchmarks): ?>
-    <h2><?= $benchmarkGroup ?></h2>
+<?php foreach ($computedBenchmarks as $benchmarkGroup): ?>
+    <h2 id="form-<?= $benchmarkGroup['number'] ?>"><?= $benchmarkGroup['name'] ?></h2>
 
-    <?php if ($benchmarks): ?>
-        <?php foreach ($benchmarks as $benchmark): ?>
+    <?php if ($benchmarkGroup['benchmarks']): ?>
+        <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
         <?php if (!empty($benchmark['heading'])): ?>
             <h3><?= $benchmark['name'] ?></h3>
             <?php continue ?>

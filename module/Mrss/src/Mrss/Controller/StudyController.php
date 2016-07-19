@@ -219,7 +219,11 @@ class StudyController extends AbstractActionController
                 );
             }
 
-            $computedBenchmarks[$benchmarkGroup->getName()] = $computed;
+            $computedBenchmarks[] = array(
+                'name' => $benchmarkGroup->getName(),
+                'number' => $benchmarkGroup->getUrl(),
+                'benchmarks' => $computed
+            );
         }
 
         return array(
