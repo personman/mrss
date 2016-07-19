@@ -294,7 +294,7 @@ class Explore extends AbstractForm
             'bar' => 'Percentile Bar Chart',
             'scatter' => 'Scatter Plot',
             'bubble' => 'Bubble Plot',
-            //'peer' =>'Peer Comparison',
+            'peer' =>'Peer Comparison',
             'text' => 'Text'
         );
 
