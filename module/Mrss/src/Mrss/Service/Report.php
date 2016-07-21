@@ -558,6 +558,10 @@ class Report
                 /** @var \Mrss\Service\Report\ChartBuilder\BarBuilder $builder */
                 $builder = $this->getServiceManager()->get('builder.bar');
                 break;
+            case 'peer':
+                /** @var \Mrss\Service\Report\ChartBuilder\PeerBuilder $builder */
+                $builder = $this->getServiceManager()->get('builder.peer');
+                break;
             case 'text':
                 /** @var \Mrss\Service\Report\ChartBuilder\TextBuilder $builder */
                 $builder = $this->getServiceManager()->get('builder.text');

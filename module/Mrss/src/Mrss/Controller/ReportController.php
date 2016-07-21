@@ -889,6 +889,8 @@ class ReportController extends AbstractActionController
 
     public function peerResultsAction()
     {
+        takeYourTime();
+
         if ($redirect = $this->checkReportsAreOpen()) {
             return $redirect;
         }
@@ -897,8 +899,6 @@ class ReportController extends AbstractActionController
         $peerService = $this->getServiceLocator()->get('service.report.peer');
 
         $format = $this->params()->fromRoute('format');
-
-        ini_set('memory_limit', '512M');
 
         $benchmarks = $this->getSessionContainer()->benchmarks;
         $peers = $this->getSessionContainer()->peers;

@@ -88,6 +88,8 @@ class Factory implements AbstractFactoryInterface
                 'Mrss\Service\Report\ChartBuilder\LineBuilder',
             'builder.bar' =>
                 'Mrss\Service\Report\ChartBuilder\BarBuilder',
+            'builder.peer' =>
+                'Mrss\Service\Report\ChartBuilder\PeerBuilder',
             'builder.text' =>
                 'Mrss\Service\Report\ChartBuilder\TextBuilder',
             'service.report.max.activity.instructional' =>
@@ -106,6 +108,10 @@ class Factory implements AbstractFactoryInterface
     {
         if ($name == 'service.report.peer') {
             $report->setPeerBenchmarkModel($sm->get('model.peer.benchmark'));
+        }
+
+        if ($name == 'builder.peer') {
+            $report->setPeerService($sm->get('service.report.peer'));
         }
 
         return $report;
