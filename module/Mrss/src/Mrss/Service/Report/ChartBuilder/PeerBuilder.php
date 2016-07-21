@@ -48,12 +48,13 @@ class PeerBuilder extends BarBuilder
 
             // Loop over peers
             foreach ($peerGroup->getPeers() as $collegeId) {
-                $observation = $this->getObservationModel()->findOne($collegeId, $year);
-                if ($value = $observation->get($x)) {
-                    $chartXCategories[] = 'blah';
-                    $peerData[$collegeId] = $value;
+                if ($observation = $this->getObservationModel()->findOne($collegeId, $year)) {
+                    if ($value = $observation->get($x)) {
+                        $chartXCategories[] = 'blah';
+                        $peerData[$collegeId] = $value;
 
-                    $includedPeers[] = $observation->getCollege()->getNameAndState();
+                        $includedPeers[] = $observation->getCollege()->getNameAndState();
+                    }
                 }
             }
         }
