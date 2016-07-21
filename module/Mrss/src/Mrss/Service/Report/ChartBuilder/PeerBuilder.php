@@ -3,7 +3,6 @@
 namespace Mrss\Service\Report\ChartBuilder;
 
 use Mrss\Service\Report\ChartBuilder;
-use Mrss\Entity\College;
 
 /**
  * Class PeerBuilder
@@ -25,7 +24,6 @@ class PeerBuilder extends BarBuilder
         $year = $config['year'];
 
         $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
-        $xFormat = $this->getFormat($xBenchmark);
 
         $title = $config['title'];
         $subtitle = null;
@@ -33,10 +31,8 @@ class PeerBuilder extends BarBuilder
             $subtitle = $config['subtitle'];
         }
 
-
         $reportedValue = $this->getReportedValue($x);
         $peerData[$this->getCollege()->getId()] = $reportedValue;
-
 
         // Get peer group
         $peerGroupId = $config['peerGroup'];
