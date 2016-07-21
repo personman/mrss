@@ -56,5 +56,18 @@ class Bar extends AbstractChart
         $config['chart']['type'] = 'bar';
 
         $this->setConfig($config);
+
+        return $this;
+    }
+
+    public function removeTickMarks()
+    {
+        $config = $this->getConfig();
+
+        $config['xAxis']['tickLength'] = 0;
+
+        $this->setConfig($config);
+
+        return $this;
     }
 }

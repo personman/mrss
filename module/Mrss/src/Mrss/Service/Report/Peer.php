@@ -14,6 +14,7 @@ use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Alignment;
 use PHPExcel_Shared_Font;
+use Mrss\Service\Report\Chart\Bar;
 
 class Peer extends Report
 {
@@ -267,12 +268,15 @@ class Peer extends Report
         return '#0065A1';
     }
 
-    public function getPeerBarChart(BenchmarkEntity $benchmark, $data)
+    public function getPeerBarChart(BenchmarkEntity $benchmark, $data, $title = null, $subtitle = null)
     {
         $anonymous = $this->getStudyConfig()->anonymous_peers;
-        $title = $benchmark->getPeerReportLabel();
+
+        if (empty($title)) {
+            $title = $benchmark->getPeerReportLabel();
+        }
+
         $decimalPlaces = $this->getDecimalPlaces($benchmark);
-        //prd($data);
 
         $format = $this->getFormat($benchmark);
 
@@ -318,6 +322,24 @@ class Peer extends Report
             )
         );
 
+
+
+        $barChart = new Bar;
+        $barChart->setOrientationHorizontal();
+        $barChart->setTitle($title)
+            ->setSubtitle($subtitle)
+            ->setSeries($series)
+            ->setXFormat($format)
+            ->removeTickMarks()
+            ->setCategories($chartXCategories);
+
+        if ($benchmark->isPercent()) {
+            $barChart->setYAxisMax(100);
+        }
+
+        return $barChart->getConfig();
+
+        /*
         $seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
         $dataDefinition = $this->getChartFooter($benchmark);
 
@@ -395,7 +417,7 @@ class Peer extends Report
             $chart['yAxis']['labels']['format'] = '{value}%';
         }
 
-        return $chart;
+        return $chart;*/
     }
 
     /**
