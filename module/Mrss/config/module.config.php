@@ -1341,11 +1341,12 @@ return array(
                             'addItem' => array(
                                 'type' => 'segment',
                                 'options' => array(
-                                    'route' => '/:id/add',
+                                    'route' => '/:id/add[/:type]',
                                     'defaults' => array(
                                         'controller' => 'reportItems',
                                         'action' => 'add',
-                                        'id' => 0
+                                        'id' => 0,
+                                        'type' => null
                                     )
                                 )
                             ),

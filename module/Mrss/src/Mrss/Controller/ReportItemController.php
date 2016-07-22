@@ -75,6 +75,10 @@ class ReportItemController extends CustomReportController
             $builder = $this->getChartBuilder($data);
             $chart = $builder->getChart();
             $footnotes = $builder->getFootnotes();
+        } else {
+            if ($presentationType = $this->params()->fromRoute('type')) {
+                $form->get('presentation')->setValue($presentationType);
+            }
         }
 
         if (empty($year)) {

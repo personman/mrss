@@ -53,6 +53,7 @@ class Explore extends AbstractForm
                 ),
                 'attributes' => array(
                     'id' => 'inputType',
+                    'class' => 'selectpicker',
                     'options' => $this->getPresentationOptions($includeTrends)
                 )
             )
@@ -291,6 +292,20 @@ class Explore extends AbstractForm
 
         $options = array(
             'line' => 'Trend Line',
+            'bar' => 'Percentile Bar Chart',
+            'scatter' => 'Scatter Plot',
+            'bubble' => 'Bubble Plot',
+            'peer' =>'Peer Comparison',
+            'text' => 'Text'
+        );
+
+        $options = array(
+            'line' => array(
+                'label' => 'Trend Line',
+                'value' => 'line',
+                'attributes' => array('data-thumbnail' => '/images/chart-type-line.png')
+            ),
+            //'line' => 'Trend Line',
             'bar' => 'Percentile Bar Chart',
             'scatter' => 'Scatter Plot',
             'bubble' => 'Bubble Plot',
