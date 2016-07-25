@@ -225,3 +225,9 @@ ul.ui-autocomplete {
     text-align: center;
     color: black; /* color is for demo purposes */
 }
+
+
+/* Custom report add button */
+.addItemButton a {
+    text-decoration: none;
+}

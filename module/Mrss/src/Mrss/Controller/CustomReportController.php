@@ -3,6 +3,7 @@
 namespace Mrss\Controller;
 
 use Mrss\Entity\PeerGroup;
+use Mrss\Form\Explore;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
@@ -92,8 +93,26 @@ class CustomReportController extends ReportController
         $this->populateCache($report);
 
         return array(
-            'report' => $report
+            'report' => $report,
+            'presentationOptions' => $this->getPresentationOptions()
         );
+    }
+
+    protected function getPresentationOptions()
+    {
+        $includeTrends = $this->getIncludeTrends();
+
+        return Explore::getPresentationOptions($includeTrends);
+    }
+
+    public function getIncludeTrends()
+    {
+        $minYears = 3;
+
+        $model = $this->getSubscriptionModel();
+        $years = $model->getYearsWithSubscriptions($this->currentStudy());
+
+        return (count($years) >= $minYears);
     }
 
     public function viewAction()

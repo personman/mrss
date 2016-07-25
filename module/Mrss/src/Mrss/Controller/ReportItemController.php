@@ -150,16 +150,6 @@ class ReportItemController extends CustomReportController
         return $item;
     }
 
-    public function getIncludeTrends()
-    {
-        $minYears = 3;
-
-        $model = $this->getSubscriptionModel();
-        $years = $model->getYearsWithSubscriptions($this->currentStudy());
-
-        return (count($years) >= $minYears);
-    }
-
     public function reorderAction()
     {
         $id = $this->params()->fromRoute('id');

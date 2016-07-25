@@ -53,8 +53,8 @@ class Explore extends AbstractForm
                 ),
                 'attributes' => array(
                     'id' => 'inputType',
-                    'class' => 'selectpicker',
-                    'options' => $this->getPresentationOptions($includeTrends)
+                    //'class' => 'selectpicker',
+                    'options' => self::getPresentationOptions($includeTrends)
                 )
             )
         );
@@ -286,10 +286,8 @@ class Explore extends AbstractForm
         return $filter;
     }
 
-    protected function getPresentationOptions($includeTrends)
+    static function getPresentationOptions($includeTrends)
     {
-        $minYears = 3;
-
         $options = array(
             'line' => 'Trend Line',
             'bar' => 'Percentile Bar Chart',
@@ -299,24 +297,7 @@ class Explore extends AbstractForm
             'text' => 'Text'
         );
 
-        $options = array(
-            'line' => array(
-                'label' => 'Trend Line',
-                'value' => 'line',
-                'attributes' => array('data-thumbnail' => '/images/chart-type-line.png')
-            ),
-            //'line' => 'Trend Line',
-            'bar' => 'Percentile Bar Chart',
-            'scatter' => 'Scatter Plot',
-            'bubble' => 'Bubble Plot',
-            'peer' =>'Peer Comparison',
-            'text' => 'Text'
-        );
-
         // Remove trend option if there's not enough data
-        //if (count($years) < $minYears) {
-            //unset($options['line']);
-        //}
         if (empty($includeTrends)) {
             unset($options['line']);
         }

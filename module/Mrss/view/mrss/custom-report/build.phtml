@@ -6,10 +6,10 @@
 <?//= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
 
 <?php
-    $this->headScript()->appendFile(
+$this->headScript()->appendFile(
     '/js/report.js?v=1',
     'text/javascript'
-    );
+);
 ?>
 
 
@@ -49,41 +49,52 @@
 
 <p class="reportDescription"><?= $report->getDescription() ?></p>
 
-<p class="addItemButton">
-    <a href="<?= $this->url('reports/custom/addItem', array('id' => $report->getId())) ?>" class="btn btn-default">
-        <span class="glyphicon glyphicon-plus icon icon-plus"></span>
-        Add an Item
-    </a>
+<?php $url = $this->url('reports/custom/addItem', array('id' => $report->getId())) ?>
+
+<div class="addItemButton">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-plus icon icon-plus"></span>
+            Add an Item <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <?php foreach ($presentationOptions as $key => $label): ?>
+                <li><a href="<?= $url ?>/<?= $key ?>"><?= $label ?></a></li>
+            <?php endforeach ?>
+        </ul>
+    </div>
 
     <span class="smallNote">Drag and drop to reorder.</span>
-</p>
-
-
-<div class="reportItems">
-    <?php $footnotes = array(); ?>
-    <?php foreach ($report->getItems() as $item): ?>
-        <?= $this->partial(
-            'mrss/custom-report/report-item.partial.phtml',
-            array('item' => $item, 'buttons' => true)
-        ) ?>
-        <?php
-        if ($itemFootnotes = $item->getCacheFootnotes()) {
-            $footnotes[] = array(
-                'name' => $item->getName(),
-                'footnotes' => $itemFootnotes
-            );
-        }
-
-        ?>
-    <?php endforeach ?>
 </div>
 
-<div style="clear: both; margin-bottom: 30px"></div>
 
-<?php if (!empty($footnotes)): ?>
-    <?= $this->partial(
-        'mrss/custom-report/footnotes.partial.phtml',
-        array('footnotes' => $footnotes)
-    ) ?>
 
-<?php endif ?>
+
+    <div class="reportItems">
+        <?php $footnotes = array(); ?>
+        <?php foreach ($report->getItems() as $item): ?>
+            <?= $this->partial(
+                'mrss/custom-report/report-item.partial.phtml',
+                array('item' => $item, 'buttons' => true)
+            ) ?>
+            <?php
+            if ($itemFootnotes = $item->getCacheFootnotes()) {
+                $footnotes[] = array(
+                    'name' => $item->getName(),
+                    'footnotes' => $itemFootnotes
+                );
+            }
+
+            ?>
+        <?php endforeach ?>
+    </div>
+
+    <div style="clear: both; margin-bottom: 30px"></div>
+
+    <?php if (!empty($footnotes)): ?>
+        <?= $this->partial(
+            'mrss/custom-report/footnotes.partial.phtml',
+            array('footnotes' => $footnotes)
+        ) ?>
+
+    <?php endif ?>
