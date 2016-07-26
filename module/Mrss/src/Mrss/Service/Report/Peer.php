@@ -99,6 +99,7 @@ class Peer extends Report
             }
 
             $data = $this->sortAndLabelPeerData($data, $currentCollege);
+            $data = $this->addPercentileRanks($data, $benchmark, $year);
 
             // Data labels
             $prefix = $suffix = '';
@@ -123,6 +124,29 @@ class Peer extends Report
         $this->getPeerBenchmarkModel()->getEntityManager()->flush();
 
         return $report;
+    }
+
+    protected function addPercentileRanks($data, $benchmark, $year)
+    {
+        $newData = array();
+        foreach ($data as $collegeId => $info) {
+            $percentileRank = $this->getPercentileRankModel()->findOneByCollegeBenchmarkAndYear(
+                $collegeId,
+                $benchmark,
+                $year
+            );
+
+            $rank = null;
+            if ($percentileRank) {
+                $rank = $percentileRank->getRank();
+            }
+
+            $info['percentileRank'] = $rank;
+
+            $newData[$collegeId] = $info;
+        }
+
+        return $newData;
     }
 
     public function downloadPeerReport($report)
@@ -171,7 +195,10 @@ class Peer extends Report
             $sheet->getStyle("A$row:B$row")->applyFromArray($blueBar);
             $row++;
 
-            foreach ($section['data'] as $institution => $value) {
+            foreach ($section['data'] as $collegeId => $peerData) {
+                $institution = $peerData['label'];
+                $value = $peerData['value'];
+
                 $dataRow = array(
                     $institution,
                     round($value)
@@ -251,7 +278,13 @@ class Peer extends Report
                 $i++;
             }
 
-            $dataWithLabels[$label] = $value;
+            //$dataWithLabels[$label] = $value;
+            $dataWithLabels[$collegeId] = array(
+                'label' => $label,
+                'value' => $value
+            );
+
+
         }
 
         return $dataWithLabels;
@@ -282,8 +315,9 @@ class Peer extends Report
 
         $chartData = array();
         $chartXCategories = array();
-        foreach ($data as $name => $value) {
-            $value = round($value, $decimalPlaces);
+        foreach ($data as $collegeId => $peerData) {
+            $name = $peerData['label'];
+            $value = round($peerData['value'], $decimalPlaces);
 
             $label = $this->shortenCollegeName($name);
 

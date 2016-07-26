@@ -21,12 +21,25 @@ class PercentileRank extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    /**
+     * @param $college
+     * @param $benchmark
+     * @param $year
+     * @param null $system
+     * @return PercentileRankEntity
+     */
     public function findOneByCollegeBenchmarkAndYear(
         $college,
         $benchmark,
         $year,
         $system = null
     ) {
+
+        if (!is_int($college)) {
+            $collegeId = $college->getId();
+        } else {
+            $collegeId = $college;
+        }
 
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
@@ -35,7 +48,7 @@ class PercentileRank extends AbstractModel
         $qb->from('\Mrss\Entity\PercentileRank', 'r');
 
         $qb->andWhere('r.college = :college_id');
-        $qb->setParameter('college_id', $college->getId());
+        $qb->setParameter('college_id', $collegeId);
 
         $qb->andWhere('r.benchmark = :benchmark_id');
         $qb->setParameter('benchmark_id', $benchmark->getId());

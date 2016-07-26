@@ -60,16 +60,21 @@ $this->headScript()->appendFile(
                         <tr>
                             <th>Institution</th>
                             <th>Benchmark</th>
+                            <th>National<br>% Rank</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($section['data'] as $institution => $value): ?>
+                        <?php foreach ($section['data'] as $collegeId => $peerData): ?>
                             <tr>
                                 <td>
-                                    <?= $institution ?>
+                                    <?= $peerData['label'] ?>
                                 </td>
                                 <td>
-                                    <?= $section['prefix'] ?><?= number_format($value, $section['decimal_places']) ?><?= $section['suffix'] ?></td>
+                                    <?= $section['prefix'] ?><?= number_format($peerData['value'], $section['decimal_places']) ?><?= $section['suffix'] ?></td>
+                                </td>
+
+                                <td>
+                                    <?= round($peerData['percentileRank']) ?>%
                                 </td>
                             </tr>
                         <?php endforeach ?>
