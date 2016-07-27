@@ -43,7 +43,7 @@ class ComputedFields
 
     protected $debugDbColumn = null;
 
-    protected $skipEmpty = false;
+    protected $skipEmpty = true;
 
     protected $error;
 
