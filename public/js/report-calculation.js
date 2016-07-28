@@ -7,6 +7,7 @@ var startTime;
 $(function() {
     setUpCalculation();
     setUpCompute();
+    setUpChangeCalculation();
     setUpPercentiles();
     setUpSystems();
 });
@@ -74,6 +75,47 @@ function setUpCompute()
             var observation = observationsYear[i];
 
             var url = baseUrl + observation;
+
+            if (i == 0) {
+                url = url + '/last';
+            } else if (i == observationsYear.length - 1) {
+                url = url + '/first';
+            }
+
+            urlStack.push(url);
+        }
+
+        // Now the url stack is built. Kick it off.
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
+    })
+}
+
+function setUpChangeCalculation()
+{
+    var changeBaseUrl = '/reports/calculate-changes/';
+
+    $('.calculate-changes').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+
+        progressBar = $('#calculate-changes-' + year + ' .progress-bar');
+
+        // Get the observation Ids
+        var observationsYear = observations[year];
+
+        originalTotal = observationsYear.length;
+
+        // Build the url stack
+        urlStack = [];
+        for (var i in observationsYear) {
+            var observation = observationsYear[i];
+
+            var url = changeBaseUrl + observation + '/' + year;
 
             if (i == 0) {
                 url = url + '/last';

@@ -32,7 +32,7 @@ $this->headScript()->appendFile(
     h3 {
        margin-top: 25px;
     }
-    .calculation-progress, .system-progress {
+    .calculation-progress, .system-progress, .calculate-changes-progress {
         display: none;
     }
 </style>
@@ -128,9 +128,42 @@ $this->headScript()->appendFile(
         </div>
     </div>
 
+    <h3>Percent Change Report</h3>
+    <div class="row-fluid row">
+        <div class="span4 col-md-4">
+            <p>
+                Identify values with greater than 5% change from last year.
+            </p>
+
+            <p>
+                <a href="/reports/percent-changes">View Percent Change Report</a>
+            </p>
+
+        </div>
+
+        <div class="span5 col-md-5">
+            <div class="progress calculate-changes-progress" id="calculate-changes-<?= $year ?>">
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: 0%;"></div>
+            </div>
+
+        </div>
+
+        <div class="span1 col-md-1">
+        </div>
+
+        <div class="span1 col-md-2">
+            <a class="btn btn-default calculate-changes" href="#" id="calculate-changes-<?= $year ?>">Prepare Percent Change Report</a>
+        </div>
+    </div>
+
     <h3>National Report</h3>
     <div class="row-fluid row">
-        <div class="span6 col-md-4">
+        <div class="span4 col-md-4">
             <p>
                 Calculate percentiles for National Report.
             </p>
@@ -140,7 +173,7 @@ $this->headScript()->appendFile(
             </p>
         </div>
 
-        <div class="span6 col-md-5" id="percentile-progress-<?= $year ?>">
+        <div class="span5 col-md-5" id="percentile-progress-<?= $year ?>">
             <div class="progress calculation-progress">
                 <div class="bar progress-bar"
                      role="progressbar"
@@ -152,7 +185,7 @@ $this->headScript()->appendFile(
 
         </div>
 
-        <div class="col-md-1">
+        <div class="span1 col-md-1">
             <span class="progress-label"></span>
         </div>
 
@@ -213,5 +246,6 @@ $this->headScript()->appendFile(
         </div>
     </div>
 
+    <hr>
 
 <?php endforeach ?>

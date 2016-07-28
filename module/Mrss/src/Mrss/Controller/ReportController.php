@@ -242,6 +242,44 @@ class ReportController extends AbstractActionController
         return $view;
     }
 
+    public function calculateChangesAction()
+    {
+        $status = 'ok';
+        $observationId = $this->params()->fromRoute('observation');
+
+        $changesService = $this->getServiceLocator()->get('service.report.changes');
+        $changesService->calculateChanges($observationId);
+
+        //prd(get_class($changesService));
+
+        $view = new JsonModel(
+            array(
+                'status' => $status,
+                'observation' => $observationId
+            )
+        );
+
+        return $view;
+    }
+
+    public function percentChangesAction()
+    {
+        takeYourTime();
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        /** @var \Mrss\Model\PercentChange $percentChangeModel */
+        $percentChangeModel = $this->getServiceLocator()->get('model.percentchange');
+        $changes = $percentChangeModel->findByYear($year);
+
+        return array(
+            'changes' => $changes
+        );
+    }
+
     /**
      * @return \Mrss\Model\System
      */

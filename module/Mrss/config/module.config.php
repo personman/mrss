@@ -950,6 +950,28 @@ return array(
                             )
                         )
                     ),
+                    'calculate-changes' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-changes/:observation/:year[/:position]',
+                            'defaults' => array(
+                                'action' => 'calculateChanges',
+                                'year' => null,
+                                'observation' => null,
+                                'position' => null
+                            )
+                        )
+                    ),
+                    'percent-changes' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/percent-changes[/:year]',
+                            'defaults' => array(
+                                'action' => 'percentChanges',
+                                'year' => null,
+                            )
+                        )
+                    ),
                     'calculate-outlier' => array(
                         'type' => 'segment',
                         'options' => array(

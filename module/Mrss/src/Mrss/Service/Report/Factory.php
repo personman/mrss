@@ -81,6 +81,7 @@ class Factory implements AbstractFactoryInterface
             'service.report.performers' => 'Mrss\Service\Report\BestPerformers',
             'service.report.max.internal' => 'Mrss\Service\Report\Max\Internal',
             'service.report.max.national' => 'Mrss\Service\Report\Max\National',
+            'service.report.changes' => 'Mrss\Service\Report\Changes',
             'service.report.builder' => 'Mrss\Service\Report\CustomReportBuilder',
             'builder.bubble' =>
                 'Mrss\Service\Report\ChartBuilder\BubbleBuilder',
@@ -112,6 +113,10 @@ class Factory implements AbstractFactoryInterface
 
         if ($name == 'builder.peer') {
             $report->setPeerService($sm->get('service.report.peer'));
+        }
+
+        if ($name == 'service.report.changes') {
+            $report->setPercentChangeModel($sm->get('model.percentchange'));
         }
 
         return $report;
