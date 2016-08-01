@@ -48,7 +48,7 @@ class Changes extends Report
     {
         $difference = $previousValue - $value;
 
-        $percentDifference = $difference / $previousValue * 100;
+        $percentDifference = $difference / $previousValue * 100 * -1;
 
         return $percentDifference;
     }
