@@ -506,9 +506,12 @@ class ObservationController extends AbstractActionController
         }
 
         if ($_SERVER['REMOTE_ADDR'] == '99.22.134.102') {
+            $oId = $observation->getId();
+            pr($oId);
+            
             $v = $observation->get('best_practices');
             pr($v);
-            
+
             $bp = $form->get('best_practices');
             pr($bp);
         }
