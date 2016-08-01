@@ -33,7 +33,7 @@ class Changes extends Report
                     if (!is_null($value) && !is_null($previousValue) && $previousValue != 0) {
                         $percentDifference = $this->compareValues($value, $previousValue);
 
-                        if (abs($percentDifference) >= $this->percentThreshold)
+                        //if (abs($percentDifference) >= $this->percentThreshold)
                         $this->recordChange($value, $previousValue, $benchmark, $observation, $percentDifference);
                     }
                 }
