@@ -26,6 +26,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     <thead>
         <tr>
             <th>Institution</th>
+            <th>Form</th>
             <th>Benchmark</th>
             <th>Old Value</th>
             <th>New Value</th>
@@ -36,6 +37,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <?php foreach ($changes as $change): ?>
             <tr>
                 <td><?= $change->getCollege()->getNameAndState() ?></td>
+                <td><?= $change->getBenchmark()->getBenchmarkGroup()->getUrl() ?></td>
                 <td><?= $change->getBenchmark()->getDescriptiveReportLabel() ?></td>
                 <td><?= $change->getOldValue() ?></td>
                 <td><?= $change->getValue() ?></td>
