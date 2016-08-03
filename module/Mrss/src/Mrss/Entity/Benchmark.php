@@ -117,6 +117,12 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $computeAfter;
 
     /**
+     * When this is true, assume missing values equal zero
+     * @ORM\Column(type="boolean")
+     */
+    protected $computeIfValuesMissing;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     protected $excludeFromCompletion;
@@ -125,6 +131,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      * @ORM\Column(type="boolean")
      */
     protected $includeInNationalReport;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $includeInOtherReports;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -390,6 +401,42 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     public function getComputeAfter()
     {
         return $this->computeAfter;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIncludeInOtherReports()
+    {
+        return $this->includeInOtherReports;
+    }
+
+    /**
+     * @param mixed $includeInOtherReports
+     * @return Benchmark
+     */
+    public function setIncludeInOtherReports($includeInOtherReports)
+    {
+        $this->includeInOtherReports = $includeInOtherReports;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComputeIfValuesMissing()
+    {
+        return $this->computeIfValuesMissing;
+    }
+
+    /**
+     * @param mixed $computeIfValuesMissing
+     * @return Benchmark
+     */
+    public function setComputeIfValuesMissing($computeIfValuesMissing)
+    {
+        $this->computeIfValuesMissing = $computeIfValuesMissing;
+        return $this;
     }
 
     public function getOptions()

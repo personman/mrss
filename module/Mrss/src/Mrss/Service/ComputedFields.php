@@ -61,6 +61,9 @@ class ComputedFields
             $start = microtime(1);
         }
 
+        // Respect the compute if values missing checkbox
+        $this->skipEmpty = !$benchmark->getComputeIfValuesMissing();
+
         $equationWithVariables = $benchmark->getEquation();
         $benchmarkColumn = $benchmark->getDbColumn();
         if ($this->getDebug()) {

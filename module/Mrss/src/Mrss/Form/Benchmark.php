@@ -111,7 +111,7 @@ class Benchmark extends AbstractForm
                         'float' => 'Float',
                         'text' => 'Text',
                         'textarea' => 'Textarea',
-                        'computed' => 'Computed',
+                        'computed' => 'Computed (do not use)',
                         'radio' => 'Radio',
                         'checkboxes' => 'Checkboxes'
                     )
@@ -198,6 +198,21 @@ class Benchmark extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'computeIfValuesMissing',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Compute If Values Missing',
+                    'help-block' => "When this box is checked, the computed benchmark's equation will be run, even " .
+                        "if some source values are missing. The app assumes zeroes for any missing values. Use this " .
+                        "with caution as it may result in incorrect data for certain equations."
+                )
+            )
+        );
+
+
+
         $options = array(
             '' => 'Always compute'
         );
@@ -254,6 +269,18 @@ class Benchmark extends AbstractForm
                 'type' => 'Checkbox',
                 'options' => array(
                     'label' => 'Include in National Report'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'includeInOtherReports',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Include in Other Reports',
+                    'help-block' => 'Custom report, peer comparison, etc.'
+
                 )
             )
         );
