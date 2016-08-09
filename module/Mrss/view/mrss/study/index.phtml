@@ -7,14 +7,14 @@
             <td>
                 <?php echo $study->getName() ?>
             </td>
-            <td>
+            <!--td>
                 <a href="<?= $this->url(
                     'studies/completion',
                     array('id' => $study->getId())
                 ) ?>">
                     Completion
                 </a>
-            </td>
+            </td-->
             <td>
                 <a href="<?= $this->url('benchmark', array('study' => $study->getId())) ?>">
                     Benchmark Setup
