@@ -619,7 +619,12 @@ function updateMaxFields()
 }
 
 
-// For NCCBP
+/**
+ * For NCCBP
+ *
+ * @todo: If any of the source values are null, the total should be null
+ * @returns {boolean}
+ */
 function setupForm2Totals()
 {
     // Are we on the correct page?

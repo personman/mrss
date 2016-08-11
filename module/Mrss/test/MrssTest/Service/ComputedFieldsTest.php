@@ -202,6 +202,29 @@ class ComputedFieldsTest extends TestCase
         $this->assertEquals(true, $result);
     }
 
+    public function testCalculateMixedAddSub()
+    {
+        // Doesn't work without the middle 2 parens
+        $this->benchmarkMock->expects($this->once())
+            ->method('getEquation')
+            ->will($this->returnValue('( 6475 - 434) + (9341 - 432 )'));
+
+        $this->benchmarkMock->expects($this->once())
+            ->method('getDbColumn')
+            ->will($this->returnValue('my_test_column'));
+
+        $this->observationMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue(null));
+
+        $result = $this->computedFields->calculate(
+            $this->benchmarkMock,
+            $this->observationMock
+        );
+
+        $this->assertEquals(14950, $result);
+    }
+
     public function testCalculateAllForObservation()
     {
         $computedBenchmarkMocks = array(

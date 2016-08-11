@@ -79,6 +79,7 @@ class DataExport
             $years = array(2015 => array($studyId), 2014 => array($studyId));
         }*/
 
+        $years = array(2016 => array($studyId));
         return $years;
     }
 
@@ -225,7 +226,7 @@ class DataExport
             $row++;
         }
 
-        $sheet->fromArray($data, null, 'A4');
+        $sheet->fromArray($data, null, 'A4', true);
 
         // Add the benchmarks from each study
         /*foreach ($this->getStudies() as $study) {
