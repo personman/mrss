@@ -247,7 +247,7 @@ class ReportController extends AbstractActionController
         $status = 'ok';
         $observationId = $this->params()->fromRoute('observation');
 
-        $changesService = $this->getServiceLocator()->get('service.report.changes');
+        $changesService = $this->getPercentChangeService();
         $changesService->calculateChanges($observationId);
 
         //prd(get_class($changesService));
@@ -262,9 +262,18 @@ class ReportController extends AbstractActionController
         return $view;
     }
 
+    /**
+     * @return \Mrss\Service\Report\Changes
+     */
+    protected function getPercentChangeService()
+    {
+        return $this->getServiceLocator()->get('service.report.changes');
+    }
+
     public function percentChangesAction()
     {
         takeYourTime();
+        $format = $this->params()->fromRoute('format');
 
         $year = $this->params()->fromRoute('year');
         if (empty($year)) {
@@ -274,6 +283,11 @@ class ReportController extends AbstractActionController
         /** @var \Mrss\Model\PercentChange $percentChangeModel */
         $percentChangeModel = $this->getServiceLocator()->get('model.percentchange');
         $changes = $percentChangeModel->findByYear($year);
+
+        if ($format == 'excel') {
+            $this->getPercentChangeService()->download($changes);
+            die;
+        }
 
         return array(
             'changes' => $changes

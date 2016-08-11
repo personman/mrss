@@ -965,10 +965,11 @@ return array(
                     'percent-changes' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/percent-changes[/:year]',
+                            'route' => '/percent-changes[/:year][/:format]',
                             'defaults' => array(
                                 'action' => 'percentChanges',
                                 'year' => null,
+                                'format' => 'html'
                             )
                         )
                     ),

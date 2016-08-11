@@ -4,6 +4,7 @@ namespace Mrss\Service\Report;
 
 use Mrss\Service\Report;
 use Mrss\Entity\PercentChange;
+use PHPExcel;
 
 class Changes extends Report
 {
@@ -89,5 +90,50 @@ class Changes extends Report
     {
         $this->percentChangeModel = $percentChangeModel;
         return $this;
+    }
+
+    public function download($changes)
+    {
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $row = 1;
+
+        // Headers
+        $headers = array(
+            'Institution',
+            'Form',
+            'Benchmark',
+            'Old Value',
+            'New Value',
+            'Percent Difference'
+        );
+
+        $sheet->fromArray($headers, null, 'A1');
+        $row++;
+
+        foreach ($changes as $change) {
+            $rowData = array(
+                $change->getCollege()->getNameAndState(),
+                $change->getBenchmark()->getBenchmarkGroup()->getUrl(),
+                $change->getBenchmark()->getDescriptiveReportLabel(),
+                $change->getOldValue(),
+                $change->getValue(),
+                round($change->getPercentChange())
+            );
+
+            $sheet->fromArray($rowData, null, 'A' . $row, true);
+            $row++;
+        }
+
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+
+
+        $filename = 'percent-changes';
+        $this->downloadExcel($excel, $filename);
     }
 }

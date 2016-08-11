@@ -20,7 +20,17 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     });
 </script>
 
+
+
 <h1>Percent Changes</h1>
+
+<p>
+    <a href="/reports/percent-changes/<?= date('Y') ?>/excel" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download
+    </a>
+</p>
+
 
 <table class="table" id="percentChanges">
     <thead>
@@ -34,7 +44,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($changes as $change): ?>
+        <?php /* foreach ($changes as $change): ?>
             <tr>
                 <td><?= $change->getCollege()->getNameAndState() ?></td>
                 <td><?= $change->getBenchmark()->getBenchmarkGroup()->getUrl() ?></td>
@@ -43,6 +53,6 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                 <td><?= $change->getValue() ?></td>
                 <td><?= round($change->getPercentChange()) ?>%</td>
             </tr>
-        <?php endforeach ?>
+        <?php endforeach */?>
     </tbody>
 </table>
