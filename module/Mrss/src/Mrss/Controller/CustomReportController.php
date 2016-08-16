@@ -10,6 +10,7 @@ use Mrss\Form\Report as ReportForm;
 use Mrss\Entity\Report;
 use Mrss\Entity\ReportItem;
 use Mrss\Entity\College;
+use Mrss\Entity\User as User;
 use Zend\View\Model\ViewModel;
 
 class CustomReportController extends ReportController
@@ -293,16 +294,20 @@ class CustomReportController extends ReportController
             foreach ($this->getAllColleges() as $college) {
                 // Skip the current college to prevent dupes
                 if ($college->getId() == $this->currentCollege()->getId()) {
-                    continue;
+                    //continue;
                 }
 
-                $this->copyCustomReport($report, $college);
-                $count++;
+                foreach ($college->getUsers() as $user) {
+                    $this->copyCustomReport($report, $user);
+                    $count++;
+
+                    //pr("$count. {$college->getName()} {$user->getFullName()}");
+                }
             }
 
             $elapsed = round(microtime(true) - $start);
             $this->flashMessenger()->addSuccessMessage(
-                "Report copied to all institutions ($count) in $elapsed seconds.
+                "Report copied to all users at all institutions ($count) in $elapsed seconds.
             Now <a href='/reports/custom/admin'>rebuild the cache</a>."
             );
 
@@ -315,16 +320,21 @@ class CustomReportController extends ReportController
         return $this->redirect()->toRoute('reports/custom');
     }
 
-    protected function copyCustomReport(Report $sourceReport, $college)
+    protected function copyCustomReport(Report $sourceReport, $user)
     {
-        return false;
+        // Get or create the sample peer group.
+        if ($peerGroup = $this->getSamplePeerGroup($user)) {
+            $peerGroupId = $peerGroup->getId();
+        } else {
+            $peerGroupIdToCopy = 3465; // Peer group for sample reports
+            //$peerGroupIdToCopy = null; // Peer group for sample reports
+            $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $user);
+        }
 
-        $peerGroupIdToCopy = 3465; // Peer group for sample reports
-        //$peerGroupIdToCopy = null; // Peer group for sample reports
-        $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $college);
 
         $report = new Report;
-        $report->setCollege($college);
+        //$report->setCollege($college);
+        $report->setUser($user);
         $report->setStudy($this->currentStudy());
         $report->setName($sourceReport->getName());
         $report->setDescription($sourceReport->getDescription());
@@ -344,16 +354,24 @@ class CustomReportController extends ReportController
         /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $this->getServiceLocator()->get('model.college');
 
-        //return $collegeModel->findByStudy($this->currentStudy());
-        return $collegeModel->findByState('MO');
+        return $collegeModel->findByStudy($this->currentStudy());
+        //return $collegeModel->findByState('MO');
+    }
+
+    protected function getSamplePeerGroup($user)
+    {
+        $name = "Random Peer Group for Sample Report";
+
+        return $this->getPeerGroupModel()->findOneByUserAndName($user, $name);
     }
 
     /**
      * @param $peerGroupIdToCopy
-     * @param College $college
+     * @param User $user
      * @return null
+     * @internal param College $college
      */
-    protected function copyPeerGroup($peerGroupIdToCopy, College $college)
+    protected function copyPeerGroup($peerGroupIdToCopy, User $user)
     {
         $newPeerGroupId = null;
         if (!empty($peerGroupIdToCopy)) {
@@ -361,14 +379,15 @@ class CustomReportController extends ReportController
             $peers = $sampleGroup->getPeers();
 
             // Remove the owning college from the peer group
-            if (($key = array_search($college->getId(), $peers)) !== false) {
+            if (($key = array_search($user->getCollege()->getId(), $peers)) !== false) {
                 unset($peers[$key]);
             }
 
             // Create the new peer group
             $newPeerGroup = new PeerGroup();
             $newPeerGroup->setName($sampleGroup->getName());
-            $newPeerGroup->setCollege($college);
+            //$newPeerGroup->setCollege($college);
+            $newPeerGroup->setUser($user);
             $newPeerGroup->setPeers($peers);
             $newPeerGroup->setStudy($this->currentStudy());
 
