@@ -1,5 +1,6 @@
 var savedCharts = {}
-var editor
+var editor;
+var secondBenchmarkControls;
 
 $(function() {
 
@@ -10,15 +11,16 @@ $(function() {
     updateFormForChartType()
     $('#inputType').change(function() {
         updateFormForChartType()
-    })
+    });
 
     $('#explore').submit(function() {
         return exploreFormSubmit()
     })
-})
+});
 
 function setUpSelects()
 {
+    cloneBenchmark2();
     $('#benchmark1, #benchmark2, #benchmark3').chosen({search_contains: true})
 }
 
@@ -104,12 +106,17 @@ function updateFormForChartType()
         title.show()
         subtitle.show()
         //yearField.show()
+        benchmark2.find('label').text('Benchmark')
         benchmark2.show()
         peerGroup.show()
         hideMine.show()
         hideNational.show()
         percentiles.show()
+        placeAddSecondBenchmarkButton(benchmark2);
         populateDefaultBreakpoints([50])
+    } else {
+        removeAddSecondBenchmarkButton();
+        benchmark2.find('label').text('Y Axis')
     }
 
     // Percentile bar
@@ -247,7 +254,7 @@ function populateDefaultBreakpoints(breakPoints)
 function getDefaultBreakpoints()
 {
     // Convert to integers
-    converted = []
+    var converted = [];
     if (typeof defaultBreakpoints != 'undefined') {
         for (var i in defaultBreakpoints) {
             converted.push(parseInt(defaultBreakpoints[i]))
@@ -255,4 +262,96 @@ function getDefaultBreakpoints()
     }
 
     return converted
+}
+
+function placeAddSecondBenchmarkButton(benchmark)
+{
+    var id = getSecondBenchmarkButtonId();
+    var button = $('<a>', {class: 'btn btn-default', id: id, href: '#', style: 'margin-left: 16px'});
+    button.text('Add a Second Benchmark');
+
+    button.click(function() {
+        displayFilteredSecondBenchmarkSelect(benchmark);
+        removeAddSecondBenchmarkButton();
+        placeRemoveSecondBenchmarkButton(benchmark);
+        return false;
+    });
+
+    benchmark.after(button);
+}
+
+function removeAddSecondBenchmarkButton()
+{
+    var id = getSecondBenchmarkButtonId();
+    $('#' + id).remove();
+}
+
+function placeRemoveSecondBenchmarkButton(benchmark)
+{
+    var id = getSecondBenchmarkButtonId() + 'Remove';
+
+    var button = $('<a>', {class: 'btn btn-default', id: id, href: '#', style: 'margin-left: 16px'});
+    button.text('Remove Second Benchmark');
+
+    button.click(function() {
+        removeSecondBenchmarkSelect();
+        placeAddSecondBenchmarkButton(benchmark);
+        removeRemoveSecondBenchmarkButton();
+        return false;
+    });
+
+    benchmark.next().after(button);
+
+}
+
+function removeSecondBenchmarkSelect()
+{
+    $('#control-group-benchmark2a').remove();
+}
+
+function removeRemoveSecondBenchmarkButton()
+{
+    var id = getSecondBenchmarkButtonId() + 'Remove';
+    $('#' + id).remove();
+}
+
+function getSecondBenchmarkButtonId()
+{
+    return 'secondBenchmarkButton';
+}
+
+function displayFilteredSecondBenchmarkSelect(benchmarkSelect)
+{
+    var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
+    var benchmarkTwoContainer = secondBenchmarkControls.clone();
+
+    benchmarkTwoContainer = filterSecondBenchmarkSelect(benchmarkTwoContainer);
+
+    // Change the label and select name
+    benchmarkTwoContainer.attr('id', 'control-group-benchmark2a');
+    benchmarkTwoContainer.find('label').text('Second Benchmark');
+    benchmarkTwoContainer.find('.controls').attr('id', 'controls-benchmark2a');
+    benchmarkTwoContainer.find('select').attr('name', 'benchmark2a').attr('id', 'benchmark2a');
+    benchmarkTwoContainer.find('.chosen-container').attr('id', 'benchmark2a_chosen');
+
+
+
+    benchmarkOneContainer.after(benchmarkTwoContainer);
+
+    benchmarkTwoContainer.find('select').chosen({search_contains: true});
+
+}
+
+function cloneBenchmark2()
+{
+    secondBenchmarkControls = $('#control-group-benchmark2').clone();
+}
+
+/**
+ * Needs to know the inputTypes of all benchmarks
+ * @param benchmarkTwoContainer
+ */
+function filterSecondBenchmarkSelect(benchmarkTwoContainer)
+{
+
 }
