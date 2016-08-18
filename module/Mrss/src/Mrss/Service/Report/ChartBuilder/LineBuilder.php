@@ -164,6 +164,16 @@ class LineBuilder extends ChartBuilder
             }
         }
 
+        // Multiple trend lines?
+        if (!empty($config['multiTrend'])) {
+            $series[] = array(
+                'name' => 'test',
+                'data' => array(null, null, null, null, null, null, 5, 6, 25, 50),
+                'color' => '#FF0000'
+            );
+
+        }
+
         $xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
 
         $chart = new Line;
@@ -184,7 +194,7 @@ class LineBuilder extends ChartBuilder
         return $chart->getConfig();
     }
 
-    protected function syncArrays($array1, $array2)
+    public function syncArrays($array1, $array2)
     {
         $keys = array_unique(array_merge(array_keys($array1), array_keys($array2)));
         ksort($keys);

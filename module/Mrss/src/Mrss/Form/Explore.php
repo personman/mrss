@@ -46,6 +46,16 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'multiTrend',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'id' => 'multiTrend'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'presentation',
                 'type' => 'Select',
                 'options' => array(

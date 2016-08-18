@@ -41,6 +41,8 @@ class ReportItemController extends CustomReportController
             if ($form->isValid()) {
                 $data = $form->getData();
 
+                pr($data);
+
                 // What type of button was pressed?
                 $buttonPressed = $this->getButtonPressed($data);
 
