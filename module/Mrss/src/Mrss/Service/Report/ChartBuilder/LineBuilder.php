@@ -115,9 +115,6 @@ class LineBuilder extends ChartBuilder
             $peerMediansData[$percentile] = $peerMedians;
         }
 
-        pr($peerMediansData);
-        pr($peerMedians);
-
         if (!empty($peerFootnote)) {
             $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
         }
