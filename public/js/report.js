@@ -60,6 +60,7 @@ $(function() {
     setUpExploreSpinner()
 
     setUpCancelAndPreview();
+    fixChart()
 })
 
 
@@ -153,6 +154,7 @@ function loadChart(event, chart)
              chart.setSize(width, height)
 
              // add some spacingBottom: done in Report.php
+
         }
     }
 
@@ -166,6 +168,21 @@ function loadChart(event, chart)
 
         return offset
     }
+}
+
+function fixChart()
+{
+    setTimeout(function() {
+
+        $("tspan").each(function () {
+            var text = $(this).text();
+            text = text.replace("$â€¦", "...");
+            $(this).text(text);
+        })
+        },
+        800
+    )
+
 }
 
 function preventNegativeScale(chart)
