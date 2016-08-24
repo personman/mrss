@@ -201,7 +201,7 @@ class Peer extends Report
 
                 $dataRow = array(
                     $institution,
-                    round($value)
+                    round($value, 2)
                 );
 
                 $sheet->fromArray($dataRow, null, 'A' . $row);
