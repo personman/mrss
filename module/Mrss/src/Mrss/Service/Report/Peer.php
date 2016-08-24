@@ -188,11 +188,12 @@ class Peer extends Report
 
             $headerRow = array(
                 $section['benchmark'],
-                null
+                'Benchmark',
+                'National % Rank'
             );
 
             $sheet->fromArray($headerRow, null, 'A' . $row);
-            $sheet->getStyle("A$row:B$row")->applyFromArray($blueBar);
+            $sheet->getStyle("A$row:C$row")->applyFromArray($blueBar);
             $row++;
 
             foreach ($section['data'] as $collegeId => $peerData) {
@@ -201,7 +202,8 @@ class Peer extends Report
 
                 $dataRow = array(
                     $institution,
-                    round($value, 2)
+                    round($value, 2),
+                    round($peerData['percentileRank'])
                 );
 
                 $sheet->fromArray($dataRow, null, 'A' . $row);
@@ -213,7 +215,7 @@ class Peer extends Report
             $sheet->getStyle('B1:B400')->getAlignment()
                 ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-            foreach (range(0, 1) as $column) {
+            foreach (range(0, 2) as $column) {
                 $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
             }
 
