@@ -143,6 +143,10 @@ class CustomReportController extends ReportController
         foreach ($report->getItems() as $item) {
             $chart = $item->getCacheChart();
 
+            if (empty($chart['chart'])) {
+                continue;
+            }
+
             if ($chart['chart']['type'] == 'column') {
                 foreach ($chart['series'] as $key => &$series) {
                     foreach ($series['data'] as $dataKey => &$dataPoint) {
@@ -159,8 +163,6 @@ class CustomReportController extends ReportController
             }
 
             $item->setCacheChart($chart);
-
-            //prd($chart['series']);
         }
     }
 
