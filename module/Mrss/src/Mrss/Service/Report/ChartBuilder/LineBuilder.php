@@ -33,19 +33,16 @@ class LineBuilder extends ChartBuilder
             $title = $benchmark->getDescriptiveReportLabel();
         }
 
-        // Get the college's reported data
-        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy());
-        $data = array();
-        foreach ($subscriptions as $subscription) {
-            // Skip current year if reporting isn't open yet.
-            if ($this->getStudy()->getCurrentYear() == $subscription->getYear()
-                && !$this->getStudy()->getReportsOpen()) {
-                continue;
-            }
 
-            $data[$subscription->getYear()] = floatval($subscription->getObservation()->get($dbColumn));
-        }
-        ksort($data);
+
+
+
+
+
+
+
+        // Get the college's reported data
+        $data = $this->getDataForCollege($dbColumn);
 
 
         // Get the median
@@ -192,6 +189,25 @@ class LineBuilder extends ChartBuilder
 
 
         return $chart->getConfig();
+    }
+
+    public function getDataForCollege($dbColumn)
+    {
+        // Get the college's reported data
+        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy());
+        $data = array();
+        foreach ($subscriptions as $subscription) {
+            // Skip current year if reporting isn't open yet.
+            if ($this->getStudy()->getCurrentYear() == $subscription->getYear()
+                && !$this->getStudy()->getReportsOpen()) {
+                continue;
+            }
+
+            $data[$subscription->getYear()] = floatval($subscription->getObservation()->get($dbColumn));
+        }
+        ksort($data);
+
+        return $data;
     }
 
     public function syncArrays($array1, $array2)

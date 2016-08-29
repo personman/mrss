@@ -59,8 +59,6 @@ function updateFormForChartType()
     $('#explore .control-group').hide()
     $('#control-group-inputType, #control-group-submitButton, #control-group-previewButton, #control-group-cancelButton').show()
 
-    console.log('68 val: ' + $('#multiTrend').val());
-
     // Text
     if (chartType == 'text') {
         textEditor.slideDown()
