@@ -102,13 +102,10 @@ class ReportController extends AbstractActionController
         // Get System ids
         $currentYear = $this->currentStudy()->getCurrentYear();
         $systemIds = array();
-        //foreach ($this->getSystemModel()->findAll() as $system) {
-        foreach ($this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId()) as $system) {
+        $systems = $this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId());
+        foreach ($systems as $system) {
             $systemIds[] = $system->getId();
         }
-
-
-
 
 
         return array(

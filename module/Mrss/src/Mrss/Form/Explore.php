@@ -296,7 +296,7 @@ class Explore extends AbstractForm
         return $filter;
     }
 
-    static function getPresentationOptions($includeTrends)
+    public static function getPresentationOptions($includeTrends)
     {
         $options = array(
             'line' => 'Trend Line',

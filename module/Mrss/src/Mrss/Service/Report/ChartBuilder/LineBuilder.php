@@ -12,8 +12,13 @@ class LineBuilder extends ChartBuilder
     {
         $config = $this->getConfig();
 
+
+
         $dbColumn = $config['benchmark2'];
-        $peerGroup = $config['peerGroup'];
+        $peerGroupConfig = $config['peerGroup'];
+
+        $peerGroupModel = $this->getPeerGroupModel();
+        $peerGroup = $peerGroupModel->find($peerGroupConfig);
 
         $benchmark = $this->getBenchmark($dbColumn);
 
@@ -33,90 +38,28 @@ class LineBuilder extends ChartBuilder
             $title = $benchmark->getDescriptiveReportLabel();
         }
 
-
-
-
-
-
-
-
-
         // Get the college's reported data
         $data = $this->getDataForCollege($dbColumn);
 
 
-        // Get the median
         $percentiles = $config['percentiles'];
         //$percentiles = array(50);
 
         $mediansData = array();
         $peerMediansData = array();
         foreach ($percentiles as $percentile) {
-            $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile);
+            list($data, $medianData) = $this->getMedianData($benchmark, $percentile, $data);
 
-            $medianData = array();
-            foreach ($medians as $median) {
-                // Don't show any data for years they didn't subscribe
-                if (!isset($data[$median->getYear()])) {
-                    continue;
-                }
-                $medianData[$median->getYear()] = floatval($median->getValue());
-            }
-            ksort($medianData);
-
-            list($data, $medianData) = $this->syncArrays($data, $medianData);
-
-            // Don't show the current year if reports aren't open yet
-            if (!$this->getStudy()->getReportsOpen()) {
-                $year = $this->getStudy()->getCurrentYear();
-                unset($data[$year]);
-                unset($medianData[$year]);
-            }
-
-
-            // Peer group median
-            $peerMedianData = array();
-            if (!empty($peerGroup)) {
-                $peerGroupModel = $this->getPeerGroupModel();
-                $peerGroup = $peerGroupModel->find($peerGroup);
-
-                if ($peerGroup) {
-                    list($peerMedianData, $peerIds) = $this->getPeerMedians(
-                        $peerGroup,
-                        $dbColumn,
-                        array_keys($medianData),
-                        $percentile
-                    );
-
-                    $peerFootnote = "(Select a peer group with at least {$this->minimumPeers} data points.)";
-                    if (count($peerIds) >= $this->minimumPeers) {
-                        $this->setPeers($peerIds);
-
-                        $includedPeers = $this->getCollegeModel()->findByIds($peerIds);
-                        $peerNames = array();
-                        foreach ($includedPeers as $peer) {
-                            $peerNames[] = $peer->getNAme();
-                        }
-                        $peerFootnote = implode(', ', $peerNames);
-                    }
-
-
-                }
-            }
-
-            list($data, $medianData, $peerMedians) = $this->fillInGaps($data, $medianData, $peerMedianData);
-
-
+            list($data, $peerMedianData, $peerIds) = $this->getPeerMedianData(
+                $peerGroup,
+                $benchmark,
+                $percentile,
+                $data
+            );
 
             $mediansData[$percentile] = $medianData;
             $peerMediansData[$percentile] = $peerMedianData;
         }
-
-        if (!empty($peerFootnote)) {
-            $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
-        }
-
-
 
 
         // Build the series
@@ -210,6 +153,86 @@ class LineBuilder extends ChartBuilder
         return $data;
     }
 
+    public function getMedianData($benchmark, $percentile, $data)
+    {
+        $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile);
+
+        $medianData = array();
+        foreach ($medians as $median) {
+            // Don't show any data for years they didn't subscribe
+            if (!isset($data[$median->getYear()])) {
+                continue;
+            }
+            $medianData[$median->getYear()] = floatval($median->getValue());
+        }
+        ksort($medianData);
+
+        list($data, $medianData) = $this->syncArrays($data, $medianData);
+
+        // Don't show the current year if reports aren't open yet
+        if (!$this->getStudy()->getReportsOpen()) {
+            $year = $this->getStudy()->getCurrentYear();
+            unset($data[$year]);
+            unset($medianData[$year]);
+        }
+
+        return $this->fillInGaps($data, $medianData);
+    }
+
+    public function getPeerMedianData(
+        $peerGroup,
+        $benchmark,
+        $percentile,
+        $data
+    ) {
+
+        $dbColumn = $benchmark->getDbColumn();
+
+        // Peer group median
+        $peerMedianData = array();
+        if (!empty($peerGroup)) {
+            if ($peerGroup) {
+                list($peerMedianData, $peerIds) = $this->getPeerMedians(
+                    $peerGroup,
+                    $dbColumn,
+                    $this->getYearRange($data),
+                    $percentile
+                );
+
+                $peerFootnote = $this->getPeerFootnote($peerIds);
+            }
+        }
+
+        if (!empty($peerFootnote)) {
+            $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
+        }
+
+        list($data, $peerMedianData) = $this->fillInGaps($data, $peerMedianData);
+
+        $datas = array($data, $peerMedianData);
+
+        array_push($datas, $peerIds);
+
+        return $datas;
+    }
+
+    public function getPeerFootnote($peerIds)
+    {
+        $peerFootnote = "(Select a peer group with at least {$this->minimumPeers} data points.)";
+        if (count($peerIds) >= $this->minimumPeers) {
+            $this->setPeers($peerIds);
+
+            $includedPeers = $this->getCollegeModel()->findByIds($peerIds);
+            $peerNames = array();
+            foreach ($includedPeers as $peer) {
+                $peerNames[] = $peer->getNAme();
+            }
+            $peerFootnote = implode(', ', $peerNames);
+        }
+
+        return $peerFootnote;
+    }
+
     public function syncArrays($array1, $array2)
     {
         $keys = array_unique(array_merge(array_keys($array1), array_keys($array2)));
@@ -234,37 +257,39 @@ class LineBuilder extends ChartBuilder
         return array($new1, $new2);
     }
 
-    protected function fillInGaps($data, $medianData, $peerMedians)
+    public function fillInGaps($masterArray, $secondArray)
     {
-        reset($data);
-        $start = key($data);
-        end($data);
-        $end = key($data);
+        // What years did they submit data?
+        $years = $this->getYearRange($masterArray);
 
-        $years = range($start, $end);
-
-        $newData = $newMedians = $newPeerMedians = array();
+        $newMaster = $newSecond = array();
         foreach ($years as $year) {
-            if (isset($data[$year])) {
-                $newData[$year] = $data[$year];
+            if (isset($masterArray[$year])) {
+                $newMaster[$year] = $masterArray[$year];
             } else {
-                $newData[$year] = null;
+                $newMaster[$year] = null;
             }
 
-            if (isset($medianData[$year])) {
-                $newMedians[$year] = $medianData[$year];
+            if (isset($secondArray[$year])) {
+                $newSecond[$year] = $secondArray[$year];
             } else {
-                $newMedians[$year] = null;
-            }
-
-            if (isset($peerMedians[$year])) {
-                $newPeerMedians[$year] = $peerMedians[$year];
-            } else {
-                $newPeerMedians[$year] = null;
+                $newSecond[$year] = null;
             }
         }
 
-        return array($newData, $newMedians, $newPeerMedians);
+        return array($newMaster, $newSecond);
+    }
+
+    public function getYearRange($array)
+    {
+        reset($array);
+        $start = key($array);
+        end($array);
+        $end = key($array);
+
+        $years = range($start, $end);
+
+        return $years;
     }
 
     protected function getPeerMedians($peerGroup, $dbColumn, $years, $breakpoint = 50)
