@@ -15,6 +15,16 @@ class LineBuilderTest extends PHPUnit_Framework_TestCase
         $this->lineBuilder = new LineBuilder();
     }
 
+    public function testHasYear()
+    {
+        $years = array(2012, 2014, 2016);
+        $this->lineBuilder->setYears($years);
+
+        $this->assertTrue($this->lineBuilder->hasYear(2012));
+        $this->assertTrue($this->lineBuilder->hasYear(2014));
+        $this->assertFalse($this->lineBuilder->hasYear(2015));
+    }
+
     public function testSyncArrays()
     {
         $one = array(
@@ -41,9 +51,10 @@ class LineBuilderTest extends PHPUnit_Framework_TestCase
      */
     public function testFillInGaps($masterArray, $secondArray, $masterExpected, $secondExpected)
     {
-        list($masterResult, $secondResult) = $this->lineBuilder->fillInGaps($masterArray, $secondArray);
+        $this->lineBuilder->setYears(array_keys($masterArray));
+        $secondResult = $this->lineBuilder->fillInGaps($secondArray);
 
-        $this->assertEquals($masterExpected, $masterResult);
+        //$this->assertEquals($masterExpected, $masterResult);
         $this->assertEquals($secondExpected, $secondResult);
     }
 
@@ -90,7 +101,8 @@ class LineBuilderTest extends PHPUnit_Framework_TestCase
      */
     public function testGetYearRange($array, $expectedRange)
     {
-        $range = $this->lineBuilder->getYearRange($array);
+        $this->lineBuilder->setYears(array_keys($array));
+        $range = $this->lineBuilder->getYearRange();
 
         $this->assertEquals($expectedRange, $range);
     }

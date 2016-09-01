@@ -8,111 +8,50 @@ use Mrss\Service\Report\Calculator;
 
 class LineBuilder extends ChartBuilder
 {
+    // The years the college subscribed. Don't show them data if they were not members
+    protected $years = array();
+
+    public function setYears($years)
+    {
+        $this->years = $years;
+
+        return $this;
+    }
+
+    public function getYears()
+    {
+        return $this->years;
+    }
+
+    public function hasYear($year)
+    {
+        return in_array($year, $this->getYears());
+    }
+
     public function getChart()
     {
-        $config = $this->getConfig();
+        $dbColumns = $this->getDbColumns();
+        $peerGroup = $this->getPeerGroup();
+        $title = $this->getTitle();
+        $subtitle = $this->getSubtitle();
+
+        $allData = $this->getAllData();
 
 
+        // @todo: make peer cohort needs to handle both benchmarks. only want peers who submitted both for each year
+        // @todo: show only one peer footnote
 
-        $dbColumn = $config['benchmark2'];
-        $peerGroupConfig = $config['peerGroup'];
+        //pr($allData);
 
-        $peerGroupModel = $this->getPeerGroupModel();
-        $peerGroup = $peerGroupModel->find($peerGroupConfig);
+        $series = $this->getSeries($allData, $peerGroup);
 
-        $benchmark = $this->getBenchmark($dbColumn);
-
-        if ($definition = $benchmark->getReportDescription(true)) {
-            $this->addFootnote($benchmark->getDescriptiveReportLabel() . ': ' . $definition);
+        // First benchmark:
+        foreach ($dbColumns as $dbColumn) {
+            $benchmark = $this->getBenchmark($dbColumn);
+            $data = $allData[$dbColumn]['data'];
+            break;
         }
 
-        $title = $config['title'];
-
-        $subtitle = null;
-        if (!empty($config['subtitle'])) {
-            $subtitle = $config['subtitle'];
-        }
-
-
-        if (empty($title)) {
-            $title = $benchmark->getDescriptiveReportLabel();
-        }
-
-        // Get the college's reported data
-        $data = $this->getDataForCollege($dbColumn);
-
-
-        $percentiles = $config['percentiles'];
-        //$percentiles = array(50);
-
-        $mediansData = array();
-        $peerMediansData = array();
-        foreach ($percentiles as $percentile) {
-            list($data, $medianData) = $this->getMedianData($benchmark, $percentile, $data);
-
-            list($data, $peerMedianData, $peerIds) = $this->getPeerMedianData(
-                $peerGroup,
-                $benchmark,
-                $percentile,
-                $data
-            );
-
-            $mediansData[$percentile] = $medianData;
-            $peerMediansData[$percentile] = $peerMedianData;
-        }
-
-
-        // Build the series
-        $series = array();
-
-        if (empty($config['hideMine'])) {
-            $series[] = array(
-                'name' => $this->getCollege()->getName(),
-                'data' => array_values($data),
-                'color' => $this->getYourColor()
-            );
-        }
-
-        if (empty($config['hideNational'])) {
-            foreach ($mediansData as $percentile => $medianData) {
-                if ($percentile == 50) {
-                    $label = 'Median';
-                } else {
-                    $label = $this->getOrdinal($percentile);
-                }
-                $series[] = array(
-                    'name' => "National $label",
-                    'data' => array_values($medianData),
-                    'color' => $this->getNationalColor()
-                );
-            }
-        }
-
-        if (!empty($peerGroup) && !empty($peerIds) && count($peerIds) >= $this->minimumPeers) {
-            foreach ($peerMediansData as $percentile => $peerMedianData) {
-                if ($percentile == 50) {
-                    $label = 'Median';
-                } else {
-                    $label = $this->getOrdinal($percentile);
-                }
-
-                $series[] = array(
-                    'name' => $peerGroup->getName() . ' ' . $label,
-                    'data' => array_values($peerMedianData),
-                    'color' => $this->getPeerColor()
-                );
-            }
-        }
-
-        // Multiple trend lines?
-        if (!empty($config['multiTrend'])) {
-            $series[] = array(
-                'name' => 'test',
-                'data' => array(null, null, null, null, null, null, 5, 6, 25, 50),
-                'color' => '#FF0000'
-            );
-
-        }
 
         $xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
 
@@ -134,6 +73,183 @@ class LineBuilder extends ChartBuilder
         return $chart->getConfig();
     }
 
+    public function getDbColumns()
+    {
+        $config = $this->getConfig();
+
+        $dbColumns = array($config['benchmark2']);
+        if (!empty($config['multiTrend'])) {
+            $dbColumns[] = $config['benchmark3'];
+        }
+
+        return $dbColumns;
+    }
+
+    public function getPeerGroup()
+    {
+        $config = $this->getConfig();
+        $peerGroup = null;
+        $peerGroupConfig = $config['peerGroup'];
+
+        if ($peerGroupConfig) {
+            $peerGroupModel = $this->getPeerGroupModel();
+            $peerGroup = $peerGroupModel->find($peerGroupConfig);
+        }
+
+        return $peerGroup;
+    }
+
+    public function getTitle()
+    {
+        $config = $this->getConfig();
+
+        $title = $config['title'];
+
+        if (empty($title)) {
+            $title = array();
+            foreach ($this->getDbColumns() as $dbColumn) {
+                $benchmark = $this->getBenchmark($dbColumn);
+                $title[] = $benchmark->getDescriptiveReportLabel();
+            }
+
+            $title = implode(' and ', $title);
+        }
+
+        return $title;
+    }
+
+    public function getSubtitle()
+    {
+        $config = $this->getConfig();
+        $subtitle = null;
+        if (!empty($config['subtitle'])) {
+            $subtitle = $config['subtitle'];
+        }
+
+        return $subtitle;
+    }
+
+    public function getAllData()
+    {
+        $config = $this->getConfig();
+
+        $allData = array();
+
+        $dbColumns = array($config['benchmark2']);
+        if (!empty($config['multiTrend'])) {
+            $dbColumns[] = $config['benchmark3'];
+        }
+
+        $peerGroupConfig = $config['peerGroup'];
+
+        $peerGroupModel = $this->getPeerGroupModel();
+        $peerGroup = $peerGroupModel->find($peerGroupConfig);
+
+        foreach ($dbColumns as $dbColumn) {
+            $benchmark = $this->getBenchmark($dbColumn);
+
+            if ($definition = $benchmark->getReportDescription(true)) {
+                $this->addFootnote($benchmark->getDescriptiveReportLabel() . ': ' . $definition);
+            }
+
+            if (empty($title)) {
+                $title = $benchmark->getDescriptiveReportLabel();
+            }
+
+            // Get the college's reported data
+            $data = $this->getDataForCollege($dbColumn);
+
+
+            $percentiles = $config['percentiles'];
+            //$percentiles = array(50);
+
+            $mediansData = array();
+            $peerMediansData = array();
+            foreach ($percentiles as $percentile) {
+                $medianData = $this->getMedianData($benchmark, $percentile);
+
+                list($peerMedianData, $peerIds) = $this->getPeerMedianData(
+                    $peerGroup,
+                    $benchmark,
+                    $percentile
+                );
+
+                $mediansData[$percentile] = $medianData;
+                $peerMediansData[$percentile] = $peerMedianData;
+            }
+
+            $allData[$dbColumn] = array(
+                'data' => $data,
+                'mediansData' => $mediansData,
+                'peerMediansData' => $peerMediansData,
+                'peerIds' => $peerIds
+            );
+        }
+
+        return $allData;
+    }
+
+    public function getSeries($allData, $peerGroup = null)
+    {
+        $config = $this->getConfig();
+
+        // Build the series
+        $series = array();
+
+        $i = 0;
+        foreach ($allData as $dbColumn => $dataForBenchmark) {
+            $data = $dataForBenchmark['data'];
+            $mediansData = $dataForBenchmark['mediansData'];
+            $peerMediansData = $dataForBenchmark['peerMediansData'];
+            $peerIds = $dataForBenchmark['peerIds'];
+
+            if (empty($config['hideMine'])) {
+                $series[] = array(
+                    'name' => $this->getCollege()->getName(),
+                    'data' => array_values($data),
+                    'color' => $this->getYourColor($i)
+                );
+            }
+
+            if (empty($config['hideNational'])) {
+                foreach ($mediansData as $percentile => $medianData) {
+                    if ($percentile == 50) {
+                        $label = 'Median';
+                    } else {
+                        $label = $this->getOrdinal($percentile);
+                    }
+                    $series[] = array(
+                        'name' => "National $label",
+                        'data' => array_values($medianData),
+                        'color' => $this->getNationalColor($i)
+                    );
+                }
+            }
+
+            if (!empty($peerGroup) && !empty($peerIds) && count($peerIds) >= $this->minimumPeers) {
+                foreach ($peerMediansData as $percentile => $peerMedianData) {
+                    if ($percentile == 50) {
+                        $label = 'Median';
+                    } else {
+                        $label = $this->getOrdinal($percentile);
+                    }
+
+                    $series[] = array(
+                        'name' => $peerGroup->getName() . ' ' . $label,
+                        'data' => array_values($peerMedianData),
+                        'color' => $this->getPeerColor($i)
+                    );
+                }
+            }
+
+            $i++;
+        }
+
+
+
+        return $series;
+    }
+
     public function getDataForCollege($dbColumn)
     {
         // Get the college's reported data
@@ -150,42 +266,31 @@ class LineBuilder extends ChartBuilder
         }
         ksort($data);
 
+        $this->setYears(array_keys($data));
+        $data = $this->fillInGaps($data);
+
         return $data;
     }
 
-    public function getMedianData($benchmark, $percentile, $data)
+    public function getMedianData($benchmark, $percentile)
     {
         $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile);
 
         $medianData = array();
         foreach ($medians as $median) {
             // Don't show any data for years they didn't subscribe
-            if (!isset($data[$median->getYear()])) {
+            if (!$this->hasYear($median->getYear())) {
                 continue;
             }
             $medianData[$median->getYear()] = floatval($median->getValue());
         }
         ksort($medianData);
 
-        list($data, $medianData) = $this->syncArrays($data, $medianData);
-
-        // Don't show the current year if reports aren't open yet
-        if (!$this->getStudy()->getReportsOpen()) {
-            $year = $this->getStudy()->getCurrentYear();
-            unset($data[$year]);
-            unset($medianData[$year]);
-        }
-
-        return $this->fillInGaps($data, $medianData);
+        return $this->fillInGaps($medianData);
     }
 
-    public function getPeerMedianData(
-        $peerGroup,
-        $benchmark,
-        $percentile,
-        $data
-    ) {
-
+    public function getPeerMedianData($peerGroup, $benchmark, $percentile)
+    {
         $dbColumn = $benchmark->getDbColumn();
 
         // Peer group median
@@ -195,7 +300,6 @@ class LineBuilder extends ChartBuilder
                 list($peerMedianData, $peerIds) = $this->getPeerMedians(
                     $peerGroup,
                     $dbColumn,
-                    $this->getYearRange($data),
                     $percentile
                 );
 
@@ -207,13 +311,9 @@ class LineBuilder extends ChartBuilder
             $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
         }
 
-        list($data, $peerMedianData) = $this->fillInGaps($data, $peerMedianData);
+        $peerMedianData = $this->fillInGaps($peerMedianData);
 
-        $datas = array($data, $peerMedianData);
-
-        array_push($datas, $peerIds);
-
-        return $datas;
+        return array($peerMedianData, $peerIds);
     }
 
     public function getPeerFootnote($peerIds)
@@ -257,44 +357,38 @@ class LineBuilder extends ChartBuilder
         return array($new1, $new2);
     }
 
-    public function fillInGaps($masterArray, $secondArray)
+    public function fillInGaps($array)
     {
-        // What years did they submit data?
-        $years = $this->getYearRange($masterArray);
+        $years = $this->getYearRange();
 
-        $newMaster = $newSecond = array();
+        $newArray = array();
         foreach ($years as $year) {
-            if (isset($masterArray[$year])) {
-                $newMaster[$year] = $masterArray[$year];
+            if (isset($array[$year])) {
+                $newArray[$year] = $array[$year];
             } else {
-                $newMaster[$year] = null;
-            }
-
-            if (isset($secondArray[$year])) {
-                $newSecond[$year] = $secondArray[$year];
-            } else {
-                $newSecond[$year] = null;
+                $newArray[$year] = null;
             }
         }
 
-        return array($newMaster, $newSecond);
+        return $newArray;
     }
 
-    public function getYearRange($array)
+    public function getYearRange()
     {
-        reset($array);
-        $start = key($array);
-        end($array);
-        $end = key($array);
+        $years = $this->getYears();
+        $start = min($years);
+        $end = max($years);
 
         $years = range($start, $end);
 
         return $years;
     }
 
-    protected function getPeerMedians($peerGroup, $dbColumn, $years, $breakpoint = 50)
+    protected function getPeerMedians($peerGroup, $dbColumn, $breakpoint = 50)
     {
         $peersData = array();
+
+        $years = $this->getYears();
 
         foreach ($years as $year) {
             $peersData[$year] = $this->getPeerData($peerGroup, $dbColumn, $year);
