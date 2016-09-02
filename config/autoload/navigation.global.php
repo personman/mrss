@@ -794,7 +794,7 @@ function getAdminMenu()
         'route' => 'colleges'
     ),
     'studies' => array(
-        'label' => 'Studies',
+        'label' => 'Study Setup',
         'controller' => 'studies',
         'route' => 'studies'
     ),
