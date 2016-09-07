@@ -186,6 +186,8 @@ function addSavedPeerGroups()
 function selectPeerGroup(group)
 {
     var peers = $.map(group.peers, Number)
+    var minSelected = 5
+    var selectedCount = 0
 
     // Loop over the options, selecting any that belong to the group
     var selectBox = $('#peers')
@@ -203,31 +205,36 @@ function selectPeerGroup(group)
                     //option.attr('selected', 'selected')
                     // This works in IE10 and 11. above doesn't
                     option[0].selected = 'selected'
+                    selectedCount++
                 }
             }
 
         }
     }
 
-    // Put the name in the name field
-    $('#controls-name input').val(group.name)
+    if (selectedCount >= minSelected) {
+        // Put the name in the name field
+        $('#controls-name input').val(group.name)
 
-    // Hide the peer selection element and peer group name element
-    $('#control-group-peers, #control-group-name').hide()
+        // Hide the peer selection element and peer group name element
+        $('#control-group-peers, #control-group-name').hide()
 
-    // Show a message about the selected peer group
-    var newControls = '<div class="control-group" id="control-group-selected-name">' +
-    '<label class="control-label">Selected Peer Group</label>' +
-    '<div class="controls">' + group.name + ' <span class="deleteLink">' +
-    '<a href="#">[change]</a></span></div>' +
-    '</div></div>';
-    $('#control-group-peers').before(newControls)
+        // Show a message about the selected peer group
+        var newControls = '<div class="control-group" id="control-group-selected-name">' +
+            '<label class="control-label">Selected Peer Group</label>' +
+            '<div class="controls">' + group.name + ' <span class="deleteLink">' +
+            '<a href="#">[change]</a></span></div>' +
+            '</div></div>';
+        $('#control-group-peers').before(newControls)
 
-    // Handle the change button
-    $('#control-group-selected-name a').click(function() {
-        $('#control-group-selected-name').remove()
-        $('#control-group-peers, #control-group-name').show()
-        $('#controls-name input').val('')
-    })
+        // Handle the change button
+        $('#control-group-selected-name a').click(function() {
+            $('#control-group-selected-name').remove()
+            $('#control-group-peers, #control-group-name').show()
+            $('#controls-name input').val('')
+        })
+    } else {
+        alert("The peer group you selected does not contain enough institutions that submitted the selected benchmark.");
+    }
 }
 
