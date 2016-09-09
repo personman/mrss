@@ -41,7 +41,11 @@ class ReportItemController extends CustomReportController
             if ($form->isValid()) {
                 $data = $form->getData();
 
-                pr($data);
+                //pr($data);
+
+                if (!empty($data['multiTrend']) && $data['multiTrend'] == 'false') {
+                    $data['multiTrend'] = 0;
+                }
 
                 // What type of button was pressed?
                 $buttonPressed = $this->getButtonPressed($data);

@@ -41,7 +41,6 @@ class LineBuilder extends ChartBuilder
         // @todo: make peer cohort needs to handle both benchmarks. only want peers who submitted both for each year
         // @todo: show only one peer footnote
 
-        //pr($allData);
 
         $series = $this->getSeries($allData, $peerGroup);
 
@@ -204,8 +203,15 @@ class LineBuilder extends ChartBuilder
             $peerIds = $dataForBenchmark['peerIds'];
 
             if (empty($config['hideMine'])) {
+                $name = $this->getCollege()->getName();
+                if (!empty($config['multiTrend'])) {
+                    echo 'multitrend is not empty';
+                    $benchmark = $this->getBenchmark($dbColumn);
+                    $name .= '|' . $benchmark->getDescriptiveReportLabel();
+                }
+
                 $series[] = array(
-                    'name' => $this->getCollege()->getName(),
+                    'name' => $name,
                     'data' => array_values($data),
                     'color' => $this->getYourColor($i)
                 );
@@ -218,8 +224,16 @@ class LineBuilder extends ChartBuilder
                     } else {
                         $label = $this->getOrdinal($percentile);
                     }
+
+                    $nationalLabel = "National $label";
+                    if (!empty($config['multiTrend'])) {
+                        $benchmark = $this->getBenchmark($dbColumn);
+                        $nationalLabel .= '|' . $benchmark->getDescriptiveReportLabel();
+                    }
+
+
                     $series[] = array(
-                        'name' => "National $label",
+                        'name' => $nationalLabel,
                         'data' => array_values($medianData),
                         'color' => $this->getNationalColor($i)
                     );

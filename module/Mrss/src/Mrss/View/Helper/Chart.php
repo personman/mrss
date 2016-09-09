@@ -16,7 +16,7 @@ class Chart extends AbstractHelper
     /**
      * @var string
      */
-    protected $chartJsUri = '/js/highcharts.js?v=2';
+    protected $chartJsUri = '/js/highcharts.js?v=5';
 
     protected $exportingJsUri = '/js/highcharts-exporting.js?v=3';
 
@@ -79,6 +79,18 @@ class Chart extends AbstractHelper
             $script = "function (event) { $function(event, this) }";
             $config = str_replace($functionLabel, $script, $config);
         }
+
+        // Legend format
+        $multiTrend = 'false';
+        if (!empty($chartConfig['multiTrend'])) {
+            $multiTrend = 'true';
+        }
+
+        $formatter = "function () {return legendLabelFormatter(this, $multiTrend)}";
+        $config = str_replace('"legendLabelFormatter"', $formatter, $config);
+        //pr($chartConfig);
+
+        //pr($config);
 
         return $config;
     }
