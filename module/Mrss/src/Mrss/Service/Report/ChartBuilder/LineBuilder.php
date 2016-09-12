@@ -34,6 +34,7 @@ class LineBuilder extends ChartBuilder
         $peerGroup = $this->getPeerGroup();
         $title = $this->getTitle();
         $subtitle = $this->getSubtitle();
+        $config = $this->getConfig();
 
         $allData = $this->getAllData();
 
@@ -53,11 +54,15 @@ class LineBuilder extends ChartBuilder
 
 
         $xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
+        $yLabel = $benchmark->getDescriptiveReportLabel();
+        if (!empty($config['multiTrend'])) {
+            $yLabel = '';
+        }
 
         $chart = new Line;
         $chart->setTitle($title)
             ->setSubtitle($subtitle)
-            ->setYLabel($benchmark->getDescriptiveReportLabel())
+            ->setYLabel($yLabel)
             ->setYFormat($this->getFormat($benchmark))
             ->setCategories($xCategories)
             ->setSeries($series);
@@ -205,7 +210,6 @@ class LineBuilder extends ChartBuilder
             if (empty($config['hideMine'])) {
                 $name = $this->getCollege()->getName();
                 if (!empty($config['multiTrend'])) {
-                    echo 'multitrend is not empty';
                     $benchmark = $this->getBenchmark($dbColumn);
                     $name .= '|' . $benchmark->getDescriptiveReportLabel();
                 }
