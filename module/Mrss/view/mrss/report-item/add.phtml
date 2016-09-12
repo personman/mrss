@@ -189,41 +189,10 @@ $this->headScript()->appendFile(
 
 
 
-
-
-
-
-
-
-        H.wrap(H.Legend.prototype, 'render', function (proceed) {
-            //console.log('init ran')
-            //debugger;
-
-            //console.log('before rendering legend')
-
-            proceed.call(this)
-
-            //console.log('after rendering legend')
-        })
-
-
-
         H.wrap(H.Legend.prototype, 'getAllItems', function (proceed) {
-            //console.log('init ran')
-            //debugger;
-
 
             var results = proceed.call(this)
 
-
-
-            var heading = {
-                heading: "Test heading"
-            }
-
-            //results.unshift(heading)
-
-            //results[0].name = "test"
 
             var currentHeading = null
             var headingsToAdd = []
@@ -256,17 +225,6 @@ $this->headScript()->appendFile(
 
 
         H.wrap(H.Legend.prototype, 'renderItem', function (proceed, item) {
-            //console.log('init ran')
-            //debugger;
-
-            //console.log('before renderItem legend')
-
-            //console.log('arguments = ')
-            //console.log(arguments)
-            //var item = Array.prototype.slice.call(arguments, 1)
-
-            //console.log("this is item from the renderItem wrap:")
-            //console.log(item)
 
             if (item.heading) {
                 this.renderLegendSubheading(item, this)
@@ -275,12 +233,6 @@ $this->headScript()->appendFile(
                 proceed.call(this, item)
             }
 
-
-
-            //console.log('after renderItem legend')
-
-
-            //return results
         })
 
 
