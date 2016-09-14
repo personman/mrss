@@ -30,7 +30,7 @@ $this->headScript()->appendFile(
 );*/
 
 $this->headScript()->appendFile(
-    '/js/explore.js?v=5',
+    '/js/explore.js?v=6' . rand(1, 100),
     'text/javascript'
 );
 
@@ -307,6 +307,7 @@ $this->headScript()->appendFile(
 <?php if (!empty($defaultBreakpoints)): ?>
     <script>
         var defaultBreakpoints = <?= json_encode($defaultBreakpoints) ?>;
+        var benchmarksByInputType = <?= json_encode($benchmarksByInputType) ?>;
     </script>
 <?php endif ?>
 

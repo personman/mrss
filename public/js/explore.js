@@ -336,8 +336,10 @@ function displayFilteredSecondBenchmarkSelect(benchmarkSelect)
 {
     var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
     var benchmarkTwoContainer = secondBenchmarkControls.clone();
+    var dbColumn = $('#benchmark2').val()
+    var inputType = benchmarksByInputType[dbColumn]
 
-    benchmarkTwoContainer = filterSecondBenchmarkSelect(benchmarkTwoContainer);
+    benchmarkTwoContainer = filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType);
 
     // Change the label and select name
     benchmarkTwoContainer.attr('id', 'control-group-benchmark2a');
@@ -372,8 +374,21 @@ function cloneBenchmark2()
  * Needs to know the inputTypes of all benchmarks
  * @param benchmarkTwoContainer
  */
-function filterSecondBenchmarkSelect(benchmarkTwoContainer)
+function filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType)
 {
+
+    var benchmarkOneInputType
+    var options = benchmarkTwoContainer.find('select').find('option');
+    //console.log(options.length)
+
+    options.each(function(i, e) {
+        //console.log($(e).val())
+        if (benchmarksByInputType[$(e).val()] != inputType) {
+            $(e).remove()
+        }
+
+    })
+
     return benchmarkTwoContainer;
 }
 

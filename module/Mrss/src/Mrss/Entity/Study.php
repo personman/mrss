@@ -565,6 +565,21 @@ class Study
         return $allBenchmarks;
     }
 
+    public function getBenchmarksByInputType()
+    {
+        $byType = array();
+        foreach ($this->getAllBenchmarks() as $benchmark) {
+            $type = $benchmark->getInputType();
+            /*if (empty($byType[$type])) {
+                $byType[$type] = array();
+            }*/
+
+            $byType[$benchmark->getDbColumn()] = $benchmark->getInputType();
+        }
+
+        return $byType;
+    }
+
     public function getAllBenchmarkKeys()
     {
         $allKeys = array();

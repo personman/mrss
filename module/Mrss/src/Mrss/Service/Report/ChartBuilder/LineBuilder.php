@@ -10,6 +10,7 @@ class LineBuilder extends ChartBuilder
 {
     // The years the college subscribed. Don't show them data if they were not members
     protected $years = array();
+    protected $peerData = array();
 
     public function setYears($years)
     {
@@ -49,8 +50,19 @@ class LineBuilder extends ChartBuilder
         foreach ($dbColumns as $dbColumn) {
             $benchmark = $this->getBenchmark($dbColumn);
             $data = $allData[$dbColumn]['data'];
+
+            // Peer footnote
+            if ($peerIds = $allData[$dbColumn]['peerIds']) {
+                $peerFootnote = $this->getPeerFootnote($peerIds);
+
+                if (!empty($peerFootnote)) {
+                    $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
+                }
+
+            }
             break;
         }
+
 
 
         $xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
@@ -136,16 +148,11 @@ class LineBuilder extends ChartBuilder
     public function getAllData()
     {
         $config = $this->getConfig();
+        $dbColumns = $this->getDbColumns();
 
         $allData = array();
 
-        $dbColumns = array($config['benchmark2']);
-        if (!empty($config['multiTrend'])) {
-            $dbColumns[] = $config['benchmark3'];
-        }
-
         $peerGroupConfig = $config['peerGroup'];
-
         $peerGroupModel = $this->getPeerGroupModel();
         $peerGroup = $peerGroupModel->find($peerGroupConfig);
 
@@ -320,13 +327,7 @@ class LineBuilder extends ChartBuilder
                     $dbColumn,
                     $percentile
                 );
-
-                $peerFootnote = $this->getPeerFootnote($peerIds);
             }
-        }
-
-        if (!empty($peerFootnote)) {
-            $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
         }
 
         $peerMedianData = $this->fillInGaps($peerMedianData);
@@ -404,15 +405,17 @@ class LineBuilder extends ChartBuilder
 
     protected function getPeerMedians($peerGroup, $dbColumn, $breakpoint = 50)
     {
-        $peersData = array();
-
         $years = $this->getYears();
 
+        list($allPeersData, $collegeIds) = $this->getAllPeerData($peerGroup, $years);
+        $peersData = $allPeersData[$dbColumn];
+
+        /*$peersData = array();
         foreach ($years as $year) {
             $peersData[$year] = $this->getPeerData($peerGroup, $dbColumn, $year);
         }
-
         list($peersData, $collegeIds) = $this->makePeerCohort($peersData);
+        */
 
         $peerMedians = array();
         foreach ($years as $year) {
@@ -442,6 +445,51 @@ class LineBuilder extends ChartBuilder
         return array($peerMedians, $collegeIds);
     }
 
+    public function getAllPeerData($peerGroup, $years)
+    {
+        $peersData = array();
+        foreach ($this->getDbColumns() as $dbColumn) {
+            $peersData[$dbColumn] = array();
+            foreach ($years as $year) {
+                $peersData[$dbColumn][$year] = $this->getPeerData($peerGroup, $dbColumn, $year);
+            }
+        }
+
+        // Now make a cohort from all this data. To be included, peers have to submit all data points for all years
+        list($peersData, $collegeIds) = $this->makeCohortForMultiTrend($peersData);
+
+        return array($peersData, $collegeIds);
+    }
+
+    public function makeCohortForMultiTrend($peersData)
+    {
+        $newData = array();
+        $peerIds = array();
+        foreach ($peersData as $dbColumn => $peerData) {
+            //list($data, $peerIds) = $this->makePeerCohort($peerData);
+            //pr($peerIds);
+            //pr(count($peerIds));
+
+            $otherData = $this->getOtherData($peersData, $dbColumn);
+            list($data, $peerIds) = $this->makePeerCohort($peerData, $otherData);
+
+            $newData[$dbColumn] = $data;
+        }
+
+        return array($newData, $peerIds);
+    }
+
+    public function getOtherData($peersData, $columnToNotGet)
+    {
+        $clone = $peersData;
+        unset($clone[$columnToNotGet]);
+
+        foreach ($clone as $dbColumn => $otherData) {
+            //prd($otherData);
+            return $otherData;
+        }
+    }
+
     public function getPeerData($peerGroup, $dbColumn, $year)
     {
         $data = array();
@@ -459,8 +507,10 @@ class LineBuilder extends ChartBuilder
         return $data;
     }
 
-    public function makePeerCohort($peersData)
+    public function makePeerCohort($peersData, $otherData = null)
     {
+        //pr($otherData);
+
         $minPeers = 5;
 
         // Step one: sort the array to start at the most recent year
@@ -479,7 +529,14 @@ class LineBuilder extends ChartBuilder
             $updatedCohort = array();
             foreach ($cohort as $collegeId) {
                 if (isset($yearData[$collegeId])) {
-                    $updatedCohort[] = $collegeId;
+                    //pr($yearData[$collegeId]); pr($otherData[$year][$collegeId]);
+                    //pr($yearData); pr($otherData[$year]);
+
+                    if (empty($otherData) || isset($otherData[$year][$collegeId])) {
+                        $updatedCohort[] = $collegeId;
+                        //pr($year); pr($updatedCohort);
+                    }
+
                 }
             }
 
@@ -493,6 +550,16 @@ class LineBuilder extends ChartBuilder
         }
 
         // Step four: rebuild the data using only the cohort colleges
+        $newPeerData = $this->rebuildDataForCohort($peersData, $cohort, $firstYear);
+
+        // Step five: flip the array back around so it starts with the lowest year
+        ksort($newPeerData);
+
+        return array($newPeerData, $cohort);
+    }
+
+    public function rebuildDataForCohort($peersData, $cohort, $firstYear)
+    {
         $newPeerData = array();
         foreach ($peersData as $year => $yearData) {
             if ($year < $firstYear) {
@@ -507,9 +574,6 @@ class LineBuilder extends ChartBuilder
             $newPeerData[$year] = $newYearData;
         }
 
-        // Step five: flip the array back around so it starts with the lowest year
-        ksort($newPeerData);
-
-        return array($newPeerData, $cohort);
+        return $newPeerData;
     }
 }

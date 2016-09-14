@@ -104,7 +104,8 @@ class ReportItemController extends CustomReportController
             'footnotes' => $footnotes,
             'report' => $report,
             'edit' => $edit,
-            'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy()
+            'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy(),
+            'benchmarksByInputType' => $this->currentStudy()->getBenchmarksByInputType()
         ));
 
         return $viewModel;
