@@ -70,7 +70,14 @@ $this->headScript()->appendFile(
                                     <?= $peerData['label'] ?>
                                 </td>
                                 <td>
-                                    <?= $section['prefix'] ?><?= number_format($peerData['value'], $section['decimal_places']) ?><?= $section['suffix'] ?></td>
+                                    <?php
+                                        $value = $peerData['value'];
+                                        if ($section['isNumber']) {
+                                            $value = number_format($peerData['value'], $section['decimal_places']);
+                                        }
+                                    ?>
+
+                                    <?= $section['suffix'] . $value . $section['prefix'] ?></td>
                                 </td>
 
                                 <td>

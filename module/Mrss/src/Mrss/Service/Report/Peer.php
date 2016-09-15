@@ -115,7 +115,8 @@ class Peer extends Report
                 'data' => $data,
                 'chart' => $this->getPeerBarChart($benchmark, $data),
                 'prefix' => $prefix,
-                'suffix' => $suffix
+                'suffix' => $suffix,
+                'isNumber' => $benchmark->isNumber()
             );
 
             $report['sections'][] = $reportSection;
