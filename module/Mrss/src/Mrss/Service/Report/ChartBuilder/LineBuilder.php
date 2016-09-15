@@ -109,8 +109,6 @@ class LineBuilder extends ChartBuilder
 
             list($data, $medianData, $peerMedians) = $this->fillInGaps($data, $medianData, $peerMedianData);
 
-
-
             $mediansData[$percentile] = $medianData;
             $peerMediansData[$percentile] = $peerMedians;
         }
@@ -118,8 +116,6 @@ class LineBuilder extends ChartBuilder
         if (!empty($peerFootnote)) {
             $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
         }
-
-
 
 
         // Build the series
@@ -192,13 +188,13 @@ class LineBuilder extends ChartBuilder
         $new1 = array();
         $new2 = array();
         foreach ($keys as $key) {
-            if (!empty($array1[$key])) {
+            if (isset($array1[$key])) {
                 $new1[$key] = $array1[$key];
             } else {
                 $new1[$key] = null;
             }
 
-            if (!empty($array2[$key])) {
+            if (isset($array2[$key])) {
                 $new2[$key] = $array2[$key];
             } else {
                 $new2[$key] = null;
