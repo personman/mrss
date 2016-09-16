@@ -171,7 +171,7 @@ class College extends AbstractModel
      * @param $currentCollege
      * @return \Mrss\Entity\College[]
      */
-    public function findByCriteria($criteria, StudyEntity $currentStudy, $currentCollege)
+    public function findByCriteria($criteria, StudyEntity $currentStudy, $currentCollege, $year)
     {
         $em = $this->getEntityManager();
         $builder = $em->createQueryBuilder();
@@ -210,6 +210,10 @@ class College extends AbstractModel
         // Exclude the current college (they can't be their own peer)
         $builder->andWhere('c.id != :current_college_id');
         $builder->setParameter('current_college_id', $currentCollege->getId());
+
+        // Filter by year
+        $builder->andWhere('o.year = :year');
+        $builder->setParameter('year', $year);
 
         // Order
         $builder->orderBy('c.name', 'ASC');

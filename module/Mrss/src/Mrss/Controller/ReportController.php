@@ -1464,7 +1464,7 @@ class ReportController extends AbstractActionController
             );*/
 
             $criteria = $this->getCriteriaFromSession();
-            $colleges = $collegeModel->findByCriteria($criteria, $this->currentStudy(), $this->currentCollege());
+            $colleges = $collegeModel->findByCriteria($criteria, $this->currentStudy(), $this->currentCollege(), $year);
 
 
             // Lou's issue
