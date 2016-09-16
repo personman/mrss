@@ -249,6 +249,16 @@ class Study
         return $this->currentYear;
     }
 
+    public function getLatestReportYear()
+    {
+        $year = $this->getCurrentYear();
+        if (!$this->getReportsOpen()) {
+            $year = $year - 1;
+        }
+
+        return $year;
+    }
+
     public function getCurrentYearMinus($minus)
     {
         $minus = intval($minus);

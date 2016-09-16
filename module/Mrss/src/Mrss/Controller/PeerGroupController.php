@@ -284,7 +284,7 @@ class PeerGroupController extends ReportController
                     $this->currentStudy()
                 );*/
 
-                $year = $this->currentStudy()->getCurrentYear();
+                $year = $this->currentStudy()->getLatestReportYear();
 
                 $colleges = $collegeModel->findByCriteria(
                     $postData,
