@@ -284,7 +284,14 @@ class PeerGroupController extends ReportController
                     $this->currentStudy()
                 );*/
 
-                $colleges = $collegeModel->findByCriteria($postData, $this->currentStudy(), $this->currentCollege());
+                $year = $this->currentStudy()->getCurrentYear();
+
+                $colleges = $collegeModel->findByCriteria(
+                    $postData,
+                    $this->currentStudy(),
+                    $this->currentCollege(),
+                    $year
+                );
 
                 $names = array();
                 foreach ($colleges as $college) {
