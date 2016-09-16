@@ -816,9 +816,9 @@ class ReportController extends AbstractActionController
         }
         rsort($years);
 
-        $s = microtime(1);
+        //$s = microtime(1);
         $defaultBenchmarks = $this->getPeerBenchmarks($years[0], true);
-        $e = microtime(1) - $s;
+        //$e = microtime(1) - $s;
         //prd($e);
 
         $form = new PeerComparison(
@@ -843,9 +843,7 @@ class ReportController extends AbstractActionController
 
                 // Save to db?
                 if ($name = $data['name']) {
-                    $college = $this->currentCollege();
                     $peerGroup->setName($name);
-                    //$peerGroup->setCollege($college);
 
                     $currentUser = $this->zfcUserAuthentication()->getIdentity();
                     $peerGroup->setUser($currentUser);
