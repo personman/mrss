@@ -69,7 +69,7 @@ class ChartBuilder extends Report
         $color = '#9CBF3D';
 
         if ($variation) {
-            $color = '#E9FF8A';
+            $color = '#CFF270';
         }
 
         return $color;

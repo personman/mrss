@@ -15,6 +15,11 @@ $(function() {
     $('#explore').submit(function() {
         return exploreFormSubmit()
     })
+
+    benchmarkChanged()
+    $('#benchmark2').change(function() {
+        benchmarkChanged()
+    })
 });
 
 function setUpSelects()
@@ -54,6 +59,7 @@ function updateFormForChartType()
     var hideNational = $('#control-group-hideNational')
     var previewButton = $('#previewButton')
     var regression = $('#control-group-regression')
+    var percentScaleZoom = $('#control-group-percentScaleZoom')
 
     // Hide all by default
     $('#explore .control-group').hide()
@@ -285,17 +291,20 @@ function placeAddSecondBenchmarkButton(benchmark)
 
 function addSecondBenchmarkButtonClicked(benchmark)
 {
+    // Remove any existing UI for this
+    $('#secondBenchmarkButtonRemove, #control-group-benchmark2a').remove()
+
     displayFilteredSecondBenchmarkSelect(benchmark);
     removeAddSecondBenchmarkButton();
     placeRemoveSecondBenchmarkButton(benchmark);
-    $('#multiTrend').val(true);
+    setMultiTrendHiddenValue(true)
 }
 
-function removeAddSecondBenchmarkButton()
+function setMultiTrendHiddenValue(value)
 {
-    var id = getSecondBenchmarkButtonId();
-    $('#' + id).remove();
+    $('#multiTrend').val(value);
 }
+
 
 function placeRemoveSecondBenchmarkButton(benchmark)
 {
@@ -336,8 +345,7 @@ function displayFilteredSecondBenchmarkSelect(benchmarkSelect)
 {
     var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
     var benchmarkTwoContainer = secondBenchmarkControls.clone();
-    var dbColumn = $('#benchmark2').val()
-    var inputType = benchmarksByInputType[dbColumn]
+    var inputType = getCurrentInputType()
 
     benchmarkTwoContainer = filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType);
 
@@ -363,6 +371,14 @@ function displayFilteredSecondBenchmarkSelect(benchmarkSelect)
 
     benchmarkTwoContainer.find('select').chosen({search_contains: true});
 
+}
+
+function getCurrentInputType()
+{
+    var dbColumn = $('#benchmark2').val()
+    var inputType = benchmarksByInputType[dbColumn]
+
+    return inputType
 }
 
 function cloneBenchmark2()
@@ -392,7 +408,33 @@ function filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType)
     return benchmarkTwoContainer;
 }
 
+function removeAddSecondBenchmarkButton()
+{
+    var id = getSecondBenchmarkButtonId();
+
+    $('#' + id).remove();
+
+    setMultiTrendHiddenValue(false)
+
+    $('#secondBenchmarkButtonRemove').remove()
+}
+
 function getMultiTrendHiddenValue()
 {
     return $('#multiTrend').val() == 'true';
+}
+
+function benchmarkChanged()
+{
+    // If we're in multitrend mode, reset the 2nd benchmark when the 1st changes
+    if (getMultiTrendHiddenValue()) {
+        addSecondBenchmarkButtonClicked($('#control-group-benchmark2'))
+    }
+
+    var percentScale = $('#control-group-percentScaleZoom')
+    if (getCurrentInputType() == 'percent') {
+        percentScale.show()
+    } else {
+        percentScale.hide()
+    }
 }

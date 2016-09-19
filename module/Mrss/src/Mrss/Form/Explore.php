@@ -192,6 +192,22 @@ class Explore extends AbstractForm
         );
 
 
+        $this->add(
+            array(
+                'name' => 'percentScaleZoom',
+                'type' => 'Zend\Form\Element\Checkbox',
+                'options' => array(
+                    'label' => 'Percent Scale Other than 0-100',
+                    'help-block' => 'By default the scale for percentages is 0-100%. ' .
+                        'Check this box to allow the chart to select a scale that shows more detail.'
+                ),
+                'attributes' => array(
+                    'id' => 'percentScaleZoom'
+                )
+            )
+        );
+
+
 
         $this->add($this->getButtons());
     }

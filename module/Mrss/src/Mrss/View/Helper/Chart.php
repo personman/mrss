@@ -129,6 +129,12 @@ class Chart extends AbstractHelper
                 'text/javascript'
             );
 
+            // Our plugin for legend subheadings
+            $this->getView()->headScript()->appendFile(
+                '/js/highcharts-legend-subheadings.js?v=1',
+                'text/javascript'
+            );
+
             $this->getView()->headScript()->appendScript($this->getSetupOptions());
 
 

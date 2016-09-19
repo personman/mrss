@@ -80,7 +80,7 @@ class LineBuilder extends ChartBuilder
             ->setSeries($series);
 
         // Percentages should have the axis as 0-100
-        if ($benchmark->isPercent()) {
+        if ($benchmark->isPercent() && empty($config['percentScaleZoom'])) {
             $chart->setYAxisMax(100);
             $chart->setYAxisMin(0);
         }
@@ -169,7 +169,6 @@ class LineBuilder extends ChartBuilder
 
             // Get the college's reported data
             $data = $this->getDataForCollege($dbColumn);
-
 
             $percentiles = $config['percentiles'];
             //$percentiles = array(50);
@@ -287,9 +286,15 @@ class LineBuilder extends ChartBuilder
                 continue;
             }
 
-            $data[$subscription->getYear()] = floatval($subscription->getObservation()->get($dbColumn));
+            $value = $subscription->getObservation()->get($dbColumn);
+            if ($value !== null) {
+                $value = floatval($value);
+            }
+
+            $data[$subscription->getYear()] = $value;
         }
         ksort($data);
+
 
         $this->setYears(array_keys($data));
         $data = $this->fillInGaps($data);
