@@ -278,7 +278,7 @@ function getDefaultBreakpoints()
 function placeAddSecondBenchmarkButton(benchmark)
 {
     var id = getSecondBenchmarkButtonId();
-    var button = $('<a>', {class: 'btn btn-default', id: id, href: '#', style: 'margin-left: 16px'});
+    var button = $('<a>', {class: 'btn btn-default btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
     button.text('Add a Second Benchmark');
 
     button.click(function() {
@@ -310,7 +310,7 @@ function placeRemoveSecondBenchmarkButton(benchmark)
 {
     var id = getSecondBenchmarkButtonId() + 'Remove';
 
-    var button = $('<a>', {class: 'btn btn-default', id: id, href: '#', style: 'margin-left: 16px'});
+    var button = $('<a>', {class: 'btn btn-default btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
     button.text('Remove Second Benchmark');
 
     button.click(function() {
