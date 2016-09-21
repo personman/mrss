@@ -659,7 +659,8 @@ class ReportController extends AbstractActionController
         $year = $this->getYearFromRouteOrStudy($college);
 
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
-        // Don't show 2015 executive report yet
+
+        // Don't show current executive report yet @todo: use a study setup checkbox for this
         $newSubs = array();
         $yearToSkip = 2016;
         foreach ($subscriptions as $subscription) {
@@ -669,9 +670,8 @@ class ReportController extends AbstractActionController
         }
         $subscriptions = $newSubs;
         if ($year == $yearToSkip) {
-            $year = $year - 1;
+            $year = $newSubs[0]->getYear();
         }
-
 
 
         //$this->view->headTitle('test');
