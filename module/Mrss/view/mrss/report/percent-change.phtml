@@ -1,3 +1,5 @@
+<?= $this->headLink()->appendStylesheet('/css/report.css') ?>
+
 <?php /** @var \Mrss\Entity\PercentChange[] $changes */ ?>
 <?php
 
@@ -22,8 +24,104 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 
 
-<h1>Percent Changes</h1>
+<h1>Percent Change Report</h1>
 
+
+<div class="report">
+
+    <?php foreach ($reportData as $benchmarkGroup): ?>
+        <?php if (stristr($benchmarkGroup['benchmarkGroup'], '|')): ?>
+            <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php elseif (stristr($benchmarkGroup['benchmarkGroup'], ':')): ?>
+            <?php $nameParts = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
+            <?php $formNumber = array_shift($nameParts) ?>
+            <?php $formTitle = implode(': ', $nameParts) ?>
+        <?php endif ?>
+        <h3 class="benchmarkGroupTitle" id="form_<?= $benchmarkGroup['url'] ?>">
+            <span class="small-heading"><?= $formNumber ?></span><br>
+            <?= $formTitle ?>
+            <?php if (!empty($benchmarkGroup['timeframe'])): ?>
+                <span class="timeframe">(<?= $benchmarkGroup['timeframe'] ?>)</span>
+            <?php endif ?>
+
+        </h3>
+
+        <?php if (empty($system)) {
+            $heading = 'National Percentiles';
+
+            if ($this->currentStudy()->getId() == 4) {
+                $heading = 'National Median Percentiles';
+            }
+        } else {
+            $heading = 'System Percentiles';
+        }?>
+
+        <table class="table table-hover table-striped-manual">
+            <thead>
+            <tr class="topHeading">
+                <th></th>
+                <th colspan="3">Your Institution</th>
+            </tr>
+            <tr class="secondHeading">
+                <th></th>
+                <th><?= $year - 1 ?></th>
+                <th><?= $year ?></th>
+                <th>% Change</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
+                <?php if (!empty($benchmark['heading'])): ?>
+                    <tr class="retportSeparator"></tr>
+                    <tr class="reportSubHeading">
+                        <td colspan="10">
+                            <?= $benchmark['name'] ?>
+                        </td>
+                    </tr>
+                    <?php continue ?>
+                <?php endif; ?>
+
+                <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
+                <tr class="<?= $rowClass ?>">
+                    <td class="benchmarkLabel">
+                        <?= $benchmark['benchmark'] ?>
+                        <?php if (!empty($benchmark['timeframe'])): ?>
+                            <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
+                        <?php endif ?>
+                    </td>
+                    <?php if (!empty($benchmark['oldValue']) && $benchmark['oldValue'] !== null): ?>
+                        <td><?= $benchmark['oldValue'] ?></td>
+                        <td>
+                            <?= $benchmark['newValue'] ?>
+                        </td>
+                        <td>
+                            <?= $benchmark['percentChange'] ?>
+                        </td>
+                    <?php else: ?>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    <?php endif ?>
+                </tr>
+
+            <?php endforeach ?>
+            </tbody>
+            <thead>
+            <tr class="spacerRow">
+                <td colspan="9"></td>
+            </tr>
+            </thead>
+        </table>
+        <hr>
+    <?php endforeach ?>
+
+
+</div>
+
+
+
+<? /*
 <p>
     <a href="/reports/percent-changes/<?= date('Y') ?>/excel" class="btn btn-default">
         <span class="glyphicon glyphicon-circle-arrow-down"></span>
@@ -56,3 +154,4 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     <?php endforeach ?>
     </tbody>
 </table>
+*/ ?>

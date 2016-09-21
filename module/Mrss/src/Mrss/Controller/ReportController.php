@@ -314,9 +314,13 @@ class ReportController extends AbstractActionController
             $year = $this->currentStudy()->getCurrentYear();
         }
 
+        $college = $this->currentCollege();
+
         /** @var \Mrss\Model\PercentChange $percentChangeModel */
         $percentChangeModel = $this->getServiceLocator()->get('model.percentchange');
-        $changes = $percentChangeModel->findByYear($year);
+        $changes = $percentChangeModel->findByCollegeAndYear($college, $year);
+
+        $changes = $this->getPercentChangeService()->getReport($changes, $year);
 
         if ($format == 'excel') {
             $this->getPercentChangeService()->download($changes);
@@ -324,7 +328,9 @@ class ReportController extends AbstractActionController
         }
 
         return array(
-            'changes' => $changes
+            'reportData' => $changes,
+            'changes' => $changes,
+            'year' => $year
         );
     }
 
