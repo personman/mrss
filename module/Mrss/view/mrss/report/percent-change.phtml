@@ -1,0 +1,58 @@
+<?php /** @var \Mrss\Entity\PercentChange[] $changes */ ?>
+<?php
+
+// Data Tables
+$this->headScript()->appendFile(
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+<script>
+    $(document).ready(function() {
+        $('#percentChanges').dataTable({
+            "order": [[0, "asc"]],
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
+    });
+</script>
+
+
+
+<h1>Percent Changes</h1>
+
+<p>
+    <a href="/reports/percent-changes/<?= date('Y') ?>/excel" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download
+    </a>
+</p>
+
+
+<table class="table" id="percentChanges">
+    <thead>
+    <tr>
+        <th>Institution</th>
+        <th>Form</th>
+        <th>Benchmark</th>
+        <th>Old Value</th>
+        <th>New Value</th>
+        <th>Percent Difference</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($changes as $change): ?>
+        <tr>
+            <td><?= $change->getCollege()->getNameAndState() ?></td>
+            <td><?= $change->getBenchmark()->getBenchmarkGroup()->getUrl() ?></td>
+            <td><?= $change->getBenchmark()->getDescriptiveReportLabel() ?></td>
+            <td><?= $change->getOldValue() ?></td>
+            <td><?= $change->getValue() ?></td>
+            <td><?= round($change->getPercentChange()) ?>%</td>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
