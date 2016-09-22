@@ -707,6 +707,9 @@ class ReportController extends AbstractActionController
             $media = 'print';
         }
 
+        // Membership count
+        $memberCount = $this->getMemberCount($year);
+
         $view = new ViewModel(
             array(
                 'reportData' => $reportData,
@@ -714,12 +717,20 @@ class ReportController extends AbstractActionController
                 'subscriptions' => $subscriptions,
                 'college' => $college,
                 'open' => $open,
-                'media' => $media
+                'media' => $media,
+                'memberCount' => $memberCount
             )
         );
         $view->setTemplate('mrss/report/executive.phtml');
 
         return $view;
+    }
+
+    public function getMemberCount($year)
+    {
+        $members = $this->currentStudy()->getSubscriptionsForYear($year);
+
+        return count($members);
     }
 
     public function executiveListAction()
