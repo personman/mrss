@@ -639,7 +639,7 @@ class ReportController extends AbstractActionController
 
     public function executiveAction()
     {
-        $open = true;
+        $open = false;
 
         if ($this->params()->fromRoute('open')) {
             $open = true;
@@ -649,6 +649,7 @@ class ReportController extends AbstractActionController
             /** @var \Mrss\Model\college $collegeModel */
             $collegeModel = $this->getServiceLocator()->get('model.college');
             $college = $collegeModel->findOneByIpeds($ipeds);
+            $open = true;
         }
 
         if (empty($college)) {
@@ -661,8 +662,12 @@ class ReportController extends AbstractActionController
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
 
         // Don't show current executive report yet @todo: use a study setup checkbox for this
+        $yearToSkip = null;
+        if (!$open) {
+            $yearToSkip = $this->currentStudy()->getCurrentYear();
+        }
+
         $newSubs = array();
-        $yearToSkip = 2016;
         foreach ($subscriptions as $subscription) {
             if ($subscription->getYear() != $yearToSkip) {
                 $newSubs[] = $subscription;
@@ -672,7 +677,6 @@ class ReportController extends AbstractActionController
         if ($year == $yearToSkip) {
             $year = $newSubs[0]->getYear();
         }
-
 
         //$this->view->headTitle('test');
 

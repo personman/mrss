@@ -15,7 +15,7 @@
 <div id="executiveReport" class="page">
 <?php if (empty($open)): ?>
     <h1>Executive Report</h1>
-    <p>The 2014 Executive Report is not yet available.</p>
+    <p>The <?= $year ?> Executive Report is not yet available.</p>
 <?php else: ?>
     <ul class="nav nav-pills report-nav">
         <?php foreach ($subscriptions as $subscription): ?>
@@ -134,7 +134,7 @@
 
             <p>Your research office will be able to provide additional benchmarks from the research, including peer comparisons.</p>
 
-            <p>A new feature in the NCCBP reports this year is the capability for each institution to design custom reports.  This feature gives access to your institution's trend data for the years it was a member from 2007 to 2015.</p>
+            <p>A new feature in the NCCBP reports this year is the capability for each institution to design custom reports.  This feature gives access to your institution's trend data for the years it was a member from 2007 to <?= $year ?>.</p>
 
             <p class="executiveReportLinkToThisPage">To view reports online, go to <a href="http://nccbp.org/reports">NCCBP.org/reports</a> and log in.</p>
 
