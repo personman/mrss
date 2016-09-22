@@ -20,6 +20,9 @@ class College
     /** @ORM\Column(type="string") */
     protected $name;
 
+    /** @ORM\Column(type="string") */
+    protected $abbreviation;
+
     /**
      * @ORM\Column(type="string")
      */
@@ -147,6 +150,18 @@ class College
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAbbreviation()
+    {
+        return $this->abbreviation;
+    }
+
+    public function setAbbreviation($abbreviation)
+    {
+        $this->abbreviation = $abbreviation;
 
         return $this;
     }
