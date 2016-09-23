@@ -134,7 +134,16 @@ class Executive extends Report
 
             // Set up the categories
             if (empty($chartXCategories)) {
-                foreach ($chartValues as $key => $chartValue) {
+                foreach (array_keys($chartValues) as $key) {
+                    if ($key == $this->yourCollegeLabel) {
+                        $college = $this->getObservation()->getCollege();
+                        if ($abbreviation = $college->getAbbreviation()) {
+                            $key = $abbreviation;
+                        }
+                    }
+
+
+
                     $chartXCategories[] = $key;
                 }
             }
