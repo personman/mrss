@@ -486,4 +486,7 @@ html .form-nav .form-nav-head {
   a.brand {
     height: 70px;
   }
+  ul.nav li a {
+    padding: 10px 8px !important;
+  }
 }
