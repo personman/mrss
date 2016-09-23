@@ -2055,6 +2055,16 @@ return array(
                             )
                         )
                     ),
+
+                    'ob-dat' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/ob-dat',
+                            'defaults' => array(
+                                'action' => 'observationDataMigration',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

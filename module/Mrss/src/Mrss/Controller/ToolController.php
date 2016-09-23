@@ -1393,4 +1393,24 @@ class ToolController extends AbstractActionController
     {
         return $this->getServiceLocator()->get('model.benchmark.group');
     }
+
+    public function observationDataMigrationAction()
+    {
+        takeYourTime();
+        $migrator = $this->getServiceLocator()->get('service.observation.data.migration');
+        //$migrator->copySubscription($this->getCurrentSubscription());
+        $migrator->copyAllSubscriptions();
+
+        die('ok');
+    }
+
+    public function getCurrentSubscription()
+    {
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $study = $this->currentStudy();
+        $college = $this->currentCollege();
+
+        return $subscriptionModel->findCurrentSubscription($study, $college->getId());
+    }
 }

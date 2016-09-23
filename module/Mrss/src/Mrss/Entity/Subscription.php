@@ -46,6 +46,12 @@ class Subscription
     protected $observation;
 
     /**
+     * @ORM\OneToMany(targetEntity="Datum", mappedBy="subscription")
+     * @var Datum[]
+     */
+    protected $data;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $paymentMethod;
@@ -350,6 +356,23 @@ class Subscription
     public function setReportAccess($reportAccess)
     {
         $this->reportAccess = $reportAccess;
+    }
+
+    /**
+     * @return Datum[]
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param Datum[] $data
+     * @return Subscription
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
         return $this;
     }
 
