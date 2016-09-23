@@ -274,6 +274,7 @@ class Executive extends Report
                     'animation' => false,
                     'dataLabels' => array(
                         'overflow' => 'none',
+                        'allowOverlap' => true,
                         'crop' => false
                     )
                 )
