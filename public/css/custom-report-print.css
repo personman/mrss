@@ -18,12 +18,14 @@ a[href]:after {
 }
 
 .reportItems {
-    width: 750px;
+    /*width: 750px;*/
+    width: 1000px;
 }
 
 .complete-chart-box {
     /*width: 400px !important;*/
-    width: 300px !important;
+    /*width: 300px !important;*/
+    width: 420px !important;
 }
 
 .footer {
