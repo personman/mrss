@@ -39,6 +39,19 @@ class College extends Fieldset implements InputFilterProviderInterface
 
         $this->add(
             array(
+                'name' => 'abbreviation',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Abbreviation for Institution'
+                ),
+                'attributes' => array(
+                    'id' => 'institution-abbreviation'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'ipeds',
                 'type' => 'Text',
                 'options' => array(

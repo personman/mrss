@@ -40,7 +40,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             "order": [[1, "asc"]],
             'aoColumnDefs': [
                 // Don't sort on the action column
-                {'bSortable': false, 'aTargets': [6]}
+                {'bSortable': false, 'aTargets': [7]}
             ],
             // show X entries options
             "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
@@ -79,6 +79,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <tr>
             <th>Completion</th>
             <th>Institution</th>
+            <th>Abbreviation</th>
             <th>Users</th>
             <th>Subscription Date</th>
             <th>Payment Method</th>
@@ -104,6 +105,10 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                     ) ?>">
                         <?= $subscription->getCollege()->getNameAndState() ?>
                     </a>
+                </td>
+
+                <td>
+                    <?= $subscription->getCollege()->getAbbreviation() ?>
                 </td>
 
                 <td>

@@ -679,7 +679,7 @@ class ReportController extends AbstractActionController
 
     public function executiveAction()
     {
-        $open = true;
+        $open = false;
 
         if ($this->params()->fromRoute('open')) {
             $open = true;
@@ -689,6 +689,7 @@ class ReportController extends AbstractActionController
             /** @var \Mrss\Model\college $collegeModel */
             $collegeModel = $this->getServiceLocator()->get('model.college');
             $college = $collegeModel->findOneByIpeds($ipeds);
+            $open = true;
         }
 
         if (empty($college)) {
@@ -699,9 +700,14 @@ class ReportController extends AbstractActionController
         $year = $this->getYearFromRouteOrStudy($college);
 
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
-        // Don't show 2015 executive report yet
+
+        // Don't show current executive report yet @todo: use a study setup checkbox for this
+        $yearToSkip = null;
+        if (!$open) {
+            $yearToSkip = $this->currentStudy()->getCurrentYear();
+        }
+
         $newSubs = array();
-        $yearToSkip = 2016;
         foreach ($subscriptions as $subscription) {
             if ($subscription->getYear() != $yearToSkip) {
                 $newSubs[] = $subscription;
@@ -709,10 +715,8 @@ class ReportController extends AbstractActionController
         }
         $subscriptions = $newSubs;
         if ($year == $yearToSkip) {
-            $year = $year - 1;
+            $year = $newSubs[0]->getYear();
         }
-
-
 
         //$this->view->headTitle('test');
 
@@ -743,6 +747,9 @@ class ReportController extends AbstractActionController
             $media = 'print';
         }
 
+        // Membership count
+        $memberCount = $this->getMemberCount($year);
+
         $view = new ViewModel(
             array(
                 'reportData' => $reportData,
@@ -750,12 +757,20 @@ class ReportController extends AbstractActionController
                 'subscriptions' => $subscriptions,
                 'college' => $college,
                 'open' => $open,
-                'media' => $media
+                'media' => $media,
+                'memberCount' => $memberCount
             )
         );
         $view->setTemplate('mrss/report/executive.phtml');
 
         return $view;
+    }
+
+    public function getMemberCount($year)
+    {
+        $members = $this->currentStudy()->getSubscriptionsForYear($year);
+
+        return count($members);
     }
 
     public function executiveListAction()

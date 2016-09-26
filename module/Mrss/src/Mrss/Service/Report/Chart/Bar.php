@@ -12,7 +12,11 @@ class Bar extends AbstractChart
 
         $config['chart']['type'] = 'column';
 
-        $config['plotOptions']['series'] = array('animation' => false);
+        $config['plotOptions']['series'] = array(
+            'animation' => false,
+            //'dataLabels' => array('crop' => false)
+        );
+
         $config['legend'] = array('enabled' => false);
 
         $config['yAxis'] = array(

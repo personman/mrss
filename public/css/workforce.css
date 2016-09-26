@@ -478,12 +478,15 @@ html .form-nav .form-nav-head {
 
 
 
-/* Navbar width */
-@media (max-width: 1090px) {
+/* Navbar width (was 1090) */
+@media (max-width: 1320px) {
   a.brand img {
-    width: 350px !important;
+    width: 300px !important;
   }
   a.brand {
-    height: 66px;
+    height: 70px;
+  }
+  ul.nav li a {
+    padding: 10px 8px !important;
   }
 }
