@@ -95,14 +95,14 @@ NhebiSubscriptions
             $url .= "?year=$year&ipeds=$ipeds";
 
             if ($this->getDebug()) {
-                //var_dump($url);
+                var_dump($url);
             }
 
             $results[$code] = $this->getRemoteResults($url);
         }
 
         if ($this->getDebug()) {
-            //var_dump($results);
+            var_dump($results);
         }
 
         return $results;
