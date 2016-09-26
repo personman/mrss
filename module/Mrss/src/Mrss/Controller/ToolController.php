@@ -1397,9 +1397,11 @@ class ToolController extends AbstractActionController
     public function observationDataMigrationAction()
     {
         takeYourTime();
+        /** @var \Mrss\Service\ObservationDataMigration $migrator */
         $migrator = $this->getServiceLocator()->get('service.observation.data.migration');
         //$migrator->copySubscription($this->getCurrentSubscription());
-        $migrator->copyAllSubscriptions();
+        $count = $migrator->copyAllSubscriptions();
+
 
         die('ok');
     }

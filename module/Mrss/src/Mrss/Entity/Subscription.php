@@ -358,6 +358,32 @@ class Subscription
         $this->reportAccess = $reportAccess;
     }
 
+    public function setValue($dbColumn, $value)
+    {
+        foreach ($this->getData() as $datum)
+        {
+            //pr($datum->getBenchmark()->getDbColumn());
+            if ($datum->getBenchmark()->getDbColumn() == $dbColumn) {
+                $datum->setValue($value);
+                return;
+            }
+        }
+
+    }
+
+    public function getValue($dbColumn)
+    {
+        foreach ($this->getData() as $datum)
+        {
+            //pr($datum->getBenchmark()->getDbColumn());
+            if ($datum->getBenchmark()->getDbColumn() == $dbColumn) {
+                //pr($datum->getValue());
+                //pr($datum->getId());
+                return $datum->getValue();
+            }
+        }
+    }
+
     /**
      * @return Datum[]
      */

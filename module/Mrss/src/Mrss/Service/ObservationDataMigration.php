@@ -23,9 +23,23 @@ class ObservationDataMigration
 
     public function copyAllSubscriptions()
     {
-        foreach ($this->getStudy()->getSubscriptions() as $subscription) {
+        $year = 2016;
+
+        $count = 0;
+        foreach ($this->getStudy()->getSubscriptionsForYear($year) as $subscription) {
+            //echo 'Copying 2016 only';
+            /*if ($subscription->getYear() != 2016) {
+                continue;
+            }*/
+            if ($subscription->getCollege()->getId() != 10) {
+                continue;
+            }
+
             $this->copySubscription($subscription);
+            $count++;
         }
+
+        return $count;
     }
 
     public function copySubscription(Subscription $subscription)
@@ -46,6 +60,12 @@ class ObservationDataMigration
         $datum->setValue($value);
 
         $this->getDatumModel()->save($datum);
+
+        if ($benchmark->getDbColumn() == 'ft_average_no_rank_salary') {
+            pr($observation->get('ft_average_no_rank_salary'));
+            pr($observation->get($benchmark->getDbColumn()));
+            pr($value);
+        }
     }
 
     public function getOrCreateDatum(Subscription $subscription, Benchmark $benchmark)

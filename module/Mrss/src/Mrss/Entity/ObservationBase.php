@@ -89,13 +89,23 @@ class ObservationBase
         return property_exists($this, $benchmark);
     }
 
+    public function get($benchmark)
+    {
+        // Note that this line needs to uncommented when running the migration, then commented back out
+        //return $this->getOld($benchmark);
+
+        $subscriptions = $this->getSubscriptions();
+        $subscription = $subscriptions[0];
+
+        return $subscription->getValue($benchmark);
+    }
 
     /**
      * @param $benchmark
      * @return mixed
      * @throws Exception\InvalidBenchmarkException
      */
-    public function get($benchmark)
+    public function getOld($benchmark)
     {
         if (!$this->has($benchmark)) {
             throw new Exception\InvalidBenchmarkException(
