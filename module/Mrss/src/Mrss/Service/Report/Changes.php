@@ -100,6 +100,7 @@ class Changes extends Report
         $report = array();
 
         $study = $this->getStudy();
+        $dbColumns = $this->getIncludedDbColumns();
 
         $benchmarkGroups = $study->getBenchmarkGroups();
         foreach ($benchmarkGroups as $benchmarkGroup) {
@@ -109,7 +110,7 @@ class Changes extends Report
                 'url' => $benchmarkGroup->getUrl(),
                 'benchmarks' => array()
             );
-            $benchmarks = $benchmarkGroup->getChildren($year, true, 'report', 'report');
+            $benchmarks = $benchmarkGroup->getChildren($year, true, 'report', $dbColumns);
 
             foreach ($benchmarks as $benchmark) {
                 if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
@@ -122,6 +123,11 @@ class Changes extends Report
                     );
                     continue;
                 }
+
+                // Skip benchmark if it's not in the included list
+                /*if (!in_array($benchmark->getDbColumn(), $dbColumns)) {
+                    continue;
+                }*/
 
                 /** @var \Mrss\Entity\BenchmarkHeading $benchmark */
                 /*if ($this->isBenchmarkExcludeFromReport($benchmark)) {
@@ -139,10 +145,45 @@ class Changes extends Report
                 $groupData['benchmarks'][] = $benchmarkData;
             }
 
-            $report[] = $groupData;
+            if (!empty($groupData['benchmarks'])) {
+                $report[] = $groupData;
+            }
+
         }
 
         return $report;
+    }
+
+    public function getIncludedDbColumns()
+    {
+        return array(
+            'ft_cr_head',
+            'tuition_fees',
+            'ft_minus4_perc_completed',
+            'pt_minus4_perc_completed',
+            'ft_perc_transf',
+            'pt_perc_transf',
+            'ft_minus4_perc_comp_and_transf',
+            'pt_minus4_perc_comp_and_transf',
+            'ft_minus7_perc_completed',
+            'pt_minus7_perc_completed',
+            'percminus7_transf',
+            'pt_percminus7_tran',
+            'ft_minus7_perc_comp_and_transf',
+            'pt_minus7_perc_comp_and_transf',
+            'cst_crh',
+            'cst_fte_stud'
+        );
+    }
+
+    public function isBenchmarkGroupEmpty($groupData)
+    {
+        $empty = true;
+        foreach ($groupData['benchmarks'] as $benchmark) {
+            if (empty($benchmark['heading'])) {
+                $empty = false;
+            }
+        }
     }
 
     public function prepareChanges($changes)
