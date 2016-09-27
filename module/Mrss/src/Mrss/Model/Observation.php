@@ -68,6 +68,18 @@ class Observation extends AbstractModel
     }
 
     /**
+     * @return ObservationEntity
+     */
+    public function findOneUnMigrated()
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+                'migrated' => false
+            )
+        );
+    }
+
+    /**
      * Return all observations belonging to a subscription for the given year
      * and study.
      *

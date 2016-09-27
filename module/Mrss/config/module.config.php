@@ -1827,7 +1827,16 @@ return array(
                                 'action' => 'equations'
                             )
                         )
-                    )
+                    ),
+                    'clean-up' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/clean-up',
+                            'defaults' => array(
+                                'action' => 'cleanUp',
+                            )
+                        )
+                    ),
                 )
             ),
             'tools' => array(
@@ -2055,7 +2064,6 @@ return array(
                             )
                         )
                     ),
-
                     'ob-dat' => array(
                         'type' => 'segment',
                         'options' => array(

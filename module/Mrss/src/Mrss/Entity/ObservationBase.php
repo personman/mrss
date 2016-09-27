@@ -6,6 +6,17 @@ class ObservationBase
 {
 
 
+    public function setMigrated($migrated)
+    {
+        $this->migrated = $migrated;
+
+        return $this;
+    }
+
+    public function getMigrated()
+    {
+        return $this->migrated;
+    }
 
     public function getYear()
     {
@@ -92,7 +103,7 @@ class ObservationBase
     public function get($benchmark)
     {
         // Note that this line needs to uncommented when running the migration, then commented back out
-        //return $this->getOld($benchmark);
+        return $this->getOld($benchmark);
 
         $subscriptions = $this->getSubscriptions();
         $subscription = $subscriptions[0];

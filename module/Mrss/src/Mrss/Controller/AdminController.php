@@ -138,7 +138,7 @@ class AdminController extends AbstractActionController
         /** @var \Mrss\Service\ObservationGenerator $generator */
         $generator = $this->getServiceLocator()->get('service.generator');
 
-        $generator->generate();
+        $generator->generate(true);
 
         $stats = $generator->getStats();
 
@@ -209,5 +209,12 @@ class AdminController extends AbstractActionController
 
             $this->flashMessenger()->addSuccessMessage('Email sent to ' . $toEmail);
         }
+    }
+
+    public function cleanUpAction()
+    {
+        $study = $this->currentStudy();
+
+
     }
 }

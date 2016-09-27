@@ -23,9 +23,9 @@ class ObservationGenerator
         'errors' => array()
     );
 
-    public function generate()
+    public function generate($force = false)
     {
-        if ($this->observationEntityNeedsUpdate()) {
+        if ($force || $this->observationEntityNeedsUpdate()) {
             $code = $this->getObservationCode();
             $this->writeCodeToObservation($code);
         }
@@ -177,14 +177,14 @@ class ObservationGenerator
         ));
         $baseProperties[] = $pg;
 
-        // Cip Code
+        // Migrated
         $pg = PropertyGenerator::fromArray(array(
-            'name' => 'cipCode',
+            'name' => 'migrated',
             'flags' => array(PropertyGenerator::FLAG_PROTECTED),
             'docblock' => array(
                 'tags' => array(
                     array(
-                        'name' => 'ORM\Column(type="float")',
+                        'name' => 'ORM\Column(type="boolean")',
                     )
                 )
             ),

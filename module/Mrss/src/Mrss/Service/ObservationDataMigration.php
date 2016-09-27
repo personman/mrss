@@ -51,6 +51,16 @@ class ObservationDataMigration
         $this->getDatumModel()->getEntityManager()->flush();
     }
 
+    public function copyObservation(Observation $observation)
+    {
+        $subs = $observation->getSubscriptions();
+
+        if ($sub = $subs[0]) {
+            $this->copySubscription($sub);
+            return true;
+        }
+    }
+
     public function copySubscriptionBenchmark(Subscription $subscription, Benchmark $benchmark)
     {
         $observation = $subscription->getObservation();
@@ -61,11 +71,11 @@ class ObservationDataMigration
 
         $this->getDatumModel()->save($datum);
 
-        if ($benchmark->getDbColumn() == 'ft_average_no_rank_salary') {
+        /*if ($benchmark->getDbColumn() == 'ft_average_no_rank_salary') {
             pr($observation->get('ft_average_no_rank_salary'));
             pr($observation->get($benchmark->getDbColumn()));
             pr($value);
-        }
+        }*/
     }
 
     public function getOrCreateDatum(Subscription $subscription, Benchmark $benchmark)
