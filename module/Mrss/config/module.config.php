@@ -973,6 +973,17 @@ return array(
                             )
                         )
                     ),
+                    'percent-change' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/percent-change[/:year][/:format]',
+                            'defaults' => array(
+                                'action' => 'percentChange',
+                                'year' => null,
+                                'format' => 'html'
+                            )
+                        )
+                    ),
                     'calculate-outlier' => array(
                         'type' => 'segment',
                         'options' => array(

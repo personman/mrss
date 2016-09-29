@@ -665,6 +665,10 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
                 continue;
             }
 
+            if (is_array($filterBy) && !in_array($benchmark->getDbColumn(), $filterBy)) {
+                continue;
+            }
+
             if ($organization == 'report') {
                 $sequence = $benchmark->getReportSequence();
             } else {
