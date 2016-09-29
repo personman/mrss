@@ -307,7 +307,7 @@ function workforceUpdateRevenueTotal()
 function workforceGetRevenueSelector()
 {
     var selectors = [];
-    var fields = ['controls-revenue_federal', 'controls-revenue_state', 'controls-revenue_local', 'controls-revenue_grants', 'controls-revenue_earned_revenue'];
+    var fields = ['controls-revenue_federal', 'controls-revenue_state', 'controls-revenue_local', 'controls-revenue_grants', 'controls-revenue_earned_revenue', 'control-group-revenue_earned_ct'];
     for (var i in fields) {
         var field = fields[i];
 
@@ -499,7 +499,7 @@ function updateSalaryTotals()
             }
 
             if (id == 'current_professor') {
-                console.log(converted)
+                //console.log(converted)
             }
 
             sum += Number(converted);
