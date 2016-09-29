@@ -714,8 +714,13 @@ class ReportController extends AbstractActionController
             }
         }
         $subscriptions = $newSubs;
+
         if ($year == $yearToSkip) {
             $year = $newSubs[0]->getYear();
+        }
+
+        if ($year != $yearToSkip) {
+            $open = true;
         }
 
         //$this->view->headTitle('test');
