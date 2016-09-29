@@ -309,7 +309,14 @@ return array(
                 ),
                 array(
                     'controller' => 'reports',
-                    'action' => array('emailOutliers', 'explore', 'calculate', 'executiveList', 'compute'),
+                    'action' => array(
+                        'emailOutliers',
+                        'explore',
+                        'calculate',
+                        'executiveList',
+                        'compute',
+                        'percentChanges'
+                    ),
                     'roles' => array('admin')
                 ),
                 array(
