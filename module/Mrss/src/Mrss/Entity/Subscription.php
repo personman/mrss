@@ -2,7 +2,9 @@
 
 namespace Mrss\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 use Mrss\Entity\College;
 use Mrss\Entity\Study;
 
@@ -152,6 +154,11 @@ class Subscription
      */
     protected $paidNotes;
 
+
+    public function __construct()
+    {
+        $this->data = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -377,11 +384,28 @@ class Subscription
         {
             //pr($datum->getBenchmark()->getDbColumn());
             if ($datum->getBenchmark()->getDbColumn() == $dbColumn) {
-                //pr($datum->getValue());
-                //pr($datum->getId());
                 return $datum->getValue();
             }
         }
+    }
+
+    public function getDatum($benchmark)
+    {
+        $data = $this->getData();
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('benchmark', $benchmark));
+
+        $data = $data->matching($criteria);
+
+        // We just want one
+        if ($data->count() > 0) {
+            $datum = $data->first();
+        } else {
+            $datum = null;
+        }
+
+        return $datum;
     }
 
     /**
