@@ -13,6 +13,7 @@ use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
 use PHPExcel_Cell;
+use PHPExcel_Shared_Date;
 
 class Excel
 {
@@ -498,13 +499,22 @@ class Excel
             $sheet = $excel->getSheetByName($sheetName);
 
             foreach ($sheetInfo['positions'] as $dbColumn => $coordinates) {
-                $value = $sheet->getCell($coordinates)->getValue();
+                $cell = $sheet->getCell($coordinates);
+
+                // Is it a date?
+                if (PHPExcel_Shared_Date::isDateTime($sheet->getCell($coordinates))) {
+                    $value = $cell->getFormattedValue();
+                } else {
+                    $value = $cell->getValue();
+                }
+
                 $value = trim($value);
                 if ($value === '') {
                     $value = null;
                 }
 
                 $data[$dbColumn] = $value;
+
             }
         }
 
