@@ -22,6 +22,19 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     });
 </script>
 
+<style>
+    td.benchmarkLabel {
+        width: 58%
+    }
+
+    td.pc-old, td.pc-new {
+        width: 14%;
+    }
+
+    td.pc-change {
+        width: 14%;
+    }
+</style>
 
 
 <h1>Percent Change Report</h1>
@@ -91,17 +104,17 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                         <?php endif ?>
                     </td>
                     <?php if (!empty($benchmark['oldValue']) && $benchmark['oldValue'] !== null): ?>
-                        <td><?= $benchmark['oldValue'] ?></td>
-                        <td>
+                        <td class="pc-old"><?= $benchmark['oldValue'] ?></td>
+                        <td class="pc-new">
                             <?= $benchmark['newValue'] ?>
                         </td>
-                        <td>
+                        <td class="pc-change">
                             <?= $benchmark['percentChange'] ?>
                         </td>
                     <?php else: ?>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
+                        <td class="pc-old">-</td>
+                        <td class="pc-new">-</td>
+                        <td class="pc-change">-</td>
                     <?php endif ?>
                 </tr>
 
