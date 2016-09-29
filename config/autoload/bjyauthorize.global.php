@@ -121,7 +121,7 @@ return array(
                 ),
                 array(
                     'controller' => 'reports',
-                    'action' => 'executiveprint',
+                    'action' => array('executiveprint'),
 
                     'roles' => array('guest')
                 ),
@@ -145,6 +145,32 @@ return array(
                 // Report viewers:
                 array(
                     'controller' => 'reports',
+                    'action' => array(
+                        'national',
+                        'percentChange',
+                        'outlier',
+                        'summary',
+                        'executive',
+                        'executivePrint',
+                        'peer',
+                        'peerResults',
+                        'deletePeerGroup',
+                        'peerdemographic',
+                        'bestPerformers',
+                        'bestPerformersResult',
+                        'strengths',
+                        'peerBenchmarks',
+                        'peerColleges',
+                        // These are Max/MRSS specific:
+                        'institutional',
+                        'instructional',
+                        'institutionalCosts',
+                        'instructionalCosts',
+                        'unitCosts',
+                        'unitDemographics',
+                        'studentServicesCosts',
+                        'academicSupport',
+                    ),
                     'roles' => array('viewer')
                 ),
                 array(
@@ -309,14 +335,6 @@ return array(
                 ),
                 array(
                     'controller' => 'reports',
-                    'action' => array(
-                        'emailOutliers',
-                        'explore',
-                        'calculate',
-                        'executiveList',
-                        'compute',
-                        'percentChanges'
-                    ),
                     'roles' => array('admin')
                 ),
                 array(
