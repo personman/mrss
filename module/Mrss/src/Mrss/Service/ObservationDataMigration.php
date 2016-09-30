@@ -86,6 +86,7 @@ class ObservationDataMigration
             $datum = new Datum;
             $datum->setBenchmark($benchmark);
             $datum->setSubscription($subscription);
+            $datum->setDbColumn($benchmark->getDbColumn());
         }
 
         return $datum;

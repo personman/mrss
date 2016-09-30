@@ -43,6 +43,11 @@ class Datum
     protected $stringValue;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $dbColumn;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -169,5 +174,23 @@ class Datum
         }
 
         return $usesString;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDbColumn()
+    {
+        return $this->dbColumn;
+    }
+
+    /**
+     * @param mixed $dbColumn
+     * @return Datum
+     */
+    public function setDbColumn($dbColumn)
+    {
+        $this->dbColumn = $dbColumn;
+        return $this;
     }
 }

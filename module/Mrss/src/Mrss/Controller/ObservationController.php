@@ -1098,6 +1098,39 @@ class ObservationController extends AbstractActionController
 
     public function submittedValuesAction()
     {
+        // Test stuff
+        $dbColumn = 'ft_average_no_rank_salary';
+
+        /** @var \Mrss\Model\Benchmark $model */
+        $model = $this->getServiceLocator()->get('model.benchmark');
+        $benchmark = $model->findOneByDbColumn($dbColumn);
+
+        /** @var \Mrss\Entity\Subscription $subscription */
+        $subscription = $this->currentCollege()->getSubscriptionByStudyAndYear($this->currentStudy()->getId(), 2016);
+
+        pr($subscription->getCollege()->getNameAndState());
+
+
+        $start = microtime(true);
+        pr($subscription->getDatum($benchmark)->getValue());
+        pr(microtime(true) - $start);
+
+        $start = microtime(true);
+        pr($subscription->getDatum($dbColumn)->getValue());
+        pr(microtime(true) - $start);
+
+        $start = microtime(true);
+        pr($subscription->getValue($dbColumn));
+        pr(microtime(true) - $start);
+
+
+
+        prd($benchmark->getName());
+
+
+
+
+
         $year = $this->getYearFromRouteOrStudy(false);
         $format = $this->params()->fromRoute('format', 'html');
 

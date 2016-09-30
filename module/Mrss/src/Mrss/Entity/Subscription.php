@@ -380,21 +380,38 @@ class Subscription
 
     public function getValue($dbColumn)
     {
-        foreach ($this->getData() as $datum)
+        $value = null;
+        if ($datum = $this->getDatum($dbColumn)) {
+            $value = $datum->getValue();
+        }
+
+        /*foreach ($this->getData() as $datum)
         {
             //pr($datum->getBenchmark()->getDbColumn());
             if ($datum->getBenchmark()->getDbColumn() == $dbColumn) {
                 return $datum->getValue();
             }
-        }
+        }*/
+
+        return $value;
     }
 
+    /**
+     * @param $benchmark
+     * @return Datum
+     */
     public function getDatum($benchmark)
     {
         $data = $this->getData();
 
+        if (is_object($benchmark)) {
+            $field = 'benchmark';
+        } else {
+            $field = 'dbColumn';
+        }
+
         $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('benchmark', $benchmark));
+            ->where(Criteria::expr()->eq($field, $benchmark));
 
         $data = $data->matching($criteria);
 
