@@ -396,8 +396,19 @@ class Subscription
         return $value;
     }
 
+    public function hasValue($benchmark)
+    {
+        $has = false;
+        if ($this->getDatum($benchmark)) {
+            $has = true;
+        }
+
+        return $has;
+    }
+
     /**
-     * @param $benchmark
+     * Get the data value for one benchmark for this subscription
+     * @param mixed $benchmark Can be a dbColumn string or a benchmark object
      * @return Datum
      */
     public function getDatum($benchmark)

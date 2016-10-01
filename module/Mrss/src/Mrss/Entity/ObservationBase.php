@@ -97,18 +97,30 @@ class ObservationBase
 
     public function has($benchmark)
     {
+        return $this->getSubscription()->getDatum($benchmark);
+    }
+
+    public function hasOld($benchmark)
+    {
         return property_exists($this, $benchmark);
     }
 
     public function get($benchmark)
     {
         // Note that this line needs to uncommented when running the migration, then commented back out
-        return $this->getOld($benchmark);
+        //return $this->getOld($benchmark);
 
+        $subscription = $this->getSubscription();
+
+        return $subscription->getValue($benchmark);
+    }
+
+    protected function getSubscription()
+    {
         $subscriptions = $this->getSubscriptions();
         $subscription = $subscriptions[0];
 
-        return $subscription->getValue($benchmark);
+        return $subscription;
     }
 
     /**

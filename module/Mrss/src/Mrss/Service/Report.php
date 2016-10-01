@@ -208,6 +208,8 @@ class Report
         $dbColumn = $benchmark->getDbColumn();
         $ob = new Observation;
         if ($ob->has($dbColumn)) {
+
+            // We no longer need the observation here
             $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
                 $this->getStudy(),
                 $year,
@@ -235,11 +237,10 @@ class Report
             }
 
             /** @var /Mrss/Entity/Observation $observation */
-            if ($observation = $subscription->getObservation()) {
-                $dbColumn = $benchmark->getDbColumn();
+            if (true) {
 
                 try {
-                    $value = $observation->get($dbColumn);
+                    $value = $subscription->getValue($benchmark);
                 } catch (\Exception $e) {
                     $value = null;
                 }

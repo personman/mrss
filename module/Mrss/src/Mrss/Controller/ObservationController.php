@@ -1096,9 +1096,8 @@ class ObservationController extends AbstractActionController
         return $year;
     }
 
-    public function submittedValuesAction()
+    public function test2()
     {
-        // Test stuff
         $dbColumn = 'ft_average_no_rank_salary';
 
         /** @var \Mrss\Model\Benchmark $model */
@@ -1126,6 +1125,56 @@ class ObservationController extends AbstractActionController
 
 
         prd($benchmark->getName());
+    }
+
+    public function test()
+    {
+        // Test stuff
+        /** @var \Mrss\Model\Subscription $subModel */
+        $subModel = $this->getServiceLocator()->get('model.subscription');
+
+        $dbColumns = array('ft_average_professor_salary', 'ft_average_male_professor_salary');
+        $excludeOutliers = true;
+        $notNull = true;
+        $benchmarkGroupIds = array();
+        $system = null;
+
+        $start = microtime(1);
+        $subscriptions = $subModel->findWithPartialObservations(
+            $this->currentStudy(),
+            2016,
+            $dbColumns,
+            $excludeOutliers,
+            $notNull,
+            $benchmarkGroupIds,
+            $system
+        );
+
+        $seconds = round(microtime(1) - $start, 5);
+        pr($seconds);
+
+
+        foreach ($subscriptions as $sub) {
+            pr($sub->getCollege()->getNameAndState());
+            pr($sub->getObservation()->getId());
+            foreach ($dbColumns as $dbColumn) {
+                echo $dbColumn;
+                pr($sub->getValue($dbColumn));
+            }
+        }
+
+        $seconds = round(microtime(1) - $start, 5);
+        pr($seconds);
+
+        die(' test');
+    }
+
+    public function submittedValuesAction()
+    {
+        return $this->test();
+
+
+
 
 
 
