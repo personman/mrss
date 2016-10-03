@@ -107,15 +107,12 @@ class ObservationBase
 
     public function get($benchmark)
     {
-        // Note that this line needs to uncommented when running the migration, then commented back out
-        //return $this->getOld($benchmark);
-
         $subscription = $this->getSubscription();
 
         return $subscription->getValue($benchmark);
     }
 
-    protected function getSubscription()
+    public function getSubscription()
     {
         $subscriptions = $this->getSubscriptions();
         $subscription = $subscriptions[0];
@@ -141,7 +138,9 @@ class ObservationBase
 
     public function set($benchmark, $value)
     {
-        if (!property_exists($this, $benchmark)) {
+        $this->getSubscription()->setValue($benchmark, $value);
+
+        /*if (!property_exists($this, $benchmark)) {
             throw new Exception\InvalidBenchmarkException(
                 "'$benchmark' is not a valid benchmark."
             );
@@ -159,17 +158,23 @@ class ObservationBase
 
         $this->$benchmark = $value;
 
-        return $this;
+        return $this;*/
     }
 
     public function getArrayCopy()
     {
-        $arrayCopy = array();
+        /*$arrayCopy = array();
         foreach ($this as $key => $value) {
             $arrayCopy[$key] = $value;
         }
 
-        return $arrayCopy;
+        return $arrayCopy;*/
+
+        //die('getArrayCopy');
+        //pr($this->getSubscription()->getValue('institution_conversion_factor'));
+
+        //prd($this->getAllValues());
+        return $this->getAllValues();
     }
 
     /**
@@ -179,11 +184,13 @@ class ObservationBase
      */
     public function populate($observationArray)
     {
-        foreach ($observationArray as $key => $value) {
+        return $this->getSubscription()->setValues($observationArray);
+
+        /*foreach ($observationArray as $key => $value) {
             if ($this->has($key)) {
                 $this->set($key, $value);
             }
-        }
+        }*/
     }
 
     public function getAllBenchmarks()
@@ -309,6 +316,14 @@ class ObservationBase
 
     public function getAllProperties()
     {
-        return get_object_vars($this);
+        //return get_object_vars($this);
+        $data = $this->getAllValues();
+
+        return array_keys($data);
+    }
+
+    public function getAllValues()
+    {
+        return $this->getSubscription()->getAllData();
     }
 }

@@ -379,8 +379,13 @@ class ObservationController extends AbstractActionController
 
         }
 
+        // Phasing out observation for subscripton
+        $subscription = $observation->getSubscription();
+
+        $oldData = $subscription->getAllData();
+
         // Clone the unedited observation for comparison
-        $oldObservation = clone $observation;
+        //$oldObservation = clone $observation;
 
         /** @var \Mrss\Service\FormBuilder $formService */
         $formService = $this->getServiceLocator()
@@ -446,8 +451,21 @@ class ObservationController extends AbstractActionController
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
 
-                $changeSet = $this->getServiceLocator()->get('service.observationAudit')
-                    ->logChanges($oldObservation, $observation, 'dataEntry');
+                //$changeSet = $this->getServiceLocator()->get('service.observationAudit')
+                //    ->logChanges($oldObservation, $observation, 'dataEntry');
+
+                $newData = $subscription->getAllData();
+
+                //pr($newData);
+                //pr($newData['institution_conversion_factor']);
+                //pr($subscription->getValue('institution_conversion_factor'));
+                //pr($subscription->getId());
+
+                /** @var \Mrss\Service\ObservationAudit $observationAudit */
+                $observationAudit = $this->getServiceLocator()->get('service.observationAudit');
+                $changeSet = $observationAudit
+                    ->logChangesNew($oldData, $newData, 'dataEntry', $subscription);
+
 
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
@@ -785,10 +803,14 @@ class ObservationController extends AbstractActionController
                     // Is the data in the Excel file valid?
                     if ($inputFilter->isValid()) {
                         // Now we actually save the data to the observation
+                        // @todo: phasing out observation, plus ipeds could be generic instead
                         $observation = $this->getCurrentObservationByIpeds($ipeds);
+
+                        $subscription = $observation->getSubscription();
 
                         // Clone for logging
                         $oldObservation = clone $observation;
+                        $oldData = $subscription->getAllData();
 
                         // Handle any subobservations
                         if (!empty($data['subobservations'])) {
@@ -852,8 +874,14 @@ class ObservationController extends AbstractActionController
                 }
 
                 // Log any changes
-                $changeSet = $this->getServiceLocator()->get('service.observationAudit')
-                    ->logChanges($oldObservation, $observation, 'excel');
+                $this->getServiceLocator()->get('em')->flush();
+
+                $newData = $subscription->getAllData();
+
+                /** @var \Mrss\Service\ObservationAudit $observationAudit */
+                $observationAudit = $this->getServiceLocator()->get('service.observationAudit');
+                $changeSet = $observationAudit
+                    ->logChangesNew($oldData, $newData, 'excel', $subscription);
 
                 // Validate against validation rule class
                 $validationService = $this->getServiceLocator()->get('service.validation');

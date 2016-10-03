@@ -375,7 +375,6 @@ class Subscription
                 return;
             }
         }
-
     }
 
     public function getValue($dbColumn)
@@ -434,6 +433,29 @@ class Subscription
         }
 
         return $datum;
+    }
+
+    /**
+     * Return an associative array with dbColumn => value.
+     * Used to log changes
+     *
+     */
+    public function getAllData()
+    {
+        $data = array();
+        foreach ($this->getDAta() as $datum) {
+            $data[$datum->getBenchmark()->getDbColumn()] = $datum->getValue();
+        }
+
+        return $data;
+    }
+
+    public function setValues($data)
+    {
+        foreach ($data as $dbColumn => $value)
+        {
+            $this->setValue($dbColumn, $value);
+        }
     }
 
     /**

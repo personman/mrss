@@ -68,6 +68,36 @@ class ObservationAudit
     }
 
     /**
+     *
+     * @param $oldData
+     * @param $newData
+     * @param $editType
+     * @param $subscription
+     * @return ChangeSet|null
+     */
+    public function logChangesNew(
+        $oldData,
+        $newData,
+        $editType,
+        $subscription
+    ) {
+        // Were there any changes?
+        $changes = $this->compareNew($oldData, $newData);
+
+        $changeSet = null;
+        if (!empty($changes)) {
+            $changeSet = $this->getChangeSetEntity($changes);
+            $changeSet->setSubScription($subscription);
+            $changeSet->setObservation($subscription->getObservation());
+            $changeSet->setEditType($editType);
+
+            $this->getChangeSetModel()->save($changeSet);
+        }
+
+        return $changeSet;
+    }
+
+    /**
      * Compare two subObservations and log any changes to the database
      *
      * @param SubObservation $old
@@ -175,6 +205,33 @@ class ObservationAudit
 
             if ($oldValue != $newValue) {
                 $changes[$benchmark] = array(
+                    'old' => $oldValue,
+                    'new' => $newValue
+                );
+            }
+        }
+
+        return $changes;
+    }
+
+
+    public function compareNew($old, $new)
+    {
+        // Do some rounding
+        $precision = 5;
+
+        $changes = array();
+
+        foreach ($new as $dbColumn => $newValue) {
+            $oldValue = $old[$dbColumn];
+
+            if (is_numeric($newValue) && is_numeric($oldValue)) {
+                $newValue = round($newValue, $precision);
+                $oldValue = round($oldValue, $precision);
+            }
+
+            if ($oldValue != $newValue) {
+                $changes[$dbColumn] = array(
                     'old' => $oldValue,
                     'new' => $newValue
                 );

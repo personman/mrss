@@ -66,7 +66,7 @@ class ObservationDataMigration
         $observation = $subscription->getObservation();
 
         $datum = $this->getOrCreateDatum($subscription, $benchmark);
-        $value = $observation->get($benchmark->getDbColumn());
+        $value = $observation->getOld($benchmark->getDbColumn());
         $datum->setValue($value);
 
         $this->getDatumModel()->save($datum);

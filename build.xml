@@ -119,6 +119,16 @@
               passthru="true" />
     </target>
 
+    <target name="migrations:diff" depends="clear-caches">
+        <echo message="Running database migration diff." />
+        <exec command="./bin/doctrine-module migrations:diff"
+              passthru="true" />
+    </target>
+
+    <target name="mdiff" depends="migrations:diff">
+
+    </target>
+
     <target name="test-db" description="Create the test db and write the credentials to a config file.">
         <!-- These is the credentials for the db we're about to create -->
         <property name="db.name" value="mrss_test" />
