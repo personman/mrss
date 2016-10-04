@@ -138,7 +138,8 @@ class AdminController extends AbstractActionController
         /** @var \Mrss\Service\ObservationGenerator $generator */
         $generator = $this->getServiceLocator()->get('service.generator');
 
-        $generator->generate(true);
+        //$generator->generate(true);
+        $generator->stripObservation();
 
         $stats = $generator->getStats();
 

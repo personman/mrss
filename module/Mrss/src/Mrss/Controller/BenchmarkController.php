@@ -131,7 +131,7 @@ class BenchmarkController extends AbstractActionController
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
-                $extraMessage = $this->generateObservation();
+                $extraMessage = ''; //$this->generateObservation();
 
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
                 return $this->redirect()->toRoute(
@@ -180,7 +180,7 @@ class BenchmarkController extends AbstractActionController
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
-                $extraMessage = $this->generateObservation();
+                $extraMessage = ''; //$this->generateObservation();
 
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
 
