@@ -1822,10 +1822,21 @@ return array(
                     'check-migration' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/check-migration',
+                            'route' => '/check-migration[/:minId]',
                             'defaults' => array(
                                 'controller' => 'Admin',
-                                'action' => 'checkMigration'
+                                'action' => 'checkMigration',
+                                'minId' => 0
+                            )
+                        )
+                    ),
+                    'test-filter' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/test-filter',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'testFilter'
                             )
                         )
                     ),

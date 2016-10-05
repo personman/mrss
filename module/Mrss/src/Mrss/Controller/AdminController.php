@@ -156,10 +156,12 @@ class AdminController extends AbstractActionController
     {
         takeYourTime();
 
+        $minId = $this->params()->fromRoute('minId');
+
         /** @var \Mrss\Service\ObservationDataMigration $migrator */
         $migrator = $this->getServiceLocator()->get('service.observation.data.migration');
 
-        $migrator->check();
+        $migrator->check($minId);
     }
 
     protected function getYear()
@@ -170,6 +172,53 @@ class AdminController extends AbstractActionController
         }
 
         return $year;
+    }
+
+    public function testFilterAction()
+    {
+        $criteria = array(
+            'institution_control' => array('Public'),
+            'ft_average_instructor_salary' => '6000 - 50000',
+            //'ft_male_faculty_number_9_month' => '1 - 10000',
+            //'ft_female_faculty_number_9_month' => '1 - 10000',
+            'states' => array('MO')
+        );
+
+        $year = 2016;
+        $study = $this->currentStudy();
+
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+
+        $start = microtime(1);
+        $colleges = $collegeModel->findByCriteria(
+            $criteria,
+            $study,
+            $this->currentCollege(),
+            $year
+        );
+
+        $elapsed = round(microtime(1) - $start, 3);
+        pr($elapsed);
+
+        echo 'Count: ';
+        pr(count($colleges));
+
+        foreach ($colleges as $college) {
+            $sub = $college->getSubscriptionByStudyAndYear($study->getId(), $year);
+
+            pr($college->getNameAndState());
+
+            foreach (array_keys($criteria) as $dbColumn) {
+                $val = $sub->getValue($dbColumn);
+
+
+                echo "$dbColumn = $val<br>";
+            }
+        }
+
+        die(' done');
     }
 
     /**

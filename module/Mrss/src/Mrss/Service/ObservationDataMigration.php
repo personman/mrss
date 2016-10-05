@@ -92,10 +92,15 @@ class ObservationDataMigration
         return $datum;
     }
 
-    public function check()
+    public function check($minId = 0)
     {
+        $count = 0;
         $mistakes = array();
         foreach ($this->getStudy()->getSubscriptions() as $subscription) {
+            if ($subscription->getId() < $minId) {
+                continue;
+            }
+
             foreach ($this->getStudy()->getAllBenchmarks() as $benchmark) {
                 $oldValue = $subscription->getObservation()->getOld($benchmark->getDbColumn());
                 $newValue = $subscription->getValue($benchmark);
@@ -117,7 +122,32 @@ class ObservationDataMigration
                     prd($mistakes);
                 }
             }
+
+            $count++;
+
+            pr($subscription->getId());
+            if ($count >= 10) {
+                if (empty($mistakes)) {
+                    echo 'Ok so far.';
+
+                    $protocol = 'http://';
+                    $host = $protocol . $_SERVER['HTTP_HOST'];
+                    //pr($_SERVER);
+                    $url = $host . '/admin/check-migration/' . $subscription->getId();
+                    pr($url);
+                    pr($count);
+                    echo "<script>location.href = '$url';</script>";
+                    die;
+                } else {
+                    pr($count);
+                    prd($mistakes);
+                }
+            }
+
         }
+
+        echo 'all done';
+        pr($mistakes);
 
         die('blah');
     }
