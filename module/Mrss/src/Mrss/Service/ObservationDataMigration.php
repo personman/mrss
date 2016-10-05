@@ -92,6 +92,36 @@ class ObservationDataMigration
         return $datum;
     }
 
+    public function check()
+    {
+        $mistakes = array();
+        foreach ($this->getStudy()->getSubscriptions() as $subscription) {
+            foreach ($this->getStudy()->getAllBenchmarks() as $benchmark) {
+                $oldValue = $subscription->getObservation()->getOld($benchmark->getDbColumn());
+                $newValue = $subscription->getValue($benchmark);
+
+                if ($benchmark->isNumber()) {
+                    $round = 5;
+                    $oldValue = round(floatval($oldValue), $round);
+                    $newValue = round(floatval($newValue), $round);
+                }
+
+                if ($oldValue != $newValue) {
+                    $mistakes[] = array(
+                        'sub' => $subscription->getId(),
+                        'benchmark' => $benchmark->getId(),
+                        'old' => $oldValue,
+                        'new' => $newValue
+                    );
+
+                    prd($mistakes);
+                }
+            }
+        }
+
+        die('blah');
+    }
+
     /**
      * @return \Mrss\Model\Datum
      */

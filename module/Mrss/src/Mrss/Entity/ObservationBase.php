@@ -97,7 +97,9 @@ class ObservationBase
 
     public function has($benchmark)
     {
-        return $this->getSubscription()->getDatum($benchmark);
+        return true;
+
+        //return $this->getSubscription()->getDatum($benchmark);
     }
 
     public function hasOld($benchmark)
@@ -127,7 +129,7 @@ class ObservationBase
      */
     public function getOld($benchmark)
     {
-        if (!$this->has($benchmark)) {
+        if (!$this->hasOld($benchmark)) {
             throw new Exception\InvalidBenchmarkException(
                 "'$benchmark' is not a valid benchmark."
             );

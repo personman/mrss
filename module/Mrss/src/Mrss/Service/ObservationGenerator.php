@@ -23,14 +23,14 @@ class ObservationGenerator
         'errors' => array()
     );
 
-    public function generate($force = false)
+    public function generate($force = false, $includeBenchmarks = true)
     {
         if ($force || $this->observationEntityNeedsUpdate()) {
-            $code = $this->getObservationCode();
+            $code = $this->getObservationCode($includeBenchmarks);
             $this->writeCodeToObservation($code);
         }
 
-        $this->updateDatabase();
+        //$this->updateDatabase();
         $this->clearCaches();
     }
 
@@ -52,12 +52,15 @@ class ObservationGenerator
         $this->clearCaches();
     }
 
-    public function getObservationCode()
+    public function getObservationCode($includeBenchmarks = true)
     {
-        //$properties = $this->getProperties();
+        if ($includeBenchmarks) {
+            $properties = $this->getProperties();
+        } else {
+            // Phasing out observation:
+            $properties = $this->getBaseProperties();
+        }
 
-        // Phasing out observation:
-        $properties = $this->getBaseProperties();
 
 
         $docblock = DocBlockGenerator::fromArray(array(

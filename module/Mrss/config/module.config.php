@@ -1811,10 +1811,21 @@ return array(
                     'generate-observation' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/generate',
+                            'route' => '/generate[/:strip]',
                             'defaults' => array(
                                 'controller' => 'Admin',
-                                'action' => 'generate'
+                                'action' => 'generate',
+                                'strip' => false
+                            )
+                        )
+                    ),
+                    'check-migration' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/check-migration',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'checkMigration'
                             )
                         )
                     ),

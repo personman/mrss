@@ -138,12 +138,28 @@ class AdminController extends AbstractActionController
         /** @var \Mrss\Service\ObservationGenerator $generator */
         $generator = $this->getServiceLocator()->get('service.generator');
 
-        //$generator->generate(true);
-        $generator->stripObservation();
+
+        $strip = $this->params()->fromRoute('strip');
+
+        if (!$strip) {
+            $generator->generate(true, true);
+        } else {
+            $generator->stripObservation();
+        }
 
         $stats = $generator->getStats();
 
         prd($stats);
+    }
+
+    public function checkMigrationAction()
+    {
+        takeYourTime();
+
+        /** @var \Mrss\Service\ObservationDataMigration $migrator */
+        $migrator = $this->getServiceLocator()->get('service.observation.data.migration');
+
+        $migrator->check();
     }
 
     protected function getYear()
