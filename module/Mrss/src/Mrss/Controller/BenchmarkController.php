@@ -39,15 +39,17 @@ class BenchmarkController extends AbstractActionController
         $organization = $user->getAdminBenchmarkSorting();
 
         // Sparklines
+        // @todo: use study-wide median for sparkline, if any. Disabled for now.
         $observationModel = $this->getServiceLocator()->get('model.observation');
+        $percentileModel = $this->getServiceLocator()->get('model.percentile');
         $sparklines = array();
         $counts = array('benchmarks' => 0, 'collected' => 0, 'computed' => 0);
         foreach ($benchmarkGroups as $benchmarkGroup) {
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
-                $data = $observationModel
+                /*$data = $observationModel
                     ->getSparkline($benchmark, $this->currentCollege());
                 $asString = implode(',', $data);
-                $sparklines[$benchmark->getId()] = $asString;
+                $sparklines[$benchmark->getId()] = $asString;*/
 
                 // Counts
                 $counts['benchmarks']++;
@@ -64,7 +66,7 @@ class BenchmarkController extends AbstractActionController
             'benchmarkGroups' => $benchmarkGroups,
             'study' => $study,
             'yearsToShow' => $years,
-            'sparklines' => $sparklines,
+            //'sparklines' => $sparklines,
             'activeCollege' => $this->currentCollege(),
             'organization' => $organization,
             'counts' => $counts

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Entity for a single data point
  *
  * @ORM\Entity
- * @ORM\Table(name="data_values")
+ * @ORM\Table(name="data_values",indexes={@ORM\Index(name="dbColumnIndex", columns={"dbColumn"})})
  */
 class Datum
 {
@@ -115,6 +115,9 @@ class Datum
      */
     public function setFloatValue($floatValue)
     {
+        // Also set the string from here
+        $this->setStringValue($floatValue);
+
         $this->floatValue = $floatValue;
         return $this;
     }

@@ -179,13 +179,20 @@ class Benchmark extends AbstractModel
         $qb->select(
             array(
                 'year',
-                'SUM(IF(' . $dbColumn . ' IS NULL, 0, 1)) / COUNT(id) * 100 AS
+                'SUM(IF(v.stringValue IS NULL, 0, 1)) / COUNT(s.id) * 100 AS
                 percentage'
             )
         );
-        $qb->from('observations', 'o');
-        $qb->where("year IN($years)");
-        $qb->groupBy('year');
+        $qb->from('data_values', 'v');
+        $qb->join('v', 'subscriptions', 's', 'v.subscription_id = s.id');
+        $qb->where("s.year IN(:years)");
+        $qb->andWhere("v.dbColumn = :dbColumn");
+        $qb->groupBy('s.year');
+
+        $qb->setParameter('years', $years);
+        $qb->setParameter('dbColumn', $dbColumn);
+
+        //prd($qb->getSQL());
 
         try {
             $results = $qb->execute()->fetchAll();
