@@ -1199,7 +1199,7 @@ class ObservationController extends AbstractActionController
 
     public function submittedValuesAction()
     {
-        return $this->test();
+        //return $this->test();
 
 
 
@@ -1270,6 +1270,7 @@ class ObservationController extends AbstractActionController
                     );
                     continue;
                 }
+
 
                 $value = $observation->get($benchmark->getDbColumn());
                 $value = $benchmark->format($value);

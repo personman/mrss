@@ -192,6 +192,7 @@
         <exec command="rm data/cache/classes.php.cache" />
         <exec command="rm data/cache/module-config-cache.config_cache.php" />
         <exec command="rm -Rf data/DoctrineModule/cache/*" />
+        <exec command="rm -Rf data/DoctrineORMModule/Proxy/*" />
         <exec command="rm -Rf public/files/all-colleges.json" />
     </target>
 

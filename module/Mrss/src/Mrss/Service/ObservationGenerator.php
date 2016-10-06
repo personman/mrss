@@ -40,8 +40,11 @@ class ObservationGenerator
      */
     public function stripObservation()
     {
-        $code = $this->getObservationCode();
-        $this->writeCodeToObservation($code);
+
+        $this->generate(true, false);
+
+        //$code = $this->getObservationCode();
+        //$this->writeCodeToObservation($code);
 
         // Drop columns
         foreach ($this->getStudy()->getAllBenchmarks() as $benchmark) {
@@ -60,7 +63,6 @@ class ObservationGenerator
             // Phasing out observation:
             $properties = $this->getBaseProperties();
         }
-
 
 
         $docblock = DocBlockGenerator::fromArray(array(
@@ -92,7 +94,8 @@ class ObservationGenerator
         $code = $class->generate();
 
         // Opening php tag and strip the ' = null' from properties
-        $code = '<?php ' . str_replace(' = null;', ';', $code);
+        $code = str_replace(' = null;', ';', $code);
+        //$code = '?php ' . $code;
 
         return $code;
     }
@@ -309,6 +312,7 @@ class ObservationGenerator
 
     protected function writeCodeToObservation($code)
     {
+        $code = '<?php ' . $code;
         file_put_contents($this->observationFile, $code);
     }
 
