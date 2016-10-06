@@ -28,3 +28,7 @@ ol.example li.placeholder:before {
 .onReportEditable {
     display: none;
 }
+
+.table td a {
+    text-decoration: underline !important;
+}

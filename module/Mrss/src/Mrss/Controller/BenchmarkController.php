@@ -19,6 +19,9 @@ class BenchmarkController extends AbstractActionController
 
     public function indexAction()
     {
+        $studyConfig = $this->getServiceLocator()->get('study');
+        $showHeatMap = $studyConfig->benchmark_completion_heatmap;
+
         $studyId = $this->params()->fromRoute('study', null);
         if (empty($studyId)) {
             $studyId = $this->currentStudy()->getId();
@@ -30,9 +33,15 @@ class BenchmarkController extends AbstractActionController
         $study = $studyModel->find($studyId);
         $benchmarkGroups = $study->getBenchmarkGroups();
 
-        $years = $this->getServiceLocator()->get('model.subscription')
-            ->getYearsWithSubscriptions($study);
-        rsort($years);
+
+        if ($showHeatMap) {
+            $years = $this->getServiceLocator()->get('model.subscription')
+                ->getYearsWithSubscriptions($study);
+            rsort($years);
+        } else {
+            $years = array();
+        }
+
 
         // Are we organizing the benchmarks for data-entry or reports?
         $user = $this->zfcUserAuthentication()->getIdentity();
@@ -61,8 +70,8 @@ class BenchmarkController extends AbstractActionController
             }
         }
 
+
         return array(
-            //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
             'benchmarkGroups' => $benchmarkGroups,
             'study' => $study,
             'yearsToShow' => $years,
