@@ -57,8 +57,10 @@ class ObservationDataMigration
 
         if ($sub = $subs[0]) {
             $this->copySubscription($sub);
-            return true;
+
         }
+
+        return true;
     }
 
     public function copySubscriptionBenchmark(Subscription $subscription, Benchmark $benchmark)
