@@ -81,12 +81,12 @@ $this->headScript()->appendFile(
     </tr>
     <tr class="data-entry-heading">
         <th>Academic Rank</th>
-        <th>Number of Faculty</th>
-        <th>Total Contracted Salaries ($)</th>
-        <th>Number of Faculty</th>
-        <th>Total Contracted Salaries ($)</th>
-        <th>Number of Faculty</th>
-        <th>Total Contracted Salaries ($)</th>
+        <th>Number<br>of Faculty</th>
+        <th>Total Contracted<br>Salaries ($)</th>
+        <th>Number<br>of Faculty</th>
+        <th>Total Contracted<br>Salaries ($)</th>
+        <th>Number<br>of Faculty</th>
+        <th>Total Contracted<br>Salaries ($)</th>
     </tr>
     </thead>
 
@@ -123,7 +123,7 @@ $this->headScript()->appendFile(
                     <?php endif ?>
                 <?php endforeach ?>
 
-                <?php $rank = ($label == 'Part-time Faculty') ? 'part-time-faculty' : 'graduate-teaching-assistant'; ?>
+                <?php $rank = ($label == 'Part-Time Faculty') ? 'part-time-faculty' : 'graduate-teaching-assistant'; ?>
 
                 <td class="column-total" id="<?= $rank ?>_faculty">0</td>
                 <td class="column-total" id="<?= $rank ?>_salaries">0</td>
