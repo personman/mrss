@@ -76,3 +76,7 @@ a[href]:after {
 body {
     background-color: #FFF !important;
 }
+
+.impersonation {
+    display: none !important;
+}
