@@ -80,7 +80,6 @@ class Outlier extends AbstractModel
         CollegeEntity $college,
         StudyEntity $study,
         $year
-
     ) {
         $collegeId = $college->getId();
         $studyId = $study->getId();

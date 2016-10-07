@@ -846,7 +846,9 @@ class ToolController extends AbstractActionController
                         $groups = array($benchmarkGroupId);
                     }
 
-                    if (count($groups) && !in_array($benchmark->getBenchmarkGroup()->getId(), $groups)) continue;
+                    if (count($groups) && !in_array($benchmark->getBenchmarkGroup()->getId(), $groups)) {
+                        continue;
+                    }
 
 
                     $fromCol = $benchmark->getDbColumn();

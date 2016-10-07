@@ -41,7 +41,8 @@ class Bubble extends AbstractChart
         $yFormat = $this->getYFormat();
 
 
-        $pointFormat = "<strong>{point.name}</strong><br><strong>$xLabel:</strong> {point.x}<br> <strong>$yLabel</strong>: {point.y}";
+        $pointFormat = "<strong>{point.name}</strong><br><strong>$xLabel:</strong> {point.x}<br>" .
+            " <strong>$yLabel</strong>: {point.y}";
         $pointFormat = str_replace('{point.x}', str_replace('y', 'point.x', $xFormat), $pointFormat);
         $pointFormat = str_replace('{point.y}', str_replace('y', 'point.y', $yFormat), $pointFormat);
 

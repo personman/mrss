@@ -1,8 +1,8 @@
 var savedCharts = {}
-var editor
+var editor;
+var secondBenchmarkControls;
 
 $(function() {
-
     setUpSelects();
     setUpTextarea();
 
@@ -10,15 +10,21 @@ $(function() {
     updateFormForChartType()
     $('#inputType').change(function() {
         updateFormForChartType()
-    })
+    });
 
     $('#explore').submit(function() {
         return exploreFormSubmit()
     })
-})
+
+    benchmarkChanged()
+    $('#benchmark2').change(function() {
+        benchmarkChanged()
+    })
+});
 
 function setUpSelects()
 {
+    cloneBenchmark2();
     $('#benchmark1, #benchmark2, #benchmark3').chosen({search_contains: true})
 }
 
@@ -53,6 +59,7 @@ function updateFormForChartType()
     var hideNational = $('#control-group-hideNational')
     var previewButton = $('#previewButton')
     var regression = $('#control-group-regression')
+    var percentScaleZoom = $('#control-group-percentScaleZoom')
 
     // Hide all by default
     $('#explore .control-group').hide()
@@ -104,12 +111,23 @@ function updateFormForChartType()
         title.show()
         subtitle.show()
         //yearField.show()
+        benchmark2.find('label').text('Benchmark')
         benchmark2.show()
         peerGroup.show()
         hideMine.show()
         hideNational.show()
         percentiles.show()
+
+        if (getMultiTrendHiddenValue()) {
+            addSecondBenchmarkButtonClicked(benchmark2);
+        } else {
+            placeAddSecondBenchmarkButton(benchmark2);
+        }
+
         populateDefaultBreakpoints([50])
+    } else {
+        removeAddSecondBenchmarkButton();
+        benchmark2.find('label').text('Y Axis')
     }
 
     // Percentile bar
@@ -247,7 +265,7 @@ function populateDefaultBreakpoints(breakPoints)
 function getDefaultBreakpoints()
 {
     // Convert to integers
-    converted = []
+    var converted = [];
     if (typeof defaultBreakpoints != 'undefined') {
         for (var i in defaultBreakpoints) {
             converted.push(parseInt(defaultBreakpoints[i]))
@@ -255,4 +273,168 @@ function getDefaultBreakpoints()
     }
 
     return converted
+}
+
+function placeAddSecondBenchmarkButton(benchmark)
+{
+    var id = getSecondBenchmarkButtonId();
+    var button = $('<a>', {class: 'btn btn-default btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
+    button.text('Add a Second Benchmark');
+
+    button.click(function() {
+        addSecondBenchmarkButtonClicked(benchmark);
+        return false;
+    });
+
+    benchmark.after(button);
+}
+
+function addSecondBenchmarkButtonClicked(benchmark)
+{
+    // Remove any existing UI for this
+    $('#secondBenchmarkButtonRemove, #control-group-benchmark2a').remove()
+
+    displayFilteredSecondBenchmarkSelect(benchmark);
+    removeAddSecondBenchmarkButton();
+    placeRemoveSecondBenchmarkButton(benchmark);
+    setMultiTrendHiddenValue(true)
+}
+
+function setMultiTrendHiddenValue(value)
+{
+    $('#multiTrend').val(value);
+}
+
+
+function placeRemoveSecondBenchmarkButton(benchmark)
+{
+    var id = getSecondBenchmarkButtonId() + 'Remove';
+
+    var button = $('<a>', {class: 'btn btn-default btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
+    button.text('Remove Second Benchmark');
+
+    button.click(function() {
+        removeSecondBenchmarkSelect();
+        placeAddSecondBenchmarkButton(benchmark);
+        removeRemoveSecondBenchmarkButton();
+        $('#multiTrend').val(false);
+        return false;
+    });
+
+    benchmark.next().after(button);
+
+}
+
+function removeSecondBenchmarkSelect()
+{
+    $('#control-group-benchmark2a').remove();
+}
+
+function removeRemoveSecondBenchmarkButton()
+{
+    var id = getSecondBenchmarkButtonId() + 'Remove';
+    $('#' + id).remove();
+}
+
+function getSecondBenchmarkButtonId()
+{
+    return 'secondBenchmarkButton';
+}
+
+function displayFilteredSecondBenchmarkSelect(benchmarkSelect)
+{
+    var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
+    var benchmarkTwoContainer = secondBenchmarkControls.clone();
+    var inputType = getCurrentInputType()
+
+    benchmarkTwoContainer = filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType);
+
+    // Change the label and select name
+    benchmarkTwoContainer.attr('id', 'control-group-benchmark2a');
+    benchmarkTwoContainer.find('label').text('Second Benchmark');
+    benchmarkTwoContainer.find('.controls').attr('id', 'controls-benchmark2a');
+    benchmarkTwoContainer.find('.chosen-container').attr('id', 'benchmark2a_chosen');
+    benchmarkTwoContainer.find('select').attr('name', 'benchmark2a').attr('id', 'benchmark2a');
+
+    benchmarkTwoContainer.find('select').val($('#benchmark3').val());
+    benchmarkTwoContainer.find('select').change(function()
+    {
+        var selected = $(this).val();
+        // Copy to benchmark3
+        $('#benchmark3').val(selected);
+    });
+
+
+
+
+    benchmarkOneContainer.after(benchmarkTwoContainer);
+
+    benchmarkTwoContainer.find('select').chosen({search_contains: true});
+
+}
+
+function getCurrentInputType()
+{
+    var dbColumn = $('#benchmark2').val()
+    var inputType = benchmarksByInputType[dbColumn]
+
+    return inputType
+}
+
+function cloneBenchmark2()
+{
+    secondBenchmarkControls = $('#control-group-benchmark2').clone();
+}
+
+/**
+ * Needs to know the inputTypes of all benchmarks
+ * @param benchmarkTwoContainer
+ */
+function filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType)
+{
+
+    var benchmarkOneInputType
+    var options = benchmarkTwoContainer.find('select').find('option');
+    //console.log(options.length)
+
+    options.each(function(i, e) {
+        //console.log($(e).val())
+        if (benchmarksByInputType[$(e).val()] != inputType) {
+            $(e).remove()
+        }
+
+    })
+
+    return benchmarkTwoContainer;
+}
+
+function removeAddSecondBenchmarkButton()
+{
+    var id = getSecondBenchmarkButtonId();
+
+    $('#' + id).remove();
+
+    setMultiTrendHiddenValue(false)
+
+    $('#secondBenchmarkButtonRemove').remove()
+}
+
+function getMultiTrendHiddenValue()
+{
+    return $('#multiTrend').val() == 'true';
+}
+
+function benchmarkChanged()
+{
+    // If we're in multitrend mode, reset the 2nd benchmark when the 1st changes
+    if (getMultiTrendHiddenValue()) {
+        addSecondBenchmarkButtonClicked($('#control-group-benchmark2'))
+    }
+
+    var percentScale = $('#control-group-percentScaleZoom')
+    if (getCurrentInputType() == 'percent') {
+        percentScale.show()
+    } else {
+        percentScale.hide()
+    }
 }

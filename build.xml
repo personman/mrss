@@ -7,7 +7,7 @@
         <!--<exec command="echo $SHELL" passthru="true" /-->
 
         <exec
-              command="phpcs --standard=PSR2 --ignore=*Bootstrap*,*Module.php* module"
+              command="phpcs --standard=PSR2 --ignore=*Bootstrap*,*Module.php*,*Entity/Observation.php module"
               outputProperty="codesniffer.output" passthru="false" />
 
         <if>

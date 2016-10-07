@@ -68,7 +68,9 @@ abstract class AbstractChart
 
     public function getConfig()
     {
-        return $this->config;
+        $config = $this->config;
+
+        return $config;
     }
 
     public function getId()

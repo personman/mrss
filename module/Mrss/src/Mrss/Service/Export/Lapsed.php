@@ -161,6 +161,4 @@ class Lapsed extends Export
         $this->subscriptionModel = $subscriptionModel;
         return $this;
     }
-
-
 }
