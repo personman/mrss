@@ -39,6 +39,17 @@ class User extends AbstractModel
         );
     }
 
+    public function findByLastAccess($limit = 20)
+    {
+        return $this->getRepository()->findBy(
+            array(),
+            array(
+                'lastAccess' => 'DESC'
+            ),
+            $limit
+        );
+    }
+
     /**
      * Find all colleges, ordered by name
      */
