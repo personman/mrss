@@ -45,7 +45,7 @@ a[href]:after {
 /*#content, #content-inner { margin-top:  -.75em !important; }*/
 
 .highcharts-container {
-    width: 423px;
+    width: 423px !important;
 }
 
 .executiveReportIntro {

@@ -639,7 +639,7 @@ class ReportController extends AbstractActionController
 
     public function executiveAction()
     {
-        $open = false;
+        $open = true;
 
         if ($this->params()->fromRoute('open')) {
             $open = true;
