@@ -115,7 +115,7 @@
 
     <target name="migrate">
         <echo message="Running database migration." />
-        <exec command="./bin/doctrine-module migrations:migrate -q -n"
+        <exec command="./bin/doctrine-module migrations:migrate -n"
               passthru="true" />
     </target>
 
