@@ -85,23 +85,9 @@ body {
     display: none !important;
 }
 
-
-/** Firefox onlly (big print margins) */
-/*.gecko .highcharts-container {
-    width: 400px !important;
-
-}
-*/
 .container-fluid, .container {
     margin-left: 0 !important;
 }
-.gecko #executiveReport {
-    /*margin-left: -70px; */
-}
-/*
-.gecko .executiveReportStrengths, .gecko .executiveReportImprovements {
-    width: 400px !important;
-}*/
 
 
 
