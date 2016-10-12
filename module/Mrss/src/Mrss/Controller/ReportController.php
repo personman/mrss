@@ -749,6 +749,11 @@ class ReportController extends AbstractActionController
             $media = 'print';
         }
 
+        $autoPrint = false;
+        if (empty($ipeds) && $forcePrintStyles) {
+            $autoPrint = true;
+        }
+
         // Membership count
         $memberCount = $this->getMemberCount($year);
 
@@ -760,7 +765,8 @@ class ReportController extends AbstractActionController
                 'college' => $college,
                 'open' => $open,
                 'media' => $media,
-                'memberCount' => $memberCount
+                'memberCount' => $memberCount,
+                'autoPrint' => $autoPrint
             )
         );
         $view->setTemplate('mrss/report/executive.phtml');

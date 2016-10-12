@@ -119,12 +119,12 @@ return array(
                     'action' => array('peers', 'search', 'cacheColleges'),
                     'roles' => array('guest')
                 ),
-                array(
+                /*array(
                     'controller' => 'reports',
                     'action' => array('executiveprint'),
 
                     'roles' => array('guest')
-                ),
+                ),*/
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'users',

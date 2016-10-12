@@ -1074,7 +1074,20 @@ return array(
                     'executive-print' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/executive-print[/:ipeds[/:year]]',
+                            'route' => '/executive-print[/:year]',
+                            'defaults' => array(
+                                'action' => 'executiveprint',
+                                'year' => null,
+                                'ipeds' => null,
+                                'print' => true,
+                                'open' => true
+                            )
+                        )
+                    ),
+                    'executive-print-admin' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/executive-print-admin[/:ipeds[/:year]]',
                             'defaults' => array(
                                 'action' => 'executiveprint',
                                 'year' => null,

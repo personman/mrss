@@ -68,6 +68,10 @@ a[href]:after {
     display: none;
 }
 
+#printButton {
+    display: none;
+}
+
 
 #closure-blocks {
     display: none;

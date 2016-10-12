@@ -26,6 +26,12 @@
         <?php endforeach ?>
     </ul>
 
+    <div id="printButton">
+        <a class="btn btn-default" href="<?= $this->url('reports/executive-print', array('year' => $year)) ?>">
+            <span class="glyphicon glyphicon-print"></span>
+            Print
+        </a>
+    </div>
 
     <div class="executiveReportHeader">
         <h2>Executive Report for <?= $college->getExecFullName() ?></h2>
@@ -255,3 +261,13 @@
     }
     //})
 </script>
+
+<?php if ($autoPrint): ?>
+    <script>
+        $(function() {
+            setTimeout(function() {window.print()}, 2000);
+        });
+    </script>
+<?php endif ?>
+
+
