@@ -310,6 +310,15 @@ class SubscriptionController extends AbstractActionController
     public function renewAction()
     {
         $college = $this->currentCollege();
+        $study = $this->currentStudy();
+
+
+        // Make sure it's open
+        if (!$study->getEnrollmentOpen()) {
+            $this->flashMessenger()->addErrorMessage('Enrollment is not currently open. Please check back later.');
+            return $this->redirect()->toUrl('/');
+        }
+
 
         $form = new AbstractForm('renew');
 
