@@ -423,10 +423,12 @@ class Subscription
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq($field, $benchmark));
 
-        if ($data && $data = $data->matching($criteria) && $data->count() > 0) {
-            $datum = $data->first();
-        } else {
-            $datum = null;
+        $datum = null;
+        if ($data) {
+            $datums = $data->matching($criteria);
+            if ($datums && $datums->count() > 0) {
+                $datum = $datums->first();
+            }
         }
 
         return $datum;
