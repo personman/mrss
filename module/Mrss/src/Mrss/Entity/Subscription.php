@@ -48,7 +48,7 @@ class Subscription
     protected $observation;
 
     /**
-     * @ORM\OneToMany(targetEntity="Datum", mappedBy="subscription")
+     * @ORM\OneToMany(targetEntity="Datum", mappedBy="subscription", cascade={"persist", "remove"})
      * @var Datum[]
      */
     protected $data;
@@ -154,6 +154,8 @@ class Subscription
      */
     protected $paidNotes;
 
+    protected $benchmarkModel;
+    protected $datumModel;
 
     public function __construct()
     {
@@ -367,13 +369,8 @@ class Subscription
 
     public function setValue($dbColumn, $value)
     {
-        foreach ($this->getData() as $datum)
-        {
-            //pr($datum->getBenchmark()->getDbColumn());
-            if ($datum->getBenchmark()->getDbColumn() == $dbColumn) {
-                $datum->setValue($value);
-                return;
-            }
+        if ($datum = $this->getdatum($dbColumn)) {
+            $datum->setValue($value);
         }
     }
 
@@ -383,14 +380,6 @@ class Subscription
         if ($datum = $this->getDatum($dbColumn)) {
             $value = $datum->getValue();
         }
-
-        /*foreach ($this->getData() as $datum)
-        {
-            //pr($datum->getBenchmark()->getDbColumn());
-            if ($datum->getBenchmark()->getDbColumn() == $dbColumn) {
-                return $datum->getValue();
-            }
-        }*/
 
         return $value;
     }
@@ -431,6 +420,30 @@ class Subscription
             }
         }
 
+        // If the data row doesn't exist, create it
+        if ($datum === null) {
+            $datum = new Datum();
+            $datum->setSubscription($this);
+
+
+            if (is_object($benchmark)) {
+                $datum->setBenchmark($benchmark);
+                $datum->setDbColumn($benchmark->getDbColumn());
+            } else {
+                $dbColumn = $benchmark;
+                $datum->setDbColumn($dbColumn);
+                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+
+                $datum->setBenchmark($benchmark);
+            }
+
+            if ($benchmark) {
+                $this->getData()->add($datum);
+                $this->getDatumModel()->save($datum);
+                $this->getDatumModel()->getEntityManager()->flush();
+            }
+        }
+
         return $datum;
     }
 
@@ -443,6 +456,10 @@ class Subscription
     {
         $data = array();
         foreach ($this->getDAta() as $datum) {
+            $b = $datum->getBenchmark();
+            if (empty($b)) {
+                prd($datum->getId());
+            }
             $data[$datum->getBenchmark()->getDbColumn()] = $datum->getValue();
         }
 
@@ -550,5 +567,32 @@ class Subscription
     public function __toString()
     {
         return "Subscription id: {$this->getId()}";
+    }
+
+
+    public function setBenchmarkModel($model)
+    {
+        $this->benchmarkModel = $model;
+    }
+
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        return $this->benchmarkModel;
+    }
+
+    public function setDatumModel($model)
+    {
+        $this->datumModel = $model;
+    }
+
+    /**
+     * @return \Mrss\Model\Datum
+     */
+    public function getDatumModel()
+    {
+        return $this->datumModel;
     }
 }

@@ -223,7 +223,10 @@ class ObservationAudit
         $changes = array();
 
         foreach ($new as $dbColumn => $newValue) {
-            $oldValue = $old[$dbColumn];
+            $oldValue = null;
+            if (!empty($old[$dbColumn])) {
+                $oldValue = $old[$dbColumn];
+            }
 
             if (is_numeric($newValue) && is_numeric($oldValue)) {
                 $newValue = round($newValue, $precision);

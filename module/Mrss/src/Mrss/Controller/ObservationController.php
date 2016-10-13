@@ -441,7 +441,11 @@ class ObservationController extends AbstractActionController
 
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $formData = $this->params()->fromPost();
+            unset($formData['buttons']);
+
+            $form->setData($formData);
+
 
             //var_dump($form->getElements()); die;
             if ($form->isValid()) {
@@ -519,7 +523,7 @@ class ObservationController extends AbstractActionController
         );
 
         $conversionFactor = 1;
-        if ($observation->has('institution_conversion_factor')) {
+        if ($this->currentStudy()->getId() == 4 && $observation->has('institution_conversion_factor')) {
             $conversionFactor = $observation->get('institution_conversion_factor');
         }
 
