@@ -973,6 +973,17 @@ return array(
                             )
                         )
                     ),
+                    'percent-change' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/percent-change[/:year][/:format]',
+                            'defaults' => array(
+                                'action' => 'percentChange',
+                                'year' => null,
+                                'format' => 'html'
+                            )
+                        )
+                    ),
                     'calculate-outlier' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -1063,7 +1074,20 @@ return array(
                     'executive-print' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/executive-print[/:ipeds[/:year]]',
+                            'route' => '/executive-print[/:year]',
+                            'defaults' => array(
+                                'action' => 'executiveprint',
+                                'year' => null,
+                                'ipeds' => null,
+                                'print' => true,
+                                'open' => true
+                            )
+                        )
+                    ),
+                    'executive-print-admin' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/executive-print-admin[/:ipeds[/:year]]',
                             'defaults' => array(
                                 'action' => 'executiveprint',
                                 'year' => null,

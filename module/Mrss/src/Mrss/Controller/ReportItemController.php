@@ -41,6 +41,12 @@ class ReportItemController extends CustomReportController
             if ($form->isValid()) {
                 $data = $form->getData();
 
+                //pr($data);
+
+                if (!empty($data['multiTrend']) && $data['multiTrend'] == 'false') {
+                    $data['multiTrend'] = 0;
+                }
+
                 // What type of button was pressed?
                 $buttonPressed = $this->getButtonPressed($data);
 
@@ -98,7 +104,8 @@ class ReportItemController extends CustomReportController
             'footnotes' => $footnotes,
             'report' => $report,
             'edit' => $edit,
-            'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy()
+            'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy(),
+            'benchmarksByInputType' => $this->currentStudy()->getBenchmarksByInputType()
         ));
 
         return $viewModel;

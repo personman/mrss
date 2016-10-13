@@ -16,7 +16,7 @@ class Chart extends AbstractHelper
     /**
      * @var string
      */
-    protected $chartJsUri = '/js/highcharts.js?v=3';
+    protected $chartJsUri = '/js/highcharts.js?v=5';
 
     protected $exportingJsUri = '/js/highcharts-exporting.js?v=4';
 
@@ -80,6 +80,18 @@ class Chart extends AbstractHelper
             $config = str_replace($functionLabel, $script, $config);
         }
 
+        // Legend format
+        $multiTrend = 'false';
+        if (!empty($chartConfig['multiTrend'])) {
+            $multiTrend = 'true';
+        }
+
+        $formatter = "function () {return legendLabelFormatter(this, $multiTrend)}";
+        $config = str_replace('"legendLabelFormatter"', $formatter, $config);
+        //pr($chartConfig);
+
+        //pr($config);
+
         return $config;
     }
 
@@ -114,6 +126,12 @@ class Chart extends AbstractHelper
 
             $this->getView()->headScript()->appendFile(
                 '/js/highcharts-regression.js?v=3',
+                'text/javascript'
+            );
+
+            // Our plugin for legend subheadings
+            $this->getView()->headScript()->appendFile(
+                '/js/highcharts-legend-subheadings.js?v=1',
                 'text/javascript'
             );
 

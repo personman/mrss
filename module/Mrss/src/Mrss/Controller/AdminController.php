@@ -34,11 +34,14 @@ class AdminController extends AbstractActionController
         // Users queue
         $users = $this->getUserModel()->findByState(0);
 
+        $recentlyActiveUsers = $this->getUserModel()->findByLastAccess();
+
         return array(
             'subscriptions' => $subscriptions,
             'subscriptionCount' => $subscriptionCount,
             'changeSets' => $changeSets,
-            'userQueue' => $users
+            'userQueue' => $users,
+            'recentlyActiveUsers' => $recentlyActiveUsers
         );
     }
 

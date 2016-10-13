@@ -1,0 +1,170 @@
+<?= $this->headLink()->appendStylesheet('/css/report.css') ?>
+
+<?php /** @var \Mrss\Entity\PercentChange[] $changes */ ?>
+<?php
+
+// Data Tables
+$this->headScript()->appendFile(
+    '/js/jquery.dataTables.min.js',
+    'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+<script>
+    $(document).ready(function() {
+        $('#percentChanges').dataTable({
+            "order": [[0, "asc"]],
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 25
+        });
+    });
+</script>
+
+<style>
+    td.benchmarkLabel {
+        width: 58%
+    }
+
+    td.pc-old, td.pc-new {
+        width: 14%;
+    }
+
+    td.pc-change {
+        width: 14%;
+    }
+</style>
+
+
+<h1>Percent Change Report</h1>
+
+
+<div class="report">
+
+    <?php foreach ($reportData as $benchmarkGroup): ?>
+        <?php if (stristr($benchmarkGroup['benchmarkGroup'], '|')): ?>
+            <?php list($formNumber, $formTitle) = explode(' | ', $benchmarkGroup['benchmarkGroup']) ?>
+        <?php elseif (stristr($benchmarkGroup['benchmarkGroup'], ':')): ?>
+            <?php $nameParts = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
+            <?php $formNumber = array_shift($nameParts) ?>
+            <?php $formTitle = implode(': ', $nameParts) ?>
+        <?php endif ?>
+        <h3 class="benchmarkGroupTitle" id="form_<?= $benchmarkGroup['url'] ?>">
+            <span class="small-heading"><?= $formNumber ?></span><br>
+            <?= $formTitle ?>
+            <?php if (!empty($benchmarkGroup['timeframe'])): ?>
+                <span class="timeframe">(<?= $benchmarkGroup['timeframe'] ?>)</span>
+            <?php endif ?>
+
+        </h3>
+
+        <?php if (empty($system)) {
+            $heading = 'National Percentiles';
+
+            if ($this->currentStudy()->getId() == 4) {
+                $heading = 'National Median Percentiles';
+            }
+        } else {
+            $heading = 'System Percentiles';
+        }?>
+
+        <table class="table table-hover table-striped-manual">
+            <thead>
+            <tr class="topHeading">
+                <th></th>
+                <th colspan="3">Your Institution</th>
+            </tr>
+            <tr class="secondHeading">
+                <th></th>
+                <th><?= $year - 1 ?></th>
+                <th><?= $year ?></th>
+                <th>% Change</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <?php foreach ($benchmarkGroup['benchmarks'] as $benchmark): ?>
+                <?php if (!empty($benchmark['heading'])): ?>
+                    <tr class="retportSeparator"></tr>
+                    <tr class="reportSubHeading">
+                        <td colspan="10">
+                            <?= $benchmark['name'] ?>
+                        </td>
+                    </tr>
+                    <?php continue ?>
+                <?php endif; ?>
+
+                <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
+                <tr class="<?= $rowClass ?>">
+                    <td class="benchmarkLabel">
+                        <?= $benchmark['benchmark'] ?>
+                        <?php if (!empty($benchmark['timeframe'])): ?>
+                            <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
+                        <?php endif ?>
+                    </td>
+                    <?php if (!empty($benchmark['oldValue']) && $benchmark['oldValue'] !== null): ?>
+                        <td class="pc-old"><?= $benchmark['oldValue'] ?></td>
+                        <td class="pc-new">
+                            <?= $benchmark['newValue'] ?>
+                        </td>
+                        <td class="pc-change">
+                            <?= $benchmark['percentChange'] ?>
+                        </td>
+                    <?php else: ?>
+                        <td class="pc-old">-</td>
+                        <td class="pc-new">-</td>
+                        <td class="pc-change">-</td>
+                    <?php endif ?>
+                </tr>
+
+            <?php endforeach ?>
+            </tbody>
+            <thead>
+            <tr class="spacerRow">
+                <td colspan="9"></td>
+            </tr>
+            </thead>
+        </table>
+        <hr>
+    <?php endforeach ?>
+
+
+</div>
+
+
+
+<? /*
+<p>
+    <a href="/reports/percent-changes/<?= date('Y') ?>/excel" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download
+    </a>
+</p>
+
+
+<table class="table" id="percentChanges">
+    <thead>
+    <tr>
+        <th>Institution</th>
+        <th>Form</th>
+        <th>Benchmark</th>
+        <th>Old Value</th>
+        <th>New Value</th>
+        <th>Percent Difference</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($changes as $change): ?>
+        <tr>
+            <td><?= $change->getCollege()->getNameAndState() ?></td>
+            <td><?= $change->getBenchmark()->getBenchmarkGroup()->getUrl() ?></td>
+            <td><?= $change->getBenchmark()->getDescriptiveReportLabel() ?></td>
+            <td><?= $change->getOldValue() ?></td>
+            <td><?= $change->getValue() ?></td>
+            <td><?= round($change->getPercentChange()) ?>%</td>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
+*/ ?>

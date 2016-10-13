@@ -668,6 +668,10 @@ function getReportMenu()
             'custom' => array(
                 'label' => 'Custom Reports',
                 'uri' => '/reports/custom'
+            ),
+            'percent-change' => array(
+                'label' => 'Percent Change Report',
+                'uri' => '/reports/percent-change'
             )
         )
     );

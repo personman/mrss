@@ -102,13 +102,10 @@ class ReportController extends AbstractActionController
         // Get System ids
         $currentYear = $this->currentStudy()->getCurrentYear();
         $systemIds = array();
-        //foreach ($this->getSystemModel()->findAll() as $system) {
-        foreach ($this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId()) as $system) {
+        $systems = $this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId());
+        foreach ($systems as $system) {
             $systemIds[] = $system->getId();
         }
-
-
-
 
 
         return array(
@@ -270,6 +267,11 @@ class ReportController extends AbstractActionController
         return $this->getServiceLocator()->get('service.report.changes');
     }
 
+    /**
+     * For admins. Shows all institutions.
+     *
+     * @return array
+     */
     public function percentChangesAction()
     {
         takeYourTime();
@@ -291,6 +293,41 @@ class ReportController extends AbstractActionController
 
         return array(
             'changes' => $changes
+        );
+    }
+
+    /**
+     * For an individual institution
+     *
+     * @return array
+     */
+    public function percentChangeAction()
+    {
+        takeYourTime();
+        $format = $this->params()->fromRoute('format');
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        $college = $this->currentCollege();
+
+        /** @var \Mrss\Model\PercentChange $percentChangeModel */
+        $percentChangeModel = $this->getServiceLocator()->get('model.percentchange');
+        $changes = $percentChangeModel->findByCollegeAndYear($college, $year);
+
+        $changes = $this->getPercentChangeService()->getReport($changes, $year);
+
+        if ($format == 'excel') {
+            $this->getPercentChangeService()->download($changes);
+            die;
+        }
+
+        return array(
+            'reportData' => $changes,
+            'changes' => $changes,
+            'year' => $year
         );
     }
 
@@ -674,8 +711,13 @@ class ReportController extends AbstractActionController
             }
         }
         $subscriptions = $newSubs;
+
         if ($year == $yearToSkip) {
             $year = $newSubs[0]->getYear();
+        }
+
+        if ($year != $yearToSkip) {
+            $open = true;
         }
 
         //$this->view->headTitle('test');
@@ -707,6 +749,11 @@ class ReportController extends AbstractActionController
             $media = 'print';
         }
 
+        $autoPrint = false;
+        if (empty($ipeds) && $forcePrintStyles) {
+            $autoPrint = true;
+        }
+
         // Membership count
         $memberCount = $this->getMemberCount($year);
 
@@ -718,7 +765,8 @@ class ReportController extends AbstractActionController
                 'college' => $college,
                 'open' => $open,
                 'media' => $media,
-                'memberCount' => $memberCount
+                'memberCount' => $memberCount,
+                'autoPrint' => $autoPrint
             )
         );
         $view->setTemplate('mrss/report/executive.phtml');

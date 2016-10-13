@@ -850,7 +850,7 @@ return array(
         7 => array(
             array(
                 'rows' => array(
-                    'Part-time Faculty' => array(
+                    'Part-Time Faculty' => array(
                         'pt_male_faculty',
                         'pt_male_salaries',
                         'pt_female_faculty',

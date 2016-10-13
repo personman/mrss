@@ -68,6 +68,10 @@ a[href]:after {
     display: none;
 }
 
+#printButton {
+    display: none;
+}
+
 
 #closure-blocks {
     display: none;
@@ -80,3 +84,9 @@ body {
 .impersonation {
     display: none !important;
 }
+
+.container-fluid, .container {
+    margin-left: 0 !important;
+}
+
+

@@ -398,6 +398,10 @@ p.instituteLogo {
     line-height: 18px;
 }
 
+#printButton {
+    float: right;
+
+}
+
 
 @-moz-document url-prefix() {fieldset legend{margin-bottom:0;}}ul.symbol-links{list-style-type:none;padding:0px;margin:0px;}ul.symbol-links li{background-repeat:no-repeat;background-position:0px 2px;padding-left:24px;padding-bottom:5px;}.page-content-subscribe ul.symbol-links li{margin-left:0;margin-bottom:0.5em;}ul li.information{background-image:url(/sites/all/themes/nccbp_new/images/symbols_info.gif);}ul li.contact{background-image:url(/sites/all/themes/nccbp_new/images/symbols_contact.gif);}ul li.form{background-image:url(/sites/all/themes/nccbp_new/images/symbols_form.gif);}
-

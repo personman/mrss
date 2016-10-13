@@ -651,11 +651,11 @@ class SubscriptionController extends AbstractActionController
             $service->setCurrentStudyCode($currentStudyCode);
 
             // For now, only discount the price for NCCBP
-            if ($currentStudyCode == 'nccbp') {
+            //if ($currentStudyCode == 'nccbp') {
 
                 $discount = $service->checkForDiscount($year, $ipeds);
                 $amount = $amount - $discount;
-            }
+            //}
         }
 
         return $amount;
@@ -1591,10 +1591,10 @@ class SubscriptionController extends AbstractActionController
         if (empty($this->ipeds)) {
             $this->getLog()->info("Ipeds property not set. Generating it.");
 
-            if (!empty($this->getSessionContainer()->ipeds)) {
-                $ipeds = $this->getSessionContainer()->ipeds;
-            } elseif (!empty($data['institution']['ipeds'])) {
+            if (!empty($data['institution']['ipeds'])) {
                 $ipeds = $data['institution']['ipeds'];
+            } elseif (!empty($this->getSessionContainer()->ipeds)) {
+                $ipeds = $this->getSessionContainer()->ipeds;
             } elseif ($college = $this->currentCollege()) {
                 $ipeds = $college->getIpeds();
             } elseif ($draft = $this->getDraftSubscription()) {
