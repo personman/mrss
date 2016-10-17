@@ -49,7 +49,7 @@ class ObservationGenerator
         // Drop columns
         foreach ($this->getStudy()->getAllBenchmarks() as $benchmark) {
             $dbColumn = $benchmark->getDbColumn();
-            //$this->dropColumn($dbColumn);
+            $this->dropColumn($dbColumn);
         }
 
         $this->clearCaches();
