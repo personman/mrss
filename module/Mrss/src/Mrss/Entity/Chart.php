@@ -5,11 +5,12 @@ namespace Mrss\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Chart
+ * Chart - @todo: Delete this file and remove the db table
  *
  * Configuration for a chart
  *
  * @ORM\Entity
+ * @deprecated
  * @ORM\Table(name="charts")
  */
 class Chart

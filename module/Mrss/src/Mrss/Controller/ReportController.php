@@ -1103,6 +1103,12 @@ class ReportController extends AbstractActionController
         );
     }
 
+    /**
+     * Delete this
+     *
+     * @param $config
+     * @deprecated
+     */
     protected function saveChart($config)
     {
         $chartModel = $this->getChartModel();
