@@ -591,6 +591,15 @@ return array(
                                 'service' => 'demo'
                             )
                         )
+                    ),
+                    'download' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/download',
+                            'defaults' => array(
+                                'action' => 'download',
+                            )
+                        )
                     )
                 )
             ),

@@ -341,6 +341,7 @@ class Module
                 'export.nccbp' => 'Mrss\Service\Factory\ExportNccbp',
                 'export.users' => 'Mrss\Service\Factory\ExportUsers',
                 'validator.equation' => 'Mrss\Service\Factory\EquationValidator',
+                'download.colleges' => 'Mrss\Service\Factory\DownloadColleges',
                 'service.import.colleges' => 'Mrss\Service\Factory\ImportColleges',
                 'service.import.colleges.demo' => 'Mrss\Service\Factory\ImportCollegeDemographics',
                 'service.import.colleges.category' => 'Mrss\Service\Factory\ImportCollegeCategory',

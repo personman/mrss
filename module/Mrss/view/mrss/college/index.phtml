@@ -24,6 +24,11 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 </script>
 
 <div class="btn-group heading-btns">
+    <a class="btn btn-default" href="<?= $this->url('colleges/download') ?>">
+        <i class="glyphicon glyphicon-circle-arrow-down"></i>
+        Download</a>
+    </a>
+
     <a class="btn btn-default" href="<?= $this->url('colleges/add') ?>">
         <i class="glyphicon glyphicon-plus"></i>
         Add Institution</a>

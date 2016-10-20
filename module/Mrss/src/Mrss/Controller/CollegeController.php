@@ -34,6 +34,11 @@ class CollegeController extends AbstractActionController
     }
 
 
+    public function downloadAction()
+    {
+        $service = $this->getServiceLocator()->get('download.colleges');
+        $service->download();
+    }
 
     public function flashtestAction()
     {
