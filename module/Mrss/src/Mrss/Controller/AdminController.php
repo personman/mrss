@@ -28,7 +28,7 @@ class AdminController extends AbstractActionController
         // Recent changes
         $changeSets = $this->getChangeSetModel()->findByStudy(
             $this->getStudy()->getId(),
-            12
+            8
         );
 
         // Users queue
