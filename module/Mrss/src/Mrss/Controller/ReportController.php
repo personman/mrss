@@ -604,14 +604,6 @@ class ReportController extends AbstractActionController
             return $this->observationNotFound();
         }
 
-        // Nccbp migration: temporary
-        if (false && $year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
-            $this->flashMessenger()->addErrorMessage(
-                "Reports prior to 2014 are under review and will be available soon."
-            );
-            return $this->redirect()->toUrl('/reports/national/2014');
-        }
-
         /** @var \Mrss\Service\Report\National $reportService */
         $reportService = $this->getServiceLocator()->get('service.report.national');
         $reportData = $reportService->getData($subscription, $system);
@@ -719,17 +711,6 @@ class ReportController extends AbstractActionController
         if ($year != $yearToSkip) {
             $open = true;
         }
-
-        //$this->view->headTitle('test');
-
-        // Nccbp migration: temporary
-        /*if ($year < 2014 && !$this->isAllowed('adminMenu', 'view')) {
-            $this->flashMessenger()->addErrorMessage(
-                "Reports prior to 2014 are under review and will be available soon."
-            );
-            return $this->redirect()->toUrl('/reports/executive/2014');
-        }*/
-
 
         /** @var \Mrss\Entity\Observation $observation */
         $observation = $college->getObservationForYear($year);
@@ -1604,6 +1585,7 @@ class ReportController extends AbstractActionController
                     continue;
                 }
 
+                // @todo: generalize
                 // Skip NCCBP form one, with these exceptions:
                 $nccbpFormOneInclude = array(
                     'ft_cr_head',

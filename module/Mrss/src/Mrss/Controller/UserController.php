@@ -555,8 +555,8 @@ class UserController extends AbstractActionController
         $sw = new Stopwatch();
         $saveEvery = 20;
 
-        // Get all users with NCCBP subscriptions who have never logged in
-        $users = $this->getAllNewNCCBPUsers();
+        // Get all users who have never logged in
+        $users = $this->getAllNewUsers();
 
         $excelArray = array(
             array('email', 'name', 'college', 'loginLink')
@@ -663,9 +663,8 @@ class UserController extends AbstractActionController
     /**
      * @return \Mrss\Entity\User[]
      */
-    protected function getAllNewNCCBPUsers()
+    protected function getAllNewUsers()
     {
-
         $collegeModel = $this->getServiceLocator()->get('model.college');
         /** @var \Mrss\Entity\College[] $colleges */
         $colleges = $collegeModel->findAll();
@@ -673,7 +672,7 @@ class UserController extends AbstractActionController
 
         $users = array();
         foreach ($colleges as $college) {
-            foreach ($college->getUsers() as $user) {
+            foreach ($college->getUsersByStudy($study) as $user) {
                 $lastAccess = $user->getLastAccess();
                 if (empty($lastAccess)) {
                     $users[] = $user;

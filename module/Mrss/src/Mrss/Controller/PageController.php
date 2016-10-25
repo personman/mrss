@@ -100,7 +100,7 @@ class PageController extends AbstractActionController
             $pageRoute = '';
         }
 
-        // Customize for NCCBP. report-only viewers can't access member home
+        // Customize for NCCBP. report-only viewers can't access member home @todo: generalize
         if ($pageRoute == 'members' && $this->currentStudy()->getId() == 1) {
             $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
 
