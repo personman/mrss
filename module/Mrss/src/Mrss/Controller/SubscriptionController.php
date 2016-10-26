@@ -1194,6 +1194,7 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($observation)) {
             $observation = new \Mrss\Entity\Observation;
+            $observation->setMigrated(false);
         }
 
         $observation->setYear($this->getCurrentYear());
