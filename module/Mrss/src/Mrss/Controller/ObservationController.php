@@ -924,6 +924,8 @@ class ObservationController extends AbstractActionController
 
     /**
      * For AAUP, if the institution hasn't entered any data beyond form 1
+     *
+     * @todo: generalize
      */
     protected function useDirectDownloadLink()
     {
