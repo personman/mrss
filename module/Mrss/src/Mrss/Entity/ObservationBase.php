@@ -118,21 +118,18 @@ class ObservationBase
     {
         $subscriptions = $this->getSubscriptions();
 
-        if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
+        if (false && $_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
             pr($this->getId());
             pr(count($subscriptions));
         }
 
-
-        //$subscription = $subscriptions[0];
-        $subscription = array_pop($subscriptions);
-
         foreach ($subscriptions as $sub) {
-            $subscription = $sub;
-            
+            if ($sub->getYear() == $this->getYear()) {
+                $subscription = $sub;
+            }
         }
 
-        if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
+        if (false && $_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
             //pr($subscription->getId());
             pr(gettype($subscription));
         }
