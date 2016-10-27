@@ -156,6 +156,7 @@ class Subscription
 
     protected $benchmarkModel;
     protected $datumModel;
+    protected $allData = array();
 
     public function __construct()
     {
@@ -371,14 +372,20 @@ class Subscription
     {
         if ($datum = $this->getdatum($dbColumn)) {
             $datum->setValue($value);
+            $this->allData[$dbColumn] = $value;
         }
     }
 
     public function getValue($dbColumn)
     {
         $value = null;
-        if ($datum = $this->getDatum($dbColumn)) {
-            $value = $datum->getValue();
+        if (array_key_exists($dbColumn, $this->allData)) {
+            $value = $this->allData[$dbColumn];
+        } else {
+            if ($datum = $this->getDatum($dbColumn)) {
+                $value = $datum->getValue();
+                $this->allData[$dbColumn] = $value;
+            }
         }
 
         return $value;

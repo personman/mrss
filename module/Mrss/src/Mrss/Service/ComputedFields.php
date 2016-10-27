@@ -373,6 +373,13 @@ class ComputedFields
         $col = $this->debugDbColumn;
         $benchmarks = $this->getComputedBenchmarks($observation->getYear());
 
+        // Load the data
+        $sub = $observation->getSubscription();
+
+        //foreach ($sub->getData() as $datum) {
+            //$val = $datum->getValue();
+        //}
+
         $i = 0;
         foreach ($benchmarks as $benchmark) {
             $i++;

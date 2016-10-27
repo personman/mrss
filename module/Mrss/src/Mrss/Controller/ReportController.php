@@ -201,6 +201,8 @@ class ReportController extends AbstractActionController
     {
         takeYourTime();
 
+        $this->disableQueryLogging();
+
         $observationId = $this->params()->fromRoute('observation');
         $debug = $this->params()->fromRoute('debug');
         $debugColumn = $this->params()->fromRoute('benchmark');
@@ -228,15 +230,87 @@ class ReportController extends AbstractActionController
         }
 
 
-
-        $view = new JsonModel(
-            array(
-                'status' => $status,
-                'observation' => $observationId
-            )
+        $viewParams = array(
+            'status' => $status,
+            'observation' => $observationId
         );
 
+        $view = new JsonModel($viewParams);
+
         return $view;
+
+        //$logger = $this->getObservationModel()->getEntityManager()->getConfiguration()->getSQLLogger();
+
+        //echo '<pre>';
+        //\Doctrine\Common\Util\Debug::dump($logger, 5);
+        //die;
+        //$this->queryLogger($logger);
+
+        //return $viewParams;
+    }
+
+    public function disableQueryLogging()
+    {
+        // Turn off query logging
+        $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
+    }
+
+
+    protected function queryLogger($logger)
+    {
+        $tables = array();
+        $params = array();
+
+        foreach ($logger->queries as $query) {
+            //pr($query['sql']);
+            $sql = $query['sql'];
+
+            $table = $this->getTableFromSql($sql);
+
+            if (empty($tables[$table])) {
+                $tables[$table] = 1;
+            } else {
+                $tables[$table]++;
+            }
+
+            $qParams = $query['params'];
+            if ($table && isset($qParams[0])) {
+                $param = $qParams[0];
+
+                if ($param == 'ft_male_no_rank_number_12_month') {
+                    //pr($sql);
+                }
+
+                if (!isset($params[$param])) {
+                    $params[$param] = 1;
+                } else {
+                    $params[$param]++;
+                }
+            }
+        }
+
+        pr($tables);
+
+        asort($params);
+        pr($params);
+
+        die('tewt');
+    }
+
+    protected function getTableFromSql($sql)
+    {
+        preg_match('/(FROM|UPDATE_SKIP) (.*?) /', $sql, $matches);
+
+        $table = null;
+        if (!empty($matches[2])) {
+            $table = $matches[2];
+        }
+
+        return $table;
     }
 
     public function calculateChangesAction()
