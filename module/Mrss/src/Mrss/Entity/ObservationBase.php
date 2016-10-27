@@ -127,8 +127,8 @@ class ObservationBase
         $subscription = array_pop($subscriptions);
 
         if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
-            pr($subscription->getId());
-            pr(get_class($subscription));
+            //pr($subscription->getId());
+            pr(gettype($subscription));
         }
 
 
