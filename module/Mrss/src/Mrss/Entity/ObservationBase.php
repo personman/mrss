@@ -119,11 +119,12 @@ class ObservationBase
         $subscriptions = $this->getSubscriptions();
 
         if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
-            pr($subscriptions);
+            pr(count($subscriptions));
         }
 
 
-        $subscription = $subscriptions[0];
+        //$subscription = $subscriptions[0];
+        $subscription = array_pop($subscriptions);
 
         return $subscription;
     }
