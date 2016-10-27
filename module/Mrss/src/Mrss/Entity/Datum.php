@@ -145,9 +145,16 @@ class Datum
         if ($this->usesString()) {
             $this->setStringValue($value);
         } else {
+            if ($this->getDbColumn() == 'tot_stud_trans') {
+                if (is_null($value) || $value === '') {
+                    $value = null;
+                }
+            }
+
             if ($value) {
                 $value = floatval($value);
             }
+            
             $this->setFloatValue($value);
         }
     }
