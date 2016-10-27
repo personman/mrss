@@ -5,8 +5,9 @@
 <?php $this->headTitle()->prepend('Executive Report') ?>
 <?php $this->headTitle()->prepend($college->getName()) ?>
 
-<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=5', 'screen,print') ?>
-<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=7', $media) ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=7', 'screen,print') ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=9', $media) ?>
+
 <?= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
 
 <?php /** @var \Mrss\Entity\College $college */ ?>
@@ -26,6 +27,12 @@
         <?php endforeach ?>
     </ul>
 
+    <div id="printButton">
+        <a class="btn btn-default" href="<?= $this->url('reports/executive-print', array('year' => $year)) ?>">
+            <span class="glyphicon glyphicon-print"></span>
+            Print
+        </a>
+    </div>
 
     <div class="executiveReportHeader">
         <h2>Executive Report for <?= $college->getExecFullName() ?></h2>
@@ -250,8 +257,18 @@
         // Swap out the logo for a higher quality one for printing
         $('.logo img')
             .attr('src', '/images/nccbp-logo-cmyk.svg')
-            .css('width', '300px')
+            //.css('width', '300px')
 
     }
     //})
 </script>
+
+<?php if ($autoPrint): ?>
+    <script>
+        $(function() {
+            setTimeout(function() {window.print()}, 2000);
+        });
+    </script>
+<?php endif ?>
+
+

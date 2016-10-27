@@ -511,9 +511,9 @@ class College
         return $this->system;
     }
 
-    public function getFullAddress()
+    public function getFullAddress($lineBreak = "<br>")
     {
-        $address = $this->getAddress() . "<br>\n"
+        $address = $this->getAddress() . $lineBreak . "\n"
             . $this->getCity() . ", "
             . $this->getState() . " "
             . $this->getZip();

@@ -70,5 +70,4 @@ class Email extends AbstractForm
         //pr($filter);
         return $filter;
     }
-
 }

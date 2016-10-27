@@ -21,6 +21,8 @@ class ChangeSet
     protected $id;
 
     /**
+     * Phasing this out in favor of subscriptions
+     *
      * @ORM\ManyToOne(targetEntity="Observation", inversedBy="changes")
      * @ORM\JoinColumn(name="observation_id", referencedColumnName="id", onDelete="SET NULL")
      * @var Observation
@@ -33,6 +35,13 @@ class ChangeSet
      * @var SubObservation
      */
     protected $subObservation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Subscription", inversedBy="changes")
+     * @ORM\JoinColumn(name="subscription_id", referencedColumnName="id", onDelete="SET NULL")
+     * @var Subscription
+     */
+    protected $subscription;
 
     /**
      * @ORM\ManyToOne(targetEntity="Study")
@@ -208,4 +217,32 @@ class ChangeSet
     {
         return $this->changes;
     }
+
+    /**
+     * Switching from observations to subscriptions as the connection point
+     * @return Subscription
+     */
+    public function getSubscription()
+    {
+        $sub = $this->subscription;
+
+        if (empty($sub)) {
+            $sub = $this->getObservation()->getSubscription();
+            $this->setSubscription($sub);
+        }
+
+        return $sub;
+    }
+
+    /**
+     * @param Observation $subscription
+     * @return ChangeSet
+     */
+    public function setSubscription($subscription = null)
+    {
+        $this->subscription = $subscription;
+        return $this;
+    }
+
+
 }

@@ -68,6 +68,18 @@ class Observation extends AbstractModel
     }
 
     /**
+     * @return ObservationEntity
+     */
+    public function findOneUnMigrated()
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+                'migrated' => false
+            )
+        );
+    }
+
+    /**
      * Return all observations belonging to a subscription for the given year
      * and study.
      *
@@ -192,61 +204,6 @@ class Observation extends AbstractModel
         }
 
         return $sparkline;
-    }
-
-    public function findForScatterPlot($study, $year, $benchmark1, $benchmark2 = null, $benchmark3 = null)
-    {
-        // Headers based on colleges
-        $selects = array($benchmark1);
-
-        // Prepare a queryBuilder
-        $connection = $this->getEntityManager()->getConnection();
-        $connection->setFetchMode(\PDO::FETCH_NUM);
-        $qb = $connection->createQueryBuilder();
-
-
-
-
-        // The query
-        /*$qb->select($selects);
-        $qb->from('observations', 'o');
-        $qb->join(
-            'subscriptions',
-            's',
-            'ON',
-            's.observation_id = o.id'
-        );
-
-        $qb->where('s.year = :year');
-        $qb->setParameter('year', $year);
-
-        $qb->where('s.study_id = :study_id');
-        $qb->setParameter('study_id', $study->getId());
-
-        $qb->where("$benchmark1 IS NOT NULL");
-        //$qb->orderBy('year');*/
-
-
-        $qb->add('select', 'c');
-        $qb->add('from', '\Mrss\Entity\College c');
-
-        // Join subscriptions
-        /*$qb->innerJoin(
-            '\Mrss\Entity\Subscription',
-            's',
-            'WITH',
-            's.college = c.id'
-        );*/
-
-        pr($qb->getSQL());
-
-        try {
-            $data = $qb->execute()->fetchAll();
-        } catch (\Exception $e) {
-            return array();
-        }
-
-        return $data;
     }
 
     /**

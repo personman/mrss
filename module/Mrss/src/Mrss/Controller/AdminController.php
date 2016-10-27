@@ -28,7 +28,7 @@ class AdminController extends AbstractActionController
         // Recent changes
         $changeSets = $this->getChangeSetModel()->findByStudy(
             $this->getStudy()->getId(),
-            12
+            8
         );
 
         // Users queue
@@ -141,11 +141,30 @@ class AdminController extends AbstractActionController
         /** @var \Mrss\Service\ObservationGenerator $generator */
         $generator = $this->getServiceLocator()->get('service.generator');
 
-        $generator->generate();
+
+        $strip = $this->params()->fromRoute('strip');
+
+        if (!$strip) {
+            $generator->generate(true, true);
+        } else {
+            $generator->stripObservation();
+        }
 
         $stats = $generator->getStats();
 
         prd($stats);
+    }
+
+    public function checkMigrationAction()
+    {
+        takeYourTime();
+
+        $minId = $this->params()->fromRoute('minId');
+
+        /** @var \Mrss\Service\ObservationDataMigration $migrator */
+        $migrator = $this->getServiceLocator()->get('service.observation.data.migration');
+
+        $migrator->check($minId);
     }
 
     protected function getYear()
@@ -156,6 +175,53 @@ class AdminController extends AbstractActionController
         }
 
         return $year;
+    }
+
+    public function testFilterAction()
+    {
+        $criteria = array(
+            'institution_control' => array('Public'),
+            'ft_average_instructor_salary' => '6000 - 50000',
+            //'ft_male_faculty_number_9_month' => '1 - 10000',
+            //'ft_female_faculty_number_9_month' => '1 - 10000',
+            'states' => array('MO')
+        );
+
+        $year = 2016;
+        $study = $this->currentStudy();
+
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+
+        $start = microtime(1);
+        $colleges = $collegeModel->findByCriteria(
+            $criteria,
+            $study,
+            $this->currentCollege(),
+            $year
+        );
+
+        $elapsed = round(microtime(1) - $start, 3);
+        pr($elapsed);
+
+        echo 'Count: ';
+        pr(count($colleges));
+
+        foreach ($colleges as $college) {
+            $sub = $college->getSubscriptionByStudyAndYear($study->getId(), $year);
+
+            pr($college->getNameAndState());
+
+            foreach (array_keys($criteria) as $dbColumn) {
+                $val = $sub->getValue($dbColumn);
+
+
+                echo "$dbColumn = $val<br>";
+            }
+        }
+
+        die(' done');
     }
 
     /**
@@ -212,5 +278,12 @@ class AdminController extends AbstractActionController
 
             $this->flashMessenger()->addSuccessMessage('Email sent to ' . $toEmail);
         }
+    }
+
+    public function cleanUpAction()
+    {
+        $study = $this->currentStudy();
+
+
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Mrss\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 use Mrss\Entity\College;
 use Mrss\Entity\Study;
 
@@ -44,6 +46,12 @@ class Subscription
      * @ORM\ManyToOne(targetEntity="Observation", inversedBy="subscriptions")
      */
     protected $observation;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Datum", mappedBy="subscription", cascade={"persist", "remove"})
+     * @var Datum[]
+     */
+    protected $data;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -146,6 +154,13 @@ class Subscription
      */
     protected $paidNotes;
 
+    protected $benchmarkModel;
+    protected $datumModel;
+
+    public function __construct()
+    {
+        $this->data = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -350,6 +365,130 @@ class Subscription
     public function setReportAccess($reportAccess)
     {
         $this->reportAccess = $reportAccess;
+    }
+
+    public function setValue($dbColumn, $value)
+    {
+        if ($datum = $this->getdatum($dbColumn)) {
+            $datum->setValue($value);
+        }
+    }
+
+    public function getValue($dbColumn)
+    {
+        $value = null;
+        if ($datum = $this->getDatum($dbColumn)) {
+            $value = $datum->getValue();
+        }
+
+        return $value;
+    }
+
+    public function hasValue($benchmark)
+    {
+        $has = false;
+        if ($this->getDatum($benchmark)) {
+            $has = true;
+        }
+
+        return $has;
+    }
+
+    /**
+     * Get the data value for one benchmark for this subscription
+     * @param mixed $benchmark Can be a dbColumn string or a benchmark object
+     * @return Datum
+     */
+    public function getDatum($benchmark)
+    {
+        $data = $this->getData();
+
+        if (is_object($benchmark)) {
+            $field = 'benchmark';
+        } else {
+            $field = 'dbColumn';
+        }
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq($field, $benchmark));
+
+        $datum = null;
+        if ($data) {
+            $datums = $data->matching($criteria);
+            if ($datums && $datums->count() > 0) {
+                $datum = $datums->first();
+            }
+        }
+
+        // If the data row doesn't exist, create it
+        if ($datum === null) {
+            $datum = new Datum();
+            $datum->setSubscription($this);
+
+
+            if (is_object($benchmark)) {
+                $datum->setBenchmark($benchmark);
+                $datum->setDbColumn($benchmark->getDbColumn());
+            } else {
+                $dbColumn = $benchmark;
+                $datum->setDbColumn($dbColumn);
+                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+
+                $datum->setBenchmark($benchmark);
+            }
+
+            if ($benchmark) {
+                $this->getData()->add($datum);
+                $this->getDatumModel()->save($datum);
+                $this->getDatumModel()->getEntityManager()->flush();
+            }
+        }
+
+        return $datum;
+    }
+
+    /**
+     * Return an associative array with dbColumn => value.
+     * Used to log changes
+     *
+     */
+    public function getAllData()
+    {
+        $data = array();
+        foreach ($this->getDAta() as $datum) {
+            $b = $datum->getBenchmark();
+            if (empty($b)) {
+                prd($datum->getId());
+            }
+            $data[$datum->getBenchmark()->getDbColumn()] = $datum->getValue();
+        }
+
+        return $data;
+    }
+
+    public function setValues($data)
+    {
+        foreach ($data as $dbColumn => $value)
+        {
+            $this->setValue($dbColumn, $value);
+        }
+    }
+
+    /**
+     * @return Datum[]
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param Datum[] $data
+     * @return Subscription
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
         return $this;
     }
 
@@ -428,5 +567,32 @@ class Subscription
     public function __toString()
     {
         return "Subscription id: {$this->getId()}";
+    }
+
+
+    public function setBenchmarkModel($model)
+    {
+        $this->benchmarkModel = $model;
+    }
+
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        return $this->benchmarkModel;
+    }
+
+    public function setDatumModel($model)
+    {
+        $this->datumModel = $model;
+    }
+
+    /**
+     * @return \Mrss\Model\Datum
+     */
+    public function getDatumModel()
+    {
+        return $this->datumModel;
     }
 }

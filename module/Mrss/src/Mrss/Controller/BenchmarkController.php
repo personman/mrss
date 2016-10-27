@@ -19,6 +19,9 @@ class BenchmarkController extends AbstractActionController
 
     public function indexAction()
     {
+        $studyConfig = $this->getServiceLocator()->get('study');
+        $showHeatMap = $studyConfig->benchmark_completion_heatmap;
+
         $studyId = $this->params()->fromRoute('study', null);
         if (empty($studyId)) {
             $studyId = $this->currentStudy()->getId();
@@ -30,24 +33,32 @@ class BenchmarkController extends AbstractActionController
         $study = $studyModel->find($studyId);
         $benchmarkGroups = $study->getBenchmarkGroups();
 
-        $years = $this->getServiceLocator()->get('model.subscription')
-            ->getYearsWithSubscriptions($study);
-        rsort($years);
+
+        if ($showHeatMap) {
+            $years = $this->getServiceLocator()->get('model.subscription')
+                ->getYearsWithSubscriptions($study);
+            rsort($years);
+        } else {
+            $years = array();
+        }
+
 
         // Are we organizing the benchmarks for data-entry or reports?
         $user = $this->zfcUserAuthentication()->getIdentity();
         $organization = $user->getAdminBenchmarkSorting();
 
         // Sparklines
+        // @todo: use study-wide median for sparkline, if any. Disabled for now.
         $observationModel = $this->getServiceLocator()->get('model.observation');
+        $percentileModel = $this->getServiceLocator()->get('model.percentile');
         $sparklines = array();
         $counts = array('benchmarks' => 0, 'collected' => 0, 'computed' => 0);
         foreach ($benchmarkGroups as $benchmarkGroup) {
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
-                $data = $observationModel
+                /*$data = $observationModel
                     ->getSparkline($benchmark, $this->currentCollege());
                 $asString = implode(',', $data);
-                $sparklines[$benchmark->getId()] = $asString;
+                $sparklines[$benchmark->getId()] = $asString;*/
 
                 // Counts
                 $counts['benchmarks']++;
@@ -59,12 +70,12 @@ class BenchmarkController extends AbstractActionController
             }
         }
 
+
         return array(
-            //'benchmarkGroups' => $benchmarkGroupModel->findAll(),
             'benchmarkGroups' => $benchmarkGroups,
             'study' => $study,
             'yearsToShow' => $years,
-            'sparklines' => $sparklines,
+            //'sparklines' => $sparklines,
             'activeCollege' => $this->currentCollege(),
             'organization' => $organization,
             'counts' => $counts
@@ -131,7 +142,7 @@ class BenchmarkController extends AbstractActionController
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
-                $extraMessage = $this->generateObservation();
+                $extraMessage = ''; //$this->generateObservation();
 
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
                 return $this->redirect()->toRoute(
@@ -180,7 +191,7 @@ class BenchmarkController extends AbstractActionController
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
-                $extraMessage = $this->generateObservation();
+                $extraMessage = ''; //$this->generateObservation();
 
                 $this->flashMessenger()->addSuccessMessage('Benchmark saved. ' . $extraMessage);
 

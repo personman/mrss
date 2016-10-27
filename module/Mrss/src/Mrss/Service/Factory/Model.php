@@ -72,6 +72,7 @@ class Model implements AbstractFactoryInterface
             'model.outlier' => 'Mrss\Model\Outlier',
             'model.suppression' => 'Mrss\Model\Suppression',
             'model.percentchange' => 'Mrss\Model\PercentChange',
+            'model.datum' => 'Mrss\Model\Datum',
         );
     }
 }

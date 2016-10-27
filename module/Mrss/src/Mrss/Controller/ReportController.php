@@ -102,13 +102,10 @@ class ReportController extends AbstractActionController
         // Get System ids
         $currentYear = $this->currentStudy()->getCurrentYear();
         $systemIds = array();
-        //foreach ($this->getSystemModel()->findAll() as $system) {
-        foreach ($this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId()) as $system) {
+        $systems = $this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId());
+        foreach ($systems as $system) {
             $systemIds[] = $system->getId();
         }
-
-
-
 
 
         return array(
@@ -752,6 +749,11 @@ class ReportController extends AbstractActionController
             $media = 'print';
         }
 
+        $autoPrint = false;
+        if (empty($ipeds) && $forcePrintStyles) {
+            $autoPrint = true;
+        }
+
         // Membership count
         $memberCount = $this->getMemberCount($year);
 
@@ -763,7 +765,8 @@ class ReportController extends AbstractActionController
                 'college' => $college,
                 'open' => $open,
                 'media' => $media,
-                'memberCount' => $memberCount
+                'memberCount' => $memberCount,
+                'autoPrint' => $autoPrint
             )
         );
         $view->setTemplate('mrss/report/executive.phtml');
@@ -1100,6 +1103,12 @@ class ReportController extends AbstractActionController
         );
     }
 
+    /**
+     * Delete this
+     *
+     * @param $config
+     * @deprecated
+     */
     protected function saveChart($config)
     {
         $chartModel = $this->getChartModel();

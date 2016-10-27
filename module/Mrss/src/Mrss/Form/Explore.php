@@ -46,6 +46,16 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'multiTrend',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'id' => 'multiTrend'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'presentation',
                 'type' => 'Select',
                 'options' => array(
@@ -182,6 +192,22 @@ class Explore extends AbstractForm
         );
 
 
+        $this->add(
+            array(
+                'name' => 'percentScaleZoom',
+                'type' => 'Zend\Form\Element\Checkbox',
+                'options' => array(
+                    'label' => 'Percent Scale Other than 0-100',
+                    'help-block' => 'By default the scale for percentages is 0-100%. ' .
+                        'Check this box to allow the chart to select a scale that shows more detail.'
+                ),
+                'attributes' => array(
+                    'id' => 'percentScaleZoom'
+                )
+            )
+        );
+
+
 
         $this->add($this->getButtons());
     }
@@ -286,7 +312,7 @@ class Explore extends AbstractForm
         return $filter;
     }
 
-    static function getPresentationOptions($includeTrends)
+    public static function getPresentationOptions($includeTrends)
     {
         $options = array(
             'line' => 'Trend Line',

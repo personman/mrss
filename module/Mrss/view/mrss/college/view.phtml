@@ -61,6 +61,18 @@
             <?= $college->getOpeId() ?>
         </td>
     </tr>
+
+    <?php if ($system = $college->getSystem()): ?>
+    <tr>
+        <td>
+            System:
+        </td>
+        <td>
+            <?= $system->getName() ?>
+        </td>
+    </tr>
+    <?php endif ?>
+
     <tr>
         <td>
             Address:

@@ -379,8 +379,13 @@ class ObservationController extends AbstractActionController
 
         }
 
+        // Phasing out observation for subscripton
+        $subscription = $observation->getSubscription();
+
+        $oldData = $subscription->getAllData();
+
         // Clone the unedited observation for comparison
-        $oldObservation = clone $observation;
+        //$oldObservation = clone $observation;
 
         /** @var \Mrss\Service\FormBuilder $formService */
         $formService = $this->getServiceLocator()
@@ -436,7 +441,11 @@ class ObservationController extends AbstractActionController
 
 
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $formData = $this->params()->fromPost();
+            unset($formData['buttons']);
+
+            $form->setData($formData);
+
 
             //var_dump($form->getElements()); die;
             if ($form->isValid()) {
@@ -446,8 +455,21 @@ class ObservationController extends AbstractActionController
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
 
-                $changeSet = $this->getServiceLocator()->get('service.observationAudit')
-                    ->logChanges($oldObservation, $observation, 'dataEntry');
+                //$changeSet = $this->getServiceLocator()->get('service.observationAudit')
+                //    ->logChanges($oldObservation, $observation, 'dataEntry');
+
+                $newData = $subscription->getAllData();
+
+                //pr($newData);
+                //pr($newData['institution_conversion_factor']);
+                //pr($subscription->getValue('institution_conversion_factor'));
+                //pr($subscription->getId());
+
+                /** @var \Mrss\Service\ObservationAudit $observationAudit */
+                $observationAudit = $this->getServiceLocator()->get('service.observationAudit');
+                $changeSet = $observationAudit
+                    ->logChangesNew($oldData, $newData, 'dataEntry', $subscription);
+
 
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
@@ -501,7 +523,7 @@ class ObservationController extends AbstractActionController
         );
 
         $conversionFactor = 1;
-        if ($observation->has('institution_conversion_factor')) {
+        if ($this->currentStudy()->getId() == 4 && $observation->has('institution_conversion_factor')) {
             $conversionFactor = $observation->get('institution_conversion_factor');
         }
 
@@ -785,10 +807,14 @@ class ObservationController extends AbstractActionController
                     // Is the data in the Excel file valid?
                     if ($inputFilter->isValid()) {
                         // Now we actually save the data to the observation
+                        // @todo: phasing out observation, plus ipeds could be generic instead
                         $observation = $this->getCurrentObservationByIpeds($ipeds);
+
+                        $subscription = $observation->getSubscription();
 
                         // Clone for logging
                         $oldObservation = clone $observation;
+                        $oldData = $subscription->getAllData();
 
                         // Handle any subobservations
                         if (!empty($data['subobservations'])) {
@@ -852,8 +878,14 @@ class ObservationController extends AbstractActionController
                 }
 
                 // Log any changes
-                $changeSet = $this->getServiceLocator()->get('service.observationAudit')
-                    ->logChanges($oldObservation, $observation, 'excel');
+                $this->getServiceLocator()->get('em')->flush();
+
+                $newData = $subscription->getAllData();
+
+                /** @var \Mrss\Service\ObservationAudit $observationAudit */
+                $observationAudit = $this->getServiceLocator()->get('service.observationAudit');
+                $changeSet = $observationAudit
+                    ->logChangesNew($oldData, $newData, 'excel', $subscription);
 
                 // Validate against validation rule class
                 $validationService = $this->getServiceLocator()->get('service.validation');
@@ -1096,8 +1128,90 @@ class ObservationController extends AbstractActionController
         return $year;
     }
 
+    public function test2()
+    {
+        $dbColumn = 'ft_average_no_rank_salary';
+
+        /** @var \Mrss\Model\Benchmark $model */
+        $model = $this->getServiceLocator()->get('model.benchmark');
+        $benchmark = $model->findOneByDbColumn($dbColumn);
+
+        /** @var \Mrss\Entity\Subscription $subscription */
+        $subscription = $this->currentCollege()->getSubscriptionByStudyAndYear($this->currentStudy()->getId(), 2016);
+
+        pr($subscription->getCollege()->getNameAndState());
+
+
+        $start = microtime(true);
+        pr($subscription->getDatum($benchmark)->getValue());
+        pr(microtime(true) - $start);
+
+        $start = microtime(true);
+        pr($subscription->getDatum($dbColumn)->getValue());
+        pr(microtime(true) - $start);
+
+        $start = microtime(true);
+        pr($subscription->getValue($dbColumn));
+        pr(microtime(true) - $start);
+
+
+
+        prd($benchmark->getName());
+    }
+
+    public function test()
+    {
+        // Test stuff
+        /** @var \Mrss\Model\Subscription $subModel */
+        $subModel = $this->getServiceLocator()->get('model.subscription');
+
+        $dbColumns = array('ft_average_professor_salary', 'ft_average_male_professor_salary');
+        $excludeOutliers = true;
+        $notNull = true;
+        $benchmarkGroupIds = array();
+        $system = null;
+
+        $start = microtime(1);
+        $subscriptions = $subModel->findWithPartialObservations(
+            $this->currentStudy(),
+            2016,
+            $dbColumns,
+            $excludeOutliers,
+            $notNull,
+            $benchmarkGroupIds,
+            $system
+        );
+
+        $seconds = round(microtime(1) - $start, 5);
+        pr($seconds);
+
+
+        foreach ($subscriptions as $sub) {
+            pr($sub->getCollege()->getNameAndState());
+            pr($sub->getObservation()->getId());
+            foreach ($dbColumns as $dbColumn) {
+                echo $dbColumn;
+                pr($sub->getValue($dbColumn));
+            }
+        }
+
+        $seconds = round(microtime(1) - $start, 5);
+        pr($seconds);
+
+        die(' test');
+    }
+
     public function submittedValuesAction()
     {
+        //return $this->test();
+
+
+
+
+
+
+
+
         $year = $this->getYearFromRouteOrStudy(false);
         $format = $this->params()->fromRoute('format', 'html');
 
@@ -1160,6 +1274,7 @@ class ObservationController extends AbstractActionController
                     );
                     continue;
                 }
+
 
                 $value = $observation->get($benchmark->getDbColumn());
                 $value = $benchmark->format($value);

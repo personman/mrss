@@ -86,21 +86,15 @@ class BubbleBuilder extends ChartBuilder
 
         $subCount = 0;
         foreach ($subscriptions as $subscription) {
-            //pr($subscription->getCollege()->getId());
-            //pr($collegeId);
-
-            $observation = $subscription->getObservation();
             $college = $subscription->getCollege();
-            //unset($subscription);
 
-            $xVal = $observation->get($x);
-            $yVal = $observation->get($y);
+            $xVal = $subscription->getValue($x);
+            $yVal = $subscription->getValue($y);
 
             $test = array($xVal, $yVal);
-            //pr($test);
 
             if ($size) {
-                $sizeVal = $observation->get($size);
+                $sizeVal = $subscription->getValue($size);
             } else {
                 $sizeVal = 1;
             }
@@ -137,7 +131,6 @@ class BubbleBuilder extends ChartBuilder
                 $yVals[] = $yVal;
             }
 
-            unset($observation);
         }
 
         $xLabel = $xBenchmark->getDescriptiveReportLabel();

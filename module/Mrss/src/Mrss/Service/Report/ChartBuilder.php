@@ -53,20 +53,36 @@ class ChartBuilder extends Report
         return $this->peers;
     }
 
-    public function getNationalColor()
+    public function getNationalColor($variation = false)
     {
-        return '#0065A1';
+        $color = '#0065A1';
+
+        if ($variation) {
+            $color = '#4DB2EE';
+        }
+
+        return $color;
     }
 
-    public function getYourColor()
+    public function getYourColor($variation = false)
     {
-        return '#9CBF3D';
+        $color = '#9CBF3D';
+
+        if ($variation) {
+            $color = '#CFF270';
+        }
+
+        return $color;
     }
 
-    public function getPeerColor()
+    public function getPeerColor($variation = false)
     {
-        //return '#422D68';
-        return '#8F7AB5';
+        $color = '#8F7AB5';
+        if ($variation) {
+            $color = '#DCC7FF';
+        }
+
+        return $color;
     }
 
     public function getFootnotes()

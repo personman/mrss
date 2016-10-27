@@ -197,6 +197,57 @@ class College extends AbstractModel
             }
         }
 
+
+        $builder = $this->addCriteria($builder, $criteria);
+
+        // Exclude the current college (they can't be their own peer)
+        $builder->andWhere('c.id != :current_college_id');
+        $builder->setParameter('current_college_id', $currentCollege->getId());
+
+        // Filter by year
+        $builder->andWhere('s.year = :year');
+        $builder->setParameter('year', $year);
+
+        // Order
+        $builder->orderBy('c.name', 'ASC');
+
+        //echo $builder->getQuery()->getSql();
+        $colleges = $builder->getQuery()->getResult();
+
+        return $colleges;
+    }
+    /**
+     * @param $criteria
+     * @param StudyEntity $currentStudy
+     * @param $currentCollege
+     * @return \Mrss\Entity\College[]
+     */
+    public function findByCriteriaOld($criteria, StudyEntity $currentStudy, $currentCollege, $year)
+    {
+        $em = $this->getEntityManager();
+        $builder = $em->createQueryBuilder();
+
+        $builder->add('select', 'c');
+        $builder->add('from', '\Mrss\Entity\College c');
+
+        // Join subscriptions
+        $builder->innerJoin(
+            '\Mrss\Entity\Subscription',
+            's',
+            'WITH',
+            's.college = c.id'
+        );
+        $builder->andWhere('s.study = :study_id');
+        $builder->setParameter('study_id', $currentStudy->getId());
+
+        // Filter by state
+        if (!empty($criteria['states']) && $states = $criteria['states']) {
+            if (is_array($states) && count($states) > 0) {
+                $builder->andWhere($builder->expr()->in('c.state', ':states'));
+                $builder->setParameter('states', $states);
+            }
+        }
+
         // Join observations
         $builder->innerJoin(
             '\Mrss\Entity\Observation',
@@ -205,7 +256,7 @@ class College extends AbstractModel
             's.observation = o.id'
         );
 
-        $builder = $this->addCriteria($builder, $criteria);
+        $builder = $this->addCriteriaOld($builder, $criteria);
 
         // Exclude the current college (they can't be their own peer)
         $builder->andWhere('c.id != :current_college_id');
@@ -229,6 +280,83 @@ class College extends AbstractModel
      * @return QueryBuilder
      */
     protected function addCriteria(QueryBuilder $builder, $criteria)
+    {
+        unset($criteria['states']);
+
+        // Filter the the other criteria
+        $dqlSubqueries = array();
+        $i = 0;
+        foreach ($criteria as $criterion => $value) {
+            if ($criterion == 'states') {
+                // Already handled this
+                continue;
+            }
+
+            $table = "v" . $i;
+            $subQueryBase = "SELECT $table FROM \Mrss\Entity\Datum $table WHERE s.id = $table.subscription AND ";
+
+            if (!empty($value)) {
+                // Criteria that support multiple values, use IN
+                if (is_array($value)) {
+
+                    $subQuery = "$table.stringValue IN (:{$criterion}_in) AND $table.dbColumn = :{$criterion}_col";
+                    $dqlSubqueries[] = $subQueryBase . $subQuery;
+
+
+                    $builder->setParameter(
+                        $criterion . "_in",
+                        $value
+                    );
+
+                    $builder->setParameter(
+                        $criterion . '_col',
+                        $criterion
+                    );
+
+
+                } else {
+                    // Criteria that support a range
+                    $parsedRange = $this->parseRange($value);
+
+
+
+                    $subQuery = "$table.floatValue BETWEEN :{$criterion}_min AND :{$criterion}_max AND $table.dbColumn = :{$criterion}_col";
+                    $dqlSubqueries[] = $subQueryBase . $subQuery;
+
+
+                    $builder->setParameter(
+                        $criterion . '_min',
+                        $parsedRange['min']
+                    );
+                    $builder->setParameter(
+                        $criterion . '_max',
+                        $parsedRange['max']
+                    );
+                    $builder->setParameter(
+                        $criterion . '_col',
+                        $criterion
+                    );
+                }
+            }
+
+            $i++;
+        }
+
+        if ($dqlSubqueries) {
+            foreach ($dqlSubqueries as $dql) {
+                $builder->andWhere($builder->expr()->exists($dql));
+            }
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @param QueryBuilder $builder
+     * @param $criteria
+     * @return QueryBuilder
+     */
+    protected function addCriteriaOld(QueryBuilder $builder, $criteria)
     {
         // Filter the the other criteria
         foreach ($criteria as $criterion => $value) {

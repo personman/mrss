@@ -341,11 +341,13 @@ class Module
                 'export.nccbp' => 'Mrss\Service\Factory\ExportNccbp',
                 'export.users' => 'Mrss\Service\Factory\ExportUsers',
                 'validator.equation' => 'Mrss\Service\Factory\EquationValidator',
+                'download.colleges' => 'Mrss\Service\Factory\DownloadColleges',
                 'service.import.colleges' => 'Mrss\Service\Factory\ImportColleges',
                 'service.import.colleges.demo' => 'Mrss\Service\Factory\ImportCollegeDemographics',
                 'service.import.colleges.category' => 'Mrss\Service\Factory\ImportCollegeCategory',
                 'service.import.users' => 'Mrss\Service\Factory\ImportUsers',
                 'service.generator' => 'Mrss\Service\Factory\ObservationGenerator',
+                'service.observation.data.migration' => 'Mrss\Service\Factory\ObservationDataMigration',
                 'service.variableSubstitution' => function ($sm) {
                     $service = new Service\VariableSubstitution();
                     $currentStudy = $sm->get('ControllerPluginManager')

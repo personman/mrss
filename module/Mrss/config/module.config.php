@@ -591,6 +591,15 @@ return array(
                                 'service' => 'demo'
                             )
                         )
+                    ),
+                    'download' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/download',
+                            'defaults' => array(
+                                'action' => 'download',
+                            )
+                        )
                     )
                 )
             ),
@@ -1074,7 +1083,20 @@ return array(
                     'executive-print' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/executive-print[/:ipeds[/:year]]',
+                            'route' => '/executive-print[/:year]',
+                            'defaults' => array(
+                                'action' => 'executiveprint',
+                                'year' => null,
+                                'ipeds' => null,
+                                'print' => true,
+                                'open' => true
+                            )
+                        )
+                    ),
+                    'executive-print-admin' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/executive-print-admin[/:ipeds[/:year]]',
                             'defaults' => array(
                                 'action' => 'executiveprint',
                                 'year' => null,
@@ -1822,10 +1844,32 @@ return array(
                     'generate-observation' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/generate',
+                            'route' => '/generate[/:strip]',
                             'defaults' => array(
                                 'controller' => 'Admin',
-                                'action' => 'generate'
+                                'action' => 'generate',
+                                'strip' => false
+                            )
+                        )
+                    ),
+                    'check-migration' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/check-migration[/:minId]',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'checkMigration',
+                                'minId' => 0
+                            )
+                        )
+                    ),
+                    'test-filter' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/test-filter',
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'testFilter'
                             )
                         )
                     ),
@@ -1838,7 +1882,16 @@ return array(
                                 'action' => 'equations'
                             )
                         )
-                    )
+                    ),
+                    'clean-up' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/clean-up',
+                            'defaults' => array(
+                                'action' => 'cleanUp',
+                            )
+                        )
+                    ),
                 )
             ),
             'tools' => array(
@@ -2063,6 +2116,15 @@ return array(
                             'route' => '/email-test',
                             'defaults' => array(
                                 'action' => 'emailTest',
+                            )
+                        )
+                    ),
+                    'ob-dat' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/ob-dat',
+                            'defaults' => array(
+                                'action' => 'observationDataMigration',
                             )
                         )
                     ),

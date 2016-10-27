@@ -109,7 +109,7 @@ class MergeData
         $targetObservation = $this->getObservationModel()->findOne($to, $this->getYear());
 
         // Save the merged data
-        foreach ($mergedData as $dbColumn=> $value) {
+        foreach ($mergedData as $dbColumn => $value) {
             $targetObservation->set($dbColumn, $value);
             echo "Saving $dbColumn: $value<br>\n";
         }

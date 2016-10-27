@@ -18,7 +18,7 @@
                 array('study' => $study->getId())
             )?>">
                 <span class="icon-plus-sign glyphicon glyphicon-plus"></span>
-                Add a benchmark group
+                Add a form
             </a>
         </li>
 
@@ -81,7 +81,7 @@
                 <a href="<?= $this->url(
                     'benchmarkgroups/edit',
                     array('id' => $benchmarkGroup->getId())
-                ) ?>">Benchmark group settings</a>
+                ) ?>">Form settings</a>
             </li>
 
             <li>
@@ -127,7 +127,7 @@
                 <th>Computed</th>
                 <th>On <a href="#" class="onReport"><i class="icon-pencil glyphicon glyphicon-pencil" title="Choose which benchmarks are used in reporting."></i></a><br>Report</th>
                 <th>Name</th>
-                <th>Trends</th>
+                <th><?php //Trends ?></th>
 
                 <?php foreach ($this->yearsToShow as $year): ?>
                     <th><?= $year ?></th>
@@ -190,7 +190,7 @@
                                     'id' => $benchmark->getId()
                                 )
                             ) ?>">
-                                <span class="inlinesparkline"><?= $sparklines[$benchmark->getId()] ?></span>
+                                <span class="inlinesparkline"><?//= $sparklines[$benchmark->getId()] ?></span>
                             </a>
                         </td>
 

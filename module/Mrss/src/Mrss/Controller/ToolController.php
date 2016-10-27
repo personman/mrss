@@ -846,7 +846,9 @@ class ToolController extends AbstractActionController
                         $groups = array($benchmarkGroupId);
                     }
 
-                    if (count($groups) && !in_array($benchmark->getBenchmarkGroup()->getId(), $groups)) continue;
+                    if (count($groups) && !in_array($benchmark->getBenchmarkGroup()->getId(), $groups)) {
+                        continue;
+                    }
 
 
                     $fromCol = $benchmark->getDbColumn();
@@ -1392,5 +1394,59 @@ class ToolController extends AbstractActionController
     protected function getBenchmarkGroupModel()
     {
         return $this->getServiceLocator()->get('model.benchmark.group');
+    }
+
+    public function observationDataMigrationAction()
+    {
+        takeYourTime();
+        /** @var \Mrss\Service\ObservationDataMigration $migrator */
+        $migrator = $this->getServiceLocator()->get('service.observation.data.migration');
+        //$migrator->copySubscription($this->getCurrentSubscription());
+        //$count = $migrator->copyAllSubscriptions();
+
+        /** @var \Mrss\Model\Observation $obModel */
+        $obModel = $this->getServiceLocator()->get('model.observation');
+        $ob = $obModel->findOneUnMigrated();
+
+        $start = microtime(true);
+
+        if ($ob && $migrator->copyObservation($ob)) {
+            $ob->setMigrated(true);
+            $obModel->save($ob);
+            $obModel->getEntityManager()->flush();
+
+            echo 'Success';
+        } else {
+            //echo 'Error';
+        }
+
+        if ($ob) {
+            pr($ob->getId());
+            pr($ob->getCollege()->getNameAndState());
+            pr($ob->getYear());
+
+        }
+
+        $elapsed = microtime(true) - $start;
+
+        pr(round($elapsed, 3));
+
+        if (!empty($ob)) {
+            echo '<script>location.reload()</script>';
+        } else {
+            echo 'All done.';
+        }
+
+        die(' ok');
+    }
+
+    public function getCurrentSubscription()
+    {
+        /** @var \Mrss\Model\Subscription $subscriptionModel */
+        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
+        $study = $this->currentStudy();
+        $college = $this->currentCollege();
+
+        return $subscriptionModel->findCurrentSubscription($study, $college->getId());
     }
 }

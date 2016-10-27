@@ -114,13 +114,87 @@ class Subscription extends AbstractModel
      * year and we don't want to load every single value for every observation. The $benchmarks array
      * specifies a subset of benchmarks to fetch. We can also optionally exclude outliers.
      *
+     * @deprecated
      * @param $study
      * @param $year
      * @param array $benchmarks
      * @param boolean $excludeOutliers
+     * @param boolean $notNull - Deprecated/ignored
+     * @param array $benchmarkGroupIds
+     * @param $system
      * @return SubscriptionEntity[]
      */
     public function findWithPartialObservations(
+        $study,
+        $year,
+        $benchmarks,
+        $excludeOutliers = true,
+        $notNull = true,
+        $benchmarkGroupIds = array(),
+        $system = null
+    ) {
+        $rsm = new ResultSetMapping;
+
+        $rsm->addEntityResult('Mrss\Entity\Subscription', 's');
+        $rsm->addFieldResult('s', 'id', 'id');
+        $rsm->addFieldResult('s', 'paymentAmount', 'paymentAmount');
+
+        $rsm->addJoinedEntityResult('Mrss\Entity\College', 'c', 's', 'college');
+        $rsm->addFieldResult('c', 'college_id', 'id');
+        $rsm->addFieldResult('c', 'name', 'name');
+        $rsm->addFieldResult('c', 'state', 'state');
+
+        $rsm->addJoinedEntityResult('Mrss\Entity\Observation', 'o', 's', 'observation');
+        $rsm->addFieldResult('o', 'o_id', 'id');
+
+
+        $systemWhere = '';
+        if ($system) {
+            $systemWhere = " AND c.system_id = :system_id ";
+        }
+
+        $subQueries = array();
+
+        foreach ($benchmarks as $benchmark) {
+            if ($excludeOutliers) {
+                $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
+            }
+
+        }
+
+        // Suppression subquery
+        $subQueries[] = $this->getSuppressionSubquery($benchmarkGroupIds);
+
+        $subQueries = implode("\n", $subQueries);
+        $benchmarkList = '';
+
+        $sql = "SELECT s.id, c.id college_id, c.name, c.state, o.id o_id
+        FROM subscriptions s
+        INNER JOIN colleges c ON s.college_id = c.id
+        INNER JOIN observations o ON s.observation_id = o.id
+        WHERE s.year = :year
+        AND s.study_id = :study_id
+        $systemWhere
+        $subQueries
+        ";
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameter('year', $year);
+        $query->setParameter('study_id', $study->getId());
+
+        if ($system) {
+            $query->setParameter('system_id', $system->getId());
+        }
+
+        // Force refresh so it doesn't serve stale entities (when multiple charts are built on one page)
+        $query->setHint(Query::HINT_REFRESH, true);
+
+        $result = $query->getResult();
+
+        return $result;
+    }
+
+    public function findWithPartialObservationsOld(
         $study,
         $year,
         $benchmarks,
