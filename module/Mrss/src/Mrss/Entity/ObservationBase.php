@@ -111,6 +111,10 @@ class ObservationBase
     {
         $subscription = $this->getSubscription();
 
+        if ($_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
+            pr($subscription);
+        }
+
         return $subscription->getValue($benchmark);
     }
 
