@@ -470,6 +470,8 @@ class Subscription
             $data[$datum->getBenchmark()->getDbColumn()] = $datum->getValue();
         }
 
+        $this->allData = $data;
+
         return $data;
     }
 

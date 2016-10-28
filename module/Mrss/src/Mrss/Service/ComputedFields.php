@@ -367,8 +367,9 @@ class ComputedFields
         $flushEvery = 3000;
         if (empty($observation)) {
             throw new \Exception('Observation missing.');
-
         }
+
+        $null = $observation->getSubscription()->getAllData();
 
         $col = $this->debugDbColumn;
         $benchmarks = $this->getComputedBenchmarks($observation->getYear());

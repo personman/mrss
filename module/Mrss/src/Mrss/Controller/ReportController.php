@@ -199,12 +199,17 @@ class ReportController extends AbstractActionController
 
     public function computeOneAction()
     {
+        $debug = $this->params()->fromRoute('debug');
+
         takeYourTime();
 
-        $this->disableQueryLogging();
+
+        if (!$debug) {
+            $this->disableQueryLogging();
+        }
 
         $observationId = $this->params()->fromRoute('observation');
-        $debug = $this->params()->fromRoute('debug');
+
         $debugColumn = $this->params()->fromRoute('benchmark');
 
         $status = 'ok';
@@ -214,7 +219,7 @@ class ReportController extends AbstractActionController
 
         if ($observation) {
             $service = $this->getPercentileService()->getComputedFieldsService();
-            $service->setDebug($debug);
+            //$service->setDebug($debug);
             $service->setDebugDbColumn($debugColumn);
 
             try {
@@ -235,18 +240,18 @@ class ReportController extends AbstractActionController
             'observation' => $observationId
         );
 
-        $view = new JsonModel($viewParams);
+        if ($debug) {
+            $logger = $this->getObservationModel()->getEntityManager()->getConfiguration()->getSQLLogger();
+
+            $this->queryLogger($logger);
+            $viewParams['logger'] = $logger;
+
+            $view = $viewParams;
+        } else {
+            $view = new JsonModel($viewParams);
+        }
 
         return $view;
-
-        //$logger = $this->getObservationModel()->getEntityManager()->getConfiguration()->getSQLLogger();
-
-        //echo '<pre>';
-        //\Doctrine\Common\Util\Debug::dump($logger, 5);
-        //die;
-        //$this->queryLogger($logger);
-
-        //return $viewParams;
     }
 
     public function disableQueryLogging()
@@ -266,8 +271,8 @@ class ReportController extends AbstractActionController
         $params = array();
 
         foreach ($logger->queries as $query) {
-            //pr($query['sql']);
             $sql = $query['sql'];
+            //pr($sql);
 
             $table = $this->getTableFromSql($sql);
 
@@ -296,14 +301,14 @@ class ReportController extends AbstractActionController
         pr($tables);
 
         asort($params);
-        pr($params);
+        //pr($params);
 
-        die('tewt');
+        //die('tewt');
     }
 
     protected function getTableFromSql($sql)
     {
-        preg_match('/(FROM|UPDATE_SKIP) (.*?) /', $sql, $matches);
+        preg_match('/(FROM|UPDATE) (.*?) /', $sql, $matches);
 
         $table = null;
         if (!empty($matches[2])) {
