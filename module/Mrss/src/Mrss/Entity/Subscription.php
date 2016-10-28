@@ -462,7 +462,7 @@ class Subscription
     public function getAllData()
     {
         $data = array();
-        foreach ($this->getDAta() as $datum) {
+        foreach ($this->getData() as $datum) {
             $b = $datum->getBenchmark();
             if (empty($b)) {
                 prd($datum->getId());

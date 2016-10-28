@@ -24,21 +24,28 @@ class DataExport
      * @var PHPExcel $excel
      */
     protected $excel;
-    protected $filename = 'full-data-export';
+    protected $filename = '/tmp/full-data-export.csv';
     protected $studyIds = array();
     protected $studies = array();
     protected $studyModel;
     protected $subscriptionModel;
+    protected $debugLimit = 20;
+    protected $benchmarks = array();
+    protected $year;
 
-    public function getFullDataDump($studyIds)
+    public function getFullDataDump($studyIds, $year)
     {
         // This may take some time (and RAM)
         takeYourTime();
+        $start = microtime(1);
 
+        $this->year = $year;
         $this->studyIds = $studyIds;
 
+        $this->startCsvFile();
+
         // Start building the Excel file
-        $this->excel = new PHPExcel();
+        //$this->excel = new PHPExcel();
 
         // Add a sheet for each year
         foreach ($this->getYears() as $year => $studies) {
@@ -46,13 +53,109 @@ class DataExport
         }
 
         // Remove the default sheet
-        $sheetIndex = $this->excel->getIndex(
+        /*$sheetIndex = $this->excel->getIndex(
             $this->excel->getSheetByName('Worksheet')
         );
-        $this->excel->removeSheetByIndex($sheetIndex);
+        $this->excel->removeSheetByIndex($sheetIndex);*/
+
+
+
+
+
+
+
+        // Debug
+
+        $elapsed = microtime(1) - $start;
+        $elapsed = round($elapsed, 3);
+
+
+        $logger = $this->getSubscriptionModel()->getEntityManager()->getConfiguration()->getSQLLogger();
+
+        $this->queryLogger($logger);
+
+
+        $mem = memory_get_peak_usage();
+        $mem = round($mem / (1024 * 1024), 2);
+
+        echo 'Memory used in MB:';
+        pr($mem);
+
+        echo 'rows processed:';
+        pr($this->debugLimit);
+
+
+
+        echo 'Elapsed seconds:';
+        pr($elapsed);
+
+        die('debug');
 
         // Send the file for download
         $this->download();
+    }
+
+    protected function queryLogger($logger)
+    {
+        $tables = array();
+        $params = array();
+        $queryTime = 0;
+
+        foreach ($logger->queries as $query) {
+            if (array_key_exists('executionMS', $query)) {
+                $queryTime += $query['executionMS'];
+            }
+
+
+            $sql = $query['sql'];
+            //pr($sql);
+
+            $table = $this->getTableFromSql($sql);
+
+            if (empty($tables[$table])) {
+                $tables[$table] = 1;
+            } else {
+                $tables[$table]++;
+            }
+
+            $qParams = $query['params'];
+            if ($table && isset($qParams[0])) {
+                $param = $qParams[0];
+
+                if ($param == 'ft_male_no_rank_number_12_month') {
+                    //pr($sql);
+                }
+
+                if (!isset($params[$param])) {
+                    $params[$param] = 1;
+                } else {
+                    $params[$param]++;
+                }
+            }
+        }
+
+        pr($tables);
+
+        asort($params);
+
+        echo 'Query time:';
+        pr($queryTime);
+
+        //pr($params);
+
+        //die('tewt');
+    }
+
+    protected function getTableFromSql($sql)
+    {
+        preg_match('/(FROM|UPDATE) (.*?) /', $sql, $matches);
+
+        $table = null;
+        if (!empty($matches[2])) {
+            $table = $matches[2];
+        }
+
+        return $table;
     }
 
     /**
@@ -95,6 +198,11 @@ class DataExport
         return $this->studies;
     }
 
+    /**
+     * @param $studyId
+     * @return \Mrss\Entity\Study
+     * @throws \Exception
+     */
     protected function getStudy($studyId)
     {
         $studies = $this->getStudies();
@@ -108,26 +216,49 @@ class DataExport
         return $study;
     }
 
+    protected function startCsvFile()
+    {
+        $file = fopen($this->filename, 'w');
+        
+        fclose($file);
+    }
+    
+    protected function addCsvRow($row)
+    {
+        $file = fopen($this->filename, 'a');
+        
+        fputcsv($file, $row);
+        
+        fclose($file);
+    }
+    
     protected function addSheetForYearAndStudies($year, $studies)
     {
         // Create a new worksheet
-        $sheet = new PHPExcel_Worksheet($this->excel, "$year");
-        $this->excel->addSheet($sheet);
-        $this->excel->setActiveSheetIndexByName("$year");
+        //$sheet = new PHPExcel_Worksheet($this->excel, "$year");
+        //$this->excel->addSheet($sheet);
+        //$this->excel->setActiveSheetIndexByName("$year");
 
         $this->writeHeaders($year);
-        $this->writeData($year);
+        //$this->writeData($year);
 
-        $sheet->getColumnDimensionByColumn(1)->setAutoSize(true);
+        $allData = $this->getSubscriptionModel()->findAllWithData(4, $year);
+        //pr($allData);
+
+
+        //$sheet->getColumnDimensionByColumn(1)->setAutoSize(true);
     }
 
     protected function writeHeaders($year)
     {
-        $sheet = $this->excel->getActiveSheet();
+        $headers = array(
+            'IPEDS',
+            'Institution',
+            'State'
+        );
 
-        $sheet->setCellValue('A1', 'IPEDS');
-        $sheet->setCellValue('B1', 'Institution');
-        $sheet->setCellValue('C1', 'State');
+        $headers2 = $headers3 = array(null, null, null);
+
 
         $row = 1;
         $column = 3;
@@ -138,6 +269,13 @@ class DataExport
             $benchmarks = $study->getBenchmarksForYear($year);
 
             foreach ($benchmarks as $benchmark) {
+                $headers[] = $benchmark->getName();
+
+                $headers2[] = $benchmark->getDbColumn();
+
+                $headers3[] = $benchmark->getBenchmarkGroup()->getName();
+
+                /*
                 $sheet->setCellValueByColumnAndRow(
                     $column,
                     $row,
@@ -156,38 +294,48 @@ class DataExport
                     $benchmark->getBenchmarkGroup()->getName()
                 );
                 $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
-                $column++;
+                $column++;*/
             }
         }
 
-        if (false && $year == '2013') {
-            $dupes = array();
-            foreach ($names as $name => $dbColumns) {
-                if (count($dbColumns) == 1) {
-                    continue;
-                }
+        $this->addCsvRow($headers);
+        $this->addCsvRow($headers2);
+        $this->addCsvRow($headers3);
+    }
 
-                foreach ($dbColumns as $d) {
-                    $dupes[$d] = $name;
-                }
-            }
-
-            echo '<pre>';
-            //print_r($dupes);
-            //die;
+    /**
+     * @param $studyId
+     * @return \Mrss\Entity\Benchmark[]
+     * @throws \Exception
+     */
+    protected function getBenchmarks($studyId)
+    {
+        if (empty($this->benchmarks[$studyId])) {
+            $this->benchmarks[$studyId] = $this->getStudy($studyId)->getBenchmarksForYear($this->year);
         }
+
+        return $this->benchmarks[$studyId];
     }
 
     protected function writeData($year)
     {
-        $sheet = $this->excel->getActiveSheet();
 
-        $row = 4;
+        //$sheet = $this->excel->getActiveSheet();
+
+        $row = 1;
         $dataStartingColumn = 2;
+
 
         // Get institutions that subscribed to any of the active studies for the year
         $data = array();
         foreach ($this->getCollegesWithDataForYear($year) as $collegeInfo) {
+
+            // Debug:
+            if ($row > $this->debugLimit) {
+                continue;
+            }
+
+
             $dataRow = array();
 
             $college = $collegeInfo['college'];
@@ -201,31 +349,44 @@ class DataExport
             //$sheet->setCellValueByColumnAndRow(1, $row, $college->getName());
 
             // Add the data
-            $observation = $collegeInfo['observation'];
+            //$observation = $collegeInfo['observation'];
+            /** @var \Mrss\Entity\Subscription $subscription */
+            $subscription = $collegeInfo['subscription'];
+            $subData = $subscription->getAllData();
 
             $column = $dataStartingColumn;
             foreach ($collegeInfo['studies'] as $study) {
-                $benchmarks = $study->getBenchmarksForYear($year);
+
+                $benchmarks = $this->getBenchmarks($study->getId());
 
                 foreach ($benchmarks as $benchmark) {
-                    if ($observation->has($benchmark->getDbColumn())) {
-                        $value = $observation->get($benchmark->getDbColumn());
-                    } else {
-                        $value = '';
-                    }
-
+                    //$value = $subscription->getValue($benchmark->getDbColumn());
+                    $value = $subData[$benchmark->getDbColumn()];
                     $dataRow[] = $value;
 
                     $column++;
                 }
+
+                //$this->getSubscriptionModel()->getEntityManager()->flush();
             }
 
-            $data[] = $dataRow;
+            //$data[] = $dataRow;
+
+            $this->addCsvRow($dataRow);
 
             $row++;
+
+            $entityManager = $this->getSubscriptionModel()->getEntityManager();
+            $entityManager->detach($college);
+            $entityManager->detach($subscription);
+
+            unset($college);
+            unset($subscription);
+            unset($dataRow);
         }
 
-        $sheet->fromArray($data, null, 'A4', true);
+        //$sheet->fromArray($data, null, 'A4', true);
+
 
         // Add the benchmarks from each study
         /*foreach ($this->getStudies() as $study) {
@@ -258,16 +419,16 @@ class DataExport
                 $study = $subscription->getStudy();
                 $studyId = $study->getId();
 
-                $observation = $subscription->getObservation();
+                //$observation = $subscription->getObservation();
 
-                if (empty($observation)) {
+                /*if (empty($subscription)) {
                     continue;
-                }
+                }*/
 
                 if (empty($colleges[$collegeId])) {
                     $colleges[$collegeId] = array(
                         'college' => $college,
-                        'observation' => $observation,
+                        'subscription' => $subscription,
                         'studies' => array()
                     );
                 }
@@ -275,11 +436,31 @@ class DataExport
                 $colleges[$collegeId]['studies'][$studyId] = $study;
             }
         }
+
+
         return $colleges;
     }
 
-
     protected function download()
+    {
+        if (file_exists($this->filename)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($this->filename).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($this->filename));
+
+            readfile($this->filename);
+
+            exit;
+        } else {
+            die('error: file does not exist');
+        }
+    }
+
+    protected function downloadOld()
     {
         // redirect output to client browser
         header(

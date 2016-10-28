@@ -77,11 +77,13 @@ class Subscription extends AbstractModel
             FROM Mrss\Entity\Subscription s
             JOIN s.college c
             $joinOb
-            WHERE s.study = $studyId
-            AND s.year = $year
+            WHERE s.study = :studyId
+            AND s.year = :year
             ORDER BY $order";
 
         $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('year', $year);
+        $query->setParameter('studyId', $studyId);
 
         if ($limit) {
             $query->setMaxResults($limit);
@@ -99,12 +101,137 @@ class Subscription extends AbstractModel
     {
         $dql = "SELECT COUNT(s)
             FROM Mrss\Entity\Subscription s
-            WHERE s.study = $studyId
-            AND s.year = $year";
+            WHERE s.study = :studyId
+            AND s.year = :year";
 
         $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('year', $year);
+        $query->setParameter('studyId', $studyId);
+
 
         return $query->getSingleScalarResult();
+    }
+
+    /**
+     * WINNER!
+     *
+     * @param $studyId
+     * @param $year
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findAllWithData($studyId, $year)
+    {
+
+        $allData = array();
+
+        $sql = "SELECT c.name, c.ipeds, c.state, s.id
+        FROM subscriptions s
+        INNER JOIN colleges c ON s.college_id = c.id
+        WHERE s.year = :year";
+
+        $query = $this->getEntityManager()->getConnection()->prepare($sql);
+        //$query->setParameter('year', $year);
+
+        $params = array('year' => $year);
+        $query->execute($params);
+
+        $results = $query->fetchAll();
+
+        foreach ($results as $subInfo) {
+            $sql = "SELECT d.floatValue, d.stringValue, d.dbColumn
+            FROM data_values d
+            WHERE d.subscription_id = :subscription";
+
+            $query = $this->getEntityManager()->getConnection()->prepare($sql);
+
+            $params = array('subscription' => $subInfo['id']);
+            $query->execute($params);
+
+            $dataResults = $query->fetchAll();
+
+            $allData[] = array(
+                $subInfo['ipeds'],
+                $subInfo['name'],
+                $subInfo['state'],
+                $subInfo['data'] = $dataResults
+            );
+        }
+
+        //pr($results);
+        //pr(count($results));
+
+        return $allData;
+    }
+
+    /**
+     * For full data export
+     *
+     * @param $studyId
+     * @param $year
+     * @return SubscriptionEntity[]
+     */
+    public function findAllWithDataOld($studyId, $year)
+    {
+        //$connection = $this->getEntityManager()->getConnection();
+
+
+        $dql = "SELECT s, c
+        FROM Mrss\Entity\Subscription s
+        JOIN s.college c
+        WHERE s.study = :studyId
+        AND s.year = :year
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('year', $year);
+        $query->setParameter('studyId', $studyId);
+
+
+        $allData = array();
+
+        $limit = 500;
+        $i = 0;
+
+        // Doesn't work with data join
+        $iterableResult = $query->iterate();
+        foreach ($iterableResult as $row) {
+            if ($i > $limit) {
+                continue;
+            }
+            // do stuff with the data in the row, $row[0] is always the object
+            /** @var \Mrss\Entity\Subscription $subscription */
+            $subscription = $row[0];
+
+            $college = $subscription->getCollege();
+
+            $dataRow = array(
+                $college->getIpeds(),
+                $college->getName(),
+                $college->getState(),
+                //'data' => $subscription->getAllData()
+            );
+
+            $data = array();
+            foreach ($subscription->getData() as $datum) {
+                $data[$datum->getDbColumn()] = $datum->getValue();
+
+                $this->getEntityManager()->detach($datum);
+            }
+
+            $dataRow = array_merge($dataRow, $data);
+
+
+            $allData[] = $dataRow;
+
+            // detach from Doctrine, so that it can be Garbage-Collected immediately
+            $this->getEntityManager()->detach($row[0]);
+
+            unset($dataRow);
+            $i++;
+        }
+
+        return $allData;
     }
 
     /**
