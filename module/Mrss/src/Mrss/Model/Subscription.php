@@ -150,11 +150,21 @@ class Subscription extends AbstractModel
 
             $dataResults = $query->fetchAll();
 
+            $dataForSub = array();
+            foreach ($dataResults as $datumRow) {
+                $value = $datumRow['floatValue'];
+                if (empty($value) && !empty($datumRow['stringValue'])) {
+                    $value = $datumRow['stringValue'];
+                }
+
+                $dataForSub[$datumRow['dbColumn']] = $value;
+            }
+
             $allData[] = array(
                 $subInfo['ipeds'],
                 $subInfo['name'],
                 $subInfo['state'],
-                $subInfo['data'] = $dataResults
+                'data' => $dataForSub
             );
         }
 

@@ -60,7 +60,8 @@ class DataExport
 
 
 
-
+        $this->download();
+        die;
 
 
 
@@ -226,7 +227,7 @@ class DataExport
     protected function addCsvRow($row)
     {
         $file = fopen($this->filename, 'a');
-        
+
         fputcsv($file, $row);
         
         fclose($file);
@@ -240,9 +241,9 @@ class DataExport
         //$this->excel->setActiveSheetIndexByName("$year");
 
         $this->writeHeaders($year);
-        //$this->writeData($year);
+        $this->writeData($year);
 
-        $allData = $this->getSubscriptionModel()->findAllWithData(4, $year);
+
         //pr($allData);
 
 
@@ -319,6 +320,41 @@ class DataExport
 
     protected function writeData($year)
     {
+
+        $benchmarks = $this->getBenchmarks(4);
+        $dbColumns = array();
+        foreach ($benchmarks as $benchmark) {
+            $dbColumns[] = $benchmark->getDbColumn();
+        }
+
+        $allData = $this->getSubscriptionModel()->findAllWithData(4, $year);
+
+        foreach ($allData as $row) {
+            $data = $row['data'];
+            unset($row['data']);
+
+            $newData = array();
+            foreach ($dbColumns as $dbColumn) {
+                $value = null;
+                if (array_key_exists($dbColumn, $data)) {
+                    $value = $data[$dbColumn];
+                }
+
+                $newData[] = $value;
+            }
+
+            $row = array_merge($row, $newData);
+
+            $this->addCsvRow($row);
+        }
+
+        return true;
+
+
+
+
+
+
 
         //$sheet = $this->excel->getActiveSheet();
 
