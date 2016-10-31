@@ -663,27 +663,12 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
         // Radio type:
         if ($this->getInputType() == 'radio') {
-            $element['type'] = 'Select';
-
-            $options = explode("\n", $this->getOptions());
-            $options = array_map('trim', $options);
-            $options = array_combine($options, $options);
-            $element['attributes']['options'] = $options;
-            $element['options']['empty_option'] = '---';
+            $element = $this->radioElement($element);
         }
 
         // Checkboxes type:
         if ($this->getInputType() == 'checkboxes') {
-            $element['type'] = 'MultiCheckbox';
-
-            $options = $this->getOptions();
-            $options = str_replace("\r", '', $options);
-            $options = explode("\n", $options);
-            $options = array_map('trim', $options);
-            $options = array_combine($options, $options);
-            $element['attributes']['options'] = $options;
-            $element['options']['use_hidden_element'] = true;
-            //$element['options']['empty_option'] = '---';
+            $this->checkboxesElement($element);
         }
 
         // Textarea
@@ -691,6 +676,41 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $element['type'] = 'Textarea';
         }
 
+        $element = $this->addValidation($element);
+
+        return $element;
+    }
+
+    protected function radioElement($element)
+    {
+        $element['type'] = 'Select';
+
+        $options = explode("\n", $this->getOptions());
+        $options = array_map('trim', $options);
+        $options = array_combine($options, $options);
+        $element['attributes']['options'] = $options;
+        $element['options']['empty_option'] = '---';
+
+        return $element;
+    }
+
+    protected function checkboxesElement($element)
+    {
+        $element['type'] = 'MultiCheckbox';
+
+        $options = $this->getOptions();
+        $options = str_replace("\r", '', $options);
+        $options = explode("\n", $options);
+        $options = array_map('trim', $options);
+        $options = array_combine($options, $options);
+        $element['attributes']['options'] = $options;
+        $element['options']['use_hidden_element'] = true;
+
+        return $element;
+    }
+
+    protected function addValidation($element)
+    {
         // Some HTML 5 validation
         if ($this->isDollars()) {
             $element['attributes']['pattern'] = '(-)?\d+(\.\d+)?';
@@ -707,8 +727,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $element['attributes']['title'] = 'Use the format 1234';
         }
 
-
-            return $element;
+        return $element;
     }
 
     public function getFormElementInputFilter()
