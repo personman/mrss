@@ -16,7 +16,7 @@ class CollegeDemographics extends Import
     /** @var \Mrss\Model\Observation $observationModel */
     protected $observationModel;
 
-    protected $skipCollegesWithExecTitle = false;
+    protected $skipIfExecTitle = false;
 
     protected function saveRow(PHPExcel_Worksheet_Row $row)
     {
@@ -73,10 +73,10 @@ class CollegeDemographics extends Import
         );
 
         $withNumbers = array();
-        $i = 0;
+        $iteration = 0;
 
         foreach ($map as $key) {
-            $withNumbers[$key] = $i++;
+            $withNumbers[$key] = $iteration++;
         }
 
         return $withNumbers;
@@ -93,7 +93,7 @@ class CollegeDemographics extends Import
         }
 
         // If this has been imported already, skip it.
-        if ($entity->getExecTitle() && $this->skipCollegesWithExecTitle) {
+        if ($entity->getExecTitle() && $this->skipIfExecTitle) {
         }
 
         // Now plug in the data
