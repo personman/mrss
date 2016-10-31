@@ -419,12 +419,12 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     }
 
     /**
-     * @param mixed $includeInOtherReports
+     * @param mixed $include
      * @return Benchmark
      */
-    public function setIncludeInOtherReports($includeInOtherReports)
+    public function setIncludeInOtherReports($include)
     {
-        $this->includeInOtherReports = $includeInOtherReports;
+        $this->includeInOtherReports = $include;
         return $this;
     }
 
@@ -437,12 +437,12 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     }
 
     /**
-     * @param mixed $computeIfValuesMissing
+     * @param mixed $compute
      * @return Benchmark
      */
-    public function setComputeIfValuesMissing($computeIfValuesMissing)
+    public function setComputeIfValuesMissing($compute)
     {
-        $this->computeIfValuesMissing = $computeIfValuesMissing;
+        $this->computeIfValuesMissing = $compute;
         return $this;
     }
 
@@ -451,13 +451,13 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $this->options;
     }
 
-    public function setExcludeFromCompletion($excludeFromCompletion)
+    public function setExcludeFromCompletion($exclude)
     {
-        if (empty($excludeFromCompletion)) {
-            $excludeFromCompletion = false;
+        if (empty($exclude)) {
+            $exclude = false;
         }
 
-        $this->excludeFromCompletion = $excludeFromCompletion;
+        $this->excludeFromCompletion = $exclude;
 
         return $this;
     }
@@ -467,13 +467,13 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $this->excludeFromCompletion;
     }
 
-    public function setIncludeInNationalReport($includeInNationalReport)
+    public function setIncludeInNationalReport($include)
     {
-        if (empty($includeInNationalReport)) {
-            $includeInNationalReport = false;
+        if (empty($include)) {
+            $include = false;
         }
 
-        $this->includeInNationalReport = $includeInNationalReport;
+        $this->includeInNationalReport = $include;
 
         return $this;
     }
@@ -485,12 +485,12 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
 
     /**
-     * @param mixed $descriptiveReportLabel
+     * @param mixed $label
      * @return $this
      */
-    public function setDescriptiveReportLabel($descriptiveReportLabel)
+    public function setDescriptiveReportLabel($label)
     {
-        $this->descriptiveReportLabel = $descriptiveReportLabel;
+        $this->descriptiveReportLabel = $label;
         return $this;
     }
 
@@ -529,9 +529,9 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      * @param mixed $includeInBestPerformer
      * @return $this
      */
-    public function setIncludeInBestPerformer($includeInBestPerformer)
+    public function setIncludeInBestPerformer($include)
     {
-        $this->includeInBestPerformer = $includeInBestPerformer;
+        $this->includeInBestPerformer = $include;
         return $this;
     }
 
@@ -819,6 +819,38 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         $this->inputFilter = $inputFilter;
     }
 
+    protected function getNameInputFilter()
+    {
+        return array(
+            'name' => 'name',
+            'required' => true,
+            'filters' => array(
+                array('name' => 'StripTags'),
+                array('name' => 'StringTrim')
+            ),
+            'validators' => array(
+                array('name' => 'NotEmpty')
+            )
+        );
+    }
+
+    protected function getDbColumnInputFilter()
+    {
+        // Validator to make sure the dbColumn is unique (disabled currently)
+        return array(
+            'name' => 'dbColumn',
+            'required' => true,
+            'filters' => array(
+                array('name' => 'StringTrim')
+            ),
+            'validators' => array(
+                array('name' => 'NotEmpty'),
+                // Allow dbColumn to be non-unique
+                //$this->getDbColumnValidator()
+            )
+        );
+    }
+
     public function getInputFilter()
     {
         if (empty($this->inputFilter)) {
@@ -826,52 +858,12 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $factory = new InputFactory();
 
             $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name' => 'name',
-                        'required' => true,
-                        'filters' => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim')
-                        ),
-                        'validators' => array(
-                            array('name' => 'NotEmpty')
-                        )
-                    )
-                )
+                $factory->createInput($this->getNameInputFilter())
             );
 
-
-            // Validator to make sure the dbColumn is unique
-            $repository = $this->getEntityManager()
-                ->getRepository('Mrss\Entity\Benchmark');
-            //var_dump(get_parent_class($repository));die;
-            $dbColumnUniqueValidator = new \DoctrineModule\Validator\UniqueObject(
-                array(
-                    'object_repository' => $repository,
-                    'object_manager' => $this->getEntityManager(),
-                    'fields' => array('dbColumn'),
-                    'messages' => array(
-                        'objectNotUnique' => 'The database column must be unique.'
-                    )
-                )
-            );
 
             $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name' => 'dbColumn',
-                        'required' => true,
-                        'filters' => array(
-                            array('name' => 'StringTrim')
-                        ),
-                        'validators' => array(
-                            array('name' => 'NotEmpty'),
-                            // Allow dbColumn to be non-unique
-                            //$dbColumnUniqueValidator
-                        )
-                    )
-                )
+                $factory->createInput($this->getDbColumnInputFilter())
             );
 
             /**
@@ -895,6 +887,25 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         }
 
         return $this->inputFilter;
+    }
+
+    protected function getDbColumnValidator()
+    {
+        $repository = $this->getEntityManager()
+            ->getRepository('Mrss\Entity\Benchmark');
+
+        $dbColumnValidator = new \DoctrineModule\Validator\UniqueObject(
+            array(
+                'object_repository' => $repository,
+                'object_manager' => $this->getEntityManager(),
+                'fields' => array('dbColumn'),
+                'messages' => array(
+                    'objectNotUnique' => 'The database column must be unique.'
+                )
+            )
+        );
+
+        return $dbColumnValidator;
     }
 
     public function format($value, $decimalPlaces = null)

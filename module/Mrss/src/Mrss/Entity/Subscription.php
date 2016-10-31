@@ -315,9 +315,9 @@ class Subscription
         return $this->digitalSignature;
     }
 
-    public function setDigitalSignatureTitle($digitalSignatureTitle)
+    public function setDigitalSignatureTitle($title)
     {
-        $this->digitalSignatureTitle = $digitalSignatureTitle;
+        $this->digitalSignatureTitle = $title;
 
         return $this;
     }
@@ -429,26 +429,33 @@ class Subscription
 
         // If the data row doesn't exist, create it
         if ($datum === null) {
-            $datum = new Datum();
-            $datum->setSubscription($this);
+            $datum = $this->createDatum($benchmark);
+        }
+
+        return $datum;
+    }
+
+    protected function createDatum($benchmark)
+    {
+        $datum = new Datum();
+        $datum->setSubscription($this);
 
 
-            if (is_object($benchmark)) {
-                $datum->setBenchmark($benchmark);
-                $datum->setDbColumn($benchmark->getDbColumn());
-            } else {
-                $dbColumn = $benchmark;
-                $datum->setDbColumn($dbColumn);
-                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+        if (is_object($benchmark)) {
+            $datum->setBenchmark($benchmark);
+            $datum->setDbColumn($benchmark->getDbColumn());
+        } else {
+            $dbColumn = $benchmark;
+            $datum->setDbColumn($dbColumn);
+            $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
 
-                $datum->setBenchmark($benchmark);
-            }
+            $datum->setBenchmark($benchmark);
+        }
 
-            if ($benchmark) {
-                $this->getData()->add($datum);
-                $this->getDatumModel()->save($datum);
-                $this->getDatumModel()->getEntityManager()->flush();
-            }
+        if ($benchmark) {
+            $this->getData()->add($datum);
+            $this->getDatumModel()->save($datum);
+            $this->getDatumModel()->getEntityManager()->flush();
         }
 
         return $datum;
@@ -463,11 +470,9 @@ class Subscription
     {
         $data = array();
         foreach ($this->getData() as $datum) {
-            $b = $datum->getBenchmark();
-            if (empty($b)) {
-                prd($datum->getId());
+            if ($benchmark = $datum->getBenchmark()) {
+                $data[$benchmark->getDbColumn()] = $datum->getValue();
             }
-            $data[$datum->getBenchmark()->getDbColumn()] = $datum->getValue();
         }
 
         $this->allData = $data;
