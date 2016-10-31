@@ -156,7 +156,7 @@ class Outliers extends Report
                 }*/
             } else {
                 $outliers = $this->getOutlierModel()
-                    ->findReportedByCollegStudyAndYear($college, $study, $year);
+                    ->findReportedByCollegeStudyAndYear($college, $study, $year);
             }
 
 
