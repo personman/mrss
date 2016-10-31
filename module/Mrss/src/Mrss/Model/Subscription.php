@@ -122,7 +122,6 @@ class Subscription extends AbstractModel
      */
     public function findAllWithData($studyId, $year)
     {
-
         $allData = array();
 
         $sql = "SELECT c.name, c.ipeds, c.state, s.id
@@ -131,7 +130,6 @@ class Subscription extends AbstractModel
         WHERE s.year = :year";
 
         $query = $this->getEntityManager()->getConnection()->prepare($sql);
-        //$query->setParameter('year', $year);
 
         $params = array('year' => $year);
         $query->execute($params);
@@ -139,26 +137,7 @@ class Subscription extends AbstractModel
         $results = $query->fetchAll();
 
         foreach ($results as $subInfo) {
-            $sql = "SELECT d.floatValue, d.stringValue, d.dbColumn
-            FROM data_values d
-            WHERE d.subscription_id = :subscription";
-
-            $query = $this->getEntityManager()->getConnection()->prepare($sql);
-
-            $params = array('subscription' => $subInfo['id']);
-            $query->execute($params);
-
-            $dataResults = $query->fetchAll();
-
-            $dataForSub = array();
-            foreach ($dataResults as $datumRow) {
-                $value = $datumRow['floatValue'];
-                if (empty($value) && !empty($datumRow['stringValue'])) {
-                    $value = $datumRow['stringValue'];
-                }
-
-                $dataForSub[$datumRow['dbColumn']] = $value;
-            }
+            $dataForSub = $this->getAllDataForSubscription($subInfo['id']);
 
             $allData[] = array(
                 $subInfo['ipeds'],
@@ -168,81 +147,35 @@ class Subscription extends AbstractModel
             );
         }
 
-        //pr($results);
-        //pr(count($results));
-
         return $allData;
     }
 
-    /**
-     * For full data export
-     *
-     * @param $studyId
-     * @param $year
-     * @return SubscriptionEntity[]
-     */
-    public function findAllWithDataOld($studyId, $year)
+    public function getAllDataForSubscription($subscriptionId)
     {
-        //$connection = $this->getEntityManager()->getConnection();
+        $sql = "SELECT d.floatValue, d.stringValue, d.dbColumn
+            FROM data_values d
+            WHERE d.subscription_id = :subscription";
 
+        $query = $this->getEntityManager()->getConnection()->prepare($sql);
+        $params = array('subscription' => $subscriptionId);
 
-        $dql = "SELECT s, c
-        FROM Mrss\Entity\Subscription s
-        JOIN s.college c
-        WHERE s.study = :studyId
-        AND s.year = :year
-        ";
+        $query->execute($params);
 
-        $query = $this->getEntityManager()->createQuery($dql);
-        $query->setParameter('year', $year);
-        $query->setParameter('studyId', $studyId);
+        $dataResults = $query->fetchAll();
 
-
-        $allData = array();
-
-        $limit = 500;
-        $i = 0;
-
-        // Doesn't work with data join
-        $iterableResult = $query->iterate();
-        foreach ($iterableResult as $row) {
-            if ($i > $limit) {
-                continue;
-            }
-            // do stuff with the data in the row, $row[0] is always the object
-            /** @var \Mrss\Entity\Subscription $subscription */
-            $subscription = $row[0];
-
-            $college = $subscription->getCollege();
-
-            $dataRow = array(
-                $college->getIpeds(),
-                $college->getName(),
-                $college->getState(),
-                //'data' => $subscription->getAllData()
-            );
-
-            $data = array();
-            foreach ($subscription->getData() as $datum) {
-                $data[$datum->getDbColumn()] = $datum->getValue();
-
-                $this->getEntityManager()->detach($datum);
+        $dataForSub = array();
+        foreach ($dataResults as $datumRow) {
+            $value = $datumRow['floatValue'];
+            if (empty($value) && !empty($datumRow['stringValue'])) {
+                $value = $datumRow['stringValue'];
             }
 
-            $dataRow = array_merge($dataRow, $data);
-
-
-            $allData[] = $dataRow;
-
-            // detach from Doctrine, so that it can be Garbage-Collected immediately
-            $this->getEntityManager()->detach($row[0]);
-
-            unset($dataRow);
-            $i++;
+            $dataForSub[$datumRow['dbColumn']] = $value;
         }
 
-        return $allData;
+        return $dataForSub;
     }
+
 
     /**
      * Return a list of subscriptions with an eagerly fetched partial observation.
@@ -312,87 +245,6 @@ class Subscription extends AbstractModel
         WHERE s.year = :year
         AND s.study_id = :study_id
         $systemWhere
-        $subQueries
-        ";
-
-        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
-        $query->setParameter('year', $year);
-        $query->setParameter('study_id', $study->getId());
-
-        if ($system) {
-            $query->setParameter('system_id', $system->getId());
-        }
-
-        // Force refresh so it doesn't serve stale entities (when multiple charts are built on one page)
-        $query->setHint(Query::HINT_REFRESH, true);
-
-        $result = $query->getResult();
-
-        return $result;
-    }
-
-    public function findWithPartialObservationsOld(
-        $study,
-        $year,
-        $benchmarks,
-        $excludeOutliers = true,
-        $notNull = true,
-        $benchmarkGroupIds = array(),
-        $system = null
-    ) {
-        $rsm = new ResultSetMapping;
-
-        $rsm->addEntityResult('Mrss\Entity\Subscription', 's');
-        $rsm->addFieldResult('s', 'id', 'id');
-        $rsm->addFieldResult('s', 'paymentAmount', 'paymentAmount');
-
-        $rsm->addJoinedEntityResult('Mrss\Entity\College', 'c', 's', 'college');
-        $rsm->addFieldResult('c', 'college_id', 'id');
-        $rsm->addFieldResult('c', 'name', 'name');
-        $rsm->addFieldResult('c', 'state', 'state');
-
-        $rsm->addJoinedEntityResult('Mrss\Entity\Observation', 'o', 's', 'observation');
-        $rsm->addFieldResult('o', 'o_id', 'id');
-
-        $systemWhere = '';
-        if ($system) {
-            //$systemJoin = " INNER JOIN systems sy ON c.sytem_id = sy.id";
-            $systemWhere = " AND c.system_id = :system_id ";
-        }
-
-        $subQueries = array();
-        $notNulls = array();
-
-        foreach ($benchmarks as $benchmark) {
-            $rsm->addFieldResult('o', $benchmark, $benchmark);
-
-            if ($excludeOutliers) {
-                $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
-            }
-
-            if ($notNull) {
-                $notNulls[] = " AND $benchmark IS NOT NULL ";
-            }
-        }
-        $notNulls = implode(' ', $notNulls);
-
-        // Suppression subquery
-        $subQueries[] = $this->getSuppressionSubquery($benchmarkGroupIds);
-
-        $benchmarkList = implode(', ', $benchmarks);
-        $subQueries = implode("\n", $subQueries);
-        if ($benchmarkList) {
-            $benchmarkList = ', ' . $benchmarkList;
-        }
-
-        $sql = "SELECT s.id, c.id college_id, c.name, c.state, o.id o_id $benchmarkList
-        FROM subscriptions s
-        INNER JOIN colleges c ON s.college_id = c.id
-        INNER JOIN observations o ON s.observation_id = o.id
-        WHERE s.year = :year
-        AND s.study_id = :study_id
-        $systemWhere
-        $notNulls
         $subQueries
         ";
 

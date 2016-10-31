@@ -477,8 +477,7 @@ class Subscription
 
     public function setValues($data)
     {
-        foreach ($data as $dbColumn => $value)
-        {
+        foreach ($data as $dbColumn => $value) {
             $this->setValue($dbColumn, $value);
         }
     }
