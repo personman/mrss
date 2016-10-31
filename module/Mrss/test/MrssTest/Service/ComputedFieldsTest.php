@@ -225,7 +225,7 @@ class ComputedFieldsTest extends TestCase
         $this->assertEquals(14950, $result);
     }
 
-    public function testCalculateAllForObservation()
+    /*public function testCalculateAllForObservation()
     {
         $computedBenchmarkMocks = array(
             $this->benchmarkMock
@@ -253,7 +253,7 @@ class ComputedFieldsTest extends TestCase
         $this->computedFields->calculateAllForObservation(
             $this->observationMock
         );
-    }
+    }*/
 
     /*public function testNestedEquation()
     {

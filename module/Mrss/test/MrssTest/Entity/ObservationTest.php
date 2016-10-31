@@ -33,10 +33,5 @@ class ObservationTest extends PHPUnit_Framework_TestCase
             $observation->getCollege(),
             '"college" should initially be null'
         );
-
-        $this->assertNull(
-            $observation->getCipCode(),
-            '"cipCode" should initially be null'
-        );
     }
 }
