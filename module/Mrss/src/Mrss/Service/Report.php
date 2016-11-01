@@ -136,21 +136,21 @@ class Report
         $years = $this->getYearsWithSubscriptions();
 
         // Also show the date the report was calculated
-        $yearsWithCalculationDates = array();
+        $yearsWithDates = array();
         foreach ($years as $year) {
-            $yearsWithCalculationDates[$year] = array();
+            $yearsWithDates[$year] = array();
 
             $key = $this->getReportCalculatedSettingKey($year);
-            $yearsWithCalculationDates[$year]['report'] = $this->getDateForSettingKey($key);
+            $yearsWithDates[$year]['report'] = $this->getDateForSettingKey($key);
 
             $key = $this->getReportCalculatedSettingKey($year, true);
-            $yearsWithCalculationDates[$year]['system'] = $this->getDateForSettingKey($key);
+            $yearsWithDates[$year]['system'] = $this->getDateForSettingKey($key);
 
             $key = $this->getOutliersCalculatedSettingKey($year);
-            $yearsWithCalculationDates[$year]['outliers'] = $this->getDateForSettingKey($key);
+            $yearsWithDates[$year]['outliers'] = $this->getDateForSettingKey($key);
         }
 
-        return $yearsWithCalculationDates;
+        return $yearsWithDates;
     }
 
     protected function getDateForSettingKey($key, $format = 'Y-m-d H:i')
@@ -206,8 +206,8 @@ class Report
         $system = null
     ) {
         $dbColumn = $benchmark->getDbColumn();
-        $ob = new Observation;
-        if ($ob->has($dbColumn)) {
+        $observation = new Observation;
+        if ($observation->has($dbColumn)) {
 
             // We no longer need the observation here
             $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
@@ -223,6 +223,19 @@ class Report
             $subscriptions = array();
         }
 
+        $data = $this->getDataFromSubscriptions($subscriptions, $benchmark, $skipNull);
+
+        return $data;
+    }
+
+    /**
+     * @param \Mrss\Entity\Subscription[] $subscriptions
+     * @param \Mrss\Entity\Benchmark $benchmark
+     * @param $skipNull
+     * @return array
+     */
+    protected function getDataFromSubscriptions($subscriptions, $benchmark, $skipNull)
+    {
         $benchmarkGroupId = $benchmark->getBenchmarkGroup()->getId();
 
         $data = array();
@@ -271,18 +284,9 @@ class Report
         return $data;
     }
 
-    /**
-     * Most reported values should be rounded to 0 decimal places.
-     * These are the exceptions
-     *
-     * @param Benchmark $benchmark
-     * @return int
-     */
-    public function getDecimalPlaces(Benchmark $benchmark)
+    protected function getDecimalOverrides()
     {
-        $dbColumn = $benchmark->getDbColumn();
-
-        $map = array(
+        return array(
             'enrollment_information_contact_hours_per_student' => 1,
             'enrollment_information_market_penetration' => 1,
             'fst_yr_gpa' => 2,
@@ -316,6 +320,20 @@ class Report
             'stud_inst_serv_ratio' => 2,
             'empl_inst_serv_ratio' => 2
         );
+    }
+
+    /**
+     * Most reported values should be rounded to 0 decimal places.
+     * These are the exceptions
+     *
+     * @param Benchmark $benchmark
+     * @return int
+     */
+    public function getDecimalPlaces(Benchmark $benchmark)
+    {
+        $dbColumn = $benchmark->getDbColumn();
+
+        $map = $this->getDecimalOverrides();
 
         $decimalPlaces = 0;
         if (isset($map[$dbColumn])) {
@@ -640,14 +658,8 @@ class Report
         return null;
     }
 
-    public function getBenchmarkData(Benchmark $benchmark)
+    protected function loadPercentileData($benchmarkData, $benchmark, $year)
     {
-        $benchmarkData = array(
-            'benchmark' => $this->getVariableSubstitution()->substitute($benchmark->getReportLabel()),
-            'dbColumn' => $benchmark->getDbColumn()
-        );
-
-        $year = $this->getObservation()->getYear();
         $breakpoints = $this->getPercentileBreakpointsForStudy();
         $breakpoints[] = 'N';
         $percentiles = $this->getPercentileModel()
@@ -664,6 +676,7 @@ class Report
             $percentileData = array();
             foreach ($this->getPercentileBreakpointsForStudy() as $breakpoint) {
                 $percentileData[] = null;
+                unset($breakpoint);
             }
         }
 
@@ -674,8 +687,20 @@ class Report
             $benchmarkData['N'] = '';
         }
 
-
         $benchmarkData['percentiles'] = $percentileData;
+
+        return $benchmarkData;
+    }
+    public function getBenchmarkData(Benchmark $benchmark)
+    {
+        $benchmarkData = array(
+            'benchmark' => $this->getVariableSubstitution()->substitute($benchmark->getReportLabel()),
+            'dbColumn' => $benchmark->getDbColumn()
+        );
+
+        $year = $this->getObservation()->getYear();
+
+        $benchmarkData = $this->loadPercentileData($benchmarkData, $benchmark, $year);
 
         $benchmarkData['reported'] = $this->getObservation()->get(
             $benchmark->getDbColumn()
@@ -831,19 +856,11 @@ class Report
             $roundTo = $this->getDecimalPlaces($benchmark);
         }
 
-        if (false && $benchmark->getDbColumn() == 'hs_stud_hdct') {
-            $r = $benchmark->isPercent();
-            pr($r);
-            pr($benchmark->getId());
-            pr($benchmark->getInputType());
-            pr($benchmark->getDbColumn());
-            prd($roundTo);
-        }
-
         if (empty($chartValues) || !is_array($chartValues)) {
             return null;
         }
 
+        // @todo: resolve duplication with BarBuilder.php
         $chartData = array();
         foreach ($chartValues as $i => $value) {
             $value = round($value, $roundTo);
@@ -1152,7 +1169,7 @@ class Report
     public function getTrends($dbColumn, $colleges)
     {
         $report = array();
-        $i = 1;
+        $iteration = 1;
         foreach ($colleges as $collegeId) {
             $college = $this->getCollegeModel()->find($collegeId);
 
@@ -1163,11 +1180,11 @@ class Report
                 $values[$observation->getYear()] = $value;
             }
 
-            $label = "College " . $this->numberToLetter($i);
+            $label = "College " . $this->numberToLetter($iteration);
 
             $report[$label] = $values;
 
-            $i++;
+            $iteration++;
         }
 
         return $report;
@@ -1577,7 +1594,7 @@ class Report
                 //    " " . $sub->getYear();
                 //die;
             }
-            $el = microtime(1) - $start;
+            //$el = microtime(1) - $start;
             //pr(round($el, 3));
             unset($observation);
             //die('blkajsdls');
