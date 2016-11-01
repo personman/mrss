@@ -582,14 +582,8 @@ class SubscriptionController extends AbstractActionController
         $uPayUrl = $this->getStudy()->getUPayUrl();
 
         $amount = $this->getPaymentAmount();
-
-        // Calculate the validation key for uPay/TouchNet
         $transId = $this->getTransIdFromSession();
-        // @todo: put this in the db, too:
-        $val = 'kdifvn3e9oskndfk';
-        $validation_key = $val . $transId . $amount;
-        $validation_key = md5($validation_key);
-        $val = base64_encode(pack('H*', $validation_key));
+        $val = $this->getEncodedValidationKey($amount, $transId);
 
         $ccForm = new PaymentForm($uPaySiteId, $uPayUrl, $amount, $transId, $val);
 
@@ -608,6 +602,18 @@ class SubscriptionController extends AbstractActionController
             'systemForm' => $systemForm,
             'pilotForm' => $pilotForm
         );
+    }
+
+    protected function getEncodedValidationKey($amount, $transId)
+    {
+        // Calculate the validation key for uPay/TouchNet
+        // @todo: put this in the db, too:
+        $val = 'kdifvn3e9oskndfk';
+        $validationKey = $val . $transId . $amount;
+        $validationKey = md5($validationKey);
+        $val = base64_encode(pack('H*', $validationKey));
+
+        return $val;
     }
 
     public function getPaymentAmount()
@@ -641,28 +647,35 @@ class SubscriptionController extends AbstractActionController
 
         // Check other studies for subscriptions and give a discount
         if (!$skipOtherDiscounts) {
-            $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
-            $year = $this->getCurrentYear();
-
-            $ipeds = $this->getIpeds();
-
-            $studyId = $this->getStudy()->getId();
-            if ($studyId == 2) {
-                $currentStudyCode = 'mrss';
-            } elseif ($studyId == 3) {
-                $currentStudyCode = 'workforce';
-            } elseif ($studyId == 1) {
-                $currentStudyCode = 'nccbp';
-            } else {
-                $currentStudyCode = 'unknown';
-            }
-
-            $service->setCurrentStudyCode($currentStudyCode);
-            $discount = $service->checkForDiscount($year, $ipeds);
+            $discount = $this->getNhebiDiscount();
             $amount = $amount - $discount;
         }
 
         return $amount;
+    }
+
+    protected function getNhebiDiscount()
+    {
+        $service = $this->getServiceLocator()->get('service.nhebisubscriptions');
+        $year = $this->getCurrentYear();
+
+        $ipeds = $this->getIpeds();
+
+        $studyId = $this->getStudy()->getId();
+        if ($studyId == 2) {
+            $currentStudyCode = 'mrss';
+        } elseif ($studyId == 3) {
+            $currentStudyCode = 'workforce';
+        } elseif ($studyId == 1) {
+            $currentStudyCode = 'nccbp';
+        } else {
+            $currentStudyCode = 'unknown';
+        }
+
+        $service->setCurrentStudyCode($currentStudyCode);
+        $discount = $service->checkForDiscount($year, $ipeds);
+
+        return $discount;
     }
 
     public function systemAction()
@@ -938,10 +951,22 @@ class SubscriptionController extends AbstractActionController
         $message .= "Cost: $$cost. ";
 
         // Add notes about subscription totals:
+        $year = $subscription->getYear();
+
+        list($count, $total) = $this->getSubscriptionCountAndTotal($year);
+        $message .= " $count members, $$total. ";
+
+        if ($channelSetup = $this->getSlackChannel()) {
+            list($channel, $icon, $username) = $channelSetup;
+
+            $this->slack($message, $channel, $icon, $username);
+        }
+    }
+
+    protected function getSubscriptionCountAndTotal($year)
+    {
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $studyId = $this->currentStudy()->getId();
-
-        $year = $subscription->getYear();
 
         $subscriptions = $subscriptionModel->findByStudyAndYear(
             $studyId,
@@ -956,8 +981,14 @@ class SubscriptionController extends AbstractActionController
         $count = count($subscriptions);
         $total = number_format($total);
 
-        //$message .= "\n";
-        $message .= " $count members, $$total. ";
+        return array($count, $total);
+    }
+
+    protected function getSlackChannel()
+    {
+        $studyId = $this->currentStudy()->getId();
+
+        $channelSetup = null;
 
         // Configure channel, etc
         $map = array(
@@ -966,11 +997,11 @@ class SubscriptionController extends AbstractActionController
             3 => array('workforce-website', ':workforce:', 'Workforce-bot')
         );
 
-        if (!empty($map[$studyId])) {
-            list($channel, $icon, $username) = $map[$studyId];
-
-            $this->slack($message, $channel, $icon, $username);
+        if (array_key_exists($studyId, $map)) {
+            $channelSetup = $map[$studyId];
         }
+
+        return $channelSetup;
     }
 
     protected function getCurrentYear()
@@ -1289,7 +1320,22 @@ class SubscriptionController extends AbstractActionController
             "$subjectIntro: $collegeName joined $studyName for $year"
         );
 
+        $body = $this->getInvoiceBody($subscription, $adminUser, $dataUser);
+        $invoice->setBody($body);
+
+        $this->getServiceLocator()->get('mail.transport')->send($invoice);
+    }
+
+    /**
+     * @param \Mrss\Entity\Subscription $subscription
+     * @return string
+     */
+    protected function getInvoiceBody($subscription, $adminUser, $dataUser)
+    {
         $date = date('Y-m-d');
+        $study = $subscription->getStudy();
+        $college = $subscription->getCollege();
+        $year = $subscription->getYear();
 
         $amountDue = number_format($subscription->getPaymentAmount(), 2);
 
@@ -1308,7 +1354,7 @@ class SubscriptionController extends AbstractActionController
             "Title: {$subscription->getDigitalSignatureTitle()}\n";
 
         if ($adminUser && $dataUser) {
-                $body .= "
+            $body .= "
             Admin User:
                 {$adminUser->getFullName()}
                 {$adminUser->getTitle()}
@@ -1322,9 +1368,8 @@ class SubscriptionController extends AbstractActionController
                 {$dataUser->getPhone()} {$dataUser->getExtension()}
             ";
         }
-        $invoice->setBody($body);
 
-        $this->getServiceLocator()->get('mail.transport')->send($invoice);
+        return $body;
     }
 
     protected function sendWelcomeEmail(Subscription $subscription)
