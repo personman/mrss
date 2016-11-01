@@ -1182,15 +1182,6 @@ return array(
                             )
                         )
                     ),
-                    'trend' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => '/trend',
-                            'defaults' => array(
-                                'action' => 'trend'
-                            )
-                        )
-                    ),
                     'best-performers' => array(
                         'type' => 'segment',
                         'options' => array(

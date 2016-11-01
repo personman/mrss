@@ -33,28 +33,6 @@ class StudyTest extends ModelTestAbstract
         $this->assertInstanceOf('Mrss\Model\Study', $this->model);
     }
 
-    public function testFindAll()
-    {
-        $repoMock = $this->getMock(
-            'Doctrine\ORM\EntityRepository',
-            array('findBy', 'getUnitOfWork'),
-            array(),
-            '',
-            false
-        );
-
-        $repoMock->expects($this->once())
-            ->method('findBy')
-            ->will($this->returnValue('placeholder'));
-
-        $this->model->setRepository($repoMock);
-        $this->model->setEntityManager($this->getEmMock());
-
-        $result = $this->model->findAll();
-
-        $this->assertEquals('placeholder', $result);
-    }
-
     /**
      * Find by id
      */
@@ -92,5 +70,27 @@ class StudyTest extends ModelTestAbstract
         $this->model->setEntityManager($emMock);
 
         $this->model->save(new \Mrss\Entity\Study);
+    }
+
+    public function testFindAll()
+    {
+        $repoMock = $this->getMock(
+            'Doctrine\ORM\EntityRepository',
+            array('findBy', 'getUnitOfWork'),
+            array(),
+            '',
+            false
+        );
+
+        $repoMock->expects($this->once())
+            ->method('findBy')
+            ->will($this->returnValue('placeholder'));
+
+        $this->model->setRepository($repoMock);
+        $this->model->setEntityManager($this->getEmMock());
+
+        $result = $this->model->findAll();
+
+        $this->assertEquals('placeholder', $result);
     }
 }
