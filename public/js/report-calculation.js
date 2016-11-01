@@ -238,6 +238,10 @@ function processUrlStack()
         startTimer();
         //console.log(url);
 
+        //if (window.console && !console.dir) {
+            //console.log(url)
+        //}
+
         $.get(url, function(data) {
             // Update the progress bar
             var remaining = urlStack.length;
