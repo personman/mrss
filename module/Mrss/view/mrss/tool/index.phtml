@@ -17,12 +17,6 @@
         <a href="<?= $this->url('users/import') ?>">Import users</a> - Take users from an Excel file and insert them into the database.
     </li>
 
-    <?php if (false): // Specific to the Drupal verson of NCCBP and no longer needed ?>
-    <li>
-        <a href="/import">Import</a> - Import from NCCBP
-    </li>
-    <?php endif ?>
-
     <li>
         <a href="<?= $this->url(
             'tools/exceldiff'
@@ -35,7 +29,7 @@
         <a href="<?= $this->url(
             'users/exportLoginLinks'
         ) ?>">Export One-time Login Links</a> - Download an Excel file of users who belong to the current
-        study but have never logged in. Created for NCCBP migration.
+        study but have never logged in. Generates password reset links.
     </li>
 
     <li>

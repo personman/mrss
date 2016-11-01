@@ -905,6 +905,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $formatted;
     }
 
+    /**
+     * @todo: generalize. Move to benchmark config?
+     *
+     * @return int
+     */
     public function getDecimalPlaces()
     {
         $dbColumn = $this->getDbColumn();
@@ -948,8 +953,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         if (isset($map[$dbColumn])) {
             $decimalPlaces = $map[$dbColumn];
         } else {
-            //All NCCBP percentages should use 2 decimal places
-            if (/*$this->getBenchmarkGroup()->getStudy()->getId() == 1 &&*/ $this->isPercent()) {
+            //All percentages should use 2 decimal places
+            if ($this->isPercent()) {
                 $decimalPlaces = 2;
             }
 

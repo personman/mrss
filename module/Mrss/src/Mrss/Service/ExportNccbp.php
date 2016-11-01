@@ -8,6 +8,7 @@ use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 
 /**
+ * @deprecated
  * Class ExportNccbp
  *
  * Connect to the NCCBP database and export the data directly to an excel file

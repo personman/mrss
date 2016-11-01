@@ -23,11 +23,6 @@ class BestPerformers extends Report
 
         $benchmarkGroups = $study->getBenchmarkGroups();
         foreach ($benchmarkGroups as $benchmarkGroup) {
-            // Skip NCCBP form one
-            if ($benchmarkGroup->getId() == 1) {
-                continue;
-            }
-
             $groupData = array(
                 'name' => $benchmarkGroup->getName(),
                 'timeframe' => $this->getVariableSubstitution()->substitute($benchmarkGroup->getTimeframe()),

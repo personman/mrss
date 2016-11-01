@@ -474,7 +474,8 @@ class Outliers extends Report
 
     public function getExcludedCollegeIds()
     {
-        // Don't email these colleges outlier reports (applies to NCCBP 2015)
+        // Don't email these colleges outlier reports
+        // @todo generalize (push to config file or db) or remove
         return array();
     }
 }

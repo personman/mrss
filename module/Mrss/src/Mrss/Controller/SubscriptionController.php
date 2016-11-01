@@ -658,13 +658,8 @@ class SubscriptionController extends AbstractActionController
             }
 
             $service->setCurrentStudyCode($currentStudyCode);
-
-            // For now, only discount the price for NCCBP
-            //if ($currentStudyCode == 'nccbp') {
-
-                $discount = $service->checkForDiscount($year, $ipeds);
-                $amount = $amount - $discount;
-            //}
+            $discount = $service->checkForDiscount($year, $ipeds);
+            $amount = $amount - $discount;
         }
 
         return $amount;

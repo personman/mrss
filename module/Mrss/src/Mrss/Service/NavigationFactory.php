@@ -103,6 +103,7 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
         // Rename or hide system report link (only show for NCCBP)
+        // @todo: generalize
         if ($system && in_array($currentStudy->getId(), array(1, 4))) {
             $label = $system->getName() . ' Report';
             $pages['reports']['pages']['system']['label'] = $label;
