@@ -48,7 +48,7 @@ class ChartTest extends PHPUnit_Framework_TestCase
 
     public function testGetChartJsUri()
     {
-        $expected = '/js/highcharts.js?v=2';
+        $expected = '/js/highcharts.js?v=5';
         $this->assertEquals($expected, $this->helper->getChartJsUri());
     }
 

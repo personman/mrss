@@ -3,18 +3,13 @@
 <h4>Export all data</h4>
 
 <p>
-    <a href="/export/full">Download full data export</a>
+    <?php foreach ($years as $year): ?>
+        <a href="<?= $this->url('export', array('action' => 'full', 'year' => $year)) ?>">Export all data for <?= $year ?> </a><br>
+    <?php endforeach; ?>
+
 </p>
 <br>
 
-<?php if (false): ?>
-<h4>Export NCCBP data</h4>
-
-<p>
-    <a href="/export/nccbp">Download NCCBP data for all years</a>
-</p>
-<br>
-<?php endif ?>
 
 <h4>Export users from <?= $this->currentStudy()->getDescription() ?></h4>
 

@@ -26,7 +26,7 @@ class Datum
     protected $subscription;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Benchmark",)
+     * @ORM\ManyToOne(targetEntity="Benchmark", fetch="EAGER")
      * @ORM\JoinColumn(name="benchmark_id", referencedColumnName="id", onDelete="CASCADE")
      * @var Benchmark
      */

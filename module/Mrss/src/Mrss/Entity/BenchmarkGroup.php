@@ -299,15 +299,15 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     public function getNonComputedBenchmarksForYear($year)
     {
         $benchmarks = $this->getBenchmarksForYear($year);
-        $nonComputedBenchmarks = array();
+        $nonComputed = array();
 
         foreach ($benchmarks as $benchmark) {
             if (!$benchmark->getComputed()) {
-                $nonComputedBenchmarks[] = $benchmark;
+                $nonComputed[] = $benchmark;
             }
         }
 
-        return $nonComputedBenchmarks;
+        return $nonComputed;
     }
 
     /**
@@ -653,19 +653,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
 
         $duplicates = array();
         foreach ($benchmarks as $benchmark) {
-            if ($filterBy == 'best-performers' && !$benchmark->getIncludeInBestPerformer()) {
-                continue;
-            }
-
-            if ($filterBy == 'report' && !$benchmark->getIncludeInNationalReport()) {
-                continue;
-            }
-
-            if ($filterBy == 'computed' && !$benchmark->getComputed()) {
-                continue;
-            }
-
-            if (is_array($filterBy) && !in_array($benchmark->getDbColumn(), $filterBy)) {
+            if ($this->skipBenchmark($filterBy, $benchmark)) {
                 continue;
             }
 
@@ -708,6 +696,28 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         $children = $this->removeEmptySections($children);
 
         return $children;
+    }
+
+    protected function skipBenchmark($filterBy, Benchmark $benchmark)
+    {
+        $skip = false;
+        if ($filterBy == 'best-performers' && !$benchmark->getIncludeInBestPerformer()) {
+            $skip = true;
+        }
+
+        if ($filterBy == 'report' && !$benchmark->getIncludeInNationalReport()) {
+            $skip = true;
+        }
+
+        if ($filterBy == 'computed' && !$benchmark->getComputed()) {
+            $skip = true;
+        }
+
+        if (is_array($filterBy) && !in_array($benchmark->getDbColumn(), $filterBy)) {
+            $skip = true;
+        }
+
+        return $skip;
     }
 
     /**

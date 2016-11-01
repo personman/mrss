@@ -243,6 +243,4 @@ class ChangeSet
         $this->subscription = $subscription;
         return $this;
     }
-
-
 }

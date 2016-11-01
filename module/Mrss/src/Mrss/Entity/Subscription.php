@@ -156,6 +156,7 @@ class Subscription
 
     protected $benchmarkModel;
     protected $datumModel;
+    protected $allData = array();
 
     public function __construct()
     {
@@ -314,9 +315,9 @@ class Subscription
         return $this->digitalSignature;
     }
 
-    public function setDigitalSignatureTitle($digitalSignatureTitle)
+    public function setDigitalSignatureTitle($title)
     {
-        $this->digitalSignatureTitle = $digitalSignatureTitle;
+        $this->digitalSignatureTitle = $title;
 
         return $this;
     }
@@ -371,14 +372,20 @@ class Subscription
     {
         if ($datum = $this->getdatum($dbColumn)) {
             $datum->setValue($value);
+            $this->allData[$dbColumn] = $value;
         }
     }
 
     public function getValue($dbColumn)
     {
         $value = null;
-        if ($datum = $this->getDatum($dbColumn)) {
-            $value = $datum->getValue();
+        if (array_key_exists($dbColumn, $this->allData)) {
+            $value = $this->allData[$dbColumn];
+        } else {
+            if ($datum = $this->getDatum($dbColumn)) {
+                $value = $datum->getValue();
+                $this->allData[$dbColumn] = $value;
+            }
         }
 
         return $value;
@@ -422,26 +429,33 @@ class Subscription
 
         // If the data row doesn't exist, create it
         if ($datum === null) {
-            $datum = new Datum();
-            $datum->setSubscription($this);
+            $datum = $this->createDatum($benchmark);
+        }
+
+        return $datum;
+    }
+
+    protected function createDatum($benchmark)
+    {
+        $datum = new Datum();
+        $datum->setSubscription($this);
 
 
-            if (is_object($benchmark)) {
-                $datum->setBenchmark($benchmark);
-                $datum->setDbColumn($benchmark->getDbColumn());
-            } else {
-                $dbColumn = $benchmark;
-                $datum->setDbColumn($dbColumn);
-                $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
+        if (is_object($benchmark)) {
+            $datum->setBenchmark($benchmark);
+            $datum->setDbColumn($benchmark->getDbColumn());
+        } else {
+            $dbColumn = $benchmark;
+            $datum->setDbColumn($dbColumn);
+            $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
 
-                $datum->setBenchmark($benchmark);
-            }
+            $datum->setBenchmark($benchmark);
+        }
 
-            if ($benchmark) {
-                $this->getData()->add($datum);
-                $this->getDatumModel()->save($datum);
-                $this->getDatumModel()->getEntityManager()->flush();
-            }
+        if ($benchmark) {
+            $this->getData()->add($datum);
+            $this->getDatumModel()->save($datum);
+            $this->getDatumModel()->getEntityManager()->flush();
         }
 
         return $datum;
@@ -455,21 +469,20 @@ class Subscription
     public function getAllData()
     {
         $data = array();
-        foreach ($this->getDAta() as $datum) {
-            $b = $datum->getBenchmark();
-            if (empty($b)) {
-                prd($datum->getId());
+        foreach ($this->getData() as $datum) {
+            if ($benchmark = $datum->getBenchmark()) {
+                $data[$benchmark->getDbColumn()] = $datum->getValue();
             }
-            $data[$datum->getBenchmark()->getDbColumn()] = $datum->getValue();
         }
+
+        $this->allData = $data;
 
         return $data;
     }
 
     public function setValues($data)
     {
-        foreach ($data as $dbColumn => $value)
-        {
+        foreach ($data as $dbColumn => $value) {
             $this->setValue($dbColumn, $value);
         }
     }

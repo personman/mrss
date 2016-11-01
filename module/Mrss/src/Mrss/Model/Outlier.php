@@ -76,7 +76,7 @@ class Outlier extends AbstractModel
         return $this->getRepository()->findBy($criteria);
     }
 
-    public function findReportedByCollegStudyAndYear(
+    public function findReportedByCollegeStudyAndYear(
         CollegeEntity $college,
         StudyEntity $study,
         $year
@@ -87,14 +87,16 @@ class Outlier extends AbstractModel
         $dql = "SELECT o
             FROM Mrss\Entity\Outlier o
             JOIN Mrss\Entity\Benchmark b WITH o.benchmark = b
-            WHERE o.college = $collegeId
-            AND o.year = $year
-            AND o.study = $studyId
+            WHERE o.college = :collegeId
+            AND o.year = :year
+            AND o.study = :studyId
             AND b.includeInNationalReport = true
         ";
 
         $query = $this->getEntityManager()->createQuery($dql);
-
+        $query->setParameter('year', $year);
+        $query->setParameter('studyId', $studyId);
+        $query->setParameter('collegeId', $collegeId);
 
         return $query->getResult();
     }

@@ -320,7 +320,8 @@ class College extends AbstractModel
 
 
 
-                    $subQuery = "$table.floatValue BETWEEN :{$criterion}_min AND :{$criterion}_max AND $table.dbColumn = :{$criterion}_col";
+                    $subQuery = "$table.floatValue BETWEEN :{$criterion}_min
+                    AND :{$criterion}_max AND $table.dbColumn = :{$criterion}_col";
                     $dqlSubqueries[] = $subQueryBase . $subQuery;
 
 

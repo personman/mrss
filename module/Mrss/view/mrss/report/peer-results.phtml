@@ -59,7 +59,7 @@ $this->headScript()->appendFile(
                     <thead>
                         <tr>
                             <th>Institution</th>
-                            <th>Benchmark</th>
+                            <th>Value</th>
                             <th>National<br>% Rank</th>
                         </tr>
                     </thead>
@@ -94,7 +94,7 @@ $this->headScript()->appendFile(
 </div>
 
 <?php if (!empty($report['skipped'])): ?>
-    <p>The following benchmarks are not included in the report because fewer than 5 or your selected peers reported data for them:</p>
+    <p>The following metrics are not included in the report because fewer than 5 or your selected peers reported data for them:</p>
 
     <ul>
         <?php foreach ($report['skipped'] as $benchmark): ?>
@@ -105,7 +105,7 @@ $this->headScript()->appendFile(
 <?php endif ?>
 
 <?php if (!empty($report['youHaveNoData'])): ?>
-    <p>The following benchmarks are not included in the report because your institution did not submit data for them:</p>
+    <p>The following metrics are not included in the report because your institution did not submit data for them:</p>
 
     <ul>
         <?php foreach ($report['youHaveNoData'] as $benchmark): ?>

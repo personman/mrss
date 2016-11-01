@@ -23,11 +23,13 @@ class ExportController extends AbstractActionController
      */
     public function fullAction()
     {
+        $year = $this->params()->fromRoute('year');
+
         /** @var \Mrss\Service\DataExport $exportService */
         $exportService = $this->getServiceLocator()->get('export');
 
         $studies = array($this->currentStudy()->getId());
-        $exportService->getFullDataDump($studies);
+        $exportService->getFullDataDump($studies, $year);
 
         return array(
         );

@@ -15,6 +15,16 @@ class Explore extends AbstractForm
 
         rsort($years);
 
+        $this->addBasicFields($years, $includeTrends);
+        $this->addBenchmarkSelects($benchmarks);
+        $this->addPeerGroupDropdown($peerGroups);
+        $this->addAdvancedFields($benchmarks, $allBreakpoints);
+
+        $this->add($this->getButtons());
+    }
+
+    protected function addBasicFields($years, $includeTrends)
+    {
         $years = array_combine($years, $years);
 
         $this->add(
@@ -102,11 +112,78 @@ class Explore extends AbstractForm
                 )
             )
         );
+    }
 
-        $this->addBenchmarkSelects($benchmarks);
+    protected function addBenchmarkSelects($benchmarks)
+    {
+        $this->add(
+            array(
+                'name' => 'benchmark1',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'X Axis'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks,
+                    'id' => 'benchmark1'
+                )
+            )
+        );
 
-        $this->addPeerGroupDropdown($peerGroups);
+        $this->add(
+            array(
+                'name' => 'benchmark2',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'Y Axis'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks,
+                    'id' => 'benchmark2'
+                )
+            )
+        );
 
+        $this->add(
+            array(
+                'name' => 'benchmark3',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'Bubble Size'
+                ),
+                'attributes' => array(
+                    'options' => $benchmarks,
+                    'id' => 'benchmark3'
+                )
+            )
+        );
+
+    }
+
+    protected function addPeerGroupDropdown($peerGroups)
+    {
+        $this->add(
+            array(
+                'name' => 'peerGroup',
+                'type' => 'Zend\Form\Element\Select',
+                'allow_empty' => true,
+                'required' => false,
+                'options' => array(
+                    'label' => 'Peer Group',
+                    'empty_option' => 'None',
+                    'help-block' => '<a href="/peer-groups" target="_blank">Create and manage peer groups</a>'
+                ),
+                'attributes' => array(
+                    'options' => $peerGroups,
+                    'id' => 'peerGroup'
+                )
+            )
+        );
+
+    }
+
+    protected function addAdvancedFields($benchmarks, $allBreakpoints)
+    {
         if (true) {
             $this->add(
                 array(
@@ -206,78 +283,6 @@ class Explore extends AbstractForm
                 )
             )
         );
-
-
-
-        $this->add($this->getButtons());
-    }
-
-    protected function addBenchmarkSelects($benchmarks)
-    {
-        $this->add(
-            array(
-                'name' => 'benchmark1',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'X Axis'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'benchmark1'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'benchmark2',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'Y Axis'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'benchmark2'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'benchmark3',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'Bubble Size'
-                ),
-                'attributes' => array(
-                    'options' => $benchmarks,
-                    'id' => 'benchmark3'
-                )
-            )
-        );
-
-    }
-
-    protected function addPeerGroupDropdown($peerGroups)
-    {
-        $this->add(
-            array(
-                'name' => 'peerGroup',
-                'type' => 'Zend\Form\Element\Select',
-                'allow_empty' => true,
-                'required' => false,
-                'options' => array(
-                    'label' => 'Peer Group',
-                    'empty_option' => 'None',
-                    'help-block' => '<a href="/peer-groups" target="_blank">Create and manage peer groups</a>'
-                ),
-                'attributes' => array(
-                    'options' => $peerGroups,
-                    'id' => 'peerGroup'
-                )
-            )
-        );
-
     }
 
     protected function getButtons()

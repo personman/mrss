@@ -199,10 +199,17 @@ class ReportController extends AbstractActionController
 
     public function computeOneAction()
     {
+        $debug = $this->params()->fromRoute('debug');
+
         takeYourTime();
 
+
+        if (!$debug) {
+            $this->disableQueryLogging();
+        }
+
         $observationId = $this->params()->fromRoute('observation');
-        $debug = $this->params()->fromRoute('debug');
+
         $debugColumn = $this->params()->fromRoute('benchmark');
 
         $status = 'ok';
@@ -212,7 +219,7 @@ class ReportController extends AbstractActionController
 
         if ($observation) {
             $service = $this->getPercentileService()->getComputedFieldsService();
-            $service->setDebug($debug);
+            //$service->setDebug($debug);
             $service->setDebugDbColumn($debugColumn);
 
             try {
@@ -228,15 +235,87 @@ class ReportController extends AbstractActionController
         }
 
 
-
-        $view = new JsonModel(
-            array(
-                'status' => $status,
-                'observation' => $observationId
-            )
+        $viewParams = array(
+            'status' => $status,
+            'observation' => $observationId
         );
 
+        if ($debug) {
+            $logger = $this->getObservationModel()->getEntityManager()->getConfiguration()->getSQLLogger();
+
+            $this->queryLogger($logger);
+            $viewParams['logger'] = $logger;
+
+            $view = $viewParams;
+        } else {
+            $view = new JsonModel($viewParams);
+        }
+
         return $view;
+    }
+
+    public function disableQueryLogging()
+    {
+        // Turn off query logging
+        $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
+    }
+
+
+    protected function queryLogger($logger)
+    {
+        $tables = array();
+        $params = array();
+
+        foreach ($logger->queries as $query) {
+            $sql = $query['sql'];
+            //pr($sql);
+
+            $table = $this->getTableFromSql($sql);
+
+            if (empty($tables[$table])) {
+                $tables[$table] = 1;
+            } else {
+                $tables[$table]++;
+            }
+
+            $qParams = $query['params'];
+            if ($table && isset($qParams[0])) {
+                $param = $qParams[0];
+
+                if ($param == 'ft_male_no_rank_number_12_month') {
+                    //pr($sql);
+                }
+
+                if (!isset($params[$param])) {
+                    $params[$param] = 1;
+                } else {
+                    $params[$param]++;
+                }
+            }
+        }
+
+        pr($tables);
+
+        asort($params);
+        //pr($params);
+
+        //die('tewt');
+    }
+
+    protected function getTableFromSql($sql)
+    {
+        preg_match('/(FROM|UPDATE) (.*?) /', $sql, $matches);
+
+        $table = null;
+        if (!empty($matches[2])) {
+            $table = $matches[2];
+        }
+
+        return $table;
     }
 
     public function calculateChangesAction()

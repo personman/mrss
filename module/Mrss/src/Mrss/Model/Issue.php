@@ -47,8 +47,8 @@ class Issue extends AbstractModel
      */
     public function findForCollege($college)
     {
-        $em = $this->getEntityManager();
-        $query = $em->createQuery(
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
             "SELECT i
             FROM Mrss\Entity\Issue i
             WHERE i.status IS NULL

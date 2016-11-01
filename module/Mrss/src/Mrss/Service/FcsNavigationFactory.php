@@ -20,9 +20,9 @@ class FcsNavigationFactory extends NavigationFactory
         $system = null;
         if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
 
-            if ($college = $user->getCollege()) {
+            /*if ($college = $user->getCollege()) {
                 $system = $college->getSystem();
-            }
+            }*/
 
             // Remove the Home button from nav if user is role: viewer
             if ($user->getRole() == 'viewer') {
@@ -50,6 +50,18 @@ class FcsNavigationFactory extends NavigationFactory
             unset($pages['members-contact']);
         }
 
+        $pages = $this->addDataCollectionForms($pages, $serviceLocator);
+
+        return $pages;
+    }
+
+    protected function addDataCollectionForms($pages, $serviceLocator)
+    {
+        // Hide data entry links, if needed
+        if (!$this->getAuthorizeService()->isAllowed('dataEntry', 'view')) {
+            unset($pages['data-collection']);
+        }
+
         // Add individual forms
         $dataEntryPages = array();
 
@@ -69,11 +81,6 @@ class FcsNavigationFactory extends NavigationFactory
             $dataEntryPages = array_merge($pages['data-collection']['pages'], $dataEntryPages);
 
             $pages['data-collection']['pages'] = $dataEntryPages;
-        }
-
-        // Hide data entry links, if needed
-        if (!$this->getAuthorizeService()->isAllowed('dataEntry', 'view')) {
-            unset($pages['data-collection']);
         }
 
         return $pages;
