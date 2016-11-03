@@ -45,7 +45,7 @@ class Report
     /**
      * @var ComputedFields
      */
-    protected $computedFieldsService;
+    protected $computedService;
 
     /**
      * @var VariableSubstitution
@@ -488,6 +488,11 @@ class Report
             )
         );
 
+        return $this->buildPieChart($chartConfig, $series, $usePercentage);
+    }
+
+    protected function buildPieChart($chartConfig, $series, $usePercentage)
+    {
         $dataDefinition = $this->getYear() . ' ' . $this->getStudy()->getName();
 
         $chart = array(
@@ -625,8 +630,8 @@ class Report
         foreach ($peerGroup->getPeers() as $collegeId) {
             $college = $this->getCollegeModel()->find($collegeId);
 
-            if ($ob = $college->getObservationForYear($year)) {
-                $datum = $ob->get($dbColumn);
+            if ($observation = $college->getObservationForYear($year)) {
+                $datum = $observation->get($dbColumn);
                 if (null !== $datum) {
                     $data[] = floatval($datum);
                 }
@@ -901,6 +906,11 @@ class Report
         );
 
 
+        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series);
+    }
+
+    protected function buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series)
+    {
         //$seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
         $dataDefinition = $this->getChartFooter($benchmark);
 
@@ -912,14 +922,6 @@ class Report
                     'load' => 'loadChart'
                 ),
             ),
-            /*'exporting' => array(
-                'chartOptions' => array(
-                    //'series' => $seriesWithDataLabels,
-                    'chart' => array(
-                        'spacingBottom' => ceil(strlen($dataDefinition) / 106) * 35,
-                    ),
-                ),
-            ),*/
             'title' => array(
                 'text' => $chartConfig['title'],
             ),
@@ -1219,9 +1221,9 @@ class Report
         return $this->study;
     }
 
-    public function setComputedFieldsService(ComputedFields $service)
+    public function setComputedService(ComputedFields $service)
     {
-        $this->computedFieldsService = $service;
+        $this->computedService = $service;
 
         return $this;
     }
@@ -1229,9 +1231,9 @@ class Report
     /**
      * @return ComputedFields
      */
-    public function getComputedFieldsService()
+    public function getComputedService()
     {
-        return $this->computedFieldsService;
+        return $this->computedService;
     }
 
     /**
@@ -1587,7 +1589,7 @@ class Report
         foreach ($subs as $sub) {
             $observation = $sub->getObservation();
             if ($observation) {
-                $this->getComputedFieldsService()
+                $this->getComputedService()
                     ->calculateAllForObservation($observation);
             } else {
                 //echo "Observation missing for " . $sub->getCollege()->getName() .
@@ -1624,7 +1626,7 @@ class Report
                 $observation = $sub->getObservation();
                 foreach ($observation->getSubObservations() as $subObservation) {
                     foreach ($subObForms as $benchmarkGroup) {
-                        $this->getComputedFieldsService()
+                        $this->getComputedService()
                             ->calculateAllForSubObservation($subObservation, $benchmarkGroup);
                     }
                 }

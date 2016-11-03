@@ -267,8 +267,8 @@ class Outliers extends Report
         if ($benchmark->getComputed() && $equation = $benchmark->getEquation()) {
             // Expand the equation
             $year = $this->getStudy()->getCurrentYear();
-            $equation = $this->getComputedFieldsService()->nestComputedEquations($equation, $year);
-            $variables = $this->getComputedFieldsService()->getVariables($equation);
+            $equation = $this->getComputedService()->nestComputedEquations($equation, $year);
+            $variables = $this->getComputedService()->getVariables($equation);
 
             foreach ($variables as $dbColumn) {
                 $baseBenchmark = $this->getBenchmark($dbColumn);
@@ -298,7 +298,7 @@ class Outliers extends Report
             //$equation = $this->getComputedFieldsService()->getEquationWithLabels($benchmark, $nested);
 
             if ($observation = $this->getObservation()) {
-                $equation = $this->getComputedFieldsService()
+                $equation = $this->getComputedService()
                         ->getEquationWithNumbers($benchmark, $this->getObservation(), $nested);
             }
         }
