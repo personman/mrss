@@ -12,19 +12,57 @@ use Zend\Validator\Regex;
 class User extends Fieldset implements InputFilterProviderInterface
 {
     protected $includeEmailConfirm = true;
+    protected $name;
 
     public function __construct(
         $name,
         $includeEmailConfirm = true,
         $adminControls = false,
-        $em = null,
+        $entityManager = null,
         $roleSubset = false,
         $userRoleChoices = array('viewer', 'contact', 'data'),
         $editingSelf = false
     ) {
         $this->includeEmailConfirm = $includeEmailConfirm;
+        $this->name = $name;
 
         parent::__construct($name);
+
+        $this->addContactFields();
+
+        if ($adminControls) {
+            $this->addAdminControls($entityManager);
+
+        } elseif ($roleSubset && !$editingSelf) {
+            $this->addNonAdminControls($userRoleChoices);
+
+        }
+    }
+
+    protected function addContactFields()
+    {
+        $this->addNameFields();
+        $this->addPhoneFields();
+        $this->addEmailFields();
+    }
+
+    protected function getUserRoles()
+    {
+        $userRoles = array(
+            'data' => 'Data Manager',
+            'contact' => 'Membership Coordinator',
+            'viewer' => 'View Reports Only',
+            'system_admin' => 'System Administrator',
+            'system_viewer' => 'System Viewer',
+            'admin' => 'NHEBI Staff'
+        );
+
+        return $userRoles;
+    }
+
+    protected function addNameFields()
+    {
+        $name = $this->name;
 
         $this->add(
             array(
@@ -86,7 +124,10 @@ class User extends Fieldset implements InputFilterProviderInterface
                 )
             )
         );
+    }
 
+    protected function addPhoneFields()
+    {
         $this->add(
             array(
                 'name' => 'phone',
@@ -96,7 +137,7 @@ class User extends Fieldset implements InputFilterProviderInterface
                     'label' => 'Phone'
                 ),
                 'attributes' => array(
-                    'id' => $name . '-phone'
+                    'id' => $this->name . '-phone'
                 )
             )
         );
@@ -109,11 +150,14 @@ class User extends Fieldset implements InputFilterProviderInterface
                     'label' => 'Extension'
                 ),
                 'attributes' => array(
-                    'id' => $name . '-extension'
+                    'id' => $this->name . '-extension'
                 )
             )
         );
+    }
 
+    protected function addEmailFields()
+    {
         $this->add(
             array(
                 'name' => 'email',
@@ -123,7 +167,7 @@ class User extends Fieldset implements InputFilterProviderInterface
                     'label' => 'E-Mail Address'
                 ),
                 'attributes' => array(
-                    'id' => $name . '-email'
+                    'id' => $this->name . '-email'
                 )
             )
         );
@@ -138,79 +182,77 @@ class User extends Fieldset implements InputFilterProviderInterface
                         'label' => 'Confirm E-Mail Address'
                     ),
                     'attributes' => array(
-                        'id' => $name . '-emailConfirm'
+                        'id' => $this->name . '-emailConfirm'
                     )
                 )
             );
         }
+    }
 
-        if ($adminControls) {
-            $userRoles = array(
-                'data' => 'Data Manager',
-                'contact' => 'Membership Coordinator',
-                'viewer' => 'View Reports Only',
-                'system_admin' => 'System Administrator',
-                'system_viewer' => 'System Viewer',
-                'admin' => 'NHEBI Staff'
-            );
+    protected function addAdminControls($entityManager)
+    {
 
+
+        $this->add(
+            array(
+                'name' => 'role',
+                'type' => 'Select',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Role',
+                    'help-block' => $this->getRoleHelp($this->getUserRoles())
+                ),
+                'attributes' => array(
+                    'options' => $this->getUserRoles()
+                )
+            )
+        );
+
+        if ($entityManager) {
             $this->add(
                 array(
-                    'name' => 'role',
-                    'type' => 'Select',
-                    'required' => true,
+                    'type' => 'DoctrineORMModule\Form\Element\EntityMultiCheckbox',
+                    'name' => 'studies',
                     'options' => array(
-                        'label' => 'Role',
-                        'help-block' => $this->getRoleHelp($userRoles)
+                        'label' => 'Studies',
+                        'object_manager' => $entityManager,
+                        'target_class'   => 'Mrss\Entity\Study',
+                        'property'       => 'name',
                     ),
-                    'attributes' => array(
-                        'options' => $userRoles
-                    )
                 )
             );
-
-            if ($em) {
-                $this->add(
-                    array(
-                        'type' => 'DoctrineORMModule\Form\Element\EntityMultiCheckbox',
-                        'name' => 'studies',
-                        'options' => array(
-                            'label' => 'Studies',
-                            'object_manager' => $em,
-                            'target_class'   => 'Mrss\Entity\Study',
-                            'property'       => 'name',
-                        ),
-                    )
-                );
-            }
-        } elseif ($roleSubset && !$editingSelf) {
-            $userRoles = array(
-                'data' => 'Data Manager',
-                'contact' => 'Membership Coordinator',
-                'viewer' => 'View Reports Only'
-            );
-            foreach ($userRoles as $key => $label) {
-                if (!in_array($key, $userRoleChoices)) {
-                    unset($userRoles[$key]);
-                }
-            }
-
-            $this->add(
-                array(
-                    'name' => 'role',
-                    'type' => 'Select',
-                    'required' => true,
-                    'options' => array(
-                        'label' => 'Role',
-                        'help-block' => $this->getRoleHelp($userRoles)
-                    ),
-                    'attributes' => array(
-                        'options' => $userRoles
-                    )
-                )
-            );
-
         }
+
+    }
+
+    protected function addNonAdminControls($userRoleChoices)
+    {
+        $userRoles = array(
+            'data' => 'Data Manager',
+            'contact' => 'Membership Coordinator',
+            'viewer' => 'View Reports Only'
+        );
+        foreach ($userRoles as $key => $label) {
+            if (!in_array($key, $userRoleChoices)) {
+                unset($userRoles[$key]);
+                unset($label);
+            }
+        }
+
+        $this->add(
+            array(
+                'name' => 'role',
+                'type' => 'Select',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Role',
+                    'help-block' => $this->getRoleHelp($userRoles)
+                ),
+                'attributes' => array(
+                    'options' => $userRoles
+                )
+            )
+        );
     }
 
     protected function getRoleHelp($roles)
@@ -273,8 +315,8 @@ class User extends Fieldset implements InputFilterProviderInterface
         );
 
         if ($this->includeEmailConfirm) {
-            $emailConfirmValidator = new Identical('email');
-            $emailConfirmValidator->setMessage(
+            $emailValidator = new Identical('email');
+            $emailValidator->setMessage(
                 'E-Mail addresses do not match',
                 Identical::NOT_SAME
             );
@@ -283,7 +325,7 @@ class User extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'validators' => array(
                     new EmailValidator(),
-                    $emailConfirmValidator
+                    $emailValidator
                 )
             );
         }

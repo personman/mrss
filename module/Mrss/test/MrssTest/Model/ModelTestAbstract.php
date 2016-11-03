@@ -1,12 +1,12 @@
 <?php
 
-namespace MrssTest\MOdel;
+namespace MrssTest\Model;
 
 use PHPUnit_Framework_TestCase;
 
 class ModelTestAbstract extends PHPUnit_Framework_TestCase
 {
-    protected function getEmMock($additionalMethodsToMock = array())
+    protected function getEmMock($extraMethods = array())
     {
         $repositoryMock = $this->getMock(
             'Doctrine\Orm\Repository',
@@ -19,7 +19,7 @@ class ModelTestAbstract extends PHPUnit_Framework_TestCase
             'persist',
             'flush'
         );
-        $methodsToMock = array_merge($methodsToMock, $additionalMethodsToMock);
+        $methodsToMock = array_merge($methodsToMock, $extraMethods);
 
         $emMock  = $this->getMock(
             '\Doctrine\ORM\EntityManager',
