@@ -1166,20 +1166,11 @@ class SubscriptionController extends AbstractActionController
             $subscription = new Subscription();
         }
 
-        // Status: cc = complete, invoice or system = pending
-        if ($method == 'creditCard') {
-            $status = 'complete';
-        } elseif ($method == 'system') {
+        if ($method == 'system') {
             $subscription->setPaymentSystemName($paymentForm['system']);
-            $status = 'pending';
-        } elseif ($method == 'free') {
-            $status = 'complete';
-        } elseif ($method == 'pilot') {
-            $status = 'pilot';
-        } else {
-            $status = 'pending';
         }
 
+        $status = $this->getSubscriptionStatus($method);
 
         if ($method == 'free') {
             $amount = 0;
@@ -1206,6 +1197,24 @@ class SubscriptionController extends AbstractActionController
         $this->getSubscriptionModel()->save($subscription);
 
         return $subscription;
+    }
+
+    protected function getSubscriptionStatus($method)
+    {
+        // Status: cc = complete, invoice or system = pending
+        if ($method == 'creditCard') {
+            $status = 'complete';
+        } elseif ($method == 'system') {
+            $status = 'pending';
+        } elseif ($method == 'free') {
+            $status = 'complete';
+        } elseif ($method == 'pilot') {
+            $status = 'pilot';
+        } else {
+            $status = 'pending';
+        }
+
+        return $status;
     }
     
     public function createOrUpdateObservation(\Mrss\Entity\College $college)
@@ -1279,7 +1288,7 @@ class SubscriptionController extends AbstractActionController
         Subscription $subscription,
         User $adminUser = null,
         User $dataUser = null,
-        $to = null
+        $toEmail = null
     ) {
         // Check config to see if emails are being suppressed (by Behat, probably)
         $config = $this->getServiceLocator()->get('config');
@@ -1287,26 +1296,36 @@ class SubscriptionController extends AbstractActionController
             return false;
         }
 
-        $college = $subscription->getCollege();
-
         $invoice = new Message();
         $invoice->setFrom('info@benchmarkinginstitute.org', 'NHEBI Staff');
 
-        if ($to) {
-            $invoice->addTo($to);
+        if ($toEmail) {
+            $invoice->addTo($toEmail);
         } else {
             $invoice->addTo('dfergu15@jccc.edu');
             $invoice->addTo('michelletaylor@jccc.edu');
         }
-        $study = $subscription->getStudy();
-        $studyName = $study->getName();
-
-        $collegeName = $college->getName();
-
-        $year = $subscription->getYear();
 
         $paymentMethod = $subscription->getPaymentMethod();
 
+        $invoice->setSubject(
+            $this->getInvoiceSubject($subscription, $paymentMethod)
+
+        );
+
+        $body = $this->getInvoiceBody($subscription, $adminUser, $dataUser);
+        $invoice->setBody($body);
+
+        $this->getServiceLocator()->get('mail.transport')->send($invoice);
+    }
+
+    /**
+     * @param \Mrss\Entity\Subscription $subscription
+     * @param $paymentMethod
+     * @return string
+     */
+    protected function getInvoiceSubject($subscription, $paymentMethod)
+    {
         // Email subject
         if ($subscription->getPaymentMethod() == 'pilot') {
             $subjectIntro = 'Pilot';
@@ -1316,14 +1335,13 @@ class SubscriptionController extends AbstractActionController
             $subjectIntro = 'Membership';
         }
 
-        $invoice->setSubject(
-            "$subjectIntro: $collegeName joined $studyName for $year"
-        );
+        $study = $subscription->getStudy();
+        $studyName = $study->getName();
+        $college = $subscription->getCollege();
+        $collegeName = $college->getName();
+        $year = $subscription->getYear();
 
-        $body = $this->getInvoiceBody($subscription, $adminUser, $dataUser);
-        $invoice->setBody($body);
-
-        $this->getServiceLocator()->get('mail.transport')->send($invoice);
+        return "$subjectIntro: $collegeName joined $studyName for $year";
     }
 
     /**
@@ -1439,21 +1457,7 @@ class SubscriptionController extends AbstractActionController
         if ($subscriptionId == 'all') {
             takeYourTime();
 
-            /** @var \Mrss\Entity\Study $study */
-            $study = $this->currentStudy();
-            if ($year = $this->params()->fromQuery('year')) {
-                $subscriptions = $study->getSubscriptionsForYear($year);
-            } else {
-                $subscriptions = $study->getSubscriptions();
-            }
-
-            $message = '';
-            foreach ($subscriptions as $subscription) {
-                $message .= $this->deleteSubscription($subscription) . "<br>\n";
-            }
-
-            $this->flashMessenger()->addSuccessMessage($message);
-            return $this->redirect()->toUrl('/admin');
+            return $this->deleteAllSubscriptions();
 
         } else {
             $subscription = $subscriptionModel->find($subscriptionId);
@@ -1471,6 +1475,25 @@ class SubscriptionController extends AbstractActionController
 
         $message = $this->deleteSubscription($subscription);
 
+
+        $this->flashMessenger()->addSuccessMessage($message);
+        return $this->redirect()->toUrl('/admin');
+    }
+
+    protected function deleteAllSubscriptions()
+    {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+        if ($year = $this->params()->fromQuery('year')) {
+            $subscriptions = $study->getSubscriptionsForYear($year);
+        } else {
+            $subscriptions = $study->getSubscriptions();
+        }
+
+        $message = '';
+        foreach ($subscriptions as $subscription) {
+            $message .= $this->deleteSubscription($subscription) . "<br>\n";
+        }
 
         $this->flashMessenger()->addSuccessMessage($message);
         return $this->redirect()->toUrl('/admin');
@@ -1562,25 +1585,23 @@ class SubscriptionController extends AbstractActionController
             $allStudies[] = $subscription->getStudy();
         }
 
-        $benchmarksInCurrentStudy = $currentStudy->getAllBenchmarkKeys();
+        $benchmarksInStudy = $currentStudy->getAllBenchmarkKeys();
 
-        // Temp fix. This will clear out some Max data, but it should get re-imported
-        return $benchmarksInCurrentStudy;
 
-        $benchmarksInCurrentStudyOnly = $benchmarksInCurrentStudy;
+        $inStudyOnly = $benchmarksInStudy;
 
         foreach ($allStudies as $study) {
             if ($study->getId() == $currentStudy->getId()) {
                 continue;
             }
 
-            $benchmarksInCurrentStudyOnly = array_diff(
-                $benchmarksInCurrentStudyOnly,
+            $inStudyOnly = array_diff(
+                $inStudyOnly,
                 $study->getAllBenchmarkKeys()
             );
         }
 
-        return $benchmarksInCurrentStudyOnly;
+        return $inStudyOnly;
     }
 
     /**
@@ -1682,17 +1703,17 @@ class SubscriptionController extends AbstractActionController
     }
 
     /**
-     * @param null $id
+     * @param null $identifier
      * @return null|\Mrss\Entity\SubscriptionDraft
      */
-    public function getDraftSubscription($id = null)
+    public function getDraftSubscription($identifier = null)
     {
         if (empty($this->draftSubscription)) {
-            if (empty($id)) {
-                $id = $this->getTransIdFromSession();
+            if (empty($identifier)) {
+                $identifier = $this->getTransIdFromSession();
             }
 
-            $this->draftSubscription = $this->getSubscriptionDraftModel()->find($id);
+            $this->draftSubscription = $this->getSubscriptionDraftModel()->find($identifier);
         }
 
         return $this->draftSubscription;
@@ -1737,13 +1758,43 @@ class SubscriptionController extends AbstractActionController
     {
         takeYourTime();
 
-        $model = $this->getSubscriptionModel();
+        $year = $this->params()->fromRoute('year');
 
-        $subscriptionsInfo = array();
+        $subscriptionsInfo = $this->getSubscriptionsForExport($year);
+
+        $excel = new PHPExcel();
+        $sheet = $excel->getActiveSheet();
+        $sheet->fromArray($subscriptionsInfo);
+
+        foreach (range(0, count($subscriptionsInfo[0])) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
+        }
+
+        // Make the first row bold
+        $sheet->getStyle('A1:Z1')->getFont()->setBold(true);
+
+        $filename = $this->currentStudy()->getName() . '-Members-' . $year;
+
+        header(
+            'Content-Type: '.
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $objWriter->save('php://output');
+        die;
+    }
+
+    protected function getSubscriptionsForExport($year)
+    {
+        $model = $this->getSubscriptionModel();
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
-        $year = $this->params()->fromRoute('year');
+
+        $subscriptionsInfo = array();
 
         $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
 
@@ -1773,29 +1824,7 @@ class SubscriptionController extends AbstractActionController
             $subscriptionsInfo[] = $exportRow;
         }
 
-        $excel = new PHPExcel();
-        $sheet = $excel->getActiveSheet();
-        $sheet->fromArray($subscriptionsInfo);
-
-        foreach (range(0, count($subscriptionsInfo[0])) as $column) {
-            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
-        }
-
-        // Make the first row bold
-        $sheet->getStyle('A1:Z1')->getFont()->setBold(true);
-
-        $filename = $this->currentStudy()->getName() . '-Members-' . $year;
-
-        header(
-            'Content-Type: '.
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
-
-        $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-        $objWriter->save('php://output');
-        die;
+        return $subscriptionsInfo;
     }
 
     public function reportAccessAction()
