@@ -43,9 +43,9 @@ class College extends AbstractModel
      * @param $id
      * @return null|\Mrss\Entity\College
      */
-    public function find($id)
+    public function find($identifier)
     {
-        return $this->getRepository()->find($id);
+        return $this->getRepository()->find($identifier);
     }
 
     /**
@@ -131,8 +131,8 @@ class College extends AbstractModel
         $term = strtolower($term);
         $limit = intval($limit);
 
-        $em = $this->getEntityManager();
-        $query = $em->createQuery(
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
             "SELECT c
             FROM Mrss\Entity\College c
             WHERE c.name LIKE ?1
@@ -173,8 +173,8 @@ class College extends AbstractModel
      */
     public function findByCriteria($criteria, StudyEntity $currentStudy, $currentCollege, $year)
     {
-        $em = $this->getEntityManager();
-        $builder = $em->createQueryBuilder();
+        $entityManager = $this->getEntityManager();
+        $builder = $entityManager->createQueryBuilder();
 
         $builder->add('select', 'c');
         $builder->add('from', '\Mrss\Entity\College c');
@@ -216,63 +216,7 @@ class College extends AbstractModel
 
         return $colleges;
     }
-    /**
-     * @param $criteria
-     * @param StudyEntity $currentStudy
-     * @param $currentCollege
-     * @return \Mrss\Entity\College[]
-     */
-    public function findByCriteriaOld($criteria, StudyEntity $currentStudy, $currentCollege, $year)
-    {
-        $em = $this->getEntityManager();
-        $builder = $em->createQueryBuilder();
 
-        $builder->add('select', 'c');
-        $builder->add('from', '\Mrss\Entity\College c');
-
-        // Join subscriptions
-        $builder->innerJoin(
-            '\Mrss\Entity\Subscription',
-            's',
-            'WITH',
-            's.college = c.id'
-        );
-        $builder->andWhere('s.study = :study_id');
-        $builder->setParameter('study_id', $currentStudy->getId());
-
-        // Filter by state
-        if (!empty($criteria['states']) && $states = $criteria['states']) {
-            if (is_array($states) && count($states) > 0) {
-                $builder->andWhere($builder->expr()->in('c.state', ':states'));
-                $builder->setParameter('states', $states);
-            }
-        }
-
-        // Join observations
-        $builder->innerJoin(
-            '\Mrss\Entity\Observation',
-            'o',
-            'WITH',
-            's.observation = o.id'
-        );
-
-        $builder = $this->addCriteriaOld($builder, $criteria);
-
-        // Exclude the current college (they can't be their own peer)
-        $builder->andWhere('c.id != :current_college_id');
-        $builder->setParameter('current_college_id', $currentCollege->getId());
-
-        // Filter by year
-        $builder->andWhere('o.year = :year');
-        $builder->setParameter('year', $year);
-
-        // Order
-        $builder->orderBy('c.name', 'ASC');
-
-        $colleges = $builder->getQuery()->getResult();
-
-        return $colleges;
-    }
 
     /**
      * @param QueryBuilder $builder
@@ -285,14 +229,14 @@ class College extends AbstractModel
 
         // Filter the the other criteria
         $dqlSubqueries = array();
-        $i = 0;
+        $iteration = 0;
         foreach ($criteria as $criterion => $value) {
             if ($criterion == 'states') {
                 // Already handled this
                 continue;
             }
 
-            $table = "v" . $i;
+            $table = "v" . $iteration;
             $subQueryBase = "SELECT $table FROM \Mrss\Entity\Datum $table WHERE s.id = $table.subscription AND ";
 
             if (!empty($value)) {
@@ -340,62 +284,12 @@ class College extends AbstractModel
                 }
             }
 
-            $i++;
+            $iteration++;
         }
 
         if ($dqlSubqueries) {
             foreach ($dqlSubqueries as $dql) {
                 $builder->andWhere($builder->expr()->exists($dql));
-            }
-        }
-
-        return $builder;
-    }
-
-    /**
-     * @param QueryBuilder $builder
-     * @param $criteria
-     * @return QueryBuilder
-     */
-    protected function addCriteriaOld(QueryBuilder $builder, $criteria)
-    {
-        // Filter the the other criteria
-        foreach ($criteria as $criterion => $value) {
-            if ($criterion == 'states') {
-                // Already handled this
-                continue;
-            }
-
-            if (!empty($value)) {
-                // Criteria that support multiple values, use IN
-                if (is_array($value)) {
-                    $builder->andWhere(
-                        $builder->expr()->in(
-                            "o.$criterion",
-                            ':' . $criterion
-                        )
-                    );
-                    $builder->setParameter(
-                        $criterion,
-                        $value
-                    );
-
-                } else {
-                    // Criteria that support a range
-                    $parsedRange = $this->parseRange($value);
-
-                    $builder->andWhere(
-                        "o.$criterion BETWEEN :{$criterion}_min AND :{$criterion}_max"
-                    );
-                    $builder->setParameter(
-                        $criterion . '_min',
-                        $parsedRange['min']
-                    );
-                    $builder->setParameter(
-                        $criterion . '_max',
-                        $parsedRange['max']
-                    );
-                }
             }
         }
 
