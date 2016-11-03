@@ -16,16 +16,16 @@ class PercentileRank extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\PercentileRank';
 
-    public function find($id)
+    public function find($identifier)
     {
-        return $this->getRepository()->find($id);
+        return $this->getRepository()->find($identifier);
     }
 
     /**
-     * @param $college
-     * @param $benchmark
+     * @param int|\Mrss\Entity\College $college
+     * @param \Mrss\Entity\Benchmark $benchmark
      * @param $year
-     * @param null $system
+     * @param null|\Mrss\Entity\System $system
      * @return PercentileRankEntity
      */
     public function findOneByCollegeBenchmarkAndYear(
@@ -41,49 +41,46 @@ class PercentileRank extends AbstractModel
             $collegeId = $college;
         }
 
-        $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
+        $query = $this->getBaseQuery();
 
-        $qb->select(array('r'));
-        $qb->from('\Mrss\Entity\PercentileRank', 'r');
+        $query->select(array('r'));
+        $query->from('\Mrss\Entity\PercentileRank', 'r');
 
-        $qb->andWhere('r.college = :college_id');
-        $qb->setParameter('college_id', $collegeId);
+        $query->andWhere('r.college = :college_id');
+        $query->setParameter('college_id', $collegeId);
 
-        $qb->andWhere('r.benchmark = :benchmark_id');
-        $qb->setParameter('benchmark_id', $benchmark->getId());
+        $query->andWhere('r.benchmark = :benchmark_id');
+        $query->setParameter('benchmark_id', $benchmark->getId());
 
-        $qb->andWhere('r.year = :year');
-        $qb->setParameter('year', $year);
+        $query->andWhere('r.year = :year');
+        $query->setParameter('year', $year);
 
         if ($system) {
-            $qb->andWhere('r.system = :system_id');
-            $qb->setParameter('system_id', $system->getId());
+            $query->andWhere('r.system = :system_id');
+            $query->setParameter('system_id', $system->getId());
         } else {
-            $qb->andWhere('r.system IS NULL');
+            $query->andWhere('r.system IS NULL');
         }
 
         $result = null;
         try {
-            $results = $qb->getQuery()->getResult();
+            $results = $query->getQuery()->getResult();
             if (count($results)) {
                 $result = $results[0];
             }
-        } catch (\Exception $e) {
-            prd($e->getMessage());
+        } catch (\Exception $error) {
+            prd($error->getMessage());
         }
 
         return $result;
+    }
 
-        // The old, simple way didn't handle null systems correctly
-        /*return $this->getRepository()->findOneBy(
-            array(
-                'college' => $college,
-                'benchmark' => $benchmark,
-                'year' => $year,
-                'system' => $system
-            )
-        );*/
+    protected function getBaseQuery()
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQueryBuilder();
+
+        return $query;
     }
 
     /**
@@ -91,7 +88,7 @@ class PercentileRank extends AbstractModel
      * @param \Mrss\Entity\Study $study
      * @param $year
      * @param bool $weaknesses
-     * @param null $benchmarkGroupToExclude
+     * @param null $formToExclude
      * @param int $threshold
      * @internal param int $limit
      * @return PercentileRankEntity[]
@@ -101,77 +98,73 @@ class PercentileRank extends AbstractModel
         StudyEntity $study,
         $year,
         $weaknesses = false,
-        $benchmarkGroupToExclude = null,
+        $formToExclude = null,
         $threshold = 85
     ) {
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
-        //$connection->setFetchMode('\Mrss\Entity\PercentileRank');
-        $qb = $em->createQueryBuilder();
-
-        //->setFetchMode('MyBundle\Entity\User', 'addresses', \Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER)
+        $query = $this->getBaseQuery();
 
         // For some benchmarks, lower is better. Calculate an absolute rank so we can sort by that.
         $absoluteRank = 'CASE WHEN b.highIsBetter = true THEN p.rank ELSE 100 - p.rank END AS absolute_rank';
 
-        $qb->select(array('p', $absoluteRank));
-        $qb->from('\Mrss\Entity\Benchmark', 'b');
+        $query->select(array('p', $absoluteRank));
+        $query->from('\Mrss\Entity\Benchmark', 'b');
 
         // Join subscriptions
-        $qb->innerJoin(
+        $query->innerJoin(
             '\Mrss\Entity\PercentileRank',
             'p',
             'WITH',
             'p.benchmark = b.id'
         );
 
-        $qb->andWhere("b.includeInBestPerformer = TRUE");
+        $query->andWhere("b.includeInBestPerformer = TRUE");
 
-        $qb->andWhere("p.college = :college_id");
-        $qb->setParameter('college_id', $college->getId());
+        $query->andWhere("p.college = :college_id");
+        $query->setParameter('college_id', $college->getId());
 
-        $qb->andWhere("p.study = :study_id");
-        $qb->setParameter('study_id', $study->getId());
+        $query->andWhere("p.study = :study_id");
+        $query->setParameter('study_id', $study->getId());
 
-        $qb->andWhere("p.year = :year");
-        $qb->setParameter('year', $year);
+        $query->andWhere("p.year = :year");
+        $query->setParameter('year', $year);
 
-        $qb->andWhere('p.system IS NULL');
+        $query->andWhere('p.system IS NULL');
 
         // Only fetch results that surpass a threshold
         if (!empty($threshold)) {
             if (!$weaknesses) {
-                $qb->having('absolute_rank >= :threshold');
-                $qb->setParameter('threshold', $threshold);
+                $query->having('absolute_rank >= :threshold');
+                $query->setParameter('threshold', $threshold);
             } else {
-                $qb->having('absolute_rank <= :threshold');
-                $qb->setParameter('threshold', 100 - $threshold);
+                $query->having('absolute_rank <= :threshold');
+                $query->setParameter('threshold', 100 - $threshold);
             }
         }
 
         if (!$weaknesses) {
-            $qb->orderBy('absolute_rank', 'DESC');
+            $query->orderBy('absolute_rank', 'DESC');
         } else {
-            $qb->orderBy('absolute_rank', 'ASC');
+            $query->orderBy('absolute_rank', 'ASC');
         }
 
-        if ($benchmarkGroupToExclude) {
-            $qb->andWhere('b.benchmarkGroup != :group_id');
-            $qb->setParameter('group_id', $benchmarkGroupToExclude);
+        if ($formToExclude) {
+            $query->andWhere('b.benchmarkGroup != :group_id');
+            $query->setParameter('group_id', $formToExclude);
         }
 
 
         try {
-            //$results = $qb->getQuery()->getResult();
-            $results = $qb->getQuery()->getResult();
-        } catch (\Exception $e) {
-            prd($e->getMessage());
+            //$results = $query->getQuery()->getResult();
+            $results = $query->getQuery()->getResult();
+        } catch (\Exception $error) {
+            prd($error->getMessage());
             return array();
         }
 
         // Convert back to array of rank objects
         $ranks = array();
         foreach ($results as $row) {
+            /** @var \Mrss\Entity\PercentileRank $rank */
             $rank = $row[0];
             $hib = ($row['absolute_rank'] == $rank->getRank());
             $rank->setHighIsBetter($hib);
@@ -185,69 +178,57 @@ class PercentileRank extends AbstractModel
 
     public function findBestPerformers(StudyEntity $study, BenchmarkEntity $benchmark, $year, $threshold)
     {
-        $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
+        $query = $this->getBaseQuery();
 
         // For some benchmarks, lower is better. Calculate an absolute rank so we can sort by that.
-        $absoluteRank = 'CASE WHEN b.highIsBetter = true THEN p.rank ELSE 100 - p.rank END AS absolute_rank';
+        //$absoluteRank = 'CASE WHEN b.highIsBetter = true THEN p.rank ELSE 100 - p.rank END AS absolute_rank';
 
-        $qb->select(array('c'/*, $absoluteRank*/));
-        $qb->from('\Mrss\Entity\College', 'c');
+        $query->select(array('c'));
+        $query->from('\Mrss\Entity\College', 'c');
 
         // Join subscriptions
-        $qb->innerJoin(
+        $query->innerJoin(
             '\Mrss\Entity\PercentileRank',
             'p',
             'WITH',
             'p.college = c.id'
         );
 
-        //$qb->andWhere("b.includeInBestPerformer = TRUE");
+        //$query->andWhere("b.includeInBestPerformer = TRUE");
 
-        $qb->andWhere("p.benchmark = :benchmark_id");
-        $qb->setParameter('benchmark_id', $benchmark->getId());
+        $query->andWhere("p.benchmark = :benchmark_id");
+        $query->setParameter('benchmark_id', $benchmark->getId());
 
-        $qb->andWhere("p.study = :study_id");
-        $qb->setParameter('study_id', $study->getId());
+        $query->andWhere("p.study = :study_id");
+        $query->setParameter('study_id', $study->getId());
 
-        $qb->andWhere("p.year = :year");
-        $qb->setParameter('year', $year);
+        $query->andWhere("p.year = :year");
+        $query->setParameter('year', $year);
 
-        $qb->andWhere('p.system IS NULL');
+        $query->andWhere('p.system IS NULL');
 
         if ($benchmark->getHighIsBetter()) {
-            $qb->andWhere('p.rank > :threshold');
-            $qb->setParameter('threshold', $threshold);
+            $query->andWhere('p.rank > :threshold');
+            $query->setParameter('threshold', $threshold);
         } else {
-            $qb->andWhere('p.rank < :threshold');
+            $query->andWhere('p.rank < :threshold');
             $invertedThreshold = 100 - $threshold;
-            $qb->setParameter('threshold', $invertedThreshold);
+            $query->setParameter('threshold', $invertedThreshold);
         }
-
 
         try {
-            $results = $qb->getQuery()->getResult();
-        } catch (\Exception $e) {
-            prd($e->getMessage());
+            $results = $query->getQuery()->getResult();
+        } catch (\Exception $error) {
+            prd($error->getMessage());
             return array();
         }
-
-        /*// Convert back to array of rank objects
-        $colleges = array();
-        foreach ($results as $row) {
-            $college = $row;
-            pr($college->getName());
-            $colleges[] = $college;
-        }
-
-        $results = $colleges;*/
 
         return $results;
     }
 
-    public function save(PercentileRankEntity $PercentileRank)
+    public function save(PercentileRankEntity $percentileRank)
     {
-        $this->getEntityManager()->persist($PercentileRank);
+        $this->getEntityManager()->persist($percentileRank);
 
         // Flush here or leave it to some other code?
     }
