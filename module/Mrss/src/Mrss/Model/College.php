@@ -40,7 +40,7 @@ class College extends AbstractModel
     }
 
     /**
-     * @param $id
+     * @param $identifier
      * @return null|\Mrss\Entity\College
      */
     public function find($identifier)
@@ -95,10 +95,12 @@ class College extends AbstractModel
             FROM Mrss\Entity\College c
             INNER JOIN Mrss\Entity\Subscription s
             WHERE s.college = c.id
-            AND s.study = $studyId
-            AND s.year = $year
+            AND s.study = :studyId
+            AND s.year = :year
             ORDER BY c.name ASC"
         );
+        $query->setParameter('studyId', $studyId);
+        $query->setParameter('year', $year);
 
         return $query->getResult();
     }
@@ -118,9 +120,10 @@ class College extends AbstractModel
             FROM Mrss\Entity\College c
             INNER JOIN Mrss\Entity\Subscription s
             WHERE s.college = c.id
-            AND s.study = $studyId
+            AND s.study = :studyId
             ORDER BY c.name ASC"
         );
+        $query->setParameter('studyId', $studyId);
 
         return $query->getResult();
 

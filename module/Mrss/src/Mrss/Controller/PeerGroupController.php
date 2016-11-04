@@ -39,18 +39,20 @@ class PeerGroupController extends ReportController
     public function addAction()
     {
         $form = $this->getForm();
+        $post = $this->params()->fromPost();
 
         $peerGroup = $this->getPeerGroup();
         $form->bind($peerGroup);
+        $entityManager = $this->getServiceLocator()->get('em');
 
 
         if ($this->getRequest()->isPost()) {
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $form->setData($post);
 
             if ($form->isValid()) {
                 $this->getPeerGroupModel()->save($peerGroup);
-                $this->getServiceLocator()->get('em')->flush();
+                $entityManager->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Peer group saved.');
 
@@ -67,13 +69,13 @@ class PeerGroupController extends ReportController
 
     public function editAction()
     {
-        $id = $this->params()->fromRoute('id');
+        $identifier = $this->params()->fromRoute('id');
 
-        if (empty($id)) {
+        if (empty($identifier)) {
             throw new \Exception('Peer group id missing.');
         }
 
-        $peerGroup = $this->getPeerGroup($id);
+        $peerGroup = $this->getPeerGroup($identifier);
         $form = $this->getForm();
         $form->bind($peerGroup);
 

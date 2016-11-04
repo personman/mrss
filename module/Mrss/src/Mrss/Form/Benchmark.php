@@ -20,39 +20,7 @@ class Benchmark extends AbstractForm
         $this->addId();
         $this->addName('Data Entry Label', 'For dynamic years, use [year], [year_minus_2], etc.');
 
-        $this->add(
-            array(
-                'name' => 'reportLabel',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Report Label',
-                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'peerReportLabel',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Peer Report Label'
-                )
-            )
-        );
-
-
-        $this->add(
-            array(
-                'name' => 'descriptiveReportLabel',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Descriptive Label',
-                    'help-block' => 'Used for Executive Report'
-                )
-            )
-        );
-
+        $this->addLabels();
 
         $this->addDescription('Data Entry Description', 'For dynamic years, use [year], [year_minus_2], etc.');
 
@@ -93,6 +61,48 @@ class Benchmark extends AbstractForm
             )
         );
 
+        $this->addInputType();
+
+    }
+
+    protected function addLabels()
+    {
+        $this->add(
+            array(
+                'name' => 'reportLabel',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Report Label',
+                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'peerReportLabel',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Peer Report Label'
+                )
+            )
+        );
+
+
+        $this->add(
+            array(
+                'name' => 'descriptiveReportLabel',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Descriptive Label',
+                    'help-block' => 'Used for Executive Report'
+                )
+            )
+        );
+    }
+
+    protected function addInputType()
+    {
         $this->add(
             array(
                 'name' => 'inputType',
@@ -118,60 +128,19 @@ class Benchmark extends AbstractForm
                 )
             )
         );
-
     }
 
     protected function addExtraFields()
     {
-        $this->add(
-            array(
-                'name' => 'yearPrefix',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Year Prefix',
-                    'help-block' => 'E.g., Fall, Spring, FY, academic year'
-                )
-            )
-        );
+        $this->addYearFields();
+        $this->addRequired();
+        $this->addComputedFields();
+        $this->addYearsAvailable();
+        $this->addReportCheckboxes();
+    }
 
-        $this->add(
-            array(
-                'name' => 'yearOffset',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'Year offset',
-                    'help-block' => 'Collection year - x = data year.'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'options',
-                'type' => 'Textarea',
-                'options' => array(
-                    'label' => 'Options',
-                    'help-block' => 'One option per line.'
-                ),
-                'attributes' => array(
-                    'rows' => 8,
-                    'cols' => 80,
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'required',
-                'type' => 'Checkbox',
-                'options' => array(
-                    'label' => 'Required',
-                    'help-block' => 'Required data elements can still be submitted
-                    empty, but will show up on the outlier report'
-                )
-            )
-        );
-
+    protected function addComputedFields()
+    {
         $this->add(
             array(
                 'name' => 'computed',
@@ -211,8 +180,6 @@ class Benchmark extends AbstractForm
             )
         );
 
-
-
         $options = array(
             '' => 'Always compute'
         );
@@ -238,31 +205,65 @@ class Benchmark extends AbstractForm
                 )
             )
         );
+    }
 
-        //$this->getInputFilter();
-
-
+    protected function addYearFields()
+    {
         $this->add(
             array(
-                'name' => 'yearsAvailable',
-                'type' => 'Zend\Form\Element\MultiCheckbox',
+                'name' => 'yearPrefix',
+                'type' => 'Text',
                 'options' => array(
-                    'label' => 'Years Available',
-                    'value_options' => $this->getYearsAvailable()
+                    'label' => 'Year Prefix',
+                    'help-block' => 'E.g., Fall, Spring, FY, academic year'
                 )
             )
         );
 
         $this->add(
             array(
-                'name' => 'excludeFromCompletion',
+                'name' => 'yearOffset',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Year offset',
+                    'help-block' => 'Collection year - x = data year.'
+                )
+            )
+        );
+    }
+
+    protected function addRequired()
+    {
+        $this->add(
+            array(
+                'name' => 'options',
+                'type' => 'Textarea',
+                'options' => array(
+                    'label' => 'Options',
+                    'help-block' => 'One option per line.'
+                ),
+                'attributes' => array(
+                    'rows' => 8,
+                    'cols' => 80,
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'required',
                 'type' => 'Checkbox',
                 'options' => array(
-                    'label' => 'Exclude From Completion Calculations'
+                    'label' => 'Required',
+                    'help-block' => 'Required data elements can still be submitted
+                    empty, but will show up on the outlier report'
                 )
             )
         );
+    }
 
+    protected function addReportCheckboxes()
+    {
         $this->add(
             array(
                 'name' => 'includeInNationalReport',
@@ -303,6 +304,30 @@ class Benchmark extends AbstractForm
                 'type' => 'Checkbox',
                 'options' => array(
                     'label' => 'High Values Are Better'
+                )
+            )
+        );
+    }
+
+    protected function addYearsAvailable()
+    {
+        $this->add(
+            array(
+                'name' => 'yearsAvailable',
+                'type' => 'Zend\Form\Element\MultiCheckbox',
+                'options' => array(
+                    'label' => 'Years Available',
+                    'value_options' => $this->getYearsAvailable()
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'excludeFromCompletion',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Exclude From Completion Calculations'
                 )
             )
         );

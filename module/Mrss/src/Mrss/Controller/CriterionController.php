@@ -91,9 +91,9 @@ class CriterionController extends AbstractActionController
         return $form;
     }
 
-    public function getCriterion($id = null)
+    public function getCriterion($identifier = null)
     {
-        if (empty($id)) {
+        if (empty($identifier)) {
             $criterion = new CriterionEntity();
             $criterion->setStudy($this->currentStudy());
         } else {
