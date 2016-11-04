@@ -34,7 +34,8 @@
         "symfony/debug": "2.*",
         "symfony/http-foundation": "2.*",
         "symfony/filesystem": "2.*",
-        "symfony/stopwatch": "2.*"
+        "symfony/stopwatch": "2.*",
+        "rwoverdijk/assetmanager": "1.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",
