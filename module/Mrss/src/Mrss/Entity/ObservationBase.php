@@ -2,6 +2,9 @@
 
 namespace Mrss\Entity;
 
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
+
 class ObservationBase
 {
 
@@ -121,11 +124,6 @@ class ObservationBase
     {
         $subscriptions = $this->getSubscriptions();
 
-        if (false && $_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
-            pr($this->getId());
-            pr(count($subscriptions));
-        }
-
         $subscription = null;
         foreach ($subscriptions as $sub) {
             if ($sub->getYear() == $this->getYear()) {
@@ -133,13 +131,32 @@ class ObservationBase
             }
         }
 
-        if (false && $_SERVER['REMOTE_ADDR'] == '216.185.230.3') {
-            //pr($subscription->getId());
-            pr(gettype($subscription));
+
+
+        if ($subscription == null) {
+            $message = "Tried to get subscription in ObservationBase::getSubscription and couldn't find one. ";
+            $message .= "Observation ID: " . $this->getId() . ". ";
+            $message .= "Subscription count: " . count($subscriptions) . ". ";
+            $this->getLog()->alert($message);
         }
 
 
         return $subscription;
+    }
+
+    protected $log;
+    public function getLog()
+    {
+        if (empty($this->log)) {
+            $filename = 'error.log';
+            $logger = new Logger;
+            $writer = new Stream($filename);
+            $logger->addWriter($writer);
+
+            $this->log = $logger;
+        }
+
+        return $this->log;
     }
 
     /**
