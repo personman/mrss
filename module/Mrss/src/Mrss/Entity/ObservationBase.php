@@ -109,9 +109,12 @@ class ObservationBase
 
     public function get($benchmark)
     {
-        $subscription = $this->getSubscription();
+        $value = null;
+        if ($subscription = $this->getSubscription()) {
+            $value = $subscription->getValue($benchmark);
+        }
 
-        return $subscription->getValue($benchmark);
+        return $value;
     }
 
     public function getSubscription()
@@ -123,6 +126,7 @@ class ObservationBase
             pr(count($subscriptions));
         }
 
+        $subscription = null;
         foreach ($subscriptions as $sub) {
             if ($sub->getYear() == $this->getYear()) {
                 $subscription = $sub;
