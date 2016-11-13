@@ -45,34 +45,19 @@ $this->headScript()->appendFile(
         })
     })
 
-    /*function updateSalaryTotals()
-    {
-        $('.column-total').each(function() {
-            var id = $(this).attr('id')
-
-            // Convert the id into the class selector for finding the inputs to sum
-            var idParts = id.split('_');
-            var selector = '.' + idParts.join('.') + ' input';
-            var sum = 0;
-            $(selector).each(function() {
-                sum += Number($(this).val());
-            })
-
-            $(this).html(sum);
-        })
-    }*/
 
     function updatePercentageIncrease()
     {
         $('.percentage-increase').each(function() {
-            var previous = $(this).parent().find('.previous input').val();
-            var current = $(this).parent().find('.current input').val();
+            var previous = parseFloat($(this).parent().find('.previous input').val());
+            var current = parseFloat($(this).parent().find('.current input').val());
 
             // Handle total rows. They have no inputs
             if ($(this).parent().find('input').length == 0) {
-                var previous = parseFloat($(this).parent().find('.previous').html());
-                var current = parseFloat($(this).parent().find('.current').html());
+                previous = parseFloat($(this).parent().find('.previous').html());
+                current = parseFloat($(this).parent().find('.current').html());
             }
+
             var increase = 0;
             if (current && previous) {
                 increase = ((current - previous) / previous) * 100;
