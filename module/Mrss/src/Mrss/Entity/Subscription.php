@@ -384,6 +384,11 @@ class Subscription
             prd(get_class($dbColumn));
         }
 
+        if (!is_string($dbColumn)) {
+            var_dump($dbColumn);
+            die;
+        }
+
         $value = null;
         if (array_key_exists($dbColumn, $this->allData)) {
             $value = $this->allData[$dbColumn];
