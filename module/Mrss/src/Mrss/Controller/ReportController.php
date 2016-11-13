@@ -23,16 +23,6 @@ class ReportController extends ReportAdminController
 
     protected $observations;
 
-    /**
-     * @return Report\Percentile
-     */
-    protected function getPercentileService()
-    {
-        $percentileService = $this->getServiceLocator()->get('service.report.percentile');
-
-        return $percentileService;
-    }
-
 
 
     /**

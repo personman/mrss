@@ -13,6 +13,26 @@ use Zend\Log\Formatter\Simple;
 
 class ReportAdminController extends AbstractActionController
 {
+    /**
+     * @return Report\Percentile
+     */
+    protected function getPercentileService()
+    {
+        $percentileService = $this->getServiceLocator()->get('service.report.percentile');
+
+        return $percentileService;
+    }
+
+    /**
+     * @return \Mrss\Service\ComputedFields
+     */
+    protected function getComputedFieldsService()
+    {
+        $service = $this->getServiceLocator()->get('computedFields');
+
+        return $service;
+    }
+
     public function calculateAction()
     {
         $this->longRunningScript();
@@ -191,7 +211,7 @@ class ReportAdminController extends AbstractActionController
 
 
         if ($observation) {
-            $service = $this->getPercentileService()->getComputedFieldsService();
+            $service = $this->getComputedFieldsService();
             //$service->setDebug($debug);
             $service->setDebugDbColumn($debugColumn);
 

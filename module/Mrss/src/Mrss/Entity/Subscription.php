@@ -378,6 +378,10 @@ class Subscription
 
     public function getValue($dbColumn)
     {
+        if (empty($dbColumn)) {
+            return null;
+        }
+        
         $value = null;
         if (array_key_exists($dbColumn, $this->allData)) {
             $value = $this->allData[$dbColumn];
