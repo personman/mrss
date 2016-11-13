@@ -380,8 +380,10 @@ class Subscription
     {
         if (empty($dbColumn)) {
             return null;
+        } elseif (is_object($dbColumn)) {
+            prd(get_class($dbColumn));
         }
-        
+
         $value = null;
         if (array_key_exists($dbColumn, $this->allData)) {
             $value = $this->allData[$dbColumn];
