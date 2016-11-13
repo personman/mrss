@@ -378,15 +378,8 @@ class Subscription
 
     public function getValue($dbColumn)
     {
-        if (empty($dbColumn)) {
-            return null;
-        } elseif (is_object($dbColumn)) {
-            prd(get_class($dbColumn));
-        }
-
-        if (!is_string($dbColumn)) {
-            var_dump($dbColumn);
-            die;
+        if (is_object($dbColumn) && get_class($dbColumn) == 'Mrss\Entity\Benchmark') {
+            $dbColumn = $dbColumn->getDbColumn();
         }
 
         $value = null;
