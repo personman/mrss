@@ -865,6 +865,14 @@ return array(
                         'pt_female_graduate_teaching_salaries',
                         //'pt_total_graduate_teaching',
                         //'pt_total_graduate_teaching_salaries',
+                    ),
+                    'Part-Time Per Section Faculty' => array(
+                        'pt_male_per_section_faculty',
+                        'pt_male_per_section_salaries',
+                        'pt_female_per_section_faculty',
+                        'pt_female_per_section_salaries',
+                        //'pt_total_graduate_teaching',
+                        //'pt_total_graduate_teaching_salaries',
                     )
                 )
             )

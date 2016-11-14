@@ -6,6 +6,7 @@
 $tableConfig = $dataEntryLayout;
 
 $colClassConfig = array('male faculty', 'male salaries', 'female faculty', 'female salaries', 'total faculty', 'total salaries');
+$ranks = array('part-time-faculty', 'graduate-teaching-assistant', 'part-time-per-section-faculty');
 $colSpan = 7;
 ?>
 
@@ -50,6 +51,8 @@ $this->headScript()->appendFile(
                 sum += Number($(this).val());
             })
 
+            sum = Math.round(sum)
+
             $(this).html(sum);
         })
     }
@@ -91,6 +94,7 @@ $this->headScript()->appendFile(
     </thead>
 
     <tbody>
+    <?php $sectionNumber = 0; ?>
     <?php foreach ($tableConfig as $section): ?>
         <? if (!empty($section['title'])): ?>
             <tr>
@@ -115,7 +119,7 @@ $this->headScript()->appendFile(
                     <?php if (!empty($field)):  ?>
                         <?php $class = ($i == 4) ? 'data-entry-border-right' : ''; ?>
                         <td class="grid-value <?= $colClassConfig[$i] ?> <?= $class ?> <?= str_replace(' ', '-', strtolower($label)) ?>"
-                            id="<?= $colClassConfig[$i] ?>-<?= $field ?>">
+                            id="<?//= $colClassConfig[$i] ?>-<?= $field ?>">
                             <?= $this->simpleFormElement($form->get($field)) ?>
                         </td>
                     <?php else: ?>
@@ -123,7 +127,8 @@ $this->headScript()->appendFile(
                     <?php endif ?>
                 <?php endforeach ?>
 
-                <?php $rank = ($label == 'Part-Time Faculty') ? 'part-time-faculty' : 'graduate-teaching-assistant'; ?>
+                <?php //$rank = ($label == 'Part-Time Faculty') ? 'part-time-faculty' : 'graduate-teaching-assistant'; ?>
+                <?php $rank = $ranks[$sectionNumber]; ?>
 
                 <td class="column-total" id="<?= $rank ?>_faculty">0</td>
                 <td class="column-total" id="<?= $rank ?>_salaries">0</td>
@@ -149,6 +154,8 @@ $this->headScript()->appendFile(
             <?php endif ?>
 
             </tr>
+
+            <?php $sectionNumber++; ?>
         <?php endforeach ?>
     <?php endforeach ?>
         <tr>
