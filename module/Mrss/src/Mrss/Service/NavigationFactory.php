@@ -204,8 +204,8 @@ class NavigationFactory extends DefaultNavigationFactory
 
         // Since it's the first year of aaup, don't show the report menu until open and paid
         if ($currentStudy->getId() == 4) {
-            $sub = $this->getSubscription();
-            if (/*$currentStudy->getReportsOpen() && */ $sub && $sub->getReportAccess()) {
+            $college = $this->getCollege();
+            if ($college && $college->hasReportAccess()) {
                 // Allow the reports menu to show (hide the public results menu)
                 unset($pages['members-results']);
             } else {
@@ -439,13 +439,24 @@ class NavigationFactory extends DefaultNavigationFactory
         $user = null;
         $auth = $this->getAuthService();
 
-        //pr(get_class($auth));
-        //pr($auth->hasIdentity());
-
         if ($auth->hasIdentity()) {
             $user = $auth->getIdentity();
         }
 
         return $user;
+    }
+
+    /**
+     * @return null|\Mrss\Entity\College
+     */
+    protected function getCollege()
+    {
+        $college = null;
+
+        if ($user = $this->getUser()) {
+            $college = $user->getCollege();
+        }
+
+        return $college;
     }
 }

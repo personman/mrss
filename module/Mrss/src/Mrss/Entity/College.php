@@ -496,6 +496,24 @@ class College
         return $subscriptions;
     }
 
+    /**
+     * Look through subscriptions and see if they have purchased report access for any year
+     */
+    public function hasReportAccess()
+    {
+        $hasAccess = false;
+        foreach ($this->getSubscriptions() as $subscription) {
+            if ($subscription->getReportAccess()) {
+                $hasAccess = true;
+
+                // Even one year is enough
+                continue;
+            }
+        }
+
+        return $hasAccess;
+    }
+
     public function setSystem($system)
     {
         $this->system = $system;
