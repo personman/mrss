@@ -976,7 +976,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             'harass_occ_rate' => 4,
             'stu_fac_ratio' => 2,
             'stud_inst_serv_ratio' => 2,
-            'empl_inst_serv_ratio' => 2
+            'empl_inst_serv_ratio' => 2,
+            'institution_conversion_factor' => 9
         );
 
         $decimalPlaces = 0;
