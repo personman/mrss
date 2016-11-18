@@ -128,6 +128,15 @@ return array(
                             )
                         )
                     ),
+                    'template' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/template',
+                            'defaults' => array(
+                                'action' => 'template'
+                            )
+                        )
+                    ),
                     'importsystem' => array(
                         'type' => 'segment',
                         'options' => array(

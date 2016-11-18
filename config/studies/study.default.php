@@ -23,6 +23,7 @@ return array(
     'validation_class' => null,
     'free_to_join' => false,
     'agreement_template' => null,
+    'custom_excel_template' => null,
     'welcome_email' => 'welcome',
     'outlier_email' => 'outliers.email',
     'outlier_email_none' => 'outliers.email.none',

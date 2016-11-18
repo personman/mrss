@@ -23,6 +23,7 @@ return array(
 	'header_title' => 'Faculty<br>Compensation<br>Survey',
     'free_to_join' => true,
     'agreement_template' => 'agreement-fcs',
+    'custom_excel_template' => 'data/imports/aaup-export.xlsx',
     'welcome_email' => 'welcome-aaup',
     'outlier_email' => 'outliers.email.aaup',
     'outlier_email_none' => 'outliers.email.none.aaup', // Send all AAUP users the same email

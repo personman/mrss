@@ -560,9 +560,14 @@ class ObservationController extends AbstractActionController
         return $message;
     }
 
+    protected function getStudyConfig()
+    {
+        return $this->getServiceLocator()->get('Study');
+    }
+
     protected function getDataEntryLayout($benchmarkGroup)
     {
-        $studyConfig = $this->getServiceLocator()->get('Study');
+        $studyConfig = $this->getStudyConfig();
 
         /** @var \Zend\Config\Config $dataEntryLayouts */
         $dataEntryLayouts = $studyConfig->data_entry_layout;
@@ -699,7 +704,7 @@ class ObservationController extends AbstractActionController
         $id = $benchmarkGroup->getId();
         $shortName = $benchmarkGroup->getShortName();
 
-        $studyConfig = $this->getServiceLocator()->get('Study');
+        $studyConfig = $this->getStudyConfig();
         $dataEntryTemplates = $studyConfig->data_entry_templates;
 
         // Do we have a config for the grouped template?
@@ -1030,6 +1035,32 @@ class ObservationController extends AbstractActionController
         $excelService->setStudyConfig($config);
 
         $excelService->getExcelForSubscriptions(array($subscription));
+    }
+
+    /**
+     * Because of the resources needed to build the file in exportAction(), users with no data can be sent to this
+     * action which just downloads the blank excel file rather than converting it to an in-memory object like PHPExcel
+     * does.
+     */
+    public function templateAction()
+    {
+        // Do they have a custom template?
+        $studyConfig = $this->getStudyConfig();
+        $filename = $studyConfig->custom_excel_template;
+
+        if ($filename && file_exists($filename)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="data-export.xlsx"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filename));
+            readfile($filename);
+            exit;
+        } else {
+            return $this->redirect()->toUrl('/data-entry/export');
+        }
     }
 
     public function importsystemAction()
