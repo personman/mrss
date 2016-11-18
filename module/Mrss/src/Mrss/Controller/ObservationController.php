@@ -576,6 +576,10 @@ class ObservationController extends AbstractActionController
         return $layout;
     }
 
+    /**
+     * @param \Zend\Form\Form $form
+     * @return mixed
+     */
     protected function copyCampusInfoFromLastYear($form)
     {
         if ($lastYearObservation = $this->getLastYearObservation()) {
@@ -598,6 +602,7 @@ class ObservationController extends AbstractActionController
     protected function getCampusBenchmarksToCopyFromLastYear()
     {
         return array(
+            // NCCBP
             'institutional_type',
             'institutional_demographics_campus_environment',
             'institutional_demographics_faculty_unionized',
@@ -605,7 +610,17 @@ class ObservationController extends AbstractActionController
             'institutional_control',
             'institutional_demographics_calendar',
             'on_campus_housing',
-            'four_year_degrees'
+            'four_year_degrees',
+
+            // AAUP
+            'institution_control',
+            'institution_sector',
+            'institution_aaup_category',
+            'institution_conversion_factor',
+            'institution_campuses',
+            'institution_tenure_system',
+            'institution_faculty_union',
+            'institution_part_time_benefits'
         );
     }
 
