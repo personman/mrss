@@ -31,6 +31,8 @@ $this->headScript()->appendFile(
 ?>
 
 <script>
+    var classesToExcludePerSectionFrom = ['.male.faculty input', '.male.salaries input', '.female.faculty input', '.female.salaries input', '.faculty input', '.salaries input'];
+
     $(function() {
         updateSalaryTotals()
         $('form input').change(function() {
@@ -46,6 +48,12 @@ $this->headScript()->appendFile(
             // Convert the id into the class selector for finding the inputs to sum
             var idParts = id.split('_');
             var selector = '.' + idParts.join('.') + ' input';
+
+            // Exclude the per-section numbers from the bottom row totals.
+            if ($.inArray(selector, classesToExcludePerSectionFrom) > -1) {
+                selector = selector.replace(' input', ":not(.part-time-per-section-faculty) input")
+            }
+
             var sum = 0;
             $(selector).each(function() {
                 sum += Number($(this).val());
