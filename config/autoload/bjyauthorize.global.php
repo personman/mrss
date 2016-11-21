@@ -210,7 +210,7 @@ return array(
                 // Data users:
                 array(
                     'controller' => 'observations',
-                    'action' => array('dataEntry', 'overview', 'import', 'export', 'submittedValues'),
+                    'action' => array('dataEntry', 'overview', 'import', 'export', 'submittedValues', 'template'),
                     'roles' => array('data')
                 ),
                 array(
