@@ -621,7 +621,6 @@ class ObservationController extends AbstractActionController
             'institution_control',
             'institution_sector',
             'institution_aaup_category',
-            'institution_conversion_factor',
             'institution_campuses',
             'institution_tenure_system',
             'institution_faculty_union',
