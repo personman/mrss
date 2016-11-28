@@ -16,6 +16,8 @@ return array(
         'GoalioForgotPassword',
         'GoalioForgotPasswordDoctrineORM',
         'PhlyContact',
+        'AssetManager',
+        'Aaup',
         'Mrss'
     ),
 

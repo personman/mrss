@@ -2,6 +2,13 @@
 
 return array(
     'routeCacheFile' => 'data/cache/cmsRoutes',
+    'asset_manager' => array(
+        'resolver_configs' => array(
+            'paths' => array(
+                'Mrss' => __DIR__ . '/../public',
+            ),
+        ),
+    ),
     'router' => array(
         'routes' => array(
             // @todo: get rid of this general route
