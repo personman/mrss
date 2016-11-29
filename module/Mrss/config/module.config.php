@@ -257,6 +257,18 @@ return array(
                         'study' => null
                     )
                 ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => null
+                            )
+                        )
+                    ),
+                ),
             ),
             'data-dictionary' => array(
                 'type' => 'segment',
