@@ -2,7 +2,9 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\Section;
 use Zend\Mvc\Controller\AbstractActionController;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Section as SectionForm;
 
 class SectionController extends AbstractActionController
@@ -27,26 +29,28 @@ class SectionController extends AbstractActionController
         return $this->getServiceLocator()->get('model.study');
     }
 
+    protected function getSectionModel()
+    {
+        return $this->getServiceLocator()->get('model.section');
+    }
+
     public function editAction()
     {
         $studyId = $this->params()->fromRoute('study');
         $study = $this->getStudyModel()->find($studyId);
 
 
-        $id = $this->params('id');
-        if (empty($id) && $this->getRequest()->isPost()) {
-            $id = $this->params()->fromPost('id');
-        }
+        $section = $this->getSection();
 
         $form = new SectionForm;
 
-        /*$form->setHydrator(
+        $form->setHydrator(
             new DoctrineHydrator(
                 $this->getServiceLocator()->get('em'),
-                'Mrss\Entity\Study'
+                'Mrss\Entity\Section'
             )
         );
-        $form->bind($study);
+        $form->bind($section);
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
@@ -55,21 +59,39 @@ class SectionController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                //var_dump($this->params()->fromPost());
-                //var_dump($study); die;
-                $this->getStudyModel()->save($study);
+                $this->getSectionModel()->save($section);
 
-                $this->flashMessenger()->addSuccessMessage('Study saved.');
-                return $this->redirect()->toRoute('studies');
+                $this->flashMessenger()->addSuccessMessage('Module saved.');
+                return $this->redirect()->toRoute('sections', array('study' => $study->getId()));
             }
 
         }
-        */
 
         return array(
             'form' => $form,
             'study' => $study,
-            'id' => $id
+            'section' => $section
         );
     }
+
+    protected function getSection()
+    {
+
+        $sectionId = $this->params('id');
+        if (empty($sectionId) && $this->getRequest()->isPost()) {
+            $sectionId = $this->params()->fromPost('id');
+        }
+
+        $section = null;
+        if ($sectionId) {
+            $section = $this->getSectionModel()->find($sectionId);
+        }
+
+        if (empty($section)) {
+            $section = new Section();
+        }
+
+        return $section;
+    }
+
 }
