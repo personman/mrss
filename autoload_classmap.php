@@ -376,6 +376,7 @@ return array(
   'Mrss\Model\PercentileRank'                                                                                          => __DIR__ . '/module/Mrss/src/Mrss/Model/PercentileRank.php',
   'Mrss\Model\Report'                                                                                                  => __DIR__ . '/module/Mrss/src/Mrss/Model/Report.php',
   'Mrss\Model\ReportItem'                                                                                              => __DIR__ . '/module/Mrss/src/Mrss/Model/ReportItem.php',
+  'Mrss\Model\Section'                                                                                                 => __DIR__ . '/module/Mrss/src/Mrss/Model/Section.php',
   'Mrss\Model\Setting'                                                                                                 => __DIR__ . '/module/Mrss/src/Mrss/Model/Setting.php',
   'Mrss\Model\Study'                                                                                                   => __DIR__ . '/module/Mrss/src/Mrss/Model/Study.php',
   'Mrss\Model\SubObservation'                                                                                          => __DIR__ . '/module/Mrss/src/Mrss/Model/SubObservation.php',
