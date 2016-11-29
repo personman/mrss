@@ -133,6 +133,11 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
     protected $study;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Section", inversedBy="benchmarkGroups")
+     */
+    protected $section;
+
+    /**
      * Construct the benchmarkGroup entity
      * Populate the benchmarks property with a placeholder
      */

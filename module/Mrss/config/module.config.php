@@ -246,6 +246,18 @@ return array(
                     )
                 )
             ),
+            'sections' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/modules/study/:study',
+                    'defaults' => array(
+                        'controller' => 'sections',
+                        'action' => 'index',
+                        'study' => null
+                    )
+                ),
+            ),
             'data-dictionary' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
@@ -2466,6 +2478,7 @@ return array(
             'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
             'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController',
+            'sections' => 'Mrss\Controller\SectionController',
             'offercodes' => 'Mrss\Controller\OfferCodeController',
             'settings' => 'Mrss\Controller\SettingController',
             'pages' => 'Mrss\Controller\PageController',
