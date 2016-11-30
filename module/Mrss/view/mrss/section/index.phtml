@@ -1,6 +1,31 @@
-<h1>Study Modules</h1>
+<?php /** @var \Mrss\Entity\Section[] $sections */ ?>
 
-<a href="<?= $this->url('sections/edit', array('study' => $study->getId(), 'id' => 0)) ?>" class="btn btn-default">
+<div class="btn-group heading-btns">
+    <a href="<?= $this->url('sections/edit', array('study' => $study->getId(), 'id' => 0)) ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus icon icon-plus"></span>
+        Add a Module
+    </a>
+</div>
 
-    Add a Module
-</a>
+
+<h1><?= $study->getName() ?> Modules</h1>
+
+<div style="margin-top: 20px">
+<?php foreach ($sections as $section): ?>
+    <p>
+        <h2>
+        <a href="<?= $this->url('sections/edit', array('study' => $study->getId(), 'id' => $section->getId())) ?>">
+            <?= $section->getName() ?>
+        </a>
+        </h2>
+
+        <ul>
+            <?php foreach ($section->getBenchmarkGroups() as $form): ?>
+                <li>
+                    <?= $form->getName() ?>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    </p>
+<?php endforeach ?>
+</div>

@@ -16,11 +16,13 @@ class SectionController extends AbstractActionController
 
     public function indexAction()
     {
-        $studyId = $this->params()->fromRoute('study');
-        $study = $this->getStudyModel()->find($studyId);
+        $study = $this->getStudy();
+
+        $sections = $this->getSectionModel()->findByStudy($study->getId());
 
         return array(
-            'study' => $study
+            'study' => $study,
+            'sections' => $sections
         );
     }
 
@@ -29,6 +31,9 @@ class SectionController extends AbstractActionController
         return $this->getServiceLocator()->get('model.study');
     }
 
+    /**
+     * @return \Mrss\Model\Section
+     */
     protected function getSectionModel()
     {
         return $this->getServiceLocator()->get('model.section');
@@ -36,17 +41,16 @@ class SectionController extends AbstractActionController
 
     public function editAction()
     {
-        $studyId = $this->params()->fromRoute('study');
-        $study = $this->getStudyModel()->find($studyId);
-
-
+        $study = $this->getStudy();
         $section = $this->getSection();
 
-        $form = new SectionForm;
+        $entityManager = $this->getServiceLocator()->get('em');
+        $form = new SectionForm($entityManager);
+
 
         $form->setHydrator(
             new DoctrineHydrator(
-                $this->getServiceLocator()->get('em'),
+                $entityManager,
                 'Mrss\Entity\Section'
             )
         );
@@ -89,9 +93,17 @@ class SectionController extends AbstractActionController
 
         if (empty($section)) {
             $section = new Section();
+            $section->setStudy($this->getStudy());
         }
 
         return $section;
     }
 
+    protected function getStudy()
+    {
+        $studyId = $this->params()->fromRoute('study');
+        $study = $this->getStudyModel()->find($studyId);
+
+        return $study;
+    }
 }

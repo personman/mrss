@@ -129,6 +129,13 @@ class Study
      */
     protected $subscriptions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Section", mappedBy="study")
+     * @var Section[]
+     */
+    protected $sections;
+
+
     public function __construct()
     {
         $this->benchmarkGroups = new ArrayCollection();

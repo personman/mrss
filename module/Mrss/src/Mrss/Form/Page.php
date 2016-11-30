@@ -5,10 +5,9 @@ namespace Mrss\Form;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\Form\Fieldset;
-use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class Page extends Form implements ObjectManagerAwareInterface
+class Page extends ObjectManagerAwareAbstractForm
 {
     protected $objectManager;
 
@@ -19,6 +18,17 @@ class Page extends Form implements ObjectManagerAwareInterface
         // Call the parent constructor
         parent::__construct('page');
 
+        $this->addBasicElements();
+        $this->addAdvancedElements();
+
+
+
+
+        $this->add($this->getButtonFieldset('Save', false, true));
+    }
+
+    protected function addBasicElements()
+    {
         $this->add(
             array(
                 'name' => 'id',
@@ -59,8 +69,10 @@ class Page extends Form implements ObjectManagerAwareInterface
                 )
             )
         );
+    }
 
-
+    protected function addAdvancedElements()
+    {
         $this->add(
             array(
                 'name' => 'status',
@@ -112,11 +124,9 @@ class Page extends Form implements ObjectManagerAwareInterface
                 )
             )
         );
-
-        $this->add($this->getButtonFieldset());
     }
 
-    public function getButtonFieldset()
+    /*public function getButtonFieldset()
     {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
@@ -136,15 +146,5 @@ class Page extends Form implements ObjectManagerAwareInterface
         $buttons->add($delete);
 
         return $buttons;
-    }
-
-    public function setObjectManager(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    public function getObjectManager()
-    {
-        return $this->objectManager;
-    }
+    }*/
 }

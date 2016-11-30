@@ -24,8 +24,8 @@ class StudyController extends AbstractActionController
 
     public function viewAction()
     {
-        $id = $this->params('id');
-        $study = $this->getStudy($id);
+        $studyId = $this->params('id');
+        $study = $this->getStudy($studyId);
 
         return array(
             'study' => $study

@@ -1,14 +1,18 @@
 <?php
 
 namespace Mrss\Form;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class Section extends AbstractForm
+class Section extends ObjectManagerAwareAbstractForm
 {
-    public function __construct()
+    public function __construct($objectManager)
     {
+        $this->setObjectManager($objectManager);
+
         // Call the parent constructor
         parent::__construct('section');
         $this->addBasicFields();
+        $this->addBenchmarkGroups();
         $this->add($this->getButtonFieldset());
     }
 
@@ -25,6 +29,25 @@ class Section extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Price'
+                )
+            )
+        );
+    }
+
+    protected function addBenchmarkGroups()
+    {
+        $this->add(
+            array(
+                'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
+                'name' => 'benchmarkGroups',
+                'options' => array(
+                    'label' => 'Forms',
+                    'object_manager' => $this->getObjectManager(),
+                    'target_class' => 'Mrss\Entity\BenchmarkGroup',
+                    'property' => 'name',
+                ),
+                'attributes' => array(
+                    'id' => 'benchmarkGroups'
                 )
             )
         );

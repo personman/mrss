@@ -231,3 +231,7 @@ ul.ui-autocomplete {
 .addItemButton a {
     text-decoration: none;
 }
+
+label.checkbox {
+    margin-left: 20px;
+}

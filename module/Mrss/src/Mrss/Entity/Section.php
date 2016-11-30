@@ -33,8 +33,8 @@ class Section
     protected $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="BenchmarkGroup", mappedBy="section")
-     * @ORM\OrderBy({"sequence" = "ASC"})
+     * @ORM\ManyToMany(targetEntity="BenchmarkGroup", inversedBy="sections")
+     * @ORM\JoinTable(name="sections_benchmark_groups")
      * @var \Mrss\Entity\BenchmarkGroup[]
      */
     protected $benchmarkGroups;
@@ -45,7 +45,7 @@ class Section
     protected $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Study", inversedBy="benchmarkGroups")
+     * @ORM\ManyToOne(targetEntity="Study", inversedBy="sections")
      */
     protected $study;
 
@@ -128,6 +128,22 @@ class Section
         return $this;
     }
 
+    public function addBenchmarkGroups($benchmarkGroups)
+    {
+        foreach ($benchmarkGroups as $group) {
+            $this->benchmarkGroups->add($group);
+        }
+        return $this;
+    }
+
+    public function removeBenchmarkGroups($benchmarkGroups)
+    {
+        foreach ($benchmarkGroups as $group) {
+            $this->benchmarkGroups->removeElement($group);
+        }
+        return $this;
+    }
+
     /**
      * @return mixed
      */
@@ -163,6 +179,4 @@ class Section
         $this->study = $study;
         return $this;
     }
-
-
 }
