@@ -81,6 +81,7 @@ class UserExport
         $sheet->setCellValue('L' . $row, 'Email');
         $sheet->setCellValue('M' . $row, 'Phone');
         $sheet->setCellValue('N' . $row, 'Extension');
+        $sheet->setCellValue('N' . $row, 'Role');
 
         // Style 'em
         $headerRow = $sheet->getStyle('A1:N1');
@@ -116,6 +117,7 @@ class UserExport
                 $sheet->setCellValue('L' . $row, $user->getEmail());
                 $sheet->setCellValue('M' . $row, $user->getPhone());
                 $sheet->setCellValue('N' . $row, $user->getExtension());
+                $sheet->setCellValue('N' . $row, $user->getRole());
 
                 $row++;
             }
