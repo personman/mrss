@@ -44,7 +44,11 @@ class DataExport
         $this->startCsvFile();
 
         // Add a sheet for each year
-        foreach ($this->getYears() as $year => $studies) {
+        foreach ($this->getYears() as $studyYear => $studies) {
+            if ($year != $studyYear) {
+                continue;
+            }
+            
             $this->addSheetForYearAndStudies($year, $studies);
         }
 
