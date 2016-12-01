@@ -129,7 +129,7 @@ class DataExport
         //$this->excel->setActiveSheetIndexByName("$year");
 
         $this->writeHeaders($year);
-        $this->writeData($year);
+        $this->writeData($year, $studies);
 
 
         //pr($allData);
@@ -206,16 +206,16 @@ class DataExport
         return $this->benchmarks[$studyId];
     }
 
-    protected function writeData($year)
+    protected function writeData($year, $studies)
     {
-
-        $benchmarks = $this->getBenchmarks(4);
+        $studyId = array_pop($studies);
+        $benchmarks = $this->getBenchmarks($studyId);
         $dbColumns = array();
         foreach ($benchmarks as $benchmark) {
             $dbColumns[] = $benchmark->getDbColumn();
         }
 
-        $allData = $this->getSubscriptionModel()->findAllWithData(4, $year);
+        $allData = $this->getSubscriptionModel()->findAllWithData($studyId, $year);
 
         foreach ($allData as $row) {
             $data = $row['data'];
