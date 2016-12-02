@@ -39,6 +39,8 @@
 <p>
     <strong>Please note:</strong> The website has created the values in grey italics based on the data you entered.
 </p>
+
+<?php if (false): ?>
 <div class="row row-fluid">
     <div class="span2 col-md-2">
         <strong>Data Entry Progress:</strong>
@@ -62,6 +64,7 @@
     </div>
 
 </div>
+<?php endif ?>
 
 <table class="table submittedValues">
 <?php foreach ($submittedValues as $benchmarkGroup): ?>

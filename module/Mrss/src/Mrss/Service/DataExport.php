@@ -48,7 +48,7 @@ class DataExport
             if ($year != $studyYear) {
                 continue;
             }
-            
+
             $this->addSheetForYearAndStudies($year, $studies);
         }
 
