@@ -667,4 +667,14 @@ class Study
 
         return $has;
     }
+
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    public function hasSections()
+    {
+        return (count($this->getSections()) > 1);
+    }
 }

@@ -474,6 +474,15 @@ return array(
                             )
                         )
                     ),
+                    'modules' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/modules',
+                            'defaults' => array(
+                                'action' => 'modules'
+                            )
+                        )
+                    ),
                     'payment' => array(
                         'type' => 'segment',
                         'options' => array(

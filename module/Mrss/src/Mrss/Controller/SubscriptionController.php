@@ -14,6 +14,7 @@ use Mrss\Form\SubscriptionFree;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
+use Mrss\Form\SubscriptionModule;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -422,8 +423,13 @@ class SubscriptionController extends AbstractActionController
                         return $this->joinFreeFinal();
                     }
                 } else {
-                    // Once they've agreed to the terms, redirect to the payment page
-                    return $this->redirect()->toRoute('subscribe/payment');
+                    if ($this->getStudy()->hasSections()) {
+                        return $this->redirect()->toRoute('subscribe/modules');
+                    } else {
+                        // Once they've agreed to the terms, redirect to the payment page
+                        return $this->redirect()->toRoute('subscribe/payment');
+                    }
+
                 }
             } else {
                 $this->flashMessenger()->addErrorMessage(
@@ -446,6 +452,32 @@ class SubscriptionController extends AbstractActionController
         }
 
         return $viewModel->setTemplate($template);
+    }
+
+    public function modulesAction()
+    {
+        $study = $this->getStudy();
+        $sections = array();
+        foreach ($study->getSections() as $section) {
+            $sections[$section->getId()] = $section->getName();
+        }
+
+        $form = new SubscriptionModule($sections);
+
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                prd($form->getData());
+            }
+
+        }
+
+        return array(
+            'form' => $form
+        );
     }
 
     /**
