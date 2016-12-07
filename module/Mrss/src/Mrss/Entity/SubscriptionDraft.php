@@ -34,6 +34,12 @@ class SubscriptionDraft
     protected $agreementData;
 
     /**
+     * JSON string of agreement form data
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $sections;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $date;
@@ -134,5 +140,23 @@ class SubscriptionDraft
         }
 
         return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * @param mixed $sections
+     * @return SubscriptionDraft
+     */
+    public function setSections($sections)
+    {
+        $this->sections = $sections;
+        return $this;
     }
 }

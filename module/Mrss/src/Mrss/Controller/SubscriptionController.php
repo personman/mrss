@@ -470,7 +470,10 @@ class SubscriptionController extends AbstractActionController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                prd($form->getData());
+                $data = $form->getData();
+                $this->saveDraftSections($data['sections']);
+
+                return $this->redirect()->toRoute('subscribe/payment');
             }
 
         }
@@ -632,7 +635,8 @@ class SubscriptionController extends AbstractActionController
             'ccForm' => $ccForm,
             'invoiceForm' => $invoiceForm,
             'systemForm' => $systemForm,
-            'pilotForm' => $pilotForm
+            'pilotForm' => $pilotForm,
+            'amount' => $amount
         );
     }
 
@@ -1665,10 +1669,11 @@ class SubscriptionController extends AbstractActionController
         return $this->log;
     }
 
-    public function saveDraftSubscription($data)
+    public function saveDraftSubscription($data = null)
     {
         $draft = new SubscriptionDraft();
         $draft->setFormData(json_encode($data));
+
         $draft->setDate(new DateTime('now'));
         $ipAddress = $this->getRequest()->getServer('REMOTE_ADDR');
         $draft->setIp($ipAddress);
@@ -1680,6 +1685,16 @@ class SubscriptionController extends AbstractActionController
 
         // Save college id to session
         $this->getSessionContainer()->ipeds = $this->getIpeds($data);
+    }
+
+    public function saveDraftSections($sections)
+    {
+        $draft = $this->getDraftSubscription();
+        $draft->setSections(json_encode($sections));
+
+        $this->getSubscriptionDraftModel()->save($draft);
+        $this->getSubscriptionDraftModel()->getEntityManager()->flush();
+
     }
 
     public function setIpeds($ipeds)

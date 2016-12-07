@@ -1,4 +1,19 @@
+<style>
+    #system #fieldset-submit .controls {
+        margin-left: 30px;
+    }
+    #system #control-group-paymentType {
+        display: none;
+    }
+</style>
+
 <h2>Select Payment Type</h2>
+
+<p>
+    <h4>Payment Amount:</h4>
+
+    $<?= number_format($amount, 2) ?>
+</p>
 
 <?php if ($this->currentStudy()->getEnrollmentOpen()): ?>
 
