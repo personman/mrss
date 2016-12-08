@@ -28,7 +28,21 @@ class Section extends ObjectManagerAwareAbstractForm
                 'name' => 'price',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Price'
+                    'label' => 'Price Add-on',
+                    'help-block' => 'This number gets added to the relevant study base price
+                    (renewal, regular, or early) when this is the only module selected.'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'comboPrice',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Combo Price Add-on',
+                    'help-block' => 'This number gets added to the relevant study base price
+                    (renewal, regular, or early) when this module is selected along with at least one other module.'
                 )
             )
         );

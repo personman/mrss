@@ -45,6 +45,11 @@ class Section
     protected $price;
 
     /**
+     * @ORM\Column(type="float")
+     */
+    protected $comboPrice;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Study", inversedBy="sections")
      */
     protected $study;
@@ -159,6 +164,24 @@ class Section
     public function setPrice($price)
     {
         $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComboPrice()
+    {
+        return $this->comboPrice;
+    }
+
+    /**
+     * @param mixed $comboPrice
+     * @return Section
+     */
+    public function setComboPrice($comboPrice)
+    {
+        $this->comboPrice = $comboPrice;
         return $this;
     }
 

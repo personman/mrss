@@ -654,14 +654,13 @@ class SubscriptionController extends AbstractActionController
 
     public function getPaymentAmount()
     {
-        // Get this dynamically based on study and date
-        $amount = $this->getStudy()->getCurrentPrice();
-
         $isRenewal = $this->isRenewal();
 
-        if ($isRenewal) {
-            $amount = $this->getStudy()->getRenewalPrice();
-        }
+        $selectedSections = json_decode($this->getDraftSubscription()->getSections(), false);
+
+        // Get this dynamically based on study, date, renewal, and selected modules
+        $amount = $this->getStudy()->getCurrentPrice($isRenewal, $selectedSections);
+
 
         // Check for offer code
         $agreement = json_decode(
