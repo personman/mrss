@@ -656,7 +656,7 @@ class SubscriptionController extends AbstractActionController
     {
         $isRenewal = $this->isRenewal();
 
-        $selectedSections = json_decode($this->getDraftSubscription()->getSections(), false);
+        $selectedSections = json_decode($this->getDraftSubscription()->getSections(), true);
 
         // Get this dynamically based on study, date, renewal, and selected modules
         $amount = $this->getStudy()->getCurrentPrice($isRenewal, $selectedSections);
@@ -871,6 +871,18 @@ class SubscriptionController extends AbstractActionController
         return $this->sessionContainer;
     }
 
+    protected function getSelectedSections($subscriptionDraft)
+    {
+        $sections = array();
+        $sectionIds = json_decode($subscriptionDraft->getSections(), true);
+
+        foreach ($sectionIds as $sectionId) {
+            $sections[] = $this->getStudy()->getSection($sectionId);
+        }
+
+        return $sections;
+    }
+
     /**
      * Complete the subscription, creating college and users as needed
      *
@@ -979,6 +991,9 @@ class SubscriptionController extends AbstractActionController
         $state = $subscription->getCollege()->getState();
         $college .= " ($state)";
         $appName = $this->currentStudy()->getName();
+        if ($sectionNames = $subscription->getSectionNames()) {
+            $appName .= " ($sectionNames)";
+        }
         $cost = number_format($subscription->getPaymentAmount());
         $cost .= ' (' . $subscription->getPaymentMethodForDisplay() . ')';
         $message = "New $appName membership for $college. ";
@@ -1228,6 +1243,11 @@ class SubscriptionController extends AbstractActionController
             $subscription->setDigitalSignature($agreement['signature']);
             $subscription->setDigitalSignatureTitle($agreement['title']);
         }
+
+        // Modules/sections
+        $selectedSections = $this->getSelectedSections($draftSubscription);
+        $subscription->setSections($selectedSections);
+
 
         $this->getSubscriptionModel()->save($subscription);
 

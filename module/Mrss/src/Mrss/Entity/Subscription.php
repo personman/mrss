@@ -154,6 +154,14 @@ class Subscription
      */
     protected $paidNotes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Section")
+     * @ORM\JoinTable(name="subscription_sections")
+     * @var \Mrss\Entity\Section[]
+     */
+    protected $sections;
+
+
     protected $benchmarkModel;
     protected $datumModel;
     protected $allData = array();
@@ -611,5 +619,33 @@ class Subscription
     public function getDatumModel()
     {
         return $this->datumModel;
+    }
+
+    /**
+     * @return Section[]
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * @param Section[] $sections
+     * @return Subscription
+     */
+    public function setSections($sections)
+    {
+        $this->sections = $sections;
+        return $this;
+    }
+
+    public function getSectionNames()
+    {
+        $names = array();
+        foreach ($this->getSections() as $section) {
+            $names[] = $section->getName();
+        }
+
+        return implode(', ', $names);
     }
 }
