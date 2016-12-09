@@ -295,7 +295,7 @@ class Subscription extends AbstractModel
      *
      * @param StudyEntity $study
      * @param $collegeId
-     * @return array
+     * @return \Mrss\Entity\Subscription
      */
     public function findCurrentSubscription(StudyEntity $study, $collegeId)
     {

@@ -51,6 +51,8 @@ class SubscriptionController extends AbstractActionController
 
     protected $ipeds;
 
+    protected $oldTotal = 0;
+
     /**
      * @var \Mrss\Entity\Study
      */
@@ -483,6 +485,79 @@ class SubscriptionController extends AbstractActionController
         );
     }
 
+    public function editAction()
+    {
+        $subscription = $this->getSubscriptionModel()
+            ->findCurrentSubscription($this->getStudy(), $this->currentCollege());
+
+        if (empty($subscription)) {
+            return $this->redirect()->toUrl('/join');
+        }
+
+        $study = $this->getStudy();
+
+        $selectedSections = array();
+        foreach ($subscription->getSections() as $section) {
+            $selectedSections[] = $section->getId();
+        }
+
+        $sections = array();
+        foreach ($study->getSections() as $section) {
+            $selected = in_array($section->getId(), $selectedSections);
+            $sections[] = array(
+                'value' => $section->getId(),
+                'label' => $section->getName(),
+                'selected' => $selected,
+                'disabled' => $selected,
+            );
+        }
+
+
+
+        $form = new SubscriptionModule($sections);
+
+        if ($this->getRequest()->isPost()) {
+
+            // Hand the POST data to the form for validation
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $selectedSections = $data['sections'];
+
+                // Merge in the previously selected sections
+                $selectedSections = array_merge($selectedSections, $subscription->getSectionIds());
+
+                // Save to session and
+                $this->createDraftSubscriptionForUpdate($subscription, $selectedSections);
+
+                //$this->saveDraftSections($data['sections']);
+
+                return $this->redirect()->toRoute('subscribe/payment');
+            }
+
+        }
+
+        return array(
+            'form' => $form,
+        );
+    }
+
+    protected function createDraftSubscriptionForUpdate($subscription, $sections)
+    {
+        $draft = $this->getDraftSubscription();
+        if (!$draft) {
+            $draft = $this->saveDraftSubscription();
+        }
+
+        $draft->setSubscription($subscription);
+
+        // This triggers a save and flush:
+        $this->saveDraftSections($sections);
+
+        return $draft;
+    }
+
     /**
      * When TouchNet sends the payment postback, complete the subscription
      */
@@ -661,6 +736,14 @@ class SubscriptionController extends AbstractActionController
         // Get this dynamically based on study, date, renewal, and selected modules
         $amount = $this->getStudy()->getCurrentPrice($isRenewal, $selectedSections);
 
+        // Are we just updating the selected sections/modules? If so, get the difference between the
+        // original subscription payment amount and the new amount. Return that, skipping offer codes and discounts
+        if ($this->getDraftSubscription()->isUpdate()) {
+            $originalPayment = $this->getDraftSubscription()->getSubscription()->getPaymentAmount();
+            $difference = $amount - $originalPayment;
+
+            return $difference;
+        }
 
         // Check for offer code
         $agreement = json_decode(
@@ -900,6 +983,10 @@ class SubscriptionController extends AbstractActionController
         $sendInvoice = false,
         $redirect = true
     ) {
+        if ($subscriptionDraft->isUpdate()) {
+            return $this->updateSubscription($subscriptionDraft, $paymentForm, $sendInvoice, $redirect);
+        }
+
         $subscriptionForm = json_decode($subscriptionDraft->getFormData(), true);
 
         // Create or fetch the college
@@ -963,9 +1050,7 @@ class SubscriptionController extends AbstractActionController
         // Send welcome email
         $this->sendWelcomeEmail($subscription);
 
-        // Now clear out the draft subscription
-        $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
-        $this->getServiceLocator()->get('em')->flush();
+        $this->clearDraftSubscription($subscriptionDraft);
 
         // Redirect
         if ($redirect) {
@@ -985,7 +1070,67 @@ class SubscriptionController extends AbstractActionController
         }
     }
 
-    protected function sendSlackNotification(Subscription $subscription)
+    protected function clearDraftSubscription($subscriptionDraft)
+    {
+        // Now clear out the draft subscription
+        $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
+        $this->getServiceLocator()->get('em')->flush();
+    }
+
+    /**
+     * @param \Mrss\Entity\SubscriptionDraft $subscriptionDraft
+     * @param $paymentForm
+     * @param $sendInvoice
+     * @param $redirect
+     * @return \Zend\Http\Response
+     */
+    public function updateSubscription($subscriptionDraft, $paymentForm, $sendInvoice, $redirect)
+    {
+        $subscription = $subscriptionDraft->getSubscription();
+
+        // Update the subscription sections
+        $sections = $this->getSelectedSections($subscriptionDraft);
+        $subscription->setSections($sections);
+
+        // Update the payment amount (new total)
+        $this->oldTotal = $oldTotal = $subscription->getPaymentAmount();
+        $amountDue = $this->getPaymentAmount();
+        $paymentAmount = $oldTotal + $amountDue;
+
+        $subscription->setPaymentAmount($paymentAmount);
+
+        $method = $paymentForm['paymentType'];
+        $subscription->setPaymentMethod($method);
+
+        // Send the invoice notification (if they want a paper invoice
+        if ($sendInvoice) {
+            $this->sendInvoice($subscription, null, null, null, true);
+        }
+
+        $date = date('c');
+        $note = "Membership updated on $date. Payment amount changed from $oldTotal to $paymentAmount.";
+        $subscription->addPaidNote($note);
+
+        $this->getSubscriptionModel()->save($subscription);
+        $this->getSubscriptionModel()->getEntityManager()->flush();
+
+
+        $this->clearDraftSubscription($subscriptionDraft);
+
+        // Send a notification to slack
+        $this->sendSlackNotification($subscription, true);
+
+        if ($redirect) {
+            $message = "Your membership has been updated. You now have access to the selected modules. ";
+            $this->flashMessenger()->addSuccessMessage($message);
+
+            $redirect = $this->redirect()->toRoute('membership');
+        }
+
+        return $redirect;
+    }
+
+    protected function sendSlackNotification(Subscription $subscription, $update = false)
     {
         $college = $subscription->getCollege()->getName();
         $state = $subscription->getCollege()->getState();
@@ -996,7 +1141,11 @@ class SubscriptionController extends AbstractActionController
         }
         $cost = number_format($subscription->getPaymentAmount());
         $cost .= ' (' . $subscription->getPaymentMethodForDisplay() . ')';
+
         $message = "New $appName membership for $college. ";
+        if ($update) {
+            $message = "Updated $appName membership for $college. ";
+        }
 
         $message .= "Cost: $$cost. ";
 
@@ -1343,7 +1492,8 @@ class SubscriptionController extends AbstractActionController
         Subscription $subscription,
         User $adminUser = null,
         User $dataUser = null,
-        $toEmail = null
+        $toEmail = null,
+        $update = false
     ) {
         // Check config to see if emails are being suppressed (by Behat, probably)
         $config = $this->getServiceLocator()->get('config');
@@ -1364,11 +1514,11 @@ class SubscriptionController extends AbstractActionController
         $paymentMethod = $subscription->getPaymentMethod();
 
         $invoice->setSubject(
-            $this->getInvoiceSubject($subscription, $paymentMethod)
+            $this->getInvoiceSubject($subscription, $paymentMethod, $update)
 
         );
 
-        $body = $this->getInvoiceBody($subscription, $adminUser, $dataUser);
+        $body = $this->getInvoiceBody($subscription, $adminUser, $dataUser, $update);
         $invoice->setBody($body);
 
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
@@ -1379,7 +1529,7 @@ class SubscriptionController extends AbstractActionController
      * @param $paymentMethod
      * @return string
      */
-    protected function getInvoiceSubject($subscription, $paymentMethod)
+    protected function getInvoiceSubject($subscription, $paymentMethod, $update = false)
     {
         // Email subject
         if ($subscription->getPaymentMethod() == 'pilot') {
@@ -1396,14 +1546,20 @@ class SubscriptionController extends AbstractActionController
         $collegeName = $college->getName();
         $year = $subscription->getYear();
 
-        return "$subjectIntro: $collegeName joined $studyName for $year";
+        if ($update) {
+            $subject  = "$subjectIntro: $collegeName updated their $year $studyName membership";
+        } else {
+            $subject = "$subjectIntro: $collegeName joined $studyName for $year";
+        }
+
+        return $subject;
     }
 
     /**
      * @param \Mrss\Entity\Subscription $subscription
      * @return string
      */
-    protected function getInvoiceBody($subscription, $adminUser, $dataUser)
+    protected function getInvoiceBody($subscription, $adminUser, $dataUser, $update = false)
     {
         $date = date('Y-m-d');
         $study = $subscription->getStudy();
@@ -1412,11 +1568,26 @@ class SubscriptionController extends AbstractActionController
 
         $amountDue = number_format($subscription->getPaymentAmount(), 2);
 
+        $amounts = "Amount Due: $amountDue\n";
+        if ($update) {
+            $oldTotal = $this->oldTotal;
+            $newTotal = $subscription->getPaymentAmount();
+            $amountDue = ($newTotal - $oldTotal);
+
+            $oldTotal = number_format($oldTotal, 2);
+            $newTotal = number_format($newTotal, 2);
+            $amountDue = number_format($amountDue, 2);
+
+            $amounts = "Updated Total: $newTotal\n";
+            $amounts .= "Previous Payment: $oldTotal\n";
+            $amounts .= "Amount Due: $amountDue\n";
+        }
+
         $body =
             "Study: {$study->getName()}\n" .
             "Year: $year\n" .
             "Institution: {$college->getName()}\n" .
-            "Amount Due: $amountDue\n" .
+            $amounts .
             "Payment Method: {$subscription->getPaymentMethodForDisplay()}\n" .
             "Date: $date\n" .
             "Address: {$college->getAddress()} {$college->getAddress2()}\n" .
@@ -1425,6 +1596,10 @@ class SubscriptionController extends AbstractActionController
             "Zip: {$college->getZip()}\n" .
             "Digital Signature: {$subscription->getDigitalSignature()}\n" .
             "Title: {$subscription->getDigitalSignatureTitle()}\n";
+
+        if ($sections = $subscription->getSectionNames()) {
+            $body .= "Module(s): " . $sections . "\n";
+        }
 
         if ($adminUser && $dataUser) {
             $body .= "
@@ -1704,6 +1879,10 @@ class SubscriptionController extends AbstractActionController
 
         // Save college id to session
         $this->getSessionContainer()->ipeds = $this->getIpeds($data);
+
+        $this->draftSubscription = $draft;
+
+        return $draft;
     }
 
     public function saveDraftSections($sections)

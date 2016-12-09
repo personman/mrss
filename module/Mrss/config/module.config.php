@@ -351,6 +351,17 @@ return array(
                     )
                 )
             ),
+            'membership-edit' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/membership-edit',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'edit'
+                    )
+                )
+            ),
             'join' => array(
                 'type' => 'segment',
                 'priority' => 10,

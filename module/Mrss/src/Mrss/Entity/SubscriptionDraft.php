@@ -45,6 +45,12 @@ class SubscriptionDraft
     protected $date;
 
     /**
+     * The subscription we are editing (if any)
+     * @ORM\OneToOne(targetEntity="Subscription")
+     */
+    private $subscription;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $ip;
@@ -158,5 +164,28 @@ class SubscriptionDraft
     {
         $this->sections = $sections;
         return $this;
+    }
+
+    /**
+     * @return null|Subscription
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * @param mixed $subscription
+     * @return SubscriptionDraft
+     */
+    public function setSubscription($subscription)
+    {
+        $this->subscription = $subscription;
+        return $this;
+    }
+
+    public function isUpdate()
+    {
+        return (is_object($this->getSubscription()));
     }
 }

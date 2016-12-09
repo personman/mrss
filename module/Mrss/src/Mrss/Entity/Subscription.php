@@ -135,6 +135,12 @@ class Subscription
     protected $created;
 
     /**
+     * @Gedmo\Mapping\Annotation\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    protected $updated;
+
+    /**
      * @ORM\OneToMany(targetEntity="Suppression", mappedBy="subscription")
      */
     protected $suppressions;
@@ -347,6 +353,18 @@ class Subscription
         return $this->created;
     }
 
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
     public function setCompletion($completion)
     {
         $this->completion = $completion;
@@ -555,6 +573,16 @@ class Subscription
         return $this;
     }
 
+    public function addPaidNote($note)
+    {
+        $separator = "\n";
+        $existing = $this->getPaidNotes();
+
+        $new = $existing . $separator . $note;
+
+        $this->setPaidNotes($new);
+    }
+
 
     /**
      * @return Suppression[]
@@ -637,6 +665,16 @@ class Subscription
     {
         $this->sections = $sections;
         return $this;
+    }
+
+    public function getSectionIds()
+    {
+        $sectionIds = array();
+        foreach ($this->getSections() as $section) {
+            $sectionIds[] = $section->getId();
+        }
+
+        return $sectionIds;
     }
 
     public function getSectionNames()
