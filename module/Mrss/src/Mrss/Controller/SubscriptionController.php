@@ -443,7 +443,8 @@ class SubscriptionController extends AbstractActionController
         $viewModel = new ViewModel(
             array(
                 'form' => $form,
-                'subscription' => $this->getDraftSubscription()->getFormData()
+                'subscription' => $this->getDraftSubscription()->getFormData(),
+                'isRenewal' => $this->isRenewal()
             )
         );
 
@@ -461,7 +462,12 @@ class SubscriptionController extends AbstractActionController
         $study = $this->getStudy();
         $sections = array();
         foreach ($study->getSections() as $section) {
-            $sections[$section->getId()] = $section->getName();
+            $name = $section->getName();
+            if ($desc = $section->getDescription()) {
+                $name .= " - " . $desc;
+            }
+
+            $sections[$section->getId()] = $name;
         }
 
         $form = new SubscriptionModule($sections);
