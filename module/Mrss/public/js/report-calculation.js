@@ -194,7 +194,7 @@ function setUpSystems()
         var lastSystemId = systemIdsForYear.length - 1;
         var lastBenchmarkId = benchmarkIds.length - 1;
 
-        for (var si in systemIds) {
+        for (var si in systemIdsForYear) {
             var systemId = systemIdsForYear[si];
 
             for (var bi in benchmarkIds) {
