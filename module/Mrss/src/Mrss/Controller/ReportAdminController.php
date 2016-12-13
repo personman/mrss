@@ -68,6 +68,7 @@ class ReportAdminController extends AbstractActionController
         // Get observation ids
         $observationIds = array();
         $benchmarkIds = array();
+        $systemIds = array();
         foreach ($years as $year => $yearInfo) {
             $yearIds = array();
             $subs = $this->getSubscriptionModel()->findWithPartialObservations(
@@ -90,15 +91,18 @@ class ReportAdminController extends AbstractActionController
                 $benchmarkIds[$year][] = $benchmark->getId();
             }
 
+            $systems = $this->getSystemModel()->findWithSubscription($year, $this->currentStudy()->getId());
+            $systemIds[$year] = array();
+            foreach ($systems as $system) {
+                $systemIds[$year][] = $system->getId();
+            }
+
+
         }
 
         // Get System ids
         $currentYear = $this->currentStudy()->getCurrentYear();
-        $systemIds = array();
-        $systems = $this->getSystemModel()->findWithSubscription($currentYear, $this->currentStudy()->getId());
-        foreach ($systems as $system) {
-            $systemIds[] = $system->getId();
-        }
+
 
 
         return array(
