@@ -686,4 +686,13 @@ class Subscription
 
         return implode(', ', $names);
     }
+
+    public function canBeUpdated()
+    {
+        $studySectionCount = count($this->getStudy()->getSections());
+
+        $subSectionCount = count($this->getSectionIds());
+
+        return ($studySectionCount && $studySectionCount > $subSectionCount);
+    }
 }

@@ -167,7 +167,8 @@ class ObservationController extends AbstractActionController
             'benchmarkGroups' => $benchmarkGroups,
             'observation' => $observation,
             'issues' => $issues,
-            'completionPercentage' => $completionPercentage
+            'completionPercentage' => $completionPercentage,
+            'subscription' => $membership
         );
     }
 

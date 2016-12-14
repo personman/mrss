@@ -154,7 +154,12 @@ class SubscriptionController extends AbstractActionController
                 //$this->saveSubscriptionToSession($form->getData());
                 $this->saveDraftSubscription($form->getData());
 
-                return $this->redirect()->toRoute('subscribe/user-agreement');
+                if ($this->getStudy()->hasSections()) {
+                    return $this->redirect()->toRoute('subscribe/modules');
+                } else {
+                    return $this->redirect()->toRoute('subscribe/user-agreement');
+                }
+
             } else {
                 $this->flashMessenger()->addErrorMessage(
                     "Please correct the problems below."
@@ -203,7 +208,12 @@ class SubscriptionController extends AbstractActionController
 
                     $this->saveDraftSubscription($data);
 
-                    return $this->redirect()->toRoute('subscribe/user-agreement');
+                    if ($this->getStudy()->hasSections()) {
+                        return $this->redirect()->toRoute('subscribe/modules');
+                    } else {
+                        return $this->redirect()->toRoute('subscribe/user-agreement');
+                    }
+
                 } else {
                     $this->flashMessenger()->addErrorMessage("Unable to find institution.");
                     return $this->redirect()->toUrl('/participate');
@@ -343,7 +353,11 @@ class SubscriptionController extends AbstractActionController
 
                 $this->saveDraftSubscription($data);
 
-                return $this->redirect()->toRoute('subscribe/user-agreement');
+                if ($this->getStudy()->hasSections()) {
+                    return $this->redirect()->toRoute('subscribe/modules');
+                } else {
+                    return $this->redirect()->toRoute('subscribe/user-agreement');
+                }
             }
         }
 
@@ -425,13 +439,8 @@ class SubscriptionController extends AbstractActionController
                         return $this->joinFreeFinal();
                     }
                 } else {
-                    if ($this->getStudy()->hasSections()) {
-                        return $this->redirect()->toRoute('subscribe/modules');
-                    } else {
-                        // Once they've agreed to the terms, redirect to the payment page
-                        return $this->redirect()->toRoute('subscribe/payment');
-                    }
-
+                    // Once they've agreed to the terms, redirect to the payment page
+                    return $this->redirect()->toRoute('subscribe/payment');
                 }
             } else {
                 $this->flashMessenger()->addErrorMessage(
@@ -444,7 +453,8 @@ class SubscriptionController extends AbstractActionController
             array(
                 'form' => $form,
                 'subscription' => $this->getDraftSubscription()->getFormData(),
-                'isRenewal' => $this->isRenewal()
+                'isRenewal' => $this->isRenewal(),
+                'paymentAmount' => $this->getPaymentAmount()
             )
         );
 
@@ -481,7 +491,7 @@ class SubscriptionController extends AbstractActionController
                 $data = $form->getData();
                 $this->saveDraftSections($data['sections']);
 
-                return $this->redirect()->toRoute('subscribe/payment');
+                return $this->redirect()->toRoute('subscribe/user-agreement');
             }
 
         }
@@ -654,8 +664,10 @@ class SubscriptionController extends AbstractActionController
         // Renewal price @todo: make this dymanic
         $sub = json_decode($this->getDraftSubscription()->getFormData(), true);
 
+        $isUpdate = $this->getDraftSubscription()->isUpdate();
+
         $isRenewal = false;
-        if (!empty($sub['renew'])) {
+        if (!empty($sub['renew']) || $isUpdate) {
             $isRenewal = true;
         } else {
             // Are they renewing via the new join form?

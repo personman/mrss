@@ -10,6 +10,10 @@
         <br>
     <?php else: ?>
 
+
+        <h3>Payment Amount: $<?= $paymentAmount ?></h3>
+
+    <?php /*
     Annual subscription fees are as follows:
     <br>
 
@@ -55,7 +59,7 @@
 <?php else: ?>
     Renewal registration: $<?= number_format($this->currentStudy()->getRenewalPrice()) ?>
     <br>
-<?php endif ?>
+<?php endif */ ?>
 
 <?php /*Early-Bird registration: $<?= number_format($this->currentStudy()->getEarlyPrice()) ?>
     <br>

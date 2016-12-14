@@ -739,6 +739,10 @@ function getAccountMenu()
                 'label' => 'Member Home',
                 'uri' => '/members'
             ),
+            'membership-edit' => array(
+                'label' => 'Add a Module to Your Membership',
+                'route' => 'membership-edit',
+            ),
             'account' => array(
                 'label' => 'Manage Your Account',
                 'route' => 'account',
