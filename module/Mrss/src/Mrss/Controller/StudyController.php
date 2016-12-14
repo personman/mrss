@@ -109,7 +109,7 @@ class StudyController extends AbstractActionController
      */
     public function importAction()
     {
-        return array();
+        //return array();
 
         takeYourTime();
 
@@ -155,7 +155,8 @@ class StudyController extends AbstractActionController
     public function getCsvImportFileForStudy($studyId)
     {
         $csvFiles = array(
-            1 => 'data/imports/nccbp-benchmarks.csv',
+            //1 => 'data/imports/nccbp-benchmarks.csv',
+            1 => 'data/imports/nccwtp-benchmarks.csv',
             2 => 'data/imports/mrss-benchmarks.csv',
             3 => 'data/imports/nccwtp-benchmarks.csv',
             4 => 'data/imports/aaup-benchmarks.csv'
