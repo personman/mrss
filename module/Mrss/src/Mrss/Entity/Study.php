@@ -666,10 +666,16 @@ class Study
         return $allKeys;
     }
 
-    public function getStructuredBenchmarks($onlyReported = true, $keyField = 'dbColumn')
+    public function getStructuredBenchmarks($onlyReported = true, $keyField = 'dbColumn', $subscription = null)
     {
+        if ($subscription && $this->hasSections()) {
+            $groups = $this->getBenchmarkGroupsBySubscription($subscription);
+        } else {
+            $groups = $this->getBenchmarkGroups();
+        }
+
         $benchmarks = array();
-        foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+        foreach ($groups as $benchmarkGroup) {
             $group = array(
                 'label' => $benchmarkGroup->getName(),
                 'options' => array()
