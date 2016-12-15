@@ -187,6 +187,24 @@ class Study
         return $this->benchmarkGroups;
     }
 
+    public function getBenchmarkGroupsBySubscription(Subscription $subscription)
+    {
+        if ($this->hasSections()) {
+            $benchmarkGroupIds = $subscription->getBenchmarkGroupIds();
+
+            $benchmarkGroups = array();
+            foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+                if (in_array($benchmarkGroup->getId(), $benchmarkGroupIds)) {
+                    $benchmarkGroups[] = $benchmarkGroup;
+                }
+            }
+        } else {
+            $benchmarkGroups = $this->getBenchmarkGroups();
+        }
+
+        return $benchmarkGroups;
+    }
+
     public function setCriteria($criteria)
     {
         $this->criteria = $criteria;

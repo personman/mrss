@@ -687,6 +687,22 @@ class Subscription
         return implode(', ', $names);
     }
 
+    public function getBenchmarkGroupIds()
+    {
+        $benchmarkGroupIds = array();
+
+        foreach ($this->getSections() as $section) {
+            foreach ($section->getBenchmarkGroups() as $benchmarkGroup) {
+                $benchmarkGroupId = $benchmarkGroup->getId();
+                if (!in_array($benchmarkGroupId, $benchmarkGroupIds)) {
+                    $benchmarkGroupIds[] = $benchmarkGroupId;
+                }
+            }
+        }
+
+        return $benchmarkGroupIds;
+    }
+
     public function canBeUpdated()
     {
         $studySectionCount = count($this->getStudy()->getSections());

@@ -150,8 +150,9 @@ class ObservationController extends AbstractActionController
         }
 
         // Regular users
+        /** @var \Mrss\Entity\Study $currentStudy */
         $currentStudy = $this->currentStudy();
-        $benchmarkGroups = $currentStudy->getBenchmarkGroups();
+        $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($membership);
         $observation = $this->getCurrentObservation();
         $completionPercentage = $currentStudy
             ->getCompletionPercentage($observation);

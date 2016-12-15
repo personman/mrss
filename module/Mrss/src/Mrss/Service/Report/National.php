@@ -43,7 +43,7 @@ class National extends Report
 
         $study = $this->getStudy();
 
-        $benchmarkGroups = $study->getBenchmarkGroups();
+        $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
         foreach ($benchmarkGroups as $benchmarkGroup) {
             if (!empty($benchmarkGroupId) && $benchmarkGroup->getId() != $benchmarkGroupId) {
                 continue;
