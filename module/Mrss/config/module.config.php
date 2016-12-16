@@ -2179,6 +2179,15 @@ return array(
                             )
                         )
                     ),
+                    'populate-modules' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/populate-modules',
+                            'defaults' => array(
+                                'action' => 'populateSections',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
