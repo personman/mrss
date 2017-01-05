@@ -96,6 +96,7 @@ legend + .control-group {
     width:45%;
     margin:5px 0%;
     float:left;
+    clear: left;
 }
 
 #control-group-institution-address2{
@@ -109,6 +110,7 @@ legend + .control-group {
     width:42%;
     margin:5px 0%;
     float:left;
+    clear: left;
 }
 
 #control-group-institution-state {

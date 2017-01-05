@@ -539,6 +539,15 @@ return array(
                             )
                         )
                     ),
+                    'cancel' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/cancel',
+                            'defaults' => array(
+                                'action' => 'cancel'
+                            )
+                        )
+                    ),
                     'postback' => array(
                         'type' => 'segment',
                         'options' => array(

@@ -846,6 +846,17 @@ class SubscriptionController extends AbstractActionController
 
     }
 
+    /**
+     * Cancel button clicked on TouchNet payment screen. Just redirect and show a message.
+     */
+    public function cancelAction()
+    {
+        $this->flashMessenger()
+            ->addInfoMessage("Credit card payment canceled. Please try again or select another payment method");
+
+        return $this->redirect()->toRoute('subscribe/payment');
+    }
+
     public function invoiceAction()
     {
         $this->checkSubscriptionIsInProgress();
