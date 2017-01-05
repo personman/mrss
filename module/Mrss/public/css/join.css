@@ -72,8 +72,21 @@ legend + .control-group {
     float:left;
 }
 
-#control-group-institution-ipdeds {
+#control-group-institution-abbreviation {
     width:30%;
+    margin:5px 0% 5px 5%;
+    float:left;
+    clear:right;
+}
+
+#control-group-institution-ipeds {
+    width:45%;
+    margin:5px 0%;
+    float:left;
+}
+
+#control-group-institution-opeid {
+    width:45%;
     margin:5px 0% 5px 5%;
     float:left;
     clear:right;
