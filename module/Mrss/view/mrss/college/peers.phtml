@@ -165,6 +165,10 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                     <th>Institution</th>
                     <th>State</th>
                     <th>System</th>
+                    <?php foreach ($sections as $section): ?>
+                        <th><?= $section->getName() ?></th>
+
+                    <?php endforeach ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -179,6 +183,15 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                                 <?= $system->getName() ?>
                             <?php endif ?>
                         </td>
+                        <?php foreach ($sections as $section): ?>
+                            <td style="text-align: center">
+                                <?php if (in_array($section->getId(), $college->getSectionIds())): ?>
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                <?php endif ?>
+                            </td>
+
+                        <?php endforeach ?>
+
                     </tr>
                 <?php endforeach ?>
 

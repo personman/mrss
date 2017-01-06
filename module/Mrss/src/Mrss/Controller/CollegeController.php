@@ -144,7 +144,8 @@ class CollegeController extends AbstractActionController
 
         return array(
             'colleges' => $colleges,
-            'markers' => $markers
+            'markers' => $markers,
+            'sections' => $this->currentStudy()->getSections()
         );
     }
 
