@@ -187,12 +187,12 @@ ul.navbar-nav > li {
 }
 
 #matter .carousel-caption {
-    background-color: #00508d;
-    background-color: rgba(0,79,140,0.85);
+    /*background-color: rgba(0,79,140,0.85);*/
     top: 8%;
     right: auto;
     left: 3%;
     bottom: auto;
+    background-color: rgba(144, 176, 56, .85);
 }
 
 .carousel #yardstick {
@@ -204,7 +204,7 @@ ul.navbar-nav > li {
     right: 8%;
     bottom: auto;
     left: auto;
-    background-color: rgba(144, 176, 56, .85);
+    background-color: rgba(101, 49, 143, .85)
 }
 
 .carousel #accountability {
@@ -217,7 +217,7 @@ ul.navbar-nav > li {
     bottom: 8%;
     right: auto;
 
-    background-color: rgba(155, 155, 155, .85);
+    background-color: rgba(0,79,140,0.85);
 }
 
 
