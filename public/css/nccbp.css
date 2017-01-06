@@ -999,6 +999,10 @@ ul.benchmarks { margin-bottom: 25px; padding-left: 25px; }
 ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
 .page-header {margin: 30px 0 5px 0;}
 .sec-banner { position: absolute; top: 7.2%; right: 0; z-index: 9999; display: inline-block; width: auto; max-width: 50%; height: auto; max-height: 260px; background-color: rgba(155, 191, 61, .9); padding: 10px 13px 5px;}
+.sec-banner.sec-banner-non-credit {
+    left: 0;
+    right: auto;
+}
 
 
 /* Fancybox */
