@@ -1008,7 +1008,7 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
     color: #65318F;
 }
 
-.benchmarks-non-credit-photo {
+.benchmarks-non-credit-photo img {
     float: right;
     width: 75%;
 }
