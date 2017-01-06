@@ -1004,6 +1004,10 @@ ul.benchmarks li { line-height: 16px; margin-bottom: 8px }
     right: auto;
 }
 
+.benchmarks-non-credit h3 {
+    color: #65318F;
+}
+
 
 /* Fancybox */
 /*a.fancybox img {
