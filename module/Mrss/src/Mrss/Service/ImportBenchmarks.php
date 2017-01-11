@@ -158,8 +158,11 @@ class ImportBenchmarks
     public function saveHeadings()
     {
         foreach ($this->headings as $gId => $headings) {
-            $this->getBenchmarkGroupModel()->find($gId)
-                ->setBenchmarkHeadings($headings);
+            $group = $this->getBenchmarkGroupModel()->find($gId);
+
+            if ($group) {
+                $group->setBenchmarkHeadings($headings);
+            }
         }
 
         $this->entityManager->flush();

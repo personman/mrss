@@ -175,6 +175,7 @@ class Subscription
     public function __construct()
     {
         $this->data = new ArrayCollection();
+        $this->sections = new ArrayCollection();
     }
 
     public function getId()
@@ -471,6 +472,12 @@ class Subscription
         $datum->setSubscription($this);
 
 
+        if (!$benchmark) {
+            echo 'null passed to createDatum<br>';
+        } else {
+            var_dump($benchmark);
+        }
+
         if (is_object($benchmark)) {
             $datum->setBenchmark($benchmark);
             $datum->setDbColumn($benchmark->getDbColumn());
@@ -485,7 +492,11 @@ class Subscription
         if ($benchmark) {
             $this->getData()->add($datum);
             $this->getDatumModel()->save($datum);
+            echo 'saving new datum: ' . $benchmark->getDbColumn();
+
             $this->getDatumModel()->getEntityManager()->flush();
+        } else {
+            die('cannot find benchmark for ' . $benchmark);
         }
 
         return $datum;
@@ -667,9 +678,18 @@ class Subscription
         return $this;
     }
 
+    public function addSection($section)
+    {
+        if (!$this->hasSection($section)) {
+            $sections = $this->getSections();
+            $sections[] = $section;
+        }
+    }
+
     public function getSectionIds()
     {
         $sectionIds = array();
+
         foreach ($this->getSections() as $section) {
             $sectionIds[] = $section->getId();
         }
@@ -685,6 +705,11 @@ class Subscription
         }
 
         return implode(', ', $names);
+    }
+
+    public function hasSection($section)
+    {
+        return in_array($section->getId(), $this->getSectionIds());
     }
 
     public function getBenchmarkGroupIds()
