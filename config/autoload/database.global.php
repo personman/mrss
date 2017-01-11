@@ -17,7 +17,7 @@ return array(
                 'password' => $dbParams['password'],
                 'port' => 3306,
             ),
-            'nccbp-db' => array(
+            'workforce-db' => array(
                 'driver' => 'pdo',
             ),
         )

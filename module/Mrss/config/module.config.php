@@ -2197,6 +2197,15 @@ return array(
                             )
                         )
                     ),
+                    'import-wf' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import-wf',
+                            'defaults' => array(
+                                'action' => 'importWf',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

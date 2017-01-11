@@ -1382,4 +1382,23 @@ class ToolController extends AbstractActionController
 
         die("$updates subscriptions updated");
     }
+
+    public function importWfAction()
+    {
+        $importer = $this->getServiceLocator()->get('service.import.workforce.data');
+
+        $importer->import();
+
+
+
+        die('test');
+    }
+
+    /**
+     * @return \Zend\Db\Adapter\Adapter
+     */
+    protected function getWfDb()
+    {
+        return $this->getServiceLocator()->get('workforce-db');
+    }
 }
