@@ -161,6 +161,16 @@ class NavigationFactory extends DefaultNavigationFactory
                 unset($pages['data-entry']);
             }
 
+            // Hide reports menu if they only have one year (this year) and reports aren't open
+            $study = $this->getCurrentStudy();
+            if (!$study->getReportsOpen()) {
+                $subs = $this->getSubscriptions();
+                if (count($subs) == 1 && $subs[0]->getYear() == $study->getCurrentYear()) {
+                    unset($pages['reports']);
+                }
+            }
+
+
             // If enrollment is open and they haven't subscribed, show renew button
             if ($this->getCurrentStudy()->getEnrollmentOpen() &&
                 !$this->hasSubscription($user)) {
@@ -398,6 +408,29 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         return $subscription;
+    }
+
+    protected function getSubscriptions()
+    {
+        $subModel = $this->getSubscriptionModel();
+        $study = $this->getCurrentStudy();
+
+        $subscriptions = null;
+
+        if ($user = $this->getUser()) {
+            $systemId = $this->getSystemCollegeId();
+            $user = $this->getUser();
+            $collegeId = $user->getCollege()->getId();
+
+            if ($systemId && $systemId != $collegeId) {
+                $collegeId = $systemId;
+            }
+
+
+            $subscriptions = $subModel->findByCollegeAndStudy($collegeId, $study->getId());
+        }
+
+        return $subscriptions;
     }
 
     protected function hasSubscription()
