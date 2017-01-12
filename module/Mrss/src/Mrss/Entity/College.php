@@ -632,7 +632,7 @@ class College
     {
         $sectionIds = array();
         foreach ($this->getSubscriptions() as $subscription) {
-            $sectionIds = array_merge($subscription->getSectionIds());
+            $sectionIds = array_merge($sectionIds, $subscription->getSectionIds());
         }
 
         $sectionIds = array_unique($sectionIds);

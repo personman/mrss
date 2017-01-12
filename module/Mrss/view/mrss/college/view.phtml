@@ -106,6 +106,10 @@
                         <?php if (!empty($studyConfig->college_report_access_checkbox)): ?>
                             <th>Report Access</th>
                         <?php endif ?>
+
+                        <?php if ($this->currentStudy()->hasSections()): ?>
+                            <th>Modules</th>
+                        <?php endif ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,9 +126,7 @@
                                 'observation',
                                 array('id' => $subscription->getObservation()->getId())
                             ) ?>">
-                            <?= $subscription->getStudy()->getCompletionPercentage(
-                                $subscription->getObservation()
-                            ) ?>%
+                            <?= $subscription->getCompletion() ?>%
                             </a>
                         </td>
                         <td>
@@ -146,6 +148,13 @@
                                 <input type="checkbox" name="report_access[<?= $id ?>]" title="Saves automatically." id="reportAccess_<?= $id ?>" class="reportAccess" <?php if ($subscription->getReportAccess()) echo 'checked="checked"' ?> />
                             </td>
                         <?php endif ?>
+
+                        <?php if ($this->currentStudy()->hasSections()): ?>
+                            <td>
+                                <?= $subscription->getSectionNames(); ?>
+                            </td>
+                        <?php endif ?>
+
                     </tr>
                     <?php endforeach ?>
                 </tbody>

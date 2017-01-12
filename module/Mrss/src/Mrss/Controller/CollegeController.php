@@ -4,6 +4,7 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\College;
 use Mrss\Form\AbstractForm;
+use Zend\Cache\StorageFactory;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Debug\Debug;
@@ -118,34 +119,79 @@ class CollegeController extends AbstractActionController
         return new JsonModel($json);
     }
 
+    /**
+     * @return \Zend\Cache\Storage\Adapter\Filesystem
+     */
+    protected function getCache()
+    {
+        return $this->getServiceLocator()->get('cache');
+    }
+
     public function peersAction()
     {
-        // Get a list of subscriptions to the current study for all years
-        /** @var \Mrss\Model\College $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
-        $studyId = $this->currentStudy()->getId();
+        $cacheKey = 'peer-map';
+        $cache = $this->getCache();
 
-        $colleges = $collegeModel->findByStudy($this->currentStudy());
+        $result = $cache->getItem($cacheKey);
 
-        // Map markers
-        $markers = array();
-        foreach ($colleges as $college) {
-            $lat = $college->getLatitude();
-            $lon = $college->getLongitude();
+        if (!$result) {
+            // Get a list of subscriptions to the current study for all years
+            /** @var \Mrss\Model\College $collegeModel */
+            $collegeModel = $this->getServiceLocator()->get('model.college');
+            $studyId = $this->currentStudy()->getId();
 
-            if ($lat && $lon) {
-                $markers[] = array(
-                    'latLng' => array($lat, $lon),
-                    'name' => $college->getName()
+            $colleges = $collegeModel->findByStudy($this->currentStudy());
+
+            // Map markers
+            $markers = array();
+            $sectionIds = array();
+            $collegeData = array();
+            foreach ($colleges as $college) {
+                $lat = $college->getLatitude();
+                $lon = $college->getLongitude();
+
+                if ($lat && $lon) {
+                    $markers[] = array(
+                        'latLng' => array($lat, $lon),
+                        'name' => $college->getName()
+                    );
+                }
+
+                $sectionIds[$college->getId()] = $college->getSectionIds();
+
+                $system = null;
+                if ($system = $college->getSystem()) {
+                    $system = $system->getName();
+                }
+
+                $collegeData[$college->getId()] = array(
+                    'name' => $college->getName(),
+                    'state' => $college->getState(),
+                    'system' => $system
                 );
             }
+
+
+            $markers = json_encode($markers);
+
+            $forCache = array(
+                'colleges' => $collegeData,
+                'markers' => $markers,
+                'sectionIds' => $sectionIds
+            );
+
+            $cache->setItem($cacheKey, $forCache);
+        } else {
+            $collegeData = $result['colleges'];
+            $markers = $result['markers'];
+            $sectionIds = $result['sectionIds'];
         }
-        $markers = json_encode($markers);
 
         return array(
-            'colleges' => $colleges,
+            'colleges' => $collegeData,
             'markers' => $markers,
-            'sections' => $this->currentStudy()->getSections()
+            'sections' => $this->currentStudy()->getSections(),
+            'sectionIds' => $sectionIds
         );
     }
 

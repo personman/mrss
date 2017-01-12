@@ -175,9 +175,9 @@ class ImportWorkforceData
     protected function handleData($subscription, $wfSubscription, $college)
     {
         $wfData = $this->getWfData($wfSubscription);
-        echo 'Here is where we import the data for ' . $college->getName() . ' ' . $wfSubscription['year'] . '<br>';
+        //echo 'Here is where we import the data for ' . $college->getName() . ' ' . $wfSubscription['year'] . '<br>';
 
-        echo 'Data points found in WF: ' . count($wfData) . '<br>';
+        //echo 'Data points found in WF: ' . count($wfData) . '<br>';
 
         foreach ($wfData as $wfDatum) {
             $dbColumn = $wfDatum['dbColumn'];
@@ -191,7 +191,7 @@ class ImportWorkforceData
                 //$subscription->getObservation()->set($dbColumn, $value);
 
                 $this->getSubscriptionModel()->save($subscription);
-                echo "Value set for $dbColumn: $value<br>";
+                //echo "Value set for $dbColumn: $value<br>";
             }
         }
 

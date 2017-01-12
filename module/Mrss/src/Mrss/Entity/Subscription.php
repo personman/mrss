@@ -475,7 +475,7 @@ class Subscription
         if (!$benchmark) {
             echo 'null passed to createDatum<br>';
         } else {
-            var_dump($benchmark);
+            //var_dump($benchmark);
         }
 
         if (is_object($benchmark)) {
@@ -492,11 +492,10 @@ class Subscription
         if ($benchmark) {
             $this->getData()->add($datum);
             $this->getDatumModel()->save($datum);
-            echo 'saving new datum: ' . $benchmark->getDbColumn();
 
             $this->getDatumModel()->getEntityManager()->flush();
         } else {
-            die('cannot find benchmark for ' . $benchmark);
+            //die('cannot find benchmark for ' . $benchmark);
         }
 
         return $datum;

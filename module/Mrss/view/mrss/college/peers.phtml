@@ -173,19 +173,15 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                 </thead>
                 <tbody>
 
-                <?php foreach ($colleges as $college): ?>
+                <?php foreach ($colleges as $collegeId => $college): ?>
 
                     <tr>
-                        <td><?= $college->getName() ?></td>
-                        <td><?= $college->getState() ?></td>
-                        <td>
-                            <?php if ($system = $college->getSystem()): ?>
-                                <?= $system->getName() ?>
-                            <?php endif ?>
-                        </td>
+                        <td><?= $college['name'] ?></td>
+                        <td><?= $college['state'] ?></td>
+                        <td><?= $college['system'] ?></td>
                         <?php foreach ($sections as $section): ?>
                             <td style="text-align: center">
-                                <?php if (in_array($section->getId(), $college->getSectionIds())): ?>
+                                <?php if (in_array($section->getId(), $sectionIds[$collegeId])): ?>
                                     <span class="glyphicon glyphicon-ok"></span>
                                 <?php endif ?>
                             </td>
