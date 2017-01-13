@@ -122,9 +122,10 @@
                                 'observation',
                                 array('id' => $subscription->getObservation()->getId())
                             ) ?>">
-                            <?= $subscription->getStudy()->getCompletionPercentage(
+                            <?= $subscription->getCompletion()
+                            /*= $subscription->getStudy()->getCompletionPercentage(
                                 $subscription->getObservation()
-                            ) ?>%
+                            )*/ ?>%
                             </a>
                         </td>
                         <td>

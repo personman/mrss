@@ -124,7 +124,7 @@ class ObservationController extends AbstractActionController
         );
     }
 
-    public function overviewAction()
+    protected function redirectIfNoMembership()
     {
         // Do they have a membership?
         $year = $this->currentStudy()->getCurrentYear();
@@ -140,7 +140,13 @@ class ObservationController extends AbstractActionController
 
             return $this->redirect()->toUrl('/renew');
         }
+    }
 
+    public function overviewAction()
+    {
+        if ($redirect = $this->redirectIfNoMembership()) {
+            return $redirect;
+        }
 
         // Handle system admins
         $user = $this->zfcUserAuthentication()->getIdentity();
@@ -737,6 +743,10 @@ class ObservationController extends AbstractActionController
     public function importAction()
     {
         takeYourTime();
+
+        if ($redirect = $this->redirectIfNoMembership()) {
+            return $redirect;
+        }
 
         // Get the import form
         $form = new ImportData('import');

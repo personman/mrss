@@ -501,6 +501,10 @@ return array(
                         'label' => 'Overview',
                         'uri' => '/data-entry'
                     ),
+                    'submitted-values' => array(
+                        'label' => 'Submitted Values',
+                        'uri' => '/submitted-values'
+                    ),
                 )
             ),
             'documentation' => array(

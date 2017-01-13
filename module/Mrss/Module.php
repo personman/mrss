@@ -179,8 +179,10 @@ class Module
 
         $message .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ' | ';
 
+        $logIt = true;
         if ($error == 'error-router-no-match') {
             $message .= 'Not found.';
+            $logIt = false;
         } elseif (!empty($exception)) {
             $message .= $exception->getMessage();
         } else {
@@ -206,7 +208,9 @@ class Module
 
 
 
-        $this->getErrorLog(true)->err($message);
+        if ($logIt) {
+            $this->getErrorLog(true)->err($message);
+        }
     }
 
     /**

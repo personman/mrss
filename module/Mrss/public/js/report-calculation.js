@@ -185,16 +185,17 @@ function setUpSystems()
         var button = $(this);
         var buttonId = button.attr('id');
         var year = buttonId.split('-').pop();
+        var systemIdsForYear = systemIds[year];
         urlStack = [];
 
         // Get the benchmark Ids
         var benchmarkIds = benchmarks[year];
 
-        var lastSystemId = systemIds.length - 1;
+        var lastSystemId = systemIdsForYear.length - 1;
         var lastBenchmarkId = benchmarkIds.length - 1;
 
-        for (var si in systemIds) {
-            var systemId = systemIds[si];
+        for (var si in systemIdsForYear) {
+            var systemId = systemIdsForYear[si];
 
             for (var bi in benchmarkIds) {
                 var benchmarkId = benchmarkIds[bi];

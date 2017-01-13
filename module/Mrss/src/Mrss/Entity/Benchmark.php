@@ -746,7 +746,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 'name' => 'Regex',
                 'options' => array(
                     //'pattern' => '/^(\-)?\d+\.?(\d\d)?$/', // This pattern only allows 0 or 2 dec places
-                    'pattern' => '/^(\d+\.)?\d+$/', // This pattern allows any number of decimal places
+                    'pattern' => '/^-?(\d+\.)?\d+$/', // This pattern allows any number of decimal places
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234 or 1234.56'
                     )

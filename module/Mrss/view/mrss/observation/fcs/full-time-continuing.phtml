@@ -45,17 +45,26 @@ $this->headScript()->appendFile(
         })
     })
 
+    function floatFromString(string)
+    {
+        // Remove commas and spaces
+        if (string) {
+            string = string.replace(',', '').replace(' ', '')
+        }
+
+        return parseFloat(string)
+    }
 
     function updatePercentageIncrease()
     {
         $('.percentage-increase').each(function() {
-            var previous = parseFloat($(this).parent().find('.previous input').val());
-            var current = parseFloat($(this).parent().find('.current input').val());
+            var previous = floatFromString($(this).parent().find('.previous input').val());
+            var current = floatFromString($(this).parent().find('.current input').val());
 
             // Handle total rows. They have no inputs
             if ($(this).parent().find('input').length == 0) {
-                previous = parseFloat($(this).parent().find('.previous').html());
-                current = parseFloat($(this).parent().find('.current').html());
+                previous = floatFromString($(this).parent().find('.previous').html());
+                current = floatFromString($(this).parent().find('.current').html());
             }
 
             var increase = 0;
