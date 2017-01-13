@@ -20,6 +20,7 @@ class ImportWorkforceData
     public function import()
     {
         $wfDb = $this->getWfDb();
+        prd(get_class($wfDb));
 
         $sql = "SELECT * FROM subscriptions";
         $statement = $wfDb->query($sql);
