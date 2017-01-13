@@ -72,11 +72,21 @@
 </head>
 <body>
 
+<?php $headerTitle = $this->currentStudy(false)->getConfig()->header_title; ?>
+<?php if ($headerTitle) {
+    $logoCols = 3;
+    $loginCols = 8;
+} else {
+    $logoCols = 5;
+    $loginCols = 6;
+}
+?>
+
 <!-- BEGIN HEADER -->
 <header>
     <div class="container">
         <div class="row">
-            <div class="col-xs-5 logo">
+            <div class="col-xs-<?= $logoCols ?> logo">
                 <?php $logoUrl = $this->currentStudy(false)->getConfig()->head_logo_url ?>
                 <a href="<?= $logoUrl ?>"><img class="img-responsive" alt="<?= $this->currentStudy()->getDescription() ?>" src="<?= $this->currentStudy()->getLogo() ?>" title="<?= $this->currentStudy()->getDescription() ?>" /></a>
             </div>
@@ -88,7 +98,7 @@
             </div>
 
 
-            <div class="col-xs-6 headerLogin">
+            <div class="col-xs-<?= $loginCols ?> headerLogin">
                 <?php $webinar = false //time() > strtotime('2015-04-01') ?>
 
                 <?php if(!$this->zfcUserIdentity()): ?>
