@@ -20,12 +20,13 @@ class ImportWorkforceData
     public function import()
     {
         $wfDb = $this->getWfDb();
-        prd(get_class($wfDb));
 
         $sql = "SELECT * FROM subscriptions";
         $statement = $wfDb->query($sql);
 
         $results = $statement->execute();
+
+        die('test');
 
         // Foreach subscription
         foreach ($results as $row) {
@@ -34,8 +35,6 @@ class ImportWorkforceData
             echo '<hr>';
 
         }
-
-
 
         pr(get_class($wfDb));
     }
