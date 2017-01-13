@@ -29,7 +29,7 @@ class ImportWorkforceData
 
         // Foreach subscription
         foreach ($results as $row) {
-            prd(get_class($row));
+            prd($row);
             $this->importSubscriptionToSection($row);
 
             echo '<hr>';
