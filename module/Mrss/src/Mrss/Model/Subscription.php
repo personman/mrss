@@ -59,6 +59,14 @@ class Subscription extends AbstractModel
     }
 
     /**
+     * @return null|\Mrss\Entity\Subscription[]
+     */
+    public function findAll()
+    {
+        return $this->getRepository()->findAll();
+    }
+
+    /**
      * @param $studyId
      * @param $year
      * @param bool $eagerObservation
@@ -295,7 +303,7 @@ class Subscription extends AbstractModel
      *
      * @param StudyEntity $study
      * @param $collegeId
-     * @return array
+     * @return \Mrss\Entity\Subscription
      */
     public function findCurrentSubscription(StudyEntity $study, $collegeId)
     {

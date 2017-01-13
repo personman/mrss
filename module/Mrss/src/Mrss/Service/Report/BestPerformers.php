@@ -11,9 +11,9 @@ class BestPerformers extends Report
 
     protected $year;
 
-    public function getBenchmarks($year)
+    public function getBenchmarks($subscription)
     {
-        $this->year = $year;
+        $this->year = $year = $subscription->getYear();
 
         $this->getVariableSubstitution()->setStudyYear($year);
 
@@ -21,7 +21,7 @@ class BestPerformers extends Report
 
         $study = $this->getStudy();
 
-        $benchmarkGroups = $study->getBenchmarkGroups();
+        $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
         foreach ($benchmarkGroups as $benchmarkGroup) {
             $groupData = array(
                 'name' => $benchmarkGroup->getName(),

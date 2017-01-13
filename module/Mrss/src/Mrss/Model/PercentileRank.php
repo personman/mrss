@@ -90,7 +90,6 @@ class PercentileRank extends AbstractModel
      * @param bool $weaknesses
      * @param null $formToExclude
      * @param int $threshold
-     * @internal param int $limit
      * @return PercentileRankEntity[]
      */
     public function findStrengths(

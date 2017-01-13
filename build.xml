@@ -103,16 +103,6 @@
     </target>
 
 
-    <target name="phinx" description="DB migrations with Phinx">
-        <echo message="Running DB migrations with Phinx" />
-        <exec command="php ./public/index.php phinx sync" passthru="true" />
-
-        <!-- Doing this in two steps works better than just calling index.php phinx migrate. not sure why -->
-        <exec command="phinx migrate -c config/phinx.yml" description="Try running phinx directly" passthru="true" />
-
-
-    </target>
-
     <target name="migrate">
         <echo message="Running database migration." />
         <exec command="./bin/doctrine-module migrations:migrate -n"
@@ -190,6 +180,7 @@
 
     <target name="clear-caches" description="Delete some cache files.">
         <exec command="rm data/cache/classes.php.cache" />
+        <exec command="rm -Rf data/cache/zfcache-db-f4" />
         <exec command="rm data/cache/module-config-cache.config_cache.php" />
         <exec command="rm -Rf data/DoctrineModule/cache/*" />
         <exec command="rm -Rf data/DoctrineORMModule/Proxy/*" />

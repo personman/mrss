@@ -201,23 +201,34 @@ class StudyTest extends PHPUnit_Framework_TestCase
     {
         $this->study->setPrice(1200);
         $this->study->setEarlyPrice(1100);
-        $now = new \DateTime('now');
-
-        // Two days in the past
-        $interval = new \DateInterval('P2D');
-        $earlyPricePast = clone $now;
-        $earlyPricePast->sub($interval);
-        $earlyPriceFuture = clone $now;
-        $earlyPriceFuture->add($interval);
 
         // Test with an early bird deadline in the past
-        $this->study->setEarlyPriceDate($earlyPricePast);
+        $this->setEarlyBirdValidity(false);
         $this->assertEquals(1200, $this->study->getCurrentPrice());
 
         // Test while early bird is still open
-        $this->study->setEarlyPriceDate($earlyPriceFuture);
+        $this->setEarlyBirdValidity(true);
         $this->assertEquals(1100, $this->study->getCurrentPrice());
     }
+
+    protected function setEarlyBirdValidity($valid = true)
+    {
+        $now = new \DateTime('now');
+
+        $interval = new \DateInterval('P2D');
+        $earlyBirdDate = clone $now;
+
+        if ($valid) {
+            // Two days in the future
+            $earlyBirdDate->add($interval);
+        } else {
+            // Two days in the past
+            $earlyBirdDate->sub($interval);
+        }
+
+        $this->study->setEarlyPriceDate($earlyBirdDate);
+    }
+
 
     public function testGetCurrentYearMinus()
     {
@@ -319,7 +330,6 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $this->assertSame($benchmarkMock, $benchmarks[0]);
     }
 
-
     public function testGetAllBenchmarkKeys()
     {
         $benchmark = $this->getMock(
@@ -342,5 +352,162 @@ class StudyTest extends PHPUnit_Framework_TestCase
         $keys = $this->study->getAllBenchmarkKeys();
 
         $this->assertEquals('fake_db_col', $keys[0]);
+    }
+
+    public function testSectionEarlyPricing()
+    {
+        $expected = 143;
+        $baseEarlyPrice = 99;
+
+        $identifier = 1;
+        $sectionPrice = 44;
+        $sectionComboPrice = 67;
+        $this->study->setEarlyPrice($baseEarlyPrice);
+
+        $sections = array($this->mockSection($identifier, $sectionPrice, $sectionComboPrice));
+        $this->study->setSections($sections);
+        $this->setEarlyBirdValidity();
+
+        $selectedSections = array($identifier);
+        $price = $this->study->getCurrentPrice(false, $selectedSections);
+
+        $this->assertEquals($expected, $price);
+    }
+
+    /* @todo: implement
+     *
+     *
+     **/
+     public function testSectionEarlyComboPricing()
+    {
+        $expected = 1950;
+
+        $baseEarlyPrice = 0;
+        $this->study->setEarlyPrice($baseEarlyPrice);
+
+        $selectedSections = array();
+
+        // Section 1
+        $identifier = 1;
+        $sectionPrice = 1450;
+        $sectionComboPrice = 1450;
+        $section1 = $this->mockSection($identifier, $sectionPrice, $sectionComboPrice);
+        $selectedSections[] = $identifier;
+
+        // Section 2
+        $identifier = 2;
+        $sectionPrice = 950;
+        $sectionComboPrice = 500;
+        $section2 = $this->mockSection($identifier, $sectionPrice, $sectionComboPrice);
+        $selectedSections[] = $identifier;
+
+        $sections = array($section1, $section2);
+        $this->study->setSections($sections);
+        $this->setEarlyBirdValidity();
+
+
+        $price = $this->study->getCurrentPrice(false, $selectedSections);
+
+        $this->assertEquals($expected, $price);
+    }
+
+    public function testSectionRegularComboPricing()
+    {
+        $expected = 500;
+
+        $basePrice = 200;
+        $this->study->setPrice($basePrice);
+
+        $selectedSections = array();
+
+        // Section 1
+        $identifier = 1;
+        $sectionPrice = 44;
+        $sectionComboPrice = 50;
+        $section1 = $this->mockSection($identifier, $sectionPrice, $sectionComboPrice);
+        $selectedSections[] = $identifier;
+
+        // Section 2
+        $identifier = 2;
+        $sectionPrice = 4;
+        $sectionComboPrice = 250;
+        $section2 = $this->mockSection($identifier, $sectionPrice, $sectionComboPrice);
+        $selectedSections[] = $identifier;
+
+        $sections = array($section1, $section2);
+        $this->study->setSections($sections);
+        $this->setEarlyBirdValidity(false);
+
+
+        $price = $this->study->getCurrentPrice(false, $selectedSections);
+
+        $this->assertEquals($expected, $price);
+    }
+
+    public function testSectionRenewalRegularComboPricing()
+    {
+        $expected = 500;
+
+        $basePrice = 200;
+        $this->study->setRenewalPrice($basePrice);
+
+        $selectedSections = array();
+
+        // Section 1
+        $identifier = 1;
+        $sectionPrice = 44;
+        $sectionComboPrice = 50;
+        $section1 = $this->mockSection($identifier, $sectionPrice, $sectionComboPrice);
+        $selectedSections[] = $identifier;
+
+        // Section 2
+        $identifier = 2;
+        $sectionPrice = 4;
+        $sectionComboPrice = 250;
+        $section2 = $this->mockSection($identifier, $sectionPrice, $sectionComboPrice);
+        $selectedSections[] = $identifier;
+
+        $sections = array($section1, $section2);
+        $this->study->setSections($sections);
+        $this->setEarlyBirdValidity(false);
+
+
+        $price = $this->study->getCurrentPrice(true, $selectedSections);
+
+        $this->assertEquals($expected, $price);
+    }
+
+    public function testSetSections()
+    {
+        $sectionId = 1;
+        $sectionPrice = 44;
+        $sectionComboPrice = 67;
+
+        $sections = array($this->mockSection($sectionId, $sectionPrice, $sectionComboPrice));
+        $this->study->setSections($sections);
+
+        $section = $this->study->getSection($sectionId);
+
+        $this->assertEquals($sectionId, $section->getId());
+        $this->assertEquals($sectionPrice, $section->getPrice());
+    }
+
+    protected function mockSection($sectionId, $price, $comboPrice)
+    {
+        $section = $this->getMock(
+            '\Mrss\Entity\Section',
+            array('getId', 'getPrice', 'getComboPrice')
+        );
+        $section->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($sectionId));
+        $section->expects($this->any())
+            ->method('getPrice')
+            ->will($this->returnValue($price));
+        $section->expects($this->any())
+            ->method('getComboPrice')
+            ->will($this->returnValue($comboPrice));
+
+        return $section;
     }
 }

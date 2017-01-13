@@ -144,8 +144,7 @@ class ReportController extends ReportAdminController
         $subscriptions = $this->currentCollege()
             ->getSubscriptionsForStudy($this->currentStudy());
 
-        $subscription = $this->getSubscriptionModel()
-            ->findOne($year, $this->currentCollege(), $this->currentStudy());
+        $subscription = $this->getSubscriptionByYear($year);
 
         if (empty($subscription)) {
             //throw new \Exception('Subscription not found for year ' . $year);
@@ -180,6 +179,12 @@ class ReportController extends ReportAdminController
             'system' => $system,
             'reportPath' => $reportPath
         );
+    }
+
+    protected function getSubscriptionByYear($year)
+    {
+        return $this->getSubscriptionModel()
+            ->findOne($year, $this->currentCollege(), $this->currentStudy());
     }
 
     public function summaryAction()
@@ -531,6 +536,7 @@ class ReportController extends ReportAdminController
 
     public function bestPerformersAction()
     {
+        /** @var \Mrss\Service\Report\BestPerformers $report */
         $report = $this->getServiceLocator()->get('service.report.performers');
         $year = $this->getYearFromRouteOrStudy();
 
@@ -549,7 +555,7 @@ class ReportController extends ReportAdminController
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
-            'reportData' => $report->getBenchmarks($year)
+            'reportData' => $report->getBenchmarks($subscription)
         );
     }
 
@@ -717,11 +723,13 @@ class ReportController extends ReportAdminController
     {
         $this->longRunningScript();
 
+        $subscription = $this->getSubscriptionByYear($year);
+
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
         $benchmarkGroupData = array();
-        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+        foreach ($study->getBenchmarkGroupsBySubscription($subscription) as $benchmarkGroup) {
             $group = $benchmarkGroup->getName();
             $benchmarkData = array();
 

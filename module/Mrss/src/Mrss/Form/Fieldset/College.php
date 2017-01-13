@@ -58,7 +58,7 @@ class College extends Fieldset implements InputFilterProviderInterface
                     'label' => 'IPEDS Unit ID'
                 ),
                 'attributes' => array(
-                    'id' => 'institution-ipdeds'
+                    'id' => 'institution-ipeds'
                 )
             )
         );

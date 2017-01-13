@@ -129,10 +129,18 @@ class Study
      */
     protected $subscriptions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Section", mappedBy="study")
+     * @var Section[]
+     */
+    protected $sections;
+
+
     public function __construct()
     {
         $this->benchmarkGroups = new ArrayCollection();
         $this->offerCodes = new ArrayCollection();
+        $this->sections = new ArrayCollection();
     }
 
     public function getId()
@@ -177,6 +185,24 @@ class Study
     public function getBenchmarkGroups()
     {
         return $this->benchmarkGroups;
+    }
+
+    public function getBenchmarkGroupsBySubscription(Subscription $subscription)
+    {
+        if ($this->hasSections()) {
+            $benchmarkGroupIds = $subscription->getBenchmarkGroupIds();
+
+            $benchmarkGroups = array();
+            foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+                if (in_array($benchmarkGroup->getId(), $benchmarkGroupIds)) {
+                    $benchmarkGroups[] = $benchmarkGroup;
+                }
+            }
+        } else {
+            $benchmarkGroups = $this->getBenchmarkGroups();
+        }
+
+        return $benchmarkGroups;
     }
 
     public function setCriteria($criteria)
@@ -270,18 +296,56 @@ class Study
      * If it's before the early bird date, return the early price.
      * If it's after, return the normal price. In any case, ignore the year.
      */
-    public function getCurrentPrice()
+    public function getCurrentPrice($renewal = false, $selectedSections = null)
     {
-        $deadline = $this->getEarlyPriceDateThisYear();
-        $now = new \DateTime('now');
-
-        if ($deadline > $now) {
+        // Build the base price
+        if ($renewal) {
+            $price = $this->getRenewalPrice();
+        } elseif ($this->isEarlyBirdValid()) {
             $price = $this->getEarlyPrice();
         } else {
             $price = $this->getPrice();
         }
 
+        if ($this->hasSections()) {
+            $price += $this->getSectionPriceAddOn($selectedSections);
+        }
+
         return $price;
+    }
+
+    public function getSectionPriceAddOn($selectedSections)
+    {
+        $price = $this->getSectionPrice($selectedSections);
+
+        return $price;
+    }
+
+    public function getSectionPrice($selectedSections = array())
+    {
+        $useComboPricing = (count($selectedSections) > 1);
+        $addOn = 0;
+
+        // Add section pricing
+        foreach ($selectedSections as $sectionId) {
+            $section = $this->getSection($sectionId);
+
+            if ($useComboPricing) {
+                $addOn += $section->getComboPrice();
+            } else {
+                $addOn += $section->getPrice();
+            }
+        }
+
+        return $addOn;
+    }
+
+    public function isEarlyBirdValid()
+    {
+        $deadline = $this->getEarlyPriceDateThisYear();
+        $now = new \DateTime('now');
+
+        return ($deadline > $now);
     }
 
     public function setPrice($price)
@@ -602,10 +666,16 @@ class Study
         return $allKeys;
     }
 
-    public function getStructuredBenchmarks($onlyReported = true, $keyField = 'dbColumn')
+    public function getStructuredBenchmarks($onlyReported = true, $keyField = 'dbColumn', $subscription = null)
     {
+        if ($subscription && $this->hasSections()) {
+            $groups = $this->getBenchmarkGroupsBySubscription($subscription);
+        } else {
+            $groups = $this->getBenchmarkGroups();
+        }
+
         $benchmarks = array();
-        foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+        foreach ($groups as $benchmarkGroup) {
             $group = array(
                 'label' => $benchmarkGroup->getName(),
                 'options' => array()
@@ -659,5 +729,30 @@ class Study
         }
 
         return $has;
+    }
+
+    public function setSections($sections)
+    {
+        $this->sections = $sections;
+        return $this;
+    }
+
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    public function hasSections()
+    {
+        return (count($this->getSections()) > 0);
+    }
+
+    public function getSection($sectionId)
+    {
+        foreach ($this->getSections() as $section) {
+            if ($section->getId() == $sectionId) {
+                return $section;
+            }
+        }
     }
 }

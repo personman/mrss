@@ -158,8 +158,11 @@ class ImportBenchmarks
     public function saveHeadings()
     {
         foreach ($this->headings as $gId => $headings) {
-            $this->getBenchmarkGroupModel()->find($gId)
-                ->setBenchmarkHeadings($headings);
+            $group = $this->getBenchmarkGroupModel()->find($gId);
+
+            if ($group) {
+                $group->setBenchmarkHeadings($headings);
+            }
         }
 
         $this->entityManager->flush();
@@ -220,6 +223,8 @@ class ImportBenchmarks
         $benchmark->setExcludeFromCompletion(($row['excludeFromCompletion']));
         $benchmark->setIncludeInNationalReport(($row['includeInNationalReport']));
         $benchmark->setYearsAvailable($this->getYears());
+        $benchmark->setComputeIfValuesMissing(false);
+        $benchmark->setIncludeInOtherReports(false);
 
         $sequence = $this->getSequence($benchmark);
         $benchmark->setSequence($sequence);

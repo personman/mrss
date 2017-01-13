@@ -18,12 +18,12 @@ class Study extends AbstractModel
     protected $entity = 'Mrss\Entity\Study';
 
     /**
-     * @param $id
-     * @return \Mrss\Entity\Study
+     * @param $studyId
+     * @return StudyEntity
      */
-    public function find($id)
+    public function find($studyId)
     {
-        return $this->getRepository()->find($id);
+        return $this->getRepository()->find($studyId);
     }
 
     /**
@@ -31,8 +31,7 @@ class Study extends AbstractModel
      */
     public function findAll()
     {
-        $c = $this->getRepository()->findBy(array(), array('name' => 'ASC'));
-        return $c;
+        return $this->getRepository()->findBy(array(), array('name' => 'ASC'));
     }
 
     /**

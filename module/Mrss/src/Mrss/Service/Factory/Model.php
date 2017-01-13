@@ -53,6 +53,7 @@ class Model implements AbstractFactoryInterface
             'model.benchmark.group' => 'Mrss\Model\BenchmarkGroup',
             'model.criterion' => 'Mrss\Model\Criterion',
             'model.study' => 'Mrss\Model\Study',
+            'model.section' => 'Mrss\Model\Section',
             'model.subscription' => 'Mrss\Model\Subscription',
             'model.subscription.draft' => 'Mrss\Model\SubscriptionDraft',
             'model.setting' => 'Mrss\Model\Setting',

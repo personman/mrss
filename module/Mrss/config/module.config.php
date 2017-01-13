@@ -246,6 +246,30 @@ return array(
                     )
                 )
             ),
+            'sections' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/modules/study/:study',
+                    'defaults' => array(
+                        'controller' => 'sections',
+                        'action' => 'index',
+                        'study' => null
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => null
+                            )
+                        )
+                    ),
+                ),
+            ),
             'data-dictionary' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
@@ -324,6 +348,17 @@ return array(
                         'controller' => 'subscription',
                         'action' => 'view',
                         'paymentMethod' => null
+                    )
+                )
+            ),
+            'membership-edit' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/membership-edit',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'edit'
                     )
                 )
             ),
@@ -450,6 +485,15 @@ return array(
                             )
                         )
                     ),
+                    'modules' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/modules',
+                            'defaults' => array(
+                                'action' => 'modules'
+                            )
+                        )
+                    ),
                     'payment' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -492,6 +536,15 @@ return array(
                             'route' => '/complete',
                             'defaults' => array(
                                 'action' => 'complete'
+                            )
+                        )
+                    ),
+                    'cancel' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/cancel',
+                            'defaults' => array(
+                                'action' => 'cancel'
                             )
                         )
                     ),
@@ -2135,6 +2188,24 @@ return array(
                             )
                         )
                     ),
+                    'populate-modules' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/populate-modules',
+                            'defaults' => array(
+                                'action' => 'populateSections',
+                            )
+                        )
+                    ),
+                    'import-wf' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import-wf',
+                            'defaults' => array(
+                                'action' => 'importWf',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
@@ -2466,6 +2537,7 @@ return array(
             'benchmarkgroups' => 'Mrss\Controller\BenchmarkGroupController',
             'subscription' => 'Mrss\Controller\SubscriptionController',
             'studies' => 'Mrss\Controller\StudyController',
+            'sections' => 'Mrss\Controller\SectionController',
             'offercodes' => 'Mrss\Controller\OfferCodeController',
             'settings' => 'Mrss\Controller\SettingController',
             'pages' => 'Mrss\Controller\PageController',

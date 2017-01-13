@@ -1354,4 +1354,51 @@ class ToolController extends AbstractActionController
 
         return $subscriptionModel->findCurrentSubscription($study, $college->getId());
     }
+
+    /**
+     * During merging of NCCBP and Workforce to modules/sections of the same study, set old memberships up
+     */
+    public function populateSectionsAction()
+    {
+        $defaultSectionId = 1;
+
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+        $defaultSection = $study->getSection($defaultSectionId);
+
+        $updates = 0;
+        foreach ($this->getSubscriptionModel()->findAll() as $subscription) {
+            $currentSectionIds = $subscription->getSectionIds();
+            if (count($currentSectionIds) == 0) {
+                $subscription->setSections(array($defaultSection));
+
+                $this->getSubscriptionModel()->save($subscription);
+                $updates++;
+            }
+        }
+
+        $this->getSubscriptionModel()->getEntityManager()->flush();
+
+        die("$updates subscriptions updated");
+    }
+
+    public function importWfAction()
+    {
+        takeYourTime();
+
+        $importer = $this->getServiceLocator()->get('service.import.workforce.data');
+
+        $importer->import();
+
+        die('test');
+    }
+
+    /**
+     * @return \Zend\Db\Adapter\Adapter
+     */
+    protected function getWfDb()
+    {
+        return $this->getServiceLocator()->get('workforce-db');
+    }
 }
