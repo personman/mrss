@@ -177,7 +177,17 @@ return array(
             ),
             'benchmarks' => array(
                 'label' => 'Benchmarks',
-                'uri' => '/benchmarks'
+                'uri' => '/benchmarks',
+                'pages' => array(
+                    'benchmarks' => array(
+                        'label' => 'Credit Benchmarks',
+                        'uri' => '/benchmarks',
+                    ),
+                    'benchmarks-non-credit' => array(
+                        'label' => 'Non-credit Benchmarks',
+                        'uri' => '/benchmarks-non-credit',
+                    ),
+                )
             ),
             /*'nccbp' => array(
                 'label' => 'NCCBP',
