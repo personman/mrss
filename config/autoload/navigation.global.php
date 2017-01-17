@@ -219,6 +219,10 @@ return array(
                         'label' => 'Executive Leadership',
                         'uri' => '/executive-leadership'
                     ),
+                    'ce' => array(
+                        'label' => 'Continuing Ed Professionals',
+                        'uri' => '/ce'
+                    ),
                     'systems' => array(
                         'label' => 'Systems',
                         'uri' => '/college-systems'
