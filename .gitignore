@@ -13,6 +13,7 @@ bin
 config/phinx.yml
 config/autoload/db.php
 config/autoload/db.php.bak
+config/modules.local.php
 build
 /report
 data/DoctrineORMModule/Proxy/
@@ -25,3 +26,4 @@ nohup.out
 module/Mrss/src/Mrss/Entity/Observation.php
 public/files/all-colleges.json
 public/Debugbar
+

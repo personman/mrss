@@ -1,25 +1,31 @@
 <?php
 
+$modules = array(
+    'DoctrineModule',
+    'DoctrineORMModule',
+    'ZfcBase',
+    'ZfcUser',
+    'ZfcUserDoctrineORM',
+    'ZfcUserImpersonate',
+    'ZendDeveloperTools',
+    'BjyAuthorize',
+    'ZfcTwitterBootstrap',
+    'GoalioMailService',
+    'GoalioForgotPassword',
+    'GoalioForgotPasswordDoctrineORM',
+    'PhlyContact',
+    'AssetManager',
+    'Mrss'
+);
+
+$localModuleConfig = 'config/modules.local.php';
+if (file_exists($localModuleConfig) && $localModules = include($localModuleConfig)) {
+    $modules = array_merge($modules, $localModules);
+}
+
 return array(
     // This should be an array of module namespaces used in the application.
-    'modules' => array(
-        'DoctrineModule',
-        'DoctrineORMModule',
-        'ZfcBase',
-        'ZfcUser',
-        'ZfcUserDoctrineORM',
-        'ZfcUserImpersonate',
-        'ZendDeveloperTools',
-        'BjyAuthorize',
-        'ZfcTwitterBootstrap',
-        'GoalioMailService',
-        'GoalioForgotPassword',
-        'GoalioForgotPasswordDoctrineORM',
-        'PhlyContact',
-        'AssetManager',
-        'Aaup',
-        'Mrss'
-    ),
+    'modules' => $modules,
 
     'doctrine' => array(
         'driver' => array(
