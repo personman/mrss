@@ -193,14 +193,13 @@ class BenchmarkController extends AbstractActionController
 
                 if (!empty($buttons['delete'])) {
                     $this->getBenchmarkModel()->delete($benchmark);
-                    $this->getServiceLocator()->get('em')->flush();
 
                     $this->flashMessenger()->addSuccessMessage('Benchmark deleted.');
 
                     return $this->redirect()->toRoute('benchmark');
                 }
 
-
+                // Save it
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 
