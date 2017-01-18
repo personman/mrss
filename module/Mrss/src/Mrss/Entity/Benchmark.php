@@ -177,6 +177,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
      */
     protected $highIsBetter;
 
+    /** @var \Mrss\Model\Benchmark */
     protected $benchmarkModel;
     protected $completionPercentages;
 

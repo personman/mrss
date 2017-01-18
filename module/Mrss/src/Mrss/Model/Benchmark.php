@@ -171,7 +171,6 @@ class Benchmark extends AbstractModel
             return array();
         }
 
-        $years = implode(', ', $years);
         $connection = $this->getEntityManager()->getConnection();
         $connection->setFetchMode(\PDO::FETCH_ASSOC);
         $qb = $connection->createQueryBuilder();
@@ -185,14 +184,12 @@ class Benchmark extends AbstractModel
         );
         $qb->from('data_values', 'v');
         $qb->join('v', 'subscriptions', 's', 'v.subscription_id = s.id');
-        $qb->where("s.year IN(:years)");
+        $qb->add('where', $qb->expr()->in('s.year', $years));
         $qb->andWhere("v.dbColumn = :dbColumn");
         $qb->groupBy('s.year');
 
-        $qb->setParameter('years', $years);
         $qb->setParameter('dbColumn', $dbColumn);
 
-        //prd($qb->getSQL());
 
         try {
             $results = $qb->execute()->fetchAll();
@@ -200,12 +197,12 @@ class Benchmark extends AbstractModel
             return array();
         }
 
-        $completionPercentages = array();
+        $percentages = array();
         foreach ($results as $cp) {
-            $completionPercentages[$cp['year']] = $cp['percentage'];
+            $percentages[$cp['year']] = $cp['percentage'];
         }
 
-        return $completionPercentages;
+        return $percentages;
     }
 
     public function findEmptyEquations(StudyEntity $study)

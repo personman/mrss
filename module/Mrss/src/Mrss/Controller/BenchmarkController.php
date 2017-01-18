@@ -19,6 +19,8 @@ class BenchmarkController extends AbstractActionController
 
     public function indexAction()
     {
+        takeYourTime();
+
         $studyConfig = $this->getServiceLocator()->get('study');
         $showHeatMap = $studyConfig->benchmark_completion_heatmap;
 
@@ -69,7 +71,6 @@ class BenchmarkController extends AbstractActionController
                 }
             }
         }
-
 
         return array(
             'benchmarkGroups' => $benchmarkGroups,
