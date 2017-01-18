@@ -6,13 +6,12 @@ Maximizing Resources for Student Success
 Introduction
 ------------
 This application is a project of the National Higher Education Benchmark Institute
- at Johnson County Community College, with help from the Bill and Melinda Gates
- Foundation. Its purpose is to collect data from community colleges around the
+ at Johnson County Community College. Its purpose is to collect data from community colleges around the
  country and present reports and analysis to colleges and policy makers.
 
 Requirements
 ------------
-Requires PHP 5.4 and Git. Other dependencies are installed with Composer (see
+Requires PHP 5.4, MySQL and Git. Other dependencies are installed with Composer (see
 below).
 
 Installation

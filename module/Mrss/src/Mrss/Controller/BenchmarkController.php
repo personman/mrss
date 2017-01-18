@@ -188,6 +188,19 @@ class BenchmarkController extends AbstractActionController
             $form->setData($data);
 
             if ($form->isValid()) {
+                // Delete?
+                $buttons = $this->params()->fromPost('buttons');
+
+                if (!empty($buttons['delete'])) {
+                    $this->getBenchmarkModel()->delete($benchmark);
+                    $this->getServiceLocator()->get('em')->flush();
+
+                    $this->flashMessenger()->addSuccessMessage('Benchmark deleted.');
+
+                    return $this->redirect()->toRoute('benchmark');
+                }
+
+
                 $this->getBenchmarkModel()->save($benchmark);
                 $this->getServiceLocator()->get('em')->flush();
 

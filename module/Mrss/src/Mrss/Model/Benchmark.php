@@ -221,4 +221,10 @@ class Benchmark extends AbstractModel
 
         return $emptyEquations;
     }
+
+    public function delete($benchmark)
+    {
+        $this->getEntityManager()->remove($benchmark);
+        $this->getEntityManager()->flush();
+    }
 }

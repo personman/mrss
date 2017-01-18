@@ -12,7 +12,7 @@ class Benchmark extends AbstractForm
         parent::__construct('benchmark');
         $this->addBasicFields();
         $this->addExtraFields();
-        $this->add($this->getButtonFieldset());
+        $this->add($this->getButtonFieldset('Save', false, true, $this->getConfirmText()));
     }
 
     protected function addBasicFields()
@@ -354,5 +354,10 @@ class Benchmark extends AbstractForm
             </div>
         </div>
     </div>';
+    }
+
+    protected function getConfirmText()
+    {
+        return "Are you sure you want to delete this benchmark? All data for it from all years will be deleted as well.";
     }
 }

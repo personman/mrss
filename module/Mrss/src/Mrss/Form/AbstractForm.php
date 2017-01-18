@@ -27,7 +27,8 @@ class AbstractForm extends Form
     public function getButtonFieldset(
         $buttonText = 'Save',
         $includeReset = false,
-        $includeDelete = false
+        $includeDelete = false,
+        $confirm = 'Are you sure?'
     ) {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
@@ -57,7 +58,8 @@ class AbstractForm extends Form
             $delete->setAttribute('class', 'btn btn-danger');
             //$delete->setLabel('Delete');
             $delete->setAttribute('id', 'deleteButton');
-            $delete->setAttribute('onClick', "return confirm('Are you sure?')");
+            $confirm = addslashes($confirm);
+            $delete->setAttribute('onClick', "return confirm('$confirm')");
             $buttons->add($delete);
         }
 
