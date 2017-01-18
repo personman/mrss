@@ -170,10 +170,10 @@ class NavigationFactory extends DefaultNavigationFactory
                 }
             }
 
+            $enrollmentOpen = $this->getCurrentStudy()->getEnrollmentOpen();
 
             // If enrollment is open and they haven't subscribed, show renew button
-            if ($this->getCurrentStudy()->getEnrollmentOpen() &&
-                !$this->hasSubscription($user)) {
+            if ($enrollmentOpen && !$this->hasSubscription($user)) {
                 // Show renew
                 // Hide data entry
                 unset($pages['data-entry']);
@@ -181,6 +181,14 @@ class NavigationFactory extends DefaultNavigationFactory
                 // Hide it
                 unset($pages['renew']);
             }
+
+            // Hide the button for adding modules to the membership if needed
+            if ($this->hasSubscription() && $enrollmentOpen && $this->getSubscription()->canBeUpdated()) {
+                // Keep it
+            } else {
+                unset($pages['account']['pages']['membership-edit']);
+            }
+
         } else {
             // Hide some pages from non-logged-in users
             unset($pages['data-entry']);

@@ -255,8 +255,10 @@ class ReportItemController extends CustomReportController
     {
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
-        
-        $benchmarks = $study->getStructuredBenchmarks();
+
+        $subscription = $this->getSubscriptionByYear($this->currentStudy()->getCurrentYear());
+
+        $benchmarks = $study->getStructuredBenchmarks(true, 'dbColumn', $subscription);
         
         return $benchmarks;
     }

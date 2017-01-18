@@ -287,11 +287,14 @@ class ReportAdminController extends AbstractActionController
                     //pr($sql);
                 }
 
-                if (!isset($params[$param])) {
-                    $params[$param] = 1;
-                } else {
-                    $params[$param]++;
+                if (!empty($paaram)) {
+                    if (empty($params[$param])) {
+                        $params[$param] = 1;
+                    } else {
+                        $params[$param]++;
+                    }
                 }
+
             }
         }
 

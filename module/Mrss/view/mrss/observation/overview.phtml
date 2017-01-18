@@ -1,3 +1,5 @@
+<?php /** @var \Mrss\Entity\Subscription $subscription */ ?>
+
 <?= $this->headLink()->appendStylesheet('/css/data-entry.css') ?>
 
 <div class="page-header">
@@ -172,5 +174,10 @@
 
 
 <?php endif ?>
+
+
+<?php if ($subscription->canBeUpdated()): ?>
+    <a href="<?= $this->url('membership-edit') ?>" class="btn btn-default">Add a Module to Your Membership</a>
+<?php endif  ?>
 
 

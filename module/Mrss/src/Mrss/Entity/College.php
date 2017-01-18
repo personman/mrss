@@ -624,4 +624,19 @@ class College
 
         return false;
     }
+
+    /**
+     * Return a list of the IDS for all the study sections/modules the college has ever participated in.
+     */
+    public function getSectionIds()
+    {
+        $sectionIds = array();
+        foreach ($this->getSubscriptions() as $subscription) {
+            $sectionIds = array_merge($sectionIds, $subscription->getSectionIds());
+        }
+
+        $sectionIds = array_unique($sectionIds);
+
+        return $sectionIds;
+    }
 }

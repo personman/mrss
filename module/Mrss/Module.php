@@ -13,6 +13,7 @@ use Zend\Navigation\Page\Mvc;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
 use Zend\Config\Config;
+use Zend\Cache\StorageFactory;
 
 class Module
 {
@@ -350,6 +351,7 @@ class Module
                 'service.import.colleges.demo' => 'Mrss\Service\Factory\ImportCollegeDemographics',
                 'service.import.colleges.category' => 'Mrss\Service\Factory\ImportCollegeCategory',
                 'service.import.users' => 'Mrss\Service\Factory\ImportUsers',
+                'service.import.workforce.data' => 'Mrss\Service\Factory\ImportWorkforceDataFactory',
                 'service.generator' => 'Mrss\Service\Factory\ObservationGenerator',
                 'service.observation.data.migration' => 'Mrss\Service\Factory\ObservationDataMigration',
                 'service.variableSubstitution' => function ($sm) {
@@ -422,6 +424,23 @@ class Module
                     //$service = new Service\Report\Calculator();
 
                     return $service;
+                },
+                'cache' => function() {
+                    return StorageFactory::factory(
+                        array(
+                            'adapter' => array(
+                                'name' => 'filesystem',
+                                'options' => array(
+                                    'dirLevel' => 2,
+                                    'cacheDir' => 'data/cache',
+                                    'dirPermission' => 0755,
+                                    'filePermission' => 0666,
+                                    'namespaceSeparator' => '-db-'
+                                ),
+                            ),
+                            'plugins' => array('serializer'),
+                        )
+                    );
                 },
                 'mail.transport' => function ($sm) {
                     //return new \Zend\Mail\Transport\Sendmail();

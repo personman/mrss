@@ -177,7 +177,17 @@ return array(
             ),
             'benchmarks' => array(
                 'label' => 'Benchmarks',
-                'uri' => '/benchmarks'
+                'uri' => '/benchmarks',
+                'pages' => array(
+                    'benchmarks' => array(
+                        'label' => 'Credit Benchmarks',
+                        'uri' => '/benchmarks',
+                    ),
+                    'benchmarks-non-credit' => array(
+                        'label' => 'Non-credit Benchmarks',
+                        'uri' => '/benchmarks-non-credit',
+                    ),
+                )
             ),
             /*'nccbp' => array(
                 'label' => 'NCCBP',
@@ -208,6 +218,10 @@ return array(
                     'executives' => array(
                         'label' => 'Executive Leadership',
                         'uri' => '/executive-leadership'
+                    ),
+                    'ce' => array(
+                        'label' => 'Continuing Ed Professionals',
+                        'uri' => '/ce'
                     ),
                     'systems' => array(
                         'label' => 'Systems',
@@ -742,6 +756,10 @@ function getAccountMenu()
             'home' => array(
                 'label' => 'Member Home',
                 'uri' => '/members'
+            ),
+            'membership-edit' => array(
+                'label' => 'Add a Module to Your Membership',
+                'route' => 'membership-edit',
             ),
             'account' => array(
                 'label' => 'Manage Your Account',

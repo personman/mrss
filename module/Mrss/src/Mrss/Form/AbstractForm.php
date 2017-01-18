@@ -57,6 +57,7 @@ class AbstractForm extends Form
             $delete->setAttribute('class', 'btn btn-danger');
             //$delete->setLabel('Delete');
             $delete->setAttribute('id', 'deleteButton');
+            $delete->setAttribute('onClick', "return confirm('Are you sure?')");
             $buttons->add($delete);
         }
 

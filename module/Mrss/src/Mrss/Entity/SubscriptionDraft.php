@@ -34,9 +34,21 @@ class SubscriptionDraft
     protected $agreementData;
 
     /**
+     * JSON string of agreement form data
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $sections;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $date;
+
+    /**
+     * The subscription we are editing (if any)
+     * @ORM\OneToOne(targetEntity="Subscription")
+     */
+    private $subscription;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -134,5 +146,46 @@ class SubscriptionDraft
         }
 
         return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * @param mixed $sections
+     * @return SubscriptionDraft
+     */
+    public function setSections($sections)
+    {
+        $this->sections = $sections;
+        return $this;
+    }
+
+    /**
+     * @return null|Subscription
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * @param mixed $subscription
+     * @return SubscriptionDraft
+     */
+    public function setSubscription($subscription)
+    {
+        $this->subscription = $subscription;
+        return $this;
+    }
+
+    public function isUpdate()
+    {
+        return (is_object($this->getSubscription()));
     }
 }

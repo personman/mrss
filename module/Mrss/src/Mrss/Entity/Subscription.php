@@ -135,6 +135,12 @@ class Subscription
     protected $created;
 
     /**
+     * @Gedmo\Mapping\Annotation\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    protected $updated;
+
+    /**
      * @ORM\OneToMany(targetEntity="Suppression", mappedBy="subscription")
      */
     protected $suppressions;
@@ -154,6 +160,14 @@ class Subscription
      */
     protected $paidNotes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Section")
+     * @ORM\JoinTable(name="subscription_sections")
+     * @var \Mrss\Entity\Section[]
+     */
+    protected $sections;
+
+
     protected $benchmarkModel;
     protected $datumModel;
     protected $allData = array();
@@ -161,6 +175,7 @@ class Subscription
     public function __construct()
     {
         $this->data = new ArrayCollection();
+        $this->sections = new ArrayCollection();
     }
 
     public function getId()
@@ -339,6 +354,18 @@ class Subscription
         return $this->created;
     }
 
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
     public function setCompletion($completion)
     {
         $this->completion = $completion;
@@ -445,6 +472,12 @@ class Subscription
         $datum->setSubscription($this);
 
 
+        if (!$benchmark) {
+            echo 'null passed to createDatum<br>';
+        } else {
+            //var_dump($benchmark);
+        }
+
         if (is_object($benchmark)) {
             $datum->setBenchmark($benchmark);
             $datum->setDbColumn($benchmark->getDbColumn());
@@ -459,7 +492,10 @@ class Subscription
         if ($benchmark) {
             $this->getData()->add($datum);
             $this->getDatumModel()->save($datum);
+
             $this->getDatumModel()->getEntityManager()->flush();
+        } else {
+            //die('cannot find benchmark for ' . $benchmark);
         }
 
         return $datum;
@@ -547,6 +583,16 @@ class Subscription
         return $this;
     }
 
+    public function addPaidNote($note)
+    {
+        $separator = "\n";
+        $existing = $this->getPaidNotes();
+
+        $new = $existing . $separator . $note;
+
+        $this->setPaidNotes($new);
+    }
+
 
     /**
      * @return Suppression[]
@@ -611,5 +657,82 @@ class Subscription
     public function getDatumModel()
     {
         return $this->datumModel;
+    }
+
+    /**
+     * @return Section[]
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * @param Section[] $sections
+     * @return Subscription
+     */
+    public function setSections($sections)
+    {
+        $this->sections = $sections;
+        return $this;
+    }
+
+    public function addSection($section)
+    {
+        if (!$this->hasSection($section)) {
+            $sections = $this->getSections();
+            $sections[] = $section;
+        }
+    }
+
+    public function getSectionIds()
+    {
+        $sectionIds = array();
+
+        foreach ($this->getSections() as $section) {
+            $sectionIds[] = $section->getId();
+        }
+
+        return $sectionIds;
+    }
+
+    public function getSectionNames()
+    {
+        $names = array();
+        foreach ($this->getSections() as $section) {
+            $names[] = $section->getName();
+        }
+
+        return implode(', ', $names);
+    }
+
+    public function hasSection($section)
+    {
+        return in_array($section->getId(), $this->getSectionIds());
+    }
+
+    public function getBenchmarkGroupIds()
+    {
+        $benchmarkGroupIds = array();
+
+        foreach ($this->getSections() as $section) {
+            foreach ($section->getBenchmarkGroups() as $benchmarkGroup) {
+                $benchmarkGroupId = $benchmarkGroup->getId();
+                if (!in_array($benchmarkGroupId, $benchmarkGroupIds)) {
+                    $benchmarkGroupIds[] = $benchmarkGroupId;
+                }
+            }
+        }
+
+        return $benchmarkGroupIds;
+    }
+
+    public function canBeUpdated()
+    {
+        $studySectionCount = count($this->getStudy()->getSections());
+
+        $subSectionCount = count($this->getSectionIds());
+
+        return ($studySectionCount && $studySectionCount > $subSectionCount);
     }
 }

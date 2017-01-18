@@ -275,6 +275,10 @@ return array(
                     'roles' => array('admin')
                 ),
                 array(
+                    'controller' => 'sections',
+                    'roles' => array('admin')
+                ),
+                array(
                     'controller' => 'offercodes',
                     'roles' => array('admin')
                 ),
