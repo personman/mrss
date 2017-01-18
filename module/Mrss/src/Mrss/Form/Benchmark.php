@@ -12,7 +12,7 @@ class Benchmark extends AbstractForm
         parent::__construct('benchmark');
         $this->addBasicFields();
         $this->addExtraFields();
-        $this->add($this->getButtonFieldset());
+        $this->add($this->getButtonFieldset('Save', false, true, $this->getConfirmText()));
     }
 
     protected function addBasicFields()
@@ -56,7 +56,8 @@ class Benchmark extends AbstractForm
                 'name' => 'dbColumn',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Database Column'
+                    'label' => 'Database Column',
+                    'help-block' => 'This field is required and should be unique.'
                 )
             )
         );
@@ -73,7 +74,8 @@ class Benchmark extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Report Label',
-                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc.'
+                    'help-block' => 'For dynamic years, use [year], [year_minus_2], etc. ' .
+                        'If left blank, this defaults to the Data Entry Label.'
                 )
             )
         );
@@ -83,7 +85,8 @@ class Benchmark extends AbstractForm
                 'name' => 'peerReportLabel',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Peer Report Label'
+                    'label' => 'Peer Report Label',
+                    'help-block' => 'If left blank, this defaults to the Data Entry Label.'
                 )
             )
         );
@@ -95,7 +98,8 @@ class Benchmark extends AbstractForm
                 'type' => 'Text',
                 'options' => array(
                     'label' => 'Descriptive Label',
-                    'help-block' => 'Used for Executive Report'
+                    'help-block' => 'Used for Executive Report, custom reports, ' .
+                        'and other places where a stand-alone label is needed.'
                 )
             )
         );
@@ -240,7 +244,7 @@ class Benchmark extends AbstractForm
                 'type' => 'Textarea',
                 'options' => array(
                     'label' => 'Options',
-                    'help-block' => 'One option per line.'
+                    'help-block' => 'For input types of Radio or Checkboxes. One option per line.'
                 ),
                 'attributes' => array(
                     'rows' => 8,
@@ -354,5 +358,10 @@ class Benchmark extends AbstractForm
             </div>
         </div>
     </div>';
+    }
+
+    protected function getConfirmText()
+    {
+        return "Are you sure you want to delete this benchmark? All data for it from all years will be deleted as well.";
     }
 }

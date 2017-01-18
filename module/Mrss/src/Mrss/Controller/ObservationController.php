@@ -127,12 +127,7 @@ class ObservationController extends AbstractActionController
     protected function redirectIfNoMembership()
     {
         // Do they have a membership?
-        $year = $this->currentStudy()->getCurrentYear();
-        $membership = $this->getSubscriptionModel()->findOne(
-            $year,
-            $this->currentCollege()->getId(),
-            $this->currentStudy()->getId()
-        );
+        $membership = $this->getMembership();
 
         if (empty($membership)) {
             $this->flashMessenger()
@@ -140,6 +135,18 @@ class ObservationController extends AbstractActionController
 
             return $this->redirect()->toUrl('/renew');
         }
+    }
+
+    protected function getMembership()
+    {
+        $year = $this->currentStudy()->getCurrentYear();
+        $membership = $this->getSubscriptionModel()->findOne(
+            $year,
+            $this->currentCollege()->getId(),
+            $this->currentStudy()->getId()
+        );
+
+        return $membership;
     }
 
     public function overviewAction()
@@ -158,6 +165,7 @@ class ObservationController extends AbstractActionController
         // Regular users
         /** @var \Mrss\Entity\Study $currentStudy */
         $currentStudy = $this->currentStudy();
+        $membership = $this->getMembership();
         $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($membership);
         $observation = $this->getCurrentObservation();
         $completionPercentage = $currentStudy
