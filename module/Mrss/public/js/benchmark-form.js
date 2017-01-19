@@ -1,9 +1,15 @@
 $(function() {
 
-    // Show the equation field only when Computed is the chosen inputType
+    // Show the equation field only when Computed is the selected
     toggleEquationDisplay()
     $('#control-group-computed input').change(function() {
         toggleEquationDisplay()
+    })
+
+    // Show the options field only when radio or checckboxes are the chosen inputType
+    toggleOptionsDisplay()
+    $('#inputType').change(function() {
+        toggleOptionsDisplay()
     })
 
     validateEquation();
@@ -22,6 +28,22 @@ function toggleEquationDisplay()
         equationControl.show()
     } else {
         equationControl.hide()
+    }
+}
+
+function toggleOptionsDisplay()
+{
+    var inputType = $('#inputType').val();
+
+    var typeWithOptions = ['radio', 'checkboxes'];
+
+    var showOptions = (typeWithOptions.indexOf(inputType) > -1);
+    var optionControls = $('#control-group-options');
+
+    if (showOptions) {
+        optionControls.show()
+    } else {
+        optionControls.hide()
     }
 }
 
