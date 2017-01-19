@@ -125,7 +125,6 @@ class Benchmark extends AbstractForm
                         'float' => 'Float',
                         'text' => 'Text',
                         'textarea' => 'Textarea',
-                        'computed' => 'Computed (do not use)',
                         'radio' => 'Radio',
                         'checkboxes' => 'Checkboxes'
                     )
