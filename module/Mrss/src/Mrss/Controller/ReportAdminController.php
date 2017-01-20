@@ -216,7 +216,7 @@ class ReportAdminController extends AbstractActionController
 
         if ($observation) {
             $service = $this->getComputedFieldsService();
-            //$service->setDebug($debug);
+            $service->setDebug($debug);
             $service->setDebugDbColumn($debugColumn);
 
             try {
@@ -243,7 +243,8 @@ class ReportAdminController extends AbstractActionController
             $this->queryLogger($logger);
             $viewParams['logger'] = $logger;
 
-            $view = $viewParams;
+            $view = new ViewModel($viewParams);
+            $view->setTerminal(true);
         } else {
             $view = new JsonModel($viewParams);
         }

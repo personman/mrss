@@ -7,6 +7,7 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\PeerGroup;
 use Mrss\Entity\Report as ReportEntity;
 use Mrss\Entity\ReportItem;
+use Mrss\Form\AnalyzeEquation;
 use Mrss\Form\Email;
 use Mrss\Service\Export\Lapsed;
 use Mrss\Service\NhebiSubscriptions\Mrss;
@@ -965,6 +966,97 @@ class ToolController extends AbstractActionController
         prd($elapsed);
 
         die('test');
+    }
+
+    /**
+     * @return array
+     */
+    public function analyzeEquationAction()
+    {
+        $message = $result = null;
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+        $benchmarks = $study->getStructuredBenchmarks(false, 'dbColumn', null, true);
+        $colleges = $this->getAllColleges();
+        $years = $this->getServiceLocator()->get('model.subscription')->getYearsWithSubscriptions($study);
+
+        $form = new AnalyzeEquation($benchmarks, $colleges, $years);
+
+        if ($this->getRequest()->isPost()) {
+            $post = $this->params()->fromPost();
+            $form->setData($post);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $year = $data['year'];
+                $dbColumn = $data['benchmark'];
+                $collegeId = $data['college'];
+
+                $observation = $this->getObservationModel()->findOne($collegeId, $year);
+
+                if ($observation) {
+                    $observationId = $observation->getId();
+
+                    $url = "http://fcs.dan.com/reports/compute-one/$observationId/1/$dbColumn";
+                    //$result = $this->getUrlContents($url);
+
+                    $params = array(
+                        'action' => 'computeOne',
+                        'debug' => 1,
+                        'observation' => $observationId,
+                        'benchmark' => $dbColumn
+                    );
+
+                    ob_start();
+                    $devNull = $this->forward()->dispatch('reports', $params);
+                    $result = ob_get_clean();
+                } else {
+                    $message = "That institution did not submit data in $year.";
+                }
+
+            }
+        }
+
+        return array(
+            'form' => $form,
+            'message' => $message,
+            'result' => $result
+        );
+    }
+
+    protected function getUrlContents($url) {
+        $ch = curl_init();
+        $timeout = 5;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return $data;
+    }
+
+    /**
+     * @return \Mrss\Model\Observation
+     */
+    protected function getObservationModel()
+    {
+        return $this->getServiceLocator()->get('model.observation');
+    }
+
+    protected function getAllColleges()
+    {
+        /** @var \Mrss\Model\College $collegeModel */
+        $collegeModel = $this->getServiceLocator()->get('model.college');
+
+        $colleges = array();
+        foreach ($collegeModel->findAll() as $college) {
+            $colleges[$college->getId()] = $college->getNameAndState();
+        }
+
+        return $colleges;
     }
 
     public function suppressionsAction()

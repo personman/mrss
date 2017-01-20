@@ -141,3 +141,9 @@ AddOutputFilterByType DEFLATE application/x-javascript
 Order Deny,Allow
 Deny from 93.113.125.12
 Deny from 208.69.108.108
+
+# Cache control
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresDefault "access plus 1 month"
+</IfModule>

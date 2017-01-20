@@ -666,8 +666,12 @@ class Study
         return $allKeys;
     }
 
-    public function getStructuredBenchmarks($onlyReported = true, $keyField = 'dbColumn', $subscription = null)
-    {
+    public function getStructuredBenchmarks(
+        $onlyReported = true,
+        $keyField = 'dbColumn',
+        $subscription = null,
+        $onlyComputed = false
+    ) {
         if ($subscription && $this->hasSections()) {
             $groups = $this->getBenchmarkGroupsBySubscription($subscription);
         } else {
@@ -684,6 +688,11 @@ class Study
             foreach ($benchmarkGroup->getBenchmarksForYear($this->getCurrentYear()) as $benchmark) {
                 // Skip non-report benchmarks
                 if ($onlyReported && !$benchmark->getIncludeInNationalReport()) {
+                    continue;
+                }
+
+                // Skip non-computed benchmarks
+                if ($onlyComputed && !$benchmark->getComputed()) {
                     continue;
                 }
 

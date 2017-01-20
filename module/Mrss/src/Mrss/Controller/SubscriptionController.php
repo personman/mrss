@@ -986,11 +986,15 @@ class SubscriptionController extends AbstractActionController
     protected function getSelectedSections($subscriptionDraft)
     {
         $sections = array();
-        $sectionIds = json_decode($subscriptionDraft->getSections(), true);
 
-        foreach ($sectionIds as $sectionId) {
-            $sections[] = $this->getStudy()->getSection($sectionId);
+        if (is_object($subscriptionDraft)) {
+            $sectionIds = json_decode($subscriptionDraft->getSections(), true);
+
+            foreach ($sectionIds as $sectionId) {
+                $sections[] = $this->getStudy()->getSection($sectionId);
+            }
         }
+
 
         return $sections;
     }

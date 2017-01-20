@@ -25,10 +25,16 @@
         <link rel="stylesheet" type="text/css" href="/css/<?= $cssPrintFile ?>?v=1" media="print">
     <?php endif ?>
 
-
     <!-- Google Fonts -->
     <? //<link href='http://fonts.googleapis.com/css?family=Fira+Sans:500,700,300italic|Cabin:400,400italic,500,700' rel='stylesheet' type='text/css'> ?>
     <link href='https://code.cdn.mozilla.net/fonts/fira.css' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+
+
+    <!-- jQuery -->
+    <script src="/js/jquery.js"></script>
+
 
     <?php if ($favicon = $this->currentStudy(false)->getConfig()->favicon): ?>
         <link rel="icon" href="<?= $favicon ?>" type="image/x-icon">
@@ -38,37 +44,7 @@
     <?php echo $this->headLink() ?>
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/js/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/js/bootstrap3.min.js?v=3"></script>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-   <?php /* <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> */ ?>
-    <![endif]-->
-
-    <script type="text/javascript" src="/js/jquery-ui.js"></script>
-    <script type="text/javascript" src="/js/jquery.tooltipster.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.fixwidows.js"></script>
-
-    <!-- App-specific -->
-    <script type="text/javascript" src="/js/app.js?v=2"></script>
-    <script type="text/javascript" src="/js/theme.js"></script>
-    <script type="text/javascript" src="/js/nccbp.js?v=2"></script>
-
-    <!-- Add fancyBox -->
-    <link rel="stylesheet" href="/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-    <script type="text/javascript" src="/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(".fancybox").fancybox();
-        });
-    </script>
-
-    <?php echo $this->headScript() ?>
 </head>
 <body>
 
@@ -280,6 +256,37 @@
     </div>
 </div>
 <!-- END FOOTER -->
+
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/js/bootstrap3.min.js?v=3"></script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<?php /* <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> */ ?>
+<![endif]-->
+
+<script type="text/javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/jquery.tooltipster.min.js"></script>
+<script type="text/javascript" src="/js/jquery.fixwidows.js"></script>
+
+<!-- App-specific -->
+<script type="text/javascript" src="/js/app.js?v=2"></script>
+<script type="text/javascript" src="/js/theme.js"></script>
+<script type="text/javascript" src="/js/nccbp.js?v=2"></script>
+
+<!-- Add fancyBox -->
+
+<script type="text/javascript" src="/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".fancybox").fancybox();
+    });
+</script>
+
+<?php echo $this->headScript() ?>
 
 <?php if ($googleAnalyticsKey = $this->currentStudy()->getGoogleAnalyticsKey()): ?>
     <script type="text/javascript">

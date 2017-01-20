@@ -302,4 +302,6 @@ $configs = array(
     )
 );
 
+$configs[1] = $configs[3];
+
 return $configs;

@@ -36,11 +36,12 @@ return array(
     'footerLogo' => '<span>Powered by</span> <br><a href="http://nccbp.org/benchmarking-institute" title="National Higher Eduction Benchmarking Institute @ Johnson County Community College"><img src="/images/benchmark_logo.png" /></a>',
     'footerSocial' => '',
     'data_entry_templates' => array(
-        3 => 'fcs/full-time-salary.phtml',
-        4 => 'fcs/full-time-benefits.phtml',
-        5 => 'fcs/full-time-continuing.phtml',
-        6 => 'fcs/administrative.phtml',
-        7 => 'fcs/part-time.phtml'
+        //3 => 'fcs/full-time-salary.phtml',
+        3 => 'aaup/observation/full-time-salary.phtml',
+        4 => 'aaup/observation/full-time-benefits.phtml',
+        5 => 'aaup/observation/full-time-continuing.phtml',
+        6 => 'aaup/observation/administrative.phtml',
+        7 => 'aaup/observation/part-time.phtml'
     ),
     'export_sheet_names' => array(
         // benchmarkGroup id => excel sheet name
