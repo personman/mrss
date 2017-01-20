@@ -25,12 +25,16 @@
         <link rel="stylesheet" type="text/css" href="/css/<?= $cssPrintFile ?>?v=1" media="print">
     <?php endif ?>
 
-    <!-- jQuery -->
-    <script src="/js/jquery.js"></script>
-
     <!-- Google Fonts -->
     <? //<link href='http://fonts.googleapis.com/css?family=Fira+Sans:500,700,300italic|Cabin:400,400italic,500,700' rel='stylesheet' type='text/css'> ?>
     <link href='https://code.cdn.mozilla.net/fonts/fira.css' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+
+
+    <!-- jQuery -->
+    <script src="/js/jquery.js"></script>
+
 
     <?php if ($favicon = $this->currentStudy(false)->getConfig()->favicon): ?>
         <link rel="icon" href="<?= $favicon ?>" type="image/x-icon">
@@ -39,7 +43,6 @@
 
     <?php echo $this->headLink() ?>
 
-    <link rel="stylesheet" href="/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 
 
 </head>
