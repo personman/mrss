@@ -8,6 +8,14 @@ return array(
                 'Mrss' => __DIR__ . '/../public',
             ),
         ),
+        'caching' => array(
+            'default' => array(
+                'cache' => 'AssetManager\\Cache\\FilePathCache',
+                'options' => array(
+                    'dir' => 'public'
+                )
+            )
+        )
     ),
     'router' => array(
         'routes' => array(
