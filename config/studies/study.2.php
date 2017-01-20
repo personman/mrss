@@ -7,12 +7,12 @@ return array(
     'css' => 'mrss.css',
     'css_print' => 'mrss-print.css',
     'data_entry_templates' => array(
-        37 => 'instructional-grid.phtml',
-        38 => 'student-services-grid.phtml',
-        39 => 'academic-support-grid.phtml',
-        40 => 'demographics.phtml',
-        44 => 'managerial-grid-at.phtml',
-        42 => 'student-success-metrics.phtml'
+        37 => 'mrss/observation/instructional-grid.phtml',
+        38 => 'mrss/observation/student-services-grid.phtml',
+        39 => 'mrss/observation/academic-support-grid.phtml',
+        40 => 'mrss/observation/demographics.phtml',
+        44 => 'mrss/observation/managerial-grid-at.phtml',
+        42 => 'mrss/observation/student-success-metrics.phtml'
     ),
     'contact_instructions' => "Contact us about benefits, benchmarks, data collection and reporting, subscription, peer comparison, or to simply comment on Maximizing Resources for Student&nbsp;Success.
         </p>
