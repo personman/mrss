@@ -536,12 +536,16 @@ class Report
         if (!empty($benchmarkInfo['median'])) {
             $benchmarkEntity = $this->getBenchmark($benchmarkInfo['dbColumn']);
 
-            $value = $this->getPercentileModel()
+            $percentile = $this->getPercentileModel()
                 ->findByBenchmarkYearAndPercentile(
                     $benchmarkEntity->getId(),
                     $observation->getYear(),
                     50
-                )->getValue();
+                );
+            if (!is_null($percentile)) {
+                $value = $percentile->getValue();
+            }
+
         } else {
             $value = $observation->get($benchmarkInfo['dbColumn']);
         }
