@@ -297,6 +297,9 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // No strengths report for WF
             unset($pages['reports']['pages']['strengths']);
+
+            // No percent change report
+            unset($pages['reports']['pages']['percent-change']);
         }
 
         // If the help section is empty, drop it from the menu
