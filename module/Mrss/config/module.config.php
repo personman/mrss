@@ -2214,6 +2214,15 @@ return array(
                             )
                         )
                     ),
+                    'analyze-equation' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/analyze-equation',
+                            'defaults' => array(
+                                'action' => 'analyzeEquation',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

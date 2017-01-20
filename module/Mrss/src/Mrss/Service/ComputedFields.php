@@ -126,7 +126,7 @@ class ComputedFields
             //echo "About to flush (if applicable): " . round(microtime(1) - $start, 3) . "s<br>";
             echo '<hr>';
 
-            if ($this->debugDbColumn) {
+            if (false && $this->debugDbColumn) {
 
                 $oids = array();
                 foreach ($this->getStudy()->getSubscriptionsForYear($this->getStudy()->getCurrentYear()) as $sub) {
