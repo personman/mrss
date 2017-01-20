@@ -987,7 +987,7 @@ class SubscriptionController extends AbstractActionController
     {
         $sections = array();
 
-        if ($subscriptionDraft) {
+        if (is_object($subscriptionDraft)) {
             $sectionIds = json_decode($subscriptionDraft->getSections(), true);
 
             foreach ($sectionIds as $sectionId) {
