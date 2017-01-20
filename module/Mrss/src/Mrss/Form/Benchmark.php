@@ -131,6 +131,22 @@ class Benchmark extends AbstractForm
                 )
             )
         );
+
+        $this->add(
+            array(
+                'name' => 'options',
+                'type' => 'Textarea',
+                'options' => array(
+                    'label' => 'Options',
+                    'help-block' => 'For input types of Radio or Checkboxes. One option per line.'
+                ),
+                'attributes' => array(
+                    'id' => 'options',
+                    'rows' => 8,
+                    'cols' => 80,
+                )
+            )
+        );
     }
 
     protected function addExtraFields()
@@ -237,21 +253,6 @@ class Benchmark extends AbstractForm
 
     protected function addRequired()
     {
-        $this->add(
-            array(
-                'name' => 'options',
-                'type' => 'Textarea',
-                'options' => array(
-                    'label' => 'Options',
-                    'help-block' => 'For input types of Radio or Checkboxes. One option per line.'
-                ),
-                'attributes' => array(
-                    'rows' => 8,
-                    'cols' => 80,
-                )
-            )
-        );
-
         $this->add(
             array(
                 'name' => 'required',

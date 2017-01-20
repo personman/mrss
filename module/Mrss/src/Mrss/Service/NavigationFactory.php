@@ -183,7 +183,7 @@ class NavigationFactory extends DefaultNavigationFactory
             }
 
             // Hide the button for adding modules to the membership if needed
-            if ($this->hasSubscription() && $enrollmentOpen && $this->getSubscription()->canBeUpdated()) {
+            if ($this->hasSubscription() && $enrollmentOpen && $this->getSubscription()->canBeUpdated($study)) {
                 // Keep it
             } else {
                 unset($pages['account']['pages']['membership-edit']);

@@ -727,9 +727,13 @@ class Subscription
         return $benchmarkGroupIds;
     }
 
-    public function canBeUpdated()
+    public function canBeUpdated($study = null)
     {
-        $studySectionCount = count($this->getStudy()->getSections());
+        if (empty($study)) {
+            $study = $this->getStudy();
+        }
+
+        $studySectionCount = count($study->getSections());
 
         $subSectionCount = count($this->getSectionIds());
 
