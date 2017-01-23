@@ -249,8 +249,12 @@ class Study
      * @param $year
      * @return \Mrss\Entity\Subscription[]
      */
-    public function getSubscriptionsForYear($year)
+    public function getSubscriptionsForYear($year = null)
     {
+        if (!$year) {
+            $year = $this->getCurrentYear();
+        }
+
         $subscriptions = $this->getSubscriptions();
         $subscriptionsForYear = array();
 
@@ -610,6 +614,19 @@ class Study
         }
 
         return $percentage;
+    }
+
+    public function getDbColumnsIncludedInCompletion()
+    {
+        $dbColumns = array();
+
+        foreach ($this->getBenchmarkGroups() as $group) {
+            foreach ($group->getBenchmarksForCompletionCalculationForYear($this->getCurrentYear()) as $benchmark) {
+                $dbColumns[] = $benchmark->getDbColumn();
+            }
+        }
+
+        return $dbColumns;
     }
 
     public function getBenchmarksForYear($year)

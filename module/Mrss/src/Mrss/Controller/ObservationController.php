@@ -489,17 +489,11 @@ class ObservationController extends AbstractActionController
                 }
 
                 // Calculate completion
-                $completion = $this->currentStudy()->getCompletionPercentage($observation);
+                $subscription->updateCompletion();
+                $this->getSubscriptionModel()->save($subscription);
+                $this->getSubscriptionModel()->getEntityManager()->flush();
 
-                $subscription = $subscriptionModel
-                    ->findOne(
-                        $observation->getYear(),
-                        $observation->getCollege(),
-                        $this->currentStudy()->getId()
-                    );
-                $subscription->setCompletion($completion);
-
-                $this->getServiceLocator()->get('em')->flush();
+                //$this->updateCompletion($observation);
 
                 $redirect = $this->params()->fromPost('redirect', '/data-entry');
 
@@ -553,6 +547,22 @@ class ObservationController extends AbstractActionController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    protected function updateCompletion($observation)
+    {
+        // Calculate completion
+        $completion = $this->currentStudy()->getCompletionPercentage($observation);
+
+        $subscription = $this->getSubscriptionModel()
+            ->findOne(
+                $observation->getYear(),
+                $observation->getCollege(),
+                $this->currentStudy()->getId()
+            );
+        $subscription->setCompletion($completion);
+
+        $this->getServiceLocator()->get('em')->flush();
     }
 
     protected function getValidationIssuesMessage($issues)
@@ -923,6 +933,8 @@ class ObservationController extends AbstractActionController
 
                 // No errors, time to save to the db
                 $this->getServiceLocator()->get('em')->flush();
+
+                $this->updateCompletion($observation);
 
                 if (empty($issues)) {
                     $this->flashMessenger()->addSuccessMessage("Data imported.");

@@ -270,40 +270,76 @@ class ToolController extends AbstractActionController
     public function calcCompletionAction()
     {
         $this->longRunningScript();
+        //takeYourTime();
 
         $start = microtime(1);
         $subscriptions = 0;
+        $batchSize = 100;
+        $currentBatch = $this->params()->fromQuery('batch', 1);
+        $lastOfBatch = $batchSize * $currentBatch;
+        $firstOfBatch = $lastOfBatch - $batchSize;
 
         $subscriptionModel = $this->getSubscriptionModel();
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
+        $subs = $study->getSubscriptionsForYear();
+
+        $dbColumnsIncluded = $study->getDbColumnsIncludedInCompletion();
+
+
         // Loop over all subscriptions
-        foreach ($study->getSubscriptions() as $subscription) {
-            $observation = $subscription->getObservation();
-            if (empty($observation)) {
-                continue;
-            }
-
-            // Debug
-            //if ($subscription->getYear() != 2010) continue;
-
-            $completion = $study->getCompletionPercentage(
-                $observation
-            );
-
-            $subscription->setCompletion($completion);
-            $subscriptionModel->save($subscription);
+        foreach ($subs as $subscription) {
+            /** @var \Mrss\Entity\Subscription $subscription */
 
             $subscriptions++;
+
+            if ($subscriptions < $firstOfBatch) continue;
+
+            $subscription->updateCompletion($dbColumnsIncluded);
+            $subscriptionModel->save($subscription);
+
+
+
+            if (false && $subscriptions % $flushEvery == 0) {
+                $subscriptionModel->getEntityManager()->flush();
+                echo 'flushed ';
+            }
+
+            if ($subscriptions == $lastOfBatch) {
+                $subscriptionModel->getEntityManager()->flush();
+                $nextBatch = $currentBatch + 1;
+                $url = '/tools/calc-completion?batch=' . $nextBatch;
+                return $this->redirect()->toUrl($url);
+                die;
+                //break;
+            }
+            //$this->getSubscriptionModel()->getEntityManager()->detach($subscription);
+            //unset($subscription);
         }
+
 
         $subscriptionModel->getEntityManager()->flush();
 
+
+        /*$queryLogger = $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->getSQLLogger();
+
+        prd(count($queryLogger->queries));
+        */
+
         $elapsed = round(microtime(1) - $start, 3);
+
+        //prd($elapsed);
+
+        $memory = round(memory_get_peak_usage() / 1024 / 1024);
+
         $this->flashMessenger()
-            ->addSuccessMessage("$subscriptions processed in $elapsed seconds.");
+            ->addSuccessMessage("$subscriptions processed.");// in $elapsed seconds. Memory used: $memory MB");
         return $this->redirect()->toRoute('tools');
 
     }
