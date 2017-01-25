@@ -498,23 +498,30 @@ class Excel
             $sheetName = $sheetInfo['sheetName'];
             $sheet = $excel->getSheetByName($sheetName);
 
+            if (!$sheet) {
+                throw new \Exception('Cannot find sheet "' . $sheetName . '".');
+            }
+
             foreach ($sheetInfo['positions'] as $dbColumn => $coordinates) {
-                $cell = $sheet->getCell($coordinates);
+                if ($cell = $sheet->getCell($coordinates)) {
+                    // Is it a date?
+                    if (PHPExcel_Shared_Date::isDateTime($sheet->getCell($coordinates))) {
+                        $value = $cell->getFormattedValue();
+                    } else {
+                        $value = $cell->getValue();
+                    }
 
-                // Is it a date?
-                if (PHPExcel_Shared_Date::isDateTime($sheet->getCell($coordinates))) {
-                    $value = $cell->getFormattedValue();
+                    $value = trim($value);
+                    if ($value === '') {
+                        $value = null;
+                    }
+
+                    $data[$dbColumn] = $value;
                 } else {
-                    $value = $cell->getValue();
+                    throw new \Exception(
+                        'Unable to find cell at coordinates ' . implode(', ', $coordinates) . ' for ' . $dbColumn
+                    );
                 }
-
-                $value = trim($value);
-                if ($value === '') {
-                    $value = null;
-                }
-
-                $data[$dbColumn] = $value;
-
             }
         }
 

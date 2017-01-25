@@ -5,6 +5,15 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
+<script>
+    $(document).ready(function(){
+        $('.tooltipster').tooltipster({
+            contentAsHTML: true,
+        });
+    });
+</script>
+
+
 <h1>
     <?php if (empty($system)): ?>
         Report of National Aggregate Data
@@ -113,7 +122,15 @@ $this->headScript()->appendFile(
                     <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
                     <tr class="<?= $rowClass ?>">
                         <td class="benchmarkLabel">
-                            <?= $benchmark['benchmark'] ?>
+                            <?php if (!empty($benchmark['description'])): ?>
+                                <span class="tooltipster" title="<?= addslashes($benchmark['description']) ?>">
+                                    <?= $benchmark['benchmark'] ?>
+                                </span>
+                            <?php else: ?>
+                                <?= $benchmark['benchmark'] ?>
+                            <?php endif ?>
+
+
                             <?php if (!empty($benchmark['timeframe'])): ?>
                                 <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
                             <?php endif ?>
