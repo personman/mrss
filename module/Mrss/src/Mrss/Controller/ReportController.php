@@ -14,11 +14,6 @@ use Zend\View\Model\ViewModel;
 
 class ReportController extends ReportAdminController
 {
-    /**
-     * @var Report
-     */
-    protected $reportService;
-
     protected $sessionContainer;
 
     protected $observations;
@@ -880,19 +875,6 @@ class ReportController extends ReportAdminController
         $this->reportService = $service;
 
         return $this;
-    }
-
-    /**
-     * @return Report
-     */
-    public function getReportService()
-    {
-        if (empty($this->reportService)) {
-            $this->reportService = $this->getServiceLocator()
-                ->get('service.report');
-        }
-
-        return $this->reportService;
     }
 
     /**

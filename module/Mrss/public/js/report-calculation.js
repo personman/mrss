@@ -5,15 +5,16 @@ var times = [];
 var startTime;
 
 $(function() {
-    setUpCalculation();
+    setUpOutlierCalculation();
     setUpCompute();
     setUpChangeCalculation();
+    setUpChangePercentilesCalculation();
     setUpPercentiles();
     setUpSystems();
 });
 
 
-function setUpCalculation()
+function setUpOutlierCalculation()
 {
     var baseUrl = '/reports/calculate-outlier/';
 
@@ -53,6 +54,7 @@ function setUpCalculation()
     })
 }
 
+// Computed benchmarks
 function setUpCompute()
 {
     var baseUrl = '/reports/compute-one/';
@@ -82,6 +84,47 @@ function setUpCompute()
                 url = url + '/first';
             }
 
+            urlStack.push(url);
+        }
+
+        // Now the url stack is built. Kick it off.
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
+    })
+}
+
+// National report percentiles
+function setUpPercentiles()
+{
+    var baseUrl = '/reports/calculate-one/';
+
+    $('.calculate-percentile').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+
+        progressBar = $('#percentile-progress-' + year + ' .progress-bar');
+
+        // Get the benchmark Ids
+        var benchmarkIds = benchmarks[year];
+
+        originalTotal = benchmarkIds.length;
+
+        // Build the url stack
+        urlStack = [];
+        for (var i in benchmarkIds) {
+            var benchmarkId = benchmarkIds[i];
+
+            var url = baseUrl + benchmarkId + '/' + year;
+
+            if (i == 0) {
+                url = url + '/last';
+            } else if (i == benchmarkIds.length - 1) {
+                url = url + '/first';
+            }
             urlStack.push(url);
         }
 
@@ -135,17 +178,16 @@ function setUpChangeCalculation()
     })
 }
 
-
-function setUpPercentiles()
+function setUpChangePercentilesCalculation()
 {
-    var baseUrl = '/reports/calculate-one/';
+    var baseUrl = '/reports/calculate-one-percent-change/';
 
-    $('.calculate-percentile').click(function() {
+    $('.calculate-changes-percentiles').click(function() {
         var button = $(this);
         var buttonId = button.attr('id');
         var year = buttonId.split('-').pop();
 
-        progressBar = $('#percentile-progress-' + year + ' .progress-bar');
+        progressBar = $('#calculate-changes-percentile-progress-' + year + ' .progress-bar');
 
         // Get the benchmark Ids
         var benchmarkIds = benchmarks[year];
@@ -175,6 +217,9 @@ function setUpPercentiles()
         return false;
     })
 }
+
+
+
 
 
 function setUpSystems()

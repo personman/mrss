@@ -98,6 +98,11 @@ class Report
     protected $systemModel;
 
     /**
+     * @var \Mrss\Model\PercentChange
+     */
+    protected $percentChangeModel;
+
+    /**
      * @var \Mrss\Entity\Observation
      */
     protected $observation;
@@ -171,7 +176,7 @@ class Report
      * @param bool $systems
      * @return string
      */
-    public function getReportCalculatedSettingKey($year, $systems = false)
+    public function getReportCalculatedSettingKey($year, $systems = false, $forPercentChange = false)
     {
         $studyId = $this->getStudy()->getId();
 
@@ -179,6 +184,10 @@ class Report
 
         if ($systems) {
             $key = 'system_' . $key;
+        }
+
+        if ($forPercentChange) {
+            $key = 'perc_change_' . $key;
         }
 
         return $key;
@@ -203,27 +212,36 @@ class Report
         Benchmark $benchmark,
         $year,
         $skipNull = true,
-        $system = null
+        $system = null,
+        $forPercentChange = false
     ) {
-        $dbColumn = $benchmark->getDbColumn();
-        $observation = new Observation;
-        if ($observation->has($dbColumn)) {
+        $data = array();
 
-            // We no longer need the observation here
-            $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
-                $this->getStudy(),
-                $year,
-                array($dbColumn),
-                false,
-                true,
-                array(),
-                $system
-            );
+        if ($forPercentChange) {
+            $changes = $this->getPercentChangeModel()->findByBenchmarkAndYear($benchmark, $year);
+            $data = $this->getDataFromPercentChanges($changes);
+
         } else {
-            $subscriptions = array();
-        }
+            $dbColumn = $benchmark->getDbColumn();
+            $observation = new Observation;
+            if ($observation->has($dbColumn)) {
 
-        $data = $this->getDataFromSubscriptions($subscriptions, $benchmark, $skipNull);
+                // We no longer need the observation here
+                $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
+                    $this->getStudy(),
+                    $year,
+                    array($dbColumn),
+                    false,
+                    true,
+                    array(),
+                    $system
+                );
+            } else {
+                $subscriptions = array();
+            }
+
+            $data = $this->getDataFromSubscriptions($subscriptions, $benchmark, $skipNull);
+        }
 
         return $data;
     }
@@ -274,12 +292,31 @@ class Report
                 }
 
                 $data[$collegeId] = $value;
-                $ipeds = $subscription->getCollege()->getIpeds();
-                $iData[$ipeds] = $value;
+                //$ipeds = $subscription->getCollege()->getIpeds();
+                //$iData[$ipeds] = $value;
             }
         }
 
-        ksort($iData);
+        //ksort($iData);
+
+        return $data;
+    }
+
+    /**
+     * @param \Mrss\Entity\PercentChange[] $changes
+     * @return mixed
+     */
+    protected function getDataFromPercentChanges($changes)
+    {
+        $data = array();
+
+        foreach ($changes as $change) {
+            $changeValue = $change->getPercentChange();
+            $collegeId = $change->getCollege()->getId();
+
+            $data[$collegeId] = $changeValue;
+
+        }
 
         return $data;
     }
@@ -1351,11 +1388,26 @@ class Report
     }
 
     /**
-     * @return \Mrss\Model\System
+     * @return \Mrss\Model\PercentChange
      */
     public function getSystemModel()
     {
         return $this->systemModel;
+    }
+
+    public function setPercentChangeModel($model)
+    {
+        $this->percentChangeModel = $model;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\PercentChange
+     */
+    public function getPercentChangeModel()
+    {
+        return $this->percentChangeModel;
     }
 
 

@@ -232,11 +232,12 @@ class PercentileRank extends AbstractModel
         // Flush here or leave it to some other code?
     }
 
-    public function deleteByStudyAndYear($studyId, $year, $system = null)
+    public function deleteByStudyAndYear($studyId, $year, $system = null, $forPercentChange = false)
     {
         $dql = 'DELETE Mrss\Entity\PercentileRank p
             WHERE p.year = ?1
-            AND p.study = ?2';
+            AND p.study = ?2
+            AND p.forPercentChange = ?3';
 
         if ($system) {
             $dql .= ' AND p.system IS NOT NULL';
@@ -249,6 +250,8 @@ class PercentileRank extends AbstractModel
 
         $query->setParameter(1, $year);
         $query->setParameter(2, $studyId);
+        $query->setParameter(3, $forPercentChange);
+
 
         if ($system) {
             //$query->setParameter(3, $system);

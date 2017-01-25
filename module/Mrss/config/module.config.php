@@ -999,7 +999,21 @@ return array(
                                 'action' => 'calculateOne',
                                 'year' => null,
                                 'benchmark' => null,
-                                'position' => null
+                                'position' => null,
+                                'forPercentileChange' => false
+                            )
+                        )
+                    ),
+                    'calculate-one-percent-change' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-one-percent-change/:benchmark/:year[/:position]',
+                            'defaults' => array(
+                                'action' => 'calculateOne',
+                                'year' => null,
+                                'benchmark' => null,
+                                'position' => null,
+                                'forPercentChange' => true
                             )
                         )
                     ),
