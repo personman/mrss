@@ -23,45 +23,6 @@ class ReportController extends ReportAdminController
 
     protected $observations;
 
-
-
-    /**
-     * @return \Mrss\Service\Report\Changes
-     */
-    protected function getPercentChangeService()
-    {
-        return $this->getServiceLocator()->get('service.report.changes');
-    }
-
-    /**
-     * For admins. Shows all institutions.
-     *
-     * @return array
-     */
-    public function percentChangesAction()
-    {
-        takeYourTime();
-        $format = $this->params()->fromRoute('format');
-
-        $year = $this->params()->fromRoute('year');
-        if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
-        }
-
-        /** @var \Mrss\Model\PercentChange $percentChangeModel */
-        $percentChangeModel = $this->getServiceLocator()->get('model.percentchange');
-        $changes = $percentChangeModel->findByYear($year);
-
-        if ($format == 'excel') {
-            $this->getPercentChangeService()->download($changes);
-            die;
-        }
-
-        return array(
-            'changes' => $changes
-        );
-    }
-
     /**
      * For an individual institution
      *

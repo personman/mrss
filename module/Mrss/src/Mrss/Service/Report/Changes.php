@@ -9,7 +9,7 @@ use PHPExcel;
 
 class Changes extends Report
 {
-    protected $percentThreshold = 5;
+    //protected $percentThreshold = 5;
 
     protected $percentChangeModel;
 

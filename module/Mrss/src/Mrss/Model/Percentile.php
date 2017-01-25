@@ -21,6 +21,7 @@ class Percentile extends AbstractModel
     /**
      * @param $benchmark
      * @param $year
+     * @param $breakpoints
      * @param null $system
      * @return PercentileEntity[]
      */

@@ -26,8 +26,13 @@ $this->headScript()->appendFile(
 
     var systemIds = <?= json_encode($systemIds) ?>;
 
-</script>
 
+    // Show first tab
+    $(document).ready(function(){
+        $('.nav-tabs li a:first').tab('show');
+    });
+
+</script>
 <style>
     h3 {
        margin-top: 25px;
@@ -39,7 +44,17 @@ $this->headScript()->appendFile(
 
 <h1>Calculate Reports</h1>
 
+<ul class="nav nav-tabs" role="tablist">
+    <?php foreach ($years as $year => $calculationDates): ?>
+    <li role="presentation" class=""><a href="#tab<?= $year ?>" aria-controls="home" role="tab" data-toggle="tab"><?= $year ?></a></li>
+    <?php endforeach ?>
+</ul>
+
+
+<div class="tab-content">
+
 <?php foreach ($years as $year => $calculationDates): ?>
+    <div role="tabpanel" class="tab-pane fade in" id="tab<?= $year ?>">
     <h2><?= $year ?></h2>
 
     <h3>Outlier Report</h3>
@@ -128,38 +143,6 @@ $this->headScript()->appendFile(
         </div>
     </div>
 
-    <h3>Percent Change Report</h3>
-    <div class="row-fluid row">
-        <div class="span4 col-md-4">
-            <p>
-                Identify values with greater than 5% change from last year.
-            </p>
-
-            <p>
-                <a href="/reports/percent-changes">View Percent Change Report</a>
-            </p>
-
-        </div>
-
-        <div class="span5 col-md-5">
-            <div class="progress calculate-changes-progress" id="calculate-changes-<?= $year ?>">
-                <div class="bar progress-bar"
-                     role="progressbar"
-                     aria-valuenow="0"
-                     aria-valuemin="0"
-                     aria-valuemax="100"
-                     style="width: 0%;"></div>
-            </div>
-
-        </div>
-
-        <div class="span1 col-md-1">
-        </div>
-
-        <div class="span1 col-md-2">
-            <a class="btn btn-default calculate-changes" href="#" id="calculate-changes-<?= $year ?>">Prepare Percent Change Report</a>
-        </div>
-    </div>
 
     <h3>National Report</h3>
     <div class="row-fluid row">
@@ -246,6 +229,45 @@ $this->headScript()->appendFile(
         </div>
     </div>
 
-    <hr>
+
+    <h3>Percent Change Report</h3>
+    <div class="row-fluid row">
+        <div class="span4 col-md-4">
+            <p>
+                For institutions that submitted data this year and last year, calculate the percent change for each benchmark.
+            </p>
+
+            <p>
+                <a href="/reports/percent-changes/<?= $year ?>">View Percent Change Report</a>
+            </p>
+
+        </div>
+
+        <div class="span5 col-md-5">
+            <div class="progress calculate-changes-progress" id="calculate-changes-<?= $year ?>">
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: 0%;"></div>
+            </div>
+
+        </div>
+
+        <div class="span1 col-md-1">
+        </div>
+
+        <div class="span1 col-md-2">
+            <a class="btn btn-default calculate-changes" href="#" id="calculate-changes-<?= $year ?>">Prepare Percent Change Report</a>
+        </div>
+    </div>
+
+
+        <hr>
+
+    </div>
 
 <?php endforeach ?>
+
+</div>
