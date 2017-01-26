@@ -489,7 +489,8 @@ class Report
             $benchmark,
             $percentileData,
             $value,
-            $config
+            $config,
+            $forPercentChange
         );
 
         return $chart;
@@ -862,7 +863,8 @@ class Report
         Benchmark $benchmark,
         $percentileData,
         $reportedValue,
-        $chartConfig
+        $chartConfig,
+        $forPercntChange = false
     ) {
         if (empty($percentileData)) {
             return false;
@@ -894,6 +896,10 @@ class Report
 
 
         $format = $this->getFormat($benchmark);
+
+        if ($forPercntChange) {
+            $format = '{y:,.2f}%';
+        }
 
         // Put the college's data in its place
         if (count($chartValues) != count($chartXCategories)) {
@@ -961,11 +967,10 @@ class Report
             )
         );
 
-
-        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series);
+        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercntChange);
     }
 
-    protected function buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series)
+    protected function buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercntChange)
     {
         //$seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
         $dataDefinition = $this->getChartFooter($benchmark);
@@ -1045,7 +1050,7 @@ class Report
             $chart['yAxis']['max'] = 6;
         }
 
-        if ($benchmark->isDollars()) {
+        if ($benchmark->isDollars() && !$forPercntChange) {
             $chart['yAxis']['labels'] = array(
                 'format' => '${value}'
             );

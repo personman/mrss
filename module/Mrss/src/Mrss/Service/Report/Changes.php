@@ -306,6 +306,8 @@ class Changes extends National
 
         //pr($percentiles);
 
+        $data['reported_decimal_places'] = 0;
+
         //if (!empty($data['oldValue'])) prd($data);
 
         return $data;
