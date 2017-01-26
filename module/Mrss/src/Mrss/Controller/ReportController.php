@@ -72,6 +72,8 @@ class ReportController extends ReportAdminController
         // HTML or Excel?
         $format = $this->params()->fromRoute('format');
 
+        $forPercentChange = $this->params()->fromRoute('forPercentChange');
+
         if ($redirect = $this->checkReportsAreOpen()) {
             return $redirect;
         }
@@ -108,15 +110,18 @@ class ReportController extends ReportAdminController
             return $this->observationNotFound();
         }
 
-        /** @var \Mrss\Service\Report\National $reportService */
-        $reportService = $this->getServiceLocator()->get('service.report.national');
+        if ($forPercentChange) {
+            $reportService = $this->getPercentChangeService();
+        } else {
+            $reportService = $this->getNationService($forPercentChange);
+        }
+
         $reportData = $reportService->getData($subscription, $system);
 
 
         // Download?
         if ($format == 'excel') {
-            $this->getServiceLocator()->get('service.report.national')
-                ->download($reportData, $system);
+            $reportService->download($reportData, $system);
             die;
         }
 
@@ -133,8 +138,15 @@ class ReportController extends ReportAdminController
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels(),
             'system' => $system,
-            'reportPath' => $reportPath
+            'reportPath' => $reportPath,
+            'forPercentChange' => $forPercentChange
         );
+    }
+
+    /** @return \Mrss\Service\Report\National */
+    protected function getNationService()
+    {
+        return $this->getServiceLocator()->get('service.report.national');
     }
 
     protected function getSubscriptionByYear($year)

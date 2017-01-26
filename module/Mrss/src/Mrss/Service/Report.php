@@ -452,8 +452,12 @@ class Report
         return $reportData;
     }
 
-    public function getPercentileBarChart($config, Observation $observation)
-    {
+    public function getPercentileBarChart(
+        $config,
+        Observation $observation,
+        $forPercentChange = false,
+        $percentChange = null
+    ) {
         $dbColumn = $config['dbColumn'];
         $benchmark = $this->getBenchmarkModel()->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
 
@@ -466,7 +470,8 @@ class Report
                 $benchmark,
                 $observation->getYear(),
                 $this->getPercentileBreakpointsForStudy(),
-                $this->getSystem()
+                $this->getSystem(),
+                $forPercentChange
             );
         $percentileData = array();
         foreach ($percentiles as /** var Percentile */ $percentile) {
@@ -474,10 +479,16 @@ class Report
                 ->getValue();
         }
 
+        if ($forPercentChange) {
+            $value = $percentChange;
+        } else {
+            $value = $observation->get($dbColumn);
+        }
+
         $chart = $this->getPercentileChartConfig(
             $benchmark,
             $percentileData,
-            $observation->get($dbColumn),
+            $value,
             $config
         );
 
@@ -704,12 +715,12 @@ class Report
         return null;
     }
 
-    protected function loadPercentileData($benchmarkData, $benchmark, $year)
+    protected function loadPercentileData($benchmarkData, $benchmark, $year, $forPercentChange = false)
     {
         $breakpoints = $this->getPercentileBreakpointsForStudy();
         $breakpoints[] = 'N';
         $percentiles = $this->getPercentileModel()
-            ->findByBenchmarkAndYear($benchmark, $year, $breakpoints, $this->getSystem());
+            ->findByBenchmarkAndYear($benchmark, $year, $breakpoints, $this->getSystem(), $forPercentChange);
 
         $percentileData = array();
         foreach ($percentiles as $percentile) {
@@ -737,7 +748,8 @@ class Report
 
         return $benchmarkData;
     }
-    public function getBenchmarkData(Benchmark $benchmark)
+
+    public function getBenchmarkData(Benchmark $benchmark, $forPercentChange = false, $percentChange = null)
     {
         $benchmarkData = array(
             'benchmark' => $this->getVariableSubstitution()->substitute($benchmark->getReportLabel()),
@@ -746,7 +758,7 @@ class Report
 
         $year = $this->getObservation()->getYear();
 
-        $benchmarkData = $this->loadPercentileData($benchmarkData, $benchmark, $year);
+        $benchmarkData = $this->loadPercentileData($benchmarkData, $benchmark, $year, $forPercentChange);
 
         $benchmarkData['reported'] = $this->getObservation()->get(
             $benchmark->getDbColumn()
@@ -760,7 +772,8 @@ class Report
                 $this->getObservation()->getCollege(),
                 $benchmark,
                 $year,
-                $this->getSystem()
+                $this->getSystem(),
+                $forPercentChange
             );
 
         if (!empty($percentileRank)) {
@@ -799,7 +812,9 @@ class Report
 
         $benchmarkData['chart'] = $this->getPercentileBarChart(
             $chartConfig,
-            $this->getObservation()
+            $this->getObservation(),
+            $forPercentChange,
+            $percentChange
         );
 
         $benchmarkData['description'] = $this->getVariableSubstitution()

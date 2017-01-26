@@ -32,7 +32,8 @@ class PercentileRank extends AbstractModel
         $college,
         $benchmark,
         $year,
-        $system = null
+        $system = null,
+        $forPercentChange = false
     ) {
 
         if (!is_int($college)) {
@@ -51,6 +52,15 @@ class PercentileRank extends AbstractModel
 
         $query->andWhere('r.benchmark = :benchmark_id');
         $query->setParameter('benchmark_id', $benchmark->getId());
+
+        if ($forPercentChange) {
+            $query->andWhere('r.forPercentChange = 1');
+        } else {
+            $query->andWhere('r.forPercentChange = 0');
+        }
+
+
+        //$query->setParameter('forPercentChange', $forPercentChange);
 
         $query->andWhere('r.year = :year');
         $query->setParameter('year', $year);
@@ -71,6 +81,10 @@ class PercentileRank extends AbstractModel
         } catch (\Exception $error) {
             prd($error->getMessage());
         }
+
+        /*pr($collegeId);
+        pr($benchmark->getId());
+        prd($query->getDQL());*/
 
         return $result;
     }
@@ -123,6 +137,8 @@ class PercentileRank extends AbstractModel
 
         $query->andWhere("p.study = :study_id");
         $query->setParameter('study_id', $study->getId());
+
+        $query->andWhere("p.forPercentChange IS FALSE");
 
         $query->andWhere("p.year = :year");
         $query->setParameter('year', $year);
@@ -200,6 +216,8 @@ class PercentileRank extends AbstractModel
 
         $query->andWhere("p.study = :study_id");
         $query->setParameter('study_id', $study->getId());
+
+        $query->andWhere("p.forPercentChange IS FALSE");
 
         $query->andWhere("p.year = :year");
         $query->setParameter('year', $year);

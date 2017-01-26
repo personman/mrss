@@ -32,7 +32,7 @@ class Percentile extends AbstractModel
             $system = null;
         }
 
-        return $this->getRepository()->findBy(
+        $results = $this->getRepository()->findBy(
             array(
                 'benchmark' => $benchmark,
                 'year' => $year,
@@ -44,6 +44,8 @@ class Percentile extends AbstractModel
                 'percentile' => 'ASC'
             )
         );
+
+        return $results;
     }
 
     public function findByBenchmarkYearAndPercentile($benchmark, $year, $percentile, $forPercentChange = false)

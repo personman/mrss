@@ -2,16 +2,19 @@
 
 namespace Mrss\Service\Report;
 
+use Mrss\Entity\Subscription;
 use Mrss\Entity\Benchmark;
 use Mrss\Service\Report;
 use Mrss\Entity\PercentChange;
 use PHPExcel;
 
-class Changes extends Report
+class Changes extends National
 {
     //protected $percentThreshold = 5;
 
     protected $percentChangeModel;
+
+    protected $changes;
 
     public function calculateChanges($observationId)
     {
@@ -93,6 +96,89 @@ class Changes extends Report
         return $this;
     }
 
+
+    public function getData(Subscription $subscription, $system = null, $benchmarkGroupId = null)
+    {
+        $observation = $subscription->getObservation();
+        $this->setObservation($observation);
+        $college = $subscription->getCollege();
+        $year = $subscription->getYear();
+        $study = $this->getStudy();
+        $dbColumns = $this->getIncludedDbColumns();
+
+        $changes = $this->getPercentChangeModel()->findByCollegeAndYear($college, $year);
+        $this->setChanges($changes);
+
+        //$this->setObservation($observation);
+        //$this->setSystem($system);
+        //$year = $observation->getYear();
+        $this->getVariableSubstitution()->setStudyYear($year);
+
+        $reportData = array();
+
+        $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            if (!empty($benchmarkGroupId) && $benchmarkGroup->getId() != $benchmarkGroupId) {
+                continue;
+            }
+
+            $suppressed = $subscription->hasSuppressionFor($benchmarkGroup->getId());
+
+            $groupData = array(
+                'benchmarkGroup' => $benchmarkGroup->getName(),
+                'timeframe' => $this->getVariableSubstitution()->substitute($benchmarkGroup->getTimeframe()),
+                'url' => $benchmarkGroup->getUrl(),
+                'benchmarks' => array()
+            );
+            $benchmarks = $benchmarkGroup->getChildren($year, true, 'report', $dbColumns);
+
+            foreach ($benchmarks as $benchmark) {
+                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                    /** @var \Mrss\Entity\BenchmarkHeading $heading */
+                    $heading = $benchmark;
+                    $groupData['benchmarks'][] = array(
+                        'heading' => true,
+                        'name' => $this->getVariableSubstitution()->substitute($heading->getName()),
+                        'description' => $this->getVariableSubstitution()->substitute($heading->getDescription())
+                    );
+                    continue;
+                }
+
+                /** @var \Mrss\Entity\BenchmarkHeading $benchmark */
+                if ($this->isBenchmarkExcludeFromReport($benchmark)) {
+                    continue;
+                }
+
+
+                $benchmarkData = $this->getBenchmarkChangeData($benchmark);
+
+
+                //$benchmarkData = $this->getBenchmarkData($benchmark);
+
+                //$benchmarkData = array_merge($changeData, $benchmarkData);
+
+                // Don't show them their own data if it's suppressed
+                if ($suppressed) {
+                    $benchmarkData['reported'] = null;
+                }
+
+                $groupData['benchmarks'][] = $benchmarkData;            }
+
+            if (!empty($groupData['benchmarks'])) {
+                $reportData[] = $groupData;
+            }
+
+        }
+
+        return $reportData;
+    }
+
+    /**
+     * @deprecated Use getData above instead
+     * @param $changes
+     * @param $year
+     * @return array
+     */
     public function getReport($changes, $year)
     {
         $changes = $this->prepareChanges($changes);
@@ -156,24 +242,15 @@ class Changes extends Report
 
     public function getIncludedDbColumns()
     {
-        return array(
-            'ft_cr_head',
-            'tuition_fees',
-            'ft_minus4_perc_completed',
-            'pt_minus4_perc_completed',
-            'ft_perc_transf',
-            'pt_perc_transf',
-            'ft_minus4_perc_comp_and_transf',
-            'pt_minus4_perc_comp_and_transf',
-            'ft_minus7_perc_completed',
-            'pt_minus7_perc_completed',
-            'percminus7_transf',
-            'pt_percminus7_tran',
-            'ft_minus7_perc_comp_and_transf',
-            'pt_minus7_perc_comp_and_transf',
-            'cst_crh',
-            'cst_fte_stud'
-        );
+        $cols = $this->getStudyConfig()->percent_change_report_columns;
+        $dbColumns = array();
+
+        // Can't hand the config object directly back. Iterate to extract values
+        foreach ($cols as $col) {
+            $dbColumns[] = $col;
+        }
+
+        return $dbColumns;
     }
 
     public function isBenchmarkGroupEmpty($groupData)
@@ -184,6 +261,8 @@ class Changes extends Report
                 $empty = false;
             }
         }
+
+        return $empty;
     }
 
     public function prepareChanges($changes)
@@ -196,8 +275,13 @@ class Changes extends Report
         return $newChanges;
     }
 
-    public function getBenchmarkChangeData($benchmark, $changes)
+    public function getBenchmarkChangeData($benchmark)
     {
+        $changes = $this->getChanges();
+
+        //pr(count($changes));
+
+        $percentChange = null;
         $data = array(
             'benchmark' => $benchmark->getReportLabel(),
         );
@@ -205,18 +289,29 @@ class Changes extends Report
         if (!empty($changes[$benchmark->getDbColumn()])) {
             $change = $changes[$benchmark->getDbColumn()];
 
+            $percentChange = $change->getPercentChange();
+
             $data = array(
                 'benchmark' => $benchmark->getReportLabel(),
                 'oldValue' => $benchmark->format($change->getOldValue()),
                 'newValue' => $benchmark->format($change->getValue()),
-                'percentChange' => round($change->getPercentChange()) . '%'
+                'percentChange' => round($percentChange) . '%'
             );
         }
+
+        $percentiles = $this->getBenchmarkData($benchmark, true, $percentChange);
+
+        //if (!empty($data['oldValue'])) pr($data);
+        $data = $data + $percentiles;
+
+        //pr($percentiles);
+
+        //if (!empty($data['oldValue'])) prd($data);
 
         return $data;
     }
 
-    public function download($changes)
+    public function download($changes, $system = null)
     {
         $excel = new PHPExcel();
         $sheet = $excel->getActiveSheet();
@@ -259,5 +354,17 @@ class Changes extends Report
 
         $filename = 'percent-changes';
         $this->downloadExcel($excel, $filename);
+    }
+
+    public function setChanges($changes)
+    {
+        $this->changes = $this->prepareChanges($changes);
+
+        return $this;
+    }
+
+    public function getChanges()
+    {
+        return $this->changes;
     }
 }

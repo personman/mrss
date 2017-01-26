@@ -1078,9 +1078,10 @@ return array(
                         'options' => array(
                             'route' => '/percent-change[/:year][/:format]',
                             'defaults' => array(
-                                'action' => 'percentChange',
+                                'action' => 'national',
                                 'year' => null,
-                                'format' => 'html'
+                                'format' => 'html',
+                                'forPercentChange' => true
                             )
                         )
                     ),
@@ -1123,7 +1124,8 @@ return array(
                                 'action' => 'national',
                                 'year' => null,
                                 'format' => 'html',
-                                'system' => false
+                                'system' => false,
+                                'forPercentChange' => false
                             )
                         )
                     ),

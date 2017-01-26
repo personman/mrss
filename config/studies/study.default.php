@@ -24,6 +24,7 @@ return array(
     'free_to_join' => false,
     'agreement_template' => null,
     'custom_excel_template' => null,
+    'percent_change_report_columns' => array(),
     'welcome_email' => 'welcome',
     'outlier_email' => 'outliers.email',
     'outlier_email_none' => 'outliers.email.none',
