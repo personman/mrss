@@ -148,6 +148,30 @@ class ReportController extends ReportAdminController
         );
     }
 
+    /**
+     * Remove subscriptions where they didn't have one in the prior year
+     *
+     * @param $subscriptions
+     */
+    protected function getSubscriptionsForPercentChange($subscriptions)
+    {
+        $years = array();
+        foreach ($subscriptions as $subscription) {
+            $years[] = $subscription->getYear();
+        }
+
+        $newSubscriptions = array();
+        foreach ($subscriptions as $subscription) {
+            $priorYear = $subscription->getYear() - 1;
+
+            if (in_array($priorYear, $years)) {
+                $newSubscriptions[] = $subscription;
+            }
+        }
+
+        return $newSubscriptions;
+    }
+
     /** @return \Mrss\Service\Report\National */
     protected function getNationService()
     {
