@@ -313,8 +313,72 @@ class Changes extends National
         return $data;
     }
 
-    public function download($changes, $system = null)
+    public function getDownloadHeader($formName)
     {
+        $year = $this->getYear();
+
+        // Header
+        $headerRow = array(
+            $formName,
+            $year - 1,
+            $year,
+            '% Change',
+            '% Rank',
+            'N'
+        );
+
+        return $headerRow;
+    }
+
+    protected function getDownloadColWidth()
+    {
+        return 10;
+    }
+
+    protected function getDownloadLastCol()
+    {
+        return 'K';
+    }
+
+    protected function getDownloadFileName($system = null)
+    {
+        return 'percent-change-report';
+    }
+
+    protected function getDownloadDataRow($benchmark)
+    {
+        $percentileDecimalPlaces = 0;
+
+        $rank = $benchmark['percentile_rank'];
+        if (empty($benchmark['do_not_format_rank'])) {
+            $rank = round($benchmark['percentile_rank']) . '%';
+        }
+
+        $dataRow = array(
+            $benchmark['benchmark'],
+            $benchmark['oldValue'],
+            $benchmark['newValue'],
+            $benchmark['percentChange'],
+            $rank,
+            $benchmark['N']
+        );
+
+        foreach ($benchmark['percentiles'] as $percentile) {
+            $dataRow[] = number_format(
+                    $percentile,
+                    $percentileDecimalPlaces
+                ) . '%';
+        }
+
+        return $dataRow;
+    }
+
+    public function downloadDeleteMe($changes, $system = null)
+    {
+        prd($changes);
+
+
+
         $excel = new PHPExcel();
         $sheet = $excel->getActiveSheet();
         $row = 1;

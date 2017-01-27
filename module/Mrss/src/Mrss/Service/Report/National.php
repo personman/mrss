@@ -96,13 +96,22 @@ class National extends Report
         return $reportData;
     }
 
-    public function download($reportData, $system = null)
+    protected function getDownloadFileName($system = null)
     {
         $filename = 'national-report';
+
         if ($system) {
             $name = strtolower(str_replace(' ', '-', $system->getName()));
             $filename = $name . '-report';
         }
+
+        return $filename;
+    }
+
+    public function download($reportData, $system = null)
+    {
+        $filename = $this->getDownloadFileName($system);
+
 
         $excel = new PHPExcel();
         $sheet = $excel->getActiveSheet();
@@ -116,25 +125,29 @@ class National extends Report
             )
         );
 
+        // Format for subheading row
+        $grayBar = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'F5F5F5')
+            )
+        );
+
         foreach ($reportData as $benchmarkGroup) {
             if (!empty($benchmarkGroup['timeframe'])) {
                 $benchmarkGroup['benchmarkGroup'] .= ' (' . $benchmarkGroup['timeframe'] . ')';
             }
 
-            // Header
-            $headerRow = array(
-                $benchmarkGroup['benchmarkGroup'],
-                'Reported Value',
-                '% Rank',
-                'N'
-            );
+            $headerRow = $this->getDownloadHeader($benchmarkGroup['benchmarkGroup']);
 
             foreach ($this->getPercentileBreakPointLabels() as $breakpoint) {
                 $headerRow[] = strip_tags($breakpoint);
             }
 
             $sheet->fromArray($headerRow, null, 'A' . $row);
-            $sheet->getStyle("A$row:I$row")->applyFromArray($blueBar);
+
+            $lastCol = $this->getDownloadLastCol();
+            $sheet->getStyle("A$row:$lastCol" . $row)->applyFromArray($blueBar);
             $row++;
 
             // Data
@@ -146,6 +159,7 @@ class National extends Report
                     );
 
                     $sheet->fromArray($dataRow, null, 'A' . $row);
+                    $sheet->getStyle("A$row:$lastCol" . $row)->applyFromArray($grayBar);
                     $row++;
                     continue;
                 }
@@ -155,36 +169,7 @@ class National extends Report
                 }
 
 
-                if (null !== $benchmark['reported']) {
-                    $reported = $benchmark['prefix'] .
-                        number_format(
-                            $benchmark['reported'],
-                            $benchmark['reported_decimal_places']
-                        ) .
-                        $benchmark['suffix'];
-                } else {
-                    $reported = null;
-                };
-
-                $rank = $benchmark['percentile_rank'];
-                if (empty($benchmark['do_not_format_rank'])) {
-                    $rank = round($benchmark['percentile_rank']) . '%';
-                }
-
-                $dataRow = array(
-                    $benchmark['benchmark'],
-                    $reported,
-                    $rank,
-                    $benchmark['N']
-                );
-
-                foreach ($benchmark['percentiles'] as $percentile) {
-                    $dataRow[] = $benchmark['prefix'] .
-                        number_format(
-                            $percentile,
-                            $benchmark['reported_decimal_places']
-                        ) . $benchmark['suffix'];
-                }
+                $dataRow = $this->getDownloadDataRow($benchmark);
 
                 $sheet->fromArray($dataRow, null, 'A' . $row);
                 $row++;
@@ -202,12 +187,72 @@ class National extends Report
         //PHPExcel_Shared_Font::setAutoSizeMethod(
         //    PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT
         //);
-        foreach (range(0, 8) as $column) {
+        $colWidth = $this->getDownloadColWidth();
+        foreach (range(0, $colWidth) as $column) {
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         }
 
         // redirect output to client browser
         $this->downloadExcel($excel, $filename);
+    }
+
+    protected function getDownloadDataRow($benchmark)
+    {
+        if (null !== $benchmark['reported']) {
+            $reported = $benchmark['prefix'] .
+                number_format(
+                    $benchmark['reported'],
+                    $benchmark['reported_decimal_places']
+                ) .
+                $benchmark['suffix'];
+        } else {
+            $reported = null;
+        };
+
+        $rank = $benchmark['percentile_rank'];
+        if (empty($benchmark['do_not_format_rank'])) {
+            $rank = round($benchmark['percentile_rank']) . '%';
+        }
+
+        $dataRow = array(
+            $benchmark['benchmark'],
+            $reported,
+            $rank,
+            $benchmark['N']
+        );
+
+        foreach ($benchmark['percentiles'] as $percentile) {
+            $dataRow[] = $benchmark['prefix'] .
+                number_format(
+                    $percentile,
+                    $benchmark['reported_decimal_places']
+                ) . $benchmark['suffix'];
+        }
+
+        return $dataRow;
+    }
+
+    protected function getDownloadColWidth()
+    {
+        return 8;
+    }
+
+    protected function getDownloadLastCol()
+    {
+        return 'I';
+    }
+
+    public function getDownloadHeader($formName)
+    {
+        // Header
+        $headerRow = array(
+            $formName,
+            'Reported Value',
+            '% Rank',
+            'N'
+        );
+
+        return $headerRow;
     }
 
     public function getBenchmarksToExcludeFromReport()

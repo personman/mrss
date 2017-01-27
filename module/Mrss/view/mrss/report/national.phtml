@@ -43,7 +43,7 @@ $this->headScript()->appendFile(
     Prepared for <?= $college->getName() ?>
 </p>
 
-<?php if (!$forPercentChange): ?>
+
 <p>
     <a href="<?= $this->url(
         'reports/' . $reportPath,
@@ -56,6 +56,7 @@ $this->headScript()->appendFile(
         Download Report
     </a>
 
+    <?php if (!$forPercentChange): ?>
     <a href="<?= $this->url(
         'institution/subscribed',
         array(
@@ -65,8 +66,9 @@ $this->headScript()->appendFile(
         <span class="glyphicon glyphicon-circle-arrow-down"></span>
         Download Members
     </a>
+    <?php endif ?>
 </p>
-<?php endif ?>
+
 
 
 <div class="report">

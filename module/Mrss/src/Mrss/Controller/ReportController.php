@@ -110,8 +110,14 @@ class ReportController extends ReportAdminController
             return $this->observationNotFound();
         }
 
+        $reportPath = 'national';
+        if ($system) {
+            $reportPath = 'system';
+        }
+
         if ($forPercentChange) {
             $reportService = $this->getPercentChangeService();
+            $reportPath = 'percent-change';
         } else {
             $reportService = $this->getNationService($forPercentChange);
         }
@@ -125,9 +131,8 @@ class ReportController extends ReportAdminController
             die;
         }
 
-        $reportPath = 'national';
-        if ($system) {
-            $reportPath = 'system';
+        if ($forPercentChange) {
+            $subscriptions = $this->getSubscriptionsForPercentChange($subscriptions);
         }
 
         return array(
