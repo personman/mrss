@@ -98,6 +98,11 @@ class Report
     protected $systemModel;
 
     /**
+     * @var \Mrss\Model\PercentChange
+     */
+    protected $percentChangeModel;
+
+    /**
      * @var \Mrss\Entity\Observation
      */
     protected $observation;
@@ -171,7 +176,7 @@ class Report
      * @param bool $systems
      * @return string
      */
-    public function getReportCalculatedSettingKey($year, $systems = false)
+    public function getReportCalculatedSettingKey($year, $systems = false, $forPercentChange = false)
     {
         $studyId = $this->getStudy()->getId();
 
@@ -179,6 +184,10 @@ class Report
 
         if ($systems) {
             $key = 'system_' . $key;
+        }
+
+        if ($forPercentChange) {
+            $key = 'perc_change_' . $key;
         }
 
         return $key;
@@ -203,27 +212,36 @@ class Report
         Benchmark $benchmark,
         $year,
         $skipNull = true,
-        $system = null
+        $system = null,
+        $forPercentChange = false
     ) {
-        $dbColumn = $benchmark->getDbColumn();
-        $observation = new Observation;
-        if ($observation->has($dbColumn)) {
+        $data = array();
 
-            // We no longer need the observation here
-            $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
-                $this->getStudy(),
-                $year,
-                array($dbColumn),
-                false,
-                true,
-                array(),
-                $system
-            );
+        if ($forPercentChange) {
+            $changes = $this->getPercentChangeModel()->findByBenchmarkAndYear($benchmark, $year);
+            $data = $this->getDataFromPercentChanges($changes);
+
         } else {
-            $subscriptions = array();
-        }
+            $dbColumn = $benchmark->getDbColumn();
+            $observation = new Observation;
+            if ($observation->has($dbColumn)) {
 
-        $data = $this->getDataFromSubscriptions($subscriptions, $benchmark, $skipNull);
+                // We no longer need the observation here
+                $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
+                    $this->getStudy(),
+                    $year,
+                    array($dbColumn),
+                    false,
+                    true,
+                    array(),
+                    $system
+                );
+            } else {
+                $subscriptions = array();
+            }
+
+            $data = $this->getDataFromSubscriptions($subscriptions, $benchmark, $skipNull);
+        }
 
         return $data;
     }
@@ -274,12 +292,31 @@ class Report
                 }
 
                 $data[$collegeId] = $value;
-                $ipeds = $subscription->getCollege()->getIpeds();
-                $iData[$ipeds] = $value;
+                //$ipeds = $subscription->getCollege()->getIpeds();
+                //$iData[$ipeds] = $value;
             }
         }
 
-        ksort($iData);
+        //ksort($iData);
+
+        return $data;
+    }
+
+    /**
+     * @param \Mrss\Entity\PercentChange[] $changes
+     * @return mixed
+     */
+    protected function getDataFromPercentChanges($changes)
+    {
+        $data = array();
+
+        foreach ($changes as $change) {
+            $changeValue = $change->getPercentChange();
+            $collegeId = $change->getCollege()->getId();
+
+            $data[$collegeId] = $changeValue;
+
+        }
 
         return $data;
     }
@@ -415,8 +452,12 @@ class Report
         return $reportData;
     }
 
-    public function getPercentileBarChart($config, Observation $observation)
-    {
+    public function getPercentileBarChart(
+        $config,
+        Observation $observation,
+        $forPercentChange = false,
+        $percentChange = null
+    ) {
         $dbColumn = $config['dbColumn'];
         $benchmark = $this->getBenchmarkModel()->findOneByDbColumnAndStudy($dbColumn, $this->getStudy()->getId());
 
@@ -429,7 +470,8 @@ class Report
                 $benchmark,
                 $observation->getYear(),
                 $this->getPercentileBreakpointsForStudy(),
-                $this->getSystem()
+                $this->getSystem(),
+                $forPercentChange
             );
         $percentileData = array();
         foreach ($percentiles as /** var Percentile */ $percentile) {
@@ -437,11 +479,18 @@ class Report
                 ->getValue();
         }
 
+        if ($forPercentChange) {
+            $value = $percentChange;
+        } else {
+            $value = $observation->get($dbColumn);
+        }
+
         $chart = $this->getPercentileChartConfig(
             $benchmark,
             $percentileData,
-            $observation->get($dbColumn),
-            $config
+            $value,
+            $config,
+            $forPercentChange
         );
 
         return $chart;
@@ -667,12 +716,12 @@ class Report
         return null;
     }
 
-    protected function loadPercentileData($benchmarkData, $benchmark, $year)
+    protected function loadPercentileData($benchmarkData, $benchmark, $year, $forPercentChange = false)
     {
         $breakpoints = $this->getPercentileBreakpointsForStudy();
         $breakpoints[] = 'N';
         $percentiles = $this->getPercentileModel()
-            ->findByBenchmarkAndYear($benchmark, $year, $breakpoints, $this->getSystem());
+            ->findByBenchmarkAndYear($benchmark, $year, $breakpoints, $this->getSystem(), $forPercentChange);
 
         $percentileData = array();
         foreach ($percentiles as $percentile) {
@@ -700,7 +749,8 @@ class Report
 
         return $benchmarkData;
     }
-    public function getBenchmarkData(Benchmark $benchmark)
+
+    public function getBenchmarkData(Benchmark $benchmark, $forPercentChange = false, $percentChange = null)
     {
         $benchmarkData = array(
             'benchmark' => $this->getVariableSubstitution()->substitute($benchmark->getReportLabel()),
@@ -709,7 +759,7 @@ class Report
 
         $year = $this->getObservation()->getYear();
 
-        $benchmarkData = $this->loadPercentileData($benchmarkData, $benchmark, $year);
+        $benchmarkData = $this->loadPercentileData($benchmarkData, $benchmark, $year, $forPercentChange);
 
         $benchmarkData['reported'] = $this->getObservation()->get(
             $benchmark->getDbColumn()
@@ -723,7 +773,8 @@ class Report
                 $this->getObservation()->getCollege(),
                 $benchmark,
                 $year,
-                $this->getSystem()
+                $this->getSystem(),
+                $forPercentChange
             );
 
         if (!empty($percentileRank)) {
@@ -762,7 +813,9 @@ class Report
 
         $benchmarkData['chart'] = $this->getPercentileBarChart(
             $chartConfig,
-            $this->getObservation()
+            $this->getObservation(),
+            $forPercentChange,
+            $percentChange
         );
 
         $benchmarkData['description'] = $this->getVariableSubstitution()
@@ -810,7 +863,8 @@ class Report
         Benchmark $benchmark,
         $percentileData,
         $reportedValue,
-        $chartConfig
+        $chartConfig,
+        $forPercntChange = false
     ) {
         if (empty($percentileData)) {
             return false;
@@ -842,6 +896,10 @@ class Report
 
 
         $format = $this->getFormat($benchmark);
+
+        if ($forPercntChange) {
+            $format = '{y:,.2f}%';
+        }
 
         // Put the college's data in its place
         if (count($chartValues) != count($chartXCategories)) {
@@ -909,11 +967,10 @@ class Report
             )
         );
 
-
-        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series);
+        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercntChange);
     }
 
-    protected function buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series)
+    protected function buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercntChange)
     {
         //$seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
         $dataDefinition = $this->getChartFooter($benchmark);
@@ -993,7 +1050,7 @@ class Report
             $chart['yAxis']['max'] = 6;
         }
 
-        if ($benchmark->isDollars()) {
+        if ($benchmark->isDollars() && !$forPercntChange) {
             $chart['yAxis']['labels'] = array(
                 'format' => '${value}'
             );
@@ -1351,11 +1408,26 @@ class Report
     }
 
     /**
-     * @return \Mrss\Model\System
+     * @return \Mrss\Model\PercentChange
      */
     public function getSystemModel()
     {
         return $this->systemModel;
+    }
+
+    public function setPercentChangeModel($model)
+    {
+        $this->percentChangeModel = $model;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\PercentChange
+     */
+    public function getPercentChangeModel()
+    {
+        return $this->percentChangeModel;
     }
 
 

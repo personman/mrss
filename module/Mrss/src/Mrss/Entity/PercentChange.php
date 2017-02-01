@@ -24,7 +24,10 @@ class PercentChange
      */
     protected $study;
 
+
     /**
+     * Should year and college be combined to the subscription id?
+     * Maybe not as that would make it harder to search by year or by college.
      * @ORM\Column(type="integer")
      */
     protected $year;

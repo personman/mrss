@@ -37,7 +37,7 @@ $this->headScript()->appendFile(
     h3 {
        margin-top: 25px;
     }
-    .calculation-progress, .system-progress, .calculate-changes-progress {
+    .calculation-progress, .system-progress, .calculate-changes-progress, .calculate-changes-percentiles-progress {
         display: none;
     }
 </style>
@@ -230,7 +230,7 @@ $this->headScript()->appendFile(
     </div>
 
 
-    <h3>Percent Change Report</h3>
+    <h3>Percent Changes</h3>
     <div class="row-fluid row">
         <div class="span4 col-md-4">
             <p>
@@ -256,10 +256,42 @@ $this->headScript()->appendFile(
         </div>
 
         <div class="span1 col-md-1">
+            <span class="progress-label"></span>
         </div>
 
         <div class="span1 col-md-2">
-            <a class="btn btn-default calculate-changes" href="#" id="calculate-changes-<?= $year ?>">Prepare Percent Change Report</a>
+            <a class="btn btn-default calculate-changes" href="#" id="calculate-changes-<?= $year ?>">Prepare Percent Changes</a>
+        </div>
+    </div>
+
+
+    <h3>Percent Change Percentiles</h3>
+    <div class="row-fluid row">
+        <div class="span4 col-md-4">
+            <p>
+                Do percentile comparisons for all percent changes calculated in previous step. This will look like the national report, but be based on rates of change rather than raw data.
+            </p>
+
+        </div>
+
+        <div class="span5 col-md-5">
+            <div class="progress calculate-changes-percentiles-progress" id="calculate-changes-percentile-progress-<?= $year ?>">
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: 0%;"></div>
+            </div>
+
+        </div>
+
+        <div class="col-md-1">
+            <span class="progress-label"></span>
+        </div>
+
+        <div class="span1 col-md-2">
+            <a class="btn btn-default calculate-changes-percentiles" href="#" id="calculate-changes-percentiles-<?= $year ?>">Prepare Percent Change Percentiles</a>
         </div>
     </div>
 

@@ -14,6 +14,13 @@ use Zend\Log\Formatter\Simple;
 class ReportAdminController extends AbstractActionController
 {
     /**
+     * @var Report
+     */
+    protected $reportService;
+
+    protected $debug = false;
+
+    /**
      * @return Report\Percentile
      */
     protected function getPercentileService()
@@ -116,14 +123,15 @@ class ReportAdminController extends AbstractActionController
 
     public function debug($message, $var)
     {
-        $seconds = microtime(true) - REQUEST_MICROTIME;
+        if ($this->debug) {
+            $seconds = microtime(true) - REQUEST_MICROTIME;
 
-        echo "$seconds since request started.<h3>$message</h3>";
+            echo "$seconds since request started.<h3>$message</h3>";
 
-        if ($var) {
-            pr($var);
+            if ($var) {
+                pr($var);
+            }
         }
-
     }
 
     /**
@@ -136,26 +144,28 @@ class ReportAdminController extends AbstractActionController
         $benchmarkId = $this->params()->fromRoute('benchmark');
         $year = $this->params()->fromRoute('year');
         $position = $this->params()->fromRoute('position');
+        $forPercentChange = $this->params()->fromRoute('forPercentChange', false);
 
         $percentileService = $this->getPercentileService();
         $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
 
         // If this is the first benchmark, clear existing percentiles
         if ($position == 'first') {
-            $percentileService->clearPercentiles($year);
+            $percentileService->clearPercentiles($year, null, $forPercentChange);
         }
 
         // Last?
         if ($position == 'last') {
-            $settingKey = $this->getReportService()->getReportCalculatedSettingKey($year);
+            $settingKey = $this->getReportService()->getReportCalculatedSettingKey($year, null, $forPercentChange);
             $this->getReportService()->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
         }
 
 
         $this->debug("About to calculate", $benchmarkId);
+        $this->debug("For percent change: ", $forPercentChange);
 
         // Now actually calculate and save percentiles
-        $percentileService->calculateForBenchmark($benchmark, $year);
+        $percentileService->calculateForBenchmark($benchmark, $year, null, $forPercentChange);
 
         $this->debug("Preflush", null);
 
@@ -317,6 +327,19 @@ class ReportAdminController extends AbstractActionController
         }
 
         return $table;
+    }
+
+    /**
+     * @return Report
+     */
+    public function getReportService()
+    {
+        if (empty($this->reportService)) {
+            $this->reportService = $this->getServiceLocator()
+                ->get('service.report');
+        }
+
+        return $this->reportService;
     }
 
     public function calculateChangesAction()

@@ -70,7 +70,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
 <?php if (count($subscriptions)): ?>
 <p>
-    <?= count($subscriptions) ?> subscriptions, $<?= number_format($total, 2) ?>.
+    <?= count($subscriptions) ?> subscriptions<?= $sectionsNote ?>, $<?= number_format($total, 2) ?>.
 </p>
 
 

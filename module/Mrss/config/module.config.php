@@ -999,7 +999,21 @@ return array(
                                 'action' => 'calculateOne',
                                 'year' => null,
                                 'benchmark' => null,
-                                'position' => null
+                                'position' => null,
+                                'forPercentileChange' => false
+                            )
+                        )
+                    ),
+                    'calculate-one-percent-change' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/calculate-one-percent-change/:benchmark/:year[/:position]',
+                            'defaults' => array(
+                                'action' => 'calculateOne',
+                                'year' => null,
+                                'benchmark' => null,
+                                'position' => null,
+                                'forPercentChange' => true
                             )
                         )
                     ),
@@ -1064,9 +1078,10 @@ return array(
                         'options' => array(
                             'route' => '/percent-change[/:year][/:format]',
                             'defaults' => array(
-                                'action' => 'percentChange',
+                                'action' => 'national',
                                 'year' => null,
-                                'format' => 'html'
+                                'format' => 'html',
+                                'forPercentChange' => true
                             )
                         )
                     ),
@@ -1109,7 +1124,8 @@ return array(
                                 'action' => 'national',
                                 'year' => null,
                                 'format' => 'html',
-                                'system' => false
+                                'system' => false,
+                                'forPercentChange' => false
                             )
                         )
                     ),

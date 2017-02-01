@@ -56,6 +56,11 @@ class PercentileRank
     protected $study;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $forPercentChange = false;
+
+    /**
      * @ORM\Column(type="float")
      */
     protected $rank;
@@ -172,5 +177,23 @@ class PercentileRank
     public function getHighIsBetter()
     {
         return $this->highIsBetter;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForPercentChange()
+    {
+        return $this->forPercentChange;
+    }
+
+    /**
+     * @param mixed $forPercentChange
+     * @return PercentileRank
+     */
+    public function setForPercentChange($forPercentChange)
+    {
+        $this->forPercentChange = $forPercentChange;
+        return $this;
     }
 }
