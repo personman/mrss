@@ -191,6 +191,7 @@ class StudyController extends AbstractActionController
         $computedFields = $this->getServiceLocator()->get('computedFields');
 
         $variableService = $this->getServiceLocator()->get('service.variableSubstitution');
+        $computedFields->setVariableService($variableService);
 
         $year = $study->getCurrentYear();
 
@@ -215,7 +216,7 @@ class StudyController extends AbstractActionController
                 $equation = $computedFields->getEquationWithLabels($benchmark, false);
 
                 $computed[] = array(
-                    'benchmark' => $benchmark->getReportLabel(),
+                    'benchmark' => $variableService->substitute($benchmark->getReportLabel()),
                     'equation' => $equation
                 );
             }

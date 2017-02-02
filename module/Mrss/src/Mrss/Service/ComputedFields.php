@@ -49,6 +49,8 @@ class ComputedFields
 
     protected $keyedBenchmarks = array();
 
+    protected $variableService;
+
     public function calculate(
         Benchmark $benchmark,
         Observation $observation,
@@ -446,6 +448,7 @@ class ComputedFields
                 //$benchmarkToInsert = $keyedBenchmarks[$variable];
 
                 $fieldName = $benchmarkToInsert->getDescriptiveReportLabel();
+                $fieldName = $this->getVariableService()->substitute($fieldName);
                 /*$fieldName = "<span class='fieldName'>
                     $fieldName <a href='#'><span class='glyphicon glyphicon-edit icon-edit'></span></a>
                 </span> "; */
@@ -603,5 +606,17 @@ class ComputedFields
     public function getDebug()
     {
         return $this->debug;
+    }
+
+    public function setVariableService($service)
+    {
+        $this->variableService = $service;
+
+        return $this;
+    }
+
+    public function getVariableService()
+    {
+        return $this->variableService;
     }
 }
