@@ -12,6 +12,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(document).ready(function() {
         $('#percentChanges').dataTable({
             "order": [[0, "asc"]],
@@ -20,6 +21,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             'iDisplayLength': 25
         });
     });
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <style>

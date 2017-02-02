@@ -17,6 +17,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 </style>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(document).ready(function() {
         var table = $('#issues').DataTable({
             "order": [[3, "desc"]],
@@ -102,6 +103,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         }
         form.appendTo('body').submit();
     }
+
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <div class="btn-group heading-btns">

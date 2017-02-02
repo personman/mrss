@@ -11,6 +11,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(document).ready(function() {
         $('.observationChanges').dataTable({
             "order": [[0, "desc"]],
@@ -21,6 +22,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
         $('.heatMapYear, .heatmapTd').css('width', '20px')
     });
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <h1>Recent Data Changes</h1>
