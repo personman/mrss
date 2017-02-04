@@ -4,11 +4,13 @@ $this->headLink()->appendStylesheet('/css/custom-report.css?v=1', 'screen,print'
 ?>
 
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('.delete-confirm').click(function() {
             return confirm('Are you sure you want to delete this?')
         })
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 

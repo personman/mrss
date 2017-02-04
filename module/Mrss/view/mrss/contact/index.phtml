@@ -1,52 +1,8 @@
 <?php $this->headTitle()->prepend('Contact'); ?>
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         backgroundVerification()
-
-        /* Deprecated along with old reCaptcha
-        setTimeout(function() {
-            // Add an enlarge link
-            //alert('test')
-            $('#recaptcha_table tbody').after(
-                '<tr><td>' +
-                    '<a href="#" id="enlarge">Enlarge image</a>' +
-                    '<a href="#" id="shrink">Restore image</a>' +
-                    '</td></tr>'
-            )
-            $('#shrink').hide()
-            $('#enlarge').parent().css('text-align', 'center')
-
-
-            $('#enlarge').click(function() {
-                $('#control-group-captcha').css('margin-top', '120px')
-                $('#recaptcha_image img')
-                    .css('position', 'absolute')
-                    .css('bottom', '60px')
-                    .css('left', '200px')
-                    .css('transform', 'scale(2.5)')
-                    .zIndex(99)
-                $('#shrink').show()
-                $('#enlarge').hide()
-
-                return false
-            })
-
-
-            $('#shrink').click(function() {
-                $('#control-group-captcha').css('margin-top', '15px')
-                $('#recaptcha_image img')
-                    .css('position', 'relative')
-                    .css('bottom', '0px')
-                    .css('left', '0px')
-                    .css('transform', 'scale(1)')
-                    .zIndex(99)
-                $('#shrink').hide()
-                $('#enlarge').show()
-
-                return false
-            })
-
-        }, 500)*/
     })
 
     function backgroundVerification()
@@ -69,6 +25,7 @@
     function reverse(s) {
         return s.split('').reverse().join('');
     }
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <style>

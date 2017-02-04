@@ -6,6 +6,7 @@ $this->headScript()->appendFile(
 
 <?php /** @var \Mrss\Entity\Study $study */ ?>
 <script>
+    <?php $this->headScript()->captureStart() ?>
     var benchmarks = {};
 
     <?php foreach ($years as $year => $calculationDates) {
@@ -31,7 +32,7 @@ $this->headScript()->appendFile(
     $(document).ready(function(){
         $('.nav-tabs li a:first').tab('show');
     });
-
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 <style>
     h3 {

@@ -11,11 +11,13 @@ $this->headScript()->appendFile(
 ); ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(document).ready(function(){
         $('.tooltipster').tooltipster({
             contentAsHTML: true,
         });
     });
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 

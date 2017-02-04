@@ -179,6 +179,7 @@
 
 
 <script type='text/javascript'>
+    <?php $this->headScript()->captureStart() ?>
     function chartLoaded(event)
     {
         var lastChart = this
@@ -260,14 +261,16 @@
             //.css('width', '300px')
 
     }
-    //})
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <?php if ($autoPrint): ?>
     <script>
+        <?php $this->headScript()->captureStart() ?>
         $(function() {
             setTimeout(function() {window.print()}, 2000);
         });
+        <?php $this->headScript()->captureEnd() ?>
     </script>
 <?php endif ?>
 

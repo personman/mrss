@@ -8,6 +8,7 @@ $this->headScript()->appendFile(
 ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('#benchmark').chosen({search_contains: true, placeholder_text_single: 'Choose...'})
             .change(function(event, params) {
@@ -15,6 +16,7 @@ $this->headScript()->appendFile(
                 $('#name').val(benchmarkName)
             })
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <style>

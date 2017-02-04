@@ -68,7 +68,9 @@ $form->setAttribute('action', $this->url('reports/explore'));
         <?php foreach ($charts as $savedChart): ?>
             <li><a href="#" onclick="return postChart(<?= $savedChart->getId() ?>)"><?= $savedChart->getName() ?></a></li>
             <script>
+                <?php $this->headScript()->captureStart() ?>
                 savedCharts[<?= $savedChart->getId() ?>] = '<?= $savedChart->getConfig(0) ?>'
+                <?php $this->headScript()->captureEnd() ?>
             </script>
         <?php endforeach ?>
         </ul>

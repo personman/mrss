@@ -10,10 +10,13 @@ $this->headScript()->appendFile(
 
 
 <?php if ($print): ?>
+
     <script>
+        <?php $this->headScript()->captureStart() ?>
         $(function() {
             setTimeout(function() {window.print()}, 2000);
         });
+        <?php $this->headScript()->captureEnd() ?>
     </script>
 
 

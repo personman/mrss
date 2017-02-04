@@ -27,6 +27,7 @@ $this->headScript()->appendFile(
 
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     var nodes = new vis.DataSet(<?= json_encode($nodes) ?>);
 
     // create an array with edges
@@ -79,6 +80,7 @@ $this->headScript()->appendFile(
 
     // initialize your network!
     var network = new vis.Network(container, data, options);
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 

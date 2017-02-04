@@ -7,9 +7,11 @@ $this->headScript()->appendFile(
 );
 ?>
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('#college').chosen({search_contains: true})
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <h1>Add a Peer</h1>

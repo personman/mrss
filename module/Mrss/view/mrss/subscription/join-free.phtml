@@ -24,6 +24,7 @@
 </style>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     var findUserUrl = '/find-user/';
     var formHasErrors = <?= $formHasErrors ?>;
 
@@ -138,6 +139,7 @@
         fieldsetButtons.find('input').show()
         fieldsetButtons.find('.loading').remove()
     }
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 

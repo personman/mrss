@@ -1,8 +1,9 @@
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('#list').select()
     })
-
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <textarea id="list" cols="80" rows="100">

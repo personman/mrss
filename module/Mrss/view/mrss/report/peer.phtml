@@ -18,7 +18,9 @@ $this->headScript()->appendFile(
 ?>
 
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     var peerGroups = <?= $peerGroups ?>
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <h1>Peer Comparison</h1>

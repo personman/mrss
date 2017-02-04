@@ -3,6 +3,7 @@
 ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         // Make benchmrks sortable
         $('tbody.sortable').sortable({
@@ -19,6 +20,7 @@
             }
         })
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <style>

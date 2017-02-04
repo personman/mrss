@@ -3,6 +3,7 @@
 <?= $this->ztbForm($this->form->prepare()) ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     function selectText(element) {
         var doc = document
             , text = doc.getElementById(element)
@@ -24,4 +25,5 @@
     $(function() {
         selectText('result')
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>

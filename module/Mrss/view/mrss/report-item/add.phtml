@@ -43,8 +43,10 @@ $this->headScript()->appendFile(
 
 <?php if (!empty($defaultBreakpoints)): ?>
     <script>
+        <?php $this->headScript()->captureStart() ?>
         var defaultBreakpoints = <?= json_encode($defaultBreakpoints) ?>;
         var benchmarksByInputType = <?= json_encode($benchmarksByInputType) ?>;
+        <?php $this->headScript()->captureEnd() ?>
     </script>
 <?php endif ?>
 
