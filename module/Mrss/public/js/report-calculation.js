@@ -284,9 +284,9 @@ function processUrlStack()
         startTimer();
         //console.log(url);
 
-        //if (window.console && !console.dir) {
-            //console.log(url)
-        //}
+        if (window.console && !console.dir) {
+            console.log("URL: " + url)
+        }
 
         $.get(url, function(data) {
             // Update the progress bar
@@ -294,12 +294,15 @@ function processUrlStack()
             var completed = originalTotal - remaining;
             var completion = completed / originalTotal * 100;
 
-            /*debugger;
+            /*debugger;*/
 
-            console.log("Original total: " + originalTotal);
-            console.log("Remaining: " + remaining);
-            console.log("Completed: " + completed);
-            console.log("Completion: " + completion);*/
+            if (window.console && !console.dir) {
+
+                console.log("Original total: " + originalTotal);
+                console.log("Remaining: " + remaining);
+                console.log("Completed: " + completed);
+                console.log("Completion: " + completion);
+            }
 
             progressBar.css('width', completion + '%').attr('aria-valuenow', completion);
             getProgressLabel()
