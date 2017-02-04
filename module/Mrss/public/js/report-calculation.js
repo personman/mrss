@@ -284,7 +284,7 @@ function processUrlStack()
         startTimer();
         //console.log(url);
 
-        if (window.console) {
+        if (false && window.console) {
             console.log("URL: " + url)
         }
 
@@ -296,7 +296,7 @@ function processUrlStack()
 
             /*debugger;*/
 
-            if (window.console) {
+            if (false && window.console) {
 
                 console.log("Original total: " + originalTotal);
                 console.log("Remaining: " + remaining);
