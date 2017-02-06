@@ -1272,14 +1272,6 @@ class ObservationController extends AbstractActionController
 
     public function submittedValuesAction()
     {
-        //return $this->test();
-
-
-
-
-
-
-
 
         $year = $this->getYearFromRouteOrStudy(false);
         $format = $this->params()->fromRoute('format', 'html');
@@ -1351,7 +1343,7 @@ class ObservationController extends AbstractActionController
                 $groupData['benchmarks'][] = array(
                     'benchmark' => $benchmark,
                     'value' => $value,
-                    'benchmarkName' => $variable->substitute($benchmark->getName())
+                    'benchmarkName' => $variable->substitute($benchmark->getReportLabel())
                 );
             }
 
