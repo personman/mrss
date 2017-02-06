@@ -217,7 +217,7 @@ class PercentileRank extends AbstractModel
         $query->andWhere("p.study = :study_id");
         $query->setParameter('study_id', $study->getId());
 
-        $query->andWhere("p.forPercentChange IS FALSE");
+        $query->andWhere("p.forPercentChange = 0");
 
         $query->andWhere("p.year = :year");
         $query->setParameter('year', $year);
