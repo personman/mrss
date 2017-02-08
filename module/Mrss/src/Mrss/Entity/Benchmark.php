@@ -913,24 +913,26 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     {
         $formatted = $value;
 
-        $prefix = $suffix = '';
-        if ($this->isPercent()) {
-            $suffix = '%';
-        } elseif ($this->isDollars()) {
-            $prefix = '$';
-        }
-
-        if (!is_null($value) &&
-            $this->getInputType() != 'radio' &&
-            $this->getInputType() != 'checkboxes') {
-
-            if (null === $decimalPlaces) {
-                $decimalPlaces = $this->getDecimalPlaces();
+        if ($this->isNumber()) {
+            $prefix = $suffix = '';
+            if ($this->isPercent()) {
+                $suffix = '%';
+            } elseif ($this->isDollars()) {
+                $prefix = '$';
             }
 
-            $formatted = $prefix .
-                number_format(floatval($value), $decimalPlaces) .
-                $suffix;
+            if (!is_null($value) &&
+                $this->getInputType() != 'radio' &&
+                $this->getInputType() != 'checkboxes') {
+
+                if (null === $decimalPlaces) {
+                    $decimalPlaces = $this->getDecimalPlaces();
+                }
+
+                $formatted = $prefix .
+                    number_format(floatval($value), $decimalPlaces) .
+                    $suffix;
+            }
         }
 
         return $formatted;
