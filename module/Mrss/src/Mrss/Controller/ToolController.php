@@ -1513,7 +1513,7 @@ class ToolController extends AbstractActionController
 
     public function importWfAction()
     {
-        takeYourTime();
+        $this->longRunningScript();
         $year = $this->params()->fromQuery('year', 2017);
 
         $importer = $this->getServiceLocator()->get('service.import.workforce.data');
