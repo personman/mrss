@@ -318,8 +318,9 @@ function processUrlStack()
                 processUrlStack();
             },
             error: function(xhr, statusText) {
-                console.log('error happened: ')
-                console.log(url)
+                // Put the url back on the stack so we can try again, but put it at the end
+                urlStack.unshift(url);
+                processUrlStack();
             }
         });
     } else {
