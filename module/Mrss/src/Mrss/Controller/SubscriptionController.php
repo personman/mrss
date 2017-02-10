@@ -1396,6 +1396,7 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($subscription)) {
             $subscription = new Subscription();
+            $subscription->setCompletion(0);
         }
 
         if ($method == 'system') {
@@ -1417,6 +1418,7 @@ class SubscriptionController extends AbstractActionController
         $subscription->setPaymentMethod($method);
         $subscription->setObservation($observation);
         $subscription->setPaymentAmount($amount);
+
 
         if (!empty($draftSubscription)) {
             // Get the agreement data from the session
