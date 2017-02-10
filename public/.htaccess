@@ -150,12 +150,4 @@ ExpiresActive On
 ExpiresDefault "access plus 1 month"
 </IfModule>
 
-# FCGI
-<IfModule mod_fcgid.c>
-ProcessLifeTime 7200
-MaxProcessCount 64
-DefaultMaxClassProcessCount 8
-IPCConnectTimeout 300
-IPCCommTimeout 7200
-BusyTimeout 300
-</IfModule>
+
