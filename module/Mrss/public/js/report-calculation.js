@@ -288,30 +288,40 @@ function processUrlStack()
             console.log("URL: " + url)
         }
 
-        $.get(url, function(data) {
-            // Update the progress bar
-            var remaining = urlStack.length;
-            var completed = originalTotal - remaining;
-            var completion = completed / originalTotal * 100;
+        //$.get(url, function(data) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(data) {
+                // Update the progress bar
+                var remaining = urlStack.length;
+                var completed = originalTotal - remaining;
+                var completion = completed / originalTotal * 100;
 
-            /*debugger;*/
+                /*debugger;*/
 
-            if (false && window.console) {
+                if (false && window.console) {
 
-                console.log("Original total: " + originalTotal);
-                console.log("Remaining: " + remaining);
-                console.log("Completed: " + completed);
-                console.log("Completion: " + completion);
+                    console.log("Original total: " + originalTotal);
+                    console.log("Remaining: " + remaining);
+                    console.log("Completed: " + completed);
+                    console.log("Completion: " + completion);
+                }
+
+                progressBar.css('width', completion + '%').attr('aria-valuenow', completion);
+                getProgressLabel()
+                    .html(Math.round(completion) + '%');
+
+                endTimer();
+
+                // On to the next one...
+                processUrlStack();
+            },
+            error: function(xhr, statusText) {
+                // Put the url back on the stack so we can try again, but put it at the end
+                urlStack.unshift(url);
+                processUrlStack();
             }
-
-            progressBar.css('width', completion + '%').attr('aria-valuenow', completion);
-            getProgressLabel()
-                .html(Math.round(completion) + '%');
-
-            endTimer();
-
-            // On to the next one...
-            processUrlStack();
         });
     } else {
         getProgressLabel().html('Complete.')
