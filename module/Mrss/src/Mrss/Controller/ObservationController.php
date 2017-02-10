@@ -971,24 +971,9 @@ class ObservationController extends AbstractActionController
     protected function useDirectDownloadLink()
     {
         $direct = false;
-        if ($this->currentStudy()->getId() == 4) {
-            foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-                /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+        $subscription = $this->getSubscription();
 
-                // Skip form 1
-                if ($benchmarkGroup->getId() == 2) {
-                    continue;
-                }
-
-                $observation = $this->getCurrentObservation();
-                $completion = $benchmarkGroup->getCompletionPercentageForObservation($observation);
-
-                if ($completion) {
-                    return false;
-                }
-            }
-
-            // If we made it this far, then there's no data
+        if ($subscription->getCompletion() > 0) {
             $direct = true;
         }
 
@@ -1292,8 +1277,7 @@ class ObservationController extends AbstractActionController
 
         // Get the observation
         $subscriptionModel = $this->getSubscriptionModel();
-        $subscription = $subscriptionModel
-            ->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
+        $subscription = $this->getSubscription($year);
 
         $observation = $subscription->getObservation();
 
@@ -1360,6 +1344,18 @@ class ObservationController extends AbstractActionController
             'submittedValues' => $submittedValues,
             'completionPercentage' => round($subscription->getCompletion(), 1)
         );
+    }
+
+    protected function getSubscription($year = null)
+    {
+        if ($year === null) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        $subscription = $this->getSubscriptionModel()
+            ->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
+
+        return $subscription;
     }
 
     protected function downloadSubmittedValues($submittedValues, $year)
