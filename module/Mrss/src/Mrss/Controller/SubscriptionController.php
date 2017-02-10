@@ -1449,8 +1449,8 @@ class SubscriptionController extends AbstractActionController
 
         $count = count($data);
 
-        $this->flashMessenger()->addSuccessMessage("Count is $count.");
-        $this->flashMessenger()->addSuccessMessage("subscription_id is $subscriptionId.");
+        //$this->flashMessenger()->addSuccessMessage("Count is $count.");
+        //$this->flashMessenger()->addSuccessMessage("subscription_id is $subscriptionId.");
 
         if ($count == 0) {
             $sql = "INSERT INTO data_values (subscription_id, benchmark_id, dbColumn)
