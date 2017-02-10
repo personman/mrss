@@ -152,7 +152,6 @@ ExpiresDefault "access plus 1 month"
 
 # FCGI
 <IfModule mod_fcgid.c>
-IdleTimeout 3600
 ProcessLifeTime 7200
 MaxProcessCount 64
 DefaultMaxClassProcessCount 8
