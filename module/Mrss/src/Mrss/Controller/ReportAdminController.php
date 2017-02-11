@@ -206,7 +206,7 @@ class ReportAdminController extends AbstractActionController
 
     public function computeOneAction()
     {
-        $debug = $this->params()->fromRoute('debug');
+        $debug = $this->params()->fromRoute('debug', false);
 
         takeYourTime();
 
