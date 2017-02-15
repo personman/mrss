@@ -669,7 +669,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
         // Checkboxes type:
         if ($this->getInputType() == 'checkboxes') {
-            $this->checkboxesElement($element);
+            $element = $this->checkboxesElement($element);
         }
 
         // Textarea
