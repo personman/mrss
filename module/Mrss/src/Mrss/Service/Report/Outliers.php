@@ -326,13 +326,23 @@ class Outliers extends Report
         return $report;
     }
 
-    public function emailOutliers(RendererInterface $renderer, $reallySend = true)
+    public function getCollegeName($collegeId)
+    {
+        $name = null;
+        if ($college = $this->getCollegeModel()->find($collegeId)) {
+            $name = $college->getName();
+        }
+
+        return $name;
+    }
+
+    public function emailOutliers(RendererInterface $renderer, $reallySend = true, $collegeId = null)
     {
         // For debugging:
-        $devOnly = false;
+        $devOnly = true;
 
+        $reports = $this->getAdminOutlierReport($collegeId);
 
-        $reports = $this->getAdminOutlierReport();
         $stats = array('emails' => 0, 'preview' => '');
 
         // Loop over the admin report in order to send an email to each college

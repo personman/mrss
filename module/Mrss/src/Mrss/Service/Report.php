@@ -153,9 +153,26 @@ class Report
 
             $key = $this->getOutliersCalculatedSettingKey($year);
             $yearsWithDates[$year]['outliers'] = $this->getDateForSettingKey($key);
+
+            $key = $this->getOutliersCalculatedSettingKey($year, 'sent');
+            $yearsWithDates[$year]['outliers_sent'] = $this->getOutlierDateAndCollege($key);
         }
 
         return $yearsWithDates;
+    }
+
+    protected function getOutlierDateAndCollege($key, $format = 'Y-m-d H:i')
+    {
+        $parts = $this->getSettingModel()->getValueForIdentifier($key);
+        if ($parts) {
+            list($date, $college) = explode('|', $parts);
+            $date = new DateTime($date);
+            $date = $date->format($format);
+
+            $parts = array($date, $college);
+        }
+
+        return $parts;
     }
 
     protected function getDateForSettingKey($key, $format = 'Y-m-d H:i')
@@ -199,11 +216,11 @@ class Report
      * @param $year
      * @return string
      */
-    public function getOutliersCalculatedSettingKey($year)
+    public function getOutliersCalculatedSettingKey($year, $verb = 'calculated')
     {
         $studyId = $this->getStudy()->getId();
 
-        $key = "outliers_calculated_{$studyId}_$year";
+        $key = "outliers_{$verb}_{$studyId}_$year";
 
         return $key;
     }
