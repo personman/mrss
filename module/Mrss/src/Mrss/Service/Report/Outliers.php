@@ -339,7 +339,7 @@ class Outliers extends Report
     public function emailOutliers(RendererInterface $renderer, $reallySend = true, $collegeId = null)
     {
         // For debugging:
-        $devOnly = true;
+        $devOnly = false;
 
         $reports = $this->getAdminOutlierReport($collegeId);
 

@@ -65,8 +65,6 @@ function setUpSendOutlierEmails()
         var year = buttonId.split('-').pop();
 
         progressBar = $('#outlier-email-progress-' + year + ' .progress-bar');
-        console.log(progressBar)
-        console.log('#outlier-email-progress-' + year + ' .progress-bar')
 
         // Get the benchmark Ids
         var colleges = collegeIds[year];
@@ -322,7 +320,7 @@ function processUrlStack()
         startTimer();
         //console.log(url);
 
-        if (true && window.console) {
+        if (false && window.console) {
             console.log("URL: " + url)
         }
 
