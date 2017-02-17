@@ -364,13 +364,6 @@ class Outliers extends Report
             $replyToPhone = "(913) 469-3831";
             $url = "workforceproject.org";
 
-            //$replyTo = "louguthrie@jccc.edu";
-            //$replyTo = "dfergu15@jccc.edu";
-            //$replyToName = "Lou Guthrie";
-            //$replyToPhone = "(913) 469-8500 x4019";
-            //$deadline = "July 10, " . date('Y');
-            //$url = "maximizingresources.org";
-
             $replyTo = $this->getStudyConfig()->from_email;
             $replyToName = $this->getStudyConfig()->from_email_name;
 

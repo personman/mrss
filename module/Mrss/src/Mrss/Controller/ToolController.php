@@ -28,17 +28,18 @@ class ToolController extends AbstractActionController
 {
     public function indexAction()
     {
-        /*$array = array(5 => 'hi');
-
-        $b = $array[7];*/
 
         $baseTime = round(microtime(1) - REQUEST_MICROTIME, 3);
+        $loadAverage = sys_getloadavg();
+        $loadAverage = array_map('round', $loadAverage, array(2, 2, 2));
+        $loadAverage = implode(', ', $loadAverage);
 
         return array(
             'gc_lifetime' => ini_get('session.gc_maxlifetime'),
             'cookie_lifetime' => ini_get('session.cookie_lifetime'),
             'remember_me_seconds' => ini_get('session.remember_me_seconds'),
             'session_save_path' => session_save_path(),
+            'loadAverage' => $loadAverage,
             'baseTime' => $baseTime,
             'collegesWithNoExec' => $this->getMembersWithNoExec()
         );
