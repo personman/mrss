@@ -381,8 +381,10 @@ class Outliers extends Report
             //$deadline = "July 10, " . date('Y');
             //$url = "maximizingresources.org";
 
-            $replyTo = $this->getStudyConfig()->from_email;
-            $replyToName = $this->getStudyConfig()->from_email_name;
+            $replyTo = $this->getStudyConfig()->reply_to_email;
+            $replyToName = $this->getStudyConfig()->reply_to_name;
+            $from = $this->getStudyConfig()->from_email;
+            $fromName = $this->getStudyConfig()->from_email_name;
 
             $viewParams = array(
                 'year' => $year,
@@ -425,7 +427,7 @@ class Outliers extends Report
             $message->setSubject($subject);
             $message->setBody($bodyPart);
             $message->addBcc('dfergu15@jccc.edu');
-            $message->addFrom($replyTo, $replyToName);
+            $message->addFrom($from, $fromName);
             $message->setReplyTo($replyTo);
 
 
