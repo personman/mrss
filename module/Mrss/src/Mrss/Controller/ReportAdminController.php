@@ -91,7 +91,8 @@ class ReportAdminController extends AbstractActionController
                 $yearIds[] = $sub->getObservation()->getId();
 
 
-                $break = "Mom";
+                // Use to just do part of the colleges (after an aborted run):
+                /*$break = "Mom";
                 $name = $sub->getCollege()->getName();
                 $result = strcasecmp($name, $break);
 
@@ -99,7 +100,10 @@ class ReportAdminController extends AbstractActionController
 
                 if ($result > 0) {
                     $collegeIds[$year][] = $sub->getCollege()->getId();
-                }
+                }*/
+
+                // All colleges:
+                $collegeIds[$year][] = $sub->getCollege()->getId();
             }
 
             $observationIds[$year] = $yearIds;
