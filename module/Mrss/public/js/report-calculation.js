@@ -3,6 +3,7 @@ var originalTotal = 0;
 var progressBar;
 var times = [];
 var startTime;
+var debug = true;
 
 $(function() {
     setUpOutlierCalculation();
@@ -320,7 +321,7 @@ function processUrlStack()
         startTimer();
         //console.log(url);
 
-        if (false && window.console) {
+        if (debug && window.console) {
             console.log("URL: " + url)
         }
 
@@ -336,7 +337,7 @@ function processUrlStack()
 
                 /*debugger;*/
 
-                if (false && window.console) {
+                if (debug && window.console) {
 
                     console.log("Original total: " + originalTotal);
                     console.log("Remaining: " + remaining);
