@@ -74,6 +74,7 @@ class ReportAdminController extends AbstractActionController
 
         // Get observation ids
         $observationIds = array();
+        $collegeIds = array();
         $benchmarkIds = array();
         $systemIds = array();
         foreach ($years as $year => $yearInfo) {
@@ -88,6 +89,17 @@ class ReportAdminController extends AbstractActionController
 
             foreach ($subs as $sub) {
                 $yearIds[] = $sub->getObservation()->getId();
+
+
+                $break = "Mom";
+                $name = $sub->getCollege()->getName();
+                $result = strcasecmp($name, $break);
+
+                //pr($break); pr($name); pr(
+
+                if ($result > 0) {
+                    $collegeIds[$year][] = $sub->getCollege()->getId();
+                }
             }
 
             $observationIds[$year] = $yearIds;
@@ -111,12 +123,21 @@ class ReportAdminController extends AbstractActionController
         $currentYear = $this->currentStudy()->getCurrentYear();
 
 
+        // Limit college ids for AAUP (one time thing, then remove)
+        /*$newColleges = array();
+        foreach ($collegeIds["2017"] as $collegeId) {
+            if ($collegeId > 2379) {
+                $newColleges[] = $collegeId;
+            }
+        }
+        $collegeIds["2017"] = $newColleges;*/
 
         return array(
             'years' => $years,
             'study' => $this->currentStudy(),
             'observationIds' => $observationIds,
             'systemIds' => $systemIds,
+            'collegeIds' => $collegeIds,
             'benchmarkIds' => $benchmarkIds
         );
     }
@@ -593,15 +614,45 @@ class ReportAdminController extends AbstractActionController
         return $logger;
     }
 
+    protected function sendOutlierAction()
+    {
+        $collegeId = $this->params()->fromRoute('college');
+        $year = $this->params()->fromRoute('year');
+
+        $renderer = $this->getRenderer();
+        $stats = $this->getOutlierService()->emailOutliers($renderer, true, $collegeId);
+        $name = $this->getOutlierService()->getCollegeName($collegeId);
+
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'message' => 'Sent to: ' . $name
+            )
+        );
+
+        return $view;
+    }
+
+    protected function getRenderer()
+    {
+        $renderer = $this->getServiceLocator()
+            ->get('Zend\View\Renderer\RendererInterface');
+
+        return $renderer;
+    }
+
+    /**
+     * @deprecated
+     * @return array|\Zend\Http\Response
+     */
     public function emailOutliersAction()
     {
         $this->longRunningScript();
 
-        $renderer = $this->getServiceLocator()
-            ->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->getRenderer();
 
-        /** @var \Mrss\Service\Report\Outliers $outliersService */
-        $outliersService = $this->getServiceLocator()->get('service.report.outliers');
+        $outliersService = $this->getOutlierService();
 
         $task = $this->params()->fromRoute('task');
         if ($task == 'preview') {

@@ -4,6 +4,8 @@
 return array(
     'from_email' => 'info@benchmarkinginstitute.org',
     'from_email_name' => 'Michelle Taylor',
+    'reply_to_email' => 'info@benchmarkinginstitute.org',
+    'reply_to_email_name' => 'Michelle Taylor',
     'cc_email' => 'michelletaylor@jccc.edu',
     'approver_email' => 'dfergu15@jccc.edu',
     'data_entry_templates' => array(),

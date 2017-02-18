@@ -3,9 +3,11 @@ var originalTotal = 0;
 var progressBar;
 var times = [];
 var startTime;
+var debug = true;
 
 $(function() {
     setUpOutlierCalculation();
+    setUpSendOutlierEmails();
     setUpCompute();
     setUpChangeCalculation();
     setUpChangePercentilesCalculation();
@@ -42,6 +44,41 @@ function setUpOutlierCalculation()
             } else if (i == benchmarkIds.length - 1) {
                 url = url + '/first';
             }
+            urlStack.push(url);
+        }
+
+        // Now the url stack is built. Kick it off.
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
+    })
+}
+
+function setUpSendOutlierEmails()
+{
+    var baseUrl = '/reports/send-outlier/';
+
+    $('.send-outlier-email').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+
+        progressBar = $('#outlier-email-progress-' + year + ' .progress-bar');
+
+        // Get the benchmark Ids
+        var colleges = collegeIds[year];
+
+        originalTotal = colleges.length;
+
+        // Build the url stack
+        urlStack = [];
+        for (var i in colleges) {
+            var collegeId = colleges[i];
+
+            var url = baseUrl + collegeId + '/' + year;
+
             urlStack.push(url);
         }
 
@@ -284,7 +321,7 @@ function processUrlStack()
         startTimer();
         //console.log(url);
 
-        if (false && window.console) {
+        if (debug && window.console) {
             console.log("URL: " + url)
         }
 
@@ -300,7 +337,7 @@ function processUrlStack()
 
                 /*debugger;*/
 
-                if (false && window.console) {
+                if (debug && window.console) {
 
                     console.log("Original total: " + originalTotal);
                     console.log("Remaining: " + remaining);
@@ -309,8 +346,11 @@ function processUrlStack()
                 }
 
                 progressBar.css('width', completion + '%').attr('aria-valuenow', completion);
+                var newLabel = Math.round(completion) + '%';
                 getProgressLabel()
-                    .html(Math.round(completion) + '%');
+                    .html(newLabel);
+
+                getProgressMessage().html(data["message"]);
 
                 endTimer();
 
@@ -375,4 +415,9 @@ function getTimeRemaining()
 function getProgressLabel()
 {
     return progressBar.parent().parent().parent().find('.progress-label');
+}
+
+function getProgressMessage()
+{
+    return progressBar.parent().parent().parent().find('.progress-message')
 }

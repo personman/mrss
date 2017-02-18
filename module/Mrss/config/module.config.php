@@ -1097,6 +1097,18 @@ return array(
                             )
                         )
                     ),
+                    'sendOutlier' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/send-outlier/:college/:year',
+                            'defaults' => array(
+                                'action' => 'sendOutlier',
+                                'college' => null,
+                                'year' => null
+                            )
+                        )
+                    ),
+                    // @deprecated:
                     'emailOutliers' => array(
                         'type' => 'segment',
                         'options' => array(

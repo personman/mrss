@@ -21,6 +21,8 @@ class ReportController extends ReportAdminController
     /**
      * For an individual institution
      *
+     * Replaced by nationalAction below
+     *
      * @return array
      */
     public function percentChangeAction()
