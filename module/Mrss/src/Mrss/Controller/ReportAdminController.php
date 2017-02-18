@@ -117,7 +117,7 @@ class ReportAdminController extends AbstractActionController
         $newColleges = array();
         foreach ($collegeIds as $collegeId) {
             if ($collegeId > 2379) {
-                $newColleges[] = $$collegeId;
+                $newColleges[] = $collegeId;
             }
         }
         $collegeIds = $newColleges;
