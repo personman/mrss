@@ -89,7 +89,17 @@ class ReportAdminController extends AbstractActionController
 
             foreach ($subs as $sub) {
                 $yearIds[] = $sub->getObservation()->getId();
-                $collegeIds[$year][] = $sub->getCollege()->getId();
+
+
+                $break = "Mom";
+                $name = $sub->getCollege()->getName();
+                $result = strcasecmp($name, $break);
+
+                //pr($break); pr($name); pr(
+
+                if ($result > 0) {
+                    $collegeIds[$year][] = $sub->getCollege()->getId();
+                }
             }
 
             $observationIds[$year] = $yearIds;
@@ -114,13 +124,13 @@ class ReportAdminController extends AbstractActionController
 
 
         // Limit college ids for AAUP (one time thing, then remove)
-        $newColleges = array();
+        /*$newColleges = array();
         foreach ($collegeIds["2017"] as $collegeId) {
             if ($collegeId > 2379) {
                 $newColleges[] = $collegeId;
             }
         }
-        $collegeIds["2017"] = $newColleges;
+        $collegeIds["2017"] = $newColleges;*/
 
         return array(
             'years' => $years,
