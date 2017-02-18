@@ -115,12 +115,12 @@ class ReportAdminController extends AbstractActionController
 
         // Limit college ids for AAUP (one time thing, then remove)
         $newColleges = array();
-        foreach ($collegeIds as $collegeId) {
+        foreach ($collegeIds["2017"] as $collegeId) {
             if ($collegeId > 2379) {
                 $newColleges[] = $collegeId;
             }
         }
-        $collegeIds = $newColleges;
+        $collegeIds["2017"] = $newColleges;
 
         return array(
             'years' => $years,
