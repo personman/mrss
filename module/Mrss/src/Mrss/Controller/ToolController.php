@@ -682,7 +682,7 @@ class ToolController extends AbstractActionController
 
             $headings = array();
             foreach ($benchmarkGroup->getBenchmarkHeadings('data-entry') as $heading) {
-                $headings[$heading->getId()];
+                $headings[$heading->getId()] = $heading;
             }
 
             foreach ($benchmarkGroup->getChildren() as $child) {
