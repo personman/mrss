@@ -3,7 +3,7 @@ var originalTotal = 0;
 var progressBar;
 var times = [];
 var startTime;
-var debug = true;
+var debug = false;
 
 $(function() {
     setUpOutlierCalculation();
