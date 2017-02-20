@@ -686,6 +686,8 @@ class ToolController extends AbstractActionController
             }
 
             foreach ($benchmarkGroup->getChildren() as $child) {
+                $sequence = $child->getSequence();
+
                 if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
                     unset($headings[$child->getId()]);
                     continue;
@@ -695,6 +697,18 @@ class ToolController extends AbstractActionController
             }
 
             // Now deal with any leftovers (invisible)
+            foreach ($headings as $heading) {
+                $heading->setSequence(++$sequence);
+                $this->getBenchmarHeadingkModel()->save($heading);
+            }
+
+            foreach ($benchmarks as $benchmark) {
+                $benchmark->setSequence(++$sequence);
+                $this->getBenchmarkModel()->save($benchmark);
+            }
+
+            $this->getBenchmarkModel()->getEntityManager()->flush();
+
         }
 
         $this->getBenchmarkModel()->getEntityManager()->flush();
@@ -1434,6 +1448,15 @@ class ToolController extends AbstractActionController
         }
 
         return $this->benchmarkModel;
+    }
+
+
+    /**
+     * @return \Mrss\Model\BenchmarkHeading
+     */
+    public function getBenchmarHeadingkModel()
+    {
+        return $this->getServiceLocator()->get('model.benchmark.heading');
     }
 
     /**
