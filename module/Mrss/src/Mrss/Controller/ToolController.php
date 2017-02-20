@@ -675,12 +675,26 @@ class ToolController extends AbstractActionController
         foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
             /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
 
-            $i = 1;
+            $benchmarks = array();
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
-                $benchmark->setSequence($i);
-                $this->getBenchmarkModel()->save($benchmark);
-                $i++;
+                $benchmarks[$benchmark->getId()] = $benchmark;
             }
+
+            $headings = array();
+            foreach ($benchmarkGroup->getBenchmarkHeadings('data-entry') as $heading) {
+                $headings[$heading->getId()];
+            }
+
+            foreach ($benchmarkGroup->getChildren() as $child) {
+                if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
+                    unset($headings[$child->getId()]);
+                    continue;
+                }
+
+                unset($benchmarks[$child->getId()]);
+            }
+
+            // Now deal with any leftovers (invisible)
         }
 
         $this->getBenchmarkModel()->getEntityManager()->flush();

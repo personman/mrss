@@ -135,7 +135,7 @@
             </tr>
             </thead>
             <tbody class="sortable" id="benchmarkGroup_<?= $benchmarkGroup->getId() ?>">
-            <?php foreach ($benchmarkGroup->getChildren(null, true, $organization) as $row): ?>
+            <?php foreach ($benchmarkGroup->getChildren(null, true, $organization, null, false) as $row): ?>
                 <? //pr(get_class($row)) ?>
                 <?php if (get_class($row) == 'Mrss\Entity\Benchmark'): ?>
                     <?php $benchmark = $row; ?>

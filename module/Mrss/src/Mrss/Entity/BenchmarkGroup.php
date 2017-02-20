@@ -640,7 +640,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->inputFilter;
     }
 
-    public function getChildren($year = null, $includeComputed = true, $organization = 'data-entry', $filterBy = null)
+    public function getChildren($year = null, $includeComputed = true, $organization = 'data-entry', $filterBy = null, $removeEmpty = true)
     {
         $children = array();
 
@@ -693,7 +693,9 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
             array_splice($children, $duplicateInfo['sequence'], 0, array($duplicateInfo['item']));
         }
 
-        $children = $this->removeEmptySections($children);
+        if ($removeEmpty) {
+            $children = $this->removeEmptySections($children);
+        }
 
         return $children;
     }
