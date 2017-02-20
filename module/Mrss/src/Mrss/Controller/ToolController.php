@@ -699,11 +699,17 @@ class ToolController extends AbstractActionController
             // Now deal with any leftovers (invisible)
             foreach ($headings as $heading) {
                 $heading->setSequence(++$sequence);
+
                 $this->getBenchmarHeadingkModel()->save($heading);
             }
 
             foreach ($benchmarks as $benchmark) {
-                $benchmark->setSequence(++$sequence);
+                if ($type == 'reports') {
+                    $benchmark->setReportSequence(++$sequence);
+                } else {
+                    $benchmark->setSequence(++$sequence);
+                }
+
                 $this->getBenchmarkModel()->save($benchmark);
             }
 
