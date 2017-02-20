@@ -670,7 +670,7 @@ class ToolController extends AbstractActionController
         return array();
     }
 
-    public function repairSequencesAction()
+    protected function repairSequences($type = 'data-entry')
     {
         foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
             /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
@@ -681,7 +681,7 @@ class ToolController extends AbstractActionController
             }
 
             $headings = array();
-            foreach ($benchmarkGroup->getBenchmarkHeadings('data-entry') as $heading) {
+            foreach ($benchmarkGroup->getBenchmarkHeadings($type) as $heading) {
                 $headings[$heading->getId()] = $heading;
             }
 
@@ -713,29 +713,20 @@ class ToolController extends AbstractActionController
 
         $this->getBenchmarkModel()->getEntityManager()->flush();
 
+
+    }
+
+    public function repairSequencesAction()
+    {
+        $this->repairSequences();
         $this->flashMessenger()->addSuccessMessage('Sequences repaired.');
         return $this->redirect()->toRoute('tools');
     }
 
     public function repairReportSequencesAction()
     {
-        $benchmarkModel = $this->getBenchmarkModel();
 
-        foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
-
-            $benchmarks = $benchmarkModel->findByGroupForReport($benchmarkGroup);
-
-            $i = 1;
-            foreach ($benchmarks as $benchmark) {
-                $benchmark->setReportSequence($i);
-                $this->getBenchmarkModel()->save($benchmark);
-                $i++;
-            }
-        }
-
-        $this->getBenchmarkModel()->getEntityManager()->flush();
-
+        $this->repairSequences('reports');
         $this->flashMessenger()->addSuccessMessage('Report sequences repaired.');
         return $this->redirect()->toRoute('tools');
     }
