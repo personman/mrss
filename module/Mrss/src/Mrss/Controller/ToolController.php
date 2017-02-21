@@ -581,8 +581,18 @@ class ToolController extends AbstractActionController
         );
     }
 
+    /**
+     * @return \Mrss\Model\Datum
+     */
+    protected function getDatumModel()
+    {
+        return $this->getServiceLocator()->get('model.datum');
+    }
+
     public function zerosAction()
     {
+        $start = microtime(1);
+
         $this->longRunningScript();
 
         /** @var \Mrss\Entity\Study $study */
@@ -591,6 +601,39 @@ class ToolController extends AbstractActionController
         if (empty($year)) {
             $year = $study->getCurrentYear();
         }
+
+        $subsWithZeros = $this->getDatumModel()->findZeros($year);
+        //$colleges = $this->getAllColleges();
+
+        //prd($subsWithZeros);
+
+        $report = array();
+        $users = array();
+        foreach ($subsWithZeros as $info) {
+            $collegeId = $info['college_id'];
+            //$college = $colleges[$collegeId];
+            $college = $this->getCollegeModel()->find($collegeId);
+
+            $emails = array();
+            foreach ($college->getUsersByStudy($study) as $user) {
+                if ($user->getRole() == 'viewer') {
+                    continue;
+                }
+
+                $emails[] = $user->getEmail();
+                $users[] = $user;
+            }
+
+            $report[] = array(
+                'college' => $college->getNameAndState(),
+                'emails' => implode(', ', $emails),
+                'zeros' => $info['count']
+            );
+
+        }
+
+        //prd($report);
+        /*
 
         $subscriptionModel = $this->getSubscriptionModel();
         $subs = $subscriptionModel->findByStudyAndYear($study->getId(), $year);
@@ -608,10 +651,16 @@ class ToolController extends AbstractActionController
         $users = array();
         foreach ($subs as $subscription) {
             $observation = $subscription->getObservation();
+            $data = $subscription->getAllData();
 
             $zeros = 0;
             foreach ($dbColumns as $dbColumn) {
-                $value = $observation->get($dbColumn);
+                //$value = $observation->get($dbColumn);
+
+                $value = null;
+                if (isset($data[$dbColumn])) {
+                    $value = $data[$dbColumn];
+                }
 
                 if ($value === 0) {
                     $zeros++;
@@ -638,7 +687,13 @@ class ToolController extends AbstractActionController
                 'zeros' => $zeros
             );
             $report[] = $reportRow;
+
+            $end = microtime(1);
+            $elapsed = $end - $start;
+            prd($elapsed);
         }
+
+*/
 
         // Download?
         $format = $this->params()->fromRoute('format', 'html');
@@ -646,6 +701,8 @@ class ToolController extends AbstractActionController
             $exporter = new ExportUser();
             $exporter->export($users);
         }
+
+
 
         // Years for tabs
         $years = $this->getServiceLocator()->get('model.subscription')
@@ -1108,13 +1165,21 @@ class ToolController extends AbstractActionController
         return $this->getServiceLocator()->get('model.observation');
     }
 
-    protected function getAllColleges()
+    /**
+     * @return \Mrss\Model\College
+     */
+    protected function getCollegeModel()
     {
-        /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $this->getServiceLocator()->get('model.college');
 
+        return $collegeModel;
+    }
+
+    protected function getAllColleges()
+    {
+
         $colleges = array();
-        foreach ($collegeModel->findAll() as $college) {
+        foreach ($this->getCollegeModel()->findAll() as $college) {
             $colleges[$college->getId()] = $college->getNameAndState();
         }
 
