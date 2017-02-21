@@ -82,6 +82,8 @@ $this->headScript()->appendFile(
             <?php $nameParts = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
             <?php $formNumber = array_shift($nameParts) ?>
             <?php $formTitle = implode(': ', $nameParts) ?>
+        <?php else: ?>
+            <?php $formTitle = $benchmarkGroup['benchmarkGroup'] ?>
         <?php endif ?>
         <h3 class="benchmarkGroupTitle" id="form_<?= $benchmarkGroup['url'] ?>">
             <span class="small-heading"><?= $formNumber ?></span><br>
