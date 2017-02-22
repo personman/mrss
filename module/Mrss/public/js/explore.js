@@ -51,6 +51,7 @@ function updateFormForChartType()
     var benchmark2 = $('#control-group-benchmark2')
     var yearField = $('#control-group-years')
     var peerGroup = $('#control-group-peerGroup')
+    var makePeerCohort = $('#control-group-makePeerCohort')
     var textEditor = $('#text-editor')
     var chart = $('#chart')
     var footnotes = $('.custom-report-footnotes')
@@ -117,6 +118,7 @@ function updateFormForChartType()
         hideMine.show()
         hideNational.show()
         percentiles.show()
+        makePeerCohort.show()
 
         if (getMultiTrendHiddenValue()) {
             addSecondBenchmarkButtonClicked(benchmark2);

@@ -352,6 +352,7 @@ class LineBuilder extends ChartBuilder
             foreach ($includedPeers as $peer) {
                 $peerNames[] = $peer->getNAme();
             }
+
             $peerFootnote = implode(', ', $peerNames);
         }
 
@@ -469,6 +470,9 @@ class LineBuilder extends ChartBuilder
 
     public function makeCohortForMultiTrend($peersData)
     {
+        $config = $this->getConfig();
+        $makePeerCohort = !empty($config['makePeerCohort']);
+
         $newData = array();
         $peerIds = array();
         foreach ($peersData as $dbColumn => $peerData) {
@@ -476,8 +480,25 @@ class LineBuilder extends ChartBuilder
             //pr($peerIds);
             //pr(count($peerIds));
 
-            $otherData = $this->getOtherData($peersData, $dbColumn);
-            list($data, $peerIds) = $this->makePeerCohort($peerData, $otherData);
+            if ($makePeerCohort) {
+                $otherData = $this->getOtherData($peersData, $dbColumn);
+
+                list($data, $peerIds) = $this->makePeerCohort($peerData, $otherData);
+
+
+            } else {
+                foreach ($peerData as $year => $yearData) {
+                    foreach ($yearData as $peerId => $datum) {
+                        if (!in_array($peerId, $peerIds)) {
+                            $peerIds[] = $peerId;
+                        }
+                    }
+                }
+
+                $data = $peerData;
+            }
+
+
 
             $newData[$dbColumn] = $data;
         }
