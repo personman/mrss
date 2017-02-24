@@ -632,69 +632,6 @@ class ToolController extends AbstractActionController
 
         }
 
-        //prd($report);
-        /*
-
-        $subscriptionModel = $this->getSubscriptionModel();
-        $subs = $subscriptionModel->findByStudyAndYear($study->getId(), $year);
-
-        // Get all the collected benchmark keys
-        $dbColumns = array();
-        foreach ($study->getBenchmarkGroups() as $bGroup) {
-            foreach ($bGroup->getNonComputedBenchmarksForYear($year) as $benchmark) {
-                $dbColumns[] = $benchmark->getDbColumn();
-            }
-        }
-
-        // Now loop over the subscriptions
-        $report = array();
-        $users = array();
-        foreach ($subs as $subscription) {
-            $observation = $subscription->getObservation();
-            $data = $subscription->getAllData();
-
-            $zeros = 0;
-            foreach ($dbColumns as $dbColumn) {
-                //$value = $observation->get($dbColumn);
-
-                $value = null;
-                if (isset($data[$dbColumn])) {
-                    $value = $data[$dbColumn];
-                }
-
-                if ($value === 0) {
-                    $zeros++;
-                }
-            }
-
-            if (!$zeros) {
-                continue;
-            }
-
-            $emails = array();
-            foreach ($subscription->getCollege()->getUsersByStudy($study) as $user) {
-                if ($user->getRole() == 'viewer') {
-                    continue;
-                }
-
-                $emails[] = $user->getEmail();
-                $users[] = $user;
-            }
-
-            $reportRow = array(
-                'college' => $subscription->getCollege()->getName(),
-                'emails' => implode(', ', $emails),
-                'zeros' => $zeros
-            );
-            $report[] = $reportRow;
-
-            $end = microtime(1);
-            $elapsed = $end - $start;
-            prd($elapsed);
-        }
-
-*/
-
         // Download?
         $format = $this->params()->fromRoute('format', 'html');
         if ($format == 'excel') {
