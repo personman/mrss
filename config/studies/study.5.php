@@ -7,5 +7,6 @@ return array(
     'benchmark_completion_heatmap' => true,
     'percent_change_report_columns' => array(
     ),
-    'contact_instructions' => ''
+    'contact_instructions' => '',
+    'copyright' => date('Y') . " Envisio",
 );
