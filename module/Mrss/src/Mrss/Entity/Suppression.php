@@ -23,6 +23,7 @@ class Suppression
 
     /**
      * @ORM\ManyToOne(targetEntity="Subscription", inversedBy="suppressions")
+     * @ORM\JoinColumn(name="subscription_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $subscription;
 

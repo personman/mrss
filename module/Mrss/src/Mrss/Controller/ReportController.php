@@ -14,56 +14,14 @@ use Zend\View\Model\ViewModel;
 
 class ReportController extends ReportAdminController
 {
-    /**
-     * @var Report
-     */
-    protected $reportService;
-
     protected $sessionContainer;
 
     protected $observations;
 
-
-
-    /**
-     * @return \Mrss\Service\Report\Changes
-     */
-    protected function getPercentChangeService()
-    {
-        return $this->getServiceLocator()->get('service.report.changes');
-    }
-
-    /**
-     * For admins. Shows all institutions.
-     *
-     * @return array
-     */
-    public function percentChangesAction()
-    {
-        takeYourTime();
-        $format = $this->params()->fromRoute('format');
-
-        $year = $this->params()->fromRoute('year');
-        if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
-        }
-
-        /** @var \Mrss\Model\PercentChange $percentChangeModel */
-        $percentChangeModel = $this->getServiceLocator()->get('model.percentchange');
-        $changes = $percentChangeModel->findByYear($year);
-
-        if ($format == 'excel') {
-            $this->getPercentChangeService()->download($changes);
-            die;
-        }
-
-        return array(
-            'changes' => $changes
-        );
-    }
-
     /**
      * For an individual institution
+     *
+     * Replaced by nationalAction below
      *
      * @return array
      */
@@ -116,6 +74,8 @@ class ReportController extends ReportAdminController
         // HTML or Excel?
         $format = $this->params()->fromRoute('format');
 
+        $forPercentChange = $this->params()->fromRoute('forPercentChange');
+
         if ($redirect = $this->checkReportsAreOpen()) {
             return $redirect;
         }
@@ -152,21 +112,29 @@ class ReportController extends ReportAdminController
             return $this->observationNotFound();
         }
 
-        /** @var \Mrss\Service\Report\National $reportService */
-        $reportService = $this->getServiceLocator()->get('service.report.national');
+        $reportPath = 'national';
+        if ($system) {
+            $reportPath = 'system';
+        }
+
+        if ($forPercentChange) {
+            $reportService = $this->getPercentChangeService();
+            $reportPath = 'percent-change';
+        } else {
+            $reportService = $this->getNationService($forPercentChange);
+        }
+
         $reportData = $reportService->getData($subscription, $system);
 
 
         // Download?
         if ($format == 'excel') {
-            $this->getServiceLocator()->get('service.report.national')
-                ->download($reportData, $system);
+            $reportService->download($reportData, $system);
             die;
         }
 
-        $reportPath = 'national';
-        if ($system) {
-            $reportPath = 'system';
+        if ($forPercentChange) {
+            $subscriptions = $this->getSubscriptionsForPercentChange($subscriptions);
         }
 
         return array(
@@ -177,8 +145,39 @@ class ReportController extends ReportAdminController
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels(),
             'system' => $system,
-            'reportPath' => $reportPath
+            'reportPath' => $reportPath,
+            'forPercentChange' => $forPercentChange
         );
+    }
+
+    /**
+     * Remove subscriptions where they didn't have one in the prior year
+     *
+     * @param $subscriptions
+     */
+    protected function getSubscriptionsForPercentChange($subscriptions)
+    {
+        $years = array();
+        foreach ($subscriptions as $subscription) {
+            $years[] = $subscription->getYear();
+        }
+
+        $newSubscriptions = array();
+        foreach ($subscriptions as $subscription) {
+            $priorYear = $subscription->getYear() - 1;
+
+            if (in_array($priorYear, $years)) {
+                $newSubscriptions[] = $subscription;
+            }
+        }
+
+        return $newSubscriptions;
+    }
+
+    /** @return \Mrss\Service\Report\National */
+    protected function getNationService()
+    {
+        return $this->getServiceLocator()->get('service.report.national');
     }
 
     protected function getSubscriptionByYear($year)
@@ -919,19 +918,6 @@ class ReportController extends ReportAdminController
         $this->reportService = $service;
 
         return $this;
-    }
-
-    /**
-     * @return Report
-     */
-    public function getReportService()
-    {
-        if (empty($this->reportService)) {
-            $this->reportService = $this->getServiceLocator()
-                ->get('service.report');
-        }
-
-        return $this->reportService;
     }
 
     /**

@@ -49,6 +49,11 @@ class Percentile
     protected $study;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $forPercentChange = false;
+
+    /**
      * @ORM\Column(type="string")
      */
     protected $percentile;
@@ -152,5 +157,23 @@ class Percentile
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForPercentChange()
+    {
+        return $this->forPercentChange;
+    }
+
+    /**
+     * @param mixed $forPercentChange
+     * @return PercentileRank
+     */
+    public function setForPercentChange($forPercentChange)
+    {
+        $this->forPercentChange = $forPercentChange;
+        return $this;
     }
 }

@@ -43,6 +43,21 @@ class PercentChange extends AbstractModel
     }
 
     /**
+     * @param $benchmark
+     * @param $year
+     * @return \Mrss\Entity\PercentChange[]
+     */
+    public function findByBenchmarkAndYear($benchmark, $year)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'benchmark' => $benchmark,
+                'year' => $year
+            )
+        );
+    }
+
+    /**
      * @param $year
      * @return PercentChangeEntity[]
      */

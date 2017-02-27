@@ -14,6 +14,7 @@ $this->headScript()->appendFile(
 
 
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         var url = '/reports/custom/<?= $report->getId() ?>/reorder'
 
@@ -30,6 +31,7 @@ $this->headScript()->appendFile(
             return confirm('Are you sure you want to delete this?')
         })
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <div class="back">

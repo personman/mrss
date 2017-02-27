@@ -1,4 +1,5 @@
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         // Confirmation for delete button
         $('#deleteButton').click(function() {
@@ -17,6 +18,7 @@
             })
         })
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <?php /** @var \Mrss\Entity\User[] $users */ ?>

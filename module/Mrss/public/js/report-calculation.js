@@ -3,17 +3,20 @@ var originalTotal = 0;
 var progressBar;
 var times = [];
 var startTime;
+var debug = false;
 
 $(function() {
-    setUpCalculation();
+    setUpOutlierCalculation();
+    setUpSendOutlierEmails();
     setUpCompute();
     setUpChangeCalculation();
+    setUpChangePercentilesCalculation();
     setUpPercentiles();
     setUpSystems();
 });
 
 
-function setUpCalculation()
+function setUpOutlierCalculation()
 {
     var baseUrl = '/reports/calculate-outlier/';
 
@@ -53,6 +56,42 @@ function setUpCalculation()
     })
 }
 
+function setUpSendOutlierEmails()
+{
+    var baseUrl = '/reports/send-outlier/';
+
+    $('.send-outlier-email').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+
+        progressBar = $('#outlier-email-progress-' + year + ' .progress-bar');
+
+        // Get the benchmark Ids
+        var colleges = collegeIds[year];
+
+        originalTotal = colleges.length;
+
+        // Build the url stack
+        urlStack = [];
+        for (var i in colleges) {
+            var collegeId = colleges[i];
+
+            var url = baseUrl + collegeId + '/' + year;
+
+            urlStack.push(url);
+        }
+
+        // Now the url stack is built. Kick it off.
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
+    })
+}
+
+// Computed benchmarks
 function setUpCompute()
 {
     var baseUrl = '/reports/compute-one/';
@@ -82,6 +121,47 @@ function setUpCompute()
                 url = url + '/first';
             }
 
+            urlStack.push(url);
+        }
+
+        // Now the url stack is built. Kick it off.
+        progressBar.parent().show();
+        getProgressLabel().html('Starting...');
+        processUrlStack();
+
+        return false;
+    })
+}
+
+// National report percentiles
+function setUpPercentiles()
+{
+    var baseUrl = '/reports/calculate-one/';
+
+    $('.calculate-percentile').click(function() {
+        var button = $(this);
+        var buttonId = button.attr('id');
+        var year = buttonId.split('-').pop();
+
+        progressBar = $('#percentile-progress-' + year + ' .progress-bar');
+
+        // Get the benchmark Ids
+        var benchmarkIds = benchmarks[year];
+
+        originalTotal = benchmarkIds.length;
+
+        // Build the url stack
+        urlStack = [];
+        for (var i in benchmarkIds) {
+            var benchmarkId = benchmarkIds[i];
+
+            var url = baseUrl + benchmarkId + '/' + year;
+
+            if (i == 0) {
+                url = url + '/last';
+            } else if (i == benchmarkIds.length - 1) {
+                url = url + '/first';
+            }
             urlStack.push(url);
         }
 
@@ -135,17 +215,16 @@ function setUpChangeCalculation()
     })
 }
 
-
-function setUpPercentiles()
+function setUpChangePercentilesCalculation()
 {
-    var baseUrl = '/reports/calculate-one/';
+    var baseUrl = '/reports/calculate-one-percent-change/';
 
-    $('.calculate-percentile').click(function() {
+    $('.calculate-changes-percentiles').click(function() {
         var button = $(this);
         var buttonId = button.attr('id');
         var year = buttonId.split('-').pop();
 
-        progressBar = $('#percentile-progress-' + year + ' .progress-bar');
+        progressBar = $('#calculate-changes-percentile-progress-' + year + ' .progress-bar');
 
         // Get the benchmark Ids
         var benchmarkIds = benchmarks[year];
@@ -175,6 +254,9 @@ function setUpPercentiles()
         return false;
     })
 }
+
+
+
 
 
 function setUpSystems()
@@ -239,31 +321,47 @@ function processUrlStack()
         startTimer();
         //console.log(url);
 
-        //if (window.console && !console.dir) {
-            //console.log(url)
-        //}
+        if (debug && window.console) {
+            console.log("URL: " + url)
+        }
 
-        $.get(url, function(data) {
-            // Update the progress bar
-            var remaining = urlStack.length;
-            var completed = originalTotal - remaining;
-            var completion = completed / originalTotal * 100;
+        //$.get(url, function(data) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(data) {
+                // Update the progress bar
+                var remaining = urlStack.length;
+                var completed = originalTotal - remaining;
+                var completion = completed / originalTotal * 100;
 
-            /*debugger;
+                /*debugger;*/
 
-            console.log("Original total: " + originalTotal);
-            console.log("Remaining: " + remaining);
-            console.log("Completed: " + completed);
-            console.log("Completion: " + completion);*/
+                if (debug && window.console) {
 
-            progressBar.css('width', completion + '%').attr('aria-valuenow', completion);
-            getProgressLabel()
-                .html(Math.round(completion) + '%');
+                    console.log("Original total: " + originalTotal);
+                    console.log("Remaining: " + remaining);
+                    console.log("Completed: " + completed);
+                    console.log("Completion: " + completion);
+                }
 
-            endTimer();
+                progressBar.css('width', completion + '%').attr('aria-valuenow', completion);
+                var newLabel = Math.round(completion) + '%';
+                getProgressLabel()
+                    .html(newLabel);
 
-            // On to the next one...
-            processUrlStack();
+                getProgressMessage().html(data["message"]);
+
+                endTimer();
+
+                // On to the next one...
+                processUrlStack();
+            },
+            error: function(xhr, statusText) {
+                // Put the url back on the stack so we can try again, but put it at the end
+                urlStack.unshift(url);
+                processUrlStack();
+            }
         });
     } else {
         getProgressLabel().html('Complete.')
@@ -317,4 +415,9 @@ function getTimeRemaining()
 function getProgressLabel()
 {
     return progressBar.parent().parent().parent().find('.progress-label');
+}
+
+function getProgressMessage()
+{
+    return progressBar.parent().parent().parent().find('.progress-message')
 }

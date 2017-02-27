@@ -1,6 +1,7 @@
 
 <script type='text/javascript' src='https://www.google.com/jsapi'></script>
 <script type='text/javascript'>
+    <?php $this->headScript()->captureStart() ?>
     google.load('visualization', '1', {'packages': ['geomap']});
     google.setOnLoadCallback(drawMap);
 
@@ -33,7 +34,7 @@
         var geomap = new google.visualization.GeoMap(container);
         geomap.draw(data, options);
     };
-
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <div id='map_canvas'></div>

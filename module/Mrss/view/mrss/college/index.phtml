@@ -9,6 +9,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(document).ready(function() {
         $('#colleges').dataTable({
             "order": [[2, "asc"]],
@@ -19,8 +20,9 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
         $('.heatMapYear, .heatmapTd').css('width', '20px')
 
-        //$('.heatmapCell').tooltip()
+
     });
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <div class="btn-group heading-btns">

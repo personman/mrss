@@ -1,6 +1,7 @@
 <? /** @var \Mrss\Entity\College $college */ ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('.reportAccess').click(function() {
             var checked = $(this)[0].checked;
@@ -30,7 +31,7 @@
 
         })
     })
-
+    <?php $this->headScript()->captureEnd() ?>
 
 </script>
 

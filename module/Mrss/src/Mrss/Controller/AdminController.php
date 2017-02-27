@@ -66,6 +66,7 @@ class AdminController extends AbstractActionController
             ->getYearsWithSubscriptions($this->currentStudy());
         rsort($years);
 
+
         // Total
         $total = 0;
         foreach ($subscriptions as $sub) {
@@ -76,8 +77,46 @@ class AdminController extends AbstractActionController
             'subscriptions' => $subscriptions,
             'years' => $years,
             'currentYear' => $year,
-            'total' => $total
+            'total' => $total,
+            'sectionsNote' => $this->getSectionsNote($subscriptions)
         );
+    }
+
+    /**
+     * @param \Mrss\Entity\Subscription[] $subscriptions
+     * @return string
+     */
+    protected function getSectionsNote($subscriptions)
+    {
+        $sectionCounts = array();
+        foreach ($this->getStudy()->getSections() as $section) {
+            $sectionCounts[$section->getId()] = array(
+                'name' => $section->getName(),
+                'count' => 0
+            );
+        }
+
+        foreach ($subscriptions as $sub) {
+            foreach ($sub->getSectionIds() as $sectionId) {
+                $sectionCounts[$sectionId]['count']++;
+            }
+        }
+
+        $sectionNotes = array();
+        foreach ($sectionCounts as $sectionCount) {
+            $sectionNotes[] = $sectionCount['name'] . ': ' . $sectionCount['count'];
+        }
+
+        $sectionNote = null;
+        if (count($sectionNotes)) {
+            $sectionNote = implode(', ', $sectionNotes);
+        }
+
+        if ($sectionNote) {
+            $sectionNote = " ($sectionNote)";
+        }
+
+        return $sectionNote;
     }
 
     public function changesAction()

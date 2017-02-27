@@ -124,7 +124,7 @@ class College
     /**
      * @ORM\ManyToOne(targetEntity="System", inversedBy="colleges")
      */
-    protected $system;
+    protected $system = null;
 
     /**
      * Construct the college entity

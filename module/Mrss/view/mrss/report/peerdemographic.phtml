@@ -2,6 +2,7 @@
 <h1>Demographic Peer Comparison</h1>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('.formClearButton').click(function() {
             var form = $(this).parents('form')
@@ -19,6 +20,7 @@
         $('#fieldset-buttons .controls').css('margin-left', 0)
         $('#control-group-submitButton').css('margin-left', '160px')
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <style type="text/css">

@@ -1396,6 +1396,7 @@ class SubscriptionController extends AbstractActionController
 
         if (empty($subscription)) {
             $subscription = new Subscription();
+            $subscription->setCompletion(0);
         }
 
         if ($method == 'system') {
@@ -1418,6 +1419,7 @@ class SubscriptionController extends AbstractActionController
         $subscription->setObservation($observation);
         $subscription->setPaymentAmount($amount);
 
+
         if (!empty($draftSubscription)) {
             // Get the agreement data from the session
             $agreement = json_decode($draftSubscription->getAgreementData(), true);
@@ -1432,8 +1434,34 @@ class SubscriptionController extends AbstractActionController
 
 
         $this->getSubscriptionModel()->save($subscription);
+        $this->getSubscriptionModel()->getEntityManager()->flush();
+
+        $this->createDataRows($subscription);
 
         return $subscription;
+    }
+
+    protected function createDataRows($subscription)
+    {
+        // First, make sure there aren't any
+        $data = $subscription->getData();
+        $subscriptionId = $subscription->getId();
+
+        $count = count($data);
+
+        //$this->flashMessenger()->addSuccessMessage("Count is $count.");
+        //$this->flashMessenger()->addSuccessMessage("subscription_id is $subscriptionId.");
+
+        if ($count == 0) {
+            $sql = "INSERT INTO data_values (subscription_id, benchmark_id, dbColumn)
+SELECT :subscription_id, id, dbColumn FROM benchmarks;";
+
+            $stmt = $this->getSubscriptionModel()->getEntityManager()->getConnection()->prepare($sql);
+            $stmt->execute(array('subscription_id' => $subscriptionId));
+        }
+
+
+
     }
 
     protected function getSubscriptionStatus($method)

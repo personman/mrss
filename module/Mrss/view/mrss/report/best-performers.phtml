@@ -1,6 +1,7 @@
 <?= $this->headLink()->appendStylesheet('/css/best-performers.css?v=3') ?>
 
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
 
         // Show all
@@ -46,6 +47,7 @@
         $('.show-results').click()
 
     }
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 

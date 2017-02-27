@@ -4,6 +4,8 @@
 return array(
     'from_email' => 'info@benchmarkinginstitute.org',
     'from_email_name' => 'Michelle Taylor',
+    'reply_to_email' => 'info@benchmarkinginstitute.org',
+    'reply_to_email_name' => 'Michelle Taylor',
     'cc_email' => 'michelletaylor@jccc.edu',
     'approver_email' => 'dfergu15@jccc.edu',
     'data_entry_templates' => array(),
@@ -24,6 +26,7 @@ return array(
     'free_to_join' => false,
     'agreement_template' => null,
     'custom_excel_template' => null,
+    'percent_change_report_columns' => array(),
     'welcome_email' => 'welcome',
     'outlier_email' => 'outliers.email',
     'outlier_email_none' => 'outliers.email.none',

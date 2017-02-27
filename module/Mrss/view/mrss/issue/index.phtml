@@ -3,6 +3,7 @@
 
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('a.confirmData').click(function() {
             var issue = $(this).parents('.issue');
@@ -31,6 +32,7 @@
             return false;
         });
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 

@@ -45,6 +45,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 </style>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     var map
     // Highlight states with systems
     var systemColor = '#CFF270'
@@ -127,6 +128,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             return false
         })
     });
+
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 
@@ -141,7 +144,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <div class="col-xs-12">
             <p class="lead sec-intro">Since 2004, over 400 two-year institutions have participated in the National Community College Benchmark Project (NCCBP) including the state systems of New York (SUNY), Indiana (Ivy Tech), Missouri, Pennsylvania, Wyoming, Hawaii, South Carolina and other systems including Maricopa County and Dallas County Community College District.<br>
 
-                <span style="font-size: 70%">The states with system members are highlighted in green.  To see a list of member colleges, click on each state. The blue dots represent colleges that have participated in the NCCBP for at least one year between 2007 and 2014.</span></p>
+                <span style="font-size: 70%">The states with system members are highlighted in green.  To see a list of member colleges, click on each state. The blue dots represent colleges that have participated in the NCCBP for at least one year between 2007 and <?= date('Y') ?>.</span></p>
         </div>
     </div>
 

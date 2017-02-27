@@ -14,6 +14,13 @@ use Zend\Log\Formatter\Simple;
 class ReportAdminController extends AbstractActionController
 {
     /**
+     * @var Report
+     */
+    protected $reportService;
+
+    protected $debug = false;
+
+    /**
      * @return Report\Percentile
      */
     protected function getPercentileService()
@@ -67,6 +74,7 @@ class ReportAdminController extends AbstractActionController
 
         // Get observation ids
         $observationIds = array();
+        $collegeIds = array();
         $benchmarkIds = array();
         $systemIds = array();
         foreach ($years as $year => $yearInfo) {
@@ -81,6 +89,21 @@ class ReportAdminController extends AbstractActionController
 
             foreach ($subs as $sub) {
                 $yearIds[] = $sub->getObservation()->getId();
+
+
+                // Use to just do part of the colleges (after an aborted run):
+                /*$break = "Mom";
+                $name = $sub->getCollege()->getName();
+                $result = strcasecmp($name, $break);
+
+                //pr($break); pr($name); pr(
+
+                if ($result > 0) {
+                    $collegeIds[$year][] = $sub->getCollege()->getId();
+                }*/
+
+                // All colleges:
+                $collegeIds[$year][] = $sub->getCollege()->getId();
             }
 
             $observationIds[$year] = $yearIds;
@@ -104,26 +127,36 @@ class ReportAdminController extends AbstractActionController
         $currentYear = $this->currentStudy()->getCurrentYear();
 
 
+        // Limit college ids for AAUP (one time thing, then remove)
+        /*$newColleges = array();
+        foreach ($collegeIds["2017"] as $collegeId) {
+            if ($collegeId > 2379) {
+                $newColleges[] = $collegeId;
+            }
+        }
+        $collegeIds["2017"] = $newColleges;*/
 
         return array(
             'years' => $years,
             'study' => $this->currentStudy(),
             'observationIds' => $observationIds,
             'systemIds' => $systemIds,
+            'collegeIds' => $collegeIds,
             'benchmarkIds' => $benchmarkIds
         );
     }
 
     public function debug($message, $var)
     {
-        $seconds = microtime(true) - REQUEST_MICROTIME;
+        if ($this->debug) {
+            $seconds = microtime(true) - REQUEST_MICROTIME;
 
-        echo "$seconds since request started.<h3>$message</h3>";
+            echo "$seconds since request started.<h3>$message</h3>";
 
-        if ($var) {
-            pr($var);
+            if ($var) {
+                pr($var);
+            }
         }
-
     }
 
     /**
@@ -136,26 +169,28 @@ class ReportAdminController extends AbstractActionController
         $benchmarkId = $this->params()->fromRoute('benchmark');
         $year = $this->params()->fromRoute('year');
         $position = $this->params()->fromRoute('position');
+        $forPercentChange = $this->params()->fromRoute('forPercentChange', false);
 
         $percentileService = $this->getPercentileService();
         $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
 
         // If this is the first benchmark, clear existing percentiles
         if ($position == 'first') {
-            $percentileService->clearPercentiles($year);
+            $percentileService->clearPercentiles($year, null, $forPercentChange);
         }
 
         // Last?
         if ($position == 'last') {
-            $settingKey = $this->getReportService()->getReportCalculatedSettingKey($year);
+            $settingKey = $this->getReportService()->getReportCalculatedSettingKey($year, null, $forPercentChange);
             $this->getReportService()->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
         }
 
 
         $this->debug("About to calculate", $benchmarkId);
+        $this->debug("For percent change: ", $forPercentChange);
 
         // Now actually calculate and save percentiles
-        $percentileService->calculateForBenchmark($benchmark, $year);
+        $percentileService->calculateForBenchmark($benchmark, $year, null, $forPercentChange);
 
         $this->debug("Preflush", null);
 
@@ -196,7 +231,7 @@ class ReportAdminController extends AbstractActionController
 
     public function computeOneAction()
     {
-        $debug = $this->params()->fromRoute('debug');
+        $debug = $this->params()->fromRoute('debug', false);
 
         takeYourTime();
 
@@ -319,6 +354,19 @@ class ReportAdminController extends AbstractActionController
         return $table;
     }
 
+    /**
+     * @return Report
+     */
+    public function getReportService()
+    {
+        if (empty($this->reportService)) {
+            $this->reportService = $this->getServiceLocator()
+                ->get('service.report');
+        }
+
+        return $this->reportService;
+    }
+
     public function calculateChangesAction()
     {
         $status = 'ok';
@@ -337,6 +385,43 @@ class ReportAdminController extends AbstractActionController
         );
 
         return $view;
+    }
+
+    /**
+     * For admins. Shows all institutions.
+     *
+     * @return array
+     */
+    public function percentChangesAction()
+    {
+        takeYourTime();
+        $format = $this->params()->fromRoute('format');
+
+        $year = $this->params()->fromRoute('year');
+        if (empty($year)) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        /** @var \Mrss\Model\PercentChange $percentChangeModel */
+        $percentChangeModel = $this->getServiceLocator()->get('model.percentchange');
+        $changes = $percentChangeModel->findByYear($year);
+
+        if ($format == 'excel') {
+            $this->getPercentChangeService()->download($changes);
+            die;
+        }
+
+        return array(
+            'changes' => $changes
+        );
+    }
+
+    /**
+     * @return \Mrss\Service\Report\Changes
+     */
+    protected function getPercentChangeService()
+    {
+        return $this->getServiceLocator()->get('service.report.changes');
     }
 
     /**
@@ -533,15 +618,45 @@ class ReportAdminController extends AbstractActionController
         return $logger;
     }
 
+    protected function sendOutlierAction()
+    {
+        $collegeId = $this->params()->fromRoute('college');
+        $year = $this->params()->fromRoute('year');
+
+        $renderer = $this->getRenderer();
+        $stats = $this->getOutlierService()->emailOutliers($renderer, true, $collegeId);
+        $name = $this->getOutlierService()->getCollegeName($collegeId);
+
+
+        $view = new JsonModel(
+            array(
+                'status' => 'ok',
+                'message' => 'Sent to: ' . $name
+            )
+        );
+
+        return $view;
+    }
+
+    protected function getRenderer()
+    {
+        $renderer = $this->getServiceLocator()
+            ->get('Zend\View\Renderer\RendererInterface');
+
+        return $renderer;
+    }
+
+    /**
+     * @deprecated
+     * @return array|\Zend\Http\Response
+     */
     public function emailOutliersAction()
     {
         $this->longRunningScript();
 
-        $renderer = $this->getServiceLocator()
-            ->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->getRenderer();
 
-        /** @var \Mrss\Service\Report\Outliers $outliersService */
-        $outliersService = $this->getServiceLocator()->get('service.report.outliers');
+        $outliersService = $this->getOutlierService();
 
         $task = $this->params()->fromRoute('task');
         if ($task == 'preview') {

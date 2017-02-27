@@ -15,7 +15,7 @@ $modules = array(
     'GoalioForgotPasswordDoctrineORM',
     'PhlyContact',
     'AssetManager',
-    'Mrss'
+    'Mrss',
 );
 
 $localModuleConfig = 'config/modules.local.php';

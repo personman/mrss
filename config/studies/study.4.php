@@ -4,6 +4,8 @@
 return array(
     'from_email' => 'info@benchmarkinginstitute.org',
     'from_email_name' => 'John Barnshaw',
+    'reply_to_email' => 'aaupfcs@aaup.org',
+    'reply_to_email_name' => 'John Barnshaw',
     //'cc_email' => 'jbarnshaw@aaup.org',
     'cc_email' => 'dfergu15@jccc.edu',
     //'approver_email' => 'jbarnshaw@aaup.org',
@@ -34,6 +36,13 @@ return array(
     'logged_out_header_button' => '<a href="/consultation" class="btn schedule-btn" role="button" id="schedule-demo">FREE CONSULTATION</a>',
     'copyright' => date('Y') . " American Association of University Professors",
     'footerLogo' => '<span>Powered by</span> <br><a href="http://nccbp.org/benchmarking-institute" title="National Higher Eduction Benchmarking Institute @ Johnson County Community College"><img src="/images/benchmark_logo.png" /></a>',
+    'percent_change_report_columns' => array(
+        'ft_average_professor_salary',
+        'ft_average_associate_professor_salary',
+        'ft_average_assistant_professor_salary',
+        'ft_average_instructor_salary',
+        'ft_average_all_ranks_salary_historical'
+    ),
     'footerSocial' => '',
     'data_entry_templates' => array(
         //3 => 'fcs/full-time-salary.phtml',

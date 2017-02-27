@@ -194,14 +194,14 @@ class Subscription
     {
         return $this->status;
     }
-    
+
     public function setYear($year)
     {
         $this->year = $year;
-        
+
         return $this;
     }
-    
+
     public function getYear()
     {
         return $this->year;
@@ -214,7 +214,7 @@ class Subscription
     public function setCollege(College $college)
     {
         $this->college = $college;
-        
+
         return $this;
     }
 
@@ -376,6 +376,30 @@ class Subscription
     public function getCompletion()
     {
         return $this->completion;
+    }
+
+    public function updateCompletion($dbColumnsIncluded = array())
+    {
+        $completedFields = 0;
+
+        if (!count($dbColumnsIncluded)) {
+            $dbColumnsIncluded = $this->getStudy()->getDbColumnsIncludedInCompletion();
+        }
+
+        $totalFields = count($dbColumnsIncluded);
+
+        foreach ($this->getData() as $datum) {
+            if (in_array($datum->getDbColumn(), $dbColumnsIncluded)) {
+                if ($datum->getValue() !== null) {
+                    $completedFields++;
+                }
+            }
+        }
+
+        $completion = $completedFields / $totalFields * 100;
+        $completion = round($completion, 1);
+
+        $this->setCompletion($completion);
     }
 
     /**

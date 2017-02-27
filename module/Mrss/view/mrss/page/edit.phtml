@@ -1,5 +1,6 @@
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         CKEDITOR.replace(
             'wysiwygContent',
@@ -9,6 +10,7 @@
             }
         )
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 

@@ -75,7 +75,7 @@ class Percentile extends Report
         $this->getSettingModel()->setValueForIdentifier($settingKey, date('c'));
     }
 
-    public function calculateForBenchmark(Benchmark $benchmark, $year, $system = null)
+    public function calculateForBenchmark(Benchmark $benchmark, $year, $system = null, $forPercentChange = false)
     {
         $study = $this->getStudy();
 
@@ -84,10 +84,9 @@ class Percentile extends Report
         $percentileModel = $this->getPercentileModel();
         $percentileRankModel = $this->getPercentileRankModel();
 
-
         // Get all data points for this benchmark
         // Can't just pull from observations. have to consider subscriptions, too
-        $data = $this->collectDataForBenchmark($benchmark, $year, true, $system);
+        $data = $this->collectDataForBenchmark($benchmark, $year, true, $system, $forPercentChange);
 
         if (empty($data)) {
             $this->stats['noData']++;
@@ -106,6 +105,7 @@ class Percentile extends Report
             $percentileEntity->setBenchmark($benchmark);
             $percentileEntity->setPercentile($breakpoint);
             $percentileEntity->setValue($value);
+            $percentileEntity->setForPercentChange($forPercentChange);
 
             if ($system) {
                 $percentileEntity->setSystem($system);
@@ -116,13 +116,14 @@ class Percentile extends Report
         }
 
         // Save the N (count) as a percentile
-        $n = count($data);
+        $count = count($data);
         $percentileEntity = new PercentileEntity;
         $percentileEntity->setStudy($study);
         $percentileEntity->setYear($year);
         $percentileEntity->setBenchmark($benchmark);
         $percentileEntity->setPercentile('N');
-        $percentileEntity->setValue($n);
+        $percentileEntity->setValue($count);
+        $percentileEntity->setForPercentChange($forPercentChange);
         if ($system) {
             $percentileEntity->setSystem($system);
         }
@@ -138,6 +139,7 @@ class Percentile extends Report
             $percentileRank->setYear($year);
             $percentileRank->setBenchmark($benchmark);
             $percentileRank->setRank($percentile);
+            $percentileRank->setForPercentChange($forPercentChange);
 
             if ($system) {
                 $percentileRank->setSystem($system);
@@ -155,7 +157,7 @@ class Percentile extends Report
 
     }
 
-    public function clearPercentiles($year, $system = null)
+    public function clearPercentiles($year, $system = null, $forPercentChange = false)
     {
         $percentileModel = $this->getPercentileModel();
         $percentileRankModel = $this->getPercentileRankModel();
@@ -163,8 +165,8 @@ class Percentile extends Report
 
         // Clear the stored values
         $this->debugTimer('About to clear values');
-        $percentileModel->deleteByStudyAndYear($study->getId(), $year, $system);
-        $percentileRankModel->deleteByStudyAndYear($study->getId(), $year, $system);
+        $percentileModel->deleteByStudyAndYear($study->getId(), $year, $system, $forPercentChange);
+        $percentileRankModel->deleteByStudyAndYear($study->getId(), $year, $system, $forPercentChange);
         $this->debugTimer('cleared values');
     }
 

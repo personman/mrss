@@ -2,7 +2,7 @@
 
 namespace Mrss\Service\Import;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Guzzle\Tests\Service\Mock\Command\Sub\Sub;
+//use Guzzle\Tests\Service\Mock\Command\Sub\Sub;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Subscription;
@@ -17,15 +17,15 @@ class ImportWorkforceData
     protected $sectionId = 2;
     protected $hydrator;
 
-    public function import()
+    public function import($year)
     {
         $wfDb = $this->getWfDb();
+        $start = microtime(1);
 
-        $sql = "SELECT * FROM subscriptions";
+        $sql = "SELECT * FROM subscriptions WHERE year = :year";
         $statement = $wfDb->query($sql);
 
-        $results = $statement->execute();
-
+        $results = $statement->execute(array('year' => $year));
 
         // Foreach subscription
         foreach ($results as $row) {
@@ -34,6 +34,10 @@ class ImportWorkforceData
             echo '<hr>';
 
         }
+
+        $elapsed = microtime(1) - $start;
+
+        pr($elapsed);
 
         pr(get_class($wfDb));
     }

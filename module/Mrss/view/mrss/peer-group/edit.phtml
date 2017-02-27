@@ -1,9 +1,11 @@
 <script>
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         $('.delete-confirm').click(function() {
             return confirm('Are you sure you want to delete this?')
         })
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>
 
 <div class="back">

@@ -489,17 +489,11 @@ class ObservationController extends AbstractActionController
                 }
 
                 // Calculate completion
-                $completion = $this->currentStudy()->getCompletionPercentage($observation);
+                $subscription->updateCompletion();
+                $this->getSubscriptionModel()->save($subscription);
+                $this->getSubscriptionModel()->getEntityManager()->flush();
 
-                $subscription = $subscriptionModel
-                    ->findOne(
-                        $observation->getYear(),
-                        $observation->getCollege(),
-                        $this->currentStudy()->getId()
-                    );
-                $subscription->setCompletion($completion);
-
-                $this->getServiceLocator()->get('em')->flush();
+                //$this->updateCompletion($observation);
 
                 $redirect = $this->params()->fromPost('redirect', '/data-entry');
 
@@ -553,6 +547,22 @@ class ObservationController extends AbstractActionController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    protected function updateCompletion($observation)
+    {
+        // Calculate completion
+        $completion = $this->currentStudy()->getCompletionPercentage($observation);
+
+        $subscription = $this->getSubscriptionModel()
+            ->findOne(
+                $observation->getYear(),
+                $observation->getCollege(),
+                $this->currentStudy()->getId()
+            );
+        $subscription->setCompletion($completion);
+
+        $this->getServiceLocator()->get('em')->flush();
     }
 
     protected function getValidationIssuesMessage($issues)
@@ -924,6 +934,8 @@ class ObservationController extends AbstractActionController
                 // No errors, time to save to the db
                 $this->getServiceLocator()->get('em')->flush();
 
+                $this->updateCompletion($observation);
+
                 if (empty($issues)) {
                     $this->flashMessenger()->addSuccessMessage("Data imported.");
                 } else {
@@ -959,24 +971,9 @@ class ObservationController extends AbstractActionController
     protected function useDirectDownloadLink()
     {
         $direct = false;
-        if ($this->currentStudy()->getId() == 4) {
-            foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-                /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+        $subscription = $this->getSubscription();
 
-                // Skip form 1
-                if ($benchmarkGroup->getId() == 2) {
-                    continue;
-                }
-
-                $observation = $this->getCurrentObservation();
-                $completion = $benchmarkGroup->getCompletionPercentageForObservation($observation);
-
-                if ($completion) {
-                    return false;
-                }
-            }
-
-            // If we made it this far, then there's no data
+        if ($subscription->getCompletion() > 0) {
             $direct = true;
         }
 
@@ -1260,14 +1257,6 @@ class ObservationController extends AbstractActionController
 
     public function submittedValuesAction()
     {
-        //return $this->test();
-
-
-
-
-
-
-
 
         $year = $this->getYearFromRouteOrStudy(false);
         $format = $this->params()->fromRoute('format', 'html');
@@ -1288,8 +1277,7 @@ class ObservationController extends AbstractActionController
 
         // Get the observation
         $subscriptionModel = $this->getSubscriptionModel();
-        $subscription = $subscriptionModel
-            ->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
+        $subscription = $this->getSubscription($year);
 
         $observation = $subscription->getObservation();
 
@@ -1339,7 +1327,7 @@ class ObservationController extends AbstractActionController
                 $groupData['benchmarks'][] = array(
                     'benchmark' => $benchmark,
                     'value' => $value,
-                    'benchmarkName' => $variable->substitute($benchmark->getName())
+                    'benchmarkName' => $variable->substitute($benchmark->getReportLabel())
                 );
             }
 
@@ -1356,6 +1344,18 @@ class ObservationController extends AbstractActionController
             'submittedValues' => $submittedValues,
             'completionPercentage' => round($subscription->getCompletion(), 1)
         );
+    }
+
+    protected function getSubscription($year = null)
+    {
+        if ($year === null) {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        $subscription = $this->getSubscriptionModel()
+            ->findOne($year, $this->currentCollege()->getId(), $this->currentStudy()->getId());
+
+        return $subscription;
     }
 
     protected function downloadSubmittedValues($submittedValues, $year)

@@ -10,7 +10,6 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.2.*",
-        "zendframework/zend-developer-tools": "*",
         "zendframework/zendservice-recaptcha": "2.0.*@dev",
         "phly/phly-contact": "dev-master",
         "phing/phing": "2.5.*",
@@ -21,7 +20,6 @@
         "doctrine/migrations": "*",
         "doctrine/dbal": "2.4.*",
         "doctrine/common": "2.5.*",
-        "symfony/console": "2.5.*",
         "gedmo/doctrine-extensions": "2.3.*",
         "phpoffice/phpexcel": "1.8.*",
         "mwillbanks/zfc-twitter-bootstrap": "*",
@@ -30,14 +28,16 @@
         "goalio/goalio-forgotpassword": "1.0.2",
         "goalio/goalio-forgotpassword-doctrine-orm": "*",
         "thesoftwarefarm/exprlib": "*",
+        "rwoverdijk/assetmanager": "1.*",
+        "zendframework/zend-developer-tools": "*"
+    },
+    "require-dev": {
         "symfony/http-kernel": "2.*",
         "symfony/debug": "2.*",
         "symfony/http-foundation": "2.*",
         "symfony/filesystem": "2.*",
         "symfony/stopwatch": "2.*",
-        "rwoverdijk/assetmanager": "1.*"
-    },
-    "require-dev": {
+        "symfony/console": "2.5.*",
         "squizlabs/php_codesniffer": "2.*",
         "phpunit/phpunit": "3.7.*",
         "behat/behat": "*",

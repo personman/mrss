@@ -28,17 +28,18 @@ class ToolController extends AbstractActionController
 {
     public function indexAction()
     {
-        /*$array = array(5 => 'hi');
-
-        $b = $array[7];*/
 
         $baseTime = round(microtime(1) - REQUEST_MICROTIME, 3);
+        $loadAverage = sys_getloadavg();
+        $loadAverage = array_map('round', $loadAverage, array(2, 2, 2));
+        $loadAverage = implode(', ', $loadAverage);
 
         return array(
             'gc_lifetime' => ini_get('session.gc_maxlifetime'),
             'cookie_lifetime' => ini_get('session.cookie_lifetime'),
             'remember_me_seconds' => ini_get('session.remember_me_seconds'),
             'session_save_path' => session_save_path(),
+            'loadAverage' => $loadAverage,
             'baseTime' => $baseTime,
             'collegesWithNoExec' => $this->getMembersWithNoExec()
         );
@@ -270,40 +271,76 @@ class ToolController extends AbstractActionController
     public function calcCompletionAction()
     {
         $this->longRunningScript();
+        //takeYourTime();
 
         $start = microtime(1);
         $subscriptions = 0;
+        $batchSize = 100;
+        $currentBatch = $this->params()->fromQuery('batch', 1);
+        $lastOfBatch = $batchSize * $currentBatch;
+        $firstOfBatch = $lastOfBatch - $batchSize;
 
         $subscriptionModel = $this->getSubscriptionModel();
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
+        $subs = $study->getSubscriptionsForYear();
+
+        $dbColumnsIncluded = $study->getDbColumnsIncludedInCompletion();
+
+
         // Loop over all subscriptions
-        foreach ($study->getSubscriptions() as $subscription) {
-            $observation = $subscription->getObservation();
-            if (empty($observation)) {
-                continue;
-            }
-
-            // Debug
-            //if ($subscription->getYear() != 2010) continue;
-
-            $completion = $study->getCompletionPercentage(
-                $observation
-            );
-
-            $subscription->setCompletion($completion);
-            $subscriptionModel->save($subscription);
+        foreach ($subs as $subscription) {
+            /** @var \Mrss\Entity\Subscription $subscription */
 
             $subscriptions++;
+
+            if ($subscriptions < $firstOfBatch) continue;
+
+            $subscription->updateCompletion($dbColumnsIncluded);
+            $subscriptionModel->save($subscription);
+
+
+
+            if (false && $subscriptions % $flushEvery == 0) {
+                $subscriptionModel->getEntityManager()->flush();
+                echo 'flushed ';
+            }
+
+            if ($subscriptions == $lastOfBatch) {
+                $subscriptionModel->getEntityManager()->flush();
+                $nextBatch = $currentBatch + 1;
+                $url = '/tools/calc-completion?batch=' . $nextBatch;
+                return $this->redirect()->toUrl($url);
+                die;
+                //break;
+            }
+            //$this->getSubscriptionModel()->getEntityManager()->detach($subscription);
+            //unset($subscription);
         }
+
 
         $subscriptionModel->getEntityManager()->flush();
 
+
+        /*$queryLogger = $this->getServiceLocator()
+            ->get('em')
+            ->getConnection()
+            ->getConfiguration()
+            ->getSQLLogger();
+
+        prd(count($queryLogger->queries));
+        */
+
         $elapsed = round(microtime(1) - $start, 3);
+
+        //prd($elapsed);
+
+        $memory = round(memory_get_peak_usage() / 1024 / 1024);
+
         $this->flashMessenger()
-            ->addSuccessMessage("$subscriptions processed in $elapsed seconds.");
+            ->addSuccessMessage("$subscriptions processed.");// in $elapsed seconds. Memory used: $memory MB");
         return $this->redirect()->toRoute('tools');
 
     }
@@ -544,8 +581,18 @@ class ToolController extends AbstractActionController
         );
     }
 
+    /**
+     * @return \Mrss\Model\Datum
+     */
+    protected function getDatumModel()
+    {
+        return $this->getServiceLocator()->get('model.datum');
+    }
+
     public function zerosAction()
     {
+        $start = microtime(1);
+
         $this->longRunningScript();
 
         /** @var \Mrss\Entity\Study $study */
@@ -555,38 +602,20 @@ class ToolController extends AbstractActionController
             $year = $study->getCurrentYear();
         }
 
-        $subscriptionModel = $this->getSubscriptionModel();
-        $subs = $subscriptionModel->findByStudyAndYear($study->getId(), $year);
+        $subsWithZeros = $this->getDatumModel()->findZeros($year);
+        //$colleges = $this->getAllColleges();
 
-        // Get all the collected benchmark keys
-        $dbColumns = array();
-        foreach ($study->getBenchmarkGroups() as $bGroup) {
-            foreach ($bGroup->getNonComputedBenchmarksForYear($year) as $benchmark) {
-                $dbColumns[] = $benchmark->getDbColumn();
-            }
-        }
+        //prd($subsWithZeros);
 
-        // Now loop over the subscriptions
         $report = array();
         $users = array();
-        foreach ($subs as $subscription) {
-            $observation = $subscription->getObservation();
-
-            $zeros = 0;
-            foreach ($dbColumns as $dbColumn) {
-                $value = $observation->get($dbColumn);
-
-                if ($value === 0) {
-                    $zeros++;
-                }
-            }
-
-            if (!$zeros) {
-                continue;
-            }
+        foreach ($subsWithZeros as $info) {
+            $collegeId = $info['college_id'];
+            //$college = $colleges[$collegeId];
+            $college = $this->getCollegeModel()->find($collegeId);
 
             $emails = array();
-            foreach ($subscription->getCollege()->getUsersByStudy($study) as $user) {
+            foreach ($college->getUsersByStudy($study) as $user) {
                 if ($user->getRole() == 'viewer') {
                     continue;
                 }
@@ -595,12 +624,12 @@ class ToolController extends AbstractActionController
                 $users[] = $user;
             }
 
-            $reportRow = array(
-                'college' => $subscription->getCollege()->getName(),
+            $report[] = array(
+                'college' => $college->getNameAndState(),
                 'emails' => implode(', ', $emails),
-                'zeros' => $zeros
+                'zeros' => $info['count']
             );
-            $report[] = $reportRow;
+
         }
 
         // Download?
@@ -609,6 +638,8 @@ class ToolController extends AbstractActionController
             $exporter = new ExportUser();
             $exporter->export($users);
         }
+
+
 
         // Years for tabs
         $years = $this->getServiceLocator()->get('model.subscription')
@@ -633,44 +664,69 @@ class ToolController extends AbstractActionController
         return array();
     }
 
-    public function repairSequencesAction()
+    protected function repairSequences($type = 'data-entry')
     {
         foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
             /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
 
-            $i = 1;
+            $benchmarks = array();
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
-                $benchmark->setSequence($i);
-                $this->getBenchmarkModel()->save($benchmark);
-                $i++;
+                $benchmarks[$benchmark->getId()] = $benchmark;
             }
+
+            $headings = array();
+            foreach ($benchmarkGroup->getBenchmarkHeadings($type) as $heading) {
+                $headings[$heading->getId()] = $heading;
+            }
+
+            foreach ($benchmarkGroup->getChildren() as $child) {
+                $sequence = $child->getSequence();
+
+                if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
+                    unset($headings[$child->getId()]);
+                    continue;
+                }
+
+                unset($benchmarks[$child->getId()]);
+            }
+
+            // Now deal with any leftovers (invisible)
+            foreach ($headings as $heading) {
+                $heading->setSequence(++$sequence);
+
+                $this->getBenchmarHeadingkModel()->save($heading);
+            }
+
+            foreach ($benchmarks as $benchmark) {
+                if ($type == 'reports') {
+                    $benchmark->setReportSequence(++$sequence);
+                } else {
+                    $benchmark->setSequence(++$sequence);
+                }
+
+                $this->getBenchmarkModel()->save($benchmark);
+            }
+
+            $this->getBenchmarkModel()->getEntityManager()->flush();
+
         }
 
         $this->getBenchmarkModel()->getEntityManager()->flush();
 
+
+    }
+
+    public function repairSequencesAction()
+    {
+        $this->repairSequences();
         $this->flashMessenger()->addSuccessMessage('Sequences repaired.');
         return $this->redirect()->toRoute('tools');
     }
 
     public function repairReportSequencesAction()
     {
-        $benchmarkModel = $this->getBenchmarkModel();
 
-        foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
-
-            $benchmarks = $benchmarkModel->findByGroupForReport($benchmarkGroup);
-
-            $i = 1;
-            foreach ($benchmarks as $benchmark) {
-                $benchmark->setReportSequence($i);
-                $this->getBenchmarkModel()->save($benchmark);
-                $i++;
-            }
-        }
-
-        $this->getBenchmarkModel()->getEntityManager()->flush();
-
+        $this->repairSequences('reports');
         $this->flashMessenger()->addSuccessMessage('Report sequences repaired.');
         return $this->redirect()->toRoute('tools');
     }
@@ -1046,13 +1102,21 @@ class ToolController extends AbstractActionController
         return $this->getServiceLocator()->get('model.observation');
     }
 
-    protected function getAllColleges()
+    /**
+     * @return \Mrss\Model\College
+     */
+    protected function getCollegeModel()
     {
-        /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $this->getServiceLocator()->get('model.college');
 
+        return $collegeModel;
+    }
+
+    protected function getAllColleges()
+    {
+
         $colleges = array();
-        foreach ($collegeModel->findAll() as $college) {
+        foreach ($this->getCollegeModel()->findAll() as $college) {
             $colleges[$college->getId()] = $college->getNameAndState();
         }
 
@@ -1385,6 +1449,15 @@ class ToolController extends AbstractActionController
         return $this->benchmarkModel;
     }
 
+
+    /**
+     * @return \Mrss\Model\BenchmarkHeading
+     */
+    public function getBenchmarHeadingkModel()
+    {
+        return $this->getServiceLocator()->get('model.benchmark.heading');
+    }
+
     /**
      * @return \Mrss\Model\BenchmarkGroup
      */
@@ -1477,11 +1550,12 @@ class ToolController extends AbstractActionController
 
     public function importWfAction()
     {
-        takeYourTime();
+        $this->longRunningScript();
+        $year = $this->params()->fromQuery('year', 2017);
 
         $importer = $this->getServiceLocator()->get('service.import.workforce.data');
 
-        $importer->import();
+        $importer->import($year);
 
         die('test');
     }

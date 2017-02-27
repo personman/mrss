@@ -43,6 +43,7 @@
 </div>
 
 <script type="text/javascript">
+    <?php $this->headScript()->captureStart() ?>
     $(function() {
         // When the "Add to equation button" is clicked
         $('.addToEquation').click(function() {
@@ -61,4 +62,5 @@
             $('#myModal').modal('hide')
         })
     })
+    <?php $this->headScript()->captureEnd() ?>
 </script>

@@ -1,3 +1,8 @@
+<?php
+$subHeadingColSpan = ($forPercentChange) ? 12 : 10;
+$tableHeadingColSpan = ($forPercentChange) ? 4 : 2;
+?>
+
 <?= $this->headLink()->appendStylesheet('/css/report.css') ?>
 <?php
 $this->headScript()->appendFile(
@@ -5,8 +10,21 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
+<script>
+    <?php $this->headScript()->captureStart() ?>
+    $(document).ready(function(){
+        $('.tooltipster').tooltipster({
+            contentAsHTML: true,
+        });
+    });
+    <?php $this->headScript()->captureEnd() ?>
+</script>
+
+
 <h1>
-    <?php if (empty($system)): ?>
+    <?php if ($forPercentChange): ?>
+        Percent Change Report
+    <?php elseif (empty($system)): ?>
         Report of National Aggregate Data
     <?php else: ?>
         <?= $system->getName() ?> Report
@@ -27,6 +45,7 @@ $this->headScript()->appendFile(
     Prepared for <?= $college->getName() ?>
 </p>
 
+
 <p>
     <a href="<?= $this->url(
         'reports/' . $reportPath,
@@ -39,6 +58,7 @@ $this->headScript()->appendFile(
         Download Report
     </a>
 
+    <?php if (!$forPercentChange): ?>
     <a href="<?= $this->url(
         'institution/subscribed',
         array(
@@ -48,7 +68,10 @@ $this->headScript()->appendFile(
         <span class="glyphicon glyphicon-circle-arrow-down"></span>
         Download Members
     </a>
+    <?php endif ?>
 </p>
+
+
 
 <div class="report">
 
@@ -59,6 +82,8 @@ $this->headScript()->appendFile(
             <?php $nameParts = explode(': ', $benchmarkGroup['benchmarkGroup']) ?>
             <?php $formNumber = array_shift($nameParts) ?>
             <?php $formTitle = implode(': ', $nameParts) ?>
+        <?php else: ?>
+            <?php $formTitle = $benchmarkGroup['benchmarkGroup'] ?>
         <?php endif ?>
         <h3 class="benchmarkGroupTitle" id="form_<?= $benchmarkGroup['url'] ?>">
             <span class="small-heading"><?= $formNumber ?></span><br>
@@ -83,12 +108,20 @@ $this->headScript()->appendFile(
             <thead>
                 <tr class="topHeading">
                     <th></th>
-                    <th colspan="2">Your Institution</th>
+                    <th colspan="<?= $tableHeadingColSpan ?>">Your Institution</th>
                     <th colspan="7" class="nationalPercentiles"><?= $heading ?></th>
                 </tr>
                 <tr class="secondHeading">
                     <th></th>
+                    <?php if ($forPercentChange): ?>
+                    <th><?= $year - 1 ?></th>
+                    <th><?= $year ?></th>
+                    <th>Percent<br>Change</th>
+                    <?php else: ?>
                     <th>Reported Value</th>
+                    <?php endif ?>
+
+
                     <th>% Rank</th>
                     <th>N</th>
                     <?php foreach ($breakpoints as $breakpoint): ?>
@@ -103,7 +136,7 @@ $this->headScript()->appendFile(
                     <?php if (!empty($benchmark['heading'])): ?>
                         <tr class="retportSeparator"></tr>
                         <tr class="reportSubHeading">
-                            <td colspan="10">
+                            <td colspan="<?= $subHeadingColSpan ?>">
                                 <?= $benchmark['name'] ?>
                             </td>
                         </tr>
@@ -113,24 +146,58 @@ $this->headScript()->appendFile(
                     <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
                     <tr class="<?= $rowClass ?>">
                         <td class="benchmarkLabel">
-                            <?= $benchmark['benchmark'] ?>
+                            <?php if (!empty($benchmark['description'])): ?>
+                                <span class="tooltipster" title="<?= addslashes($benchmark['description']) ?>">
+                                    <?= $benchmark['benchmark'] ?>
+                                </span>
+                            <?php else: ?>
+                                <?= $benchmark['benchmark'] ?>
+                            <?php endif ?>
+
+
                             <?php if (!empty($benchmark['timeframe'])): ?>
                                 <span class="timeframe">(<?= $benchmark['timeframe'] ?>)</span>
                             <?php endif ?>
                         </td>
-                        <?php if ($benchmark['reported'] !== null): ?>
-                        <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
-                        <td class="percentileColor">
-                            <?php if (!empty($benchmark['do_not_format_rank'])): ?>
-                                <?= $benchmark['percentile_rank'] ?>
+
+                        <?php if ($forPercentChange): ?>
+                            <?php if (!empty($benchmark['percentChange'])): ?>
+                                <td>
+                                    <?= $benchmark['oldValue'] ?>
+                                </td>
+                                <td>
+                                    <?= $benchmark['newValue'] ?>
+                                </td>
+                                <td>
+                                    <?= $benchmark['percentChange'] ?>
+                                </td>
+                                <td>
+                                    <?= round($benchmark['percentile_rank']) ?>%
+                                </td>
+                                <?php $benchmark['prefix'] = ''; $benchmark['suffix'] = '%'; ?>
                             <?php else: ?>
-                                <?= round($benchmark['percentile_rank']) ?>%
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
                             <?php endif ?>
-                        </td>
+
                         <?php else: ?>
-                            <td>-</td>
-                            <td>-</td>
+                            <?php if ($benchmark['reported'] !== null): ?>
+                                <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
+                                <td class="percentileColor">
+                                    <?php if (!empty($benchmark['do_not_format_rank'])): ?>
+                                        <?= $benchmark['percentile_rank'] ?>
+                                    <?php else: ?>
+                                        <?= round($benchmark['percentile_rank']) ?>%
+                                    <?php endif ?>
+                                </td>
+                            <?php else: ?>
+                                <td>-</td>
+                                <td>-</td>
+                            <?php endif ?>
                         <?php endif ?>
+
                         <td>
                             <?= $benchmark['N'] ?>
                         </td>

@@ -60,6 +60,7 @@
 ?>
 
 <script>
+    <?php $this->headScript()->captureStart() ?>
     var reportsNeedingCache = <?= json_encode($reportsNeedingCache) ?>;
     var currentNumber = 1;
     var count = 0;
@@ -112,4 +113,5 @@
         var percentage = currentNumber / count * 100;
         $('#cache-progress').css('width', percentage + '%');
     }
+    <?php $this->headScript()->captureEnd() ?>
 </script>

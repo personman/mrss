@@ -326,13 +326,23 @@ class Outliers extends Report
         return $report;
     }
 
-    public function emailOutliers(RendererInterface $renderer, $reallySend = true)
+    public function getCollegeName($collegeId)
+    {
+        $name = null;
+        if ($college = $this->getCollegeModel()->find($collegeId)) {
+            $name = $college->getName();
+        }
+
+        return $name;
+    }
+
+    public function emailOutliers(RendererInterface $renderer, $reallySend = true, $collegeId = null)
     {
         // For debugging:
         $devOnly = false;
 
+        $reports = $this->getAdminOutlierReport($collegeId);
 
-        $reports = $this->getAdminOutlierReport();
         $stats = array('emails' => 0, 'preview' => '');
 
         // Loop over the admin report in order to send an email to each college
@@ -364,15 +374,11 @@ class Outliers extends Report
             $replyToPhone = "(913) 469-3831";
             $url = "workforceproject.org";
 
-            //$replyTo = "louguthrie@jccc.edu";
-            //$replyTo = "dfergu15@jccc.edu";
-            //$replyToName = "Lou Guthrie";
-            //$replyToPhone = "(913) 469-8500 x4019";
-            //$deadline = "July 10, " . date('Y');
-            //$url = "maximizingresources.org";
 
-            $replyTo = $this->getStudyConfig()->from_email;
-            $replyToName = $this->getStudyConfig()->from_email_name;
+            $replyTo = $this->getStudyConfig()->reply_to_email;
+            $replyToName = $this->getStudyConfig()->reply_to_name;
+            $from = $this->getStudyConfig()->from_email;
+            $fromName = $this->getStudyConfig()->from_email_name;
 
             $viewParams = array(
                 'year' => $year,
@@ -415,7 +421,7 @@ class Outliers extends Report
             $message->setSubject($subject);
             $message->setBody($bodyPart);
             $message->addBcc('dfergu15@jccc.edu');
-            $message->addFrom($replyTo, $replyToName);
+            $message->addFrom($from, $fromName);
             $message->setReplyTo($replyTo);
 
 

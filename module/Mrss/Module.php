@@ -46,8 +46,11 @@ class Module
             Logger::registerErrorHandler($this->getErrorLog());
         }
 
-        // Touch the sql logger, so it works
-        $collector = $sm->get('doctrine.sql_logger_collector.orm_default');
+        if (!empty($config['enable_sql_logger'])) {
+            // Touch the sql logger, so it works
+            //$collector = $sm->get('doctrine.sql_logger_collector.orm_default');
+        }
+
 
 
         // Set the timezone

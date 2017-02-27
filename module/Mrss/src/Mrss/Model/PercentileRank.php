@@ -32,7 +32,8 @@ class PercentileRank extends AbstractModel
         $college,
         $benchmark,
         $year,
-        $system = null
+        $system = null,
+        $forPercentChange = false
     ) {
 
         if (!is_int($college)) {
@@ -51,6 +52,15 @@ class PercentileRank extends AbstractModel
 
         $query->andWhere('r.benchmark = :benchmark_id');
         $query->setParameter('benchmark_id', $benchmark->getId());
+
+        if ($forPercentChange) {
+            $query->andWhere('r.forPercentChange = 1');
+        } else {
+            $query->andWhere('r.forPercentChange = 0');
+        }
+
+
+        //$query->setParameter('forPercentChange', $forPercentChange);
 
         $query->andWhere('r.year = :year');
         $query->setParameter('year', $year);
@@ -71,6 +81,10 @@ class PercentileRank extends AbstractModel
         } catch (\Exception $error) {
             prd($error->getMessage());
         }
+
+        /*pr($collegeId);
+        pr($benchmark->getId());
+        prd($query->getDQL());*/
 
         return $result;
     }
@@ -123,6 +137,8 @@ class PercentileRank extends AbstractModel
 
         $query->andWhere("p.study = :study_id");
         $query->setParameter('study_id', $study->getId());
+
+        $query->andWhere("p.forPercentChange = 0");
 
         $query->andWhere("p.year = :year");
         $query->setParameter('year', $year);
@@ -201,6 +217,8 @@ class PercentileRank extends AbstractModel
         $query->andWhere("p.study = :study_id");
         $query->setParameter('study_id', $study->getId());
 
+        $query->andWhere("p.forPercentChange = 0");
+
         $query->andWhere("p.year = :year");
         $query->setParameter('year', $year);
 
@@ -232,11 +250,12 @@ class PercentileRank extends AbstractModel
         // Flush here or leave it to some other code?
     }
 
-    public function deleteByStudyAndYear($studyId, $year, $system = null)
+    public function deleteByStudyAndYear($studyId, $year, $system = null, $forPercentChange = false)
     {
         $dql = 'DELETE Mrss\Entity\PercentileRank p
             WHERE p.year = ?1
-            AND p.study = ?2';
+            AND p.study = ?2
+            AND p.forPercentChange = ?3';
 
         if ($system) {
             $dql .= ' AND p.system IS NOT NULL';
@@ -249,6 +268,8 @@ class PercentileRank extends AbstractModel
 
         $query->setParameter(1, $year);
         $query->setParameter(2, $studyId);
+        $query->setParameter(3, $forPercentChange);
+
 
         if ($system) {
             //$query->setParameter(3, $system);

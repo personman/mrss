@@ -180,6 +180,19 @@ class Explore extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'makePeerCohort',
+                'type' => 'Zend\Form\Element\Checkbox',
+                'options' => array(
+                    'label' => 'Include Only Peer Institutions with Data for All Years'
+                ),
+                'attributes' => array(
+                    'id' => 'makePeerCohort'
+                )
+            )
+        );
+
     }
 
     protected function addAdvancedFields($benchmarks, $allBreakpoints)
