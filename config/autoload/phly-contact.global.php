@@ -34,8 +34,8 @@ $settings = array(
          */
         'to' => array(
             'dfergu15@jccc.edu',
-            'michelletaylor@jccc.edu',
-            'support@nhebi.zendesk.com'
+            //'michelletaylor@jccc.edu',
+            //'support@nhebi.zendesk.com'
         ),
 
         'from' => 'dfergu15@jccc.edu'
@@ -49,19 +49,7 @@ $settings = array(
     // This example configures GMail as your SMTP server
     'mail_transport' => array(
         'class'   => 'Zend\Mail\Transport\Smtp',
-        'options' => array(
-            //'host'             => 'smtp.mandrillapp.com',
-            'host' => 'email-smtp.us-west-2.amazonaws.com',
-            'port'             => 587,
-            'connectionClass'  => 'login',
-            'connectionConfig' => array(
-                'ssl'      => 'tls',
-                //'username' => 'dfergu15@jccc.edu',
-                //'password' => '3vheGQZghNh6NoReuj6d2w'
-                'username' => 'AKIAJWKBUWWGMQJ2QZUQ',
-                'password' => 'AqtPCY2L7TQAohN+ak5zS1BtleDmynUQ4ApOmdNqpCB9'
-            ),
-        ),
+
     ),
 );
 

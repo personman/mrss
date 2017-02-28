@@ -15,21 +15,8 @@ $settings = array(
     'transport_class' => 'Zend\Mail\Transport\Smtp',
     
     'options_class' => 'Zend\Mail\Transport\SmtpOptions',
-    
-    'transport_options' => array(
-        //'host' => 'smtp.mandrillapp.com',
-        'host' => 'email-smtp.us-west-2.amazonaws.com',
-        'connection_class' => 'login',
-        'connection_config' => array(
-            'ssl' => 'tls',
-            //'username' => 'dfergu15@jccc.edu',
-            //'password' => '3vheGQZghNh6NoReuj6d2w'
-            'username' => 'AKIAJWKBUWWGMQJ2QZUQ',
-            'password' => 'AqtPCY2L7TQAohN+ak5zS1BtleDmynUQ4ApOmdNqpCB9'
 
-        ),
-        'port' => 587
-    ),
+    // Transport options in smtp.local.php
 /*    'options' => array(
         'host' => 'smtp.gmail.com',
         'connection_class' => 'login',
