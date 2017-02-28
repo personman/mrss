@@ -1,6 +1,10 @@
 RewriteBase /
 RewriteEngine On
 
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
 
 # No access to the IP address
 RewriteCond %{HTTP_HOST} ^192\.232\.207\.42 [NC]
