@@ -446,35 +446,13 @@ class Module
                     );
                 },
                 'mail.transport' => function ($sm) {
-                    //return new \Zend\Mail\Transport\Sendmail();
-                    // @todo: Consider merging this with the GoalioMailService
+                    $config = $sm->get('config');
+
+                    // Get from the shared config
+                    $smtpConfig = $config['goaliomailservice']['transport_options'];
 
                     $transport = new \Zend\Mail\Transport\Smtp();
-                    $options = new \Zend\Mail\Transport\SmtpOptions(
-                        /*array(
-                            'host' => 'smtp.gmail.com',
-                            'connection_class' => 'login',
-                            'connection_config' => array(
-                                'ssl' => 'tls',
-                                'username' => 'dan.ferguson.mo@gmail.com',
-                                'password' => 'nhebiemail'
-                            ),
-                            'port' => 587
-                        )*/
-                        array(
-                            //'host' => 'smtp.mandrillapp.com',
-                            'host' => 'email-smtp.us-west-2.amazonaws.com',
-                            'connection_class' => 'login',
-                            'connection_config' => array(
-                                'ssl' => 'tls',
-                                //'username' => 'dfergu15@jccc.edu',
-                                //'password' => '3vheGQZghNh6NoReuj6d2w'
-                                'username' => 'AKIAJWKBUWWGMQJ2QZUQ',
-                                'password' => 'AqtPCY2L7TQAohN+ak5zS1BtleDmynUQ4ApOmdNqpCB9'
-                            ),
-                            'port' => 587
-                        )
-                    );
+                    $options = new \Zend\Mail\Transport\SmtpOptions($smtpConfig);
 
                     $transport->setOptions($options);
 
