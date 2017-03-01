@@ -342,6 +342,7 @@ class Module
                 'import.nccbp' => 'Mrss\Service\Factory\ImportNccbp',
                 'service.observationAudit' => 'Mrss\Service\Factory\ObservationAudit',
                 'computedFields' => 'Mrss\Service\Factory\ComputedFields',
+                'copyData' => 'Mrss\Service\Factory\CopyData',
                 'service.validation' => 'Mrss\Service\Factory\Validation',
                 'import.csv' => 'Mrss\Service\Factory\ImportBenchmarks',
                 'export' => 'Mrss\Service\Factory\Export',

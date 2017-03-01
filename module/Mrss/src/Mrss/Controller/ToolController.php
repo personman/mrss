@@ -460,6 +460,42 @@ class ToolController extends AbstractActionController
 
     public function copyDataAction()
     {
+        $this->longRunningScript();
+
+        // $source => $destination. Use benchmark ids
+        $map = array(
+
+        );
+
+        $service = $this->getServiceLocator()->get('copyData');
+
+        $benchmarks = array(
+            1144 => 203,
+            1145 => 197,
+            1146 => 820,
+            1147 => 821,
+            1148 => 822,
+            1149 => 202,
+            1155 => 200,
+            1156 => 201,
+        );
+
+        $year = $this->params()->fromQuery('year', 2014);
+        $years = array($year);
+
+        pr($year);
+
+        $service->copy($benchmarks, $years);
+
+        die('ok');
+    }
+    
+    /**
+     * @return \Zend\Http\Response
+     * @deprecated 
+     */
+    public function copyDataActionDeprecated()
+    {
         // Copy one year's data for the study to another. dangerous
         $from = $this->params()->fromRoute('from');
         $to = $this->params()->fromRoute('to');

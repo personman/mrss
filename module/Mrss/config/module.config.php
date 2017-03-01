@@ -2049,11 +2049,9 @@ return array(
                     'copy-data' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/copy-data/:from/:to',
+                            'route' => '/copy-data',
                             'defaults' => array(
                                 'action' => 'copyData',
-                                'from' => null,
-                                'to' => null
                             )
                         )
                     ),
