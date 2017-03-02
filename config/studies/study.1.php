@@ -21,7 +21,14 @@ return array(
         'ft_minus7_perc_comp_and_transf',
         'pt_minus7_perc_comp_and_transf',
         'cst_crh',
-        'cst_fte_stud'
+        'cst_fte_stud',
+        'institutional_demographics_certifications_awarded',
+        'institutional_demographics_licenses_awarded',
+        'institutional_demographics_certificates_awarded',
+        'total_cert_lic_certificates',
+        'credentials_percent_unduplicated_enrollment',
+        'institutional_demographics_ged_awarded',
+        'all_ce_courses_canceled'
     ),
     'contact_instructions' => 'You can also reach us by phone: Dr. Lou Guthrie, Director, 913-469-8500 x4019 or Michelle Taylor, Senior Research &amp; Data Analyst, 913-469-8500 x3648.'
 );

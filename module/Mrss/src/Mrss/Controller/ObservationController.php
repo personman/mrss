@@ -532,7 +532,7 @@ class ObservationController extends AbstractActionController
                 'form' => $form,
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
-                'benchmarkGroups' => $this->getCurrentStudy()->getBenchmarkGroups(),
+                'benchmarkGroups' => $this->getCurrentStudy()->getBenchmarkGroupsBySubscription($subscription),
                 'nccbpSubscription' => $nccbpSubscription,
                 'variable' => $this->getVariableSubstitutionService(),
                 'dataDefinitionForm' => $this->getDataDefinitionForm(),

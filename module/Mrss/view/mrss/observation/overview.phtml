@@ -171,13 +171,27 @@
 
 <?php if ($this->currentStudy()->getId() == 2): ?>
     <a target="_blank" href="/files/How-to-Complete.pdf">Detailed Instructions (PDF)</a>
-
-
 <?php endif ?>
 
 
 <?php if ($subscription->canBeUpdated()): ?>
-    <a href="<?= $this->url('membership-edit') ?>" class="btn btn-default">Add a Module to Your Membership</a>
+    <a href="<?= $this->url('membership-edit') ?>" class="btn btn-default"><span class="glyphicon glyphicon-plus icon icon-plus"></span> Add a Module to Your Membership</a>
+
+    <?php if ($this->currentStudy()->getId() == 1): ?>
+        <?php if (!in_array(1, $subscription->getSectionIds())): ?>
+            <p>
+                The National Community College Benchmark Project (NCCBP) credit module provides community colleges with national benchmarks that can be utilized in strategic planning, accreditation and state/system reporting.  This module covers completion and transfer rates, retention and persistence, student performance, student satisfaction, financial and HR information and over 150 other institutional effectiveness measures.  With over 250 annual participants this module offers great peer comparison opportunities.  You are able to opt-in to this module for only an additional $900.
+            </p>
+        <?php endif ?>
+
+        <?php if (!in_array(2, $subscription->getSectionIds())): ?>
+            <p>
+                This opt-in module offers nearly 100 non-credit benchmarks to express continuing education division productivity and successes to internal and external stakeholders.  Non-credit continuing education programs, contract training, workforce training and life and leisure or life-style programs are all covered in this module.  The new module replaces Form 15 from last year's NCCBP.  You are able to opt-in to this module depending on your college's needs for these benchmarks for only an additional $500.
+            </p>
+        <?php endif ?>
+    <?php endif ?>
+
+
 <?php endif  ?>
 
 
