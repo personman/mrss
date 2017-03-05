@@ -15,6 +15,9 @@ class ImportData implements FactoryInterface
         $subscriptionModel = $sm->get('model.subscription');
         $service->setSubscriptionModel($subscriptionModel);
 
+        $observationModel = $sm->get('model.observation');
+        $service->setObservationModel($observationModel);
+
         $benchmarkModel = $sm->get('model.benchmark');
         //$service->setBenchmarkModel($benchmarkModel);
 
