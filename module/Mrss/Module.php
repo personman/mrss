@@ -353,6 +353,7 @@ class Module
                 'download.colleges' => 'Mrss\Service\Factory\DownloadColleges',
                 'service.import.colleges' => 'Mrss\Service\Factory\ImportColleges',
                 'service.import.colleges.demo' => 'Mrss\Service\Factory\ImportCollegeDemographics',
+                'service.import.data' => 'Mrss\Service\Factory\ImportData',
                 'service.import.colleges.category' => 'Mrss\Service\Factory\ImportCollegeCategory',
                 'service.import.users' => 'Mrss\Service\Factory\ImportUsers',
                 'service.import.workforce.data' => 'Mrss\Service\Factory\ImportWorkforceDataFactory',

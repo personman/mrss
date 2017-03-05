@@ -33,18 +33,6 @@ class CollegeDemographics extends Import
         }
     }
 
-    protected function getDataFromRow(PHPExcel_Worksheet_Row $row)
-    {
-        $rowIndex = $row->getRowIndex();
-
-        $rowData = array();
-        foreach ($this->getMap() as $property => $column) {
-            $rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
-        }
-
-        return $rowData;
-    }
-
     /**
      * Maps excel columns to College entity property names
      * @return array

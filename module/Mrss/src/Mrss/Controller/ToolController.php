@@ -1603,4 +1603,11 @@ class ToolController extends AbstractActionController
     {
         return $this->getServiceLocator()->get('workforce-db');
     }
+
+    public function importDataAction()
+    {
+        $importer = $this->getServiceLocator()->get('service.import.data');
+
+        $importer->import();
+    }
 }

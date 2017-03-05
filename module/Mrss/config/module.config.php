@@ -2249,6 +2249,15 @@ return array(
                             )
                         )
                     ),
+                    'import-data' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import-data',
+                            'defaults' => array(
+                                'action' => 'importData',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(
