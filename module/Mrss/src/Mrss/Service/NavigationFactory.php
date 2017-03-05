@@ -309,6 +309,9 @@ class NavigationFactory extends DefaultNavigationFactory
         if ($study->getId() == 5) {
             // No percent change report
             unset($pages['reports']['pages']['percent-change']);
+
+            // Change title of national report
+            $pages['reports']['pages']['national']['label'] = 'Benchmark Report';
         }
 
         // If the help section is empty, drop it from the menu
