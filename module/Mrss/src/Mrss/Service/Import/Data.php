@@ -47,7 +47,7 @@ class Data extends Import
         foreach ($sheets as $index => $year) {
             $this->year = $year;
 
-            $this->excel->setActiveSheetIndex(0);
+            $this->excel->setActiveSheetIndex($index);
             $sheet = $this->excel->getActiveSheet();
             $count = 0;
 
