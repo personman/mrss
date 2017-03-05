@@ -25,7 +25,7 @@ $this->headScript()->appendFile(
     <?php if ($forPercentChange): ?>
         Percent Change Report
     <?php elseif (empty($system)): ?>
-        Report of National Aggregate Data
+        <?= $studyConfig->national_report_name ?>
     <?php else: ?>
         <?= $system->getName() ?> Report
     <?php endif ?>

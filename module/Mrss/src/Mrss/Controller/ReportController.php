@@ -146,7 +146,8 @@ class ReportController extends ReportAdminController
                     ->getPercentileBreakPointLabels(),
             'system' => $system,
             'reportPath' => $reportPath,
-            'forPercentChange' => $forPercentChange
+            'forPercentChange' => $forPercentChange,
+            'studyConfig' => $this->getStudyConfig(),
         );
     }
 

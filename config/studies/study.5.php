@@ -13,6 +13,7 @@ return array(
     'benchmark_completion_heatmap' => true,
     'percent_change_report_columns' => array(
     ),
+    'national_report_name' => 'Benchmark Report',
     'contact_instructions' => '',
     'copyright' => date('Y') . " Envisio",
 );
