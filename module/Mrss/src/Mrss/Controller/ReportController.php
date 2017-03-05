@@ -755,7 +755,7 @@ class ReportController extends ReportAdminController
                     'tuition_fees_sour'
                 );
 
-                if ($benchmarkGroup->getId() == 1 &&
+                if (($this->currentStudy()->getId() == 1 &&$benchmarkGroup->getId() == 1) &&
                     !in_array($benchmark->getDbColumn(), $nccbpFormOneInclude)) {
                     continue;
                 }
