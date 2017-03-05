@@ -108,7 +108,9 @@ $this->headScript()->appendFile(
             <thead>
                 <tr class="topHeading">
                     <th></th>
-                    <th colspan="<?= $tableHeadingColSpan ?>">Your Institution</th>
+                    <th colspan="<?= $tableHeadingColSpan ?>">
+                        <?= $studyConfig->your_institution_label ?>
+                    </th>
                     <th colspan="7" class="nationalPercentiles"><?= $heading ?></th>
                 </tr>
                 <tr class="secondHeading">
