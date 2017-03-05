@@ -233,6 +233,15 @@ class Data extends Import
             'name', // Not used
             'ipeds',
             'population',
+            'median_household_income',
+            'poverty',
+            'fireresponse',
+            'totalfireservicecalls',
+            'policeresponsetimes',
+            'vcr1',
+            'pcr',
+            'vccr',
+            'pccr'
         );
 
         $withNumbers = array();
