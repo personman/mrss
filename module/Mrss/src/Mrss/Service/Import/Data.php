@@ -21,6 +21,9 @@ class Data extends Import
     /** @var \Mrss\Model\Benchmark $benchmarkmodel */
     protected $benchmarkModel;
 
+    /** @var \Mrss\Model\Datum $datumModel */
+    protected $datumModel;
+
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
 
@@ -77,6 +80,7 @@ class Data extends Import
             }
 
             $subscription->setBenchmarkModel($this->getBenchmarkmodel());
+            $subscription->setDatumModel($this->getDatumModel());
 
             foreach ($data as $dbColumn => $value) {
                 $subscription->setValue($dbColumn, $value);
@@ -256,6 +260,24 @@ class Data extends Import
     public function setObservationModel($observationModel)
     {
         $this->observationModel = $observationModel;
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\Datum
+     */
+    public function getDatumModel()
+    {
+        return $this->datumModel;
+    }
+
+    /**
+     * @param \Mrss\Model\Datum $datumModel
+     * @return Data
+     */
+    public function setDatumModel($datumModel)
+    {
+        $this->datumModel = $datumModel;
         return $this;
     }
 
