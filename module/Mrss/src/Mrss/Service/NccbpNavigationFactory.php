@@ -21,8 +21,13 @@ class NccbpNavigationFactory extends NavigationFactory
         if ($auth->hasIdentity()) {
             $user = $auth->getIdentity();
             if ($college = $user->getCollege()) {
-                $system = $college->getSystem();
+                try {
+			$system = $college->getSystem();
+		} catch (\Exception $e) {
+
+		}
             }
+
 
             // Remove the Home button from nav if user is role: viewer
             if ($user->getRole() == 'viewer') {

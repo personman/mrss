@@ -79,7 +79,10 @@ class NavigationFactory extends DefaultNavigationFactory
             // Do they belong to a system?
             $user = $auth->getIdentity();
             if ($user && $college = $user->getCollege()) {
-                $system = $college->getSystem();
+                try {
+			 $system = $college->getSystem();
+		} catch (\Exception $e) {
+		}
             }
         } else {
             // If they're logged out, hide the logout button
