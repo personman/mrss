@@ -103,7 +103,7 @@ class Data extends Import
         $method = 'free';
         $amount = 0;
 
-        $subscription->setYear($this->getCurrentYear());
+        $subscription->setYear($this->year);
         $subscription->setStatus($status);
         $subscription->setCollege($college);
         $subscription->setStudy($this->study);
