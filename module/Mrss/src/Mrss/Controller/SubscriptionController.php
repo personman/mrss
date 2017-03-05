@@ -2019,7 +2019,9 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
                 $identifier = $this->getTransIdFromSession();
             }
 
-            $this->draftSubscription = $this->getSubscriptionDraftModel()->find($identifier);
+            if ($identifier) {
+                $this->draftSubscription = $this->getSubscriptionDraftModel()->find($identifier);
+            }
         }
 
         return $this->draftSubscription;

@@ -2049,11 +2049,9 @@ return array(
                     'copy-data' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/copy-data/:from/:to',
+                            'route' => '/copy-data',
                             'defaults' => array(
                                 'action' => 'copyData',
-                                'from' => null,
-                                'to' => null
                             )
                         )
                     ),
@@ -2248,6 +2246,15 @@ return array(
                             'route' => '/analyze-equation',
                             'defaults' => array(
                                 'action' => 'analyzeEquation',
+                            )
+                        )
+                    ),
+                    'import-data' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/import-data',
+                            'defaults' => array(
+                                'action' => 'importData',
                             )
                         )
                     ),
