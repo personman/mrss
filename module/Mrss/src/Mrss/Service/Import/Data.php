@@ -86,7 +86,6 @@ class Data extends Import
             pr($college->getName());
             pr($data);
 
-            $this->saveObservationData($college, $data);
         }
     }
 
