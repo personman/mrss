@@ -21,6 +21,9 @@ class ImportData implements FactoryInterface
         $benchmarkModel = $sm->get('model.benchmark');
         $service->setBenchmarkModel($benchmarkModel);
 
+        $datumModel = $sm->get('model.datum');
+        $service->setDatumModel($datumModel);
+
         $collegeModel = $sm->get('model.college');
         $service->setCollegeModel($collegeModel);
 
