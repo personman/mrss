@@ -76,6 +76,8 @@ class Data extends Import
                 $subscription = $this->createSubscription($college);
             }
 
+            $subscription->setBenchmarkModel($this->getBenchmarkmodel());
+
             foreach ($data as $dbColumn => $value) {
                 $subscription->setValue($dbColumn, $value);
             }
