@@ -246,10 +246,24 @@ class Data extends Import
             'fireresponse',
             'totalfireservicecalls',
             'policeresponsetimes',
+            null,
             'vcr1',
             'pcr',
             'vccr',
-            'pccr'
+            'pccr',
+            null,
+            'libraries',
+            'libraries_per',
+            'libraries1	park',
+            'trails',
+            'waterbill',
+            'sewerbills',
+            'waterlow',
+            'sewerbills2',
+            'trashbill',
+            'wastediv',
+            'employ1',
+            'bondrating'
         );
 
         $withNumbers = array();

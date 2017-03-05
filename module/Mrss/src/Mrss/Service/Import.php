@@ -94,6 +94,10 @@ class Import
 
         $rowData = array();
         foreach ($this->getMap() as $property => $column) {
+            if (empty($property)) {
+                continue;
+            }
+            
             $rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
         }
 
