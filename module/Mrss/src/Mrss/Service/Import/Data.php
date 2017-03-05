@@ -37,28 +37,36 @@ class Data extends Import
     public function import()
     {
         $this->excel = $this->openFile($this->file);
-        $this->excel->setActiveSheetIndex(0);
-        $sheet = $this->excel->getActiveSheet();
-        $count = 0;
 
-        foreach ($sheet->getRowIterator() as $row) {
-            /** @var PHPExcel_Worksheet_Row $row */
-            $rowIndex = $row->getRowIndex();
+        $sheets = array(
+            0 => 2014,
+            1 => 2015,
+            2 => 2016
+        );
 
-            // Skip the header row
-            if ($rowIndex === 1 || $rowIndex == 2) {
-                continue;
+        foreach ($sheets as $index => $year) {
+            $this->year = $year;
+
+            $this->excel->setActiveSheetIndex(0);
+            $sheet = $this->excel->getActiveSheet();
+            $count = 0;
+
+            foreach ($sheet->getRowIterator() as $row) {
+                /** @var PHPExcel_Worksheet_Row $row */
+                $rowIndex = $row->getRowIndex();
+
+                // Skip the header row
+                if ($rowIndex === 1 || $rowIndex == 2) {
+                    continue;
+                }
+
+                $this->saveRow($row);
+                $count++;
             }
-
-            $this->saveRow($row);
-            $count++;
-
-
-
-
-
         }
-        die('alright');
+
+
+        die('import finished');
     }
 
     protected function saveRow(PHPExcel_Worksheet_Row $row)
