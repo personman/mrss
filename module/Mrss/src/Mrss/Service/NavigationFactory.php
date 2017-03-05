@@ -310,6 +310,9 @@ class NavigationFactory extends DefaultNavigationFactory
             // No percent change report
             unset($pages['reports']['pages']['percent-change']);
 
+            // No exec report
+            unset($pages['reports']['pages']['executive']);
+
             // Change title of national report
             $pages['reports']['pages']['national']['label'] = 'Benchmark Report';
         }
