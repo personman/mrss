@@ -19,7 +19,7 @@ class ImportData implements FactoryInterface
         $service->setObservationModel($observationModel);
 
         $benchmarkModel = $sm->get('model.benchmark');
-        //$service->setBenchmarkModel($benchmarkModel);
+        $service->setBenchmarkModel($benchmarkModel);
 
         $collegeModel = $sm->get('model.college');
         $service->setCollegeModel($collegeModel);

@@ -19,7 +19,7 @@ class Data extends Import
     protected $observationModel;
 
     /** @var \Mrss\Model\Benchmark $benchmarkmodel */
-    protected $benchmarkmodel;
+    protected $benchmarkModel;
 
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
@@ -186,16 +186,16 @@ class Data extends Import
      */
     public function getBenchmarkmodel()
     {
-        return $this->benchmarkmodel;
+        return $this->benchmarkModel;
     }
 
     /**
      * @param \Mrss\Model\Benchmark $benchmarkmodel
      * @return Data
      */
-    public function setBenchmarkmodel($benchmarkmodel)
+    public function setBenchmarkmodel($benchmarkModel)
     {
-        $this->benchmarkmodel = $benchmarkmodel;
+        $this->benchmarkModel = $benchmarkModel;
         return $this;
     }
 
