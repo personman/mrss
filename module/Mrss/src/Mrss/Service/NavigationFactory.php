@@ -305,6 +305,12 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['reports']['pages']['percent-change']);
         }
 
+        // Envisio (@todo: move this to Envisio module)
+        if ($study->getId() == 5) {
+            // No percent change report
+            unset($pages['reports']['pages']['percent-change']);
+        }
+
         // If the help section is empty, drop it from the menu
         if (empty($pages['help']['pages'])) {
             unset($pages['help']);
