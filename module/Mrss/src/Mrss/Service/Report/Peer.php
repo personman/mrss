@@ -330,7 +330,11 @@ class Peer extends Report
                 $color = $this->getYourCollegeColor();
 
                 if ($anonymous) {
-                    $label = 'Your College';
+                    //$label = 'Your College';
+                    $label = $this->currentCollege->getAbbreviation();
+                    if (empty($label)) {
+                        $label = $this->currentCollege->getName();
+                    }
                 }
             } else {
                 $dataLabelEnabled = false;
