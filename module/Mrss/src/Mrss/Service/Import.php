@@ -97,7 +97,7 @@ class Import
             if (empty($property)) {
                 continue;
             }
-            
+
             $rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
         }
 
