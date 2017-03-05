@@ -1204,7 +1204,7 @@ class Report
 
     public function getYourCollegeLabel()
     {
-        return 'Your College';
+        return $this->getStudyConfig()->your_institution_label;
     }
 
     public function getPercentileBreakPointLabels($breakpoints = null)

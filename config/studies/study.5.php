@@ -14,6 +14,7 @@ return array(
     'percent_change_report_columns' => array(
     ),
     'national_report_name' => 'Benchmark Report',
+    'your_institution_label' => 'Your Municipality',
     'contact_instructions' => '',
     'copyright' => date('Y') . " Envisio",
 );

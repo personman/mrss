@@ -36,6 +36,7 @@ return array(
     'benchmark_completion_heatmap' => false,
     'head_logo_url' => '/',
     'national_report_name' => 'Report of National Aggregate Data',
+    'your_institution_label' => 'Your College',
     'logged_out_header_button' => '<a href="/schedule-demo" class="btn schedule-btn" role="button" id="schedule-demo">SCHEDULE DEMO</a>',
     'copyright' => "2004 - " . date('Y') . " Johnson County Community College",
     'footerLogo' => '<a href="/benchmarking-institute"><img src="/images/benchmark_logo.png" /></a>',
