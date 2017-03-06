@@ -150,7 +150,7 @@ class Peer extends Report
         return $newData;
     }
 
-    public function downloadPeerReport($report)
+    public function downloadPeerReport($report, $studyConfig)
     {
         $filename = 'peer-comparison-report';
 
@@ -223,7 +223,7 @@ class Peer extends Report
             if ($this->getStudyConfig()->anonymous_peers) {
                 // Peer institutions
                 $row++;
-                $sheet->setCellValue('A' . $row, 'Peer Institutions:');
+                $sheet->setCellValue('A' . $row, 'Peer ' . $studyConfig->institutions_label . ':');
                 $row++;
 
                 foreach ($report['colleges'] as $college) {
