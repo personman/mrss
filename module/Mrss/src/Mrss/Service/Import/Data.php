@@ -107,7 +107,7 @@ class Data extends Import
     protected function processValue($dbColumn, $value)
     {
 
-        if (stristr($value, ':')) {
+        /*if (stristr($value, ':')) {
             $valueParts = explode(':', $value);
             $minutes = $valueParts[0];
             $seconds = $valueParts[1];
@@ -115,7 +115,7 @@ class Data extends Import
             $minuteSeconds = $minutes * 60;
             $seconds += $minuteSeconds;
             $value = $seconds;
-        }
+        }*/
 
 
         return $value;
