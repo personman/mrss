@@ -306,7 +306,7 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         // Envisio (@todo: move this to Envisio module)
-        if ($study->getId() == 5) {
+        if ($currentStudy->getId() == 5) {
             // No percent change report
             unset($pages['reports']['pages']['percent-change']);
 
