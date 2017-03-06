@@ -30,7 +30,7 @@ class Data extends Import
     protected $year = 2014;
 
 
-    protected $file = 'data/imports/envisio-import.xlsx';
+    protected $file = 'data/imports/envisio-import-safety.xlsx';
 
     protected $map = array();
 
@@ -91,7 +91,8 @@ class Data extends Import
             $subscription->setDatumModel($this->getDatumModel());
 
             foreach ($data as $dbColumn => $value) {
-                $subscription->setValue($dbColumn, $value);
+                $value = $this->processValue($dbColumn, $value);
+                //$subscription->setValue($dbColumn, $value);
             }
 
             $this->getSubscriptionModel()->save($subscription);
@@ -101,6 +102,23 @@ class Data extends Import
             pr($data);
 
         }
+    }
+
+    protected function processValue($dbColumn, $value)
+    {
+
+        if (stristr($value, ':')) {
+            $valueParts = explode(':', $value);
+            $minutes = $valueParts[0];
+            $seconds = $valueParts[1];
+
+            $minuteSeconds = $minutes * 60;
+            $seconds += $minuteSeconds;
+            $value = $seconds;
+        }
+
+
+        return $value;
     }
 
     protected function getCollege($ipeds)
@@ -240,14 +258,14 @@ class Data extends Import
         $map = array(
             'name', // Not used
             'ipeds',
-            'population',
-            'median_household_income',
-            'poverty',
+            //'population',
+            //'median_household_income',
+            //'poverty',
             'fireresponse',
             'totalfireservicecalls',
             'policeresponsetimes',
-            'police1',
-            'vcr1',
+            'policecalls1',
+            /*'vcr1',
             'pcr',
             'vccr',
             'pccr',
@@ -264,7 +282,7 @@ class Data extends Import
             'trashbill',
             'wastediv',
             'employ1',
-            'bondrating'
+            'bondrating'*/
         );
 
         $withNumbers = array();
