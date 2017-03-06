@@ -14,12 +14,12 @@ $this->headScript()->appendFile(
 </p>
 
 <p>
-    <span class="peer-titles">Home institution:</span><br>
+    <span class="peer-titles">Home <?= $studyConfig->institution_label ?>:</span><br>
     <?= $report['currentCollege'] ?>
 </p>
 
 <p>
-    <span class="peer-titles">Peer institutions:</span><br>
+    <span class="peer-titles">Peer <?= $studyConfig->institutions_label ?>:</span><br>
     <?= implode(', ', $report['colleges']) ?>
     <?php if (count($report['sections']) > 1): ?>
         (Peers will be omitted from charts and tables if they did not report relevant data.)
@@ -58,7 +58,7 @@ $this->headScript()->appendFile(
                 <table class="table table-hover table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Institution</th>
+                            <th><?= $studyConfig->institution_label ?></th>
                             <th>Value</th>
                             <th>National<br>% Rank</th>
                         </tr>
@@ -105,7 +105,7 @@ $this->headScript()->appendFile(
 <?php endif ?>
 
 <?php if (!empty($report['youHaveNoData'])): ?>
-    <p>The following metrics are not included in the report because your institution did not submit data for them:</p>
+    <p>The following metrics are not included in the report because your <?= $studyConfig->institution_label ?> did not submit data for them:</p>
 
     <ul>
         <?php foreach ($report['youHaveNoData'] as $benchmark): ?>

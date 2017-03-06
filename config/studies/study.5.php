@@ -15,6 +15,8 @@ return array(
     ),
     'national_report_name' => 'Benchmark Report',
     'your_institution_label' => 'Your Municipality',
+    'institution_label' => 'Municipality',
+    'institutions_label' => 'Municipalities',
     'contact_instructions' => '',
     'copyright' => date('Y') . " Envisio",
 );

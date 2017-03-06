@@ -8,7 +8,7 @@ use Zend\InputFilter\InputFilter;
 
 class PeerComparison extends AbstractForm
 {
-    public function __construct($yearsWithData, $defaultBenchmarks)
+    public function __construct($yearsWithData, $defaultBenchmarks, $studyConfig)
     {
         // Call the parent constructor
         parent::__construct('peerComparison');
@@ -47,8 +47,8 @@ class PeerComparison extends AbstractForm
                 'name' => 'peers',
                 'type' => 'Select',
                 'options' => array(
-                    'label' => 'Peer Institutions',
-                    'help-block' => 'Select at least 5 peer institutions.
+                    'label' => 'Peer ' . $studyConfig->institutions_label,
+                    'help-block' => 'Select at least 5 peer ' . $studyConfig->institutions_label . '.
                                     <a href="/peer-groups">Manage your peer groups</a>.'
                 ),
                 'attributes' => array(

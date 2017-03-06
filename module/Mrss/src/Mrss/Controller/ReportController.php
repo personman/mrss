@@ -342,7 +342,8 @@ class ReportController extends ReportAdminController
 
         $form = new PeerComparison(
             $years,
-            $defaultBenchmarks
+            $defaultBenchmarks,
+            $this->getStudyConfig()
         );
 
         $peerGroup = $this->getPeerGroupFromSession();
@@ -484,7 +485,8 @@ class ReportController extends ReportAdminController
 
         return array(
             'peerGroupName' => $peerGroupName,
-            'report' => $report
+            'report' => $report,
+            'studyConfig' => $this->getStudyConfig()
         );
     }
 
