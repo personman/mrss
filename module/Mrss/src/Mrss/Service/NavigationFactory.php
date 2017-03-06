@@ -314,10 +314,10 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['reports']['pages']['executive']);
 
             // Change title of national report
-            $pages['reports']['pages']['national'] = array(
+            /*$pages['reports']['pages']['national'] = array(
                 'label' => 'Benchmark Report',
                 'uri' => '/reports/national'
-            );
+            );*/
         }
 
         // If the help section is empty, drop it from the menu
