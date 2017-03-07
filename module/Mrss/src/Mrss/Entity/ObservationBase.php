@@ -363,6 +363,8 @@ class ObservationBase
 
     public function getAllValues()
     {
-        return $this->getSubscription()->getAllData();
+        $allData = $this->getSubscription()->getAllData();
+
+        return $allData;
     }
 }

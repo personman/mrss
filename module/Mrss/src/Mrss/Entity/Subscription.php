@@ -530,13 +530,13 @@ class Subscription
      * Used to log changes
      *
      */
-    public function getAllData($key = 'dbColumn')
+    public function getAllData($keyType = 'dbColumn')
     {
         $data = array();
         foreach ($this->getData() as $datum) {
             if ($benchmark = $datum->getBenchmark()) {
 
-                if ($key == 'dbColumn') {
+                if ($keyType == 'dbColumn') {
                     $key = $benchmark->getDbColumn();
                 } else {
                     $key = $benchmark->getId();
