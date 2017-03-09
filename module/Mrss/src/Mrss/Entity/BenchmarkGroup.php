@@ -522,7 +522,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         foreach ($benchmarks as $benchmark) {
             $value = $observation->get($benchmark->getDbColumn());
 
-            if ($value !== null) {
+            if ($value !== null && $value !== '') {
                 $complete++;
             }
         }
@@ -584,7 +584,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         foreach ($benchmarks as $benchmark) {
             $value = $observation->get($benchmark->getDbColumn());
 
-            if ($value !== null) {
+            if ($value !== null && $value !== '') {
                 $completes[] = $benchmark;
             }
         }
