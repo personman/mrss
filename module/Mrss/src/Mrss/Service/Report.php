@@ -816,8 +816,8 @@ class Report
             $prefix = '$';
         }
 
-        $benchmarkData['prefix'] = $prefix;
-        $benchmarkData['suffix'] = $suffix;
+        $benchmarkData['prefix'] = $benchmarkData['percentile_prefix'] = $prefix;
+        $benchmarkData['suffix'] = $benchmarkData['percentile_suffix'] =  $suffix;
 
         // Timeframe
         $benchmarkData['timeframe'] = $this->getVariableSubstitution()->substitute($benchmark->getTimeframe());

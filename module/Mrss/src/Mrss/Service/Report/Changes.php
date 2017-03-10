@@ -107,6 +107,7 @@ class Changes extends National
         $dbColumns = $this->getIncludedDbColumns();
 
         $changes = $this->getPercentChangeModel()->findByCollegeAndYear($college, $year);
+
         $this->setChanges($changes);
 
         //$this->setObservation($observation);
@@ -279,8 +280,6 @@ class Changes extends National
     {
         $changes = $this->getChanges();
 
-        //pr(count($changes));
-
         $percentChange = null;
         $data = array(
             'benchmark' => $benchmark->getReportLabel(),
@@ -297,6 +296,13 @@ class Changes extends National
                 'newValue' => $benchmark->format($change->getValue()),
                 'percentChange' => round($percentChange) . '%'
             );
+        } else {
+            $data = array(
+                'benchmark' => $benchmark->getReportLabel(),
+                'oldValue' => null,
+                'newValue' => null,
+                'percentChange' => null
+            );
         }
 
         $percentiles = $this->getBenchmarkData($benchmark, true, $percentChange);
@@ -306,7 +312,11 @@ class Changes extends National
 
         //pr($percentiles);
 
+        //pr($data);
+
         $data['reported_decimal_places'] = 0;
+        $data['percentile_prefix'] = '';
+        $data['percentile_suffix'] = '%';
 
         //if (!empty($data['oldValue'])) prd($data);
 
@@ -353,6 +363,8 @@ class Changes extends National
         if (empty($benchmark['do_not_format_rank'])) {
             $rank = round($benchmark['percentile_rank']) . '%';
         }
+
+        //pr($benchmark);
 
         $dataRow = array(
             $benchmark['benchmark'],

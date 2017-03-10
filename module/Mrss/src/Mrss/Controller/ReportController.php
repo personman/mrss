@@ -43,6 +43,7 @@ class ReportController extends ReportAdminController
 
         $changes = $this->getPercentChangeService()->getReport($changes, $year);
 
+
         if ($format == 'excel') {
             $this->getPercentChangeService()->download($changes);
             die;

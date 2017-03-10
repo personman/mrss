@@ -112,7 +112,6 @@ class National extends Report
     {
         $filename = $this->getDownloadFileName($system);
 
-
         $excel = new PHPExcel();
         $sheet = $excel->getActiveSheet();
         $row = 1;
