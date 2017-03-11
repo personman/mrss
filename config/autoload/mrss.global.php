@@ -24,8 +24,9 @@ return array(
         'fcs.dan.com' => 4,
         'research.aaup.org' => 4,
         'research-beta.aaup.org' => 4,
-	'beta.app.benchmark.envisio.com' => 5,
-	'app.benchmark.envisio.com' => 5
+	    'beta.app.benchmark.envisio.com' => 5,
+	    'design.app.benchmark.envisio.com' => 5,
+	    'app.benchmark.envisio.com' => 5
     ),
     // These templates override the default data entry view
     // Moved to study config
