@@ -7,7 +7,7 @@ return array(
     'reply_to_email_name' => 'Mike Bell',
     'cc_email' => 'mbell@envisio.com',
     'approver_email' => 'mbell@envisio.com',
-    'layout' => 'govbenchmark.phtml',
+    'layout' => 'govbenchmark',
     'css' => 'nccbp.css',
     'navigation' => 'nccbp_navigation',
     'benchmark_completion_heatmap' => true,
