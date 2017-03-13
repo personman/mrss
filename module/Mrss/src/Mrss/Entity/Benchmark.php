@@ -989,7 +989,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         } else {
             //All percentages should use 2 decimal places
             if ($this->isPercent()) {
-                $decimalPlaces = 2;
+                if ($this->getInputType() == 'wholepercent') {
+                    $decimalPlaces = 0;
+                } else {
+                    $decimalPlaces = 2;
+                }
             }
 
             // Floats should get 2
