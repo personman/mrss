@@ -9,6 +9,12 @@ use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 use Doctrine\DBAL\Connection;
 
+/**
+ * Class ObservationGenerator
+ *
+ * @package Mrss\Service
+ * @deprecated This was used when the observation entity contained properties for every benchmark
+ */
 class ObservationGenerator
 {
     protected $study;
