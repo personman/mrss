@@ -397,7 +397,12 @@ class Report
         } else {
             //All percentages should use 2 decimal places
             if ($benchmark->isPercent()) {
-                $decimalPlaces = 2;
+                if ($benchmark->getInputType() == 'wholepercent') {
+                    $decimalPlaces = 0;
+                } else {
+                    $decimalPlaces = 2;
+                }
+
             }
         }
 

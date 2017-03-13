@@ -1002,6 +1002,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             }
         }
 
+        prd($decimalPlaces);
         return $decimalPlaces;
     }
 
