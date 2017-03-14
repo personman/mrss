@@ -694,12 +694,21 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $element;
     }
 
+    public function isNumericalRadio()
+    {
+        $options = explode("\n", $this->getOptions());
+
+        $isNumerical = stristr($options[0], ':');
+
+        return $isNumerical;
+    }
+
     protected function getOptionsForForm()
     {
         $options = explode("\n", $this->getOptions());
 
         // Is there a number, then a colon?
-        if (stristr($options[0], ':')) {
+        if ($this->isNumericalRadio()) {
             $newOptions = array();
             foreach ($options as $option) {
                 $parts = explode(':', $option);

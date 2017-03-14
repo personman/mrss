@@ -275,6 +275,11 @@ class National extends Report
             $inputTypesToExclude
         );
 
+        // Wait, is it a numerical radio
+        if ($inputTypeExclude && $benchmark->isNumericalRadio()) {
+            $inputTypeExclude = false;
+        }
+
         // Now look at the checkbox
         if (!$benchmark->getIncludeInNationalReport()) {
             $manualExclude = true;
