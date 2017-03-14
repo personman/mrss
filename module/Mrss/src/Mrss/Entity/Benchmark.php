@@ -952,6 +952,16 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 $prefix = '$';
             }
 
+            if ($this->getInputType() == 'minutesseconds') {
+                if ($value && !stristr($value, ':')) {
+                    $value = intval($value);
+                    $minutes = floor($value / 60);
+                    $seconds = $value - ($minutes * 60);
+
+                    $formatted = "$minutes:$seconds";
+                }
+            }
+
             if (!is_null($value) &&
                 $this->getInputType() != 'radio' &&
                 $this->getInputType() != 'checkboxes') {
@@ -1076,7 +1086,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
     public function isNumber()
     {
-        $numberTypes = array('percent', 'wholepercent', 'dollars', 'wholedollars', 'number', 'float');
+        $numberTypes = array('percent', 'wholepercent', 'dollars', 'wholedollars', 'number', 'float', 'minutesseconds');
 
         return in_array($this->getInputType(), $numberTypes);
     }
