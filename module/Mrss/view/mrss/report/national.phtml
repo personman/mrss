@@ -213,7 +213,7 @@ $this->headScript()->appendFile(
                             <?= $benchmark['N'] ?>
                         </td>
                         <?php foreach ($benchmark['percentiles'] as $percentile): ?>
-                        <td><?= $percentile ?> - 
+                        <td><?= $percentile ?> -
                             <?php if (!is_null($percentile)): ?>
                                 <?= $benchmark['percentile_prefix'] . number_format($percentile, $benchmark['reported_decimal_places']) . $benchmark['percentile_suffix'] ?>
                             <?php endif ?>

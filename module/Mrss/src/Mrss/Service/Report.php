@@ -769,6 +769,14 @@ class Report
 
         $benchmarkData['percentiles'] = $percentileData;
 
+        $formatted = array();
+        foreach ($percentileData as $percentile) {
+            $formatted[] = $benchmark->format($percentile);
+        }
+
+        $benchmarkData['percentiles_formatted'] = $formatted;
+        pr($formatted);
+
         return $benchmarkData;
     }
 
