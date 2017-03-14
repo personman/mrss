@@ -24,6 +24,7 @@ $(function() {
     $('input.input-percent, input.input-wholepercent').wrap('<div class="input-append input-group" />')
     $('input.input-percent, input.input-wholepercent').after('<span class="add-on input-group-addon">%</span>')
 
+    minuteSecondFormatting();
 
     // Wrap selected input in well to highlight it
     //if (!$('.data-entry-grid').length) {
@@ -716,4 +717,41 @@ function addForm4Headings()
         var pt = $('<h2>').html('Part-time').css('margin-top', '30px');
         $('form h3:nth-of-type(4)').before(pt)
     }
+}
+
+function minuteSecondFormatting()
+{
+    // Minutes/seconds
+    $('input.input-minutesseconds').each(function(i, e) {
+        var val = $(e).val()
+
+        if (val) {
+            val = parseInt(val)
+            var minutes = Math.floor(val / 60);
+            var seconds = val - (minutes * 60);
+
+            val = minutes + ':' + seconds;
+
+            $(e).val(val)
+        }
+    });
+
+    // Convert minutes:seconds back to seconds for saving
+    $('form').submit(function() {
+        $('input.input-minutesseconds').each(function(i, e) {
+            var val = $(e).val()
+
+            if (val && val.indexOf(':') > -1) {
+                var parts = val.split(':')
+                var minutes = parseInt(parts[0]);
+                var seconds = parseInt(parts[1]);
+
+                var total = (minutes * 60) + seconds;
+
+                $(e).val(total)
+            }
+        });
+
+        return true;
+    });
 }

@@ -126,7 +126,8 @@ class Benchmark extends AbstractForm
                         'text' => 'Text',
                         'textarea' => 'Textarea',
                         'radio' => 'Radio',
-                        'checkboxes' => 'Checkboxes'
+                        'checkboxes' => 'Checkboxes',
+                        'minutesseconds' => 'Minutes and Seconds'
                     )
                 )
             )
