@@ -775,7 +775,7 @@ class Report
         }
 
         $benchmarkData['percentiles_formatted'] = $formatted;
-        pr($formatted);
+        //pr($formatted);
 
         return $benchmarkData;
     }
