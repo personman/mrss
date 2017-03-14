@@ -197,7 +197,7 @@ $this->headScript()->appendFile(
                                  <?php endif ?>
 
                                 <td class="percentileColor">
-                                    <?php if (true || !empty($benchmark['do_not_format_rank'])): ?>
+                                    <?php if (!empty($benchmark['do_not_format_rank'])): ?>
                                         <?= $benchmark['percentile_rank'] ?>
                                     <?php else: ?>
                                         <?= round($benchmark['percentile_rank']) ?>%
@@ -213,7 +213,7 @@ $this->headScript()->appendFile(
                             <?= $benchmark['N'] ?>
                         </td>
                         <?php foreach ($benchmark['percentiles'] as $percentile): ?>
-                        <td>
+                        <td><?= $percentile ?> - 
                             <?php if (!is_null($percentile)): ?>
                                 <?= $benchmark['percentile_prefix'] . number_format($percentile, $benchmark['reported_decimal_places']) . $benchmark['percentile_suffix'] ?>
                             <?php endif ?>
