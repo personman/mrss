@@ -138,7 +138,8 @@ class Benchmark extends AbstractForm
                 'type' => 'Textarea',
                 'options' => array(
                     'label' => 'Options',
-                    'help-block' => 'For input types of Radio or Checkboxes. One option per line.'
+                    'help-block' => 'For input types of Radio or Checkboxes. One option per line. To use a ' .
+                        'numerical key, use this format on each line: "1: Value".'
                 ),
                 'attributes' => array(
                     'id' => 'options',

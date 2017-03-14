@@ -686,13 +686,35 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     {
         $element['type'] = 'Select';
 
-        $options = explode("\n", $this->getOptions());
-        $options = array_map('trim', $options);
-        $options = array_combine($options, $options);
+        $options = $this->getOptionsForForm();
+
         $element['attributes']['options'] = $options;
         $element['options']['empty_option'] = '---';
 
         return $element;
+    }
+
+    protected function getOptionsForForm()
+    {
+        $options = explode("\n", $this->getOptions());
+
+        // Is there a number, then a colon?
+        if (stristr($options[0], ':')) {
+            $newOptions = array();
+            foreach ($options as $option) {
+                $parts = explode(':', $option);
+                $key = trim(array_shift($parts));
+                $value = trim(implode(':', $parts));
+                $newOptions[$key] = $value;
+            }
+
+            $options = $newOptions;
+        } else {
+            $options = array_map('trim', $options);
+            $options = array_combine($options, $options);
+        }
+
+        return $options;
     }
 
     protected function checkboxesElement($element)
