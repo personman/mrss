@@ -787,8 +787,11 @@ class Report
             $benchmark->getDbColumn()
         );
 
-        $benchmarkData['reported_decimal_places'] = $this
-            ->getDecimalPlaces($benchmark);
+        $decimalPlaces = $this->getDecimalPlaces($benchmark);
+
+        $benchmarkData['reported_decimal_places'] = $decimalPlaces;
+
+        $benchmarkData['reported_formatted'] = $benchmark->format($benchmarkData['reported'], $decimalPlaces);
 
         $percentileRank = $this->getPercentileRankModel()
             ->findOneByCollegeBenchmarkAndYear(

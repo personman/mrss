@@ -186,7 +186,14 @@ $this->headScript()->appendFile(
 
                         <?php else: ?>
                             <?php if ($benchmark['reported'] !== null): ?>
+                                <?php if ($benchmark['reported_formatted']): ?>
+                                    <td>
+                                        <?= $benchmark['reported_formatted'] ?>
+                                    </td>
+                                <?php else: ?>
                                 <td><?= $benchmark['prefix'] . number_format($benchmark['reported'], $benchmark['reported_decimal_places']) . $benchmark['suffix'] ?></td>
+                                 <?php endif ?>
+
                                 <td class="percentileColor">
                                     <?php if (!empty($benchmark['do_not_format_rank'])): ?>
                                         <?= $benchmark['percentile_rank'] ?>
