@@ -960,19 +960,19 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
                     $formatted = "$minutes:$seconds";
                 }
-            }
+            } else {
+                if (!is_null($value) &&
+                    $this->getInputType() != 'radio' &&
+                    $this->getInputType() != 'checkboxes') {
 
-            if (!is_null($value) &&
-                $this->getInputType() != 'radio' &&
-                $this->getInputType() != 'checkboxes') {
+                    if (null === $decimalPlaces) {
+                        $decimalPlaces = $this->getDecimalPlaces();
+                    }
 
-                if (null === $decimalPlaces) {
-                    $decimalPlaces = $this->getDecimalPlaces();
+                    $formatted = $prefix .
+                        number_format(floatval($value), $decimalPlaces) .
+                        $suffix;
                 }
-
-                $formatted = $prefix .
-                    number_format(floatval($value), $decimalPlaces) .
-                    $suffix;
             }
         }
 
