@@ -80,9 +80,13 @@ class NavigationFactory extends DefaultNavigationFactory
             $user = $auth->getIdentity();
             if ($user && $college = $user->getCollege()) {
                 try {
-			 $system = $college->getSystem();
-		} catch (\Exception $e) {
-		}
+			        $systemMemberships = $college->getSystemMemberships();
+                    if ($systemMemberships) {
+                        // @todo: fix this hack that only allows one system in the menu
+                        $system = $systemMemberships[0]->getSystem();
+                    }
+                } catch (\Exception $e) {
+                }
             }
         } else {
             // If they're logged out, hide the logout button

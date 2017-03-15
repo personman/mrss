@@ -22,10 +22,11 @@ class NccbpNavigationFactory extends NavigationFactory
             $user = $auth->getIdentity();
             if ($college = $user->getCollege()) {
                 try {
-			$system = $college->getSystem();
-		} catch (\Exception $e) {
+                    $systemMemberships = $college->getSystemMemberships();
 
-		}
+                } catch (\Exception $e) {
+
+                }
             }
 
 

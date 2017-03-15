@@ -113,6 +113,23 @@ class System extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'joinSetting',
+                'type' => 'Select',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Join Setting',
+                ),
+                'attributes' => array(
+                    'options' => array(
+                        'open' => 'Open - Anyone can join',
+                        'private' => 'Must request to join'
+                    )
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 }

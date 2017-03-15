@@ -226,9 +226,11 @@ class Subscription extends AbstractModel
         $rsm->addFieldResult('o', 'o_id', 'id');
 
 
-        $systemWhere = '';
+        $systemWhere = $systemJoin = '';
         if ($system) {
-            $systemWhere = " AND c.system_id = :system_id ";
+            $systemJoin = " INNER JOIN system_memberships m ON c.id = m.college_id ";
+            //$systemWhere = " AND c.system_id = :system_id ";
+            $systemWhere = " AND m.system_id = :system_id AND m.year = :year ";
         }
 
         $subQueries = array();
@@ -250,6 +252,7 @@ class Subscription extends AbstractModel
         FROM subscriptions s
         INNER JOIN colleges c ON s.college_id = c.id
         INNER JOIN observations o ON s.observation_id = o.id
+        $systemJoin
         WHERE s.year = :year
         AND s.study_id = :study_id
         $systemWhere

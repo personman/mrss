@@ -123,11 +123,6 @@ class College
     protected $users;
 
     /**
-     * @ORM\ManyToOne(targetEntity="System", inversedBy="colleges")
-     */
-    protected $system = null;
-
-    /**
      * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="college")
      */
     protected $systemMemberships;
@@ -521,20 +516,6 @@ class College
         return $hasAccess;
     }
 
-    public function setSystem($system)
-    {
-        $this->system = $system;
-
-        return $this;
-    }
-
-    /**
-     * @return null|System
-     */
-    public function getSystem()
-    {
-        return $this->system;
-    }
 
     public function getFullAddress($lineBreak = "<br>")
     {
@@ -645,5 +626,17 @@ class College
         $sectionIds = array_unique($sectionIds);
 
         return $sectionIds;
+    }
+
+    public function setSystemMemberships($memberships)
+    {
+        $this->systemMemberships = $memberships;
+
+        return $this;
+    }
+
+    public function getSystemMemberships()
+    {
+        return $this->systemMemberships;
     }
 }

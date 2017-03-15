@@ -55,10 +55,9 @@ class System
     protected $zip;
 
     /**
-     * @ORM\OneToMany(targetEntity="College", mappedBy="system")
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\Column(type="string", length=11, nullable=true)
      */
-    protected $colleges;
+    protected $joinSetting;
 
     /**
      * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="system")
@@ -168,6 +167,26 @@ class System
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getJoinSetting()
+    {
+        return $this->joinSetting;
+    }
+
+    /**
+     * @param mixed $joinSetting
+     * @return System
+     */
+    public function setJoinSetting($joinSetting)
+    {
+        $this->joinSetting = $joinSetting;
+        return $this;
+    }
+
+
+
     public function setColleges($colleges)
     {
         $this->colleges = $colleges;
@@ -180,7 +199,13 @@ class System
      */
     public function getColleges()
     {
-        return $this->colleges;
+        $colleges = array();
+        foreach ($this->getMemberships() as $membership) {
+            $college = $membership->getCollege();
+            $colleges[$college->getId()] = $college;
+        }
+
+        return array_values($colleges);
     }
 
     /**
