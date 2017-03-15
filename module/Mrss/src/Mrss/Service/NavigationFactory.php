@@ -83,7 +83,10 @@ class NavigationFactory extends DefaultNavigationFactory
 			        $systemMemberships = $college->getSystemMemberships();
                     if ($systemMemberships) {
                         // @todo: fix this hack that only allows one system in the menu
-                        $system = $systemMemberships[0]->getSystem();
+                        if ($firstMembership = $systemMemberships[0]) {
+                            $system = $firstMembership->getSystem();
+                        }
+
                     }
                 } catch (\Exception $e) {
                 }
