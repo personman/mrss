@@ -726,11 +726,7 @@ function minuteSecondFormatting()
         var val = $(e).val()
 
         if (val) {
-            val = parseInt(val)
-            var minutes = Math.floor(val / 60);
-            var seconds = val - (minutes * 60);
-
-            val = minutes + ':' + seconds;
+            val = minuteSecondFormatter(val);
 
             $(e).val(val)
         }
@@ -755,3 +751,4 @@ function minuteSecondFormatting()
         return true;
     });
 }
+

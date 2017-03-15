@@ -118,3 +118,32 @@ function round(value, exp)
 
     return value.toFixed(exp);
 }
+
+function minuteSecondFormatter(val)
+{
+    if (typeof val.value != 'undefined') {
+        val = val.value
+    } else if (typeof val.y != 'undefined') {
+        val = val.y
+    }
+
+    val = parseInt(val)
+    var minutes = Math.floor(val / 60);
+    var seconds = val - (minutes * 60);
+
+    seconds = pad('00', seconds, true);
+
+    val = minutes + ':' + seconds;
+
+    return val
+}
+
+function pad(pad, str, padLeft) {
+    if (typeof str === 'undefined')
+        return pad;
+    if (padLeft) {
+        return (pad + str).slice(-pad.length);
+    } else {
+        return (str + pad).substring(0, pad.length);
+    }
+}

@@ -958,6 +958,10 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     $minutes = floor($value / 60);
                     $seconds = $value - ($minutes * 60);
 
+                    // Pad seconds
+                    $seconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
+
+
                     $formatted = "$minutes:$seconds";
                 }
             } else {

@@ -88,7 +88,9 @@ class Chart extends AbstractHelper
 
         $formatter = "function () {return legendLabelFormatter(this, $multiTrend)}";
         $config = str_replace('"legendLabelFormatter"', $formatter, $config);
-        //pr($chartConfig);
+
+        $minuteSecondFormatter = 'ormatter":function () {return minuteSecondFormatter(this)}';
+        $config = str_replace('ormat":"minuteSecondFormatter"', $minuteSecondFormatter, $config);
 
         //pr($config);
 

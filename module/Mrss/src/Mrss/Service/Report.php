@@ -1089,6 +1089,12 @@ class Report
             );
         }
 
+        /*if ($benchmark->getInputType() == 'minutesseconds') {
+            $chart['yAxis']['labels'] = array(
+                'formatter' => 'minuteSecondFormatter'
+            );
+        }*/
+
         //var_dump($chartConfig);
         //var_dump($chart);
         return $chart;
@@ -1181,10 +1187,14 @@ class Report
             $format = "\${y:$numberFormat}";
         }
 
+        if ($benchmark->getInputType() == 'minutesseconds') {
+            $format = 'minuteSecondFormatter';
+        }
+
         return $format;
     }
 
-    // All possible percentil breakpoints
+    // All possible percentile breakpoints
     public function getPercentileBreakpoints()
     {
         //return array(10, 25, 50, 75, 90);
