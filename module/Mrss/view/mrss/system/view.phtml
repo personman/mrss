@@ -16,11 +16,11 @@
         array('system_id' => $system->getId())
     ) ?>">
         <i class="glyphicon glyphicon-plus"></i>
-        Add system admin
+        Add <?= $this->currentStudy(false)->getConfig()->system_label ?> admin
     </a>
 </div>
 
-<h2>System Admin Users</h2>
+<h2><?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?> Admin Users</h2>
 
 <table class="table table-striped table-hover">
     <?php foreach ($system->getAdmins() as $user): ?>
@@ -39,7 +39,7 @@
                 <a href="<?= $this->url(
                     'systems/removeadmin',
                     array('user_id' => $user->getId())
-                ) ?>" title="Remove system admin role from this user">
+                ) ?>" title="Remove <?= $this->currentStudy(false)->getConfig()->system_label ?> admin role from this user">
                     X
                 </a>
             </td>
@@ -54,11 +54,11 @@
         array('system_id' => $system->getId(), 'role' => 'system_viewer')
     ) ?>">
         <i class="glyphicon glyphicon-plus"></i>
-        Add system viewer
+        Add <?= $this->currentStudy(false)->getConfig()->system_label ?> viewer
     </a>
 </div>
 
-<h2>System Viewer Users</h2>
+<h2><?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?> Viewer Users</h2>
 
 <table class="table table-striped table-hover">
     <?php foreach ($system->getViewers() as $user): ?>
@@ -111,6 +111,25 @@
                     X
                 </a>
             </td>
+        </tr>
+    <?php endforeach ?>
+</table>
+
+
+<table class="table table-striped table-hover">
+    <?php foreach ($system->getMemberColleges() as $collegeInfo): ?>
+        <tr>
+            <td>
+                <?= $collegeInfo['college']->getName() ?>  (<?= implode(', ', $collegeInfo['years']) ?>)
+            </td>
+            <!--td>
+                <a href="<?= $this->url(
+                    'systems/removecollege',
+                    array('college_id' => $college->getId())
+                ) ?>" title="Remove from system">
+                    X
+                </a>
+            </td-->
         </tr>
     <?php endforeach ?>
 </table>

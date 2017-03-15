@@ -60,9 +60,15 @@ class System
      */
     protected $colleges;
 
+    /**
+     * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="system")
+     */
+    protected $memberships;
+
     public function __construct()
     {
         $this->colleges = new ArrayCollection();
+        $this->memberships = new ArrayCollection();
     }
 
     public function setId($id)
@@ -178,6 +184,24 @@ class System
     }
 
     /**
+     * @return null|SystemMembership[]
+     */
+    public function getMemberships()
+    {
+        return $this->memberships;
+    }
+
+    /**
+     * @param mixed $memberships
+     * @return System
+     */
+    public function setMemberships($memberships)
+    {
+        $this->memberships = $memberships;
+        return $this;
+    }
+
+    /**
      * Return a list of system admins for this system
      */
     public function getAdmins($role = 'system_admin')
@@ -198,6 +222,27 @@ class System
     public function getViewers()
     {
         return $this->getAdmins('system_viewer');
+    }
+
+    public function getMemberColleges()
+    {
+        $memberships = $this->getMemberships();
+
+        $colleges = array();
+        foreach ($memberships as $membership) {
+            $collegeId = $membership->getCollege()->getId();
+            if (!isset($colleges[$collegeId])) {
+                $colleges[$membership->getCollege()->getId()] = array(
+                    'college' => $membership->getCollege(),
+                    'years' => array()
+                );
+            }
+
+            $colleges[$collegeId]['years'][] = $membership->getYear();
+            sort($colleges[$collegeId]['years']);
+        }
+
+        return $colleges;
     }
 
     public function getInputFilter()

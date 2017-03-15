@@ -4,6 +4,7 @@ namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity
  * @ORM\Table(name="colleges")
@@ -48,7 +49,7 @@ class College
      */
     protected $city;
 
-        /**
+    /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
     protected $state;
@@ -127,14 +128,20 @@ class College
     protected $system = null;
 
     /**
+     * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="college")
+     */
+    protected $systemMemberships;
+
+    /**
      * Construct the college entity
      * Populate the observations property with a placeholder
      */
     public function __construct()
     {
-        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->observations = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->systemMemberships = new ArrayCollection();
     }
 
     public function getId()

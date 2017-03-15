@@ -48,7 +48,9 @@ class SystemController extends AbstractActionController
 
     public function addAction()
     {
-        $form = new SystemForm;
+        $label = $this->getServiceLocator()->get('study')->system_label;
+
+        $form = new SystemForm($label);
 
         $id = $this->params('id');
         if (empty($id) && $this->getRequest()->isPost()) {

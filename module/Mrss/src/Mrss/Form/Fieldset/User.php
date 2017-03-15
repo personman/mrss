@@ -54,7 +54,7 @@ class User extends Fieldset implements InputFilterProviderInterface
             'viewer' => 'View Reports Only',
             'system_admin' => 'System Administrator',
             'system_viewer' => 'System Viewer',
-            'admin' => 'NHEBI Staff'
+            'admin' => 'Super-Admin'
         );
 
         return $userRoles;

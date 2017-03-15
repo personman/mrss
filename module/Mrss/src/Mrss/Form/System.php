@@ -6,7 +6,7 @@ use Mrss\Form\AbstractForm;
 
 class System extends AbstractForm
 {
-    public function __construct()
+    public function __construct($label)
     {
         // Call the parent constructor
         parent::__construct('system');
@@ -23,7 +23,7 @@ class System extends AbstractForm
                 'name' => 'name',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Name of System'
+                    'label' => 'Name of ' . ucwords($label)
                 ),
                 'attributes' => array(
                     'id' => 'name'
