@@ -27,7 +27,7 @@ class System
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $ipeds;
+    protected $ipeds = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -291,7 +291,7 @@ class System
             )
         );
 
-        $inputFilter->add(
+        /*$inputFilter->add(
             $factory->createInput(
                 array(
                     'name' => 'ipeds',
@@ -306,7 +306,7 @@ class System
                     )
                 )
             )
-        );
+        );*/
 
         return $inputFilter;
     }

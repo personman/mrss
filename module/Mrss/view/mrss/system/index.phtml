@@ -33,6 +33,6 @@
 
 <?php else: ?>
 
-    <p>There are no systems yet.</p>
+    <p>There are no <?= $this->currentStudy(false)->getConfig()->system_label ?>s yet.</p>
 
 <?php endif ?>
