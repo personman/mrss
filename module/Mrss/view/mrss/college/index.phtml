@@ -51,7 +51,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <?php endforeach ?>
         <th>Users</th>
         <th>State</th>
-        <th>System</th>
+        <th><?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?></th>
     </tr>
     </thead>
 
@@ -100,8 +100,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
             </td>
             <td><?= $college->getState() ?></td>
             <td>
-                <?php if ($system = $college->getSystem()): ?>
-                    <?= $system->getName() ?>
+                <?php if ($systemNames = $college->getSystemNames()): ?>
+                    <?= implode(', ', $systemNames) ?>
                 <?php endif ?>
             </td>
         </tr>

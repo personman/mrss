@@ -639,4 +639,19 @@ class College
     {
         return $this->systemMemberships;
     }
+
+    public function getSystemNames()
+    {
+        $systems = array();
+        foreach ($this->getSystemMemberships() as $membership) {
+            $systems[$membership->getSystem()->getId()] = $membership->getSystem();
+        }
+
+        $names = array();
+        foreach ($systems as $system) {
+            $names[] = $system->getName();
+        }
+
+        return $names;
+    }
 }
