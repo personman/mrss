@@ -981,10 +981,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $options = $this->getOptionsForForm();
             $keys = array_keys($options);
             if ($closestKey = ($this->getClosest($value, $keys))) {
-                $value = $options[$closestKey];
+                $formatted = $options[$closestKey];
+            } else {
+                $formatted = $value;
             }
 
-            pr($value);
         }
 
         return $formatted;
