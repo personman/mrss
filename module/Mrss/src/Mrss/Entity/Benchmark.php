@@ -979,11 +979,25 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             }
         } elseif ($this->isNumericalRadio()) {
             $options = $this->getOptionsForForm();
+            $keys = array_keys($options);
+            if ($closestKey = ($this->getClosest($value, $keys))) {
+                $value = $options[$closestKey];
+            }
 
             pr($value);
         }
 
         return $formatted;
+    }
+
+    protected function getClosest($search, $arr) {
+        $closest = null;
+        foreach ($arr as $item) {
+            if ($closest === null || abs($search - $closest) > abs($item - $search)) {
+                $closest = $item;
+            }
+        }
+        return $closest;
     }
 
     /**
