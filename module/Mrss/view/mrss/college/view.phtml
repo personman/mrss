@@ -63,13 +63,13 @@
         </td>
     </tr>
 
-    <?php if ($system = $college->getSystem()): ?>
+    <?php if ($systemNames = $college->getSystemNames()): ?>
     <tr>
         <td>
-            System:
+            <?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?>:
         </td>
         <td>
-            <?= $system->getName() ?>
+            <?= implode(', ', $systemNames) ?>
         </td>
     </tr>
     <?php endif ?>
