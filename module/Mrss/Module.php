@@ -561,6 +561,12 @@ class Module
 
                     return $helper;
                 },
+                'studyConfig' => function($sm) {
+                    $helper = new View\Helper\StudyConfig();
+                    $helper->setConfig($sm->getServiceLocator()->get('study'));
+
+                    return $helper;
+                },
                 'systemAdmin' => function($sm) {
                     $helper = new View\Helper\SystemAdmin;
 

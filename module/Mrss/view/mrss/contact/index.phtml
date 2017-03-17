@@ -39,7 +39,7 @@
         <h2>Contact Us</h2>
     </div>
 
-    <?php if ($text = $this->currentStudy(false)->getConfig()->contact_instructions): ?>
+    <?php if ($text = $this->studyConfig()->contact_instructions): ?>
         <p class="page-intro">
             <?= $text ?>
         </p>

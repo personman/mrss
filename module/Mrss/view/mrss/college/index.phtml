@@ -51,7 +51,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <?php endforeach ?>
         <th>Users</th>
         <th>State</th>
-        <th><?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?></th>
+        <th><?= ucwords($this->studyConfig()->system_label) ?></th>
     </tr>
     </thead>
 

@@ -66,7 +66,7 @@
     <?php if ($systemNames = $college->getSystemNames()): ?>
     <tr>
         <td>
-            <?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?>:
+            <?= ucwords($this->studyConfig()->system_label) ?>:
         </td>
         <td>
             <?= implode(', ', $systemNames) ?>

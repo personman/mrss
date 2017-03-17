@@ -234,11 +234,11 @@ $this->headScript()->appendFile(
         </div>
     </div>
 
-    <h3><?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?> Reports</h3>
+    <h3><?= ucwords($this->studyConfig()->system_label) ?> Reports</h3>
     <div class="row-fluid row">
         <div class="span6 col-md-4">
             <p>
-                Calculate percentiles for <?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?> Reports.
+                Calculate percentiles for <?= ucwords($this->studyConfig()->system_label) ?> Reports.
             </p>
 
         </div>
@@ -262,7 +262,7 @@ $this->headScript()->appendFile(
 
 
         <div class="span6 col-md-2">
-            <a class="btn btn-default calculate-systems" id="calculate-systems-<?= $year ?>" href="#<?php /*/reports/calculateSystems/year/<?= $year ?> */ ?>">Prepare <?= ucwords($this->currentStudy(false)->getConfig()->system_label) ?> Reports</a>
+            <a class="btn btn-default calculate-systems" id="calculate-systems-<?= $year ?>" href="#<?php /*/reports/calculateSystems/year/<?= $year ?> */ ?>">Prepare <?= ucwords($this->studyConfig()->system_label) ?> Reports</a>
             <br>
             <?php if (!empty($calculationDates['system'])): ?>
                 Prepared on <?= $calculationDates['system'] ?>

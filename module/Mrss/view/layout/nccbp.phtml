@@ -17,11 +17,11 @@
     <link href="/css/bootstrap3-theme.css?v=3" rel="stylesheet">
     <link href="/css/content.css" rel="stylesheet" type="text/css" />
 
-    <?php if ($cssFile = $this->currentStudy(false)->getConfig()->css): ?>
+    <?php if ($cssFile = $this->studyConfig()->css): ?>
         <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=23">
     <?php endif ?>
 
-    <?php if ($cssPrintFile = $this->currentStudy(false)->getConfig()->css_print): ?>
+    <?php if ($cssPrintFile = $this->studyConfig()->css_print): ?>
         <link rel="stylesheet" type="text/css" href="/css/<?= $cssPrintFile ?>?v=1" media="print">
     <?php endif ?>
 
@@ -36,7 +36,7 @@
     <script src="/js/jquery.js"></script>
 
 
-    <?php if ($favicon = $this->currentStudy(false)->getConfig()->favicon): ?>
+    <?php if ($favicon = $this->studyConfig()->favicon): ?>
         <link rel="icon" href="<?= $favicon ?>" type="image/x-icon">
         <link rel="shortcut icon" href="<?= $favicon ?>" type="image/x-icon">
     <?php endif ?>
@@ -48,7 +48,7 @@
 </head>
 <body>
 
-<?php $headerTitle = $this->currentStudy(false)->getConfig()->header_title; ?>
+<?php $headerTitle = $this->studyConfig()->header_title; ?>
 <?php if ($headerTitle) {
     $logoCols = 3;
     $loginCols = 8;
@@ -63,12 +63,12 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-<?= $logoCols ?> logo">
-                <?php $logoUrl = $this->currentStudy(false)->getConfig()->head_logo_url ?>
+                <?php $logoUrl = $this->studyConfig()->head_logo_url ?>
                 <a href="<?= $logoUrl ?>"><img class="img-responsive" alt="<?= $this->currentStudy()->getDescription() ?>" src="<?= $this->currentStudy()->getLogo() ?>" title="<?= $this->currentStudy()->getDescription() ?>" /></a>
             </div>
 
             <div class="col-xs-1 header-title">
-			    <?php if ($headerTitle = $this->currentStudy(false)->getConfig()->header_title): ?>
+			    <?php if ($headerTitle = $this->studyConfig()->header_title): ?>
 	                <h1><?= $headerTitle ?></h1>
 			    <?php endif ?>
             </div>
@@ -82,7 +82,7 @@
                         <a href="#" class="btn login-btn" role="button" id="loginButton">SIGN IN</a>
 
                         <?php if (!$this->zfcUserIdentity()): ?>
-                            <?php if ($headerButton = $this->currentStudy(false)->getConfig()->logged_out_header_button): ?>
+                            <?php if ($headerButton = $this->studyConfig()->logged_out_header_button): ?>
                                 <?= $headerButton ?>
                             <?php endif ?>
 
@@ -162,7 +162,7 @@
                     <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
                         <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
                         <?php $partial = array('mrss/menu/nccbp-navigation.phtml', 'default') ?>
-                        <?php $navigation = $this->currentStudy(false)->getConfig()->navigation ?>
+                        <?php $navigation = $this->studyConfig()->navigation ?>
                         <?= $this->navigation()->menu($navigation)->setPartial
                             ($partial)
                             ->render(); ?>
@@ -230,13 +230,13 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-2 footer-logo">
-                <?= $this->currentStudy(false)->getConfig()->footerLogo ?>
+                <?= $this->studyConfig()->footerLogo ?>
             </div>
             <div class="col-xs-10">
                 <div class="nav-collapse footer-nav">
                     <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
                     <?php $partial = array('mrss/menu/navigation.phtml', 'aaup') ?>
-                    <?php $navigation = $this->currentStudy(false)->getConfig()->navigation ?>
+                    <?php $navigation = $this->studyConfig()->navigation ?>
                     <?php //$navigation = 'Zend\Navigation\Default'; ?>
                     <?= $this->navigation()->menu($navigation)
                         ->setPartial($partial)
@@ -247,10 +247,10 @@
 
         <div class="row">
             <div class="col-xs-6 socialButtons">
-                <?= $this->currentStudy(false)->getConfig()->footerSocial ?>
+                <?= $this->studyConfig()->footerSocial ?>
             </div>
             <div class="col-xs-6">
-                <p>© <?= $this->currentStudy(false)->getConfig()->copyright ?></p>
+                <p>© <?= $this->studyConfig()->copyright ?></p>
             </div>
         </div>
     </div>
