@@ -38,7 +38,7 @@
 <div class="btn-group heading-btns">
     <a class="btn btn-default" href="<?= $this->url('colleges/edit', array('id' => $college->getId())) ?>">
         <i class="glyphicon glyphicon-pencil"></i>
-        Edit Institution</a>
+        Edit <?= ucwords($this->studyConfig()->institution_label) ?></a>
     </a>
 </div>
 

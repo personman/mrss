@@ -64,6 +64,12 @@ class System
      */
     protected $memberships;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Structure", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="dataEntryStructure_id", referencedColumnName="id", nullable=true)
+     */
+    protected $dataEntryStructure = null;
+
     public function __construct()
     {
         $this->colleges = new ArrayCollection();
@@ -225,6 +231,26 @@ class System
         $this->memberships = $memberships;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDataEntryStructure()
+    {
+        return $this->dataEntryStructure;
+    }
+
+    /**
+     * @param mixed $dataEntryStructure
+     * @return System
+     */
+    public function setDataEntryStructure($dataEntryStructure)
+    {
+        $this->dataEntryStructure = $dataEntryStructure;
+        return $this;
+    }
+
+
 
     /**
      * Return a list of system admins for this system

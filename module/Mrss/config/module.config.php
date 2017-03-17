@@ -763,6 +763,29 @@ return array(
                     ),
                 )
             ),
+            'structures' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/structures',
+                    'defaults' => array(
+                        'controller' => 'structures',
+                        'action' => 'index'
+                    )
+                ),
+                'child_routes' => array(
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit/:id',
+                            'defaults' => array(
+                                'action' => 'edit',
+                                'id' => null
+                            )
+                        )
+                    ),
+                )
+            ),
             'benchmark' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
@@ -2582,6 +2605,7 @@ return array(
             'colleges' => 'Mrss\Controller\CollegeController',
             'ipedsInstitutions' => 'Mrss\Controller\IpedsInstitutionController',
             'systems' => 'Mrss\Controller\SystemController',
+            'structures' => 'Mrss\Controller\StructureController',
             'observations' => 'Mrss\Controller\ObservationController',
             'subobservations' => 'Mrss\Controller\SubObservationController',
             'benchmarks' => 'Mrss\Controller\BenchmarkController',

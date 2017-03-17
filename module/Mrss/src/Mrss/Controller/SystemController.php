@@ -6,6 +6,7 @@ use Mrss\Entity\SystemMembership;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\System as SystemForm;
 use Mrss\Entity\System;
+use Mrss\Entity\Structure;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\ViewModel;
 
@@ -18,16 +19,24 @@ class SystemController extends AbstractActionController
      */
     public function indexAction()
     {
-        $systemModel = $this->getServiceLocator()->get('model.system');
+        $systemModel = $this->getSystemModel();
 
         return array(
             'systems' => $systemModel->findAll()
         );
     }
 
+    /**
+     * @return \Mrss\Model\System
+     */
+    public function getSystemModel()
+    {
+        return $this->getServiceLocator()->get('model.system');
+    }
+
     public function viewAction()
     {
-        $systemModel = $this->getServiceLocator()->get('model.system');
+        $systemModel = $this->getSystemModel();
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $id = $this->params('id');
 
@@ -39,6 +48,17 @@ class SystemController extends AbstractActionController
 
         if (empty($system)) {
             throw new \Exception('System not found.');
+        }
+
+        // Create structures, if needed
+        $studyConfig = $this->getServiceLocator()->get('study');
+        if ($studyConfig->system_benchmarks) {
+            if (!$system->getDataEntryStructure()) {
+                $structure = new Structure();
+                $system->setDataEntryStructure($structure);
+                $systemModel->save($system);
+                $systemModel->getEntityManager()->flush();
+            }
         }
 
         return array(
@@ -283,11 +303,6 @@ class SystemController extends AbstractActionController
         }
 
         return $system;
-    }
-
-    public function getSystemModel()
-    {
-        return $this->getServiceLocator()->get('model.system');
     }
 
     /**

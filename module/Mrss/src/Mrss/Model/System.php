@@ -20,6 +20,10 @@ class System extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\System';
 
+    /**
+     * @param $id
+     * @return \Mrss\Entity\System
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);

@@ -1,0 +1,71 @@
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="#">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add Heading
+    </a>
+    <a class="btn btn-default" href="#">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add Measure
+    </a>
+
+</div>
+
+<h1>Edit Structure</h1>
+
+<?php
+$this->headLink()->appendStylesheet('/css/jqtree.css?v=1');
+$this->headLink()->appendStylesheet('/css/chosen.min.css');
+?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/tree.jquery.js?v=1',
+    'text/javascript'
+);
+
+$this->headScript()->appendFile(
+    '/js/chosen.jquery.min.js?v=1',
+    'text/javascript'
+);
+?>
+
+
+<script>
+    <?php $this->headScript()->captureStart() ?>
+
+
+    var data = [
+        {
+            name: 'node1',
+            children: [
+                { name: 'child1' },
+                { name: 'child2' }
+            ]
+        },
+        {
+            name: 'node2',
+            children: [
+                { name: 'child3' }
+            ]
+        }
+    ];
+
+    $(document).ready(function() {
+        $('#tree1').tree({
+            data: data,
+            dragAndDrop: true,
+            autoOpen: true
+        });
+
+        $('#benchmark').chosen({search_contains: true})
+    });
+    <?php $this->headScript()->captureEnd() ?>
+</script>
+
+
+<div id="benchmarkSelect">
+    <?= $this->ztbForm($benchmarkForm->prepare()) ?>
+</div>
+
+
+<div id="tree1"></div>

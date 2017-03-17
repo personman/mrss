@@ -33,19 +33,19 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
     <a class="btn btn-default" href="<?= $this->url('colleges/add') ?>">
         <i class="glyphicon glyphicon-plus"></i>
-        Add Institution</a>
+        Add <?= ucwords($this->studyConfig()->institution_label) ?></a>
     </a>
 </div>
 
 
-<h1>Institutions</h1>
+<h1><?= ucwords($this->studyConfig()->institutions_label) ?></h1>
 
 <table class="style1 table heatmap" id="colleges">
     <thead>
     <tr>
         <th>IPEDS Id</th>
         <th>OPE Id</th>
-        <th>College</th>
+        <th><?= ucwords($this->studyConfig()->institution_label) ?></th>
         <?php foreach ($years as $year): ?>
             <th class="heatMapYear"><?= $year ?></th>
         <?php endforeach ?>

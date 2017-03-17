@@ -240,6 +240,10 @@ return array(
                     'roles' => array('system_admin')
                 ),
                 array(
+                    'controller' => 'structures',
+                    'roles' => array('system_admin', 'admin')
+                ),
+                array(
                     'controller' => 'observations',
                     'action' => 'switch',
                     'roles' => array('system_admin')

@@ -5,6 +5,14 @@
         <i class="glyphicon glyphicon-pencil"></i>
         Edit
     </a>
+
+    <?php if ($this->studyConfig()->system_benchmarks): ?>
+        <a class="btn btn-default" href="<?= $this->url('structures/edit', array('id' => $system->getDataEntryStructure()->getId())) ?>">
+            <i class="glyphicon glyphicon-list"></i>
+            Data Entry Measures
+        </a>
+
+    <?php endif ?>
 </div>
 
 <h1><?= $system->getName() ?></h1>
@@ -90,11 +98,11 @@
 <div class="btn-group heading-btns">
     <a href="<?= $this->url('systems/addcollege', array('system_id' => $system->getId())) ?>" class="btn btn-default">
         <i class="glyphicon glyphicon-plus"></i>
-        Add an institution
+        Add an <?= $this->studyConfig()->institution_label ?>
     </a>
 </div>
 
-<h2>Institutions</h2>
+<h2><?= ucwords($this->studyConfig()->institutions_label) ?></h2>
 
 
 <?php /*
@@ -124,14 +132,14 @@
             <td>
                 <?= $collegeInfo['college']->getName() ?>  (<?= implode(', ', $collegeInfo['years']) ?>)
             </td>
-            <!--td>
+            <? /*<td>
                 <a href="<?= $this->url(
                     'systems/removecollege',
                     array('college_id' => $college->getId())
                 ) ?>" title="Remove from system">
                     X
                 </a>
-            </td-->
+            </td> */ ?>
         </tr>
     <?php endforeach ?>
 </table>
