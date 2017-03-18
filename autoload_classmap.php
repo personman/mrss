@@ -399,6 +399,7 @@ return array(
   'Mrss\Model\ReportItem'                                                                                         => __DIR__ . '/module/Mrss/src/Mrss/Model/ReportItem.php',
   'Mrss\Model\Section'                                                                                            => __DIR__ . '/module/Mrss/src/Mrss/Model/Section.php',
   'Mrss\Model\Setting'                                                                                            => __DIR__ . '/module/Mrss/src/Mrss/Model/Setting.php',
+  'Mrss\Model\Structure'                                                                                          => __DIR__ . '/module/Mrss/src/Mrss/Model/Structure.php',
   'Mrss\Model\Study'                                                                                              => __DIR__ . '/module/Mrss/src/Mrss/Model/Study.php',
   'Mrss\Model\SubObservation'                                                                                     => __DIR__ . '/module/Mrss/src/Mrss/Model/SubObservation.php',
   'Mrss\Model\Subscription'                                                                                       => __DIR__ . '/module/Mrss/src/Mrss/Model/Subscription.php',

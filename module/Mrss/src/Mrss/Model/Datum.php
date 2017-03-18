@@ -2,7 +2,7 @@
 
 namespace Mrss\Model;
 
-use \Mrss\Entity\Datum as DatumEntity;
+use Mrss\Entity\Datum as DatumEntity;
 
 /**
  * Class Percentile

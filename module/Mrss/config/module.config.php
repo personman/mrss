@@ -784,6 +784,15 @@ return array(
                             )
                         )
                     ),
+                    'save' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/save',
+                            'defaults' => array(
+                                'action' => 'save',
+                            )
+                        )
+                    ),
                 )
             ),
             'benchmark' => array(

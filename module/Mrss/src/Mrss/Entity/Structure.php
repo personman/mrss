@@ -47,6 +47,10 @@ class Structure
      */
     public function getJson()
     {
+        if (empty($this->json)) {
+            $this->json = '[]';
+        }
+
         return $this->json;
     }
 

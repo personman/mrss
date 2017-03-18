@@ -1,9 +1,9 @@
 <div class="btn-group heading-btns">
-    <a class="btn btn-default" href="#">
+    <a class="btn btn-default" href="#" id="addHeading">
         <i class="glyphicon glyphicon-plus"></i>
         Add Heading
     </a>
-    <a class="btn btn-default" href="#">
+    <a class="btn btn-default" href="#" id="addBenchmark">
         <i class="glyphicon glyphicon-plus"></i>
         Add Measure
     </a>
@@ -16,6 +16,20 @@
 $this->headLink()->appendStylesheet('/css/jqtree.css?v=1');
 $this->headLink()->appendStylesheet('/css/chosen.min.css');
 ?>
+
+<style>
+    #benchmarkSelect #control-group-cancelButton {
+        width: 10% !important;
+    }
+
+    #controls-cancelButton {
+        margin-left: 30px;
+    }
+
+    #benchmarkSelect {
+        display: none;
+    }
+</style>
 
 <?php
 $this->headScript()->appendFile(
@@ -33,22 +47,12 @@ $this->headScript()->appendFile(
 <script>
     <?php $this->headScript()->captureStart() ?>
 
+    var structureId = '<?= $structure->getId() ?>';
+    var json = '<?= $structure->getJson() ?>';
 
-    var data = [
-        {
-            name: 'node1',
-            children: [
-                { name: 'child1' },
-                { name: 'child2' }
-            ]
-        },
-        {
-            name: 'node2',
-            children: [
-                { name: 'child3' }
-            ]
-        }
-    ];
+    var addType;
+
+    var data = jQuery.parseJSON(json);
 
     $(document).ready(function() {
         $('#tree1').tree({
@@ -57,8 +61,150 @@ $this->headScript()->appendFile(
             autoOpen: true
         });
 
-        $('#benchmark').chosen({search_contains: true})
+
+        $('#benchmark').chosen({
+            search_contains: true,
+            width: '400px'
+        })
+
+        hideForm();
+        setupAddHeading();
+        setupAddBenchmark();
+        setupAddSubmitted();
+        setupNodeMove();
     });
+
+
+    function hideForm()
+    {
+        $('#benchmarkSelect').hide();
+    }
+
+    function showForm()
+    {
+        $('#benchmarkSelect').show();
+    }
+
+    function showHeadingForm()
+    {
+        $('#control-group-heading').show();
+        $('#control-group-benchmark').hide();
+        showForm();
+    }
+
+    function showBenchmarkForm()
+    {
+        $('#control-group-heading').hide();
+        $('#control-group-benchmark').show();
+        showForm();
+    }
+
+    function setupAddHeading()
+    {
+        $('#addHeading').click(function() {
+            showHeadingForm();
+            addType = 'heading';
+
+            return false;
+        })
+    }
+
+    function setupAddBenchmark()
+    {
+        $('#addBenchmark').click(function() {
+            showBenchmarkForm();
+            addType = 'benchmark';
+
+            return false;
+        })
+    }
+
+    function setupCancelButton()
+    {
+        $('#cancelButton').click(function() {
+            hideForm();
+            return false;
+        })
+    }
+
+    function setupAddSubmitted()
+    {
+        $('#benchmark_select').submit(function() {
+            if (addType == 'heading') {
+                addHeading();
+            } else if (addType == 'benchmark') {
+                addBenchmark();
+            }
+            return false;
+        })
+    }
+
+    function addClicked()
+    {
+
+    }
+
+    function addHeading()
+    {
+        var heading = $('#heading').val();
+        var parent_node = $('#tree1').tree('getSelectedNode');
+
+        $('#tree1').tree(
+            'appendNode',
+            {
+                name: heading
+            },
+            parent_node
+        );
+
+        $('#heading').val('');
+        hideForm();
+    }
+
+    function addBenchmark()
+    {
+        var benchmark_id = $('#benchmark').val();
+        var label = $('#benchmark option:selected').text()
+        var parent_node = $('#tree1').tree('getSelectedNode');
+
+        $('#tree1').tree(
+            'appendNode',
+            {
+                name: label,
+                benchmark: benchmark_id
+            },
+            parent_node
+        );
+
+        $('#heading').val('');
+
+        saveStructure();
+        hideForm();
+    }
+
+    function setupNodeMove()
+    {
+        $('#tree1').bind(
+            'tree.move',
+            function(event) {
+                event.preventDefault();
+                event.move_info.do_move();
+                saveStructure();
+            }
+        )
+    }
+
+    function saveStructure()
+    {
+        var json = $('#tree1').tree('toJson');
+        var data = {
+            json: json,
+            structureId: structureId
+        }
+
+        $.post('/structures/save', data)
+    }
+
     <?php $this->headScript()->captureEnd() ?>
 </script>
 
