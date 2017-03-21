@@ -12,14 +12,10 @@ class BenchmarkSelect extends AbstractForm
         // Call the parent constructor
         parent::__construct('benchmark_select');
 
-        $this->addHeading();
-        $this->addBenchmarkSelect($benchmarks);
-        $this->addButtons();
-    }
+        $fieldset = new Fieldset('buttons');
+        $fieldset->setAttribute('class', 'well well-small');
 
-    protected function addHeading()
-    {
-        $this->add(
+        $fieldset->add(
             array(
                 'name' => 'heading',
                 'type' => 'Text',
@@ -31,11 +27,8 @@ class BenchmarkSelect extends AbstractForm
                 )
             )
         );
-    }
 
-    protected function addBenchmarkSelect($benchmarks)
-    {
-        $this->add(
+        $fieldset->add(
             array(
                 'name' => 'benchmark',
                 'type' => 'Zend\Form\Element\Select',
@@ -48,13 +41,19 @@ class BenchmarkSelect extends AbstractForm
                 )
             )
         );
+
+
+
+        $this->addButtons($fieldset);
+
+        $this->add($fieldset);
     }
 
-    protected function addButtons()
+
+    protected function addButtons($fieldset)
     {
         // Fieldset for buttons
         $buttons = new Fieldset('buttons');
-        $buttons->setAttribute('class', 'well well-small');
 
         $save = new Element\Submit('submit');
         $save->setValue('Add');
@@ -70,6 +69,6 @@ class BenchmarkSelect extends AbstractForm
         $reset->setAttribute('id', 'cancelButton');
         $buttons->add($reset);
 
-        $this->add($buttons);
+        $fieldset->add($buttons);
     }
 }

@@ -49,6 +49,13 @@ $this->headLink()->appendStylesheet('/css/chosen.min.css');
         font-size: 120%;
     }
 
+    #control-group-submitButton {
+        width: 215px !important;
+    }
+
+    #controls-heading input {
+        width: 400px;
+    }
 </style>
 
 <?php
@@ -103,7 +110,7 @@ $this->headScript()->appendFile(
             width: '400px'
         });
 
-        hideForm();
+        setupForm();
         setupAddHeading();
         setupAddBenchmark();
         setupAddSubmitted();
@@ -112,8 +119,12 @@ $this->headScript()->appendFile(
     });
 
 
-    function hideForm()
-    {
+    function setupForm() {
+        hideForm();
+    }
+
+    function hideForm() {
+
         $('#benchmarkSelect').hide();
     }
 
