@@ -29,6 +29,26 @@ $this->headLink()->appendStylesheet('/css/chosen.min.css');
     #benchmarkSelect {
         display: none;
     }
+    .heading-node {
+        font-weight: bold;
+    }
+    a.remove-node {
+        display: none;
+        float: right;
+    }
+    .jqtree-selected > .jqtree-element > .jqtree-title > a.remove-node {
+        display: block;
+        margin-right: 3px;
+    }
+
+    p.hint {
+        font-size: 80%;
+    }
+
+    #tree1 {
+        font-size: 120%;
+    }
+
 </style>
 
 <?php
@@ -58,20 +78,37 @@ $this->headScript()->appendFile(
         $('#tree1').tree({
             data: data,
             dragAndDrop: true,
-            autoOpen: true
+            autoOpen: true,
+            // Benchmark nodes can't have children
+            onCanMoveTo: function(moved_node, target_node, position) {
+                return !target_node.benchmark;
+            },
+            onCreateLi: function(node, $li) {
+                // Add 'icon' span before title
+                if (node.benchmark) {
+                    $li.find('.jqtree-title').addClass('benchmark-node');
+                } else {
+                    $li.find('.jqtree-title').addClass('heading-node');
+                }
+
+                $li.find('.jqtree-title').append('<a class="remove-node"><span class="glyphicon glyphicon-remove"></span></a>')
+            }
         });
+
+
 
 
         $('#benchmark').chosen({
             search_contains: true,
             width: '400px'
-        })
+        });
 
         hideForm();
         setupAddHeading();
         setupAddBenchmark();
         setupAddSubmitted();
         setupNodeMove();
+        setupNodeRemove();
     });
 
 
@@ -205,6 +242,23 @@ $this->headScript()->appendFile(
         $.post('/structures/save', data)
     }
 
+
+    function setupNodeRemove()
+    {
+        var tree = $('#tree1');
+        $('a.remove-node').click(function() {
+            // Remove the selected node
+            if (confirm('Are you sure you want to remove the selected node and all its children?')) {
+                var node = tree.tree('getSelectedNode');
+                tree.tree('removeNode', node);
+                saveStructure();
+            }
+
+            return false;
+        })
+    }
+
+
     <?php $this->headScript()->captureEnd() ?>
 </script>
 
@@ -213,5 +267,7 @@ $this->headScript()->appendFile(
     <?= $this->ztbForm($benchmarkForm->prepare()) ?>
 </div>
 
+
+<p class="hint">Drag and drop to rearrange the headings and measures. Changes are saved automatically.</p>
 
 <div id="tree1"></div>
