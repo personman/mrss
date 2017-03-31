@@ -160,8 +160,8 @@ class CollegeController extends AbstractActionController
                 $sectionIds[$college->getId()] = $college->getSectionIds();
 
                 $system = null;
-                if ($system = $college->getSystem()) {
-                    $system = $system->getName();
+                if ($system = $college->getSystemNames()) {
+                    $system = implode(', ', $system);
                 }
 
                 $collegeData[$college->getId()] = array(
