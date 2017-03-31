@@ -162,6 +162,7 @@ class CollegeController extends AbstractActionController
                 $system = null;
                 if ($system = $college->getSystemNames()) {
                     $system = implode(', ', $system);
+                    //pr($system);
                 }
 
                 $collegeData[$college->getId()] = array(
