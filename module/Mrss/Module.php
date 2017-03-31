@@ -337,6 +337,7 @@ class Module
                 'footer_navigation' => 'Mrss\Service\FooterNavigationFactory',
                 'admin_navigation' => 'Mrss\Service\AdminNavigationFactory',
                 'nccbp_navigation' => 'Mrss\Service\NccbpNavigationFactory',
+                'envisio_navigation' => 'Envisio\Service\NavigationFactory',
                 'fcs_navigation' => 'Mrss\Service\FcsNavigationFactory',
                 'study' => 'Mrss\Service\Factory\Study',
                 'import.nccbp' => 'Mrss\Service\Factory\ImportNccbp',

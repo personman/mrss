@@ -63,7 +63,9 @@ $this->headScript()->appendFile(
                         <tr>
                             <th><?= $studyConfig->institution_label ?></th>
                             <th>Value</th>
+                            <?php if ($includePercentiles): ?>
                             <th>National<br>% Rank</th>
+                            <?php endif ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,9 +85,11 @@ $this->headScript()->appendFile(
                                     <?= $section['prefix'] . $value . $section['suffix'] ?></td>
                                 </td>
 
+                                <?php if ($includePercentiles): ?>
                                 <td>
                                     <?= round($peerData['percentileRank']) ?>%
                                 </td>
+                                <?php endif ?>
                             </tr>
                         <?php endforeach ?>
                     </tbody>

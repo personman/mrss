@@ -635,6 +635,56 @@ return array(
                 'pages' => getAdminMenu()
             )
         ),
+        'envisio' => array(
+            'home' => array(
+                'label' => 'Home',
+                'route' => 'home'
+            ),
+
+            'data-entry' => getDataMenu(),
+            'reports' => getReportMenu(),
+
+            'data-documentation' => array(
+                'label' => 'Resources',
+                'uri' => '#',
+                'pages' => array(
+                    'faq' => array(
+                        'label' => 'Historical Data',
+                        'uri' => '/submitted-values'
+                    ),
+                    'calculations' => array(
+                        'label' => 'Formulas',
+                        'uri' => '/calculations'
+                    ),
+                    'dictionary' => array(
+                        'label' => 'Data Dictionary',
+                        'uri' => '/data-dictionary'
+                    ),
+                )
+            ),
+            'help' => array(
+                'label' => 'Help',
+                'uri' => '#',
+                'pages' => array(
+                    /*'faq' => array(
+                        'label' => 'FAQ',
+                        'uri' => '/faq'
+                    ),*/
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
+                )
+            ),
+            'account' => getAccountMenu(),
+            'admin' => array(
+                'label' => '<span class="glyphicon glyphicon-cog icon icon-cog adminMenuIcon"></span>',
+                'uri' => '/admin',
+                'resource' => 'adminMenu',
+                'privilege' => 'view',
+                'pages' => getAdminMenu()
+            )
+        ),
         'admin' => getAdminMenu()
     )
 );

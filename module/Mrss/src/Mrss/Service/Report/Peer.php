@@ -29,6 +29,8 @@ class Peer extends Report
 
     protected $year;
 
+    protected $includePercentiles = true;
+
     public function getPeerReport($benchmarks, $colleges, $currentCollege, $year, $peerGroupName)
     {
         $minPeers = 5;
@@ -99,7 +101,11 @@ class Peer extends Report
             }
 
             $data = $this->sortAndLabelPeerData($data, $currentCollege);
-            $data = $this->addPercentileRanks($data, $benchmark, $year);
+
+            if ($this->getIncludePercentiles()) {
+                $data = $this->addPercentileRanks($data, $benchmark, $year);
+            }
+
 
             // Data labels
             $prefix = $suffix = '';
@@ -587,5 +593,17 @@ class Peer extends Report
         }
 
         return $this->year;
+    }
+
+    public function setIncludePercentiles($setting)
+    {
+        $this->includePercentiles = $setting;
+
+        return $this;
+    }
+
+    public function getIncludePercentiles()
+    {
+        return $this->includePercentiles;
     }
 }

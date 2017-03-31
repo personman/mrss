@@ -466,8 +466,13 @@ class ReportController extends ReportAdminController
             return $redirect;
         }
 
+        $config = $this->getStudyConfig();
+        $includePercentiles = $config->peer_percentiles;
+
+
         /** @var \Mrss\Service\Report\Peer $peerService */
         $peerService = $this->getServiceLocator()->get('service.report.peer');
+        $peerService->setIncludePercentiles($includePercentiles);
 
         $format = $this->params()->fromRoute('format');
 
@@ -487,7 +492,8 @@ class ReportController extends ReportAdminController
         return array(
             'peerGroupName' => $peerGroupName,
             'report' => $report,
-            'studyConfig' => $this->getStudyConfig()
+            'studyConfig' => $this->getStudyConfig(),
+            'includePercentiles' => $includePercentiles
         );
     }
 

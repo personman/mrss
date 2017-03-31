@@ -9,11 +9,12 @@ return array(
     'approver_email' => 'mbell@envisio.com',
     'layout' => 'govbenchmark.phtml',
     'css' => 'nccbp.css',
-    'navigation' => 'nccbp_navigation',
+    'navigation' => 'envisio_navigation',
     'benchmark_completion_heatmap' => true,
     'percent_change_report_columns' => array(
     ),
     'anonymous_peers' => false,
+    'peer_percentiles' => false,
     'national_report_name' => 'Benchmark Report',
     'your_institution_label' => 'Your City',
     'institution_label' => 'City',
