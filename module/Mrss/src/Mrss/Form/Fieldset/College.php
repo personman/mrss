@@ -8,8 +8,12 @@ use Zend\Validator\Regex;
 
 class College extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct($includeExec = false)
+    protected $includeCanada = false;
+
+    public function __construct($includeExec = false, $includeCanada = false)
     {
+        $this->includeCanada = $includeCanada;
+
         parent::__construct('institution');
 
         $this->setLabel('Institution');
@@ -268,7 +272,7 @@ class College extends Fieldset implements InputFilterProviderInterface
     
     public function getStates()
     {
-        return array(
+        $states = array(
             '' => 'Select State',
             'AL' => 'Alabama',
             'AK' => 'Alaska',
@@ -322,5 +326,27 @@ class College extends Fieldset implements InputFilterProviderInterface
             'WI' => 'Wisconsin',
             'WY' => 'Wyoming'
         );
+
+        if ($this->includeCanada) {
+            $provinces = array(
+                'AB' => 'Alberta',
+                'BC' => 'British Columbia',
+                'MB' => 'Manitoba',
+                'NB' => 'New Brunswick',
+                'NL' => 'Newfoundland and Labrador',
+                'NS' => 'Nova Scotia',
+                'NT' => 'Northwest Territories',
+                'NU' => 'Nunavut',
+                'ON' => 'Ontario',
+                'PE' => 'Prince Edward Island',
+                'QC' => 'Quebec',
+                'SK' => 'Saskatchewan',
+                'YT' => 'Yukon'
+            );
+
+            $states = array_merge($states, $provinces);
+        }
+
+        return $states;
     }
 }

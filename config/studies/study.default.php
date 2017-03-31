@@ -15,6 +15,7 @@ return array(
     'layout' => 'layout.phtml',
     'navigation' => 'navigation',
     'favicon' => '/favicon.ico',
+    'include_canada' => false,
     'contact_instructions' => '',
     'contact_recipient' => null,
     'css' => null,
