@@ -3,9 +3,9 @@
 // AAUP - FCS
 return array(
     'from_email' => 'info@benchmarkinginstitute.org',
-    'from_email_name' => 'John Barnshaw',
+    'from_email_name' => 'American Association of University Professors',
     'reply_to_email' => 'aaupfcs@aaup.org',
-    'reply_to_email_name' => 'John Barnshaw',
+    'reply_to_email_name' => 'American Association of University Professors',
     //'cc_email' => 'jbarnshaw@aaup.org',
     'cc_email' => 'dfergu15@jccc.edu',
     //'approver_email' => 'jbarnshaw@aaup.org',
@@ -17,7 +17,7 @@ return array(
     'layout' => 'nccbp.phtml',
     'navigation' => 'fcs_navigation',
     'contact_instructions' => null,
-    'contact_recipient' => array('jbarnshaw@aaup.org', 'sdunietz@aaup.org'),
+    'contact_recipient' => array('sdunietz@aaup.org'),
     //'contact_recipient' => array('dfergu15@jccc.edu'),
     'css' => 'aaup.css',
     'css_print' => null,
