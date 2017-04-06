@@ -459,6 +459,8 @@ class ObservationController extends AbstractActionController
                 // This may take a minute
                 takeYourTime();
 
+                $enr = $observation->get('ipeds_enr');
+
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
 

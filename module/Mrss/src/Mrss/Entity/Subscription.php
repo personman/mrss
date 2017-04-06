@@ -482,6 +482,19 @@ class Subscription
             }
         }
 
+        if (false && $benchmark == 'ipeds_enr') {
+            echo 'count: ';
+            pr($datums->count());
+            pr($datum->getId());
+            pr($datum->getSubscription()->getId());
+            //pr($criteria);
+
+            if ($datum === null) {
+                $msg = 'about to create for ' . $this->getId() . ': ' . $this->getYear() . '. ' . $benchmark;
+                pr($msg);
+            }
+        }
+
         // If the data row doesn't exist, create it
         if ($datum === null) {
             $datum = $this->createDatum($benchmark);
@@ -498,8 +511,17 @@ class Subscription
 
         if (!$benchmark) {
             echo 'null passed to createDatum<br>';
-        } else {
-            //var_dump($benchmark);
+        } elseif (false) {
+            // Debug
+            var_dump($benchmark);
+            $trace = debug_backtrace();
+
+            foreach ($trace as $info) {
+                if (!empty($info['file'])) {
+                    echo $info['file'] . ':' . $info['line'] . '<br>';
+                }
+            }
+            echo '<hr>';
         }
 
         if (is_object($benchmark)) {
