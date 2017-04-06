@@ -391,7 +391,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         $count = null;
 
         // Only do this for FCS form 3 benefits
-        if ($this->getId() == 4 && $observation->has('institution_aggregate_benefits')) {
+        if ($this->getId() == 4 && $this->getStudy()->getId() == 4) {
             $aggregate = $observation->get('institution_aggregate_benefits');
 
             if (strtolower($aggregate) == 'yes') {
@@ -451,7 +451,7 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
 
 
         // debug it
-        if (false && $this->getId() == 4) {
+        if (false && $this->getUrl() == 4) {
             pr($total);
             pr($completed);
         }
