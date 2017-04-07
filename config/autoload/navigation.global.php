@@ -890,7 +890,7 @@ function getAdminMenu()
         'label' => 'Demographic Criteria',
         'route' => 'criteria'
     ),
-    array(
+    'systems' => array(
         'label' => 'Systems',
         'route' => 'systems'
     ),
