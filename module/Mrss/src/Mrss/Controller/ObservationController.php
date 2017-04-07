@@ -167,7 +167,7 @@ class ObservationController extends AbstractActionController
         /** @var \Mrss\Entity\Study $currentStudy */
         $currentStudy = $this->currentStudy();
         $membership = $this->getMembership();
-        $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($membership);
+        $benchmarkGroups = $this->getBenchmarkGroups();
         $observation = $this->getCurrentObservation();
         $completionPercentage = $currentStudy
             ->getCompletionPercentage($observation);
@@ -189,11 +189,47 @@ class ObservationController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Entity\Structure
+     */
+    protected function getStructure()
+    {
+        //@todo: get from session
+        $currentSystem = 2;
+        $system = $this->getSystemModel()->find($currentSystem);
+        $structure = $system->getDataEntryStructure();
+
+        return $structure;
+    }
+
+    protected function getBenchmarkGroups()
+    {
+        if ($this->getStudyConfig()->use_structures) {
+            $structure = $this->getStructure();
+            $benchmarkGroups = $structure->getPages();
+
+        } else {
+            $currentStudy = $this->currentStudy();
+            $membership = $this->getMembership();
+            $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($membership);
+        }
+
+        return $benchmarkGroups;
+    }
+
+    /**
      * @return \Mrss\Model\Issue
      */
     protected function getIssueModel()
     {
         return $this->getServiceLocator()->get('model.issue');
+    }
+
+    /**
+     * @return \Mrss\Model\System
+     */
+    protected function getSystemModel()
+    {
+        return $this->getServiceLocator()->get('model.system');
     }
 
     public function systemadminoverviewAction()
@@ -349,15 +385,28 @@ class ObservationController extends AbstractActionController
         return $subscriptionModel;
     }
 
+    protected function getBenchmarkGroup($url)
+    {
+        if ($this->getStudyConfig()->use_structures) {
+            $structure = $this->getStructure();
+            $structure->setPage($url);
+            $benchmarkGroup = $structure->getBenchmarkGroup();
+        } else {
+            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+            $benchmarkGroup = $this->getServiceLocator()
+                ->get('model.benchmark.group')
+                ->findOneByUrlAndStudy($url, $this->currentStudy());
+        }
+
+        return $benchmarkGroup;
+    }
+
     public function dataEntryAction($staffView = false)
     {
         // Fetch the form
         $benchmarkGroupUrl = $this->params('benchmarkGroup');
 
-        /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
-        $benchmarkGroup = $this->getServiceLocator()
-            ->get('model.benchmark.group')
-            ->findOneByUrlAndStudy($benchmarkGroupUrl, $this->currentStudy());
+        $benchmarkGroup = $this->getBenchmarkGroup($benchmarkGroupUrl);
 
         $subscriptionModel = $this->getSubscriptionModel();
 
@@ -533,7 +582,7 @@ class ObservationController extends AbstractActionController
                 'form' => $form,
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
-                'benchmarkGroups' => $this->getCurrentStudy()->getBenchmarkGroupsBySubscription($subscription),
+                'benchmarkGroups' => $this->getBenchmarkGroups(),
                 'nccbpSubscription' => $nccbpSubscription,
                 'variable' => $this->getVariableSubstitutionService(),
                 'dataDefinitionForm' => $this->getDataDefinitionForm(),

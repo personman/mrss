@@ -9,10 +9,12 @@ return array(
     'approver_email' => 'mbell@envisio.com',
     'layout' => 'govbenchmark.phtml',
     'css' => 'nccbp.css',
+    'favicon' => '/envisio-favicon.ico',
     'navigation' => 'envisio_navigation',
     'benchmark_completion_heatmap' => true,
     'percent_change_report_columns' => array(
     ),
+    'use_structures' => true,
     'anonymous_peers' => false,
     'peer_percentiles' => false,
     'include_canada' => true,

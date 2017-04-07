@@ -9,6 +9,7 @@ return array(
     'cc_email' => 'michelletaylor@jccc.edu',
     'approver_email' => 'dfergu15@jccc.edu',
     'data_entry_templates' => array(),
+    'use_structures' => false,
     'breakpoints' => '10,25,50,75,90',
     'show_peer_data_you_did_not_submit' => false,
     'college_report_access_checkbox' => false,

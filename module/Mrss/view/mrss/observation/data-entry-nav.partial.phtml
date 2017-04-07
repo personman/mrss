@@ -1,7 +1,7 @@
 <ul class="nav nav-pills form-nav">
     <li class="form-nav-head"><h2>Forms:</h2></li>
     <?php foreach ($benchmarkGroups as $bGroup): ?>
-        <li<? if ($bGroup->getId() == $benchmarkGroup->getId()) echo ' class="active"' ?>>
+        <li<? if ($bGroup->getUrl() == $benchmarkGroup->getUrl()) echo ' class="active"' ?>>
             <a href="<?= $this->url(
                 'data-entry/edit',
                 array(

@@ -30,6 +30,19 @@ class BenchmarkSelect extends AbstractForm
 
         $fieldset->add(
             array(
+                'name' => 'url',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'URL'
+                ),
+                'attributes' => array(
+                    'id' => 'url'
+                )
+            )
+        );
+
+        $fieldset->add(
+            array(
                 'name' => 'benchmark',
                 'type' => 'Zend\Form\Element\Select',
                 'options' => array(

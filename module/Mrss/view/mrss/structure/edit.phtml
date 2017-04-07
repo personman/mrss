@@ -1,4 +1,8 @@
 <div class="btn-group heading-btns">
+    <a class="btn btn-default" href="#" id="addPage">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add Page
+    </a>
     <a class="btn btn-default" href="#" id="addHeading">
         <i class="glyphicon glyphicon-plus"></i>
         Add Heading
@@ -30,6 +34,14 @@ $this->headLink()->appendStylesheet('/css/chosen.min.css');
         display: none;
     }
     .heading-node {
+        font-weight: bold;
+        font-size: 110%;
+    }
+    ul.jqtree-tree .jqtree-title.page-node {
+        /*margin-left: 1.2em;*/
+    }
+    .page-node {
+        font-size: 130%;
         font-weight: bold;
     }
     a.remove-node {
@@ -94,6 +106,8 @@ $this->headScript()->appendFile(
                 // Add 'icon' span before title
                 if (node.benchmark) {
                     $li.find('.jqtree-title').addClass('benchmark-node');
+                } else if (node.url) {
+                    $li.find('.jqtree-title').addClass('page-node');
                 } else {
                     $li.find('.jqtree-title').addClass('heading-node');
                 }
@@ -116,6 +130,7 @@ $this->headScript()->appendFile(
         setupAddSubmitted();
         setupNodeMove();
         setupNodeRemove();
+        setupAddPage()
     });
 
 
@@ -136,6 +151,15 @@ $this->headScript()->appendFile(
     function showHeadingForm()
     {
         $('#control-group-heading').show();
+        $('#control-group-url').hide();
+        $('#control-group-benchmark').hide();
+        showForm();
+    }
+
+    function showPageForm()
+    {
+        $('#control-group-heading').show();
+        $('#control-group-url').show();
         $('#control-group-benchmark').hide();
         showForm();
     }
@@ -143,6 +167,7 @@ $this->headScript()->appendFile(
     function showBenchmarkForm()
     {
         $('#control-group-heading').hide();
+        $('#control-group-url').hide();
         $('#control-group-benchmark').show();
         showForm();
     }
@@ -152,6 +177,16 @@ $this->headScript()->appendFile(
         $('#addHeading').click(function() {
             showHeadingForm();
             addType = 'heading';
+
+            return false;
+        })
+    }
+
+    function setupAddPage()
+    {
+        $('#addPage').click(function() {
+            showPageForm();
+            addType = 'page';
 
             return false;
         })
@@ -180,6 +215,8 @@ $this->headScript()->appendFile(
         $('#benchmark_select').submit(function() {
             if (addType == 'heading') {
                 addHeading();
+            } else if (addType == 'page') {
+                addPage();
             } else if (addType == 'benchmark') {
                 addBenchmark();
             }
@@ -206,8 +243,33 @@ $this->headScript()->appendFile(
         );
 
         $('#heading').val('');
+        saveStructure();
         hideForm();
     }
+
+    function addPage()
+    {
+        var heading = $('#heading').val();
+        var url = $('#url').val();
+
+        var parent_node = null;
+
+        $('#tree1').tree(
+            'appendNode',
+            {
+                name: heading,
+                url: url
+            },
+            parent_node
+        );
+
+        $('#heading').val('');
+        $('#url').val('');
+        saveStructure();
+        hideForm();
+    }
+
+
 
     function addBenchmark()
     {
