@@ -28,7 +28,7 @@ $this->headScript()->appendFile(
     <?= $pageFromFile ?>
 <?php else: ?>
     <?php if ($page->getShowWrapper()): ?>
-        <div class="row cmsPage">
+        <div class="row cmsPage" id="page-<?= $wrapperId ?>">
             <div class="span12" id="cmsPageContent">
                 <?= $page->getContent() ?>
             </div>

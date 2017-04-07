@@ -143,9 +143,15 @@ class PageController extends AbstractActionController
             }
         }
 
+        $wrapperId = $page->getRoute();
+        if (empty($wrapperId)) {
+            $wrapperId = 'home';
+        }
+
         return array(
             'page' => $page,
-            'pageFromFile' => $pageFromFile
+            'pageFromFile' => $pageFromFile,
+            'wrapperId' => $wrapperId
         );
     }
 }
