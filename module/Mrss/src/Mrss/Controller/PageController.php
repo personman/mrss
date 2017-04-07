@@ -148,6 +148,8 @@ class PageController extends AbstractActionController
             $wrapperId = 'home';
         }
 
+        $this->layout()->wrapperId = $wrapperId;
+
         return array(
             'page' => $page,
             'pageFromFile' => $pageFromFile,

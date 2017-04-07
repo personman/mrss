@@ -190,8 +190,9 @@
 
 <?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
 
+<?php $contentWrapper = (!empty($wrapperId)) ? 'content-' . $wrapperId : 'content'; ?>
 <?php if (empty($this->noWrapper)): ?>
-    <div id="content">
+    <div id="content" class="<?= $contentWrapper ?>">
 
         <div class="container-fluid container">
             <div class="row-fluid row">
@@ -208,7 +209,7 @@
     </div>
 
 <?php else: ?>
-    <div id="content">
+    <div id="content" class="<?= $contentWrapper ?>">
         <div class="container-fluid container">
             <div class="row-fluid row">
                 <div class="span12 col-xs-12">
