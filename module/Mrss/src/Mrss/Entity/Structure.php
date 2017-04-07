@@ -123,16 +123,18 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         return $group;
     }
 
-
+    /**
+     * Skip benchmarks that don't work for this year and that are computed
+     * @param $year
+     * @return array
+     */
     public function getElements($year)
     {
-        // @todo: check year as well
-
         $benchmarks = $this->getAllBenchmarks();
 
         $nonComputed = array();
         foreach ($benchmarks as $benchmark) {
-            if (!$benchmark->getComputed()) {
+            if (!$benchmark->getComputed() && $benchmark->isAvailableForYear($year)) {
                 $nonComputed[] = $benchmark;
             }
         }
@@ -191,18 +193,18 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         return '';
     }
 
-    public function getChildren()
+    public function getChildren($year = null, $includeComputed = true)
     {
         $structure = array($this->getPageStructure());
 
 
         // Recursive
-        $this->loadChildren($structure);
+        $this->loadChildren($structure, $year, $includeComputed);
 
         return $this->children;
     }
 
-    public function loadChildren($structure)
+    public function loadChildren($structure, $year, $includeComputed)
     {
         $sequence = 0;
         foreach ($structure as $child) {
@@ -215,12 +217,14 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
             } elseif ($this->childIsBenchmark($child)) {
                 $item = $this->getBenchmark($child['benchmark']);
 
-                $this->children[] = $item;
+                if (($year === null || $item->isAvailableForYear($year)) && ($includeComputed || !$item->getComputed())) {
+                    $this->children[] = $item;
+                }
             }
 
             // Recurse:
             if (!empty($child['children'])) {
-                $this->loadChildren($child['children']);
+                $this->loadChildren($child['children'], $year, $includeComputed);
             }
 
         }

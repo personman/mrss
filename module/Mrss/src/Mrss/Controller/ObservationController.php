@@ -24,6 +24,8 @@ class ObservationController extends AbstractActionController
 {
     protected $systemAdminSessionContainer;
 
+    protected $activeSystemContainer;
+
     protected $currentObservation;
 
     public function viewAction()
@@ -194,7 +196,8 @@ class ObservationController extends AbstractActionController
     protected function getStructure()
     {
         //@todo: get from session
-        $currentSystem = 2;
+        $currentSystem = $this->getActiveSystem();
+
         $system = $this->getSystemModel()->find($currentSystem);
         $structure = $system->getDataEntryStructure();
 
@@ -1396,6 +1399,21 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    /**
+     * Switch systems and redirect to /data-entry
+     */
+    public function dataEntrySwitchAction()
+    {
+        $systemId = $this->params()->fromRoute('systemId');
+
+        // Make sure they have access to this system
+        if ($this->currentCollege()->hasSystemMembership($systemId)) {
+            $this->setActiveSystem($systemId);
+        }
+
+        return $this->redirect()->toRoute('data-entry');
+    }
+
     protected function getSubscription($year = null)
     {
         if ($year === null) {
@@ -1549,6 +1567,36 @@ class ObservationController extends AbstractActionController
         }
 
         return $this->systemAdminSessionContainer;
+    }
+
+    public function getActiveSystemContainer()
+    {
+        if (empty($this->activeSystemContainer)) {
+            $container = new Container('active_system');
+            $this->activeSystemContainer = $container;
+        }
+
+        return $this->activeSystemContainer;
+    }
+
+    public function setActiveSystem($systemId)
+    {
+        $this->getActiveSystemContainer()->system_id = $systemId;
+    }
+
+    public function getActiveSystem()
+    {
+        $systemId = $this->getActiveSystemContainer()->system_id;
+
+        // If none is set yet, just, uh, grab one
+        if (empty($systemId)) {
+            foreach ($this->currentCollege()->getSystemMemberships() as $systemMembership) {
+                // The first one will do
+                $systemId = $systemMembership->getSystem()->getId();
+            }
+        }
+
+        return $systemId;
     }
 
     /**

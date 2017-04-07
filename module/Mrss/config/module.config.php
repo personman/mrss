@@ -61,6 +61,19 @@ return array(
                     )
                 )
             ),
+            'data-entry-switch' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/data-entry-switch/:systemId',
+                    'defaults' => array(
+                        'controller' => 'observations',
+                        'action' => 'dataEntrySwitch',
+                        'systemId' => null
+                    )
+                ),
+            ),
+
             // Data entry route with benchmarkGroup id
             // We could support a benchmarkGroup short name for nicer urls in the
             // future

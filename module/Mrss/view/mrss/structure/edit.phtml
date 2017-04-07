@@ -98,9 +98,30 @@ $this->headScript()->appendFile(
             data: data,
             dragAndDrop: true,
             autoOpen: true,
-            // Benchmark nodes can't have children
             onCanMoveTo: function(moved_node, target_node, position) {
-                return !target_node.benchmark;
+                var canMove = true;
+
+                // Benchmark nodes can't have children
+                if (target_node.benchmark) {
+                    canMove = false;
+                }
+
+                // Pages can only be on the top level
+                if (moved_node.url) {
+                    /*if (target_node.parent || position == 'inside') {
+                        canMove = false;
+                        console.log("cannot move to target node. It's not top level");
+                    }*/
+
+                }
+
+                console.log(moved_node);
+                console.log(target_node);
+                console.log(position);
+
+                console.log(canMove);
+
+                return canMove;
             },
             onCreateLi: function(node, $li) {
                 // Add 'icon' span before title

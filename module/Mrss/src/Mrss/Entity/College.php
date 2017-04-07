@@ -635,6 +635,9 @@ class College
         return $this;
     }
 
+    /**
+     * @return ArrayCollection|\Mrss\Entity\SystemMembership[]
+     */
     public function getSystemMemberships()
     {
         return $this->systemMemberships;
@@ -653,5 +656,18 @@ class College
         }
 
         return $names;
+    }
+
+    public function hasSystemMembership($systemId)
+    {
+        $has = false;
+        foreach ($this->getSystemMemberships() as $systemMembership) {
+            if ($systemMembership->getSystem()->getId() == $systemId) {
+                $has = true;
+                break;
+            }
+        }
+
+        return $has;
     }
 }
