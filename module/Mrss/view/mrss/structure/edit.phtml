@@ -22,12 +22,19 @@ $this->headLink()->appendStylesheet('/css/chosen.min.css');
 ?>
 
 <style>
+    #benchmarkSelect #control-group-submitButton {
+        width: 100px !important;
+    }
     #benchmarkSelect #control-group-cancelButton {
         width: 10% !important;
     }
 
     #controls-cancelButton {
         margin-left: 30px;
+    }
+
+    #controls-submitButton, #controls-cancelButton {
+        margin-left: 50px;
     }
 
     #benchmarkSelect {
