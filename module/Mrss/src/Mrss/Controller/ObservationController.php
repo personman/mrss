@@ -224,14 +224,6 @@ class ObservationController extends BaseController
         return $this->getServiceLocator()->get('model.issue');
     }
 
-    /**
-     * @return \Mrss\Model\System
-     */
-    protected function getSystemModel()
-    {
-        return $this->getServiceLocator()->get('model.system');
-    }
-
     public function systemadminoverviewAction()
     {
         $user = $this->zfcUserAuthentication()->getIdentity();

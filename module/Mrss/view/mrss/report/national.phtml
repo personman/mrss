@@ -101,7 +101,9 @@ $this->headScript()->appendFile(
             <?php $formTitle = $benchmarkGroup['benchmarkGroup'] ?>
         <?php endif ?>
         <h3 class="benchmarkGroupTitle" id="form_<?= $benchmarkGroup['url'] ?>">
+            <?php if (!empty($formNumber)): ?>
             <span class="small-heading"><?= $formNumber ?></span><br>
+            <?php endif ?>
             <?= $formTitle ?>
             <?php if (!empty($benchmarkGroup['timeframe'])): ?>
                 <span class="timeframe">(<?= $benchmarkGroup['timeframe'] ?>)</span>
@@ -116,7 +118,12 @@ $this->headScript()->appendFile(
                 $heading = 'National Median Percentiles';
             }
         } else {
-            $heading = 'System Percentiles';
+            if ($this->currentStudy()->getId() == 5) {
+                $heading = 'Percentiles';
+            } else {
+                $heading = 'System Percentiles';
+            }
+
         }?>
 
         <table class="table table-hover table-striped-manual">

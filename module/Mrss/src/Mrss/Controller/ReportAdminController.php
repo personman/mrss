@@ -423,14 +423,6 @@ class ReportAdminController extends BaseController
         return $this->getServiceLocator()->get('service.report.changes');
     }
 
-    /**
-     * @return \Mrss\Model\System
-     */
-    protected function getSystemModel()
-    {
-        return $this->getServiceLocator()->get('model.system');
-    }
-
     public function calculateOneSystemAction()
     {
         takeYourTime();

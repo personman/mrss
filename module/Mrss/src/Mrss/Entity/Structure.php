@@ -174,6 +174,11 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         return 0;
     }
 
+    public function getTimeframe()
+    {
+        return null;
+    }
+
     public function getCompletionPercentageForObservation($observation)
     {
         $benchmarks = $this->getAllBenchmarks();

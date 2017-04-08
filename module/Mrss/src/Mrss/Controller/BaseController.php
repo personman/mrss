@@ -38,4 +38,12 @@ class BaseController extends AbstractActionController
 
         return $systemId;
     }
+
+    /**
+     * @return \Mrss\Model\System
+     */
+    public function getSystemModel()
+    {
+        return $this->getServiceLocator()->get('model.system');
+    }
 }

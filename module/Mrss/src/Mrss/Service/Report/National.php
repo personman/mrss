@@ -30,6 +30,19 @@ class National extends Report
     protected $system;
 
 
+    public function getBenchmarkGroups($subscription)
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
+            // @todo: change this to report structure
+            $benchmarkGroups = $system->getDataEntryStructure()->getPages();
+        } else {
+            $study = $this->getStudy();
+            $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        }
+
+        return $benchmarkGroups;
+    }
+
     public function getData(Subscription $subscription, $system = null, $benchmarkGroupId = null)
     {
         $observation = $subscription->getObservation();
@@ -43,7 +56,8 @@ class National extends Report
 
         $study = $this->getStudy();
 
-        $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        $benchmarkGroups = $this->getBenchmarkGroups($subscription);
+
         foreach ($benchmarkGroups as $benchmarkGroup) {
             if (!empty($benchmarkGroupId) && $benchmarkGroup->getId() != $benchmarkGroupId) {
                 continue;
@@ -322,6 +336,9 @@ class National extends Report
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\System
+     */
     public function getSystem()
     {
         return $this->system;

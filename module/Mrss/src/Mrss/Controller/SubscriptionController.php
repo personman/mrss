@@ -17,7 +17,6 @@ use Mrss\Form\SubscriptionSystem;
 use Mrss\Form\SubscriptionModule;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Form\Form;
 use Zend\Form\Fieldset;
@@ -37,7 +36,7 @@ use Zend\View\Model\ViewModel;
  *
  * @package Mrss\Controller
  */
-class SubscriptionController extends AbstractActionController
+class SubscriptionController extends BaseController
 {
     protected $sessionContainer;
 
@@ -2104,10 +2103,21 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $subscriptionsInfo = array();
 
-        $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
+        // Should we limit this by system/network?
+        if ($this->getStudyConfig()->use_structures) {
+            $systemId = $this->getActiveSystem();
+            $system = $this->getSystemModel()->find($systemId);
+            $colleges = $system->getMemberColleges();
 
+            $subscriptions = array();
+            foreach ($colleges as $college) {
+                $subscriptions[] = $college['college']->getSubscriptionByStudyAndYear($study->getId(), $year);
+            }
+        } else {
+            $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
+        }
 
-        $headers = array('Institution', 'State', 'IPEDS Unit ID');
+        $headers = array($this->getStudyConfig()->institution_label, 'State', 'IPEDS Unit ID');
         foreach ($study->getCriteria() as $criterion) {
             $headers[] = $criterion->getName();
         }
