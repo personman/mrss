@@ -103,9 +103,22 @@
                     <?= $this->zfcUserLoginWidget() ?>
                 </div>
             <?php else: ?>
-                <div id="headerButtons">
-                    <?php if ($webinar): ?>
+                <div>
+                    <?php if (false): ?>
                         <a href="/webinar" class="btn schedule-btn" role="button" id="schedule-demo">FREE WEBINAR</a>
+
+                    <?php else: ?>
+                        <?php $user = $this->zfcUserIdentity(); ?>
+                        <?php //$this->directionClass = 'dropdown-menu-right' ?>
+
+                        <div class="userMenu" id="bs-example-navbar-collapse-1">
+                            <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
+                            <?php $partial = array('mrss/menu/nccbp-navigation.phtml', 'default') ?>
+                            <?= $this->navigation()
+                                ->menu('envisiousernavigation')
+                                ->setPartial($partial)
+                                ->render(); ?>
+                        </div>
                     <?php endif ?>
                 </div>
             <?php endif ?>

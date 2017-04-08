@@ -127,8 +127,10 @@ class NavigationFactory extends DefaultNavigationFactory
 
             // Add the data entry links (if they're logged in
 
-            $name = $user->getPrefix() . ' ' . $user->getLastName();
-            $pages['account']['label'] = $name;
+            if (!empty($pages['account'])) {
+                $name = $user->getPrefix() . ' ' . $user->getLastName();
+                $pages['account']['label'] = $name;
+            }
 
             // Logged in users don't need demos
             unset($pages['schedule-demo']);

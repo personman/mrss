@@ -428,6 +428,14 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     width: 500px;
 }
 
+.userMenu .nav {
+    float: right !important;
+}
+
+.userMenu a img {
+    height: 40px !important;
+}
+
 #headerLoginForm {
     display: none;
     padding-top: 15px;

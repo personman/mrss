@@ -13,7 +13,7 @@
 
 // Note: This navigation setup is modified by module/Mrss/src/Mrss/Service/
 // NavigationFactory.php
-return array(
+$navigation = array(
     'navigation' => array(
         'default' => array(
             'home' => array(
@@ -685,9 +685,15 @@ return array(
                 'pages' => getAdminMenu()
             )
         ),
-        'admin' => getAdminMenu()
+        'admin' => getAdminMenu(),
+        //'envisiousernavigation' => getAdminMenu(),//getUserMenu()
     )
 );
+
+//prd($navigation['navigation']['nccbp']);
+$navigation['navigation']['envisiousernavigation'] = getUserMenu();
+
+return $navigation;
 
 
 
@@ -917,4 +923,38 @@ function getAdminMenu()
     )*/
 );
 
+}
+
+
+function getUserMenu()
+{
+    return array(
+        'user' => array(
+            'label' => 'Your Account',
+            'route' => 'data-entry',
+            'class' => 'dropdown-menu-right',
+            'pages' => array(
+                'account' => array(
+                    'label' => 'My Settings',
+                    'route' => 'account',
+                ),
+                'institution' => array(
+                    'label' => 'Manage Your City',
+                    'route' => 'institution/edit'
+                ),
+                'users' => array(
+                    'label' => 'Manage Your City\'s Users',
+                    'route' => 'institution/users'
+                ),
+                'peer-groups' => array(
+                    'label' => 'Manage Your Peer Groups',
+                    'route' => 'peer-groups'
+                ),
+                'logout' => array(
+                    'label' => 'Sign Out',
+                    'route' => 'zfcuser/logout',
+                )
+            )
+        )
+    );
 }

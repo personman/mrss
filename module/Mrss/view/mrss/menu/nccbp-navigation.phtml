@@ -1,5 +1,8 @@
 <?php $unique = rand(1, 100); ?>
 
+<?php $directionClass = 'dropdown-menu-left' ?>
+<?php if (count($this->container) == 1) $directionClass = 'dropdown-menu-right'; ?>
+
 <ul class="nav navbar-nav">
     <?php $count = 0 ?>
     <?php foreach ($this->container as $page): ?>
@@ -18,7 +21,7 @@
                 <span><?php echo $this->translate($page->getLabel()) ?></span>
                 <strong class="caret"></strong>
             </a>
-            <ul class="dropdown-menu" id="page_<?php echo $count ?>_<?php echo
+            <ul class="dropdown-menu <?= $directionClass ?>" id="page_<?php echo $count ?>_<?php echo
             $unique ?>">
                 <?php foreach($page->getPages() as $child): ?>
                     <?php // when using partials we need to manually check for ACL conditions ?>
