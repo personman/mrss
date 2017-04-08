@@ -61,11 +61,11 @@ return array(
                     )
                 )
             ),
-            'data-entry-switch' => array(
+            'network-switch' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/data-entry-switch/:systemId',
+                    'route' => '/network-switch/:systemId',
                     'defaults' => array(
                         'controller' => 'observations',
                         'action' => 'dataEntrySwitch',
@@ -1190,6 +1190,19 @@ return array(
                         'type' => 'segment',
                         'options' => array(
                             'route' => '/system[/:year][/:format]',
+                            'defaults' => array(
+                                'action' => 'national',
+                                'year' => null,
+                                'format' => 'html',
+                                'system' => true
+                            )
+                        )
+                    ),
+                    // Alias for system above
+                    'network' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/network[/:year][/:format]',
                             'defaults' => array(
                                 'action' => 'national',
                                 'year' => null,

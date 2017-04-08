@@ -1,6 +1,8 @@
 <?php
 $subHeadingColSpan = ($forPercentChange) ? 12 : 10;
 $tableHeadingColSpan = ($forPercentChange) ? 4 : 2;
+
+/** @var \Mrss\Entity\System[] $otherSystems */
 ?>
 
 <?= $this->headLink()->appendStylesheet('/css/report.css') ?>
@@ -30,6 +32,19 @@ $this->headScript()->appendFile(
         <?= $system->getName() ?> Report
     <?php endif ?>
 </h1>
+
+<?php if (count($otherSystems)): ?>
+    Change Network:
+    <ul class="nav nav-pills report-nav">
+        <?php foreach ($otherSystems as $otherSystem): ?>
+        <li>
+            <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('reports/network') ?>">
+                <?= $otherSystem->getName() ?>
+            </a>
+        </li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>
 
 <ul class="nav nav-pills report-nav">
     <?php foreach ($subscriptions as $subscription): ?>

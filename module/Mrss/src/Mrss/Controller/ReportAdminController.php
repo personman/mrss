@@ -2,7 +2,6 @@
 
 namespace Mrss\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Service\Report;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
@@ -11,7 +10,7 @@ use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Log\Formatter\Simple;
 
-class ReportAdminController extends AbstractActionController
+class ReportAdminController extends BaseController
 {
     /**
      * @var Report

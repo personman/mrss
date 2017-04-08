@@ -88,16 +88,26 @@ class ReportController extends ReportAdminController
         // Is this a system report?
         $systemVersion = $this->params()->fromRoute('system');
         $system = null;
+        $otherSystems = array();
         if ($systemVersion) {
             // Confirm they're actually part of a system
-            $system = $this->currentCollege()->getSystem();
+            $systemId = $this->getActiveSystem();
 
-            if (empty($system)) {
+            if (empty($systemId)) {
                 $this->flashMessenger()->addErrorMessage(
                     'Your institution is not part of a system.'
                 );
 
                 return $this->redirect()->toUrl('/members');
+            } else {
+                $system = $this->getSystemModel()->find($systemId);
+
+                $systemMemberships = $this->currentCollege()->getSystemMemberships();
+                foreach ($systemMemberships as $systemMembership) {
+                    if ($systemId != $systemMembership->getSystem()->getId()) {
+                        $otherSystems[] = $systemMembership->getSystem();
+                    }
+                }
             }
         }
 
@@ -146,6 +156,7 @@ class ReportController extends ReportAdminController
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels(),
             'system' => $system,
+            'otherSystems' => $otherSystems,
             'reportPath' => $reportPath,
             'forPercentChange' => $forPercentChange,
             'studyConfig' => $this->getStudyConfig(),

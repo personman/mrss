@@ -5,7 +5,6 @@ namespace Mrss\Controller;
 
 use Mrss\Form\ImportData;
 use Mrss\Service\DataEntryHydrator;
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
 use Mrss\Service\Excel;
@@ -20,11 +19,9 @@ use PHPExcel_Style_Fill;
 use PHPExcel_Style_Alignment;
 use PHPExcel_Shared_Font;
 
-class ObservationController extends AbstractActionController
+class ObservationController extends BaseController
 {
     protected $systemAdminSessionContainer;
-
-    protected $activeSystemContainer;
 
     protected $currentObservation;
 
@@ -1405,13 +1402,17 @@ class ObservationController extends AbstractActionController
     public function dataEntrySwitchAction()
     {
         $systemId = $this->params()->fromRoute('systemId');
+        $redirect = $this->params()->fromQuery('redirect');
+        if (empty($redirect)) {
+            $redirect = 'data-entry';
+        }
 
         // Make sure they have access to this system
         if ($this->currentCollege()->hasSystemMembership($systemId)) {
             $this->setActiveSystem($systemId);
         }
 
-        return $this->redirect()->toRoute('data-entry');
+        return $this->redirect()->toRoute($redirect);
     }
 
     protected function getSubscription($year = null)
@@ -1567,36 +1568,6 @@ class ObservationController extends AbstractActionController
         }
 
         return $this->systemAdminSessionContainer;
-    }
-
-    public function getActiveSystemContainer()
-    {
-        if (empty($this->activeSystemContainer)) {
-            $container = new Container('active_system');
-            $this->activeSystemContainer = $container;
-        }
-
-        return $this->activeSystemContainer;
-    }
-
-    public function setActiveSystem($systemId)
-    {
-        $this->getActiveSystemContainer()->system_id = $systemId;
-    }
-
-    public function getActiveSystem()
-    {
-        $systemId = $this->getActiveSystemContainer()->system_id;
-
-        // If none is set yet, just, uh, grab one
-        if (empty($systemId)) {
-            foreach ($this->currentCollege()->getSystemMemberships() as $systemMembership) {
-                // The first one will do
-                $systemId = $systemMembership->getSystem()->getId();
-            }
-        }
-
-        return $systemId;
     }
 
     /**
