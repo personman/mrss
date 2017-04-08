@@ -163,6 +163,7 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         return $this->getLabel();
     }
 
+    // These are for debugging only
     public function getIncompleteBenchmarksForObservation($observation)
     {
         return 0;
@@ -175,7 +176,24 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
 
     public function getCompletionPercentageForObservation($observation)
     {
-        return 50;
+        $benchmarks = $this->getAllBenchmarks();
+        $total = count($benchmarks);
+
+        $populated = 0;
+        foreach ($benchmarks as $benchmark) {
+            $value = $observation->get($benchmark->getDbColumn());
+
+            if ($value) {
+                $populated++;
+            }
+        }
+
+        $completion = 0;
+        if ($total) {
+            $completion = $populated / $total * 100;
+        }
+
+        return $completion;
     }
 
     public function getFormat()

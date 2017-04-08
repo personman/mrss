@@ -69,7 +69,7 @@ class BenchmarkSelect extends AbstractForm
         $buttons = new Fieldset('buttons');
 
         $save = new Element\Submit('submit');
-        $save->setValue('Add');
+        $save->setValue('Save');
         $save->setAttribute('class', 'btn btn-primary');
         $save->setAttribute('id', 'submitButton');
         $buttons->add($save);

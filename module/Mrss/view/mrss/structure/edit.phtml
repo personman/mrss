@@ -44,11 +44,16 @@ $this->headLink()->appendStylesheet('/css/chosen.min.css');
         font-size: 130%;
         font-weight: bold;
     }
-    a.remove-node {
+    a.remove-node, a.edit-node {
         display: none;
         float: right;
     }
     .jqtree-selected > .jqtree-element > .jqtree-title > a.remove-node {
+        display: block;
+        margin-right: 3px;
+    }
+
+    .jqtree-selected > .jqtree-element > .jqtree-title > a.edit-node {
         display: block;
         margin-right: 3px;
     }
@@ -90,6 +95,7 @@ $this->headScript()->appendFile(
     var json = '<?= $structure->getJson() ?>';
 
     var addType;
+    var editing = false;
 
     var data = jQuery.parseJSON(json);
 
@@ -115,12 +121,6 @@ $this->headScript()->appendFile(
 
                 }
 
-                console.log(moved_node);
-                console.log(target_node);
-                console.log(position);
-
-                console.log(canMove);
-
                 return canMove;
             },
             onCreateLi: function(node, $li) {
@@ -129,11 +129,13 @@ $this->headScript()->appendFile(
                     $li.find('.jqtree-title').addClass('benchmark-node');
                 } else if (node.url) {
                     $li.find('.jqtree-title').addClass('page-node');
+                    $li.find('.jqtree-title').prepend(node.url + ': ');
                 } else {
                     $li.find('.jqtree-title').addClass('heading-node');
                 }
 
                 $li.find('.jqtree-title').append('<a class="remove-node"><span class="glyphicon glyphicon-remove"></span></a>')
+                $li.find('.jqtree-title').append('<a class="edit-node"><span class="glyphicon glyphicon-edit"></span></a>')
             }
         });
 
@@ -151,6 +153,7 @@ $this->headScript()->appendFile(
         setupAddSubmitted();
         setupNodeMove();
         setupNodeRemove();
+        setupNodeEdit();
         setupAddPage()
     });
 
@@ -171,6 +174,7 @@ $this->headScript()->appendFile(
 
     function showHeadingForm()
     {
+        addType = 'heading';
         $('#control-group-heading').show();
         $('#control-group-url').hide();
         $('#control-group-benchmark').hide();
@@ -179,6 +183,7 @@ $this->headScript()->appendFile(
 
     function showPageForm()
     {
+        addType = 'page';
         $('#control-group-heading').show();
         $('#control-group-url').show();
         $('#control-group-benchmark').hide();
@@ -187,6 +192,7 @@ $this->headScript()->appendFile(
 
     function showBenchmarkForm()
     {
+        addType = 'benchmark';
         $('#control-group-heading').hide();
         $('#control-group-url').hide();
         $('#control-group-benchmark').show();
@@ -197,7 +203,6 @@ $this->headScript()->appendFile(
     {
         $('#addHeading').click(function() {
             showHeadingForm();
-            addType = 'heading';
 
             return false;
         })
@@ -207,7 +212,6 @@ $this->headScript()->appendFile(
     {
         $('#addPage').click(function() {
             showPageForm();
-            addType = 'page';
 
             return false;
         })
@@ -217,7 +221,6 @@ $this->headScript()->appendFile(
     {
         $('#addBenchmark').click(function() {
             showBenchmarkForm();
-            addType = 'benchmark';
 
             return false;
         })
@@ -227,6 +230,7 @@ $this->headScript()->appendFile(
     {
         $('#cancelButton').click(function() {
             hideForm();
+            editing = false;
             return false;
         })
     }
@@ -234,13 +238,26 @@ $this->headScript()->appendFile(
     function setupAddSubmitted()
     {
         $('#benchmark_select').submit(function() {
-            if (addType == 'heading') {
-                addHeading();
-            } else if (addType == 'page') {
-                addPage();
-            } else if (addType == 'benchmark') {
-                addBenchmark();
+            if (editing) {
+                if (addType == 'heading') {
+                    saveHeading();
+                } else if (addType == 'page') {
+                    savePage();
+                } else if (addType == 'benchmark') {
+                    saveBenchmark();
+                }
+            } else {
+                if (addType == 'heading') {
+                    addHeading();
+                } else if (addType == 'page') {
+                    addPage();
+                } else if (addType == 'benchmark') {
+                    addBenchmark();
+                }
             }
+
+            editing = false;
+
             return false;
         })
     }
@@ -250,65 +267,131 @@ $this->headScript()->appendFile(
 
     }
 
+    function getHeading()
+    {
+        return {
+            name: $('#heading').val()
+        }
+    }
+
+    function clearForm()
+    {
+        $('#heading').val('');
+        $('#url').val('');
+
+    }
+
     function addHeading()
     {
-        var heading = $('#heading').val();
         var parent_node = $('#tree1').tree('getSelectedNode');
 
         $('#tree1').tree(
             'appendNode',
-            {
-                name: heading
-            },
+            getHeading(),
             parent_node
         );
 
-        $('#heading').val('');
+        clearForm();
         saveStructure();
         hideForm();
     }
 
-    function addPage()
+    function getPage()
     {
         var heading = $('#heading').val();
         var url = $('#url').val();
 
+        return {
+            name: heading,
+            url: url
+        }
+    }
+
+    function addPage()
+    {
         var parent_node = null;
 
         $('#tree1').tree(
             'appendNode',
-            {
-                name: heading,
-                url: url
-            },
+            getPage(),
             parent_node
         );
 
-        $('#heading').val('');
-        $('#url').val('');
+        clearForm();
         saveStructure();
         hideForm();
     }
 
-
-
-    function addBenchmark()
+    function getBenchmark()
     {
         var benchmark_id = $('#benchmark').val();
         var label = $('#benchmark option:selected').text()
+
+        return {
+            name: label,
+            benchmark: benchmark_id
+        }
+    }
+
+    function addBenchmark()
+    {
         var parent_node = $('#tree1').tree('getSelectedNode');
 
         $('#tree1').tree(
             'appendNode',
-            {
-                name: label,
-                benchmark: benchmark_id
-            },
+            getBenchmark(),
             parent_node
         );
 
-        $('#heading').val('');
+        clearForm();
+        saveStructure();
+        hideForm();
+    }
 
+    function saveHeading()
+    {
+        var selected_node = $('#tree1').tree('getSelectedNode');
+        var new_node = getHeading();
+
+        $('#tree1').tree(
+            'updateNode',
+            selected_node,
+            new_node
+        );
+
+        clearForm();
+        saveStructure();
+        hideForm();
+    }
+
+    function savePage()
+    {
+        var selected_node = $('#tree1').tree('getSelectedNode');
+        var new_node = getPage();
+
+        $('#tree1').tree(
+            'updateNode',
+            selected_node,
+            new_node
+        );
+
+        clearForm();
+        saveStructure();
+        hideForm();
+    }
+
+    function saveBenchmark()
+    {
+        var selected_node = $('#tree1').tree('getSelectedNode');
+        var new_node = getBenchmark();
+
+        $('#tree1').tree(
+            'updateNode',
+            selected_node,
+            new_node
+        );
+
+        clearForm();
         saveStructure();
         hideForm();
     }
@@ -341,12 +424,45 @@ $this->headScript()->appendFile(
     {
         var tree = $('#tree1');
         $('a.remove-node').click(function() {
+            console.log('remove')
             // Remove the selected node
             if (confirm('Are you sure you want to remove the selected node and all its children?')) {
                 var node = tree.tree('getSelectedNode');
                 tree.tree('removeNode', node);
                 saveStructure();
             }
+
+            return false;
+        })
+    }
+
+    function setupNodeEdit()
+    {
+        var tree = $('#tree1');
+        $('a.edit-node').click(function() {
+            // Edit the selected node
+            var node = tree.tree('getSelectedNode');
+
+            var heading = node.name;
+            $('#heading').val(heading);
+
+            var url = node.url;
+            $('#url').val(url);
+
+            var benchmark = node.benchmark;
+            $('#benchmark').val(benchmark);
+
+            if (node.benchmark) {
+                showBenchmarkForm();
+            } else if (node.url) {
+                showPageForm();
+            } else {
+                showHeadingForm()
+            }
+
+            editing = node;
+
+            showForm();
 
             return false;
         })
