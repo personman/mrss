@@ -70,6 +70,12 @@ class System
      */
     protected $dataEntryStructure = null;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Structure", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="reportStructure_id", referencedColumnName="id", nullable=true)
+     */
+    protected $reportStructure = null;
+
     public function __construct()
     {
         $this->colleges = new ArrayCollection();
@@ -250,6 +256,23 @@ class System
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getReportStructure()
+    {
+        return $this->reportStructure;
+    }
+
+    /**
+     * @param mixed $reportStructure
+     * @return System
+     */
+    public function setReportStructure($reportStructure)
+    {
+        $this->reportStructure = $reportStructure;
+        return $this;
+    }
 
 
     /**

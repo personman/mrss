@@ -34,7 +34,7 @@ class National extends Report
     {
         if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
             // @todo: change this to report structure
-            $benchmarkGroups = $system->getDataEntryStructure()->getPages();
+            $benchmarkGroups = $system->getReportStructure()->getPages();
         } else {
             $study = $this->getStudy();
             $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);

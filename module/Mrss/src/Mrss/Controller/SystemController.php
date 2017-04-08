@@ -36,7 +36,7 @@ class SystemController extends AbstractActionController
 
     public function viewAction()
     {
-        $systemModel = $this->getSystemModel();
+
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $id = $this->params('id');
 
@@ -44,11 +44,23 @@ class SystemController extends AbstractActionController
             throw new \Exception('You cannot view a system without the id.');
         }
 
-        $system = $systemModel->find($id);
+        $system = $this->getSystemModel()->find($id);
 
         if (empty($system)) {
             throw new \Exception('System not found.');
         }
+
+        $this->populateStructures($system);
+
+        return array(
+            'system' => $system,
+            'colleges' => $collegeModel->findAll()
+        );
+    }
+
+    protected function populateStructures(System $system)
+    {
+        $systemModel = $this->getSystemModel();
 
         // Create structures, if needed
         $studyConfig = $this->getServiceLocator()->get('study');
@@ -59,12 +71,14 @@ class SystemController extends AbstractActionController
                 $systemModel->save($system);
                 $systemModel->getEntityManager()->flush();
             }
-        }
 
-        return array(
-            'system' => $system,
-            'colleges' => $collegeModel->findAll()
-        );
+            if (!$system->getReportStructure()) {
+                $structure = new Structure();
+                $system->setReportStructure($structure);
+                $systemModel->save($system);
+                $systemModel->getEntityManager()->flush();
+            }
+        }
     }
 
     public function addAction()

@@ -108,7 +108,7 @@ $this->headScript()->appendFile(
                 var canMove = true;
 
                 // Benchmark nodes can't have children
-                if (target_node.benchmark) {
+                if (target_node.benchmark && position == 'inside') {
                     canMove = false;
                 }
 
