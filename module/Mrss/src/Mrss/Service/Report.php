@@ -112,6 +112,8 @@ class Report
      */
     protected $observationModel;
 
+    protected $system;
+
     /**
      * @var Smtp
      */
@@ -733,10 +735,25 @@ class Report
         );
     }
 
-    protected function getSystem()
+    public function setSystem($system)
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Entity\System
+     */
+    public function getSystem()
+    {
+        return $this->system;
+    }
+
+    /*protected function getSystem()
     {
         return null;
-    }
+    }*/
 
     protected function loadPercentileData($benchmarkData, $benchmark, $year, $forPercentChange = false)
     {
@@ -1763,5 +1780,17 @@ class Report
     public function getStudyConfig()
     {
         return $this->studyConfig;
+    }
+
+    public function getBenchmarkGroups($subscription)
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
+            $benchmarkGroups = $system->getReportStructure()->getPages();
+        } else {
+            $study = $this->getStudy();
+            $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        }
+
+        return $benchmarkGroups;
     }
 }

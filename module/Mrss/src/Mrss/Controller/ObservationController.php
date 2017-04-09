@@ -137,18 +137,6 @@ class ObservationController extends BaseController
         }
     }
 
-    protected function getMembership()
-    {
-        $year = $this->currentStudy()->getCurrentYear();
-        $membership = $this->getSubscriptionModel()->findOne(
-            $year,
-            $this->currentCollege()->getId(),
-            $this->currentStudy()->getId()
-        );
-
-        return $membership;
-    }
-
     public function overviewAction()
     {
         if ($redirect = $this->redirectIfNoMembership()) {
@@ -166,7 +154,7 @@ class ObservationController extends BaseController
         /** @var \Mrss\Entity\Study $currentStudy */
         $currentStudy = $this->currentStudy();
         $membership = $this->getMembership();
-        $benchmarkGroups = $this->getBenchmarkGroups();
+        $benchmarkGroups = $this->getBenchmarkGroups($membership);
         $observation = $this->getCurrentObservation();
         $completionPercentage = $currentStudy
             ->getCompletionPercentage($observation);
@@ -185,35 +173,6 @@ class ObservationController extends BaseController
             'completionPercentage' => $completionPercentage,
             'subscription' => $membership
         );
-    }
-
-    /**
-     * @return \Mrss\Entity\Structure
-     */
-    protected function getStructure()
-    {
-        //@todo: get from session
-        $currentSystem = $this->getActiveSystem();
-
-        $system = $this->getSystemModel()->find($currentSystem);
-        $structure = $system->getDataEntryStructure();
-
-        return $structure;
-    }
-
-    protected function getBenchmarkGroups()
-    {
-        if ($this->getStudyConfig()->use_structures) {
-            $structure = $this->getStructure();
-            $benchmarkGroups = $structure->getPages();
-
-        } else {
-            $currentStudy = $this->currentStudy();
-            $membership = $this->getMembership();
-            $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($membership);
-        }
-
-        return $benchmarkGroups;
     }
 
     /**
@@ -616,11 +575,6 @@ class ObservationController extends BaseController
                         <a href='/issues'>Please review</a>.";
 
         return $message;
-    }
-
-    protected function getStudyConfig()
-    {
-        return $this->getServiceLocator()->get('Study');
     }
 
     protected function getDataEntryLayout($benchmarkGroup)

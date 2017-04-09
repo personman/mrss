@@ -2105,8 +2105,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         // Should we limit this by system/network?
         if ($this->getStudyConfig()->use_structures) {
-            $systemId = $this->getActiveSystem();
-            $system = $this->getSystemModel()->find($systemId);
+            $system = $this->getActiveSystem();
             $colleges = $system->getMemberColleges();
 
             $subscriptions = array();

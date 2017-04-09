@@ -91,7 +91,7 @@ class ReportController extends ReportAdminController
         $otherSystems = array();
         if ($systemVersion) {
             // Confirm they're actually part of a system
-            $systemId = $this->getActiveSystem();
+            $systemId = $this->getActiveSystemId();
 
             if (empty($systemId)) {
                 $this->flashMessenger()->addErrorMessage(
@@ -352,6 +352,33 @@ class ReportController extends ReportAdminController
 
         $defaultBenchmarks = $this->getPeerBenchmarks($years[0], true);
 
+        // Is this a system report?
+        $systemVersion = $this->getStudyConfig()->use_structures;
+        $system = null;
+        $otherSystems = array();
+        if ($systemVersion) {
+            // Confirm they're actually part of a system
+            $systemId = $this->getActiveSystemId();
+
+            if (empty($systemId)) {
+                $this->flashMessenger()->addErrorMessage(
+                    'Your ' . $this->getStudyConfig()->institution_label . ' is not part of a system.'
+                );
+
+                return $this->redirect()->toUrl('/members');
+            } else {
+                $system = $this->getSystemModel()->find($systemId);
+
+                $systemMemberships = $this->currentCollege()->getSystemMemberships();
+                foreach ($systemMemberships as $systemMembership) {
+                    if ($systemId != $systemMembership->getSystem()->getId()) {
+                        $otherSystems[] = $systemMembership->getSystem();
+                    }
+                }
+            }
+        }
+
+
         $form = new PeerComparison(
             $years,
             $defaultBenchmarks,
@@ -433,7 +460,9 @@ class ReportController extends ReportAdminController
             'form' => $form,
             'peerGroup' => $peerGroup,
             'peerGroups' => $peerGroups,
-            'criteria' => $criteria
+            'criteria' => $criteria,
+            'system' => $system,
+            'otherSystems' => $otherSystems
         );
     }
 
@@ -719,6 +748,8 @@ class ReportController extends ReportAdminController
                 );
             }
 
+            $colleges = $this->filterCollegesBySystem($colleges, $year);
+
             $collegeData = array();
             foreach ($colleges as $college) {
                 $collegeData[] = array(
@@ -739,6 +770,29 @@ class ReportController extends ReportAdminController
         }
     }
 
+    protected function filterCollegesBySystem($colleges, $year)
+    {
+        if ($this->getStudyConfig()->use_structures) {
+            $filteredColleges = array();
+
+            $activeSystem = $this->getActiveSystem();
+
+            $memberColleges = $activeSystem->getMemberColleges();
+            foreach ($colleges as $college) {
+                if (!empty($memberColleges[$college->getId()])) {
+                    $memberCollegeInfo = $memberColleges[$college->getId()];
+                    if (in_array($year, $memberCollegeInfo['years'])) {
+                        $filteredColleges[] = $college;
+                    }
+                }
+            }
+
+            $colleges = $filteredColleges;
+        }
+
+        return $colleges;
+    }
+
     public function getPeerBenchmarks($year, $collapse = false)
     {
         $this->longRunningScript();
@@ -749,7 +803,7 @@ class ReportController extends ReportAdminController
         $study = $this->currentStudy();
 
         $benchmarkGroupData = array();
-        foreach ($study->getBenchmarkGroupsBySubscription($subscription) as $benchmarkGroup) {
+        foreach ($this->getBenchmarkGroups($subscription) as $benchmarkGroup) {
             $group = $benchmarkGroup->getName();
             $benchmarkData = array();
 

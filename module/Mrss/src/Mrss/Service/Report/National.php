@@ -27,21 +27,6 @@ class National extends Report
      */
     protected $percentileRankModel;
 
-    protected $system;
-
-
-    public function getBenchmarkGroups($subscription)
-    {
-        if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
-            // @todo: change this to report structure
-            $benchmarkGroups = $system->getReportStructure()->getPages();
-        } else {
-            $study = $this->getStudy();
-            $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
-        }
-
-        return $benchmarkGroups;
-    }
 
     public function getData(Subscription $subscription, $system = null, $benchmarkGroupId = null)
     {
@@ -327,20 +312,5 @@ class National extends Report
     public function getPercentileRankModel()
     {
         return $this->percentileRankModel;
-    }
-
-    public function setSystem($system)
-    {
-        $this->system = $system;
-
-        return $this;
-    }
-
-    /**
-     * @return \Mrss\Entity\System
-     */
-    public function getSystem()
-    {
-        return $this->system;
     }
 }

@@ -26,6 +26,13 @@ class BaseController extends AbstractActionController
 
     public function getActiveSystem()
     {
+        $systemId = $this->getActiveSystemId();
+        $system = $this->getSystemModel()->find($systemId);
+
+        return $system;
+    }
+    public function getActiveSystemId()
+    {
         $systemId = $this->getActiveSystemContainer()->system_id;
 
         // If none is set yet, just, uh, grab one
@@ -37,6 +44,50 @@ class BaseController extends AbstractActionController
         }
 
         return $systemId;
+    }
+
+    protected function getStudyConfig()
+    {
+        return $this->getServiceLocator()->get('Study');
+    }
+
+    /**
+     * @return \Mrss\Entity\Structure
+     */
+    protected function getStructure()
+    {
+        $currentSystem = $this->getActiveSystem();
+
+
+        $structure = $currentSystem->getDataEntryStructure();
+
+        return $structure;
+    }
+
+    protected function getBenchmarkGroups($subscription)
+    {
+        if ($this->getStudyConfig()->use_structures) {
+            $structure = $this->getStructure();
+            $benchmarkGroups = $structure->getPages();
+
+        } else {
+            $currentStudy = $this->currentStudy();
+            $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($subscription);
+        }
+
+        return $benchmarkGroups;
+    }
+
+    protected function getMembership()
+    {
+        $year = $this->currentStudy()->getCurrentYear();
+        $membership = $this->getSubscriptionModel()->findOne(
+            $year,
+            $this->currentCollege()->getId(),
+            $this->currentStudy()->getId()
+        );
+
+        return $membership;
     }
 
     /**

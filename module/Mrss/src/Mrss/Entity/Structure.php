@@ -295,6 +295,18 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         return $this->getBenchmarkModel()->find($benchmarkId);
     }
 
+    public function getBenchmarksForYear($year)
+    {
+        $benchmarksForYear = array();
+        foreach ($this->getAllBenchmarks() as $benchmark) {
+            if ($benchmark->isAvailableForYear($year)) {
+                $benchmarksForYear[] = $benchmark;
+            }
+        }
+
+        return $benchmarksForYear;
+    }
+
     public function setBenchmarkModel($model)
     {
         $this->benchmarkModel = $model;
