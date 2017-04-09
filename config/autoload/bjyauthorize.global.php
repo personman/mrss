@@ -206,6 +206,11 @@ return array(
                     'action' => array('add', 'edit'),
                     'roles' => array('contact')
                 ),
+                array(
+                    'controller' => 'observations',
+                    'action' => array('dataEntrySwitch'),
+                    'roles' => array('viewer')
+                ),
 
                 // Data users:
                 array(
