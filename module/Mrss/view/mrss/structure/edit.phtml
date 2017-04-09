@@ -202,7 +202,7 @@ $this->headScript()->appendFile(
         addType = 'benchmark';
         $('#control-group-heading').hide();
         $('#control-group-url').hide();
-        $('#control-group-benchmark').show();
+        $('#control-group-benchmark').show().find('select').trigger('chosen:activate');
         showForm();
     }
 
@@ -431,7 +431,6 @@ $this->headScript()->appendFile(
     {
         var tree = $('#tree1');
         $('a.remove-node').click(function() {
-            console.log('remove')
             // Remove the selected node
             if (confirm('Are you sure you want to remove the selected node and all its children?')) {
                 var node = tree.tree('getSelectedNode');
