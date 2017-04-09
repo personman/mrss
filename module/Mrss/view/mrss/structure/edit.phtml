@@ -350,6 +350,8 @@ $this->headScript()->appendFile(
             parent_node
         );
 
+        $('#tree').tree('openNode', parent_node);
+
         clearForm();
         saveStructure();
         hideForm();

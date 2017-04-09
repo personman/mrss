@@ -43,13 +43,14 @@
 </div>
 
 <script type="text/javascript">
-    <?php $this->headScript()->captureStart() ?>
     $(function() {
         // When the "Add to equation button" is clicked
         $('.addToEquation').click(function() {
+            console.log('clicked')
             // Find the column to add
             dbColumn = $(this).parent().parent().find('.dbColumn').html().trim()
 
+            console.log(dbColumn)
             // Wrap it in {{}}
             benchmarkToAdd = "{{" + dbColumn + "}}"
 
@@ -62,5 +63,4 @@
             $('#myModal').modal('hide')
         })
     })
-    <?php $this->headScript()->captureEnd() ?>
 </script>
