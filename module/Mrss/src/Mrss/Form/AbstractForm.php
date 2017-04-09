@@ -119,7 +119,8 @@ class AbstractForm extends Form
                 'label' => $label
             ),
             'attributes' => array(
-                'rows' => 8
+                'rows' => 8,
+                'id' => 'description'
             )
         );
 

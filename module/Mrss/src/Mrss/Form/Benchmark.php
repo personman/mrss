@@ -34,7 +34,8 @@ class Benchmark extends AbstractForm
                     version will be used in reports. For dynamic years, use [year], [year_minus_2], etc.'
                 ),
                 'attributes' => array(
-                    'rows' => 8
+                    'rows' => 8,
+                    'id' => 'reportDescription'
                 )
             )
         );
