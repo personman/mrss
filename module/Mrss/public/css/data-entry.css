@@ -166,10 +166,10 @@ h3.heading {
 }
 
 /* Only show data definition when the field is focused */
-.control-group p {
+.control-group div.help-block {
     display: none
 }
-.control-group.focus p {
+.control-group.focus div.help-block {
     display: block;
 }
 

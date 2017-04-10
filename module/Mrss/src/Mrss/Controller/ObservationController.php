@@ -420,6 +420,10 @@ class ObservationController extends BaseController
             !$dataEntryOpen
         );
 
+        $viewHelperManager = $this->getServiceLocator()->get('viewhelpermanager');
+        $descriptionHelper = $viewHelperManager->get('ztbformdescription');
+        $descriptionHelper->setBlockWrapper('<div class="help-block">%s</div>');
+
 
         $class = 'data-entry-form form-horizontal ' . $benchmarkGroup->getFormat();
 
