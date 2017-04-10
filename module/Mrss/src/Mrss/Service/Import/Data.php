@@ -30,7 +30,7 @@ class Data extends Import
     protected $year = 2014;
 
 
-    protected $file = 'data/imports/envisio-import-safety.xlsx';
+    protected $file = 'data/imports/envisio-import.xlsx';
 
     protected $map = array();
 
@@ -258,14 +258,14 @@ class Data extends Import
         $map = array(
             'name', // Not used
             'ipeds',
-            //'population',
-            //'median_household_income',
-            //'poverty',
+            'population',
+            'median_household_income',
+            'poverty',
             'fireresponse',
             'totalfireservicecalls',
             'policeresponsetimes',
             'policecalls1',
-            /*'vcr1',
+            'vcr1',
             'pcr',
             'vccr',
             'pccr',
@@ -282,7 +282,7 @@ class Data extends Import
             'trashbill',
             'wastediv',
             'employ1',
-            'bondrating'*/
+            'bondrating'
         );
 
         $withNumbers = array();
