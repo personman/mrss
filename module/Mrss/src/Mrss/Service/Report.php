@@ -1093,6 +1093,12 @@ class Report
             );
         }
 
+        if ($benchmark->isNumericalRadio()) {
+            $keys = array_keys($benchmark->getOptionsForForm());
+            $maxKey = max($keys);
+            $chart['yAxis']['max'] = $maxKey;
+        }
+
         if (!empty($chartConfig['yAxisMax'])) {
             $chart['yAxis']['max'] = $chartConfig['yAxisMax'];
         }
