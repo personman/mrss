@@ -5,7 +5,7 @@ $tableHeadingColSpan = ($forPercentChange) ? 4 : 2;
 /** @var \Mrss\Entity\System[] $otherSystems */
 ?>
 
-<?= $this->headLink()->appendStylesheet('/css/report.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/report.css?v=2') ?>
 <?php
 $this->headScript()->appendFile(
     '/js/report.js?v=6',
@@ -257,9 +257,9 @@ $this->headScript()->appendFile(
                             <?php endif ?>
 
                             <?php if (!empty($benchmark['description'])): ?>
-                            <p class="nationalDataDefinition">
+                            <div class="nationalDataDefinition">
                                 <?= $benchmark['description'] ?>
-                            </p>
+                            </div>
                             <?php endif ?>
                         </td>
                     </tr>

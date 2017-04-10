@@ -302,12 +302,14 @@ class Peer extends Report
     public function getYourCollegeColor()
     {
         //return '#002C57';
-        return '#9cc03e';
+        //return '#9cc03e';
+        return $this->getChartColor(0);
     }
 
     public function getPeerColor()
     {
-        return '#0065A1';
+        //return '#0065A1';
+        return $this->getChartColor(1);
     }
 
     public function getPeerBarChart(BenchmarkEntity $benchmark, $data, $title = null, $subtitle = null)

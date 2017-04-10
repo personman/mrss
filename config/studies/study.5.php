@@ -18,6 +18,7 @@ return array(
     'anonymous_peers' => false,
     'peer_percentiles' => false,
     'include_canada' => true,
+    'chart_colors' => '#007ca0|#a2ce5d|#828387|#fbb41e',
     'national_report_name' => 'Benchmark Report',
     'your_institution_label' => 'Your City',
     'institution_label' => 'City',

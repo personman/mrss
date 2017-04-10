@@ -22,7 +22,6 @@ tr.topHeading th.benchmarkGroupTitle {
 .report tbody td {
     text-align: right;
 }
-
 .report tbody td.benchmarkLabel {
     text-align: left;
     font-weight: bold;

@@ -40,6 +40,7 @@ return array(
     'anonymous_peers' => true,
     'peer_percentiles' => true, // Show national percentiles on peer comparison results?
     'benchmark_completion_heatmap' => false,
+    'chart_colors' => '#9cc03e|#0065A1',
     'head_logo_url' => '/',
     'national_report_name' => 'Report of National Aggregate Data',
     'your_institution_label' => 'Your Institution',

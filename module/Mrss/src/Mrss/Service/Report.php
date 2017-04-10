@@ -1131,6 +1131,7 @@ class Report
     {
         // Default
         $color = '#0065A1';
+        $color = $this->getChartColor(1);
 
         // Override for Max
         if ($this->getStudy()->getId() == 2) {
@@ -1145,9 +1146,28 @@ class Report
         //$color = '#002C57';
         $color = '#9cc03e';
 
+        $color = $this->getChartColor(0);
+
+
         return $color;
     }
 
+
+    public function getChartColors()
+    {
+        return explode('|', $this->getStudyConfig()->chart_colors);
+    }
+
+    public function getChartColor($key)
+    {
+        $color = null;
+        $colors = $this->getChartColors();
+        if (!empty($colors[$key])) {
+            $color = $colors[$key];
+        }
+
+        return $color;
+    }
 
     protected function isNoelLevitz($dbColumn)
     {
