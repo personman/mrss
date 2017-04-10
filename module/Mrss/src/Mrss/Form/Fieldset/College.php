@@ -10,15 +10,15 @@ class College extends Fieldset implements InputFilterProviderInterface
 {
     protected $includeCanada = false;
 
-    public function __construct($includeExec = false, $includeCanada = false)
+    public function __construct($includeExec = false, $includeCanada = false, $institutionLabel = 'Institution')
     {
         $this->includeCanada = $includeCanada;
 
         parent::__construct('institution');
 
-        $this->setLabel('Institution');
+        $this->setLabel($institutionLabel);
 
-        $this->addBasicFields();
+        $this->addBasicFields($institutionLabel);
 
         if ($includeExec) {
             $this->addExecutiveFields();
@@ -26,14 +26,14 @@ class College extends Fieldset implements InputFilterProviderInterface
         }
     }
 
-    protected function addBasicFields()
+    protected function addBasicFields($institutionLabel)
     {
         $this->add(
             array(
                 'name' => 'name',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Name of Institution'
+                    'label' => 'Name of ' . $institutionLabel
                 ),
                 'attributes' => array(
                     'id' => 'institution-name'
@@ -46,7 +46,7 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'name' => 'abbreviation',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Abbreviation for Institution'
+                    'label' => 'Abbreviation for ' . $institutionLabel
                 ),
                 'attributes' => array(
                     'id' => 'institution-abbreviation'

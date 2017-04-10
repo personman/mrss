@@ -1,4 +1,4 @@
-<h1>Edit <?php if (!$isAdmin): ?>Your <?php endif ?>Institution</h1>
+<h1>Edit <?php if (!$isAdmin): ?>Your <?php endif ?><?= $this->studyConfig()->institution_label ?></h1>
 
 <?php
 $form->setAttribute('action', $this->url('institution/edit'));

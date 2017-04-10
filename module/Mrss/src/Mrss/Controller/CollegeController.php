@@ -204,7 +204,11 @@ class CollegeController extends AbstractActionController
 
         $config = $this->getStudyConfig();
 
-        $collegeFieldset = new \Mrss\Form\Fieldset\College(true, $config->include_canada);
+        $collegeFieldset = new \Mrss\Form\Fieldset\College(
+            true,
+            $config->include_canada,
+            $config->institution_label
+        );
 
         $collegeFieldset->setUseAsBaseFieldset(true);
 

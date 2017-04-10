@@ -866,7 +866,7 @@ function getAdminMenu()
 {
     return array(
     'dashboard' => array(
-        'label' => 'Memberships',
+        'label' => 'Overview',
         'route' => 'admin'
     ),
     'institutions' => array(
@@ -874,6 +874,10 @@ function getAdminMenu()
         'controller' => 'colleges',
         'action' => 'index',
         'route' => 'colleges'
+    ),
+    'systems' => array(
+        'label' => 'Systems',
+        'route' => 'systems'
     ),
     'studies' => array(
         'label' => 'Study Setup',
@@ -895,10 +899,6 @@ function getAdminMenu()
     'demographic-criteria' => array(
         'label' => 'Demographic Criteria',
         'route' => 'criteria'
-    ),
-    'systems' => array(
-        'label' => 'Systems',
-        'route' => 'systems'
     ),
     array(
         'label' => 'Pages',
