@@ -22,6 +22,7 @@ return array(
     'your_institution_label' => 'Your City',
     'institution_label' => 'City',
     'institutions_label' => 'Cities',
+    'benchmark_label' => 'measure',
     'contact_instructions' => '',
     'copyright' => date('Y') . " Envisio",
     'footerLogo' => '',

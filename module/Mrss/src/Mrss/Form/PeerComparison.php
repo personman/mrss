@@ -32,7 +32,7 @@ class PeerComparison extends AbstractForm
                 'name' => 'benchmarks',
                 'type' => 'Select',
                 'options' => array(
-                    'label' => 'Benchmark(s)'
+                    'label' => ucwords($studyConfig->benchmark_label) . '(s)'
                 ),
                 'attributes' => array(
                     'id' => 'benchmarks',

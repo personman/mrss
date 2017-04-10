@@ -35,6 +35,7 @@ return array(
     'default_user_state' => 1, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
     'system_label' => 'network',
+    'benchmark_label' => 'benchmark',
     'system_benchmarks' => true,
     'anonymous_peers' => true,
     'peer_percentiles' => true, // Show national percentiles on peer comparison results?
