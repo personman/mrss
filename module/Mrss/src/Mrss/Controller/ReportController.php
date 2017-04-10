@@ -105,7 +105,7 @@ class ReportController extends ReportAdminController
                 $systems = $this->currentCollege()->getSystems();
                 foreach ($systems as $otherSystem) {
                     if ($systemId != $otherSystem->getId()) {
-                        $otherSystems[] = $system;
+                        $otherSystems[] = $otherSystem;
                     }
                 }
             }
