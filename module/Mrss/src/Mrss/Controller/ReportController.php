@@ -369,10 +369,10 @@ class ReportController extends ReportAdminController
             } else {
                 $system = $this->getSystemModel()->find($systemId);
 
-                $systemMemberships = $this->currentCollege()->getSystemMemberships();
+                $systemMemberships = $this->currentCollege()->getSystems();
                 foreach ($systemMemberships as $systemMembership) {
-                    if ($systemId != $systemMembership->getSystem()->getId()) {
-                        $otherSystems[] = $systemMembership->getSystem();
+                    if ($systemId != $systemMembership->getId()) {
+                        $otherSystems[] = $systemMembership;
                     }
                 }
             }
