@@ -34,8 +34,13 @@ $this->headScript()->appendFile(
 </h1>
 
 <?php if (count($otherSystems)): ?>
-    Change Network:
     <ul class="nav nav-pills report-nav">
+        <li class="active">
+            <a href="/reports/network">
+                <?= $system->getName() ?>
+            </a>
+        </li>
+
         <?php foreach ($otherSystems as $otherSystem): ?>
         <li>
             <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('reports/network') ?>">
