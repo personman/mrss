@@ -703,7 +703,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $isNumerical;
     }
 
-    protected function getOptionsForForm()
+    public function getOptionsForForm()
     {
         $options = explode("\n", $this->getOptions());
 

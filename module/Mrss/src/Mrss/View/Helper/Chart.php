@@ -92,6 +92,23 @@ class Chart extends AbstractHelper
         $minuteSecondFormatter = 'ormatter":function () {return minuteSecondFormatter(this)}';
         $config = str_replace('ormat":"minuteSecondFormatter"', $minuteSecondFormatter, $config);
 
+
+        $regex = '/ormat":"{numericalOptions: {(.*?)}"/';
+        preg_match($regex, $config, $matches);
+
+        if ($matches[1]) {
+            $numOptions = '"{' . $matches[1] . '"';
+            $numericalFormatter = 'ormatter": function () {return numericRadio(this, ' . $numOptions . ')}';
+            //pr($config);
+            $config = preg_replace($regex, $numericalFormatter, $config);
+            //pr($config);
+            //pr($numericalFormatter);
+            //echo $config; die;
+            //prd($matches);
+
+        }
+        //$config = preg_replace('ormat"\:"{numericalOptions\:{(.*)}', $numericalFormatter, $config);
+
         //pr($config);
 
         return $config;

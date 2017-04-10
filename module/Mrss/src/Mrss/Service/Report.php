@@ -408,6 +408,10 @@ class Report
             }
         }
 
+        if ($benchmark->isNumericalRadio()) {
+            $decimalPlaces = 1;
+        }
+
         return $decimalPlaces;
     }
 
@@ -1202,6 +1206,11 @@ class Report
             $format = "{y:$numberFormat}%";
         } elseif ($benchmark->isDollars()) {
             $format = "\${y:$numberFormat}";
+        } elseif ($benchmark->isNumericalRadio()) {
+            $options = $benchmark->getOptionsForForm();
+            $options = json_encode($options);
+            $format = '{numericalOptions: ' . $options . '}';
+
         }
 
         if ($benchmark->getInputType() == 'minutesseconds') {
