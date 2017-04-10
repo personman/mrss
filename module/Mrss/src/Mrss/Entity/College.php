@@ -643,12 +643,19 @@ class College
         return $this->systemMemberships;
     }
 
-    public function getSystemNames()
+    public function getSystems()
     {
         $systems = array();
         foreach ($this->getSystemMemberships() as $membership) {
             $systems[$membership->getSystem()->getId()] = $membership->getSystem();
         }
+
+        return $systems;
+    }
+
+    public function getSystemNames()
+    {
+        $systems = $this->getSystems();
 
         $names = array();
         foreach ($systems as $system) {
