@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
+use Doctrine\Common\Collections\Criteria;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
@@ -61,6 +62,7 @@ class System
 
     /**
      * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="system")
+     * @ORM\OrderBy({"created" = "DESC"})
      */
     protected $memberships;
 
@@ -223,6 +225,20 @@ class System
     /**
      * @return null|SystemMembership[]
      */
+    public function getRecentMemberships($year, $limit = 3)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('year', $year))
+            ->setMaxResults($limit);
+
+        $memberships = $this->getMemberships()->matching($criteria);
+
+        return $memberships;
+    }
+
+    /**
+     * @return null|SystemMembership[]
+     */
     public function getMemberships()
     {
         return $this->memberships;
@@ -239,7 +255,7 @@ class System
     }
 
     /**
-     * @return mixed
+     * @return \Mrss\Entity\Structure
      */
     public function getDataEntryStructure()
     {

@@ -1,1 +1,93 @@
-dashboard
+<?php /** @var \Mrss\Entity\System[] $systems */ ?>
+
+
+
+<div class="slider-container">
+    <div class="slider-container-overlay">&nbsp;</div>
+
+    <div class="carousel"><img src="http://design.app.benchmark.envisio.com/images/chart.jpg" /></div>
+</div>
+
+<?php foreach ($systems as $system): ?>
+<div class="network-wrap">
+    <h1><?= $system->getName() ?></h1>
+
+    <div class="col-sm-3 network-progress">
+        <div class="row">
+            <div class="network-progress-graph">&nbsp;</div>
+            <span>Data Entry Progress <?= $yearRange ?></span></div>
+    </div>
+
+    <div class="col-sm-6 network-dataentry">
+        <ul>
+    <li><strong>Service Area <?= $yearRange ?></strong></li>
+
+            <?php foreach ($system->getDataEntryStructure()->getPages() as $benchmarkGroup): ?>
+                <?php $bgCompletion = round($benchmarkGroup->getCompletionPercentageForObservation($observation)); ?>
+                <?php
+                $completionColor = '#cc181e';
+                if ($bgCompletion > 75) {
+                    $completionColor = '#5fa80b';
+                } else if ($bgCompletion > 50) {
+                    $completionColor = '#cc181e';
+                }
+
+                ?>
+
+            <li><span class="service-area-type"><?= $benchmarkGroup->getLabel() ?></span>
+                <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
+                    <div class="data-entry-progress-bar">
+                        <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
+                    </div>
+                </div>
+            </li>
+            <?php endforeach ?>
+        </ul>
+        <a class="data-entry-readmore">Show All [+]</a></div>
+
+    <div class="col-sm-3 network-contributor"><strong class="big-number"><?= count($system->getColleges()) ?> <span>Cities</span></strong>
+
+        <div class="newest-contributors"><strong>Newest Members</strong>
+
+            <ul>
+                <?php foreach ($system->getRecentMemberships($year) as $systemMembership): ?>
+                <li><?= $systemMembership->getCollege()->getName() ?></li>
+                <?php endforeach ?>
+            </ul>
+        </div>
+    </div>
+
+    <div class="clear">&nbsp;</div>
+</div>
+<?php endforeach ?>
+
+
+<script>
+    $( ".network-wrap .network-dataentry ul" ).each(function( index ) {
+        $(this).children('li').each(function( index ) {
+            if (index > 5) {
+                $(this).css('display', 'none');
+            }
+        });
+    });
+
+    $( ".data-entry-readmore" ).each(function( index ) {
+        var showAll = false;
+        $(this).click(function(){
+            if (showAll == false) {
+                $(this).text('Show Less [-]');
+                $(this).prev('.network-wrap .network-dataentry ul').children('li').css('display', 'block');
+                showAll = true;
+            } else {
+                $(this).text('Show All [+]');
+                $(this).prev('.network-wrap .network-dataentry ul').children('li').each(function( index ) {
+                    if (index > 5) {
+                        $(this).css('display', 'none');
+                    }
+                    showAll = false;
+                });
+            }
+        });
+    });
+</script>
+
