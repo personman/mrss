@@ -25,11 +25,11 @@
             <?php foreach ($system->getDataEntryStructure()->getPages() as $benchmarkGroup): ?>
                 <?php $bgCompletion = round($benchmarkGroup->getCompletionPercentageForObservation($observation)); ?>
                 <?php
-                $completionColor = '#cc181e';
+                $completionColor = '#cc181e'; // Red
                 if ($bgCompletion > 75) {
-                    $completionColor = '#5fa80b';
+                    $completionColor = '#5fa80b'; // Green
                 } else if ($bgCompletion > 50) {
-                    $completionColor = '#cc181e';
+                    $completionColor = '#fbb41e'; // Yellow
                 }
 
                 ?>
