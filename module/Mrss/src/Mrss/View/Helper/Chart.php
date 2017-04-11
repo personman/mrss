@@ -96,7 +96,7 @@ class Chart extends AbstractHelper
         $regex = '/ormat":"{numericalOptions: {(.*?)}"/';
         preg_match($regex, $config, $matches);
 
-        if ($matches[1]) {
+        if (!empty($matches[1])) {
             $numOptions = '"{' . $matches[1] . '"';
             $numericalFormatter = 'ormatter": function () {return numericRadio(this, ' . $numOptions . ')}';
             //pr($config);

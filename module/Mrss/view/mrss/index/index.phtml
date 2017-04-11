@@ -34,12 +34,15 @@
 
                 ?>
 
-            <li><span class="service-area-type"><?= $benchmarkGroup->getLabel() ?></span>
+            <li>
+                <a href="/network-switch/<?= $system->getId() . '?redirect=' . urlencode('data-entry/edit') ?>">
+                <span class="service-area-type"><?= $benchmarkGroup->getLabel() ?></span>
                 <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
                     <div class="data-entry-progress-bar">
                         <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
                     </div>
                 </div>
+                </a>
             </li>
             <?php endforeach ?>
         </ul>
