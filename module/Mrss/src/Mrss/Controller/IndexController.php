@@ -11,13 +11,28 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-        $this->layout()->noWrapper = true;
+        $year = $this->currentStudy()->getCurrentYear();
 
-        return new ViewModel();
+        // Get this year's memberships by network
+        $subscriptions = $this->getCollege()->getSystemsByYear($year);
+
+        $viewParams = array();
+
+        return new ViewModel($viewParams);
     }
 
     public function glossaryAction()
     {
         return new ViewModel();
+    }
+
+    /**
+     * @return \Mrss\Entity\College
+     */
+    protected function getCollege()
+    {
+        if ($user = $this->zfcUserAuthentication()->getIdentity()) {
+            return $user->getCollege();
+        }
     }
 }

@@ -665,6 +665,18 @@ class College
         return $names;
     }
 
+    public function getSystemsByYear($year)
+    {
+        $systems = array();
+        foreach ($this->getSystemMemberships() as $systemMembership) {
+            if ($year == $systemMembership->getYear()) {
+                $systems[] = $systemMembership->getSystem();
+            }
+        }
+
+        return $systems;
+    }
+
     public function hasSystemMembership($systemId)
     {
         $has = false;
