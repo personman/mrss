@@ -192,6 +192,15 @@ class NavigationFactory extends DefaultNavigationFactory
                 unset($pages['account']['pages']['membership-edit']);
             }
 
+            // NCCBP only:
+            if ($currentStudy->getId() == 1) {
+                $pages['data-documentation']['pages']['financial'] = array(
+                    'label' => 'Financial Tools',
+                    'uri' => '/financial-tools'
+                );
+            }
+
+
         } else {
             // Hide some pages from non-logged-in users
             unset($pages['data-entry']);
