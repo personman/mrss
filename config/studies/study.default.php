@@ -36,6 +36,7 @@ return array(
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
     'system_label' => 'network',
     'benchmark_label' => 'benchmark',
+    'form_label' => 'form',
     'system_benchmarks' => true,
     'anonymous_peers' => true,
     'peer_percentiles' => true, // Show national percentiles on peer comparison results?

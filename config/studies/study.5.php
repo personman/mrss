@@ -24,6 +24,7 @@ return array(
     'institution_label' => 'City',
     'institutions_label' => 'Cities',
     'benchmark_label' => 'measure',
+    'form_label' => 'service area',
     'contact_instructions' => '',
     'copyright' => date('Y') . " Envisio",
     'footerLogo' => '',
