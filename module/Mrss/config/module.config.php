@@ -48,6 +48,17 @@ return array(
                 )
             ),
 
+            'members' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/members',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action' => 'index'
+                    )
+                )
+            ),
+
             'submitted-values' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
@@ -2538,7 +2549,7 @@ return array(
                     )
                 )
             ),
-            'members' => array(
+            /*'members' => array(
                 'type' => 'segment',
                 'options' => array(
                     'route' => '/members',
@@ -2547,7 +2558,7 @@ return array(
                         'action' => 'view'
                     )
                 )
-            ),
+            ),*/
             'reset-password' => array(
                 'type' => 'literal',
                 'options' => array(
