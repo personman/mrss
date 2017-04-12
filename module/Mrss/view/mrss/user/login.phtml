@@ -1,6 +1,10 @@
+
+<img class="img-responsive" id="loginLogo" alt="<?= $this->currentStudy()->getDescription() ?>" src="<?= $this->currentStudy()->getLogo() ?>" title="<?= $this->currentStudy()->getDescription() ?>" />
+
 <h1>Sign In</h1>
 
 <?php
+$this->layout()->bodyId = 'loginPage';
 
 // Redirect to /members
 if (empty($this->redirect)) {
@@ -37,7 +41,7 @@ $form->get('submit')->setAttribute('class', 'btn btn-primary');
 
 <?php echo $this->form()->closeTag() ?>
 
-<p><a href="/reset-password">Get a new password.</a></p>
+<p class="passwordResetLink"><a href="/reset-password">Get a new password.</a></p>
 
 <?php if ($this->enableRegistration) : ?>
     <p>Not registered? <a href="<?php echo $this->url('zfcuser/register') . ($this->redirect ? '?redirect='.$this->redirect : '') ?>">Sign up!</a></p>

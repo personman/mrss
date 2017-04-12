@@ -7,7 +7,7 @@
 
     <?= $this->headTitle() ?>
 
-    <link rel="stylesheet" type="text/css" href="/css/app.css?v=11">
+    <link rel="stylesheet" type="text/css" href="/css/app.css?v=12">
     <link rel="stylesheet" type="text/css" href="/css/content.css">
     <link rel="stylesheet" type="text/css" href="/css/tooltipster.css">
 
@@ -17,7 +17,7 @@
     <link href="/css/content.css" rel="stylesheet" type="text/css" />
 
     <?php if ($cssFile = $this->studyConfig()->css): ?>
-        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=25">
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=26">
     <?php endif ?>
 
     <?php if ($cssPrintFile = $this->studyConfig()->css_print): ?>
@@ -47,7 +47,10 @@
 
 
 </head>
-<body>
+
+<?php $bodyId = ($this->bodyId) ? 'id="' . $this->bodyId . '"' : null ?>
+
+<body <?= $bodyId ?>>
 
 <?php $headerTitle = $this->studyConfig()->header_title; ?>
 <?php if ($headerTitle) {
