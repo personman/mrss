@@ -148,6 +148,11 @@ class Chart extends AbstractHelper
                 'text/javascript'
             );
 
+            $this->getView()->headScript()->appendFile(
+                '/js/highcharts-solid-gauge.js?v=3',
+                'text/javascript'
+            );
+
             // Our plugin for legend subheadings
             $this->getView()->headScript()->appendFile(
                 '/js/highcharts-legend-subheadings.js?v=1',

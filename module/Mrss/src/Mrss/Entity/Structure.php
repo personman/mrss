@@ -270,8 +270,14 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
     {
         $pageStructure = $this->getPageStructure();
 
+        if (empty($pageStructure)) {
+            $pageStructure = $this->getStructureArray();
+        } else {
+            $pageStructure = array($pageStructure);
+        }
+
         // Recursive:
-        $this->getBenchmarks(array($pageStructure));
+        $this->getBenchmarks($pageStructure);
 
         return $this->benchmarks;
     }
