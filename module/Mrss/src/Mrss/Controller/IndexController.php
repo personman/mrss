@@ -11,13 +11,20 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
+        $college = $this->getCollege();
+
+        if (empty($college)) {
+            return $this->redirect()->toUrl('/user/login');
+        }
+
+
         $this->layout()->noWrapper = true;
         $this->layout()->wrapperId = 'home';
 
         $year = $this->currentStudy()->getCurrentYear();
 
         // Get this year's memberships by network
-        $systems = $this->getCollege()->getSystemsByYear($year);
+        $systems = $college->getSystemsByYear($year);
         $nextYear = $year + 1;
         $yearRange = "$year - $nextYear";
 
