@@ -8,6 +8,10 @@ $(function() {
 
 function addAdminMenuSearch()
 {
+    if (institutionsLabel) {
+        menuSearchPlaceholder = menuSearchPlaceholder.replace('Institutions', institutionsLabel);
+    }
+
     // The li and form
     var li = $('<li>');
     var form = $('<form>');
@@ -180,4 +184,10 @@ function pad(pad, str, padLeft) {
     } else {
         return (str + pad).substring(0, pad.length);
     }
+}
+
+function ucwords (str) {
+    return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+        return $1.toUpperCase();
+    });
 }

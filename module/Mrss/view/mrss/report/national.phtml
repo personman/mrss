@@ -33,6 +33,12 @@ $this->headScript()->appendFile(
     <?php endif ?>
 </h1>
 
+<p class="reportPreparedFor">
+    Prepared for <?= $college->getName() ?>
+</p>
+
+
+
 <?php if (count($otherSystems)): ?>
     <ul class="nav nav-pills report-nav">
         <li class="active">
@@ -60,10 +66,6 @@ $this->headScript()->appendFile(
     <?php endforeach ?>
 </ul>
 
-
-<p>
-    Prepared for <?= $college->getName() ?>
-</p>
 
 
 <div class="reportDownloads">

@@ -281,7 +281,11 @@ function placeAddSecondBenchmarkButton(benchmark)
 {
     var id = getSecondBenchmarkButtonId();
     var button = $('<a>', {class: 'btn btn-default btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
-    button.text('Add a Second Benchmark');
+    var buttonLabel = 'Add a Second Benchmark'
+    if (benchmarkLabel) {
+        buttonLabel = buttonLabel.replace('Benchmark', ucwords(benchmarkLabel));
+    }
+    button.text(buttonLabel);
 
     button.click(function() {
         addSecondBenchmarkButtonClicked(benchmark);
