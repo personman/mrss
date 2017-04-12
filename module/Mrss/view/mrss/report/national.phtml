@@ -43,7 +43,7 @@ $this->headScript()->appendFile(
 
         <?php foreach ($otherSystems as $otherSystem): ?>
         <li>
-            <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('reports/network') ?>">
+            <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('/reports/network') ?>">
                 <?= $otherSystem->getName() ?>
             </a>
         </li>

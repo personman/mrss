@@ -1354,7 +1354,7 @@ class ObservationController extends BaseController
         $systemId = $this->params()->fromRoute('systemId');
         $redirect = $this->params()->fromQuery('redirect');
         if (empty($redirect)) {
-            $redirect = 'data-entry';
+            $redirect = '/data-entry';
         }
 
         // Make sure they have access to this system
@@ -1362,7 +1362,7 @@ class ObservationController extends BaseController
             $this->setActiveSystem($systemId);
         }
 
-        return $this->redirect()->toRoute($redirect);
+        return $this->redirect()->toUrl($redirect);
     }
 
     protected function getSubscription($year = null)
