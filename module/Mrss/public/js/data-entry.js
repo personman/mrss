@@ -21,7 +21,7 @@ $(function() {
 
     // Percentage
     $('input.input-percent, input.input-wholepercent').addClass('form-control')
-    $('input.input-percent, input.input-wholepercent').wrap('<div class="input-append input-group" />')
+    $('input.input-percent, input.input-wholepercent').wrap('<div class="input-append input-group input-percent-group" />')
     $('input.input-percent, input.input-wholepercent').after('<span class="add-on input-group-addon">%</span>')
 
     minuteSecondFormatting();
