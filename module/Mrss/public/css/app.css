@@ -244,3 +244,8 @@ label.checkbox {
 #loginLogo {
     display: none;
 }
+
+
+.navSeparator {
+    border-bottom: 1px solid #999;
+}

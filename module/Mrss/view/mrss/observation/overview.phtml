@@ -25,6 +25,7 @@
 
 <?php endif ?>
 
+<?php if (!$this->studyConfig()->use_structures): ?>
 
 <?php if (true && $this->currentStudy()->getId() == 1): ?>
     <p>If you would like to print all forms, download the <a href="/files/nccbp-workbook-2017.pdf" target="_blank">print workbook (PDF - updated March 9, 2017)</a>.</p>
@@ -195,3 +196,67 @@
 <?php endif  ?>
 
 
+
+<?php else: ?>
+
+<style>
+    body .content-home .network-wrap {
+        margin: 10px auto;
+    }
+</style>
+
+
+<div class="content-home">
+<div class="network-wrap">
+    <div class="col-sm-3 network-progress">
+        <div class="row">
+
+            <?php $completion =  round($structure->getCompletionPercentageForObservation($observation));
+
+            $chart = new \Mrss\Service\Report\Chart\Gauge(null, $completion);
+
+            echo $this->chart($gauge);
+
+            ?>
+
+            <span>Data Entry Progress <?//= $yearRange ?></span></div>
+    </div>
+
+    <div class="col-sm-6 network-dataentry">
+        <ul>
+            <li>
+                <strong>Service Area <?= $yearRange ?></strong>
+                <div class="service-area-type-progress"><strong>Progress</strong></div>
+            </li>
+
+            <?php foreach ($structure->getPages() as $benchmarkGroup): ?>
+                <?php $bgCompletion = round($benchmarkGroup->getCompletionPercentageForObservation($observation)); ?>
+                <?php
+                $completionColor = '#cc181e'; // Red
+                if ($bgCompletion > 75) {
+                    $completionColor = '#5fa80b'; // Green
+                } else if ($bgCompletion > 50) {
+                    $completionColor = '#fbb41e'; // Yellow
+                }
+
+                ?>
+
+                <li>
+                    <a href="/data-entry/<?= $benchmarkGroup->getUrl() ?>">
+                        <span class="service-area-type"><?= $benchmarkGroup->getLabel() ?></span>
+                        <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
+                            <div class="data-entry-progress-bar">
+                                <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            <?php endforeach ?>
+        </ul>
+
+    <div class="clear">&nbsp;</div>
+</div>
+
+</div>
+
+<?php endif ?>

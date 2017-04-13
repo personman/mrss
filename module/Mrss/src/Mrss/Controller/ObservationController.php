@@ -171,7 +171,8 @@ class ObservationController extends BaseController
             'observation' => $observation,
             'issues' => $issues,
             'completionPercentage' => $completionPercentage,
-            'subscription' => $membership
+            'subscription' => $membership,
+            'structure' => $this->getStructure()
         );
     }
 

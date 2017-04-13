@@ -26,11 +26,17 @@
                 <?php foreach($page->getPages() as $child): ?>
                     <?php // when using partials we need to manually check for ACL conditions ?>
                     <?php if( ! $child->isVisible() || !$this->navigation()->accept($child)) continue; ?>
+
+                    <?php if ($child->get('separator')): ?>
+                        <li class="navSeparator">
+                        </li>
+                    <?php else: ?>
                     <li class="<?= $child->getClass() ?>">
                         <a href="<?php echo $child->getHref() ?>" title="<?php echo $child->getTitle() ?>">
                             <?php echo $this->translate($child->getLabel()) ?>
                         </a>
                     </li>
+                    <?php endif ?>
                 <?php endforeach ?>
             </ul>
         <?php endif ?>

@@ -56,10 +56,14 @@ class BaseController extends AbstractActionController
      */
     protected function getStructure()
     {
-        $currentSystem = $this->getActiveSystem();
+        $structure = null;
+        if ($this->getStudyConfig()->use_structures) {
+            $currentSystem = $this->getActiveSystem();
 
-
-        $structure = $currentSystem->getDataEntryStructure();
+            if ($currentSystem) {
+                $structure = $currentSystem->getDataEntryStructure();
+            }
+        }
 
         return $structure;
     }

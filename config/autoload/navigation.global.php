@@ -691,7 +691,7 @@ $navigation = array(
 );
 
 //prd($navigation['navigation']['nccbp']);
-$navigation['navigation']['envisiousernavigation'] = getUserMenu();
+$navigation['navigation']['envisiousernavigation'] = getUserMenu(true);
 
 return $navigation;
 
@@ -926,9 +926,9 @@ function getAdminMenu()
 }
 
 
-function getUserMenu()
+function getUserMenu($includeAdmin = false)
 {
-    return array(
+    $menu = array(
         'user' => array(
             'label' => 'Your Account',
             'route' => 'data-entry',
@@ -957,4 +957,10 @@ function getUserMenu()
             )
         )
     );
+
+    if ($includeAdmin) {
+        $menu['user']['pages']['admin'] = getAdminMenu();
+    }
+
+    return $menu;
 }
