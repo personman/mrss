@@ -181,6 +181,8 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
 
     public function getCompletionPercentageForObservation($observation)
     {
+        $debug = true;
+
         $benchmarks = $this->getAllBenchmarks();
         $total = count($benchmarks);
 
@@ -196,6 +198,8 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         $completion = 0;
         if ($total) {
             $completion = $populated / $total * 100;
+            if ($debug) {
+            }
         }
 
         return $completion;
@@ -269,6 +273,7 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
     protected function getAllBenchmarks()
     {
         $pageStructure = $this->getPageStructure();
+        $this->benchmarks = array();
 
         if (empty($pageStructure)) {
             $pageStructure = $this->getStructureArray();
