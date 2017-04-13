@@ -65,7 +65,6 @@ table.dataTable thead .sorting.heatMapYear {
 
 th.reportMeasureCol {
     width: 25%;
-    border: 2px solid blue;
 }
 .strengthRank {
     margin-bottom: 12px;
