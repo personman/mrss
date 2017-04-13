@@ -43,7 +43,7 @@ $this->headScript()->appendFile(
     ) ?>" class="btn btn-default">Download</a>
 </p>
 
-<div class="container-fluid">
+<div class="container-fluid report">
     <?php foreach ($report['sections'] as $section): ?>
 
         <div class="row-fluid row">
@@ -60,7 +60,7 @@ $this->headScript()->appendFile(
             <div class="span6 col-md-6">
                 <table class="table table-hover table-bordered table-striped">
                     <thead>
-                        <tr>
+                        <tr class="topHeading">
                             <th><?= $studyConfig->institution_label ?></th>
                             <th>Value</th>
                             <?php if ($includePercentiles): ?>

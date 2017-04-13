@@ -62,6 +62,11 @@ table.dataTable thead .sorting.heatMapYear {
 #report-strengths h2 {
     margin-bottom: 12px;
 }
+
+th.reportMeasureCol {
+    width: 25%;
+    border: 2px solid blue;
+}
 .strengthRank {
     margin-bottom: 12px;
     margin-left: 5px;
@@ -170,8 +175,8 @@ div.userNote .controls textarea {
 }
 
 /*div.userNote*/ .well .control-group {
-    float: left;
-}
+                     float: left;
+                 }
 
 td.no-border {
     border: none !important;
@@ -234,4 +239,8 @@ ul.ui-autocomplete {
 
 label.checkbox {
     margin-left: 20px;
+}
+
+#loginLogo {
+    display: none;
 }
