@@ -104,9 +104,9 @@ class ReportController extends ReportAdminController
 
                 $systems = $this->currentCollege()->getSystems();
                 foreach ($systems as $otherSystem) {
-                    if ($systemId != $otherSystem->getId()) {
+                    //if ($systemId != $otherSystem->getId()) {
                         $otherSystems[] = $otherSystem;
-                    }
+                    //}
                 }
             }
         }
@@ -371,9 +371,9 @@ class ReportController extends ReportAdminController
 
                 $systemMemberships = $this->currentCollege()->getSystems();
                 foreach ($systemMemberships as $systemMembership) {
-                    if ($systemId != $systemMembership->getId()) {
+                    //if ($systemId != $systemMembership->getId()) {
                         $otherSystems[] = $systemMembership;
-                    }
+                    //}
                 }
             }
         }

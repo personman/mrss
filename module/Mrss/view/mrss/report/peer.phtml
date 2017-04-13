@@ -30,14 +30,8 @@ $this->headScript()->appendFile(
 
 <?php if (count($otherSystems)): ?>
     <ul class="nav nav-pills report-nav">
-        <li class="active">
-            <a href="/reports/network">
-                <?= $system->getName() ?>
-            </a>
-        </li>
-
         <?php foreach ($otherSystems as $otherSystem): ?>
-            <li>
+            <li<?php if ($system->getId() == $otherSystem->getId()) echo ' class="active"'; ?>>
                 <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('/reports/peer') ?>">
                     <?= $otherSystem->getName() ?>
                 </a>
