@@ -45,7 +45,7 @@
 
             <li>
                 <a href="/network-switch/<?= $system->getId() . '?redirect=' . urlencode('/data-entry/' . $benchmarkGroup->getUrl()) ?>">
-                <span class="service-area-type"><?= $benchmarkGroup->getLabel() ?></span>
+                <span class="service-area-type"><?= $benchmarkGroup->getUrl() ?>: <?= $benchmarkGroup->getLabel() ?></span>
                 <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
                     <div class="data-entry-progress-bar">
                         <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
