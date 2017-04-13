@@ -211,7 +211,8 @@
     <div class="col-sm-3 network-progress">
         <div class="row">
 
-            <?php $completion =  round($structure->getCompletionPercentageForObservation($observation));
+            <?php $structure->setPage(null); ?>
+            <?php $completion = round($structure->getCompletionPercentageForObservation($observation));
 
             $chart = new \Mrss\Service\Report\Chart\Gauge(null, $completion);
 
