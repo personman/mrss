@@ -474,7 +474,7 @@ class College
      * @param Study $study
      * @return Subscription[]
      */
-    public function getSubscriptionsForStudy(Study $study)
+    public function getSubscriptionsForStudy(Study $study, $forReports = false)
     {
         $subscriptions = array();
         foreach ($this->getSubscriptions() as $sub) {
@@ -491,6 +491,14 @@ class College
             $study->getId();
 
             if ($sub->getStudy()->getId() == $study->getId()) {
+
+                if ($forReports) {
+                    // Exclude current year if reports are closed
+                    if ($study->getCurrentYear() == $sub->getYear() && !$study->getReportsOpen()) {
+                        continue;
+                    }
+                }
+
                 $subscriptions[$sub->getYear()] = $sub;
             }
         }

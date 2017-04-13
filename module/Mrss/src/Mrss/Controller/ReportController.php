@@ -113,7 +113,7 @@ class ReportController extends ReportAdminController
 
         $year = $this->getYearFromRouteOrStudy();
         $subscriptions = $this->currentCollege()
-            ->getSubscriptionsForStudy($this->currentStudy());
+            ->getSubscriptionsForStudy($this->currentStudy(), true);
 
         $subscription = $this->getSubscriptionByYear($year);
 
