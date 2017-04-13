@@ -1,13 +1,38 @@
 <?php
 $this->headScript()->appendFile(
-    '/js/benchmark-form.js',
+    '/js/benchmark-form.js?v=3',
     'text/javascript'
 );
 $this->headScript()->appendFile(
     '/js/jquery-ui.triggeredAutocomplete.js',
     'text/javascript'
 );
+$this->headScript()->appendFile(
+    '/ckeditor/ckeditor.js',
+    'text/javascript'
+);
 ?>
+<script type="text/javascript">
+        <?php $this->headScript()->captureStart() ?>
+        $(function() {
+                CKEDITOR.replace(
+                    'description',
+                    {
+                            allowedContent: true,
+                            'contentCss': '/css/index.css'
+                    }
+                )
+                CKEDITOR.replace(
+                    'reportDescription',
+                    {
+                            allowedContent: true,
+                            'contentCss': '/css/index.css'
+                    }
+                )
+        })
+        <?php $this->headScript()->captureEnd() ?>
+</script>
+
 
 <h2>Add Benchmark</h2>
 
