@@ -98,7 +98,8 @@ tr.topHeading th.nationalPercentiles {
 }
 
 .nationalDataDefinition {
-    margin: 10px;
+    width: 600px;
+    margin: 10px 0;
     text-align: left;
     font-style: italic;
 }

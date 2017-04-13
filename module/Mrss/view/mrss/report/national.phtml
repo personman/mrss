@@ -17,6 +17,7 @@ $this->headScript()->appendFile(
     $(document).ready(function(){
         $('.tooltipster').tooltipster({
             contentAsHTML: true,
+            'maxWidth': 500
         });
     });
     <?php $this->headScript()->captureEnd() ?>
@@ -134,7 +135,11 @@ $this->headScript()->appendFile(
                 <tr class="topHeading">
                     <th></th>
                     <th colspan="<?= $tableHeadingColSpan ?>">
-                        <?= $studyConfig->your_institution_label ?>
+                        <?php if ($studyConfig->show_institution_in_report_heading): ?>
+                            <?= $college->getAbbreviation(); ?>
+                        <?php else: ?>
+                            <?= $studyConfig->your_institution_label ?>
+                        <?php endif ?>
                     </th>
                     <th colspan="7" class="nationalPercentiles"><?= $heading ?></th>
                 </tr>

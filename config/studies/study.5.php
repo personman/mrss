@@ -15,6 +15,7 @@ return array(
     'percent_change_report_columns' => array(
     ),
     'use_structures' => true,
+    'show_institution_in_report_heading' => true,
     'anonymous_peers' => false,
     'peer_percentiles' => false,
     'include_canada' => true,
