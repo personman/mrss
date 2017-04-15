@@ -27,6 +27,12 @@ class ImportData implements FactoryInterface
         $collegeModel = $sm->get('model.college');
         $service->setCollegeModel($collegeModel);
 
+        $model = $sm->get('model.system');
+        $service->setSystemModel($model);
+
+        $membershipModel = $sm->get('model.system.membership');
+        $service->setSystemMembershipModel($membershipModel);
+
         $currentStudy = $sm->get('ControllerPluginManager')
             ->get('currentStudy')->getCurrentStudy();
         $service->setStudy($currentStudy);

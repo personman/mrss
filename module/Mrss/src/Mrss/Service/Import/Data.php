@@ -15,6 +15,12 @@ class Data extends Import
     /** @var \Mrss\Model\Subscription $subscriptionModel */
     protected $subscriptionModel;
 
+    /** @var \Mrss\Model\System $systemModel */
+    protected $systemModel;
+
+    /** @var \Mrss\Model\SystemMembership $systemMembershipModel */
+    protected $membershipModel;
+
     /** @var \Mrss\Model\Observation $observationModel */
     protected $observationModel;
 
@@ -27,7 +33,9 @@ class Data extends Import
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
 
-    protected $year = 2014;
+    protected $year = 2015;
+
+    protected $system = 2;
 
 
     protected $file = 'data/imports/envisio-import.xlsx';
@@ -39,9 +47,9 @@ class Data extends Import
         $this->excel = $this->openFile($this->file);
 
         $sheets = array(
-            0 => 2014,
-            1 => 2015,
-            2 => 2016
+            //0 => 2014,
+            0 => 2015,
+            //2 => 2016
         );
 
         foreach ($sheets as $index => $year) {
@@ -331,6 +339,36 @@ class Data extends Import
         return $this;
     }
 
+    /**
+     * @return \Mrss\Model\System
+     */
+    public function getSystemModel()
+    {
+        return $this->systemModel;
+    }
 
+    /**
+     * @param \Mrss\Model\System $model
+     * @return Data
+     */
+    public function setSystemModel($model)
+    {
+        $this->systemModel = $model;
+        return $this;
+    }
 
+    public function setSystemMembershipModel($model)
+    {
+        $this->membershipModel = $model;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\SystemMembership
+     */
+    public function getSystemMembershipModel()
+    {
+        return $this->membershipModel;
+    }
 }
