@@ -101,6 +101,8 @@ class Import
             $rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
         }
 
+        //prd($rowData);
+
         return $rowData;
     }
 

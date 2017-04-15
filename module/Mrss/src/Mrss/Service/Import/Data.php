@@ -7,6 +7,7 @@ use PHPExcel_Worksheet_Row;
 use Mrss\Entity\Subscription as SubscriptionEntity;
 use Mrss\Entity\College as CollegeEntity;
 use Mrss\Entity\SystemMembership;
+use PHPExcel_Cell;
 
 class Data extends Import
 {
@@ -81,6 +82,8 @@ class Data extends Import
     protected function saveRow(PHPExcel_Worksheet_Row $row)
     {
         $data = $this->getDataFromRow($row);
+
+        pr($data);
 
         if (empty($data['ipeds'])) {
             return false;
@@ -287,6 +290,35 @@ class Data extends Import
      */
     protected function getMap()
     {
+        if (count($this->map) == 0) {
+            //$headerRow = $this->excel->getActiveSheet()->row
+            //$rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
+
+
+            $row = $this->excel->getActiveSheet()->getRowIterator(2)->current();
+
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $this->map['name'] = 0; // Placeholder
+
+            foreach ($cellIterator as $key => $cell) {
+                if ($cell->getValue()) {
+                    //$coordinate = $cell->getCoordinate();
+                    //$column = $cell->getColumn();
+                    $column = PHPExcel_Cell::columnIndexFromString($cell->getColumn());
+
+                    $this->map[$cell->getValue()] = $column - 1;
+                }
+
+            }
+
+        }
+
+        //pr($this->map);
+
+        return $this->map;
+
         $map = array(
             'name', // Not used
             'ipeds',
