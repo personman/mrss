@@ -6,6 +6,7 @@ use Mrss\Service\Import;
 use PHPExcel_Worksheet_Row;
 use Mrss\Entity\Subscription as SubscriptionEntity;
 use Mrss\Entity\College as CollegeEntity;
+use Mrss\Entity\SystemMembership;
 
 class Data extends Import
 {
@@ -35,10 +36,10 @@ class Data extends Import
 
     protected $year = 2015;
 
-    protected $system = 2;
+    protected $systemId = 2;
 
 
-    protected $file = 'data/imports/envisio-import.xlsx';
+    protected $file = 'data/imports/envisio-import-icma.xlsx';
 
     protected $map = array();
 
@@ -106,9 +107,32 @@ class Data extends Import
             $this->getSubscriptionModel()->save($subscription);
             $this->getSubscriptionModel()->getEntityManager()->flush();
 
+            // Add system membership
+            $this->connectToSystem($college);
+
             pr($college->getName());
             pr($data);
 
+        }
+    }
+
+    protected function connectToSystem($college)
+    {
+        if ($this->systemId) {
+            $system = $this->getSystemModel()->find($this->systemId);
+
+            // See if the membership exists
+            $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $this->year);
+
+            if (!$membership) {
+                $membership = new SystemMembership();
+                $membership->setSystem($system);
+                $membership->setCollege($college);
+                $membership->setYear($this->year);
+                $membership->setDataVisibility('public');
+
+                $this->getSystemMembershipModel()->save($membership);
+            }
         }
     }
 

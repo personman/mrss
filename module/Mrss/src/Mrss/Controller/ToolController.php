@@ -1607,6 +1607,7 @@ class ToolController extends AbstractActionController
 
     public function importDataAction()
     {
+        $this->longRunningScript();
         $importer = $this->getServiceLocator()->get('service.import.data');
 
         $importer->import();
