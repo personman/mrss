@@ -24,6 +24,18 @@ $(function() {
 
 function setUpSelects()
 {
+    /*$('#benchmark1, #benchmark2, #benchmark3').each(function(i, e) {
+        $(e).find('option').each(function(i2, e2) {
+            if (!e2.disabled) {
+                console.log($(e2).text());
+                //$(e2).text("  " + $(e2).text());
+                $(e2).html($.parseHTML($(e2).text()));
+                console.log($(e2).text());
+                console.log($(e2).html());
+            }
+        })
+    })*/
+
     cloneBenchmark2();
     $('#benchmark1, #benchmark2, #benchmark3').chosen({search_contains: true})
 }

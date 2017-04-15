@@ -273,7 +273,7 @@ class System
     }
 
     /**
-     * @return mixed
+     * @return \Mrss\Entity\Structure
      */
     public function getReportStructure()
     {
@@ -307,6 +307,11 @@ class System
         }
 
         return $systemAdmins;
+    }
+
+    public function getChildren()
+    {
+        return array();
     }
 
     public function getViewers()

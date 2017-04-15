@@ -8,6 +8,9 @@
             <?php if ($this->currentStudy()->getId() == 4): ?>
                 Data Collection
             <?php else: ?>
+                <?php if ($activeSystem): ?>
+                    <?= $activeSystem->getName() ?>
+                <?php endif ?>
                 Data Entry
             <?php endif ?>
         </h1>

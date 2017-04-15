@@ -165,6 +165,10 @@ class ObservationController extends BaseController
 
         $issues = $this->getIssueModel()->findForCollege($this->currentCollege());
 
+        $year = $this->getCurrentStudy()->getCurrentYear();
+        $nextYear = $year + 1;
+        $yearRange = "$year - $nextYear";
+
         return array(
             'currentStudy' => $currentStudy,
             'benchmarkGroups' => $benchmarkGroups,
@@ -172,7 +176,9 @@ class ObservationController extends BaseController
             'issues' => $issues,
             'completionPercentage' => $completionPercentage,
             'subscription' => $membership,
-            'structure' => $this->getStructure()
+            'structure' => $this->getStructure(),
+            'yearRange' => $yearRange,
+            'activeSystem' => $this->getActiveSystem()
         );
     }
 
@@ -533,6 +539,10 @@ class ObservationController extends BaseController
             $conversionFactor = $observation->get('institution_conversion_factor');
         }
 
+        $year = $this->getCurrentStudy()->getCurrentYear();
+        $nextYear = $year + 1;
+        $yearRange = "$year - $nextYear";
+
         $view = new ViewModel(
             array(
                 'form' => $form,
@@ -544,7 +554,9 @@ class ObservationController extends BaseController
                 'dataDefinitionForm' => $this->getDataDefinitionForm(),
                 'dataEntryLayout' => $this->getDataEntryLayout($benchmarkGroup),
                 'staffView' => $staffView,
-                'conversionFactor' => $conversionFactor
+                'conversionFactor' => $conversionFactor,
+                'activeSystem' => $this->getActiveSystem(),
+                'yearRange' => $yearRange
             )
         );
 

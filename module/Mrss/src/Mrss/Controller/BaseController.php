@@ -82,6 +82,43 @@ class BaseController extends AbstractActionController
         return $benchmarkGroups;
     }
 
+    protected function getAllBenchmarkGroups($subscription)
+    {
+        if ($this->getStudyConfig()->use_structures) {
+            $systems = $this->getCollege()->getSystems();
+            $benchmarkGroups = array();
+            foreach ($systems as $system) {
+                $structure = $system->getReportStructure();
+                $pages = $structure->getPages();
+
+                // For multiple networks, add an optgroup for the network name
+                if (false && count($systems) > 1) {
+                    $optgroup = array(
+                        'label' => $system->getName(),
+                        'options' => array(2 => 'blah')
+                    );
+
+                    $pages = array_merge(array($system), $pages);
+                }
+
+                $benchmarkGroups = array_merge($benchmarkGroups, $pages);
+            }
+        } else {
+            $currentStudy = $this->currentStudy();
+            $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($subscription);
+        }
+
+        return $benchmarkGroups;
+    }
+
+    /**
+     * @return \Mrss\Entity\College
+     */
+    protected function getCollege()
+    {
+        return $this->currentCollege();
+    }
+
     protected function getMembership()
     {
         $year = $this->currentStudy()->getCurrentYear();

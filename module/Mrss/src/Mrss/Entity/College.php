@@ -651,6 +651,9 @@ class College
         return $this->systemMemberships;
     }
 
+    /**
+     * @return \Mrss\Entity\System[]
+     */
     public function getSystems()
     {
         $systems = array();

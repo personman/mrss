@@ -250,17 +250,88 @@ class ReportItemController extends CustomReportController
 
         return $peerGroups;
     }
-    
+
+    protected function getStructureBenchmarks()
+    {
+
+
+    }
+
+    /**
+     * @return \Mrss\Entity\College
+     */
+    protected function getCollege()
+    {
+        $college = $this->currentCollege();
+
+        return $college;
+    }
+
     protected function getBenchmarks()
     {
+        /*if ($this->getStudyConfig()->use_structures) {
+            return $this->getStructureBenchmarks();
+        }*/
+
+        $space = "&u#160;";
+        //$space = "\xA0";
+        //$space = "&nbsp;";
+        //$space = "\u0020";
+        $space = "<span class='indentOption'>&nbsp;&nbsp;&nbsp;</span>";
+        $space = "";
+
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
-        $subscription = $this->getSubscriptionByYear($this->currentStudy()->getCurrentYear());
+        //$subscription = $this->getSubscriptionByYear($this->currentStudy()->getCurrentYear());
 
-        $benchmarks = $study->getStructuredBenchmarks(true, 'dbColumn', $subscription);
-        
+        //$benchmarks = $study->getStructuredBenchmarks(true, 'dbColumn', $subscription);
+
+        $benchmarks = array();
+        foreach ($this->getAllBenchmarkGroups() as $benchmarkGroup) {
+            $groupChildren = array();
+
+            foreach ($benchmarkGroup->getChildren() as $benchmark) {
+                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                    /** @var \Mrss\Entity\BenchmarkHeading $heading */
+                    $heading = $benchmark;
+                    $groupChildren[] = array(
+                        'disabled' => true,
+                        'label' => $this->getVariableSubstitutionService()->substitute($heading->getName()),
+                        'value' => null
+                    );
+                    continue;
+                }
+
+                $key = $benchmark->getDbColumn();
+
+                $groupChildren[] = array(
+                    'disabled' => false,
+                    'label' => $space . $benchmark->getReportLabel(),
+                    'value' => $key
+                );
+            }
+
+            $benchmarkGroupInfo = array(
+                'label' => $benchmarkGroup->getName(),
+                'options' => $groupChildren
+            );
+
+            //pr($benchmarkGroup->getName());
+
+            $benchmarks[] = $benchmarkGroupInfo;
+        }
+
+
         return $benchmarks;
+    }
+
+    /**
+     * @return \Mrss\Service\VariableSubstitution
+     */
+    public function getVariableSubstitutionService()
+    {
+        return $this->getServiceLocator()->get('service.variableSubstitution');
     }
 
     protected function getNextSequence()
