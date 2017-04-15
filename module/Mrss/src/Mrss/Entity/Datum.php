@@ -142,14 +142,14 @@ class Datum
 
     public function setValue($value)
     {
+        $value = trim($value);
+
         if ($this->usesString()) {
             $this->setStringValue($value);
         } else {
-            if (is_null($value) || $value === '') {
+            if (is_null($value) || trim($value) === '') {
                 $value = null;
-            }
-
-            if ($value) {
+            } elseif ($value) {
                 $value = floatval($value);
             }
 

@@ -83,8 +83,6 @@ class Data extends Import
     {
         $data = $this->getDataFromRow($row);
 
-        pr($data);
-
         if (empty($data['ipeds'])) {
             return false;
         }
@@ -104,6 +102,9 @@ class Data extends Import
 
             foreach ($data as $dbColumn => $value) {
                 $value = $this->processValue($dbColumn, $value);
+                if (empty($value)) {
+                    $value = null;
+                }
                 $subscription->setValue($dbColumn, $value);
             }
 
@@ -112,10 +113,6 @@ class Data extends Import
 
             // Add system membership
             $this->connectToSystem($college);
-
-            pr($college->getName());
-            pr($data);
-
         }
     }
 
@@ -141,7 +138,7 @@ class Data extends Import
 
     protected function processValue($dbColumn, $value)
     {
-
+        $value = trim($value);
         if (stristr($value, ':')) {
             $valueParts = explode(':', $value);
             $minutes = $valueParts[0];
@@ -150,6 +147,18 @@ class Data extends Import
             $minuteSeconds = $minutes * 60;
             $seconds += $minuteSeconds;
             $value = $seconds;
+        }
+
+        if (stristr($value, '.')) {
+            $benchmark = $this->getBenchmarkmodel()->findOneByDbColumn($dbColumn);
+            if ($benchmark) {
+                if ($benchmark->isPercent()) {
+                    $value = $value * 100;
+                }
+
+            } else {
+                echo 'Benchmark not found for ' . $dbColumn;
+            }
         }
 
 
