@@ -35,7 +35,7 @@ class Data extends Import
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
 
-    protected $year = 2015;
+    protected $year = 2014;
 
     protected $systemId = null;
 
@@ -50,8 +50,8 @@ class Data extends Import
         $this->excel = $this->openFile($this->file);
 
         $sheets = array(
-            //0 => 2014,
-            1 => 2015,
+            0 => 2014,
+            //1 => 2015,
             //2 => 2016
         );
 
