@@ -14,6 +14,8 @@ return array(
     'benchmark_completion_heatmap' => true,
     'percent_change_report_columns' => array(
     ),
+    'show_peer_data_you_did_not_submit' => true, // Temporary!!
+    'percent_chart_scale_1_100' => false,
     'use_structures' => true,
     'show_institution_in_report_heading' => true,
     'anonymous_peers' => false,

@@ -382,7 +382,8 @@ class Peer extends Report
             ->removeTickMarks()
             ->setCategories($chartXCategories);
 
-        if ($benchmark->isPercent()) {
+        $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
+        if ($benchmark->isPercent() && $forceScale) {
             $barChart->setYAxisMax(100);
         }
 

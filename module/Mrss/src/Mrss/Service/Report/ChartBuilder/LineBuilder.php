@@ -80,7 +80,8 @@ class LineBuilder extends ChartBuilder
             ->setSeries($series);
 
         // Percentages should have the axis as 0-100
-        if ($benchmark->isPercent() && empty($config['percentScaleZoom'])) {
+        $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
+        if ($benchmark->isPercent() && empty($config['percentScaleZoom']) && $forceScale) {
             $chart->setYAxisMax(100);
             $chart->setYAxisMin(0);
         }

@@ -1085,9 +1085,13 @@ class Report
             'dataDefinition' => $dataDefinition,
         );
 
+        $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
         if ($benchmark->isPercent()) {
-            $chart['yAxis']['max'] = 100;
-            $chart['yAxis']['tickInterval'] = 25;
+            if ($forceScale) {
+                $chart['yAxis']['max'] = 100;
+                $chart['yAxis']['tickInterval'] = 25;
+            }
+
             $chart['yAxis']['labels'] = array(
                 'format' => '{value}%'
             );
