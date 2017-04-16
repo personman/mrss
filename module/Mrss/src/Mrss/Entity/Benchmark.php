@@ -1066,6 +1066,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             if ($this->getInputType() == 'float') {
                 $decimalPlaces = 2;
             }
+
+            // Added for Envisio
+            if ($this->getInputType() == 'dollars') {
+                $decimalPlaces = 2;
+            }
         }
 
         return $decimalPlaces;
