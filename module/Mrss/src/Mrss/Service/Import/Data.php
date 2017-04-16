@@ -155,7 +155,7 @@ class Data extends Import
         if (stristr($value, '.')) {
 
             if ($benchmark) {
-                if ($benchmark->isPercent()) {
+                if ($benchmark->isPercent() && $benchmark->getDbColumn() != 'vcr1') {
                     $value = $value * 100;
                 }
 
