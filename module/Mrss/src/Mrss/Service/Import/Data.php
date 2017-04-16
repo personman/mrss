@@ -37,10 +37,11 @@ class Data extends Import
 
     protected $year = 2015;
 
-    protected $systemId = 2;
+    protected $systemId = null;
 
 
-    protected $file = 'data/imports/envisio-import-icma.xlsx';
+    //protected $file = 'data/imports/envisio-import-icma.xlsx';
+    protected $file = 'data/imports/envisio-import-safety.xlsx';
 
     protected $map = array();
 
@@ -50,7 +51,7 @@ class Data extends Import
 
         $sheets = array(
             //0 => 2014,
-            0 => 2015,
+            1 => 2015,
             //2 => 2016
         );
 
