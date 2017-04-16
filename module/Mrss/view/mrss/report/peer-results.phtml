@@ -75,14 +75,7 @@ $this->headScript()->appendFile(
                                     <?= $peerData['label'] ?>
                                 </td>
                                 <td>
-                                    <?php
-                                        $value = $peerData['value'];
-                                        if ($section['isNumber']) {
-                                            $value = number_format($peerData['value'], $section['decimal_places']);
-                                        }
-                                    ?>
-
-                                    <?= $section['prefix'] . $value . $section['suffix'] ?></td>
+                                    <?= $peerData['formatted'] ?>
                                 </td>
 
                                 <?php if ($includePercentiles): ?>

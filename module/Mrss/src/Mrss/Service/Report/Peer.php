@@ -100,7 +100,7 @@ class Peer extends Report
                 continue;
             }
 
-            $data = $this->sortAndLabelPeerData($data, $currentCollege);
+            $data = $this->sortAndLabelPeerData($data, $currentCollege, $benchmark);
 
             if ($this->getIncludePercentiles()) {
                 $data = $this->addPercentileRanks($data, $benchmark, $year);
@@ -268,7 +268,7 @@ class Peer extends Report
         return $name;
     }
 
-    public function sortAndLabelPeerData($data, College $currentCollege)
+    public function sortAndLabelPeerData($data, College $currentCollege, $benchmark)
     {
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
@@ -290,7 +290,8 @@ class Peer extends Report
             //$dataWithLabels[$label] = $value;
             $dataWithLabels[$collegeId] = array(
                 'label' => $label,
-                'value' => $value
+                'value' => $value,
+                'formatted' => $benchmark->format($value)
             );
 
 
