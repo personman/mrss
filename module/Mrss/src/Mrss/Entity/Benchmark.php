@@ -953,6 +953,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             }
 
             if ($this->getInputType() == 'minutesseconds') {
+                pr($value);
                 if ($value && !stristr($value, ':')) {
                     $value = intval($value);
                     $minutes = floor($value / 60);
