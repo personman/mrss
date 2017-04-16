@@ -35,7 +35,7 @@ class Data extends Import
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
 
-    protected $year = 2014;
+    protected $year = 2015;
 
     protected $systemId = null;
 
@@ -50,8 +50,8 @@ class Data extends Import
         $this->excel = $this->openFile($this->file);
 
         $sheets = array(
-            0 => 2014,
-            //1 => 2015,
+            //0 => 2014,
+            1 => 2015,
             //2 => 2016
         );
 
@@ -139,6 +139,8 @@ class Data extends Import
 
     protected function processValue($dbColumn, $value)
     {
+        $benchmark = $this->getBenchmarkmodel()->findOneByDbColumn($dbColumn);
+
         $value = trim($value);
         if (stristr($value, ':')) {
             $valueParts = explode(':', $value);
@@ -151,7 +153,7 @@ class Data extends Import
         }
 
         if (stristr($value, '.')) {
-            $benchmark = $this->getBenchmarkmodel()->findOneByDbColumn($dbColumn);
+
             if ($benchmark) {
                 if ($benchmark->isPercent()) {
                     $value = $value * 100;
@@ -159,6 +161,16 @@ class Data extends Import
 
             } else {
                 echo 'Benchmark not found for ' . $dbColumn;
+            }
+        }
+
+        if ($benchmark && $benchmark->isNumericalRadio()) {
+            $options = $benchmark->getOptionsForForm();
+
+            $flipped = array_flip($options);
+
+            if (isset($flipped[$value])) {
+                $value = $flipped[$value];
             }
         }
 
