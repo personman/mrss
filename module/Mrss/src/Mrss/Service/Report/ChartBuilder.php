@@ -124,4 +124,16 @@ class ChartBuilder extends Report
     {
         return $this->college;
     }
+
+    public function getSystemId()
+    {
+        $config = $this->getConfig();
+
+        $systemId = null;
+        if (isset($config['system'])) {
+            $systemId = $config['system'];
+        }
+
+        return $systemId;
+    }
 }

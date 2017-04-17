@@ -7,16 +7,27 @@ use Zend\Form\Fieldset;
 
 class Explore extends AbstractForm
 {
+    protected $studyConfig;
 
-    public function __construct($benchmarks, $colleges, $years, $peerGroups, $includeTrends, $allBreakpoints)
-    {
+    public function __construct(
+        $benchmarks,
+        $colleges,
+        $years,
+        $peerGroups,
+        $includeTrends,
+        $allBreakpoints,
+        $systems,
+        $studyConfig
+    ) {
         // Call the parent constructor
         parent::__construct('explore');
 
         rsort($years);
+        $this->studyConfig = $studyConfig;
 
         $this->addBasicFields($years, $includeTrends);
         $this->addBenchmarkSelects($benchmarks);
+        $this->addSystemsDropdown($systems);
         $this->addPeerGroupDropdown($peerGroups);
         $this->addAdvancedFields($benchmarks, $allBreakpoints);
 
@@ -160,6 +171,32 @@ class Explore extends AbstractForm
 
     }
 
+    protected function addSystemsDropdown($systems)
+    {
+        if (count($systems)) {
+            $systemOptions = array();
+            foreach ($systems as $system) {
+                $systemOptions[$system->getId()] = $system->getName();
+            }
+
+            $this->add(
+                array(
+                    'name' => 'system',
+                    'type' => 'Zend\Form\Element\Select',
+                    'allow_empty' => true,
+                    'required' => false,
+                    'options' => array(
+                        'label' => 'Network',
+                    ),
+                    'attributes' => array(
+                        'options' => $systemOptions,
+                        'id' => 'system'
+                    )
+                )
+            );
+        }
+    }
+
     protected function addPeerGroupDropdown($peerGroups)
     {
         $this->add(
@@ -226,12 +263,17 @@ class Explore extends AbstractForm
             )
         );
 
+        $label = 'Hide National Data';
+        if ($this->studyConfig->use_structures) {
+            $label = 'Hide Network Data';
+        }
+
         $this->add(
             array(
                 'name' => 'hideNational',
                 'type' => 'Zend\Form\Element\Checkbox',
                 'options' => array(
-                    'label' => 'Hide National Data'
+                    'label' => $label
                 ),
                 'attributes' => array(
                     'id' => 'hideNational'

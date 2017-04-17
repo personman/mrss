@@ -66,13 +66,13 @@ class Percentile extends AbstractModel
      * @param $forPercentChange
      * @return PercentileEntity[]
      */
-    public function findByBenchmarkAndPercentile($benchmark, $percentile, $forPercentChange = false)
+    public function findByBenchmarkAndPercentile($benchmark, $percentile, $forPercentChange = false, $systemId = null)
     {
         return $this->getRepository()->findBy(
             array(
                 'benchmark' => $benchmark,
                 'percentile' => $percentile,
-                'system' => null,
+                'system' => $systemId,
                 'forPercentChange' => $forPercentChange
             ),
             array(

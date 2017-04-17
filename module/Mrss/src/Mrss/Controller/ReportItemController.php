@@ -124,7 +124,22 @@ class ReportItemController extends CustomReportController
         $includeTrends = $this->getIncludeTrends();
         $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
 
-        $form = new Explore($benchmarks, $colleges, $years, $peerGroups, $includeTrends, $allBreakpoints);
+        $systems = null;
+        if ($this->getStudyConfig()->use_structures) {
+            $systems = $this->currentCollege()->getSystems();
+        }
+
+
+        $form = new Explore(
+            $benchmarks,
+            $colleges,
+            $years,
+            $peerGroups,
+            $includeTrends,
+            $allBreakpoints,
+            $systems,
+            $this->getStudyConfig()
+        );
 
         // Are we editing an existing report item?
         if ($item = $this->getItem()) {

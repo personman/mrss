@@ -236,7 +236,13 @@ class LineBuilder extends ChartBuilder
                         $label = $this->getOrdinal($percentile);
                     }
 
-                    $nationalLabel = "National $label";
+                    $nationalOrNetwork = 'National';
+                    if (isset($config['system'])) {
+                        $system = $this->getSystemModel()->find($config['system']);
+                        $nationalOrNetwork = $system->getName();
+                    }
+
+                    $nationalLabel = "$nationalOrNetwork $label";
                     if (!empty($config['multiTrend'])) {
                         $benchmark = $this->getBenchmark($dbColumn);
                         $nationalLabel .= '|' . $benchmark->getDescriptiveReportLabel();
@@ -305,7 +311,8 @@ class LineBuilder extends ChartBuilder
 
     public function getMedianData($benchmark, $percentile)
     {
-        $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile);
+        $systemId = $this->getSystemId();
+        $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile, false, $systemId);
 
         $medianData = array();
         foreach ($medians as $median) {
