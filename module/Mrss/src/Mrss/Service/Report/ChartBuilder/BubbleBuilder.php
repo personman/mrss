@@ -60,8 +60,19 @@ class BubbleBuilder extends ChartBuilder
         }
 
 
-        $subscriptions = $this->getSubscriptionModel()
-            ->findWithPartialObservations($study, $year, $dbColumns, true, true, $benchmarkGroupIds);
+        $subscriptions = array();
+        if (!$this->getStudyConfig()->use_structures) {
+            $subscriptions = $this->getSubscriptionModel()
+                ->findWithPartialObservations($study, $year, $dbColumns, true, true, $benchmarkGroupIds);
+        } else {
+            $system = $this->getSystem();
+            $memberships = $system->getMembershipsByYear($year);
+
+            foreach ($memberships as $membership) {
+                $subscriptions[] = $membership->getCollege()->getSubscriptionByStudyAndYear($this->getStudy()->getId(), $year);
+            }
+        }
+
 
         $xFormat = $this->getFormat($xBenchmark);
         $yFormat = $this->getFormat($yBenchmark);

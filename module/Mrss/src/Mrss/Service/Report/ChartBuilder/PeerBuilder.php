@@ -58,7 +58,7 @@ class PeerBuilder extends BarBuilder
 
         $this->getPeerService()->setCurrentCollege($this->getCollege());
         $this->getPeerService()->setYear($year);
-        $chartValues = $this->getPeerService()->sortAndLabelPeerData($peerData, $this->getCollege());
+        $chartValues = $this->getPeerService()->sortAndLabelPeerData($peerData, $this->getCollege(), $xBenchmark);
 
         // Add footnotes
         $definition = $xBenchmark->getReportDescription(true);

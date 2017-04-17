@@ -237,6 +237,20 @@ class System
     }
 
     /**
+     * @param $year
+     * @return \Mrss\Entity\SystemMembership[]
+     */
+    public function getMembershipsByYear($year)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('year', $year));
+
+        $memberships = $this->getMemberships()->matching($criteria);
+
+        return $memberships;
+    }
+
+    /**
      * @return null|SystemMembership[]
      */
     public function getMemberships()
