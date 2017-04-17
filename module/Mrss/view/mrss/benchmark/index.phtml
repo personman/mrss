@@ -197,11 +197,18 @@
 
                         <?php foreach ($this->yearsToShow as $year): ?>
                             <?php if ($benchmark->isAvailableForYear($year)): ?>
-                                <? $percentage = round(
+                                <?php
+
+                                $percentage = round(
                                     $benchmark->getCompletionPercentage($year)
-                                )?>
+                                );
+                                $url = $this->url('benchmark/data', array('id' => $benchmark->getId(), 'year' => $year));
+
+                                ?>
                                 <td class="heatmapCell heatmapCellBlue" style="opacity: <?= ($percentage / 120) + .2 ?>">
-                                    <?= $percentage ?>%
+                                    <a href="<?= $url ?>" class="benchmarkDataLink">
+                                        <?= $percentage ?>%
+                                    </a>
                                 </td>
                             <?php else: ?>
                                 <td style="color:#CCC; text-align:center">

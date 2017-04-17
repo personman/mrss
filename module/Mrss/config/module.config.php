@@ -851,6 +851,17 @@ return array(
                             )
                         )
                     ),
+                    'data' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/data/:id/:year',
+                            'defaults' => array(
+                                'action' => 'data',
+                                'id' => 0,
+                                'year' => null
+                            )
+                        )
+                    ),
                     'add' => array(
                         'type' => 'segment',
                         'options' => array(

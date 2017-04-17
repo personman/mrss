@@ -367,6 +367,29 @@ class BenchmarkController extends AbstractActionController
         return $response;
     }
 
+    public function dataAction()
+    {
+        $year = $this->params()->fromRoute('year');
+        $benchmarkId = $this->params()->fromRoute('id');
+
+        $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+        $subscriptions = $this->getSubscriptionModel()->findByStudyAndYear($this->currentStudy()->getId(), $year);
+
+        return array(
+            'benchmark' => $benchmark,
+            'subscriptions' => $subscriptions,
+            'year' => $year
+        );
+    }
+
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    protected function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
+    }
+
     /**
      * Get the form and bind the entity
      *
