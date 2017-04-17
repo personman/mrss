@@ -25,8 +25,9 @@ class IndexController extends AbstractActionController
 
         // Get this year's memberships by network
         $systems = $college->getSystemsByYear($year);
-        $nextYear = $year + 1;
-        $yearRange = "$year - $nextYear";
+        //$nextYear = $year + 1;
+        //$yearRange = "$year - $nextYear";
+        $yearRange = "FY $year";
 
         $viewParams = array(
             'systems' => $systems,

@@ -540,8 +540,9 @@ class ObservationController extends BaseController
         }
 
         $year = $this->getCurrentStudy()->getCurrentYear();
-        $nextYear = $year + 1;
-        $yearRange = "$year - $nextYear";
+        //$nextYear = $year + 1;
+        //$yearRange = "$year - $nextYear";
+        $yearRange = "FY $year";
 
         $view = new ViewModel(
             array(
