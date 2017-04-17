@@ -11,9 +11,13 @@ class PeerComparisonDemographics extends AbstractForm
 {
     protected $study;
 
-    public function __construct(Study $study)
+    public function __construct(Study $study, $studyConfig = null)
     {
         $this->study = $study;
+
+        if ($studyConfig) {
+            $this->setIncludeCanada($studyConfig->include_canada);
+        }
 
         // Call the parent constructor
         parent::__construct('peerComparison');

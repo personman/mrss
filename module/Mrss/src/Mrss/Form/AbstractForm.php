@@ -8,6 +8,7 @@ use Zend\Form\Fieldset;
 
 class AbstractForm extends Form
 {
+    protected $includeCanada = false;
 
     public function __construct($name)
     {
@@ -133,71 +134,18 @@ class AbstractForm extends Form
 
     public function getStates($includeBlankOption = true)
     {
-        $states = array(
-            'AL' => 'Alabama',
-            'AK' => 'Alaska',
-            'AZ' => 'Arizona',
-            'AR' => 'Arkansas',
-            'CA' => 'California',
-            'CO' => 'Colorado',
-            'CT' => 'Connecticut',
-            'DE' => 'Delaware',
-            'DC' => 'District Of Columbia',
-            'FL' => 'Florida',
-            'GA' => 'Georgia',
-            'HI' => 'Hawaii',
-            'ID' => 'Idaho',
-            'IL' => 'Illinois',
-            'IN' => 'Indiana',
-            'IA' => 'Iowa',
-            'KS' => 'Kansas',
-            'KY' => 'Kentucky',
-            'LA' => 'Louisiana',
-            'ME' => 'Maine',
-            'MD' => 'Maryland',
-            'MA' => 'Massachusetts',
-            'MI' => 'Michigan',
-            'MN' => 'Minnesota',
-            'MS' => 'Mississippi',
-            'MO' => 'Missouri',
-            'MT' => 'Montana',
-            'NE' => 'Nebraska',
-            'NV' => 'Nevada',
-            'NH' => 'New Hampshire',
-            'NJ' => 'New Jersey',
-            'NM' => 'New Mexico',
-            'NY' => 'New York',
-            'NC' => 'North Carolina',
-            'ND' => 'North Dakota',
-            'OH' => 'Ohio',
-            'OK' => 'Oklahoma',
-            'OR' => 'Oregon',
-            'PA' => 'Pennsylvania',
-            'RI' => 'Rhode Island',
-            'SC' => 'South Carolina',
-            'SD' => 'South Dakota',
-            'TN' => 'Tennessee',
-            'TX' => 'Texas',
-            'UT' => 'Utah',
-            'VT' => 'Vermont',
-            'VA' => 'Virginia',
-            'WA' => 'Washington',
-            'WV' => 'West Virginia',
-            'WI' => 'Wisconsin',
-            'WY' => 'Wyoming',
-            'GU' => 'Guam',
-            'PR' => 'Puerto Rico',
-            'VI' => 'Virgin Islands of the U.S.'
-        );
+        return getStates($includeBlankOption, $this->getIncludeCanada());
+    }
 
-        if ($includeBlankOption) {
-            $blankOption = array(
-                '' => 'Select State'
-            );
+    public function setIncludeCanada($include)
+    {
+        $this->includeCanada = $include;
 
-            $states = array_merge($blankOption, $states);
-        }
+        return $this;
+    }
 
-        return $states;
+    public function getIncludeCanada()
+    {
+        return $this->includeCanada;
     }
 }

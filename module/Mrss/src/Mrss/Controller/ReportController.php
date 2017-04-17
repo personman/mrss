@@ -560,7 +560,7 @@ class ReportController extends ReportAdminController
             return $redirect;
         }
 
-        $form = new PeerComparisonDemographics($this->currentStudy());
+        $form = new PeerComparisonDemographics($this->currentStudy(), $this->getStudyConfig());
 
         $criteria = $this->getCriteriaFromSession();
         $form->setData($criteria);
