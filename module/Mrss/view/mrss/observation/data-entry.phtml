@@ -8,20 +8,28 @@
 $this->headScript()->appendFile(
     '/js/data-entry.js?v=14',
     'text/javascript'
-); ?>
+);
+
+$systemName = null;
+if ($activeSystem) {
+    $systemName = $activeSystem->getName();
+}
+?>
 
 
 <?= $this->partial(
     'mrss/observation/data-entry-nav.partial.phtml',
     array(
         'benchmarkGroup' => $benchmarkGroup,
-        'benchmarkGroups' => $benchmarkGroups
+        'benchmarkGroups' => $benchmarkGroups,
+        'title' => $systemName
     )
 )
 ?>
 
 <div class="row">
     <div class="col-md-9 span9">
+
         <h1>
             <?= $benchmarkGroup->getName() ?>
         </h1>
