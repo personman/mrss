@@ -439,6 +439,10 @@ blockquote footer cite { color: #00508d; font-size: 12px; }
     width: 328px;
 }
 
+#headerButtons a:visited.btn {
+    color: #FFF;
+}
+
 /* Hide the heading, forgot password link and errors */
 #headerLoginForm h1, /*#headerLoginForm a,*/ #headerLoginForm .help-inline {
     display: none;
