@@ -37,8 +37,10 @@ class BarBuilder extends ChartBuilder
 
         // @todo
         $series = array();
+        $system = $this->getSystem();
         $percentiles = $this->getPercentileModel()
-            ->findByBenchmarkAndYear($xBenchmark, $this->getYear(), $percentileBreakpoints);
+            ->findByBenchmarkAndYear($xBenchmark, $this->getYear(), $percentileBreakpoints, $system);
+
         $percentileData = array();
         foreach ($percentiles as /** var Percentile */ $percentile) {
             if ($percentile->getPercentile() == 'N') {

@@ -136,4 +136,15 @@ class ChartBuilder extends Report
 
         return $systemId;
     }
+
+    public function getSystem()
+    {
+        $systemId = $this->getSystemId();
+        $system = null;
+        if ($systemId) {
+            $system = $this->getSystemModel()->find($systemId);
+        }
+
+        return $system;
+    }
 }
