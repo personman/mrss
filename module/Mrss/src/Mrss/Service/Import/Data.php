@@ -84,6 +84,8 @@ class Data extends Import
     {
         $data = $this->getDataFromRow($row);
 
+        pr($data);
+
         if (empty($data['ipeds'])) {
             return false;
         }
