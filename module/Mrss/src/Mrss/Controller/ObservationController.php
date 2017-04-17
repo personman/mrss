@@ -166,8 +166,9 @@ class ObservationController extends BaseController
         $issues = $this->getIssueModel()->findForCollege($this->currentCollege());
 
         $year = $this->getCurrentStudy()->getCurrentYear();
-        $nextYear = $year + 1;
-        $yearRange = "$year - $nextYear";
+        //$nextYear = $year + 1;
+        //$yearRange = "$year - $nextYear";
+        $yearRange = "FY $year";
 
         return array(
             'currentStudy' => $currentStudy,
