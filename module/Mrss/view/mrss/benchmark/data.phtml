@@ -10,6 +10,7 @@
         <tr>
             <th><?= ucwords($this->studyConfig()->institution_label) ?></th>
             <th style="text-align: right">Value</th>
+            <th><?= ucwords($this->studyConfig()->system_label) ?></th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +18,7 @@
         <tr>
             <td><?= $subscription->getCollege()->getNameAndState() ?></td>
             <td style="text-align: right"><?= $subscription->getValue($benchmark) ?></td>
+            <td><?= implode(', ', $subscription->getCollege()->getSystemNames($subscription->getYear())) ?></td>
         </tr>
     <?php endforeach ?>
     </tbody>

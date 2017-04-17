@@ -664,9 +664,14 @@ class College
         return $systems;
     }
 
-    public function getSystemNames()
+    public function getSystemNames($year = null)
     {
-        $systems = $this->getSystems();
+        if ($year) {
+            $systems = $this->getSystemsByYear($year);
+        } else {
+            $systems = $this->getSystems();
+        }
+
 
         $names = array();
         foreach ($systems as $system) {
