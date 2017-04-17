@@ -1830,6 +1830,15 @@ return array(
                                 'action' => 'definitions'
                             )
                         )
+                    ),
+                    'settings' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/settings',
+                            'defaults' => array(
+                                'action' => 'accountSettings'
+                            )
+                        )
                     )
                 )
             ),

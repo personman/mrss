@@ -380,6 +380,15 @@ class UserController extends AbstractActionController
         );
     }
 
+    public function accountSettingsAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        return array(
+            'user' => $user
+        );
+    }
+
     /**
      * Update data definitions user setting via ajax
      */
