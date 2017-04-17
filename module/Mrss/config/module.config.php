@@ -2068,6 +2068,15 @@ return array(
                             )
                         )
                     ),
+                    'settings' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/settings',
+                            'defaults' => array(
+                                'action' => 'settings',
+                            )
+                        )
+                    ),
                 )
             ),
             'tools' => array(

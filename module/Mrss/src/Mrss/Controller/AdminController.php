@@ -165,6 +165,14 @@ class AdminController extends AbstractActionController
     }
 
     /**
+     * Just display a list of links
+     */
+    public function settingsAction()
+    {
+        return array();
+    }
+
+    /**
      * @return \Mrss\Service\ComputedFields
      */
     public function getComputedFieldsService()

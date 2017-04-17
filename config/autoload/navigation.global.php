@@ -691,7 +691,7 @@ $navigation = array(
 );
 
 //prd($navigation['navigation']['nccbp']);
-$navigation['navigation']['envisiousernavigation'] = getUserMenu(true);
+$navigation['navigation']['envisiousernavigation'] = getUserMenu(false);
 
 return $navigation;
 
