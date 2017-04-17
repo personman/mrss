@@ -8,10 +8,14 @@ use Zend\InputFilter\InputFilter;
 
 class PeerComparison extends AbstractForm
 {
+    protected $studyConfig;
+
     public function __construct($yearsWithData, $defaultBenchmarks, $studyConfig)
     {
         // Call the parent constructor
         parent::__construct('peerComparison');
+
+        $this->studyConfig = $studyConfig;
 
         $this->add(
             array(
@@ -42,14 +46,19 @@ class PeerComparison extends AbstractForm
             )
         );
 
+        $peersHelpText = 'Select at least ' . $studyConfig->min_peers . ' peer ' . $studyConfig->institutions_label . '.
+                                    <a href="/peer-groups">Manage your peer groups</a>.';
+        if (!$studyConfig->min_peers) {
+            $peersHelpText = '';
+        }
+
         $this->add(
             array(
                 'name' => 'peers',
                 'type' => 'Select',
                 'options' => array(
                     'label' => 'Peer ' . $studyConfig->institutions_label,
-                    'help-block' => 'Select at least 5 peer ' . $studyConfig->institutions_label . '.
-                                    <a href="/peer-groups">Manage your peer groups</a>.'
+                    'help-block' => $peersHelpText
                 ),
                 'attributes' => array(
                     'id' => 'peers',
@@ -88,8 +97,12 @@ class PeerComparison extends AbstractForm
 
         // State is not required
         $peers = new Input('peers');
-        $peers->getValidatorChain()->attach(new \Mrss\Validator\MinimumSelected(5));
-        $filter->add($peers);
+        $minPeers = $this->studyConfig->min_peers;
+
+        if ($minPeers) {
+            $peers->getValidatorChain()->attach(new \Mrss\Validator\MinimumSelected(5));
+            $filter->add($peers);
+        }
 
         return $filter;
     }

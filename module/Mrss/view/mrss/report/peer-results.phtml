@@ -94,7 +94,7 @@ $this->headScript()->appendFile(
 </div>
 
 <?php if (!empty($report['skipped'])): ?>
-    <p>The following metrics are not included in the report because fewer than 5 or your selected peers reported data for them:</p>
+    <p>The following metrics are not included in the report because fewer than <?= $this->studyConfig()->min_peers ?> or your selected peers reported data for them:</p>
 
     <ul>
         <?php foreach ($report['skipped'] as $benchmark): ?>

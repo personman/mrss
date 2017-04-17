@@ -844,7 +844,7 @@ class ReportController extends ReportAdminController
 
                 $count = 10;
 
-                if ($count >= 5) {
+                if ($count >= $this->getStudyConfig()->min_peers) {
                     $benchmarkData[] = array(
                         'name' => $benchmark->getPeerReportLabel(),
                         'id' => $benchmark->getId()

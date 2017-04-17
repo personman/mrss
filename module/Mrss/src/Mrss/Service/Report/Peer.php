@@ -33,7 +33,8 @@ class Peer extends Report
 
     public function getPeerReport($benchmarks, $colleges, $currentCollege, $year, $peerGroupName)
     {
-        $minPeers = 5;
+        $minPeers = $this->getStudyConfig()->min_peers;
+
         $this->currentCollege = $currentCollege;
 
         $report = array(

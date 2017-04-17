@@ -40,6 +40,7 @@ return array(
     'form_label' => 'form',
     'system_benchmarks' => true,
     'anonymous_peers' => true,
+    'min_peers' => 5,
     'peer_percentiles' => true, // Show national percentiles on peer comparison results?
     'show_institution_in_report_heading' => false,
     'benchmark_completion_heatmap' => false,
