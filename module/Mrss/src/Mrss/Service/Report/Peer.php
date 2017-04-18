@@ -2,6 +2,7 @@
 
 namespace Mrss\Service\Report;
 
+use Mrss\Entity\Benchmark;
 use Mrss\Service\Report;
 use Mrss\Entity\PeerGroup;
 use Mrss\Entity\College;
@@ -209,11 +210,11 @@ class Peer extends Report
 
             foreach ($section['data'] as $collegeId => $peerData) {
                 $institution = $peerData['label'];
-                $value = $peerData['value'];
+                $value = $peerData['formatted'];
 
                 $dataRow = array(
                     $institution,
-                    round($value, 2),
+                    $value,
                 );
 
                 if (!empty($peerData['percentileRank'])) {
@@ -277,11 +278,16 @@ class Peer extends Report
         return $name;
     }
 
-    public function sortAndLabelPeerData($data, College $currentCollege, $benchmark)
+    public function sortAndLabelPeerData($data, College $currentCollege, Benchmark $benchmark)
     {
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
-        arsort($data);
+        if ($benchmark->getIncludeInBestPerformer() && !$benchmark->getHighIsBetter()) {
+            asort($data);
+        } else {
+            arsort($data);
+        }
+
         $dataWithLabels = array();
 
         $i = 1;
