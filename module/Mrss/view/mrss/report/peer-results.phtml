@@ -36,12 +36,15 @@ $this->headScript()->appendFile(
 </p>
 <?php endif ?>
 
-<p>
+<div class="reportDownloads">
     <a href="<?= $this->url(
         'reports/peer-results',
         array('format' => 'excel')
-    ) ?>" class="btn btn-default">Download</a>
-</p>
+    ) ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download
+    </a>
+</div>
 
 <div class="container-fluid report">
     <?php foreach ($report['sections'] as $section): ?>

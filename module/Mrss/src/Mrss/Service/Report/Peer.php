@@ -196,9 +196,12 @@ class Peer extends Report
 
             $headerRow = array(
                 $section['benchmark'],
-                'Benchmark',
-                'National % Rank'
+                ucwords($this->getStudyConfig()->benchmark_label)
             );
+
+            if ($this->getStudyConfig()->peer_percentiles) {
+                $headerRow[] = 'National % Rank';
+            }
 
             $sheet->fromArray($headerRow, null, 'A' . $row);
             $sheet->getStyle("A$row:C$row")->applyFromArray($blueBar);
@@ -211,8 +214,13 @@ class Peer extends Report
                 $dataRow = array(
                     $institution,
                     round($value, 2),
-                    round($peerData['percentileRank'])
                 );
+
+                if (!empty($peerData['percentileRank'])) {
+                    $dataRow[] = round($peerData['percentileRank']);
+                }
+
+
 
                 $sheet->fromArray($dataRow, null, 'A' . $row);
                 $row++;
