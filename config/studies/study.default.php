@@ -43,6 +43,7 @@ return array(
     'min_peers' => 5,
     'peer_percentiles' => true, // Show national percentiles on peer comparison results?
     'show_institution_in_report_heading' => false,
+    'use_gravatar' => false,
     'benchmark_completion_heatmap' => false,
     'chart_colors' => '#9cc03e|#0065A1',
     'head_logo_url' => '/',

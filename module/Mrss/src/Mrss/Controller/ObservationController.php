@@ -1293,7 +1293,6 @@ class ObservationController extends BaseController
         // Get the observation
         $subscriptionModel = $this->getSubscriptionModel();
         $subscription = $this->getSubscription($year);
-
         $observation = $subscription->getObservation();
 
         // We'll use the report service to determine decimal places
@@ -1312,42 +1311,8 @@ class ObservationController extends BaseController
         $variable = $this->getVariableSubstitutionService();
         $variable->setStudyYear($year);
 
-        $submittedValues = array();
+        $submittedValues = $this->getSubmittedValues($subscription);
 
-        // Get the benchmark groups
-        $benchmarkGroups = $this->getCurrentStudy()->getBenchmarkGroups();
-        foreach ($benchmarkGroups as $benchmarkGroup) {
-            $groupData = array(
-                'benchmarkGroup' => $benchmarkGroup->getName(),
-                'benchmarks' => array()
-            );
-            $benchmarks = $benchmarkGroup->getChildren($year);
-
-            foreach ($benchmarks as $benchmark) {
-                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
-                    /** @var \Mrss\Entity\BenchmarkHeading $heading */
-                    $heading = $benchmark;
-                    $groupData['benchmarks'][] = array(
-                        'heading' => true,
-                        'name' => $variable->substitute($heading->getName()),
-                        'description' => $variable->substitute($heading->getDescription())
-                    );
-                    continue;
-                }
-
-
-                $value = $observation->get($benchmark->getDbColumn());
-                $value = $benchmark->format($value);
-
-                $groupData['benchmarks'][] = array(
-                    'benchmark' => $benchmark,
-                    'value' => $value,
-                    'benchmarkName' => $variable->substitute($benchmark->getReportLabel())
-                );
-            }
-
-            $submittedValues[] = $groupData;
-        }
 
         if ($format == 'xls') {
             $this->downloadSubmittedValues($submittedValues, $year);
@@ -1357,8 +1322,67 @@ class ObservationController extends BaseController
             'subscriptions' => $subscriptions,
             'year' => $year,
             'submittedValues' => $submittedValues,
-            'completionPercentage' => round($subscription->getCompletion(), 1)
+            'completionPercentage' => round($subscription->getCompletion(), 1),
+            'otherSystems' => $this->currentCollege()->getSystems(),
+            'system' => $this->getActiveSystem()
         );
+    }
+
+
+
+    protected function getSubmittedValues($subscription)
+    {
+        $observation = $subscription->getObservation();
+        $year = $subscription->getYear();
+
+        $submittedValues = array();
+
+        // Get the benchmark groups
+        $benchmarkGroups = $this->getBenchmarkGroups($subscription);
+        //$benchmarkGroups = $this->getCurrentStudy()->getBenchmarkGroups();
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            $submittedValues[] = $this->getSubmittedValuesGroup($benchmarkGroup, $observation, $year);
+        }
+
+        return $submittedValues;
+    }
+
+    protected function getSubmittedValuesGroup($benchmarkGroup, $observation, $year)
+    {
+        $variable = $this->getVariableSubstitutionService();
+
+        $groupData = array(
+            'benchmarkGroup' => $benchmarkGroup->getName(),
+            'benchmarks' => array()
+        );
+        $benchmarks = $benchmarkGroup->getChildren($year);
+
+        foreach ($benchmarks as $benchmark) {
+            if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                /** @var \Mrss\Entity\BenchmarkHeading $heading */
+                $heading = $benchmark;
+                $groupData['benchmarks'][] = array(
+                    'heading' => true,
+                    'name' => $variable->substitute($heading->getName()),
+                    'description' => $variable->substitute($heading->getDescription())
+                );
+                continue;
+            }
+
+
+            $value = $observation->get($benchmark->getDbColumn());
+            $value = $benchmark->format($value);
+
+            $row = array(
+                'benchmark' => $benchmark,
+                'value' => $value,
+                'benchmarkName' => $variable->substitute($benchmark->getReportLabel())
+            );
+
+            $groupData['benchmarks'][] = $row;
+        }
+
+        return $groupData;
     }
 
     /**

@@ -1,21 +1,41 @@
+<style>
+    .account-help {
+        color: #666;
+    }
+</style>
 <h2>Your Account</h2>
 
 <h4>Hello, <?= $user->getFullName() ?></h4>
 
 <p>Click on the categories below to change your information and don't forget to save your changes!</p>
 
-<p>
+<ul>
+    <li>
     <a href="<?= $this->url('account/edit') ?>">
         Edit your account details
     </a>
-    <br>
+    </li>
 
+    <li>
     <a href="<?= $this->url('zfcuser/changepassword') ?>">
         Change your password
     </a>
-    <br>
+    </li>
 
+    <?php if ($this->studyConfig()->use_gravatar): ?>
+    <li>
+    <a href="https://en.gravatar.com" target="=_blank">
+        Set avatar image
+    </a>
+        -
+    <span class="account-help">(Optional) Create an account at gravatar.com, add the email you use to log in here, and upload an image. The image will be displayed here in the top right.</span>
+
+    </li>
+    <?php endif ?>
+
+    <li>
     <a href="<?= $this->url('zfcuser/logout') ?>">
         Sign out
     </a>
-</p>
+    </li>
+</ul>

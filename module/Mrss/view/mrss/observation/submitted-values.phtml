@@ -22,6 +22,20 @@
 
 <h1>Submitted Values</h1>
 
+
+<?php if (count($otherSystems)): ?>
+    <ul class="nav nav-pills report-nav">
+        <?php $url = '/submitted-values/' . $year; ?>
+        <?php foreach ($otherSystems as $otherSystem): ?>
+            <li<?php if ($system->getId() == $otherSystem->getId()) echo ' class="active"'; ?>>
+                <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode($url) ?>">
+                    <?= $otherSystem->getName() ?>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>
+
 <ul class="nav nav-pills report-nav">
     <?php foreach ($subscriptions as $subscription): ?>
         <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
@@ -30,12 +44,12 @@
     <?php endforeach ?>
 </ul>
 
-<p>
+<div class="reportDownloads">
     <a href="<?= $this->url('submitted-values', array('year' => $year, 'format' => 'xls')) ?>" class="btn btn-default">
         <span class="glyphicon glyphicon-circle-arrow-down"></span>
         Download
     </a>
-</p>
+</div>
 <p>
     <strong>Please note:</strong> The website has created the values in grey italics based on the data you entered.
 </p>

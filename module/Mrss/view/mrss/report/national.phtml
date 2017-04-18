@@ -45,7 +45,7 @@ $this->headScript()->appendFile(
 
         <?php foreach ($otherSystems as $otherSystem): ?>
         <li<?php if ($system->getId() == $otherSystem->getId()) echo ' class="active"'; ?>>
-            <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('/reports/network') ?>">
+            <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('/reports/network/' . $year) ?>">
                 <?= $otherSystem->getName() ?>
             </a>
         </li>

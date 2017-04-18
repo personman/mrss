@@ -182,16 +182,6 @@
 <!-- END HEADER -->
 
 <!-- BEGIN BODY -->
-<?php foreach ($this->flashMessages(true) as $namespace => $messages) : ?>
-    <?php if (count($messages)) : ?>
-        <?php if ($namespace == 'error') $namespace = 'danger' ?>
-        <?php foreach ($messages as $message) : ?>
-            <div class="alert alert-<?=$namespace?>">
-                <?php echo $message; ?>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-<?php endforeach; ?>
 
 <?php if ($this->zfcUserImpersonatorDisplayName()): ?>
     <div class="impersonation">
@@ -203,6 +193,19 @@
         (<?= $this->zfcUserIdentity()->getCollege()->getName() ?>)
     </div>
 <?php endif ?>
+
+
+<?php foreach ($this->flashMessages(true) as $namespace => $messages) : ?>
+    <?php if (count($messages)) : ?>
+        <?php if ($namespace == 'error') $namespace = 'danger' ?>
+        <?php foreach ($messages as $message) : ?>
+            <div class="alert alert-<?=$namespace?>">
+                <?php echo $message; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+<?php endforeach; ?>
+
 
 <?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
 
