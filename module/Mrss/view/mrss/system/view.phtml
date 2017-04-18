@@ -99,11 +99,15 @@
 </table>
 
 
+<?php
+$instLabel = $this->studyConfig()->institution_label;
+$vowels = array('a', 'e', 'i', 'o', 'u');
+?>
 
 <div class="btn-group heading-btns">
     <a href="<?= $this->url('systems/addcollege', array('system_id' => $system->getId())) ?>" class="btn btn-default">
         <i class="glyphicon glyphicon-plus"></i>
-        Add an <?= $this->studyConfig()->institution_label ?>
+        Add a<?php if (in_array(strtolower(substr($instLabel, 0, 1)), $vowels)) echo 'n' ?> <?= $instLabel ?>
     </a>
 </div>
 
