@@ -788,7 +788,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+$/',
+                    'pattern' => '/^-?\d+$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234'
                     )
@@ -798,7 +798,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+\.?(\d+)?$/',
+                    'pattern' => '/^-?\d+\.?(\d+)?$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234, 1234.5, 1234.56 '
                             . 'or 1234.567'
@@ -809,7 +809,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+\.?(\d+)?$/',
+                    'pattern' => '/^-?\d+\.?(\d+)?$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 12, 12.3, 12.34 '
                     )
@@ -819,7 +819,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Between',
                 'options' => array(
-                    'min' => 0,
+                    'min' => -100,
                     'max' => 100
                 )
             );
@@ -827,7 +827,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+$/',
+                    'pattern' => '/-?^\d+$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 12'
                     )
@@ -837,7 +837,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Between',
                 'options' => array(
-                    'min' => 0,
+                    'min' => -100,
                     'max' => 100
                 )
             );
