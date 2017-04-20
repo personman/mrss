@@ -76,7 +76,7 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
                 <?php if (!empty($subs[$year]) && $sub = $subs[$year]): ?>
                     <?php $percentage = $sub->getCompletion(); ?>
-                    <td class="heatmapTd heatmapCell heatmapCellBlue" style="opacity: <?= ($percentage / 120) + 0.2 ?>">
+                    <td class="heatmapTd heatmapCell <?= $sub->getHeatmapClass() ?>" style="opacity: <?= ($percentage / 120) + 0.2 ?>">
                         <div data-toggle=tooltip" data-placement="bottom" title="<?= $year ?>">
                             <?= round($percentage) ?>%
                         </div>
@@ -109,3 +109,22 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     <?php endforeach ?>
     </tbody>
 </table>
+
+
+<?php if ($this->currentStudy()->hasSections()): ?>
+    <h3>Legend</h3>
+
+    <?php $allSectionNames = $allSectionIds = array(); ?>
+    <?php foreach ($this->currentStudy()->getSections() as $section): ?>
+
+        <span class="heatmapLegend heatmapCell <?= $sub->getHeatmapClass(array($section->getId())) ?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <?= $section->getName() ?>
+        <br>
+        <?php $allSectionIds[] = $section->getId() ?>
+        <?php $allSectionNames[] = $section->getName() ?>
+    <?php endforeach ?>
+
+
+    <span class="heatmapLegend heatmapCell <?= $sub->getHeatmapClass($allSectionIds) ?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <?= implode(', ', $allSectionNames) ?>
+<?php endif ?>

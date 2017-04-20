@@ -41,6 +41,18 @@
 .heatmapCellBlue {
     background-color: #004f8c;
 }
+.heatmapCellGreen {
+    /*background-color: #9cc03e;*/
+    background-color: #507400;
+}
+
+.heatmapCellPurple {
+    background-color: #4D1B76;
+}
+
+.heatmapLegend {
+    opacity: 0.8;
+}
 
 table.dataTable thead .sorting.heatMapYear {
     background: none;

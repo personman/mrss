@@ -764,6 +764,25 @@ class Subscription
         return in_array($section->getId(), $this->getSectionIds());
     }
 
+    public function getHeatmapClass($sectionIds = null)
+    {
+        if ($sectionIds === null) {
+            $sectionIds = $this->getSectionIds();
+        }
+
+        // Default (NCCBP only)
+        $heatmapClass = 'heatmapCellBlue';
+
+        // Both
+        if (in_array(1, $sectionIds) && in_array(2, $sectionIds)) {
+            $heatmapClass = 'heatmapCellGreen';
+        } elseif (in_array(2, $sectionIds)) {
+            $heatmapClass = 'heatmapCellPurple';
+        }
+
+        return $heatmapClass;
+    }
+
     public function getBenchmarkGroupIds()
     {
         $benchmarkGroupIds = array();
