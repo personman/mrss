@@ -236,8 +236,12 @@ class Excel extends Report
 
                 $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
                 $sheet->getColumnDimensionByColumn(1)->setAutoSize(true);
-                $sheet->getColumnDimensionByColumn(2)->setAutoSize(true);
-                $sheet->getStyle('A1:C1')->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension('C')->setWidth(90);
+                $sheet->getColumnDimension('C')->setAutoSize(false);
+
+                //$sheet->getColumnDimensionByColumn(2)->setAutoSize(true);
+                $sheet->getStyle('C1:C' . $this->rowCount)->getAlignment()->setWrapText(true);
+                $sheet->getStyle('A1:C' . $this->rowCount)->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
                 //$sheet->getColumnDimension(3)->setVisible(false);
 
                 $index++;
@@ -333,11 +337,16 @@ class Excel extends Report
             $column++;
         }
 
+        $definition = $benchmark->getDescription();
+
+        // Remove html special chars
+        $definition = preg_replace("/&#?[a-z0-9]{2,8};/i", "", $definition);
+
         // Write the data definition
         $sheet->setCellValueByColumnAndRow(
             $column,
             $row,
-            $this->getVariableSubstitution()->substitute(strip_tags($benchmark->getDescription()))
+            $this->getVariableSubstitution()->substitute(strip_tags($definition))
         );
         $column++;
 
