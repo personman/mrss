@@ -53,12 +53,16 @@ class Excel extends Report
 
     protected $year;
 
+    protected $exportFilename = 'data-export.xlsx';
+
     /**
      * @deprecated
      * @param Subscription $subscription
      */
     public function getExcelForSubscription(Subscription $subscription)
     {
+        $this->year = $subscription->getYear();
+
         $excel = new PHPExcel();
         $this->writeHeaders($excel);
         $this->writeBody($excel, $subscription);
@@ -75,6 +79,7 @@ class Excel extends Report
     {
         $excel = new PHPExcel();
         $subscription = $subscriptions[0];
+        $this->year = $subscription->getYear();
 
         if ($subscription->getStudy()->getId() != 4) {
             $this->writeHeadersSystem($excel->getActiveSheet(), $subscriptions);
@@ -97,8 +102,11 @@ class Excel extends Report
             }
         }
 
-
-
+        if ($this->getStudyConfig()->use_structures) {
+            $systemName = $this->getSystem()->getName();
+            $systemName = str_replace(' ', '-', $systemName);
+            $this->exportFilename = $systemName . '-' . $this->year . '.xlsx';
+        }
 
         $this->download($excel);
     }
@@ -379,7 +387,7 @@ class Excel extends Report
                 'Content-Type: '.
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             );
-            header('Content-Disposition: attachment;filename="data-export.xlsx"');
+            header('Content-Disposition: attachment;filename="' . $this->exportFilename . '"');
             header('Cache-Control: max-age=0');
 
             $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
