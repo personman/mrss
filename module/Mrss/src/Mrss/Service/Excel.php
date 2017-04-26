@@ -1289,7 +1289,7 @@ class Excel extends Report
     public function getBenchmarkGroups($subscription)
     {
         if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
-            $benchmarkGroups = $system->getReportStructure()->getPages();
+            $benchmarkGroups = $system->getDataEntryStructure()->getPages();
         } else {
             $study = $this->getStudy();
             $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
