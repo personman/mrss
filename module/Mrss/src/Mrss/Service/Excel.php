@@ -51,6 +51,8 @@ class Excel extends Report
 
     protected $studyConfig;
 
+    protected $year;
+
     /**
      * @deprecated
      * @param Subscription $subscription
@@ -75,7 +77,7 @@ class Excel extends Report
         $subscription = $subscriptions[0];
 
         if ($subscription->getStudy()->getId() != 4) {
-            $this->writeHeadersSystem($excel, $subscriptions);
+            $this->writeHeadersSystem($excel->getActiveSheet(), $subscriptions);
             $this->writeBodySystem($excel, $subscriptions);
         }
 
@@ -135,13 +137,11 @@ class Excel extends Report
     }
 
     /**
-     * @param PHPExcel $spreadsheet
+     * @param PHPExcel_Worksheet $sheet
      * @param Subscription[] $subscriptions
      */
-    public function writeHeadersSystem(PHPExcel $spreadsheet, $subscriptions)
+    public function writeHeadersSystem(PHPExcel_Worksheet $sheet, $subscriptions)
     {
-        $sheet = $spreadsheet->getActiveSheet();
-
         // Benchmark label
         $sheet->setCellValueByColumnAndRow(0, 1, 'Label');
         $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
@@ -176,13 +176,13 @@ class Excel extends Report
 
     public function writeBody(PHPExcel $spreadsheet, Subscription $subscription)
     {
-        $year = $subscription->getStudy()->getCurrentYear();
+        $this->year = $subscription->getStudy()->getCurrentYear();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Loop over each benchmark, adding a row
         $row = 2;
         foreach ($subscription->getStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-            $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($year);
+            $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($this->year);
             $this->writeBenchmarkGroupRow($sheet, $row, $benchmarkGroup);
             $row++;
 
@@ -201,28 +201,67 @@ class Excel extends Report
     {
         $exampleSubscription = $subscriptions[0];
         $study = $exampleSubscription->getStudy();
-        $year = $study->getCurrentYear();
+        $this->year = $study->getCurrentYear();
 
         $sheet = $spreadsheet->getActiveSheet();
         //$benchmarkGroups = $study->getBenchmarkGroups();
-        $benchmarkGroups = $this->getBenchmarkGroups();
+        $benchmarkGroups = $this->getBenchmarkGroups($exampleSubscription);
 
-        // Loop over each benchmark, adding a row
-        $row = 2;
-        foreach ($benchmarkGroups as $benchmarkGroup) {
-            $this->writeBenchmarkGroupRow($sheet, $row, $benchmarkGroup);
-            $row++;
-
-            $benchmarks = $benchmarkGroup->getChildren($year, false);
-            foreach ($benchmarks as $benchmark) {
-                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
-                    $this->writeSubHeading($sheet, $row, $benchmark);
-                } else {
-                    $this->writeRowSystem($sheet, $row, $benchmark, $subscriptions);
-                }
-
-                $row++;
+        if (false) {
+            // Loop over each benchmark, adding a row
+            $this->row = 2;
+            foreach ($benchmarkGroups as $benchmarkGroup) {
+                $this->writeBenchmarkGroup($sheet, $benchmarkGroup, $subscriptions);
             }
+        } else {
+            // Remove the original
+            $spreadsheet->removeSheetByIndex($spreadsheet->getActiveSheetIndex());
+
+            // Add one benchmark group per sheet
+            $index = 0;
+            foreach ($benchmarkGroups as $benchmarkGroup) {
+                $sheet = $spreadsheet->createSheet($index);
+                //$spreadsheet->addSheet($sheet, $index);
+                $spreadsheet->setActiveSheetIndex($index);
+
+                $shortTitle = $benchmarkGroup->getUrl() . ' ' . $benchmarkGroup->getName();
+                $shortTitle = substr($shortTitle, 0, 31);
+                $shortTitle = str_replace(array('&'), '', $shortTitle);
+                $sheet->setTitle($shortTitle);
+
+                $this->writeHeadersSystem($spreadsheet->getActiveSheet(), $subscriptions);
+
+                $this->row = 2;
+                $this->writeBenchmarkGroup($sheet, $benchmarkGroup, $subscriptions);
+
+                $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+                $sheet->getColumnDimensionByColumn(1)->setAutoSize(true);
+                $sheet->getColumnDimensionByColumn(2)->setAutoSize(true);
+                $sheet->getStyle('A1:C1')->getAlignment()->setWrapText(true);
+                //$sheet->getColumnDimension(3)->setVisible(false);
+
+                $index++;
+            }
+
+            // At the end, make the first sheet active
+            $spreadsheet->setActiveSheetIndex(0);
+        }
+    }
+
+    protected function writeBenchmarkGroup(PHPExcel_Worksheet $sheet, $benchmarkGroup, $subscriptions)
+    {
+        $this->writeBenchmarkGroupRow($sheet, $this->row, $benchmarkGroup);
+        $this->row++;
+
+        $benchmarks = $benchmarkGroup->getChildren($this->year, false);
+        foreach ($benchmarks as $benchmark) {
+            if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                $this->writeSubHeading($sheet, $this->row, $benchmark);
+            } else {
+                $this->writeRowSystem($sheet, $this->row, $benchmark, $subscriptions);
+            }
+
+            $this->row++;
         }
     }
 
