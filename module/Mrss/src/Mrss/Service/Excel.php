@@ -418,14 +418,33 @@ class Excel extends Report
         $excel->setActiveSheetIndex(0);
         $sheet = $excel->getActiveSheet();
 
-        // For testing whether a dbColumn is valid
-        $emptyObservation = new Observation();
-        $emptySubObservation = new SubObservation();
 
         $customizedData = $this->applyImportCustomizations($excel);
         if ($customizedData) {
             return $customizedData;
         }
+
+        $data = array();
+        foreach ($excel->getAllSheets() as $sheet) {
+            $sheetData = $this->getDataFromSheet($sheet);
+
+            foreach ($sheetData as $ipeds => $values) {
+                if (isset($data[$ipeds])) {
+                    $data[$ipeds] = array_merge($data[$ipeds], $values);
+                } else {
+                    $data[$ipeds] = $values;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    protected function getDataFromSheet(PHPExcel_Worksheet $sheet)
+    {
+        // For testing whether a dbColumn is valid
+        $emptyObservation = new Observation();
+        $emptySubObservation = new SubObservation();
 
         $colleges = $this->getCollegesFromExcel($sheet);
         $data = array();
