@@ -226,7 +226,7 @@ class Excel extends Report
 
                 $shortTitle = $benchmarkGroup->getUrl() . ' ' . $benchmarkGroup->getName();
                 $shortTitle = substr($shortTitle, 0, 31);
-                $shortTitle = str_replace(array('&'), '', $shortTitle);
+                $shortTitle = str_replace(array('&', '/'), array('', ' '), $shortTitle);
                 $sheet->setTitle($shortTitle);
 
                 $this->writeHeadersSystem($spreadsheet->getActiveSheet(), $subscriptions);
