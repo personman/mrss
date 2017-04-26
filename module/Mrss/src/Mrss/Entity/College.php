@@ -664,6 +664,19 @@ class College
         return $systems;
     }
 
+    public function hasSystemAdmin($userId)
+    {
+        foreach ($this->getSystems() as $system) {
+            foreach ($system->getAdmins() as $admin) {
+                if ($admin->getId() == $userId) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function getSystemNames($year = null)
     {
         if ($year) {

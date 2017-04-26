@@ -15,7 +15,7 @@ use PHPExcel_Worksheet_Row;
 use PHPExcel_Cell;
 use PHPExcel_Shared_Date;
 
-class Excel
+class Excel extends Report
 {
     // Maximum row count
     protected $rowCount = 300;
@@ -94,6 +94,8 @@ class Excel
                 $this->customizeForAaup($excel, $subscription);
             }
         }
+
+
 
 
         $this->download($excel);
@@ -202,10 +204,12 @@ class Excel
         $year = $study->getCurrentYear();
 
         $sheet = $spreadsheet->getActiveSheet();
+        //$benchmarkGroups = $study->getBenchmarkGroups();
+        $benchmarkGroups = $this->getBenchmarkGroups();
 
         // Loop over each benchmark, adding a row
         $row = 2;
-        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
+        foreach ($benchmarkGroups as $benchmarkGroup) {
             $this->writeBenchmarkGroupRow($sheet, $row, $benchmarkGroup);
             $row++;
 
@@ -1270,7 +1274,7 @@ class Excel
         return $this->valueColumnBackground;
     }
 
-    public function setStudyConfig($config)
+    /*public function setStudyConfig($config)
     {
         $this->studyConfig = $config;
 
@@ -1280,5 +1284,18 @@ class Excel
     protected function getStudyConfig()
     {
         return $this->studyConfig;
+    }*/
+
+    public function getBenchmarkGroups($subscription)
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
+            $benchmarkGroups = $system->getReportStructure()->getPages();
+        } else {
+            $study = $this->getStudy();
+            $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        }
+
+        return $benchmarkGroups;
     }
+
 }

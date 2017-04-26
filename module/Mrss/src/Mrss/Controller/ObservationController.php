@@ -974,7 +974,8 @@ class ObservationController extends BaseController
         return array(
             'form' => $form,
             'useDirectDownloadLink' => $useDirectDownloadLink,
-            'errorMessages' => $errorMessages
+            'errorMessages' => $errorMessages,
+            'activeSystem' => $this->getActiveSystem()
         );
     }
 
@@ -1054,6 +1055,8 @@ class ObservationController extends BaseController
 
         $config = $this->getServiceLocator()->get('study');
         $excelService->setStudyConfig($config);
+        $excelService->setStudy($this->currentStudy());
+        $excelService->setSystem($this->getActiveSystem());
 
         $excelService->getExcelForSubscriptions(array($subscription));
     }
@@ -1137,15 +1140,13 @@ class ObservationController extends BaseController
         }
 
         // Is the college part of a system?
-        if ($collegeSystem = $college->getSystem()) {
+        if ($collegeSystems = $college->getSystems()) {
             // Is the user a system admin in that same system?
             if ($user->getRole() == 'system_admin') {
-                $userSystem = $user->getCollege()->getSystem();
-                if (!empty($userSystem)
-                    && $userSystem->getId() == $collegeSystem->getId()
-                ) {
+                if ($college->hasSystemAdmin($user->getId())) {
                     $authorized = true;
                 }
+
             }
         }
 

@@ -10,6 +10,10 @@ $this->headScript()->appendFile(
     }
 </style>
 
+<?php if ($activeSystem): ?>
+    <h1><?= $activeSystem->getName() ?> Data Upload</h1>
+<?php endif ?>
+
 
 <?php if (!empty($errorMessages)): ?>
     <div class="well">
