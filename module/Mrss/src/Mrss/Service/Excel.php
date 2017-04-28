@@ -103,8 +103,11 @@ class Excel extends Report
         }
 
         if ($this->getStudyConfig()->use_structures) {
+            $collegeName = $subscription->getCollege()->getName();
             $systemName = $this->getSystem()->getName();
+            $systemName = "$collegeName $systemName";
             $systemName = str_replace(' ', '-', $systemName);
+
             $this->exportFilename = $systemName . '-' . $this->year . '.xlsx';
         }
 
