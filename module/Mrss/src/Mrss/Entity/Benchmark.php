@@ -745,25 +745,41 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     {
         // Some HTML 5 validation
         if ($this->isDollars()) {
-            $element['attributes']['pattern'] = '(-)?\d+(\.\d+)?';
+            //$element['attributes']['pattern'] = '(-)?\d+(\.\d+)?';
+            $element['attributes']['pattern'] = $this->getDecimalRegex(false);
             $element['attributes']['title'] = 'Use the format 1234 or 1234.56';
         } elseif ($this->getInputType() == 'percent') {
-            $element['attributes']['pattern'] = '\d+(\.\d+)?';
+            //$element['attributes']['pattern'] = '\d+(\.\d+)?';
+            $element['attributes']['pattern'] = $this->getDecimalRegex(false);
             $element['attributes']['title'] = 'Use the format 12, 12.3 or 12.34';
         } elseif ($this->getInputType() == 'wholepercent') {
             $element['attributes']['pattern'] = '\d+';
             $element['attributes']['title'] = 'Use a whole number (no decimals)';
         } elseif ($this->getInputType() == 'number' ||
             $this->getInputType() == 'wholedollars') {
-            $element['attributes']['pattern'] = '\d+';
+            $element['attributes']['pattern'] = '-?\d+';
             $element['attributes']['title'] = 'Use the format 1234';
         }
 
         return $element;
     }
 
+    protected function getDecimalRegex($slashes = true)
+    {
+        $decimalRegex = '/^-?(?:(?:0|[1-9][0-9]*)(?:\.[0-9]*)?|\.[0-9]+)$/';
+
+        if (!$slashes) {
+            $decimalRegex = str_replace('/', '', $decimalRegex);
+        }
+
+        return $decimalRegex;
+    }
+
     public function getFormElementInputFilter()
     {
+        // Allows 123, 12.3, .3, and negatives
+        $decimalRegex = $this->getDecimalRegex();
+
         $inputFilter =  array(
             'name' => $this->getDbColumn(),
             'allow_empty' => true,
@@ -778,7 +794,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 'name' => 'Regex',
                 'options' => array(
                     //'pattern' => '/^(\-)?\d+\.?(\d\d)?$/', // This pattern only allows 0 or 2 dec places
-                    'pattern' => '/^-?(\d+\.)?\d+$/', // This pattern allows any number of decimal places
+                    //'pattern' => '/^-?(\d+\.)?\d+$/', // This pattern allows any number of decimal places
+                    'pattern' => $decimalRegex,
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234 or 1234.56'
                     )
@@ -788,7 +805,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+$/',
+                    'pattern' => '/^-?\d+$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234'
                     )
@@ -798,7 +815,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+\.?(\d+)?$/',
+                    //'pattern' => '/^\d+\.?(\d+)?$/',
+                    'pattern' => $decimalRegex,
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 1234, 1234.5, 1234.56 '
                             . 'or 1234.567'
@@ -809,7 +827,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+\.?(\d+)?$/',
+                    //'pattern' => '/^\d+\.?(\d+)?$/',
+                    'pattern' => $decimalRegex,
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 12, 12.3, 12.34 '
                     )
@@ -827,7 +846,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/^\d+$/',
+                    'pattern' => '/^-?\d+$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 12'
                     )
