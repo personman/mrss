@@ -99,7 +99,7 @@ $this->headScript()->appendFile(
     <?php $this->headScript()->captureStart() ?>
 
     var structureId = '<?= $structure->getId() ?>';
-    var json = '<?= $structure->getJson() ?>';
+    var json = '<?= addslashes($structure->getJson()) ?>';
 
     var addType;
     var editing = false;
