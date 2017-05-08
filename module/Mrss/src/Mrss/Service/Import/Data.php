@@ -48,8 +48,10 @@ class Data extends Import
 
     protected $map = array();
 
-    public function import()
+    public function import($serviceManager)
     {
+        $this->serviceManager = $serviceManager;
+
         $this->excel = $this->openFile($this->file);
 
         $sheets = array(
@@ -107,14 +109,42 @@ class Data extends Import
                     echo "<p>Unable to find by city ($name) and state ($state).</p>";
                 }
 
-                return false;
+
+                // Create college
+                $ipeds = $this->getCollegeModel()->findMaxIpeds();
+                $ipeds++;
+
+                $collegeInfo = array(
+                    'ipeds' => $ipeds,
+                    'name' => $name,
+                    'state' => $state,
+                    'abbreviation' => '',
+
+                );
+
+
+                $this->createCollege($collegeInfo);
+
+                $data['ipeds'] = $ipeds;
+
+                if ($this->debug) {
+                    echo "<p>Created city ($name).</p>";
+                }
             }
         }
 
         $ipeds = $data['ipeds'];
         unset($data['ipeds']);
 
-        if ($college = $this->getCollege($ipeds)) {
+        $college = $this->getCollege($ipeds);
+
+        if (!$college) {
+            // Create it
+        }
+
+
+
+        if ($college) {
             $subscription = $this->getSubscriptionModel()->findOne($this->year, $college->getId(), $this->study->getId());
 
             if (empty($subscription)) {

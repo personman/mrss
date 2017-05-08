@@ -1610,6 +1610,6 @@ class ToolController extends AbstractActionController
         $this->longRunningScript();
         $importer = $this->getServiceLocator()->get('service.import.data');
 
-        $importer->import();
+        $importer->import($this->getServiceLocator());
     }
 }

@@ -7,6 +7,8 @@ use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_Worksheet_Row;
 use PHPExcel_IOFactory;
+use Mrss\Entity\College as CollegeEntity;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class Import
 {
@@ -14,6 +16,8 @@ class Import
     protected $excel;
 
     protected $messages;
+
+    protected $serviceManager;
 
     public function getForm()
     {
@@ -106,4 +110,25 @@ class Import
         return $rowData;
     }
 
+    protected function createCollege($collegeInfo)
+    {
+        $college = new CollegeEntity();
+        $college = $this->getHydrator()->hydrate($collegeInfo, $college);
+
+        $this->getCollegeModel()->save($college);
+
+        $this->getCollegeModel()->getEntityManager()->flush();
+
+        return null;
+    }
+
+    protected function getHydrator()
+    {
+        if (!$this->hydrator) {
+            $entityManager = $this->serviceManager->get('em');
+            $this->hydrator = new DoctrineHydrator($entityManager);
+        }
+
+        return $this->hydrator;
+    }
 }
