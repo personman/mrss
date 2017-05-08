@@ -35,13 +35,16 @@ class Data extends Import
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
 
-    protected $year = 2015;
+    protected $year = 2016;
 
     protected $systemId = null;
 
+    protected $debug = true;
+
 
     //protected $file = 'data/imports/envisio-import-icma.xlsx';
-    protected $file = 'data/imports/envisio-import-safety.xlsx';
+    //protected $file = 'data/imports/envisio-import-safety.xlsx';
+    protected $file = 'data/imports/full-icma-import.xlsx';
 
     protected $map = array();
 
@@ -50,9 +53,10 @@ class Data extends Import
         $this->excel = $this->openFile($this->file);
 
         $sheets = array(
-            //0 => 2014,
-            1 => 2015,
-            //2 => 2016
+            //0 => 2016,
+            //1 => 2015,
+            //2 => 2014,
+            3 => 2013,
         );
 
         foreach ($sheets as $index => $year) {
@@ -85,7 +89,26 @@ class Data extends Import
         $data = $this->getDataFromRow($row);
 
         if (empty($data['ipeds'])) {
-            return false;
+            $name = $data['name'];
+            $nameParts = explode(', ', $name);
+            $name = $nameParts[0];
+            $state = $nameParts[1];
+
+            $college = $this->getCollegeModel()->findByNameAndState($name, $state);
+
+            if ($college) {
+                $data['ipeds'] = $college->getIpeds();
+
+                if ($this->debug) {
+                    echo "<p>Found city by name ($name) and state ($state): {$college->getNameAndState()}</p>";
+                }
+            } else {
+                if ($this->debug) {
+                    echo "<p>Unable to find by city ($name) and state ($state).</p>";
+                }
+
+                return false;
+            }
         }
 
         $ipeds = $data['ipeds'];
@@ -107,6 +130,10 @@ class Data extends Import
                     $value = null;
                 }
                 $subscription->setValue($dbColumn, $value);
+
+                if (false && $this->debug) {
+                    echo "<p>{$college->getName()} - $dbColumn: $value</p>";
+                }
             }
 
             $this->getSubscriptionModel()->save($subscription);
@@ -114,6 +141,10 @@ class Data extends Import
 
             // Add system membership
             $this->connectToSystem($college);
+        } else {
+            if ($this->debug) {
+                echo "<p>Ipeds present ({$data['ipeds']}) but unable to find city.</p>";
+            }
         }
     }
 
@@ -151,6 +182,10 @@ class Data extends Import
             $seconds += $minuteSeconds;
             $value = $seconds;
         }
+
+        // Strip out % and $
+        $value = str_replace(array('%', '$'), array('', ''), $value);
+
 
         if (stristr($value, '.')) {
 

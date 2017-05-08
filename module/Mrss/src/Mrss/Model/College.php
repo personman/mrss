@@ -82,6 +82,20 @@ class College extends AbstractModel
     }
 
     /**
+     * @param array $state
+     * @return \Mrss\Entity\College[]
+     */
+    public function findByNameAndState($name, $state)
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+                'name' => $name,
+                'state' => $state
+            )
+        );
+    }
+
+    /**
      * @param StudyEntity $study
      * @param $year
      * @return \Mrss\Entity\College[]
