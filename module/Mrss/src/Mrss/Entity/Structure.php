@@ -190,7 +190,7 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         foreach ($benchmarks as $benchmark) {
             $value = $observation->get($benchmark->getDbColumn());
 
-            if ($value) {
+            if (!is_null($value)) {
                 $populated++;
             }
         }
