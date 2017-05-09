@@ -172,7 +172,7 @@ class BubbleBuilder extends ChartBuilder
         if (empty($config['hideNational'])) {
             $series[] = array(
                 'type' => $type,
-                'name' => 'Institutions',
+                'name' => $this->getStudyConfig()->institutions_label,
                 'color' => $this->getNationalColor(),
                 //'showInLegend' => false,
                 'data' => $data,

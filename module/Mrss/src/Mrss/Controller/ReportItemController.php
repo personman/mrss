@@ -303,7 +303,8 @@ class ReportItemController extends CustomReportController
         //$benchmarks = $study->getStructuredBenchmarks(true, 'dbColumn', $subscription);
 
         $benchmarks = array();
-        foreach ($this->getAllBenchmarkGroups() as $benchmarkGroup) {
+        $subscription = $this->currentObservation()->getSubscription();
+        foreach ($this->getAllBenchmarkGroups($subscription) as $benchmarkGroup) {
             $groupChildren = array();
 
             foreach ($benchmarkGroup->getChildren() as $benchmark) {
