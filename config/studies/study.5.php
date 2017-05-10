@@ -9,6 +9,7 @@ return array(
     'approver_email' => 'mbell@envisio.com',
     'layout' => 'govbenchmark.phtml',
     'css' => 'nccbp.css',
+    'welcome_email' => 'welcome-envisio',
     'favicon' => '/envisio-favicon.ico',
     'navigation' => 'envisio_navigation',
     'benchmark_completion_heatmap' => true,

@@ -17,7 +17,7 @@
     <?php foreach ($subscriptions as $subscription): ?>
         <tr>
             <td><?= $subscription->getCollege()->getNameAndState() ?></td>
-            <td style="text-align: right"><?= $subscription->getValue($benchmark) ?></td>
+            <td style="text-align: right"><?= $benchmark->format($subscription->getValue($benchmark)) ?></td>
             <td><?= implode(', ', $subscription->getCollege()->getSystemNames($subscription->getYear())) ?></td>
         </tr>
     <?php endforeach ?>
