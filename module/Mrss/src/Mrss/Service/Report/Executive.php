@@ -328,14 +328,33 @@ class Executive extends Report
 
     public function getStrengths($weaknesses = false, $threshold = 75)
     {
+        $formToExclude = 1;
         $college = $this->getObservation()->getCollege();
         $year = $this->getObservation()->getYear();
         $study = $this->getStudy();
 
+        $systemId = $system = null;
+        if ($this->getStudyConfig()->use_structures) {
+            $system = $this->getSystem();
+            $systemId = $system->getId();
+        }
+
         $percentileRanks = $this->getPercentileRankModel()
-            ->findStrengths($college, $study, $year, $weaknesses, 1, $threshold);
+            ->findStrengths($college, $study, $year, $weaknesses, $formToExclude, $threshold, $systemId);
 
 
+        // Filter by report structure
+        if ($system) {
+            $filteredRanks = array();
+            $benchmarkIds = $system->getReportStructure()->getBenchmarkIdsForYear($year);
+            foreach ($percentileRanks as $rank) {
+                if (in_array($rank->getBenchmark()->getId(), $benchmarkIds)) {
+                    $filteredRanks[] = $rank;
+                }
+            }
+
+            $percentileRanks = $filteredRanks;
+        }
 
         $ranks = array();
         foreach ($percentileRanks as $pRank) {

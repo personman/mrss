@@ -104,6 +104,7 @@ class PercentileRank extends AbstractModel
      * @param bool $weaknesses
      * @param null $formToExclude
      * @param int $threshold
+     * @param int $systemId
      * @return PercentileRankEntity[]
      */
     public function findStrengths(
@@ -112,7 +113,8 @@ class PercentileRank extends AbstractModel
         $year,
         $weaknesses = false,
         $formToExclude = null,
-        $threshold = 85
+        $threshold = 85,
+        $systemId = null
     ) {
         $query = $this->getBaseQuery();
 
@@ -143,7 +145,13 @@ class PercentileRank extends AbstractModel
         $query->andWhere("p.year = :year");
         $query->setParameter('year', $year);
 
-        $query->andWhere('p.system IS NULL');
+        if (is_null($systemId)) {
+            $query->andWhere('p.system IS NULL');
+        } else {
+            $query->andWhere('p.system = :system');
+            $query->setParameter('system', $systemId);
+        }
+
 
         // Only fetch results that surpass a threshold
         if (!empty($threshold)) {

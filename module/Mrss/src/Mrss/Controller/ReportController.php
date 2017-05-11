@@ -620,6 +620,9 @@ class ReportController extends ReportAdminController
         $observation = $this->currentCollege()->getObservationForYear($year);
         $report->setObservation($observation);
 
+        $report->setSystem($this->getActiveSystem());
+
+        $activeSystem = $this->getActiveSystem();
 
         $strengths = $report->getStrengths(false, $threshold);
         $weaknesses = $report->getWeaknesses($threshold);
@@ -635,11 +638,36 @@ class ReportController extends ReportAdminController
         }
 
 
+        $system = null;
+        $otherSystems = array();
+        if ($this->getStudyConfig()->use_structures) {
+            // Confirm they're actually part of a system
+            $systemId = $this->getActiveSystemId();
+
+            if (empty($systemId)) {
+                $this->flashMessenger()->addErrorMessage(
+                    'Your institution is not part of a system.'
+                );
+
+                return $this->redirect()->toUrl('/members');
+            } else {
+                $system = $this->getSystemModel()->find($systemId);
+
+                $systems = $this->currentCollege()->getSystems();
+                foreach ($systems as $otherSystem) {
+                    $otherSystems[] = $otherSystem;
+                }
+            }
+        }
+
+
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
             'strengths' => $strengths,
-            'weaknesses' => $weaknesses
+            'weaknesses' => $weaknesses,
+            'system' => $system,
+            'otherSystems' => $otherSystems
         );
 
     }

@@ -52,6 +52,15 @@ class Outlier
      */
     protected $problem;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="System")
+     * @ORM\JoinColumn(name="system_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @var System
+     */
+    protected $system;
+
+
+
     public function setId($id)
     {
         $this->id = $id;
@@ -137,5 +146,23 @@ class Outlier
     public function getProblem()
     {
         return $this->problem;
+    }
+
+    /**
+     * @return System
+     */
+    public function getSystem()
+    {
+        return $this->system;
+    }
+
+    /**
+     * @param System $system
+     * @return Outlier
+     */
+    public function setSystem($system)
+    {
+        $this->system = $system;
+        return $this;
     }
 }

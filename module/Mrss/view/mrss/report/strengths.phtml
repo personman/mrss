@@ -1,4 +1,18 @@
-<h1>Strengths/Opportunites Report</h1>
+<h1>Strengths/Opportunities Report</h1>
+
+
+<?php if (count($otherSystems)): ?>
+    <ul class="nav nav-pills report-nav">
+
+        <?php foreach ($otherSystems as $otherSystem): ?>
+            <li<?php if ($system->getId() == $otherSystem->getId()) echo ' class="active"'; ?>>
+                <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('/reports/strengths/' . $year) ?>">
+                    <?= $otherSystem->getName() ?>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>
 
 <ul class="nav nav-pills report-nav">
     <?php foreach ($subscriptions as $subscription): ?>
