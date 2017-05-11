@@ -31,6 +31,12 @@
     <div class="col-md-6">
         <h2>Strengths</h2>
 
+        <?php if (empty($strengths)): ?>
+            <p>
+                None of your data for performance measures fell above the <?= $threshold ?>th percentile.
+            </p>
+        <?php endif ?>
+
         <ol>
         <?php foreach ($strengths as $benchmark): ?>
             <li>
@@ -48,6 +54,12 @@
 
     <div class="col-md-6">
         <h2>Opportunities for Improvement</h2>
+
+        <?php if (empty($strengths)): ?>
+            <p>
+                None of your data for performance measures fell below the <?= $lowThreshold ?>th percentile.
+            </p>
+        <?php endif ?>
 
         <ol>
         <?php foreach ($weaknesses as $benchmark): ?>
