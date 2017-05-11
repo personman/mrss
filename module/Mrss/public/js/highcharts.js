@@ -1595,7 +1595,7 @@
             numericSymbols: ['k', 'M', 'G', 'T', 'P', 'E'], // SI prefixes used in axis labels
             resetZoom: 'Reset zoom',
             resetZoomTitle: 'Reset zoom level 1:1',
-            thousandsSep: ' '
+            thousandsSep: ','
         },
         global: {
             useUTC: true,

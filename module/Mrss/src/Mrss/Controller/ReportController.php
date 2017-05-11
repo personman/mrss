@@ -667,7 +667,10 @@ class ReportController extends ReportAdminController
             'strengths' => $strengths,
             'weaknesses' => $weaknesses,
             'system' => $system,
-            'otherSystems' => $otherSystems
+            'otherSystems' => $otherSystems,
+            'threshold' => $threshold,
+            'lowThreshold' => 100 - $threshold,
+            'reportUrl' => ($this->getStudyConfig()->use_structures) ? 'network' : 'national'
         );
 
     }

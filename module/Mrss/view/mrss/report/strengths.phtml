@@ -24,7 +24,7 @@
 </ul>
 
 
-<p><em>Your institution reported values for the benchmarks below that are above the 75th percentile or below the 25th percentile. Click the blue text for details.</em></p>
+<p><em>Your <?= strtolower($this->studyConfig()->institution_label) ?> reported values for the measures below that are above the <?= $threshold ?>th percentile or below the <?= $lowThreshold ?>th percentile. Click the blue text for details.</em></p>
 
 
 <div id="report-strengths" class="row">
@@ -36,7 +36,7 @@
             <li>
                 <?= $benchmark['name'] ?>
                 <div class="strengthRank">
-                    <a href="/reports/national#form_<?= $benchmark['form_url'] ?>" title="Click for details">
+                    <a href="/reports/<?= $reportUrl ?>#form_<?= $benchmark['form_url'] ?>" title="Click for details">
                     Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
                     </a>
                 </div>
@@ -54,7 +54,7 @@
             <li>
                 <?= $benchmark['name'] ?>
                 <div class="strengthRank">
-                    <a href="/reports/national#form_<?= $benchmark['form_url'] ?>" title="Click for details">
+                    <a href="/reports/<?= $reportUrl ?>#measure_<?= $benchmark['dbColumn'] ?>" title="Click for details">
                         Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
                     </a>
                 </div>

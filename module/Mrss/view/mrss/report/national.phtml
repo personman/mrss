@@ -176,7 +176,7 @@ $this->headScript()->appendFile(
                     <?php endif; ?>
 
                     <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
-                    <tr class="<?= $rowClass ?>">
+                    <tr class="<?= $rowClass ?>" id="measure_<?= $benchmark['dbColumn'] ?>">
                         <td class="benchmarkLabel">
                             <?php if (!empty($benchmark['description'])): ?>
                                 <span class="tooltipster" title="<?= addslashes($benchmark['description']) ?>">

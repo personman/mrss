@@ -1083,6 +1083,14 @@ class Report
                 )
             ),
             'dataDefinition' => $dataDefinition,
+            'lang' => array(
+                'thousandsSep' => ','
+            ),
+            'options' => array(
+                'lang' => array(
+                    'thousandsSep' => ','
+                )
+            )
         );
 
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
@@ -1116,7 +1124,7 @@ class Report
 
         if ($benchmark->isDollars() && !$forPercntChange) {
             $chart['yAxis']['labels'] = array(
-                'format' => '${value}'
+                'format' => '${value:,.0f}'
             );
         }
 

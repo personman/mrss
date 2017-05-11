@@ -6,6 +6,7 @@ $(function() {
     addAdminMenuSearch();
 });
 
+
 function addAdminMenuSearch()
 {
     if (institutionsLabel) {
