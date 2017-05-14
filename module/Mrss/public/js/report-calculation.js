@@ -28,24 +28,33 @@ function setUpOutlierCalculation()
         progressBar = $('#outlier-progress-' + year + ' .progress-bar');
 
         // Get the benchmark Ids
-        var benchmarkIds = benchmarks[year];
+        var info = getOutlierBenchmarks();
 
-        originalTotal = benchmarkIds.length;
+        for (var si in info) {
+            var benchmarkIds = info[si].benchmarkIds;
+            var system = info[si].system;
+            //var benchmarkIds = benchmarks[year];
+            //var system = 0;
 
-        // Build the url stack
-        urlStack = [];
-        for (var i in benchmarkIds) {
-            var benchmarkId = benchmarkIds[i];
+            originalTotal = benchmarkIds.length;
 
-            var url = baseUrl + benchmarkId + '/' + year;
+            // Build the url stack
+            urlStack = [];
+            for (var i in benchmarkIds) {
+                var benchmarkId = benchmarkIds[i];
 
-            if (i == 0) {
-                url = url + '/last';
-            } else if (i == benchmarkIds.length - 1) {
-                url = url + '/first';
+                var url = baseUrl + benchmarkId + '/' + year + '/' + system;
+
+                if (i == 0) {
+                    url = url + '/last';
+                } else if (i == benchmarkIds.length - 1) {
+                    url = url + '/first';
+                }
+
+                urlStack.push(url);
             }
-            urlStack.push(url);
         }
+
 
         // Now the url stack is built. Kick it off.
         progressBar.parent().show();
@@ -54,6 +63,28 @@ function setUpOutlierCalculation()
 
         return false;
     })
+}
+
+function getOutlierBenchmarks()
+{
+    var info = [];
+    if (Object.keys(systemBenchmarks).length) {
+        for (var system in systemBenchmarks) {
+            var oneSystem = {};
+            oneSystem.system = system;
+            oneSystem.benchmarkIds = systemBenchmarks[system];
+
+            info.push(oneSystem);
+        }
+    } else {
+        var oneSystem = {};
+        oneSystem.system = 0;
+        oneSystem.benchmarkIds = benchmarks[year];
+
+        info.push(oneSystem);
+    }
+
+    return info;
 }
 
 function setUpSendOutlierEmails()

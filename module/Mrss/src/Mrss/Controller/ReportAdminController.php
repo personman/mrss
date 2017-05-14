@@ -141,8 +141,22 @@ class ReportAdminController extends BaseController
             'observationIds' => $observationIds,
             'systemIds' => $systemIds,
             'collegeIds' => $collegeIds,
-            'benchmarkIds' => $benchmarkIds
+            'benchmarkIds' => $benchmarkIds,
+            'systemBenchmarks' => $this->getSystemBenchmarks($currentYear)
         );
+    }
+
+    protected function getSystemBenchmarks($year)
+    {
+        $systemBenchmarks = array();
+
+        foreach ($this->getSystemModel()->findAll() as $system) {
+            $benchmarkIds = $system->getDataEntryStructure()->getBenchmarkIdsForYear($year);
+
+            $systemBenchmarks[$system->getId()] = $benchmarkIds;
+        }
+
+        return $systemBenchmarks;
     }
 
     public function debug($message, $var)
@@ -552,16 +566,21 @@ class ReportAdminController extends BaseController
 
         $benchmarkId = $this->params()->fromRoute('benchmark');
         $year = $this->params()->fromRoute('year');
+        $systemId = $this->params()->fromRoute('system');
         $position = $this->params()->fromRoute('clear');
+
+        if ($systemId == 0) {
+            $systemId = null;
+        }
 
         // First?
         if ($position == 'first') {
-            $this->getOutlierService()->clearOutliers($year);
+            $this->getOutlierService()->clearOutliers($year, $systemId);
         }
 
         // Calculate them
         if ($benchmark = $this->getBenchmarkModel()->find($benchmarkId)) {
-            $this->getOutlierService()->calculateOutlier($benchmark, $year);
+            $this->getOutlierService()->calculateOutlier($benchmark, $year, $systemId);
         }
 
         // Last?

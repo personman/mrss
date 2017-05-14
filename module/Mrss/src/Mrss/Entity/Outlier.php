@@ -57,7 +57,7 @@ class Outlier
      * @ORM\JoinColumn(name="system_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      * @var System
      */
-    protected $system;
+    protected $system = null;
 
 
 

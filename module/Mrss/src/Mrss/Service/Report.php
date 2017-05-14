@@ -1515,7 +1515,7 @@ class Report
     }
 
     /**
-     * @return \Mrss\Model\PercentChange
+     * @return \Mrss\Model\System
      */
     public function getSystemModel()
     {

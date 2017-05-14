@@ -1155,12 +1155,13 @@ return array(
                     'calculate-outlier' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/calculate-outlier/:benchmark/:year[/:clear]',
+                            'route' => '/calculate-outlier/:benchmark/:year/:system[/:clear]',
                             'defaults' => array(
                                 'action' => 'calculateOutlier',
                                 'benchmark' => 0,
                                 'clear' => false,
-                                'year' => null
+                                'year' => null,
+                                'system' => 0
                             )
                         )
                     ),
