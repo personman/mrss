@@ -49,7 +49,8 @@ class NccbpNavigationFactory extends NavigationFactory
                 // Add the print workbook to data documentation (disabled for now)
                 $workbook = array(
                     'label' => 'Print Workbook',
-                    'uri' => '/files/nccbp-workbook-2017.pdf',
+                    //'uri' => '/files/nccbp-workbook-2017.pdf',
+                    'uri' => '/data-entry/print',
                 );
                 array_unshift($pages['data-documentation']['pages'], $workbook);
             }

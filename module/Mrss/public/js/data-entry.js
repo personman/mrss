@@ -28,13 +28,13 @@ $(function() {
 
     // Wrap selected input in well to highlight it
     //if (!$('.data-entry-grid').length) {
-        $('.form-horizontal input, .form-horizontal select')
-            .focus(function(){
-                $(this).parents('.control-group').addClass('focus');
-            }).blur(
-            function(){
-                $(this).parents('.control-group').removeClass('focus');
-            });
+    $('.form-horizontal input, .form-horizontal select')
+        .focus(function(){
+            $(this).parents('.control-group').addClass('focus');
+        }).blur(
+        function(){
+            $(this).parents('.control-group').removeClass('focus');
+        });
     //}
 
 
@@ -56,10 +56,10 @@ $(function() {
                 helpRow.show()
             }
         }).blur(function() {
-            if (!submitClicked && $(this).attr('id').search('other_specify') == -1) {
-                $(this).parents('tr').next().hide()
-            }
-        });
+        if (!submitClicked && $(this).attr('id').search('other_specify') == -1) {
+            $(this).parents('tr').next().hide()
+        }
+    });
 
     // This prevents the hiding of the help text when clicking a button
     // That was causing the button to jump away from the click.
@@ -114,7 +114,7 @@ $(function() {
     $('.academicUnits .deleteLink').click(function() {
         return confirm(
             'Are you sure you want to delete this academic division? Your data for' +
-                ' the academic division will be permanently deleted.'
+            ' the academic division will be permanently deleted.'
         )
     })
 
@@ -245,7 +245,7 @@ function workforceFormFormatting()
     // Some special formatting for form 9
     $('#control-group-institutional_demographics_companies_less_than_50').before(
         '<h4 class="subheading">Companies by Employee Size</h4>' +
-            '<p class="subheading-notes">Companies by size (Use the US Economic Census, County Business Patterns to obtain these data).  Note:  Should add to total service area companies.</p>'
+        '<p class="subheading-notes">Companies by size (Use the US Economic Census, County Business Patterns to obtain these data).  Note:  Should add to total service area companies.</p>'
     )
 
     if ($('#control-group-enrollment_information_duplicated_enrollment').length) {
@@ -710,12 +710,14 @@ function getForm2TotalConfig()
 function addForm4Headings()
 {
     if ($('#ft_cr_st').length) {
+        var form4 = $('#ft_cr_st').parents('form');
+
         // Add headings to form 4
         var ft = $('<h2>').html('Full-time').css('margin-top', '30px');
-        $('form h3:nth-of-type(1)').before(ft)
+        form4.find('h3:nth-of-type(1)').before(ft)
 
         var pt = $('<h2>').html('Part-time').css('margin-top', '30px');
-        $('form h3:nth-of-type(4)').before(pt)
+        form4.find('h3:nth-of-type(4)').before(pt)
     }
 }
 
@@ -752,3 +754,25 @@ function minuteSecondFormatting()
     });
 }
 
+function minuteSecondFormatter(val)
+{
+    val = parseInt(val)
+    var minutes = Math.floor(val / 60);
+    var seconds = val - (minutes * 60);
+
+    seconds = pad('00', seconds, true);
+
+    val = minutes + ':' + seconds;
+
+    return val
+}
+
+function pad(pad, str, padLeft) {
+    if (typeof str === 'undefined')
+        return pad;
+    if (padLeft) {
+        return (pad + str).slice(-pad.length);
+    } else {
+        return (str + pad).substring(0, pad.length);
+    }
+}
