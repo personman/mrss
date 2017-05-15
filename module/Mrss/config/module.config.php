@@ -143,6 +143,15 @@ return array(
                             )
                         )
                     ),
+                    'print' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/print',
+                            'defaults' => array(
+                                'action' => 'print'
+                            )
+                        )
+                    ),
                     'template' => array(
                         'type' => 'segment',
                         'options' => array(

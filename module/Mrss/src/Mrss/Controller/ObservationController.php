@@ -188,6 +188,43 @@ class ObservationController extends AbstractActionController
         );
     }
 
+    public function printAction()
+    {
+        $formService = $this->getFormBuilder();
+
+        $currentStudy = $this->currentStudy();
+        $subscription = $this->currentObservation()->getSubscription();
+        $year = $this->currentObservation()->getYear();
+
+        $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($subscription);
+        $dataEntryOpen = true;
+
+        $forms = array();
+
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            $form = $formService->buildForm(
+                $benchmarkGroup,
+                $year,
+                !$dataEntryOpen
+            );
+
+            $class = 'data-entry-form form-horizontal ' . $benchmarkGroup->getFormat();
+
+            $form->setAttribute('class', $class);
+
+            $forms[] = array(
+                'form' => $form,
+                'benchmarkGroup' => $benchmarkGroup
+            );
+
+        }
+
+        return array(
+            'forms' => $forms,
+            'variable' => $this->getVariableSubstitutionService()
+        );
+    }
+
     /**
      * @return \Mrss\Model\Issue
      */
@@ -404,10 +441,7 @@ class ObservationController extends AbstractActionController
         // Clone the unedited observation for comparison
         //$oldObservation = clone $observation;
 
-        /** @var \Mrss\Service\FormBuilder $formService */
-        $formService = $this->getServiceLocator()
-            ->get('service.formBuilder');
-
+        $formService = $this->getFormBuilder();
 
         // If they entered data last year, populate it here for the help-block
         if ($lastYearObservation = $this->getLastYearObservation()) {
@@ -550,6 +584,18 @@ class ObservationController extends AbstractActionController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    /**
+     * @return \Mrss\Service\FormBuilder
+     */
+    protected function getFormBuilder()
+    {
+        /** @var \Mrss\Service\FormBuilder $formService */
+        $formService = $this->getServiceLocator()
+            ->get('service.formBuilder');
+
+        return $formService;
     }
 
     protected function updateCompletion($observation)

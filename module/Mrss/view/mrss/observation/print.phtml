@@ -1,0 +1,98 @@
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=6', 'print,screen') ?>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/data-entry.js?v=12',
+    'text/javascript'
+); ?>
+
+<script>
+    $(function())
+</script>
+
+<style>
+    #fieldset-buttons {
+        display: none;
+    }
+
+    h1 {
+        margin-top: 30px !important;
+    }
+
+    .help-block {
+        display: block !important;
+    }
+
+    .control-group {
+        page-break-inside: avoid;
+    }
+
+
+    a[href]:after {
+        content: "" !important;
+    }
+
+    .data-entry-total-replace {
+        color: transparent !important;
+    }
+
+    h1, h2, h3 {
+        page-break-after: avoid !important;
+        float: none;
+    }
+
+</style>
+
+
+<?php foreach ($forms as $formInfo): ?>
+    <?php $form = $formInfo['form']; $benchmarkGroup = $formInfo['benchmarkGroup']; ?>
+
+
+    <h1>
+        <?= $benchmarkGroup->getName() ?>
+    </h1>
+
+
+    <?php $form->prepare() ?>
+    <?= $this->form()->openTag($form) ?>
+
+
+    <?php foreach ($benchmarkGroup->getChildren($this->currentStudy()->getCurrentYear(), false) as $benchmark): ?>
+        <?php if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading'): ?>
+
+            <h3 class="heading"><?= $variable->substitute($benchmark->getName()) ?></h3>
+
+            <?php if ($desc = $benchmark->getDescription()): ?>
+                <p class="subheading-description">
+                    <?= $variable->substitute($desc) ?>
+                </p>
+            <?php endif ?>
+
+        <?php else: ?>
+            <?php if (!is_object($benchmark)): ?>
+                <?php pr($benchmark); ?>
+            <?php endif ?>
+            <?= $this->ztbFormElement($form->get($benchmark->getDbColumn())) ?>
+        <?php endif ?>
+
+    <?php endforeach ?>
+
+    <?php if ($this->currentStudy()->getDataEntryOpen()): ?>
+        <fieldset id="fieldset-buttons" class="well well-small">
+            <div class="control-group" id="control-group-buttons[submit]">
+                <div class="controls" id="controls-buttons[submit]">
+                    <?= $this->formElement($form->get('buttons')->get('submit')) ?>
+                </div>
+            </div>
+            <div class="control-group" id="control-group-buttons[save-edit]">
+                <div class="controls" id="controls-buttons[save-edit]">
+                    <?= $this->formElement($form->get('buttons')->get('save-edit')) ?>
+                </div>
+            </div>
+        </fieldset>
+    <?php endif ?>
+
+    <?= $this->form()->closeTag() ?>
+
+
+<?php endforeach ?>
