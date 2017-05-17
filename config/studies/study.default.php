@@ -25,6 +25,7 @@ return array(
     'header_title' => null,
     'data_entry_layout' => array(),
     'export_sheet_names' => null,
+    'export_template' => null,
     'validation_class' => null,
     'free_to_join' => false,
     'agreement_template' => null,

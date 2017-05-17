@@ -12,6 +12,7 @@ return array(
     'welcome_email' => 'welcome-envisio',
     'favicon' => '/envisio-favicon.ico',
     'navigation' => 'envisio_navigation',
+    'export_template' => 'govbenchmark-template.xlsx',
     'benchmark_completion_heatmap' => true,
     'percent_change_report_columns' => array(
     ),

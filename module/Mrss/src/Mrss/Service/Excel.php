@@ -14,6 +14,7 @@ use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
 use PHPExcel_Cell;
 use PHPExcel_Shared_Date;
+use PHPExcel_Style_Alignment;
 
 class Excel extends Report
 {
@@ -55,6 +56,10 @@ class Excel extends Report
 
     protected $exportFilename = 'data-export.xlsx';
 
+    protected $fromTemplate = false;
+
+    protected $headingRowStyle = null;
+
     /**
      * @deprecated
      * @param Subscription $subscription
@@ -77,7 +82,8 @@ class Excel extends Report
      */
     public function getExcelForSubscriptions($subscriptions)
     {
-        $excel = new PHPExcel();
+        $excel = $this->createOrOpenExcel();
+
         $subscription = $subscriptions[0];
         $this->year = $subscription->getYear();
 
@@ -112,6 +118,23 @@ class Excel extends Report
         }
 
         $this->download($excel);
+    }
+
+    protected function createOrOpenExcel()
+    {
+        // Open the template Excel file (this takes some time)
+        $template = $this->getStudyConfig()->export_template;
+        $filename = 'data/imports/' . $template;
+
+
+        if ($template && $excel = PHPExcel_IOFactory::load($filename)) {
+            // Ok
+            $this->fromTemplate = true;
+        } else {
+            $excel = new PHPExcel();
+        }
+
+        return $excel;
     }
 
     public function writeHeaders(PHPExcel $spreadsheet)
@@ -226,19 +249,36 @@ class Excel extends Report
             }
         } else {
             // Remove the original
+            $originalSheet = $spreadsheet->getActiveSheet()->copy();
+            $this->headingRowStyle = $originalSheet->getStyle('A2');
+            //$originalSheet->removeRow(2);
+
             $spreadsheet->removeSheetByIndex($spreadsheet->getActiveSheetIndex());
 
             // Add one benchmark group per sheet
             $index = 0;
             foreach ($benchmarkGroups as $benchmarkGroup) {
-                $sheet = $spreadsheet->createSheet($index);
-                //$spreadsheet->addSheet($sheet, $index);
-                $spreadsheet->setActiveSheetIndex($index);
-
+                // Title
                 $shortTitle = $benchmarkGroup->getUrl() . ' ' . $benchmarkGroup->getName();
                 $shortTitle = substr($shortTitle, 0, 31);
                 $shortTitle = str_replace(array('&', '/'), array('', ' '), $shortTitle);
-                $sheet->setTitle($shortTitle);
+
+                // Clone or create?
+                if ($this->fromTemplate) {
+                    $sheet = clone $originalSheet;
+                    $sheet->removeRow(2);
+                    $sheet->setTitle($shortTitle);
+                    $spreadsheet->addSheet($sheet);
+                    $spreadsheet->setActiveSheetIndex($spreadsheet->getIndex($sheet));
+                } else {
+                    $sheet = $spreadsheet->createSheet($index);
+                    $sheet->setTitle($shortTitle);
+                }
+
+                //$spreadsheet->addSheet($sheet, $index);
+                $spreadsheet->setActiveSheetIndex($index);
+
+
 
                 $this->writeHeadersSystem($spreadsheet->getActiveSheet(), $subscriptions);
 
@@ -286,13 +326,19 @@ class Excel extends Report
         $sheet->setCellValue('A' . $row, $benchmarkGroup->getName());
 
         $theRow = $sheet->getStyle('A' . $row);
+
+        if ($this->fromTemplate) {
+            $this->styleHeading($sheet, $row);
+        } else {
+            $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()->setARGB($this->blankBackground);
+        }
+
         $theRow->getFont()->setBold(true);
 
-        $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
-            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($this->blankBackground);
-
         $sheet->getStyle('A' . $row)->getFont()->setSize(14);
+        $sheet->getRowDimension($row)->setRowHeight(-1);
     }
 
     /**
@@ -340,10 +386,11 @@ class Excel extends Report
             $value = $subscription->getObservation()->get($benchmark->getDbColumn());
             $sheet->setCellValueByColumnAndRow($column, $row, $value);
 
-            $sheet->getStyleByColumnAndRow($column, $row)->getFill()
-                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-                ->getStartColor()->setARGB($this->getValueColumnBackground());
-
+            if (!$this->fromTemplate) {
+                $sheet->getStyleByColumnAndRow($column, $row)->getFill()
+                    ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB($this->getValueColumnBackground());
+            }
 
             $column++;
         }
@@ -370,12 +417,34 @@ class Excel extends Report
         $subheading = $this->getVariableSubstitution()->substitute($heading->getName());
         $sheet->setCellValue('A' . $row, $subheading);
 
-        $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
-            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($this->blankBackground);
+        if ($this->fromTemplate) {
+            if ($this->headingRowStyle) {
+                //$sheet->duplicateStyle($this->headingRowStyle, 'A' . $row . ':C' . $row);
 
-        $theRow = $sheet->getStyle('A' . $row);
-        $theRow->getFont()->setBold(true);
+                $this->styleHeading($sheet, $row);
+            }
+        } else {
+            $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()->setARGB($this->blankBackground);
+
+            $theRow = $sheet->getStyle('A' . $row);
+            $theRow->getFont()->setBold(true);
+        }
+
+    }
+
+    protected function styleHeading($sheet, $row)
+    {
+        $sheet->getStyle('A' . $row . ':C' . $row)->getFill()
+            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('636463');
+
+        $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle('A' . $row)->getFont()->getColor()->setRGB('FFFFFF');
+        $sheet->getStyle('A' . $row)->getFont()->setBold(true);
+
+        $sheet->getRowDimension(1)->setRowHeight(-1);
     }
 
     public function download($spreadsheet)
