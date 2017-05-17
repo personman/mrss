@@ -160,13 +160,15 @@ class Excel extends Report
         $headerRow->getFont()->setBold(true);
 
         // Label column align right
-        $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
-            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        if (!$this->fromTemplate) {
+            $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
+                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-        // Value column background
-        $sheet->getStyle('B1:B' . $this->rowCount)->getFill()
-            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
+            // Value column background
+            $sheet->getStyle('B1:B' . $this->rowCount)->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
+        }
 
     }
 
@@ -176,13 +178,23 @@ class Excel extends Report
      */
     public function writeHeadersSystem(PHPExcel_Worksheet $sheet, $subscriptions)
     {
-        // Benchmark label
-        $sheet->setCellValueByColumnAndRow(0, 1, 'Label');
-        $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+
+        $benchmarkLabel = 'Label';
+        $dataDefinitionLabel = 'Data Definition';
 
         // Label column align right
-        $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
-            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        if (!$this->fromTemplate) {
+            $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
+                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        } else {
+            $benchmarkLabel = strtoupper($benchmarkLabel);
+            $dataDefinitionLabel = strtoupper($dataDefinitionLabel);
+        }
+
+        // Benchmark label
+        $sheet->setCellValueByColumnAndRow(0, 1, $benchmarkLabel);
+        $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+
 
         $column = 1;
         foreach ($subscriptions as $subscription) {
@@ -190,12 +202,16 @@ class Excel extends Report
             $collegeHeader = $college->getName() . " \r("
                 . $college->getIpeds() . ')';
 
+            if ($this->fromTemplate) {
+                $collegeHeader = strtoupper($collegeHeader);
+            }
+
             $sheet->setCellValueByColumnAndRow($column, 1, $collegeHeader);
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
             $column++;
         }
 
-        $sheet->setCellValueByColumnAndRow($column, 1, 'Data Definition');
+        $sheet->setCellValueByColumnAndRow($column, 1, $dataDefinitionLabel);
         $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         $column++;
 
@@ -206,6 +222,11 @@ class Excel extends Report
         // Bold header
         $headerRow = $sheet->getStyle('A1:Z1');
         $headerRow->getFont()->setBold(true);
+
+        $sheet->getStyle('A1:C1')->getAlignment()
+            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:C1')->getAlignment()
+            ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
     }
 
     public function writeBody(PHPExcel $spreadsheet, Subscription $subscription)
