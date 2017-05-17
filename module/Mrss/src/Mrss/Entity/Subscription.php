@@ -680,6 +680,20 @@ class Subscription
         return $has;
     }
 
+    public function hasAllSections()
+    {
+        $hasAll = true;
+
+        $sections = $this->getSectionIds();
+        foreach ($this->getStudy()->getSections() as $section) {
+            if (!in_array($section->getId(), $sections)) {
+                $hasAll = false;
+            }
+        }
+
+        return $hasAll;
+    }
+
     public function __toString()
     {
         return "Subscription id: {$this->getId()}";

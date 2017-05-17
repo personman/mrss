@@ -510,6 +510,11 @@ class SubscriptionController extends AbstractActionController
             return $this->redirect()->toUrl('/join');
         }
 
+        if ($subscription->hasAllSections()) {
+            $this->flashMessenger()->addSuccessMessage('Your membership already includes all available modules.');
+            return $this->redirect()->toUrl('/');
+        }
+
         $study = $this->getStudy();
 
         $selectedSections = array();
