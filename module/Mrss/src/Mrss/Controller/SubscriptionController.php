@@ -763,7 +763,15 @@ class SubscriptionController extends AbstractActionController
         // original subscription payment amount and the new amount. Return that, skipping offer codes and discounts
         if ($this->getDraftSubscription()->isUpdate()) {
             $originalPayment = $this->getDraftSubscription()->getSubscription()->getPaymentAmount();
+
+            // Hard code for when they paid under early bird pricing originally and are adding a module after
+            if ($originalPayment == 1250 && $amount == 1950) {
+                $originalPayment = 1450;
+            }
+
             $difference = $amount - $originalPayment;
+
+
 
             return $difference;
         }
