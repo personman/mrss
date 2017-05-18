@@ -571,8 +571,6 @@ class SubscriptionController extends AbstractActionController
             $draft = $this->saveDraftSubscription();
         }
 
-        var_dump($draft); die;
-
         $draft->setSubscription($subscription);
 
         // This triggers a save and flush:
@@ -2032,7 +2030,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
             if (empty($this->draftSubscription)) {
                 $currentSubscription = $this->currentObservation()->getSubscription();
-                if ($draft = $this->getSubscriptionDraftModel()->findBySubscription($currentSubscription)) {
+                if ($draft = $this->getSubscriptionDraftModel()->findOneBySubscription($currentSubscription)) {
                     $this->draftSubscription = $draft;
                 }
             }
