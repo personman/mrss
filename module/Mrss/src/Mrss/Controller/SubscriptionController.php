@@ -2027,6 +2027,12 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             if ($identifier) {
                 $this->draftSubscription = $this->getSubscriptionDraftModel()->find($identifier);
             }
+
+            if (empty($this->draftSubscription)) {
+                $currentSubscription = $this->currentObservation()->getSubscription();
+                $this->draftSubscription = $this->getSubscriptionDraftModel()
+                    ->findBySubscription($currentSubscription);
+            }
         }
 
         return $this->draftSubscription;

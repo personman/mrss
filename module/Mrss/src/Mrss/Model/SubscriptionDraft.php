@@ -20,6 +20,15 @@ class SubscriptionDraft extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function findBySubscription($subscription)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'subscription' => $subscription
+            )
+        );
+    }
+
     public function save(SubscriptionDraftEntity $form)
     {
         $this->getEntityManager()->persist($form);
