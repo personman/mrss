@@ -571,6 +571,8 @@ class SubscriptionController extends AbstractActionController
             $draft = $this->saveDraftSubscription();
         }
 
+        var_dump($draft); die;
+
         $draft->setSubscription($subscription);
 
         // This triggers a save and flush:
