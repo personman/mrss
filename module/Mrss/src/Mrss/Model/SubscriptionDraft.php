@@ -20,9 +20,9 @@ class SubscriptionDraft extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
-    public function findBySubscription($subscription)
+    public function findOneBySubscription($subscription)
     {
-        return $this->getRepository()->findBy(
+        return $this->getRepository()->findOneBy(
             array(
                 'subscription' => $subscription
             )
