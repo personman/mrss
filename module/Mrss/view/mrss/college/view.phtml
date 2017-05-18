@@ -159,8 +159,15 @@
                     </tr>
                     <?php endforeach ?>
                 </tbody>
-
             </table>
+
+            <p>
+                <a href="<?= $this->url('memberships/add', array('college' => $college->getId())) ?>" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus icon icon-plus"></span>
+                    Add Membership
+                </a>
+            </p>
+
 
             <a href="/admin/changes/<?= $college->getId() ?>">Recent Data Changes</a>
         </td>

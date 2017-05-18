@@ -10,11 +10,13 @@ use Mrss\Entity\SubscriptionDraft;
 use Mrss\Entity\Payment;
 use Mrss\Form\AbstractForm;
 use Mrss\Form\Payment as PaymentForm;
+use Mrss\Form\SubscriptionAdmin;
 use Mrss\Form\SubscriptionFree;
 use Mrss\Form\SubscriptionInvoice;
 use Mrss\Form\SubscriptionPilot;
 use Mrss\Form\SubscriptionSystem;
 use Mrss\Form\SubscriptionModule;
+use Mrss\Entity\SystemMembership as SystemMembershipEntity;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\View\Model\JsonModel;
@@ -1481,8 +1483,12 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         return $status;
     }
     
-    public function createOrUpdateObservation(\Mrss\Entity\College $college)
+    public function createOrUpdateObservation(\Mrss\Entity\College $college, $year = null)
     {
+        if (!$year) {
+            $this->getCurrentYear();
+        }
+
         /** @var \Mrss\Model\Observation $observationModel */
         $observationModel = $this->getServiceLocator()->get('model.observation');
 
@@ -1496,7 +1502,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             $observation->setMigrated(false);
         }
 
-        $observation->setYear($this->getCurrentYear());
+        $observation->setYear($year);
         $observation->setCollege($college);
 
         $observationModel->save($observation);
@@ -2163,5 +2169,88 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $response = $this->getResponse()->setContent($responseText);
         return $response;
+    }
+
+    public function adminAddAction()
+    {
+        $collegeId = $this->params()->fromRoute('college');
+        $currentStudy = $this->currentStudy();
+        $college = $this->getCollegeModel()->find($collegeId);
+
+        $systemOptions = array();
+        if ($this->getStudyConfig()->use_structures) {
+            foreach ($this->getSystemModel()->findAll() as $system) {
+                $systemOptions[$system->getId()] = $system->getName();
+            }
+        }
+
+        $systemLabel = $this->getStudyConfig()->system_label;
+
+        $form = new SubscriptionAdmin($systemOptions, $systemLabel);
+
+        $form->get('college')->setValue($collegeId);
+
+        if ($this->getRequest()->isPost()) {
+            // Handle the form
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $year = $data['year'];
+                $collegeId = $data['college'];
+                $systems = $data['systems'];
+
+                // First, see if the subscription exists
+                $subscription = $this->getSubscriptionModel()->findOne($year, $collegeId, $currentStudy->getId());
+
+                // If it doesn't exist, create it
+                if (!$subscription) {
+                    $subscription = new Subscription();
+                    $subscription->setYear($year);
+                    $subscription->setStatus('complete');
+                    $subscription->setCollege($college);
+                    $subscription->setStudy($currentStudy);
+                    $subscription->setObservation($this->createOrUpdateObservation($college, $year));
+                    $subscription->setCompletion(0);
+                    $subscription->setReportAccess(true);
+
+                    $this->getSubscriptionModel()->save($subscription);
+                    $this->getSubscriptionModel()->getEntityManager()->flush();
+                }
+
+                // Now, either way, update the system memberships, too
+                foreach ($systems as $systemId) {
+                    // Does it exist already?
+                    $system = $this->getSystemModel()->find($systemId);
+                    $membership = $this->getSystemMembershipModel()
+                        ->findBySystemCollegeYear($system, $college, $year);
+
+                    if (!$membership) {
+                        // Create it
+                        $membership = new SystemMembershipEntity();
+                        $membership->setCollege($college);
+                        $membership->setSystem($system);
+                        $membership->setYear($year);
+                        $membership->setDataVisibility('public');
+
+                        $this->getSystemMembershipModel()->save($membership);
+                        $this->getSystemMembershipModel()->getEntityManager()->flush();
+                    }
+                }
+
+                // Message and redirect
+                $systemLabel = ucwords($systemLabel);
+                $this->flashMessenger()->addSuccessMessage("$systemLabel membership saved.");
+                $this->redirect()->toRoute('colleges/view', array('id' => $collegeId));
+            }
+        } else {
+            // Set the default year
+            $form->get('year')->setValue(date('Y'));
+        }
+
+        return array(
+            'form' => $form,
+            'college' => $college
+        );
     }
 }

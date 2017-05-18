@@ -138,4 +138,12 @@ class BaseController extends AbstractActionController
     {
         return $this->getServiceLocator()->get('model.system');
     }
+
+    /**
+     * @return \Mrss\Model\SystemMembership
+     */
+    public function getSystemMembershipModel()
+    {
+        return $this->getServiceLocator()->get('model.system.membership');
+    }
 }

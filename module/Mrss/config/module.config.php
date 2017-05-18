@@ -1981,6 +1981,16 @@ return array(
                                 'action' => 'reportAccess'
                             )
                         )
+                    ),
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add/:college',
+                            'defaults' => array(
+                                'action' => 'adminAdd',
+                                'college' => 0
+                            )
+                        )
                     )
                 )
             ),
