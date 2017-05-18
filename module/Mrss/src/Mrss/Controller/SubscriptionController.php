@@ -2030,8 +2030,9 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
             if (empty($this->draftSubscription)) {
                 $currentSubscription = $this->currentObservation()->getSubscription();
-                $this->draftSubscription = $this->getSubscriptionDraftModel()
-                    ->findBySubscription($currentSubscription);
+                if ($draft = $this->getSubscriptionDraftModel()->findBySubscription($currentSubscription)) {
+                    $this->draftSubscription = $draft;
+                }
             }
         }
 
