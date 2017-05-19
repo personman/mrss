@@ -706,13 +706,16 @@ class College
         return $systems;
     }
 
-    public function hasSystemMembership($systemId)
+    public function hasSystemMembership($systemId, $year = null)
     {
         $has = false;
         foreach ($this->getSystemMemberships() as $systemMembership) {
             if ($systemMembership->getSystem()->getId() == $systemId) {
-                $has = true;
-                break;
+                if ($year === null || $systemMembership->getYear() == $year) {
+                    $has = true;
+
+                    break;
+                }
             }
         }
 

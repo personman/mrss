@@ -148,6 +148,10 @@ class ReportController extends ReportAdminController
             $subscriptions = $this->getSubscriptionsForPercentChange($subscriptions);
         }
 
+        if ($system) {
+            $subscriptions = $this->getSubscriptionsForSystem($subscriptions, $system);
+        }
+
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
@@ -161,6 +165,24 @@ class ReportController extends ReportAdminController
             'forPercentChange' => $forPercentChange,
             'studyConfig' => $this->getStudyConfig(),
         );
+    }
+
+    /**
+     * @param \Mrss\Entity\Subscription[] $subscriptions
+     * @param $system
+     */
+    protected function getSubscriptionsForSystem($subscriptions, $system)
+    {
+        $newSubscriptions = array();
+        foreach ($subscriptions as $subscription) {
+            $year = $subscription->getYear();
+            if ($subscription->getCollege()->hasSystemMembership($system->getId(), $year)) {
+                $newSubscriptions[] = $subscription;
+                //pr($subscription->getYear());
+            }
+        }
+
+        return $newSubscriptions;
     }
 
     /**
