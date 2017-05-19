@@ -39,7 +39,7 @@ class Data extends Import
 
     protected $systemId = null;
 
-    protected $debug = true;
+    protected $debug = false;
 
 
     //protected $file = 'data/imports/envisio-import-icma.xlsx';
@@ -152,6 +152,7 @@ class Data extends Import
                 $subscription = $this->createSubscription($college);
             }
 
+            $year = $subscription->getYear();
             $subscription->setBenchmarkModel($this->getBenchmarkmodel());
             $subscription->setDatumModel($this->getDatumModel());
 
@@ -162,8 +163,8 @@ class Data extends Import
                 }
                 $subscription->setValue($dbColumn, $value);
 
-                if (false && $this->debug) {
-                    echo "<p>{$college->getName()} - $dbColumn: $value</p>";
+                if ($this->debug) {
+                    echo "<p>$year: {$college->getName()} - $dbColumn: $value</p>";
                 }
             }
 

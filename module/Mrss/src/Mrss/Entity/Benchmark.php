@@ -996,7 +996,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                         $suffix;
                 }
             }
-        } elseif ($this->isNumericalRadio()) {
+        } elseif ($this->isNumericalRadio() && !is_null($value) && $value != '') {
             $options = $this->getOptionsForForm();
             $keys = array_keys($options);
             if ($closestKey = ($this->getClosest($value, $keys))) {
