@@ -35,7 +35,7 @@ class Data extends Import
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
 
-    protected $year = 2016;
+    protected $year = null;
 
     protected $systemId = null;
 
@@ -44,7 +44,8 @@ class Data extends Import
 
     //protected $file = 'data/imports/envisio-import-icma.xlsx';
     //protected $file = 'data/imports/envisio-import-safety.xlsx';
-    protected $file = 'data/imports/full-icma-import.xlsx';
+    //protected $file = 'data/imports/full-icma-import.xlsx';
+    protected $file = 'data/imports/vbc-import-final.xlsx';
 
     protected $map = array();
 
@@ -55,9 +56,9 @@ class Data extends Import
         $this->excel = $this->openFile($this->file);
 
         $sheets = array(
-            0 => 2016,
-            //1 => 2015,
-            //2 => 2014,
+            0 => 2014,
+            1 => 2015,
+            2 => 2016,
             //3 => 2013,
         );
 
