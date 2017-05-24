@@ -22,6 +22,11 @@ class CustomReportController extends ReportController
      */
     public function indexAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
+
         $webinarLink = '/webinar';
         if ($this->currentStudy()->getId() == 2) {
             $webinarLink = '/contact';

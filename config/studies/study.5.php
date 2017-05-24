@@ -14,6 +14,7 @@ return array(
     'navigation' => 'envisio_navigation',
     'export_template' => 'govbenchmark-template.xlsx',
     'benchmark_completion_heatmap' => true,
+    'college_report_access_checkbox' => true,
     'percent_change_report_columns' => array(
     ),
     'show_peer_data_you_did_not_submit' => true, // Temporary!!

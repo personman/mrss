@@ -93,6 +93,8 @@ class Percentile extends Report
             return false;
         }
 
+        $this->debug($data);
+
         $calculator->setData($data);
 
         // Percentiles

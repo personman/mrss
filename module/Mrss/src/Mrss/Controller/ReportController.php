@@ -77,7 +77,7 @@ class ReportController extends ReportAdminController
 
         $forPercentChange = $this->params()->fromRoute('forPercentChange');
 
-        if ($redirect = $this->checkReportsAreOpen()) {
+        if ($redirect = $this->checkReportsAreOpen(true)) {
             return $redirect;
         }
 
@@ -632,6 +632,11 @@ class ReportController extends ReportAdminController
 
     public function strengthsAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
+
         $threshold = 75;
 
         /** @var \Mrss\Service\Report\Executive $report */
@@ -719,9 +724,9 @@ class ReportController extends ReportAdminController
      *
      * @return \Zend\Http\Response
      */
-    public function checkReportsAreOpen()
+    public function checkReportsAreOpen($freeReport = false)
     {
-        $open = $this->checkReportAccess();
+        $open = $this->checkReportAccess($freeReport);
 
         if (!$open) {
             $this->flashMessenger()->addErrorMessage(
@@ -739,8 +744,17 @@ class ReportController extends ReportAdminController
      *
      * @return boolean
      */
-    protected function checkReportAccess()
+    protected function checkReportAccess($freeReport = false)
     {
+        if ($this->getStudyConfig()->college_report_access_checkbox && !$freeReport) {
+            if ($college = $this->getCollege()) {
+                if (!$college->hasReportAccess()) {
+                    return false;
+                }
+            }
+        }
+
+
         // Temporarily open them up no matter what.
         return true;
 
