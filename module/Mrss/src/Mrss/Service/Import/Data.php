@@ -44,8 +44,8 @@ class Data extends Import
 
     //protected $file = 'data/imports/envisio-import-icma.xlsx';
     //protected $file = 'data/imports/envisio-import-safety.xlsx';
-    //protected $file = 'data/imports/full-icma-import.xlsx';
-    protected $file = 'data/imports/vbc-import-final.xlsx';
+    protected $file = 'data/imports/full-icma-import.xlsx';
+    //protected $file = 'data/imports/vbc-import-final.xlsx';
 
     protected $map = array();
 
