@@ -99,9 +99,13 @@ tr.topHeading th.nationalPercentiles {
 
 .nationalDataDefinition {
     width: 600px;
-    margin: 10px 0;
+    margin: 10px auto;
     text-align: left;
     font-style: italic;
+}
+
+.chartWrapper, .chart, .highcharts-container {
+    margin: 0 auto;
 }
 
 .report tbody tr.reportSubHeading {
