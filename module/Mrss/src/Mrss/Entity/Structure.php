@@ -181,9 +181,9 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
 
     public function getCompletionPercentageForObservation($observation)
     {
-        $debug = true;
+        $debug = false;
 
-        $benchmarks = $this->getAllBenchmarks();
+        $benchmarks = $this->getBenchmarksForYear($observation->getYear(), false);
         $total = count($benchmarks);
 
         $populated = 0;
@@ -193,12 +193,20 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
             if (!is_null($value)) {
                 $populated++;
             }
+
+            if ($debug) {
+                pr($benchmark->getName());
+                $hasValue = !is_null($value);
+                pr($hasValue);
+            }
+
         }
 
         $completion = 0;
         if ($total) {
             $completion = $populated / $total * 100;
             if ($debug) {
+                pr($populated); pr($total);
             }
         }
 
@@ -270,7 +278,7 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
     /**
      * @return \Mrss\Entity\Benchmark[]
      */
-    protected function getAllBenchmarks()
+    protected function getAllBenchmarks($includeCalculated = true)
     {
         $pageStructure = $this->getPageStructure();
         $this->benchmarks = array();
@@ -282,21 +290,25 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         }
 
         // Recursive:
-        $this->getBenchmarks($pageStructure);
+        $this->getBenchmarks($pageStructure, $includeCalculated);
 
         return $this->benchmarks;
     }
 
-    protected function getBenchmarks($structureArray)
+    protected function getBenchmarks($structureArray, $includeCalculated = true)
     {
         foreach ($structureArray as $child) {
 
             if ($this->childIsBenchmark($child)) {
                 $benchmarkId = $child['benchmark'];
-                $this->benchmarks[] = $this->getBenchmark($benchmarkId);
+                $benchmark = $this->getBenchmark($benchmarkId);
+
+                if ($includeCalculated || !$benchmark->getComputed()) {
+                    $this->benchmarks[] = $benchmark;
+                }
 
             } elseif (!empty($child['children'])) {
-                $this->getBenchmarks($child['children']);
+                $this->getBenchmarks($child['children'], $includeCalculated);
             }
         }
     }
@@ -306,10 +318,10 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         return $this->getBenchmarkModel()->find($benchmarkId);
     }
 
-    public function getBenchmarksForYear($year)
+    public function getBenchmarksForYear($year, $includeCalculated = true)
     {
         $benchmarksForYear = array();
-        foreach ($this->getAllBenchmarks() as $benchmark) {
+        foreach ($this->getAllBenchmarks($includeCalculated) as $benchmark) {
             if ($benchmark->isAvailableForYear($year)) {
                 $benchmarksForYear[] = $benchmark;
             }
