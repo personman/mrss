@@ -12,6 +12,7 @@ return array(
     'welcome_email' => 'welcome-envisio',
     'favicon' => '/envisio-favicon.ico',
     'navigation' => 'envisio_navigation',
+    'round_data_entry_to' => 2,
     'export_template' => 'govbenchmark-template.xlsx',
     'benchmark_completion_heatmap' => true,
     'college_report_access_checkbox' => true,

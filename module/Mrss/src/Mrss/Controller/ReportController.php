@@ -647,9 +647,9 @@ class ReportController extends ReportAdminController
         $observation = $this->currentCollege()->getObservationForYear($year);
         $report->setObservation($observation);
 
-        $report->setSystem($this->getActiveSystem());
-
         $activeSystem = $this->getActiveSystem();
+        $report->setSystem($activeSystem);
+
 
         $strengths = $report->getStrengths(false, $threshold);
         $weaknesses = $report->getWeaknesses($threshold);

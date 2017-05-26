@@ -441,6 +441,7 @@ class ObservationController extends BaseController
         $form->bind($observation);
 
         $form = $this->copyCampusInfoFromLastYear($form);
+        $form = $this->roundFormValues($form);
 
         // Hard-coded binding of best practices. @todo: make this more elegant
         if ($form->has('best_practices')) {
@@ -449,6 +450,8 @@ class ObservationController extends BaseController
             $bp->setValue($bpValue);
             //prd($_POST);
         }
+
+
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
@@ -567,6 +570,21 @@ class ObservationController extends BaseController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    protected function roundFormValues($form)
+    {
+        $roundTo = $this->getStudyConfig()->round_data_entry_to;
+
+        if (!is_null($roundTo)) {
+            foreach ($form as $element) {
+                $value = $element->getValue();
+                $value = round($value, $roundTo);
+                $element->setValue($value);
+            }
+        }
+
+        return $form;
     }
 
     protected function updateCompletion($observation)
