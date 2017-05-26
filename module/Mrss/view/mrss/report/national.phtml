@@ -179,7 +179,7 @@ $this->headScript()->appendFile(
                     <tr class="<?= $rowClass ?>" id="measure_<?= $benchmark['dbColumn'] ?>">
                         <td class="benchmarkLabel">
                             <?php if (!empty($benchmark['description'])): ?>
-                                <span class="tooltipster" title="<?= addslashes($benchmark['description']) ?>">
+                                <span class="tooltipster" title="<?= addslashes(strip_tags($benchmark['description'])) ?>">
                                     <?= $benchmark['benchmark'] ?>
                                 </span>
                             <?php else: ?>
