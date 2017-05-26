@@ -82,10 +82,16 @@ class BaseController extends AbstractActionController
         return $benchmarkGroups;
     }
 
-    protected function getAllBenchmarkGroups($subscription)
+    protected function getAllBenchmarkGroups($subscription, $system = null)
     {
         if ($this->getStudyConfig()->use_structures) {
-            $systems = $this->getCollege()->getSystems();
+
+            if ($system) {
+                $systems = array($system);
+            } else {
+                $systems = $this->getCollege()->getSystems();
+            }
+
             $benchmarkGroups = array();
             foreach ($systems as $system) {
                 $structure = $system->getReportStructure();

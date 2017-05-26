@@ -173,6 +173,8 @@ class Explore extends AbstractForm
 
     protected function addSystemsDropdown($systems)
     {
+        return false;
+
         if (count($systems)) {
             $systemOptions = array();
             foreach ($systems as $system) {

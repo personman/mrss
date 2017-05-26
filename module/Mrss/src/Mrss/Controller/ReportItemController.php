@@ -47,6 +47,13 @@ class ReportItemController extends CustomReportController
                     $data['multiTrend'] = 0;
                 }
 
+                // Add system to config
+                $systemId = null;
+                if ($system = $report->getSystem()) {
+                    $systemId = $system->getId();
+                }
+                $data['system'] = $systemId;
+
                 // What type of button was pressed?
                 $buttonPressed = $this->getButtonPressed($data);
 
@@ -304,7 +311,8 @@ class ReportItemController extends CustomReportController
 
         $benchmarks = array();
         $subscription = $this->currentObservation()->getSubscription();
-        foreach ($this->getAllBenchmarkGroups($subscription) as $benchmarkGroup) {
+        $system = $this->report->getSystem();
+        foreach ($this->getAllBenchmarkGroups($subscription, $system) as $benchmarkGroup) {
             $groupChildren = array();
 
             foreach ($benchmarkGroup->getChildren() as $benchmark) {

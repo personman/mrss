@@ -43,6 +43,19 @@ class Report
     protected $college;
 
     /**
+     * System param is optional
+     *
+     * @ORM\ManyToOne(targetEntity="System")
+     * @ORM\JoinColumn(
+     * name="system_id",
+     * referencedColumnName="id",
+     * onDelete="CASCADE",
+     * nullable=true
+     * )
+     */
+    protected $system;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(
      * name="user_id",
@@ -191,5 +204,23 @@ class Report
     public function getSourceReportId()
     {
         return $this->sourceReportId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSystem()
+    {
+        return $this->system;
+    }
+
+    /**
+     * @param mixed $system
+     * @return Report
+     */
+    public function setSystem($system)
+    {
+        $this->system = $system;
+        return $this;
     }
 }

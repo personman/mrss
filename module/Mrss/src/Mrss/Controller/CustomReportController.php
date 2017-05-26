@@ -43,9 +43,17 @@ class CustomReportController extends ReportController
         );
     }
 
+    protected function getSystems()
+    {
+        /** @var \Mrss\Entity\College $currentCollege */
+        $currentCollege = $this->currentCollege();
+
+        return $currentCollege->getSystems();
+    }
+
     public function addAction()
     {
-        $form = new ReportForm;
+        $form = new ReportForm($this->getSystems(), $this->getStudyConfig(), $this->getReportItemModel()->getEntityManager());
 
         $form->setHydrator(
             new DoctrineHydrator(
@@ -61,6 +69,8 @@ class CustomReportController extends ReportController
         $report = $this->getReport($id);
 
         $form->bind($report);
+
+        //pr($form->get('system')->getValue());
 
         if ($this->getRequest()->isPost()) {
             // Hand the POST data to the form for validation
