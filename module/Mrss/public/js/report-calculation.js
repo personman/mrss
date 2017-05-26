@@ -30,6 +30,7 @@ function setUpOutlierCalculation()
         // Get the benchmark Ids
         var info = getOutlierBenchmarks();
 
+        urlStack = [];
         for (var si in info) {
             var benchmarkIds = info[si].benchmarkIds;
             var system = info[si].system;
@@ -39,7 +40,7 @@ function setUpOutlierCalculation()
             originalTotal = benchmarkIds.length;
 
             // Build the url stack
-            urlStack = [];
+
             for (var i in benchmarkIds) {
                 var benchmarkId = benchmarkIds[i];
 
@@ -54,6 +55,8 @@ function setUpOutlierCalculation()
                 urlStack.push(url);
             }
         }
+
+        //console.log(urlStack)
 
 
         // Now the url stack is built. Kick it off.
@@ -350,7 +353,7 @@ function processUrlStack()
     if (url = urlStack.pop()) {
         // Send the benchmark id and year to the server
         startTimer();
-        //console.log(url);
+        console.log(url);
 
         if (debug && window.console) {
             console.log("URL: " + url)

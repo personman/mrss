@@ -65,12 +65,14 @@ class Outlier extends AbstractModel
     public function findByCollegeStudyAndYear(
         CollegeEntity $college,
         StudyEntity $study,
-        $year
+        $year,
+        $system = null
     ) {
         $criteria = array(
             'college' => $college,
             'study' => $study,
-            'year' => $year
+            'year' => $year,
+            'system' => $system
         );
 
         return $this->getRepository()->findBy($criteria);

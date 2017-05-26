@@ -310,7 +310,7 @@ class Outliers extends Report
         return $equation;
     }
 
-    public function getOutlierReport(College $college)
+    public function getOutlierReport(College $college, $system = null)
     {
         $report = array();
         $study = $this->getStudy();
@@ -321,7 +321,7 @@ class Outliers extends Report
 
 
         $outliers = $this->getOutlierModel()
-            ->findByCollegeStudyAndYear($college, $study, $year);
+            ->findByCollegeStudyAndYear($college, $study, $year, $system);
         $report[] = array(
             'college' => $college,
             'outliers' => $this->prepareOutlierRows($outliers)
