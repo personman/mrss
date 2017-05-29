@@ -499,6 +499,11 @@ class College
                     }
                 }
 
+                if ($_SERVER['REMOTE_ADDR'] == '136.61.32.124') {
+                    pr($sub->getYear());
+                    pr($this->hasSystemMembership($system->getId(), $sub->getYear()));
+                }
+                
                 if ($system && !$this->hasSystemMembership($system->getId(), $sub->getYear())) {
 
                     continue;
