@@ -2,6 +2,7 @@
 
 namespace Mrss\Service\Report\ChartBuilder;
 
+use Mrss\Entity\System;
 use Mrss\Service\Report\ChartBuilder;
 use Mrss\Service\Report\Chart\Line;
 use Mrss\Service\Report\Calculator;
@@ -281,10 +282,12 @@ class LineBuilder extends ChartBuilder
         return $series;
     }
 
+
     public function getDataForCollege($dbColumn)
     {
         // Get the college's reported data
-        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy());
+        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy(), false, $this->getSystem());
+
         $data = array();
         foreach ($subscriptions as $subscription) {
             // Skip current year if reporting isn't open yet.
@@ -301,7 +304,6 @@ class LineBuilder extends ChartBuilder
             $data[$subscription->getYear()] = $value;
         }
         ksort($data);
-
 
         $this->setYears(array_keys($data));
         $data = $this->fillInGaps($data);
