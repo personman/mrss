@@ -224,7 +224,7 @@ class Explore extends AbstractForm
                 'name' => 'makePeerCohort',
                 'type' => 'Zend\Form\Element\Checkbox',
                 'options' => array(
-                    'label' => 'Include Only Peer Institutions with Data for All Years'
+                    'label' => 'Include Only Peer ' . ucwords($this->studyConfig->institution_label) .' with Data for All Years'
                 ),
                 'attributes' => array(
                     'id' => 'makePeerCohort'
