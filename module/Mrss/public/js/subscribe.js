@@ -69,7 +69,7 @@ function setUpAutocomplete()
             state = ui.item.state
             zip = ui.item.zip
 
-            $('#institution-ipdeds').val(ipeds)
+            $('#institution-ipeds').val(ipeds)
             $('#institution-address').val(address)
             $('#institution-city').val(city)
             $('#institution-state').val(state)

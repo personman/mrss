@@ -497,6 +497,7 @@ class ObservationController extends AbstractActionController
 
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
+                $ObservationModel->getEntityManager()->flush();
 
                 //$changeSet = $this->getServiceLocator()->get('service.observationAudit')
                 //    ->logChanges($oldObservation, $observation, 'dataEntry');
@@ -504,9 +505,9 @@ class ObservationController extends AbstractActionController
                 $newData = $subscription->getAllData();
 
                 //pr($newData);
-                //pr($newData['institution_conversion_factor']);
-                //pr($subscription->getValue('institution_conversion_factor'));
-                //pr($subscription->getId());
+                //pr($newData['private_sour']);
+                //pr($subscription->getValue('private_sour'));
+                //prd($subscription->getId());
 
                 /** @var \Mrss\Service\ObservationAudit $observationAudit */
                 $observationAudit = $this->getServiceLocator()->get('service.observationAudit');
@@ -524,6 +525,8 @@ class ObservationController extends AbstractActionController
                 if ($benchmarkGroup->getUseSubObservation()) {
                     $this->mergeAllSubobservations();
                 }
+
+
 
                 // Calculate completion
                 $subscription->updateCompletion();
@@ -547,6 +550,8 @@ class ObservationController extends AbstractActionController
                         $this->getValidationIssuesMessage($issues)
                     );
                 }
+
+                //$redirect = '/';
                 return $this->redirect()->toUrl($redirect);
             }
 
