@@ -126,7 +126,14 @@ class ReportItemController extends CustomReportController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
+
+
+        // @todo: support system year/open
         $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
+
+
+
+
         $peerGroups = $this->getPeerGroups();
         $includeTrends = $this->getIncludeTrends();
         $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();

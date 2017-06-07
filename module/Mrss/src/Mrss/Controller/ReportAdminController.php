@@ -729,6 +729,28 @@ class ReportAdminController extends BaseController
         );
     }
 
+    protected function getCurrentYear()
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getActiveSystem()) {
+            $year = $system->getCurrentYear();
+        } else {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        return $year;
+    }
+
+    public function getReportsOpen()
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getActiveSystem()) {
+            $reportsOpen = $system->getReportsOpen();
+        } else {
+            $reportsOpen = $this->currentStudy()->getReportsOpen();
+        }
+
+        return $reportsOpen;
+    }
+
     public function getYearFromRouteOrStudy($college = null)
     {
         if (empty($college)) {
@@ -738,7 +760,7 @@ class ReportAdminController extends BaseController
         $year = $this->params()->fromRoute('year');
 
         if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
+            $year = $this->getCurrentYear();
 
             // But if reports aren't open yet, show them last year's by default
             $impersonationService = $this->getServiceLocator()
@@ -756,8 +778,8 @@ class ReportAdminController extends BaseController
             $subModel = $this->getServiceLocator()->get('model.subscription');
 
             $before = null;
-            if (!$this->currentStudy()->getReportsOpen()) {
-                $before = $this->currentStudy()->getCurrentYear();
+            if (!$this->getReportsOpen()) {
+                $before = $this->getCurrentYear();
             }
 
             $latestSubscription = $subModel->getLatestSubscription($this->currentStudy(), $college->getId(), $before);

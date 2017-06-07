@@ -130,6 +130,9 @@ class System extends AbstractForm
             )
         );
 
+        $this->addCurrentYear();
+        $this->addOpenClosedElements();
+
         $this->add($this->getButtonFieldset());
     }
 }

@@ -78,6 +78,41 @@ class System
      */
     protected $reportStructure = null;
 
+
+    // Pushed down from the study entity:
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $currentYear;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $enrollmentOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $pilotOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $dataEntryOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $outlierReportsOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $reportsOpen;
+
+
+
     public function __construct()
     {
         $this->colleges = new ArrayCollection();
@@ -412,5 +447,80 @@ class System
         }
 
         return $subscriptions;
+    }
+
+
+
+    public function setCurrentYear($year)
+    {
+        $this->currentYear = $year;
+
+        return $this;
+    }
+
+    public function getCurrentYear()
+    {
+        return $this->currentYear;
+    }
+
+    public function getLatestReportYear()
+    {
+        $year = $this->getCurrentYear();
+        if (!$this->getReportsOpen()) {
+            $year = $year - 1;
+        }
+
+        return $year;
+    }
+
+    public function getCurrentYearMinus($minus)
+    {
+        $minus = intval($minus);
+
+        return $this->currentYear - $minus;
+    }
+
+    public function setEnrollmentOpen($enrollmentOpen)
+    {
+        $this->enrollmentOpen = $enrollmentOpen;
+
+        return $this;
+    }
+
+    public function getEnrollmentOpen()
+    {
+        return $this->enrollmentOpen;
+    }
+
+    public function setDataEntryOpen($dataEntryOpen)
+    {
+        $this->dataEntryOpen = $dataEntryOpen;
+
+        return $this;
+    }
+
+    public function getDataEntryOpen()
+    {
+        return $this->dataEntryOpen;
+    }
+
+    public function setReportsOpen($reportsOpen)
+    {
+        $this->reportsOpen = $reportsOpen;
+    }
+
+    public function getReportsOpen()
+    {
+        return $this->reportsOpen;
+    }
+
+    public function setOutlierReportsOpen($reportsOpen)
+    {
+        $this->outlierReportsOpen = $reportsOpen;
+    }
+
+    public function getOutlierReportsOpen()
+    {
+        return $this->outlierReportsOpen;
     }
 }

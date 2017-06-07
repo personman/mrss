@@ -113,7 +113,8 @@ class SystemController extends AbstractActionController
                 $this->getSystemModel()->save($system);
                 $this->getServiceLocator()->get('em')->flush();
 
-                $this->flashMessenger()->addSuccessMessage('System saved.');
+                $noun = ucwords($this->getSystemLabel());
+                $this->flashMessenger()->addSuccessMessage("$noun saved.");
                 return $this->redirect()->toRoute('systems');
             }
 
@@ -122,6 +123,11 @@ class SystemController extends AbstractActionController
         return array(
             'form' => $form
         );
+    }
+
+    protected function getSystemLabel()
+    {
+        return $this->getServiceLocator()->get('Study')->system_label;
     }
 
     public function addcollegeAction()
@@ -256,7 +262,8 @@ class SystemController extends AbstractActionController
                 $this->getServiceLocator()->get('em')->flush();
 
                 // Show a message and redirect
-                $this->flashMessenger()->addSuccessMessage("System $roleLabel added.");
+                $noun = ucwords($this->getSystemLabel());
+                $this->flashMessenger()->addSuccessMessage("$noun $roleLabel added.");
                 return $this->redirect()
                     ->toRoute('systems/view', array('id' => $system->getId()));
             }

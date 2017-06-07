@@ -148,4 +148,71 @@ class AbstractForm extends Form
     {
         return $this->includeCanada;
     }
+
+    public function addCurrentYear()
+    {
+        $this->add(
+            array(
+                'name' => 'currentYear',
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'Current Year'
+                ),
+                'attributes' => array(
+                    'options' => $this->getYearsAvailable()
+                )
+            )
+        );
+    }
+
+    public function getYearsAvailable()
+    {
+        $range = range(2006, date('Y') + 3);
+        $combined = array_combine($range, $range);
+
+        return $combined;
+    }
+
+    protected function addOpenClosedElements()
+    {
+        $this->add(
+            array(
+                'name' => 'enrollmentOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Enrollment Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'dataEntryOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Data Entry Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'outlierReportsOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Outlier Reports Open'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'reportsOpen',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Reports Open'
+                )
+            )
+        );
+    }
 }

@@ -21,18 +21,7 @@ class Study extends AbstractForm
         $this->addName();
         $this->addDescription();
 
-        $this->add(
-            array(
-                'name' => 'currentYear',
-                'type' => 'Zend\Form\Element\Select',
-                'options' => array(
-                    'label' => 'Current Year'
-                ),
-                'attributes' => array(
-                    'options' => $this->getYearsAvailable()
-                )
-            )
-        );
+        $this->addCurrentYear();
 
         $this->add(
             array(
@@ -88,45 +77,7 @@ class Study extends AbstractForm
             )
         );
 
-        $this->add(
-            array(
-                'name' => 'enrollmentOpen',
-                'type' => 'Checkbox',
-                'options' => array(
-                    'label' => 'Enrollment Open'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'dataEntryOpen',
-                'type' => 'Checkbox',
-                'options' => array(
-                    'label' => 'Data Entry Open'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'outlierReportsOpen',
-                'type' => 'Checkbox',
-                'options' => array(
-                    'label' => 'Outlier Reports Open'
-                )
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'reportsOpen',
-                'type' => 'Checkbox',
-                'options' => array(
-                    'label' => 'Reports Open'
-                )
-            )
-        );
+        $this->addOpenClosedElements();
 
         $this->add(
             array(
@@ -167,13 +118,5 @@ class Study extends AbstractForm
                 )
             )
         );
-    }
-
-    public function getYearsAvailable()
-    {
-        $range = range(2006, date('Y') + 3);
-        $combined = array_combine($range, $range);
-
-        return $combined;
     }
 }

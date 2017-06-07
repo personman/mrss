@@ -119,8 +119,8 @@ class ReportController extends ReportAdminController
         }
 
         $year = $this->getYearFromRouteOrStudy();
-        $subscriptions = $this->currentCollege()
-            ->getSubscriptionsForStudy($this->currentStudy(), true);
+
+        $subscriptions = $this->getSubscriptions();
 
         $subscription = $this->getSubscriptionByYear($year);
 
@@ -172,6 +172,19 @@ class ReportController extends ReportAdminController
             'forPercentChange' => $forPercentChange,
             'studyConfig' => $this->getStudyConfig(),
         );
+    }
+
+    protected function getSubscriptions()
+    {
+        $system = null;
+        if ($this->getServiceLocator()->get('Study')->use_structures) {
+            $system = $this->getActiveSystem();
+        }
+
+        $subscriptions = $this->currentCollege()
+            ->getSubscriptionsForStudy($this->currentStudy(), true, $system);
+
+        return $subscriptions;
     }
 
     /**
@@ -366,10 +379,7 @@ class ReportController extends ReportAdminController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-        $subs = $subscriptionModel
-            ->findByCollegeAndStudy($this->currentCollege()->getId(), $study->getId());
+        $subs = $this->getSubscriptions();
         $years = array();
         foreach ($subs as $sub) {
             if (!$study->getReportsOpen() && $sub->getYear() == $study->getCurrentYear()) {
@@ -661,8 +671,7 @@ class ReportController extends ReportAdminController
         $strengths = $report->getStrengths(false, $threshold);
         $weaknesses = $report->getWeaknesses($threshold);
 
-        $subscriptions = $this->currentCollege()
-            ->getSubscriptionsForStudy($this->currentStudy());
+        $subscriptions = $this->getSubscriptions();
 
         $subscription = $this->getSubscriptionModel()
             ->findOne($year, $this->currentCollege(), $this->currentStudy());

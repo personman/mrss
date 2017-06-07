@@ -492,10 +492,16 @@ class College
 
             if ($sub->getStudy()->getId() == $study->getId()) {
 
+                // Exclude current year if reports are closed
                 if ($forReports) {
-                    // Exclude current year if reports are closed
-                    if ($study->getCurrentYear() == $sub->getYear() && !$study->getReportsOpen()) {
-                        continue;
+                    if ($system) {
+                        if ($system->getCurrentYear() == $sub->getYear() && !$system->getReportsOpen()) {
+                            continue;
+                        }
+                    } else {
+                        if ($study->getCurrentYear() == $sub->getYear() && !$study->getReportsOpen()) {
+                            continue;
+                        }
                     }
                 }
 
