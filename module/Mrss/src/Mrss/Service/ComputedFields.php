@@ -84,6 +84,7 @@ class ComputedFields
             }
 
             // Populate variables
+            $this->recursionLevel = 0;
             $equationWithVariables = $this
                 ->nestComputedEquations(
                     $equationWithVariables,
@@ -333,10 +334,20 @@ class ComputedFields
         $variables = $this->getVariables($equation);
         $computed = $this->getComputedBenchmarks($year);
 
+        if ($this->getDebug()) {
+            echo 'Variables: ';
+            pr($variables);
+        }
+
         foreach ($variables as $variable) {
             if (!empty($computed[$variable])) {
                 $insideBenchmark = $computed[$variable];
                 $insideEquation = $insideBenchmark->getEquation();
+
+                if ($this->getDebug()) {
+                    echo 'Inside equation: ';
+                    pr($insideEquation);
+                }
 
                 // Multiply by 100 for percentages
                 if ($insideBenchmark->isPercent()) {
@@ -345,6 +356,9 @@ class ComputedFields
 
                 // Recurse in case the inside equation contains other computed ones
                 if ($this->recursionLevel > 15) {
+                    if ($this->getDebug()) {
+                        echo 'Equation nesting reached maximum recursion level: 15. ';
+                    }
                     return '';
                 } else {
                     $insideEquation = $this->nestComputedEquations($insideEquation, $year);
