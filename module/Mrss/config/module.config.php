@@ -2016,6 +2016,17 @@ return array(
                             )
                         )
                     ),
+                    'memberships-edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/memberships/edit/:id',
+                            'defaults' => array(
+                                'action' => 'adminEdit',
+                                'controller' => 'subscription',
+                                'id' => null
+                            )
+                        )
+                    ),
                     'changes' => array(
                         'type' => 'segment',
                         'options' => array(

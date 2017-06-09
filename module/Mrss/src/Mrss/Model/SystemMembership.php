@@ -32,10 +32,25 @@ class SystemMembership extends AbstractModel
         ));
     }
 
+    public function findByCollegeYear($college, $year)
+    {
+        return $this->getRepository()->findOneBy(array(
+            'college' => $college,
+            'year' => $year
+        ));
+    }
+
     public function save(SystemMembershipEntity $system)
     {
         $this->getEntityManager()->persist($system);
 
         // Flush here or leave it to some other code?
     }
+
+    public function delete(SystemMembershipEntity $entity)
+    {
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush();
+    }
+
 }

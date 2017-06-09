@@ -13,7 +13,7 @@ use Mrss\Form\Fieldset\Executive;
 
 class SubscriptionAdmin extends AbstractForm
 {
-    public function __construct($systems = array(), $systemLabel)
+    public function __construct($systems = array(), $systemLabel = 'System')
     {
         $currentYear = date('Y');
         $years = range($currentYear - 10, $currentYear + 5);
@@ -24,7 +24,7 @@ class SubscriptionAdmin extends AbstractForm
 
         $this->add(
             array(
-                'name' => 'college',
+                'name' => 'collegeId',
                 'type' => 'Hidden',
             )
         );

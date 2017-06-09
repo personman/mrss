@@ -343,7 +343,7 @@ return array(
                 ),
                 array(
                     'controller' => 'subscription',
-                    'action' => array('delete', 'sendinvoice', 'reportAccess'),
+                    'action' => array('delete', 'sendinvoice', 'reportAccess', 'adminEdit'),
                     'roles' => array('admin')
                 ),
                 array(

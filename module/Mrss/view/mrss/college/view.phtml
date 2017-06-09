@@ -111,6 +111,13 @@
                         <?php if ($this->currentStudy()->hasSections()): ?>
                             <th>Modules</th>
                         <?php endif ?>
+
+                        <?php if ($this->studyConfig()->use_structures): ?>
+                            <th><?= ucwords($this->studyConfig()->system_label) ?></th>
+                        <?php endif ?>
+
+                        <th>Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -155,6 +162,16 @@
                                 <?= $subscription->getSectionNames(); ?>
                             </td>
                         <?php endif ?>
+
+                        <?php if ($this->studyConfig()->use_structures): ?>
+                            <td>
+                                <?= implode(', ', $subscription->getCollege()->getSystemNames($subscription->getYear())) ?>
+                            </td>
+                        <?php endif ?>
+
+                        <td>
+                            <a href="<?= $this->url('admin/memberships-edit', array('id' => $subscription->getId())) ?>">Edit</a>
+                        </td>
 
                     </tr>
                     <?php endforeach ?>

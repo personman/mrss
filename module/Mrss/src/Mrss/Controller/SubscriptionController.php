@@ -560,6 +560,50 @@ class SubscriptionController extends BaseController
         );
     }
 
+    public function adminEditAction()
+    {
+        $subscriptionId = $this->params()->fromRoute('id');
+        $subscription = $this->getSubscriptionModel()->find($subscriptionId);
+        $entityManager = $this->getSubscriptionModel()->getEntityManager();
+
+        $selectedSystems = $subscription->getCollege()->getSystemsByYear($subscription->getYear());
+        $systemIds = array();
+        foreach($selectedSystems as $sys) {
+            $systemIds[] = $sys->getId();
+        }
+
+        $form = $this->getAdminForm($subscription->getCollege()->getId());
+
+        $form->get('systems')->setValue($systemIds);
+        $form->setHydrator(new DoctrineHydrator($entityManager, 'Mrss\Entity\Subscription'));
+        $form->bind($subscription);
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                // Handle networks
+                $this->updateSystemMemberships(
+                    $subscription->getCollege(),
+                    $this->params()->fromPost('systems'),
+                    $subscription->getYear()
+                );
+
+                $this->getSubscriptionModel()->save($subscription);
+
+                $this->getSubscriptionModel()->getEntityManager()->flush();
+
+                $this->flashMessenger()->addSuccessMessage('Saved');
+                return $this->redirect()
+                    ->toRoute('colleges/view', array('id' => $subscription->getCollege()->getId()));
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
     protected function createDraftSubscriptionForUpdate($subscription, $sections)
     {
         $draft = $this->getDraftSubscription();
@@ -2171,12 +2215,8 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         return $response;
     }
 
-    public function adminAddAction()
+    protected function getAdminForm($collegeId)
     {
-        $collegeId = $this->params()->fromRoute('college');
-        $currentStudy = $this->currentStudy();
-        $college = $this->getCollegeModel()->find($collegeId);
-
         $systemOptions = array();
         if ($this->getStudyConfig()->use_structures) {
             foreach ($this->getSystemModel()->findAll() as $system) {
@@ -2188,7 +2228,18 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $form = new SubscriptionAdmin($systemOptions, $systemLabel);
 
-        $form->get('college')->setValue($collegeId);
+        $form->get('collegeId')->setValue($collegeId);
+
+        return $form;
+    }
+
+    public function adminAddAction()
+    {
+        $collegeId = $this->params()->fromRoute('college');
+        $currentStudy = $this->currentStudy();
+        $college = $this->getCollegeModel()->find($collegeId);
+
+        $form = $this->getAdminForm($collegeId);
 
         if ($this->getRequest()->isPost()) {
             // Handle the form
@@ -2197,7 +2248,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             if ($form->isValid()) {
                 $data = $form->getData();
                 $year = $data['year'];
-                $collegeId = $data['college'];
+                $collegeId = $data['collegeId'];
                 $systems = $data['systems'];
 
                 // First, see if the subscription exists
@@ -2219,26 +2270,10 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
                 }
 
                 // Now, either way, update the system memberships, too
-                foreach ($systems as $systemId) {
-                    // Does it exist already?
-                    $system = $this->getSystemModel()->find($systemId);
-                    $membership = $this->getSystemMembershipModel()
-                        ->findBySystemCollegeYear($system, $college, $year);
-
-                    if (!$membership) {
-                        // Create it
-                        $membership = new SystemMembershipEntity();
-                        $membership->setCollege($college);
-                        $membership->setSystem($system);
-                        $membership->setYear($year);
-                        $membership->setDataVisibility('public');
-
-                        $this->getSystemMembershipModel()->save($membership);
-                        $this->getSystemMembershipModel()->getEntityManager()->flush();
-                    }
-                }
+                $this->updateSystemMemberships($college, $systems, $year);
 
                 // Message and redirect
+                $systemLabel = $this->getStudyConfig()->system_label;
                 $systemLabel = ucwords($systemLabel);
                 $this->flashMessenger()->addSuccessMessage("$systemLabel membership saved.");
                 $this->redirect()->toRoute('colleges/view', array('id' => $collegeId));
@@ -2252,5 +2287,49 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             'form' => $form,
             'college' => $college
         );
+    }
+
+    protected function updateSystemMemberships(College $college, $systemIds, $year)
+    {
+        $existingSystemIds = $college->getSystemIdsByYear($year);
+
+        foreach ($systemIds as $systemId) {
+            // Does it exist already?
+            $system = $this->getSystemModel()->find($systemId);
+            $membership = $this->getSystemMembershipModel()
+                ->findBySystemCollegeYear($system, $college, $year);
+
+            if (!$membership) {
+                // Create it
+                $membership = new SystemMembershipEntity();
+                $membership->setCollege($college);
+                $membership->setSystem($system);
+                $membership->setYear($year);
+                $membership->setDataVisibility('public');
+
+                $this->getSystemMembershipModel()->save($membership);
+
+            }
+
+            // Remove from existing list since this doesn't need deletion
+            if (($key = array_search($systemId, $existingSystemIds)) !== false) {
+                unset($existingSystemIds[$key]);
+            }
+        }
+
+        // Anything left should be removed
+        foreach ($existingSystemIds as $toDelete) {
+            $membership = $this->getSystemMembershipModel()
+                ->findBySystemCollegeYear($toDelete, $college, $year);
+
+            if ($membership) {
+                $this->getSystemMembershipModel()->delete($membership);
+            } else {
+                //die('cannot find');
+            }
+
+        }
+
+        $this->getSystemMembershipModel()->getEntityManager()->flush();
     }
 }
