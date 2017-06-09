@@ -76,7 +76,7 @@ $this->headScript()->appendFile(
         Download Report
     </a>
 
-    <?php if (!$forPercentChange): ?>
+    <?php if (!$forPercentChange && empty($system)): ?>
     <a href="<?= $this->url(
         'institution/subscribed',
         array(
