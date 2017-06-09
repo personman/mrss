@@ -81,10 +81,11 @@ class ReportController extends ReportAdminController
     {
         // HTML or Excel?
         $format = $this->params()->fromRoute('format');
+        $year = $this->getYearFromRouteOrStudy();
 
         $forPercentChange = $this->params()->fromRoute('forPercentChange');
 
-        if ($redirect = $this->checkReportsAreOpen(true)) {
+        if ($redirect = $this->checkReportsAreOpen(true, $year)) {
             return $redirect;
         }
 
@@ -117,8 +118,6 @@ class ReportController extends ReportAdminController
                 }
             }
         }
-
-        $year = $this->getYearFromRouteOrStudy();
 
         $subscriptions = $this->getSubscriptions();
 
@@ -740,9 +739,9 @@ class ReportController extends ReportAdminController
      *
      * @return \Zend\Http\Response
      */
-    public function checkReportsAreOpen($freeReport = false)
+    public function checkReportsAreOpen($freeReport = false, $year = null)
     {
-        $open = $this->checkReportAccess($freeReport);
+        $open = $this->checkReportAccess($freeReport, $year);
 
         if (!$open) {
             $this->flashMessenger()->addErrorMessage(
@@ -760,7 +759,7 @@ class ReportController extends ReportAdminController
      *
      * @return boolean
      */
-    protected function checkReportAccess($freeReport = false)
+    protected function checkReportAccess($freeReport = false, $year = null)
     {
         if ($this->getStudyConfig()->college_report_access_checkbox && !$freeReport) {
             if ($college = $this->getCollege()) {
@@ -770,6 +769,12 @@ class ReportController extends ReportAdminController
             }
         }
 
+        if ($this->getStudyConfig()->use_structures) {
+            $system = $this->getActiveSystem();
+            if (!$system->getReportsOpen() && $system->getCurrentYear() == $year) {
+                return false;
+            }
+        }
 
         // Temporarily open them up no matter what.
         return true;
@@ -793,7 +798,9 @@ class ReportController extends ReportAdminController
         }
 
         // Check the current study's report setting
-        if (!$this->currentStudy()->getReportsOpen()) {
+        if ($this->getStudyConfig()->use_structures) {
+
+        } elseif (!$this->currentStudy()->getReportsOpen()) {
             return false;
         }
     }
