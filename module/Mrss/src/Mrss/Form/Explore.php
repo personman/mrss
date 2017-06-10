@@ -28,7 +28,7 @@ class Explore extends AbstractForm
         $this->addBasicFields($years, $includeTrends);
         $this->addBenchmarkSelects($benchmarks);
         $this->addSystemsDropdown($systems);
-        $this->addPeerGroupDropdown($peerGroups);
+        $this->addPeerGroupDropdown($peerGroups, $colleges);
         $this->addAdvancedFields($benchmarks, $allBreakpoints);
 
         $this->add($this->getButtons());
@@ -199,7 +199,7 @@ class Explore extends AbstractForm
         }
     }
 
-    protected function addPeerGroupDropdown($peerGroups)
+    protected function addPeerGroupDropdown($peerGroups, $colleges)
     {
         $this->add(
             array(
@@ -218,6 +218,28 @@ class Explore extends AbstractForm
                 )
             )
         );
+
+
+        if (count($colleges)) {
+            $collegeOptions = array();
+            foreach ($colleges as $college) {
+                $collegeOptions[$college->getId()] = $college->getNameAndState();
+            }
+
+            $this->add(
+                array(
+                    'name' => 'colleges',
+                    'type' => 'Zend\Form\Element\MultiCheckbox',
+                    'options' => array(
+                        'label' => 'Peers',
+                        'value_options' => $collegeOptions
+                    ),
+                    'attributes' => array(
+                        'id' => 'colleges'
+                    )
+                )
+            );
+        }
 
         $this->add(
             array(
@@ -367,6 +389,7 @@ class Explore extends AbstractForm
     {
         $filter = parent::getInputFilter();
         $filter->get('peerGroup')->setRequired(false);
+        $filter->get('colleges')->setRequired(false);
         $filter->get('hideMine')->setRequired(false);
         $filter->get('percentiles')->setRequired(false);
 

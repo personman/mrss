@@ -112,16 +112,31 @@ class ReportItemController extends CustomReportController
             'report' => $report,
             'edit' => $edit,
             'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy(),
-            'benchmarksByInputType' => $this->currentStudy()->getBenchmarksByInputType()
+            'benchmarksByInputType' => $this->currentStudy()->getBenchmarksByInputType(),
+            'peerMembers' => $this->getPeerMembers(),
+            'formData' => $data
         ));
 
         return $viewModel;
+    }
+
+    protected function getPeerMembers()
+    {
+        $members = array();
+        foreach ($this->getPeerGroups() as $peerGroup) {
+            $members[$peerGroup->getId()] = $peerGroup->getPeers();
+        }
+
+        return $members;
     }
 
     public function getForm()
     {
         $benchmarks = $this->getBenchmarks();
         $colleges = array();
+        if ($this->getStudyConfig()->use_structures) {
+            $colleges = $this->getAllColleges();
+        }
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
@@ -134,7 +149,7 @@ class ReportItemController extends CustomReportController
 
 
 
-        $peerGroups = $this->getPeerGroups();
+        $peerGroups = $this->getPeerGroupOptions();
         $includeTrends = $this->getIncludeTrends();
         $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
 
@@ -269,6 +284,13 @@ class ReportItemController extends CustomReportController
         $model = $this->getPeerGroupModel();
         $currentUser = $this->zfcUserAuthentication()->getIdentity();
         $groups = $model->findByUserAndStudy($currentUser, $this->currentStudy());
+
+        return $groups;
+    }
+
+    protected function getPeerGroupOptions()
+    {
+        $groups = $this->getPeerGroups();
 
         $peerGroups = array();
         foreach ($groups as $group) {

@@ -4,8 +4,19 @@ var menuSearchPlaceholder = 'Search Institutions';
 
 $(function() {
     addAdminMenuSearch();
+    configHighcharts();
 });
 
+function configHighcharts()
+{
+    if (typeof Highcharts != 'undefined') {
+        Highcharts.setOptions({
+            lang: {
+                thousandsSep: ','
+            }
+        });
+    }
+}
 
 function addAdminMenuSearch()
 {

@@ -20,21 +20,26 @@ $(function() {
     $('#benchmark2').change(function() {
         benchmarkChanged()
     })
+
+    peerGroupChanged();
+    $('#peerGroup').change(function() {
+        peerGroupChanged();
+    })
 });
 
 function setUpSelects()
 {
     /*$('#benchmark1, #benchmark2, #benchmark3').each(function(i, e) {
-        $(e).find('option').each(function(i2, e2) {
-            if (!e2.disabled) {
-                console.log($(e2).text());
-                //$(e2).text("  " + $(e2).text());
-                $(e2).html($.parseHTML($(e2).text()));
-                console.log($(e2).text());
-                console.log($(e2).html());
-            }
-        })
-    })*/
+     $(e).find('option').each(function(i2, e2) {
+     if (!e2.disabled) {
+     console.log($(e2).text());
+     //$(e2).text("  " + $(e2).text());
+     $(e2).html($.parseHTML($(e2).text()));
+     console.log($(e2).text());
+     console.log($(e2).html());
+     }
+     })
+     })*/
 
     cloneBenchmark2();
     $('#benchmark1, #benchmark2, #benchmark3').chosen({search_contains: true})
@@ -65,6 +70,7 @@ function updateFormForChartType()
     var system = $('#control-group-system')
     var peerGroup = $('#control-group-peerGroup')
     var makePeerCohort = $('#control-group-makePeerCohort')
+    var colleges = $('#control-group-colleges')
     var textEditor = $('#text-editor')
     var chart = $('#chart')
     var footnotes = $('.custom-report-footnotes')
@@ -168,6 +174,59 @@ function updateFormForChartType()
         yearField.show()
         peerGroup.show()
     }
+}
+
+// @todo: handle edit (currently selects all peers even if you previously narrowed it
+function peerGroupChanged()
+{
+    var colleges = $('#control-group-colleges')
+    var peerSelect = $('#peerGroup')
+    var selectedPeerGroup = peerSelect.val()
+
+    if (selectedPeerGroup && colleges.find('input').length) {
+        colleges.show()
+
+        // Select peer members
+        var members = peerMembers[selectedPeerGroup]
+        colleges.find('input').each(function(i, e) {
+            var college = $(e).parents('label')
+            var collegeId = $(e).val().toString()
+            var collegeInput = college.find('input')[0]
+            if ($.inArray(collegeId, members) != -1) {
+                if (!peerWasUnchecked(selectedPeerGroup, collegeId)) {
+                    collegeInput.checked = true
+                } else {
+                    collegeInput.checked = false
+                }
+
+                college.show()
+            } else {
+                collegeInput.checked = false
+                college.hide()
+            }
+        })
+    } else {
+        colleges.hide()
+    }
+}
+
+function peerWasUnchecked(peerGroupId, collegeId)
+{
+    var wasUnchecked = false
+
+    if (formData) {
+        var originalPeerGroup = formData['peerGroup'].toString()
+        var originalPeers = formData['colleges']
+
+        if (originalPeerGroup == peerGroupId) {
+            //console.log(collegeId); console.log(originalPeers); console.log($.inArray(collegeId, originalPeers))
+            if ($.inArray(collegeId, originalPeers) == -1) {
+                wasUnchecked = true
+            }
+        }
+    }
+
+    return wasUnchecked
 }
 
 function exploreFormSubmit()

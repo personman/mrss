@@ -48,6 +48,8 @@ $this->headScript()->appendFile(
         <?php $this->headScript()->captureStart() ?>
         var defaultBreakpoints = <?= json_encode($defaultBreakpoints) ?>;
         var benchmarksByInputType = <?= json_encode($benchmarksByInputType) ?>;
+        var peerMembers = <?= json_encode($peerMembers) ?>;
+        var formData = <?= json_encode($formData) ?>;
         <?php $this->headScript()->captureEnd() ?>
     </script>
 <?php endif ?>

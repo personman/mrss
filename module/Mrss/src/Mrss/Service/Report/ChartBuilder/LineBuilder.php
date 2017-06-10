@@ -273,6 +273,18 @@ class LineBuilder extends ChartBuilder
                         'color' => $this->getPeerColor($i)
                     );
                 }
+
+                $config = $this->getConfig();
+
+                foreach ($config['colleges'] as $collegeId) {
+                    $college = $this->getCollegeModel()->find($collegeId);
+                    $data = $this->getDataForCollege($dbColumn, $college);
+
+                    $series[] = array(
+                        'name' => $college->getNameAndState(),
+                        'data' => array_values($data),
+                    );
+                }
             }
 
             $i++;
@@ -283,10 +295,14 @@ class LineBuilder extends ChartBuilder
     }
 
 
-    public function getDataForCollege($dbColumn)
+    public function getDataForCollege($dbColumn, $college = null)
     {
+        if (null === $college) {
+            $college = $this->getCollege();
+        }
+
         // Get the college's reported data
-        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy(), false, $this->getSystem());
+        $subscriptions = $college->getSubscriptionsForStudy($this->getStudy(), false, $this->getSystem());
 
         $data = array();
         foreach ($subscriptions as $subscription) {

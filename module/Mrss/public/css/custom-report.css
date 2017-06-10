@@ -107,7 +107,7 @@ select {
     width: 1140px;
 }
 
-#controls-percentiles {
+#controls-percentiles, #controls-colleges {
     margin: 30px 10px 0 45px;
 }
 #controls-percentiles label input {
