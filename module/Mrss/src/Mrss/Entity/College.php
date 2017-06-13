@@ -675,6 +675,14 @@ class College
         return $systems;
     }
 
+    public function getSystem()
+    {
+        $systems = $this->getSystems();
+        $system = array_pop($systems);
+
+        return $system;
+    }
+
     public function hasSystemAdmin($userId)
     {
         foreach ($this->getSystems() as $system) {
