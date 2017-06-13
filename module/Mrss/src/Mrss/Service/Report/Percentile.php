@@ -84,6 +84,13 @@ class Percentile extends Report
         $percentileModel = $this->getPercentileModel();
         $percentileRankModel = $this->getPercentileRankModel();
 
+        $msg = array(
+            'benchmark' => $benchmark->getId(),
+            'year' => $year,
+            'system' => $system->getId()
+        );
+        $this->debug($msg);
+
         // Get all data points for this benchmark
         // Can't just pull from observations. have to consider subscriptions, too
         $data = $this->collectDataForBenchmark($benchmark, $year, true, $system, $forPercentChange);

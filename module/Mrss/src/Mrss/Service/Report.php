@@ -259,6 +259,14 @@ class Report
                 $subscriptions = array();
             }
 
+            if ($this->debug) {
+                $collegeIds = array();
+                foreach ($subscriptions as $sub) {
+                    $collegeIds[] = $sub->getCollege()->getId();
+                }
+                $this->debug($collegeIds);
+            }
+
             $data = $this->getDataFromSubscriptions($subscriptions, $benchmark, $skipNull);
         }
 
@@ -301,12 +309,17 @@ class Report
                 // Leave out null values
                 if ($skipNull && $value === null) {
                     $skipped++;
+                    $benchmarkId = $benchmark->getId();
+                    $message = "Skipped college id $collegeId, benchmark id $benchmarkId because it is null.";
+                    $this->debug($message);
                     continue;
                 }
 
                 // Also skip suppressed data
                 if (in_array($benchmarkGroupId, $suppressed)) {
                     $skipped++;
+                    $message = "Skipped form id $benchmarkGroupId for college id $collegeId because it is suppressed.";
+                    $this->debug($message);
                     continue;
                 }
 
