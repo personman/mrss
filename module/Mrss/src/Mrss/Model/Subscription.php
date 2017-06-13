@@ -259,6 +259,7 @@ class Subscription extends AbstractModel
         $subQueries
         ";
 
+        pr($sql);
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('year', $year);
         $query->setParameter('study_id', $study->getId());
