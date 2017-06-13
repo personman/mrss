@@ -119,7 +119,7 @@ class Report
      */
     protected $mailTransport;
 
-    protected $debug = false;
+    protected $debug = true;
     
     protected $start;
 
