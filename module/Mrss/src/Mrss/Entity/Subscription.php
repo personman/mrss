@@ -161,7 +161,7 @@ class Subscription
     protected $paidNotes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Section")
+     * @ORM\ManyToMany(targetEntity="Section", mappedBy="subscriptions")
      * @ORM\JoinTable(name="subscription_sections")
      * @var \Mrss\Entity\Section[]
      */
@@ -741,6 +741,40 @@ class Subscription
     public function setSections($sections)
     {
         $this->sections = $sections;
+
+        return $this;
+
+    }
+
+    public function updateSections($sections)
+    {
+        $originals = array();
+        foreach ($this->sections as $section) {
+            $originals[$section->getId()] = $section;
+        }
+
+
+        foreach ($sections as $section) {
+            if (!$this->sections->contains($section)) {
+                $this->sections->add($section);
+            }
+            unset($originals[$section->getId()]);
+        }
+
+        $removeThese = array();
+        foreach ($originals as $toDelete) {
+            foreach ($this->sections as $section) {
+                if ($section->getId() == $toDelete->getId()) {
+                    $removeThese[] = $section;
+                }
+            }
+
+        }
+
+        foreach ($removeThese as $section) {
+            $this->sections->removeElement($section);
+        }
+
         return $this;
     }
 

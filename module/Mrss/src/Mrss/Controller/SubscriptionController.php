@@ -579,7 +579,17 @@ class SubscriptionController extends BaseController
 
         $form = $this->getAdminForm($subscription->getCollege()->getId());
 
-        $form->get('systems')->setValue($systemIds);
+        if ($form->has('systems')) {
+            $form->get('systems')->setValue($systemIds);
+        }
+
+        if ($form->has('modules')) {
+            $moduleIds = $subscription->getSectionIds();
+            $form->get('modules')->setValue($moduleIds);
+        }
+
+
+
         $form->setHydrator(new DoctrineHydrator($entityManager, 'Mrss\Entity\Subscription'));
         $form->bind($subscription);
 
@@ -592,6 +602,11 @@ class SubscriptionController extends BaseController
                     $subscription->getCollege(),
                     $this->params()->fromPost('systems'),
                     $subscription->getYear()
+                );
+
+                $this->updateSections(
+                    $subscription,
+                    $this->params()->fromPost('modules')
                 );
 
                 $this->getSubscriptionModel()->save($subscription);
@@ -1043,16 +1058,22 @@ class SubscriptionController extends BaseController
 
     protected function getSelectedSections($subscriptionDraft)
     {
-        $sections = array();
-
         if (is_object($subscriptionDraft)) {
             $sectionIds = json_decode($subscriptionDraft->getSections(), true);
 
-            foreach ($sectionIds as $sectionId) {
-                $sections[] = $this->getStudy()->getSection($sectionId);
-            }
+            $sections = $this->getSectionsByIds($sectionIds);
         }
 
+
+        return $sections;
+    }
+
+    protected function getSectionsByIds($sectionIds)
+    {
+        $sections = array();
+        foreach ($sectionIds as $sectionId) {
+            $sections[] = $this->getStudy()->getSection($sectionId);
+        }
 
         return $sections;
     }
@@ -2238,7 +2259,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
     protected function getAdminForm($collegeId)
     {
         $systemOptions = array();
-        if ($this->getStudyConfig()->use_structures) {
+        if (true || $this->getStudyConfig()->use_structures) {
             foreach ($this->getSystemModel()->findAll() as $system) {
                 $systemOptions[$system->getId()] = $system->getName();
             }
@@ -2246,7 +2267,14 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $systemLabel = $this->getStudyConfig()->system_label;
 
-        $form = new SubscriptionAdmin($systemOptions, $systemLabel);
+        $sectionOptions = array();
+        if ($sections = $this->currentStudy()->getSections()) {
+            foreach ($sections as $section) {
+                $sectionOptions[$section->getId()] = $section->getName();
+            }
+        }
+
+        $form = new SubscriptionAdmin($systemOptions, $systemLabel, $sectionOptions);
 
         $form->get('collegeId')->setValue($collegeId);
 
@@ -2292,6 +2320,8 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
                 // Now, either way, update the system memberships, too
                 $this->updateSystemMemberships($college, $systems, $year);
 
+                $this->updateSections($subscription, $this->params()->fromPost('modules'));
+
                 // Message and redirect
                 $systemLabel = $this->getStudyConfig()->system_label;
                 $systemLabel = ucwords($systemLabel);
@@ -2309,6 +2339,12 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         );
     }
 
+    protected function updateSections(Subscription $subscription, $sections)
+    {
+        $sections = $this->getSectionsByIds($sections);
+        $subscription->updateSections($sections);
+
+    }
     protected function updateSystemMemberships(College $college, $systemIds, $year)
     {
         $existingSystemIds = $college->getSystemIdsByYear($year);

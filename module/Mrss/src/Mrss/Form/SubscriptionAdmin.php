@@ -13,7 +13,7 @@ use Mrss\Form\Fieldset\Executive;
 
 class SubscriptionAdmin extends AbstractForm
 {
-    public function __construct($systems = array(), $systemLabel = 'System')
+    public function __construct($systems = array(), $systemLabel = 'System', $sections = array())
     {
         $currentYear = date('Y');
         $years = range($currentYear - 10, $currentYear + 5);
@@ -45,6 +45,20 @@ class SubscriptionAdmin extends AbstractForm
             )
         );
 
+        $this->add(
+            array(
+                'name' => 'paymentAmount',
+                'type' => 'Text',
+                'options' => array(
+                    'label' => 'Price',
+                ),
+                'attributes' => array(
+                    'id' => 'paymentAmount',
+
+                )
+            )
+        );
+
         if (count($systems)) {
             $this->add(
                 array(
@@ -56,6 +70,23 @@ class SubscriptionAdmin extends AbstractForm
                     'attributes' => array(
                         'id' => 'year',
                         'options' => $systems,
+
+                    )
+                )
+            );
+        }
+
+        if (count($sections)) {
+            $this->add(
+                array(
+                    'name' => 'modules',
+                    'type' => 'Zend\Form\Element\MultiCheckbox',
+                    'options' => array(
+                        'label' => 'Modules',
+                    ),
+                    'attributes' => array(
+                        'id' => 'modules',
+                        'options' => $sections,
 
                     )
                 )

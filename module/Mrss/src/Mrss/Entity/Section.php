@@ -54,11 +54,19 @@ class Section
      */
     protected $study;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Subscription", inversedBy="sections")
+     * @ORM\JoinTable(name="subscription_sections")
+     * @var \Mrss\Entity\Section[]
+     */
+    protected $subscriptions;
+
 
 
     public function __construct()
     {
         $this->benchmarkGroups = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     /**

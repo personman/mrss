@@ -38,10 +38,10 @@ return array(
     'outlier_email_none' => 'outliers.email.none',
     'default_user_state' => 1, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
-    'system_label' => 'network',
+    'system_label' => 'system',
     'benchmark_label' => 'benchmark',
     'form_label' => 'form',
-    'system_benchmarks' => true,
+    'system_benchmarks' => false,
     'anonymous_peers' => true,
     'min_peers' => 5,
     'peer_percentiles' => true, // Show national percentiles on peer comparison results?

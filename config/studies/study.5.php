@@ -21,6 +21,8 @@ return array(
     'show_peer_data_you_did_not_submit' => true, // Temporary!!
     'percent_chart_scale_1_100' => false,
     'use_structures' => true,
+    'system_benchmarks' => true,
+    'system_label' => 'network',
     'show_institution_in_report_heading' => true,
     'anonymous_peers' => false,
     'peer_percentiles' => false,
