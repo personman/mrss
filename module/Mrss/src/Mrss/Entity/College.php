@@ -4,6 +4,7 @@ namespace Mrss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /** @ORM\Entity
  * @ORM\Table(name="colleges")
@@ -48,7 +49,7 @@ class College
      */
     protected $city;
 
-        /**
+    /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
     protected $state;
@@ -122,9 +123,9 @@ class College
     protected $users;
 
     /**
-     * @ORM\ManyToOne(targetEntity="System", inversedBy="colleges")
+     * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="college")
      */
-    protected $system = null;
+    protected $systemMemberships;
 
     /**
      * Construct the college entity
@@ -132,9 +133,10 @@ class College
      */
     public function __construct()
     {
-        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->observations = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->systemMemberships = new ArrayCollection();
     }
 
     public function getId()
@@ -514,20 +516,6 @@ class College
         return $hasAccess;
     }
 
-    public function setSystem($system)
-    {
-        $this->system = $system;
-
-        return $this;
-    }
-
-    /**
-     * @return null|System
-     */
-    public function getSystem()
-    {
-        return $this->system;
-    }
 
     public function getFullAddress($lineBreak = "<br>")
     {
@@ -638,5 +626,32 @@ class College
         $sectionIds = array_unique($sectionIds);
 
         return $sectionIds;
+    }
+
+    public function setSystemMemberships($memberships)
+    {
+        $this->systemMemberships = $memberships;
+
+        return $this;
+    }
+
+    public function getSystemMemberships()
+    {
+        return $this->systemMemberships;
+    }
+
+    public function getSystemNames()
+    {
+        $systems = array();
+        foreach ($this->getSystemMemberships() as $membership) {
+            $systems[$membership->getSystem()->getId()] = $membership->getSystem();
+        }
+
+        $names = array();
+        foreach ($systems as $system) {
+            $names[] = $system->getName();
+        }
+
+        return $names;
     }
 }

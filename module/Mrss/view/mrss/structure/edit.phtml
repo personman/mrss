@@ -1,0 +1,284 @@
+<div class="btn-group heading-btns">
+    <a class="btn btn-default" href="#" id="addHeading">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add Heading
+    </a>
+    <a class="btn btn-default" href="#" id="addBenchmark">
+        <i class="glyphicon glyphicon-plus"></i>
+        Add Measure
+    </a>
+
+</div>
+
+<h1>Edit Structure</h1>
+
+<?php
+$this->headLink()->appendStylesheet('/css/jqtree.css?v=1');
+$this->headLink()->appendStylesheet('/css/chosen.min.css');
+?>
+
+<style>
+    #benchmarkSelect #control-group-cancelButton {
+        width: 10% !important;
+    }
+
+    #controls-cancelButton {
+        margin-left: 30px;
+    }
+
+    #benchmarkSelect {
+        display: none;
+    }
+    .heading-node {
+        font-weight: bold;
+    }
+    a.remove-node {
+        display: none;
+        float: right;
+    }
+    .jqtree-selected > .jqtree-element > .jqtree-title > a.remove-node {
+        display: block;
+        margin-right: 3px;
+    }
+
+    p.hint {
+        font-size: 80%;
+    }
+
+    #tree1 {
+        font-size: 120%;
+    }
+
+    #control-group-submitButton {
+        width: 215px !important;
+    }
+
+    #controls-heading input {
+        width: 400px;
+    }
+</style>
+
+<?php
+$this->headScript()->appendFile(
+    '/js/tree.jquery.js?v=1',
+    'text/javascript'
+);
+
+$this->headScript()->appendFile(
+    '/js/chosen.jquery.min.js?v=1',
+    'text/javascript'
+);
+?>
+
+
+<script>
+    <?php $this->headScript()->captureStart() ?>
+
+    var structureId = '<?= $structure->getId() ?>';
+    var json = '<?= $structure->getJson() ?>';
+
+    var addType;
+
+    var data = jQuery.parseJSON(json);
+
+    $(document).ready(function() {
+        $('#tree1').tree({
+            data: data,
+            dragAndDrop: true,
+            autoOpen: true,
+            // Benchmark nodes can't have children
+            onCanMoveTo: function(moved_node, target_node, position) {
+                return !target_node.benchmark;
+            },
+            onCreateLi: function(node, $li) {
+                // Add 'icon' span before title
+                if (node.benchmark) {
+                    $li.find('.jqtree-title').addClass('benchmark-node');
+                } else {
+                    $li.find('.jqtree-title').addClass('heading-node');
+                }
+
+                $li.find('.jqtree-title').append('<a class="remove-node"><span class="glyphicon glyphicon-remove"></span></a>')
+            }
+        });
+
+
+
+
+        $('#benchmark').chosen({
+            search_contains: true,
+            width: '400px'
+        });
+
+        setupForm();
+        setupAddHeading();
+        setupAddBenchmark();
+        setupAddSubmitted();
+        setupNodeMove();
+        setupNodeRemove();
+    });
+
+
+    function setupForm() {
+        hideForm();
+    }
+
+    function hideForm() {
+
+        $('#benchmarkSelect').hide();
+    }
+
+    function showForm()
+    {
+        $('#benchmarkSelect').show();
+    }
+
+    function showHeadingForm()
+    {
+        $('#control-group-heading').show();
+        $('#control-group-benchmark').hide();
+        showForm();
+    }
+
+    function showBenchmarkForm()
+    {
+        $('#control-group-heading').hide();
+        $('#control-group-benchmark').show();
+        showForm();
+    }
+
+    function setupAddHeading()
+    {
+        $('#addHeading').click(function() {
+            showHeadingForm();
+            addType = 'heading';
+
+            return false;
+        })
+    }
+
+    function setupAddBenchmark()
+    {
+        $('#addBenchmark').click(function() {
+            showBenchmarkForm();
+            addType = 'benchmark';
+
+            return false;
+        })
+    }
+
+    function setupCancelButton()
+    {
+        $('#cancelButton').click(function() {
+            hideForm();
+            return false;
+        })
+    }
+
+    function setupAddSubmitted()
+    {
+        $('#benchmark_select').submit(function() {
+            if (addType == 'heading') {
+                addHeading();
+            } else if (addType == 'benchmark') {
+                addBenchmark();
+            }
+            return false;
+        })
+    }
+
+    function addClicked()
+    {
+
+    }
+
+    function addHeading()
+    {
+        var heading = $('#heading').val();
+        var parent_node = $('#tree1').tree('getSelectedNode');
+
+        $('#tree1').tree(
+            'appendNode',
+            {
+                name: heading
+            },
+            parent_node
+        );
+
+        $('#heading').val('');
+        hideForm();
+    }
+
+    function addBenchmark()
+    {
+        var benchmark_id = $('#benchmark').val();
+        var label = $('#benchmark option:selected').text()
+        var parent_node = $('#tree1').tree('getSelectedNode');
+
+        $('#tree1').tree(
+            'appendNode',
+            {
+                name: label,
+                benchmark: benchmark_id
+            },
+            parent_node
+        );
+
+        $('#heading').val('');
+
+        saveStructure();
+        hideForm();
+    }
+
+    function setupNodeMove()
+    {
+        $('#tree1').bind(
+            'tree.move',
+            function(event) {
+                event.preventDefault();
+                event.move_info.do_move();
+                saveStructure();
+            }
+        )
+    }
+
+    function saveStructure()
+    {
+        var json = $('#tree1').tree('toJson');
+        var data = {
+            json: json,
+            structureId: structureId
+        }
+
+        $.post('/structures/save', data)
+    }
+
+
+    function setupNodeRemove()
+    {
+        var tree = $('#tree1');
+        $('a.remove-node').click(function() {
+            // Remove the selected node
+            if (confirm('Are you sure you want to remove the selected node and all its children?')) {
+                var node = tree.tree('getSelectedNode');
+                tree.tree('removeNode', node);
+                saveStructure();
+            }
+
+            return false;
+        })
+    }
+
+
+    <?php $this->headScript()->captureEnd() ?>
+</script>
+
+
+<div id="benchmarkSelect">
+    <?= $this->ztbForm($benchmarkForm->prepare()) ?>
+</div>
+
+
+<p class="hint">Drag and drop to rearrange the headings and measures. Changes are saved automatically.</p>
+
+<div id="tree1"></div>

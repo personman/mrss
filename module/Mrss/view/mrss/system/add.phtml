@@ -1,8 +1,8 @@
 <h2>
     <?php if ($form->get('id')->getValue()): ?>
-        Edit a System
+        Edit a <?= ucwords($this->studyConfig()->system_label) ?>
     <?php else: ?>
-        Add a System
+        Add a <?= ucwords($this->studyConfig()->system_label) ?>
     <?php endif ?>
 
 </h2>

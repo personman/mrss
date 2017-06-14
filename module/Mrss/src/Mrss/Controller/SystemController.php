@@ -2,9 +2,11 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\SystemMembership;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\System as SystemForm;
 use Mrss\Entity\System;
+use Mrss\Entity\Structure;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\ViewModel;
 
@@ -17,16 +19,24 @@ class SystemController extends AbstractActionController
      */
     public function indexAction()
     {
-        $systemModel = $this->getServiceLocator()->get('model.system');
+        $systemModel = $this->getSystemModel();
 
         return array(
             'systems' => $systemModel->findAll()
         );
     }
 
+    /**
+     * @return \Mrss\Model\System
+     */
+    public function getSystemModel()
+    {
+        return $this->getServiceLocator()->get('model.system');
+    }
+
     public function viewAction()
     {
-        $systemModel = $this->getServiceLocator()->get('model.system');
+        $systemModel = $this->getSystemModel();
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $id = $this->params('id');
 
@@ -40,6 +50,17 @@ class SystemController extends AbstractActionController
             throw new \Exception('System not found.');
         }
 
+        // Create structures, if needed
+        $studyConfig = $this->getServiceLocator()->get('study');
+        if ($studyConfig->system_benchmarks) {
+            if (!$system->getDataEntryStructure()) {
+                $structure = new Structure();
+                $system->setDataEntryStructure($structure);
+                $systemModel->save($system);
+                $systemModel->getEntityManager()->flush();
+            }
+        }
+
         return array(
             'system' => $system,
             'colleges' => $collegeModel->findAll()
@@ -48,7 +69,9 @@ class SystemController extends AbstractActionController
 
     public function addAction()
     {
-        $form = new SystemForm;
+        $label = $this->getServiceLocator()->get('study')->system_label;
+
+        $form = new SystemForm($label);
 
         $id = $this->params('id');
         if (empty($id) && $this->getRequest()->isPost()) {
@@ -95,6 +118,8 @@ class SystemController extends AbstractActionController
         $systemId = $this->params('system_id');
         $system = $this->getSystemModel()->find($systemId);
 
+        $year = $this->currentStudy()->getCurrentYear();
+
         if (empty($system)) {
             throw new \Exception('System not found');
         }
@@ -114,9 +139,23 @@ class SystemController extends AbstractActionController
                     throw new \Exception('Invalid college chosen.');
                 }
 
-                // Actually write the association
-                $college->setSystem($system);
-                $collegeModel->save($college);
+                // See if the membership exists
+                $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $year);
+
+                if (!$membership) {
+                    $membership = new SystemMembership();
+                    $membership->setSystem($system);
+                    $membership->setCollege($college);
+                    $membership->setYear($year);
+                    $membership->setDataVisibility('public');
+
+                    $this->getSystemMembershipModel()->save($membership);
+                }
+
+                // (old way): Actually write the association
+                //$college->setSystem($system);
+                //$collegeModel->save($college);
+
                 $this->getServiceLocator()->get('em')->flush();
 
                 $this->flashMessenger()->addSuccessMessage('Institution added.');
@@ -266,8 +305,11 @@ class SystemController extends AbstractActionController
         return $system;
     }
 
-    public function getSystemModel()
+    /**
+     * @return \Mrss\Model\SystemMembership
+     */
+    public function getSystemMembershipModel()
     {
-        return $this->getServiceLocator()->get('model.system');
+        return $this->getServiceLocator()->get('model.system.membership');
     }
 }

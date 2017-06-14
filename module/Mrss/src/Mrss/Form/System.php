@@ -6,7 +6,7 @@ use Mrss\Form\AbstractForm;
 
 class System extends AbstractForm
 {
-    public function __construct()
+    public function __construct($label)
     {
         // Call the parent constructor
         parent::__construct('system');
@@ -23,7 +23,7 @@ class System extends AbstractForm
                 'name' => 'name',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Name of System'
+                    'label' => 'Name of ' . ucwords($label)
                 ),
                 'attributes' => array(
                     'id' => 'name'
@@ -31,7 +31,7 @@ class System extends AbstractForm
             )
         );
 
-        $this->add(
+        /*$this->add(
             array(
                 'name' => 'ipeds',
                 'type' => 'Text',
@@ -42,7 +42,7 @@ class System extends AbstractForm
                     'id' => 'ipdeds'
                 )
             )
-        );
+        );*/
 
         $this->add(
             array(
@@ -109,6 +109,23 @@ class System extends AbstractForm
                 ),
                 'attributes' => array(
                     'id' => 'zip'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'joinSetting',
+                'type' => 'Select',
+                'required' => true,
+                'options' => array(
+                    'label' => 'Join Setting',
+                ),
+                'attributes' => array(
+                    'options' => array(
+                        'open' => 'Open - Anyone can join',
+                        'private' => 'Must request to join'
+                    )
                 )
             )
         );

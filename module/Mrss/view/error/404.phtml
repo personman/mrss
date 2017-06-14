@@ -1,4 +1,4 @@
-<?php if ($layout = $this->currentStudy(false)->getConfig()->layout): ?>
+<?php if ($layout = $this->studyConfig()->layout): ?>
     <?php $this->layout('layout/' . $layout) ?>
 <?php endif ?>
 

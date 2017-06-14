@@ -27,7 +27,7 @@ class System
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $ipeds;
+    protected $ipeds = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -55,14 +55,25 @@ class System
     protected $zip;
 
     /**
-     * @ORM\OneToMany(targetEntity="College", mappedBy="system")
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\Column(type="string", length=11, nullable=true)
      */
-    protected $colleges;
+    protected $joinSetting;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="system")
+     */
+    protected $memberships;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Structure", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="dataEntryStructure_id", referencedColumnName="id", nullable=true)
+     */
+    protected $dataEntryStructure = null;
 
     public function __construct()
     {
         $this->colleges = new ArrayCollection();
+        $this->memberships = new ArrayCollection();
     }
 
     public function setId($id)
@@ -162,6 +173,26 @@ class System
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getJoinSetting()
+    {
+        return $this->joinSetting;
+    }
+
+    /**
+     * @param mixed $joinSetting
+     * @return System
+     */
+    public function setJoinSetting($joinSetting)
+    {
+        $this->joinSetting = $joinSetting;
+        return $this;
+    }
+
+
+
     public function setColleges($colleges)
     {
         $this->colleges = $colleges;
@@ -174,8 +205,52 @@ class System
      */
     public function getColleges()
     {
-        return $this->colleges;
+        $colleges = array();
+        foreach ($this->getMemberships() as $membership) {
+            $college = $membership->getCollege();
+            $colleges[$college->getId()] = $college;
+        }
+
+        return array_values($colleges);
     }
+
+    /**
+     * @return null|SystemMembership[]
+     */
+    public function getMemberships()
+    {
+        return $this->memberships;
+    }
+
+    /**
+     * @param mixed $memberships
+     * @return System
+     */
+    public function setMemberships($memberships)
+    {
+        $this->memberships = $memberships;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDataEntryStructure()
+    {
+        return $this->dataEntryStructure;
+    }
+
+    /**
+     * @param mixed $dataEntryStructure
+     * @return System
+     */
+    public function setDataEntryStructure($dataEntryStructure)
+    {
+        $this->dataEntryStructure = $dataEntryStructure;
+        return $this;
+    }
+
+
 
     /**
      * Return a list of system admins for this system
@@ -200,6 +275,27 @@ class System
         return $this->getAdmins('system_viewer');
     }
 
+    public function getMemberColleges()
+    {
+        $memberships = $this->getMemberships();
+
+        $colleges = array();
+        foreach ($memberships as $membership) {
+            $collegeId = $membership->getCollege()->getId();
+            if (!isset($colleges[$collegeId])) {
+                $colleges[$membership->getCollege()->getId()] = array(
+                    'college' => $membership->getCollege(),
+                    'years' => array()
+                );
+            }
+
+            $colleges[$collegeId]['years'][] = $membership->getYear();
+            sort($colleges[$collegeId]['years']);
+        }
+
+        return $colleges;
+    }
+
     public function getInputFilter()
     {
         $inputFilter = new InputFilter();
@@ -221,7 +317,7 @@ class System
             )
         );
 
-        $inputFilter->add(
+        /*$inputFilter->add(
             $factory->createInput(
                 array(
                     'name' => 'ipeds',
@@ -236,7 +332,7 @@ class System
                     )
                 )
             )
-        );
+        );*/
 
         return $inputFilter;
     }

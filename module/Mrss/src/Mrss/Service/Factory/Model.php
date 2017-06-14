@@ -46,6 +46,8 @@ class Model implements AbstractFactoryInterface
             'model.user' => 'Mrss\Model\User',
             'model.college' => 'Mrss\Model\College',
             'model.system' => 'Mrss\Model\System',
+            'model.system.membership' => 'Mrss\Model\SystemMembership',
+            'model.structure' => 'Mrss\Model\Structure',
             'model.observation' => 'Mrss\Model\Observation',
             'model.subobservation' => 'Mrss\Model\SubObservation',
             'model.benchmark' => 'Mrss\Model\Benchmark',

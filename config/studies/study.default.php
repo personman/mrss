@@ -32,6 +32,8 @@ return array(
     'outlier_email_none' => 'outliers.email.none',
     'default_user_state' => 1, // 0 = pending, 1 = approved
     'user_role_choices' => 'viewer,contact,data', // Comma separated, no spaces
+    'system_label' => 'network',
+    'system_benchmarks' => true,
     'anonymous_peers' => true,
     'benchmark_completion_heatmap' => false,
     'head_logo_url' => '/',

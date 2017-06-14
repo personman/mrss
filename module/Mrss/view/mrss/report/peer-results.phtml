@@ -13,6 +13,7 @@ $this->headScript()->appendFile(
     <?= $report['year'] ?>
 </p>
 
+<?php if ($studyConfig->anonymous_peers): ?>
 <p>
     <span class="peer-titles">Home <?= $studyConfig->institution_label ?>:</span><br>
     <?= $report['currentCollege'] ?>
@@ -25,6 +26,8 @@ $this->headScript()->appendFile(
         (Peers will be omitted from charts and tables if they did not report relevant data.)
     <?php endif ?>
 </p>
+<?php endif ?>
+
 
 <?php if (!empty($peerGroupName)): ?>
 <p>

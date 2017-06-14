@@ -20,6 +20,10 @@ class System extends AbstractModel
 {
     protected $entity = 'Mrss\Entity\System';
 
+    /**
+     * @param $id
+     * @return \Mrss\Entity\System
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);
@@ -43,7 +47,8 @@ class System extends AbstractModel
     {
         $dql = "SELECT sy
             FROM Mrss\Entity\System sy
-            JOIN Mrss\Entity\College c WITH sy = c.system
+            JOIN Mrss\Entity\SystemMembership sm WITH sm.system = sy
+            JOIN Mrss\Entity\College c WITH sm.college = c
             JOIN Mrss\Entity\Subscription s WITH c = s.college
             AND s.year = $year
         ";

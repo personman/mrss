@@ -17,15 +17,15 @@
     <link rel="stylesheet" type="text/css" href="/css/index.css?v=3">
     <link rel="stylesheet" type="text/css" href="/css/app.css?v=4">
 
-    <?php if ($cssFile = $this->currentStudy(false)->getConfig()->css): ?>
+    <?php if ($cssFile = $this->studyConfig()->css): ?>
         <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=3">
     <?php endif ?>
 
-    <?php if ($cssPrintFile = $this->currentStudy(false)->getConfig()->css_print): ?>
+    <?php if ($cssPrintFile = $this->studyConfig()->css_print): ?>
         <link rel="stylesheet" type="text/css" href="/css/<?= $cssPrintFile ?>?v=2" media="print">
     <?php endif ?>
 
-    <?php if ($favicon = $this->currentStudy(false)->getConfig()->favicon): ?>
+    <?php if ($favicon = $this->studyConfig()->favicon): ?>
         <link rel="icon" href="<?= $favicon ?>" type="image/x-icon">
         <link rel="shortcut icon" href="<?= $favicon ?>" type="image/x-icon">
     <?php endif ?>

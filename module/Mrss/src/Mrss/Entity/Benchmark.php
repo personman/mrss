@@ -980,7 +980,6 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                     // Pad seconds
                     $seconds = str_pad($seconds, 2, '0', STR_PAD_LEFT);
 
-
                     $formatted = "$minutes:$seconds";
                 }
             } else {
@@ -997,9 +996,28 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                         $suffix;
                 }
             }
+        } elseif ($this->isNumericalRadio()) {
+            $options = $this->getOptionsForForm();
+            $keys = array_keys($options);
+            if ($closestKey = ($this->getClosest($value, $keys))) {
+                $formatted = $options[$closestKey];
+            } else {
+                $formatted = $value;
+            }
+
         }
 
         return $formatted;
+    }
+
+    protected function getClosest($search, $arr) {
+        $closest = null;
+        foreach ($arr as $item) {
+            if ($closest === null || abs($search - $closest) > abs($item - $search)) {
+                $closest = $item;
+            }
+        }
+        return $closest;
     }
 
     /**
