@@ -1,5 +1,19 @@
 <h1>Strengths/Opportunities Report</h1>
 
+
+<?php if (count($otherSystems)): ?>
+    <ul class="nav nav-pills report-nav">
+
+        <?php foreach ($otherSystems as $otherSystem): ?>
+            <li<?php if ($system->getId() == $otherSystem->getId()) echo ' class="active"'; ?>>
+                <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('/reports/strengths/' . $year) ?>">
+                    <?= $otherSystem->getName() ?>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>
+
 <ul class="nav nav-pills report-nav">
     <?php foreach ($subscriptions as $subscription): ?>
         <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
@@ -10,19 +24,25 @@
 </ul>
 
 
-<p><em>Your institution reported values for the benchmarks below that are above the 75th percentile or below the 25th percentile. Click the blue text for details.</em></p>
+<p><em>Your <?= strtolower($this->studyConfig()->institution_label) ?> reported values for the measures below that are above the <?= $threshold ?>th percentile or below the <?= $lowThreshold ?>th percentile. Click the blue text for details.</em></p>
 
 
 <div id="report-strengths" class="row">
     <div class="col-md-6">
         <h2>Strengths</h2>
 
+        <?php if (empty($strengths)): ?>
+            <p>
+                None of your data for performance measures fell above the <?= $threshold ?>th percentile.
+            </p>
+        <?php endif ?>
+
         <ol>
         <?php foreach ($strengths as $benchmark): ?>
             <li>
                 <?= $benchmark['name'] ?>
                 <div class="strengthRank">
-                    <a href="/reports/national#form_<?= $benchmark['form_url'] ?>" title="Click for details">
+                    <a href="/reports/<?= $reportUrl ?>#form_<?= $benchmark['form_url'] ?>" title="Click for details">
                     Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
                     </a>
                 </div>
@@ -35,12 +55,18 @@
     <div class="col-md-6">
         <h2>Opportunities for Improvement</h2>
 
+        <?php if (empty($strengths)): ?>
+            <p>
+                None of your data for performance measures fell below the <?= $lowThreshold ?>th percentile.
+            </p>
+        <?php endif ?>
+
         <ol>
         <?php foreach ($weaknesses as $benchmark): ?>
             <li>
                 <?= $benchmark['name'] ?>
                 <div class="strengthRank">
-                    <a href="/reports/national#form_<?= $benchmark['form_url'] ?>" title="Click for details">
+                    <a href="/reports/<?= $reportUrl ?>#measure_<?= $benchmark['dbColumn'] ?>" title="Click for details">
                         Your Rank - <?= $benchmark['rank'] ?> Percentile <?= $benchmark['append'] ?>
                     </a>
                 </div>

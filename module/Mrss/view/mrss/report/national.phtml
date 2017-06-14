@@ -1,9 +1,11 @@
 <?php
 $subHeadingColSpan = ($forPercentChange) ? 12 : 10;
 $tableHeadingColSpan = ($forPercentChange) ? 4 : 2;
+
+/** @var \Mrss\Entity\System[] $otherSystems */
 ?>
 
-<?= $this->headLink()->appendStylesheet('/css/report.css') ?>
+<?= $this->headLink()->appendStylesheet('/css/report.css?v=5') ?>
 <?php
 $this->headScript()->appendFile(
     '/js/report.js?v=6',
@@ -15,6 +17,7 @@ $this->headScript()->appendFile(
     $(document).ready(function(){
         $('.tooltipster').tooltipster({
             contentAsHTML: true,
+            'maxWidth': 500
         });
     });
     <?php $this->headScript()->captureEnd() ?>
@@ -31,7 +34,26 @@ $this->headScript()->appendFile(
     <?php endif ?>
 </h1>
 
-<ul class="nav nav-pills report-nav">
+<p class="reportPreparedFor">
+    Prepared for <?= $college->getName() ?>
+</p>
+
+
+
+<?php if (count($otherSystems)): ?>
+    <ul class="nav nav-pills report-nav">
+
+        <?php foreach ($otherSystems as $otherSystem): ?>
+        <li<?php if ($system->getId() == $otherSystem->getId()) echo ' class="active"'; ?>>
+            <a href="/network-switch/<?= $otherSystem->getId() . '?redirect=' . urlencode('/reports/network/' . $year) ?>">
+                <?= $otherSystem->getName() ?>
+            </a>
+        </li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>
+
+<ul class="nav nav-pills report-nav year-nav">
     <?php foreach ($subscriptions as $subscription): ?>
         <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
         <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
@@ -41,12 +63,8 @@ $this->headScript()->appendFile(
 </ul>
 
 
-<p>
-    Prepared for <?= $college->getName() ?>
-</p>
 
-
-<p>
+<div class="reportDownloads">
     <a href="<?= $this->url(
         'reports/' . $reportPath,
         array(
@@ -58,7 +76,7 @@ $this->headScript()->appendFile(
         Download Report
     </a>
 
-    <?php if (!$forPercentChange): ?>
+    <?php if (!$forPercentChange && empty($system)): ?>
     <a href="<?= $this->url(
         'institution/subscribed',
         array(
@@ -69,9 +87,10 @@ $this->headScript()->appendFile(
         Download Members
     </a>
     <?php endif ?>
-</p>
+</div>
 
-
+<br>
+<br>
 
 <div class="report">
 
@@ -86,7 +105,9 @@ $this->headScript()->appendFile(
             <?php $formTitle = $benchmarkGroup['benchmarkGroup'] ?>
         <?php endif ?>
         <h3 class="benchmarkGroupTitle" id="form_<?= $benchmarkGroup['url'] ?>">
+            <?php if (!empty($formNumber)): ?>
             <span class="small-heading"><?= $formNumber ?></span><br>
+            <?php endif ?>
             <?= $formTitle ?>
             <?php if (!empty($benchmarkGroup['timeframe'])): ?>
                 <span class="timeframe">(<?= $benchmarkGroup['timeframe'] ?>)</span>
@@ -101,7 +122,12 @@ $this->headScript()->appendFile(
                 $heading = 'National Median Percentiles';
             }
         } else {
-            $heading = 'System Percentiles';
+            if ($this->currentStudy()->getId() == 5) {
+                $heading = 'Percentiles';
+            } else {
+                $heading = 'System Percentiles';
+            }
+
         }?>
 
         <table class="table table-hover table-striped-manual">
@@ -109,12 +135,16 @@ $this->headScript()->appendFile(
                 <tr class="topHeading">
                     <th></th>
                     <th colspan="<?= $tableHeadingColSpan ?>">
-                        <?= $studyConfig->your_institution_label ?>
+                        <?php if ($studyConfig->show_institution_in_report_heading): ?>
+                            <?= $college->getAbbreviation(); ?>
+                        <?php else: ?>
+                            <?= $studyConfig->your_institution_label ?>
+                        <?php endif ?>
                     </th>
                     <th colspan="7" class="nationalPercentiles"><?= $heading ?></th>
                 </tr>
                 <tr class="secondHeading">
-                    <th></th>
+                    <th class="reportMeasureCol"></th>
                     <?php if ($forPercentChange): ?>
                     <th><?= $year - 1 ?></th>
                     <th><?= $year ?></th>
@@ -146,10 +176,10 @@ $this->headScript()->appendFile(
                     <?php endif; ?>
 
                     <?php $rowClass = $this->cycle(array('odd', 'even'))->next() ?>
-                    <tr class="<?= $rowClass ?>">
+                    <tr class="<?= $rowClass ?>" id="measure_<?= $benchmark['dbColumn'] ?>">
                         <td class="benchmarkLabel">
                             <?php if (!empty($benchmark['description'])): ?>
-                                <span class="tooltipster" title="<?= addslashes($benchmark['description']) ?>">
+                                <span class="tooltipster" title="<?= addslashes(strip_tags($benchmark['description'])) ?>">
                                     <?= $benchmark['benchmark'] ?>
                                 </span>
                             <?php else: ?>
@@ -222,17 +252,16 @@ $this->headScript()->appendFile(
                         <td><a href="#" class="btn btn-default openChart" title="Display chart"><i class="icon-signal glyphicon glyphicon-signal"></i></a></td>
                     </tr>
                     <tr class="nationalReportChart <?= $rowClass ?>" id="benchmark_<?= $benchmark['dbColumn'] ?>">
-                        <td></td>
-                        <td colspan="9">
+                        <td colspan="10">
 
                             <?php if (!empty($benchmark['chart'])): ?>
                                 <?= $this->chart($benchmark['chart']) ?>
                             <?php endif ?>
 
                             <?php if (!empty($benchmark['description'])): ?>
-                            <p class="nationalDataDefinition">
+                            <div class="nationalDataDefinition">
                                 <?= $benchmark['description'] ?>
-                            </p>
+                            </div>
                             <?php endif ?>
                         </td>
                     </tr>

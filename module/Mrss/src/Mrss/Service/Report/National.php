@@ -27,8 +27,6 @@ class National extends Report
      */
     protected $percentileRankModel;
 
-    protected $system;
-
 
     public function getData(Subscription $subscription, $system = null, $benchmarkGroupId = null)
     {
@@ -43,7 +41,8 @@ class National extends Report
 
         $study = $this->getStudy();
 
-        $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        $benchmarkGroups = $this->getBenchmarkGroups($subscription);
+
         foreach ($benchmarkGroups as $benchmarkGroup) {
             if (!empty($benchmarkGroupId) && $benchmarkGroup->getId() != $benchmarkGroupId) {
                 continue;
@@ -313,17 +312,5 @@ class National extends Report
     public function getPercentileRankModel()
     {
         return $this->percentileRankModel;
-    }
-
-    public function setSystem($system)
-    {
-        $this->system = $system;
-
-        return $this;
-    }
-
-    public function getSystem()
-    {
-        return $this->system;
     }
 }

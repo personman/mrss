@@ -2,6 +2,7 @@
 
 namespace Mrss\Service\Report;
 
+use Mrss\Entity\Benchmark;
 use Mrss\Service\Report;
 use Mrss\Entity\PeerGroup;
 use Mrss\Entity\College;
@@ -29,9 +30,12 @@ class Peer extends Report
 
     protected $year;
 
+    protected $includePercentiles = true;
+
     public function getPeerReport($benchmarks, $colleges, $currentCollege, $year, $peerGroupName)
     {
-        $minPeers = 5;
+        $minPeers = $this->getStudyConfig()->min_peers;
+
         $this->currentCollege = $currentCollege;
 
         $report = array(
@@ -98,8 +102,12 @@ class Peer extends Report
                 continue;
             }
 
-            $data = $this->sortAndLabelPeerData($data, $currentCollege);
-            $data = $this->addPercentileRanks($data, $benchmark, $year);
+            $data = $this->sortAndLabelPeerData($data, $currentCollege, $benchmark);
+
+            if ($this->getIncludePercentiles()) {
+                $data = $this->addPercentileRanks($data, $benchmark, $year);
+            }
+
 
             // Data labels
             $prefix = $suffix = '';
@@ -189,9 +197,12 @@ class Peer extends Report
 
             $headerRow = array(
                 $section['benchmark'],
-                'Benchmark',
-                'National % Rank'
+                ucwords($this->getStudyConfig()->benchmark_label)
             );
+
+            if ($this->getStudyConfig()->peer_percentiles) {
+                $headerRow[] = 'National % Rank';
+            }
 
             $sheet->fromArray($headerRow, null, 'A' . $row);
             $sheet->getStyle("A$row:C$row")->applyFromArray($blueBar);
@@ -199,13 +210,18 @@ class Peer extends Report
 
             foreach ($section['data'] as $collegeId => $peerData) {
                 $institution = $peerData['label'];
-                $value = $peerData['value'];
+                $value = $peerData['formatted'];
 
                 $dataRow = array(
                     $institution,
-                    round($value, 2),
-                    round($peerData['percentileRank'])
+                    $value,
                 );
+
+                if (!empty($peerData['percentileRank'])) {
+                    $dataRow[] = round($peerData['percentileRank']);
+                }
+
+
 
                 $sheet->fromArray($dataRow, null, 'A' . $row);
                 $row++;
@@ -262,11 +278,16 @@ class Peer extends Report
         return $name;
     }
 
-    public function sortAndLabelPeerData($data, College $currentCollege)
+    public function sortAndLabelPeerData($data, College $currentCollege, Benchmark $benchmark)
     {
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
-        arsort($data);
+        if ($benchmark->getIncludeInBestPerformer() && !$benchmark->getHighIsBetter()) {
+            asort($data);
+        } else {
+            arsort($data);
+        }
+
         $dataWithLabels = array();
 
         $i = 1;
@@ -284,7 +305,8 @@ class Peer extends Report
             //$dataWithLabels[$label] = $value;
             $dataWithLabels[$collegeId] = array(
                 'label' => $label,
-                'value' => $value
+                'value' => $value,
+                'formatted' => $benchmark->format($value)
             );
 
 
@@ -296,12 +318,14 @@ class Peer extends Report
     public function getYourCollegeColor()
     {
         //return '#002C57';
-        return '#9cc03e';
+        //return '#9cc03e';
+        return $this->getChartColor(0);
     }
 
     public function getPeerColor()
     {
-        return '#0065A1';
+        //return '#0065A1';
+        return $this->getChartColor(1);
     }
 
     public function getPeerBarChart(BenchmarkEntity $benchmark, $data, $title = null, $subtitle = null)
@@ -374,7 +398,8 @@ class Peer extends Report
             ->removeTickMarks()
             ->setCategories($chartXCategories);
 
-        if ($benchmark->isPercent()) {
+        $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
+        if ($benchmark->isPercent() && $forceScale) {
             $barChart->setYAxisMax(100);
         }
 
@@ -587,5 +612,17 @@ class Peer extends Report
         }
 
         return $this->year;
+    }
+
+    public function setIncludePercentiles($setting)
+    {
+        $this->includePercentiles = $setting;
+
+        return $this;
+    }
+
+    public function getIncludePercentiles()
+    {
+        return $this->includePercentiles;
     }
 }

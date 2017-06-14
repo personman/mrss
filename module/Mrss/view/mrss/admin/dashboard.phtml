@@ -225,7 +225,9 @@
                             <?= $user->getCollege()->getNameAndState() ?>
                         </td>
                         <td>
-                            <?= $user->getLastAccess()->format('m/d/Y H:i') ?>
+                        <?php if ($lastAccess = $user->getLastAccess()): ?>
+                            <?= $lastAccess->format('m/d/Y H:i') ?>
+                        <?php endif ?>
                         </td>
                     </tr>
 

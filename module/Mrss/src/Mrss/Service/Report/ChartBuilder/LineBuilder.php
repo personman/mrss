@@ -2,6 +2,7 @@
 
 namespace Mrss\Service\Report\ChartBuilder;
 
+use Mrss\Entity\System;
 use Mrss\Service\Report\ChartBuilder;
 use Mrss\Service\Report\Chart\Line;
 use Mrss\Service\Report\Calculator;
@@ -80,7 +81,8 @@ class LineBuilder extends ChartBuilder
             ->setSeries($series);
 
         // Percentages should have the axis as 0-100
-        if ($benchmark->isPercent() && empty($config['percentScaleZoom'])) {
+        $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
+        if ($benchmark->isPercent() && empty($config['percentScaleZoom']) && $forceScale) {
             $chart->setYAxisMax(100);
             $chart->setYAxisMin(0);
         }
@@ -235,7 +237,13 @@ class LineBuilder extends ChartBuilder
                         $label = $this->getOrdinal($percentile);
                     }
 
-                    $nationalLabel = "National $label";
+                    $nationalOrNetwork = 'National';
+                    if (isset($config['system'])) {
+                        $system = $this->getSystemModel()->find($config['system']);
+                        $nationalOrNetwork = $system->getName();
+                    }
+
+                    $nationalLabel = "$nationalOrNetwork $label";
                     if (!empty($config['multiTrend'])) {
                         $benchmark = $this->getBenchmark($dbColumn);
                         $nationalLabel .= '|' . $benchmark->getDescriptiveReportLabel();
@@ -265,6 +273,18 @@ class LineBuilder extends ChartBuilder
                         'color' => $this->getPeerColor($i)
                     );
                 }
+
+                $config = $this->getConfig();
+
+                foreach ($config['colleges'] as $collegeId) {
+                    $college = $this->getCollegeModel()->find($collegeId);
+                    $data = $this->getDataForCollege($dbColumn, $college);
+
+                    $series[] = array(
+                        'name' => $college->getNameAndState(),
+                        'data' => array_values($data),
+                    );
+                }
             }
 
             $i++;
@@ -274,10 +294,16 @@ class LineBuilder extends ChartBuilder
         return $series;
     }
 
-    public function getDataForCollege($dbColumn)
+
+    public function getDataForCollege($dbColumn, $college = null)
     {
+        if (null === $college) {
+            $college = $this->getCollege();
+        }
+
         // Get the college's reported data
-        $subscriptions = $this->getCollege()->getSubscriptionsForStudy($this->getStudy());
+        $subscriptions = $college->getSubscriptionsForStudy($this->getStudy(), false, $this->getSystem());
+
         $data = array();
         foreach ($subscriptions as $subscription) {
             // Skip current year if reporting isn't open yet.
@@ -295,7 +321,6 @@ class LineBuilder extends ChartBuilder
         }
         ksort($data);
 
-
         $this->setYears(array_keys($data));
         $data = $this->fillInGaps($data);
 
@@ -304,7 +329,8 @@ class LineBuilder extends ChartBuilder
 
     public function getMedianData($benchmark, $percentile)
     {
-        $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile);
+        $systemId = $this->getSystemId();
+        $medians = $this->getPercentileModel()->findByBenchmarkAndPercentile($benchmark, $percentile, false, $systemId);
 
         $medianData = array();
         foreach ($medians as $median) {

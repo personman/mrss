@@ -10,13 +10,19 @@ class PeerCollege extends AbstractForm
     /**
      * @param \Mrss\Entity\College[] $colleges
      */
-    public function __construct($colleges)
+    public function __construct($colleges, $studyConfig)
     {
         // Call the parent constructor
         parent::__construct('peerCollege');
 
         $this->addId();
 
+        $institution_label = $studyConfig->institution_label;
+        $aOrAn = 'a';
+        $firstLetter = strtolower(substr($institution_label, 0, 1));
+        if (in_array($firstLetter, array('a', 'e', 'i', 'o', 'u'))) {
+            $aOrAn = 'an';
+        }
         $this->add(
             array(
                 'name' => 'college',
@@ -26,8 +32,8 @@ class PeerCollege extends AbstractForm
                     'id' => 'college'
                 ),
                 'options' => array(
-                    'label' => 'Peer Institution',
-                    'empty_option' => '-- Select an institution --'
+                    'label' => 'Peer ' . ucwords($institution_label),
+                    'empty_option' => "-- Select $aOrAn " . strtolower($studyConfig->institution_label) . ' --'
                 ),
 
             )

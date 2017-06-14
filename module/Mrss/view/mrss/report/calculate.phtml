@@ -29,6 +29,13 @@ $this->headScript()->appendFile(
 
     var systemIds = <?= json_encode($systemIds) ?>;
 
+    var systemBenchmarks = [];
+
+    <?php if ($this->studyConfig()->use_structures): ?>
+
+    systemBenchmarks = <?= json_encode($systemBenchmarks) ?>;
+
+    <?php endif ?>
 
     // Show first tab
     $(document).ready(function(){

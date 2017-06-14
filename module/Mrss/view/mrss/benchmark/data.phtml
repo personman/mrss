@@ -1,0 +1,51 @@
+<?php
+/** @var \Mrss\Entity\Subscription[] $subscriptions */
+?>
+
+<h1><?= $year ?> <?= $benchmark->getName() ?> Data</h1>
+
+
+<table class="table" style="width: 40%" id="data">
+    <thead>
+        <tr>
+            <th><?= ucwords($this->studyConfig()->institution_label) ?></th>
+            <th style="text-align: right">Value</th>
+            <th><?= ucwords($this->studyConfig()->system_label) ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($subscriptions as $subscription): ?>
+        <tr>
+            <td><?= $subscription->getCollege()->getNameAndState() ?></td>
+            <td style="text-align: right"><?= $benchmark->format($subscription->getValue($benchmark)) ?></td>
+            <td><?= implode(', ', $subscription->getCollege()->getSystemNames($subscription->getYear())) ?></td>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
+
+
+<?php
+// Data Tables
+$this->headScript()->appendFile(
+'/js/jquery.dataTables.min.js',
+'text/javascript'
+);
+$this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
+?>
+
+<script>
+    <?php $this->headScript()->captureStart() ?>
+
+    $(document).ready(function() {
+
+        // Data table
+        var dataTable = $('#data').dataTable({
+            // show X entries options
+            "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+            'iDisplayLength': 100
+        });
+    })
+
+    <?php $this->headScript()->captureEnd() ?>
+</script>

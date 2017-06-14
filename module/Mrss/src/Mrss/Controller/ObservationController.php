@@ -5,7 +5,6 @@ namespace Mrss\Controller;
 
 use Mrss\Form\ImportData;
 use Mrss\Service\DataEntryHydrator;
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
 use Mrss\Service\Excel;
@@ -20,7 +19,7 @@ use PHPExcel_Style_Fill;
 use PHPExcel_Style_Alignment;
 use PHPExcel_Shared_Font;
 
-class ObservationController extends AbstractActionController
+class ObservationController extends BaseController
 {
     protected $systemAdminSessionContainer;
 
@@ -138,18 +137,6 @@ class ObservationController extends AbstractActionController
         }
     }
 
-    protected function getMembership()
-    {
-        $year = $this->currentStudy()->getCurrentYear();
-        $membership = $this->getSubscriptionModel()->findOne(
-            $year,
-            $this->currentCollege()->getId(),
-            $this->currentStudy()->getId()
-        );
-
-        return $membership;
-    }
-
     public function overviewAction()
     {
         if ($redirect = $this->redirectIfNoMembership()) {
@@ -167,7 +154,7 @@ class ObservationController extends AbstractActionController
         /** @var \Mrss\Entity\Study $currentStudy */
         $currentStudy = $this->currentStudy();
         $membership = $this->getMembership();
-        $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($membership);
+        $benchmarkGroups = $this->getBenchmarkGroups($membership);
         $observation = $this->getCurrentObservation();
         $completionPercentage = $currentStudy
             ->getCompletionPercentage($observation);
@@ -178,13 +165,21 @@ class ObservationController extends AbstractActionController
 
         $issues = $this->getIssueModel()->findForCollege($this->currentCollege());
 
+        $year = $this->getCurrentStudy()->getCurrentYear();
+        //$nextYear = $year + 1;
+        //$yearRange = "$year - $nextYear";
+        $yearRange = "FY $year";
+
         return array(
             'currentStudy' => $currentStudy,
             'benchmarkGroups' => $benchmarkGroups,
             'observation' => $observation,
             'issues' => $issues,
             'completionPercentage' => $completionPercentage,
-            'subscription' => $membership
+            'subscription' => $membership,
+            'structure' => $this->getStructure(),
+            'yearRange' => $yearRange,
+            'activeSystem' => $this->getActiveSystem()
         );
     }
 
@@ -386,15 +381,28 @@ class ObservationController extends AbstractActionController
         return $subscriptionModel;
     }
 
+    protected function getBenchmarkGroup($url)
+    {
+        if ($this->getStudyConfig()->use_structures) {
+            $structure = $this->getStructure();
+            $structure->setPage($url);
+            $benchmarkGroup = $structure->getBenchmarkGroup();
+        } else {
+            /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
+            $benchmarkGroup = $this->getServiceLocator()
+                ->get('model.benchmark.group')
+                ->findOneByUrlAndStudy($url, $this->currentStudy());
+        }
+
+        return $benchmarkGroup;
+    }
+
     public function dataEntryAction($staffView = false)
     {
         // Fetch the form
         $benchmarkGroupUrl = $this->params('benchmarkGroup');
 
-        /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
-        $benchmarkGroup = $this->getServiceLocator()
-            ->get('model.benchmark.group')
-            ->findOneByUrlAndStudy($benchmarkGroupUrl, $this->currentStudy());
+        $benchmarkGroup = $this->getBenchmarkGroup($benchmarkGroupUrl);
 
         $subscriptionModel = $this->getSubscriptionModel();
 
@@ -454,6 +462,10 @@ class ObservationController extends AbstractActionController
             !$dataEntryOpen
         );
 
+        $viewHelperManager = $this->getServiceLocator()->get('viewhelpermanager');
+        $descriptionHelper = $viewHelperManager->get('ztbformdescription');
+        $descriptionHelper->setBlockWrapper('<div class="help-block">%s</div>');
+
 
         $class = 'data-entry-form form-horizontal ' . $benchmarkGroup->getFormat();
 
@@ -463,6 +475,7 @@ class ObservationController extends AbstractActionController
         $form->bind($observation);
 
         $form = $this->copyCampusInfoFromLastYear($form);
+        $form = $this->roundFormValues($form);
 
         // Hard-coded binding of best practices. @todo: make this more elegant
         if ($form->has('best_practices')) {
@@ -471,6 +484,8 @@ class ObservationController extends AbstractActionController
             $bp->setValue($bpValue);
             //prd($_POST);
         }
+
+
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
@@ -569,18 +584,25 @@ class ObservationController extends AbstractActionController
             $conversionFactor = $observation->get('institution_conversion_factor');
         }
 
+        $year = $this->getCurrentStudy()->getCurrentYear();
+        //$nextYear = $year + 1;
+        //$yearRange = "$year - $nextYear";
+        $yearRange = "FY $year";
+
         $view = new ViewModel(
             array(
                 'form' => $form,
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
-                'benchmarkGroups' => $this->getCurrentStudy()->getBenchmarkGroupsBySubscription($subscription),
+                'benchmarkGroups' => $this->getBenchmarkGroups(),
                 'nccbpSubscription' => $nccbpSubscription,
                 'variable' => $this->getVariableSubstitutionService(),
                 'dataDefinitionForm' => $this->getDataDefinitionForm(),
                 'dataEntryLayout' => $this->getDataEntryLayout($benchmarkGroup),
                 'staffView' => $staffView,
-                'conversionFactor' => $conversionFactor
+                'conversionFactor' => $conversionFactor,
+                'activeSystem' => $this->getActiveSystem(),
+                'yearRange' => $yearRange
             )
         );
 
@@ -601,6 +623,21 @@ class ObservationController extends AbstractActionController
             ->get('service.formBuilder');
 
         return $formService;
+    }
+
+    protected function roundFormValues($form)
+    {
+        $roundTo = $this->getStudyConfig()->round_data_entry_to;
+
+        if (!is_null($roundTo)) {
+            foreach ($form as $element) {
+                $value = $element->getValue();
+                $value = round($value, $roundTo);
+                $element->setValue($value);
+            }
+        }
+
+        return $form;
     }
 
     protected function updateCompletion($observation)
@@ -628,11 +665,6 @@ class ObservationController extends AbstractActionController
                         <a href='/issues'>Please review</a>.";
 
         return $message;
-    }
-
-    protected function getStudyConfig()
-    {
-        return $this->getServiceLocator()->get('Study');
     }
 
     protected function getDataEntryLayout($benchmarkGroup)
@@ -1013,7 +1045,8 @@ class ObservationController extends AbstractActionController
         return array(
             'form' => $form,
             'useDirectDownloadLink' => $useDirectDownloadLink,
-            'errorMessages' => $errorMessages
+            'errorMessages' => $errorMessages,
+            'activeSystem' => $this->getActiveSystem()
         );
     }
 
@@ -1093,6 +1126,8 @@ class ObservationController extends AbstractActionController
 
         $config = $this->getServiceLocator()->get('study');
         $excelService->setStudyConfig($config);
+        $excelService->setStudy($this->currentStudy());
+        $excelService->setSystem($this->getActiveSystem());
 
         $excelService->getExcelForSubscriptions(array($subscription));
     }
@@ -1176,15 +1211,13 @@ class ObservationController extends AbstractActionController
         }
 
         // Is the college part of a system?
-        if ($collegeSystem = $college->getSystem()) {
+        if ($collegeSystems = $college->getSystems()) {
             // Is the user a system admin in that same system?
             if ($user->getRole() == 'system_admin') {
-                $userSystem = $user->getCollege()->getSystem();
-                if (!empty($userSystem)
-                    && $userSystem->getId() == $collegeSystem->getId()
-                ) {
+                if ($college->hasSystemAdmin($user->getId())) {
                     $authorized = true;
                 }
+
             }
         }
 
@@ -1332,7 +1365,6 @@ class ObservationController extends AbstractActionController
         // Get the observation
         $subscriptionModel = $this->getSubscriptionModel();
         $subscription = $this->getSubscription($year);
-
         $observation = $subscription->getObservation();
 
         // We'll use the report service to determine decimal places
@@ -1351,42 +1383,8 @@ class ObservationController extends AbstractActionController
         $variable = $this->getVariableSubstitutionService();
         $variable->setStudyYear($year);
 
-        $submittedValues = array();
+        $submittedValues = $this->getSubmittedValues($subscription);
 
-        // Get the benchmark groups
-        $benchmarkGroups = $this->getCurrentStudy()->getBenchmarkGroups();
-        foreach ($benchmarkGroups as $benchmarkGroup) {
-            $groupData = array(
-                'benchmarkGroup' => $benchmarkGroup->getName(),
-                'benchmarks' => array()
-            );
-            $benchmarks = $benchmarkGroup->getChildren($year);
-
-            foreach ($benchmarks as $benchmark) {
-                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
-                    /** @var \Mrss\Entity\BenchmarkHeading $heading */
-                    $heading = $benchmark;
-                    $groupData['benchmarks'][] = array(
-                        'heading' => true,
-                        'name' => $variable->substitute($heading->getName()),
-                        'description' => $variable->substitute($heading->getDescription())
-                    );
-                    continue;
-                }
-
-
-                $value = $observation->get($benchmark->getDbColumn());
-                $value = $benchmark->format($value);
-
-                $groupData['benchmarks'][] = array(
-                    'benchmark' => $benchmark,
-                    'value' => $value,
-                    'benchmarkName' => $variable->substitute($benchmark->getReportLabel())
-                );
-            }
-
-            $submittedValues[] = $groupData;
-        }
 
         if ($format == 'xls') {
             $this->downloadSubmittedValues($submittedValues, $year);
@@ -1396,8 +1394,86 @@ class ObservationController extends AbstractActionController
             'subscriptions' => $subscriptions,
             'year' => $year,
             'submittedValues' => $submittedValues,
-            'completionPercentage' => round($subscription->getCompletion(), 1)
+            'completionPercentage' => round($subscription->getCompletion(), 1),
+            'otherSystems' => $this->currentCollege()->getSystems(),
+            'system' => $this->getActiveSystem()
         );
+    }
+
+
+
+    protected function getSubmittedValues($subscription)
+    {
+        $observation = $subscription->getObservation();
+        $year = $subscription->getYear();
+
+        $submittedValues = array();
+
+        // Get the benchmark groups
+        $benchmarkGroups = $this->getBenchmarkGroups($subscription);
+        //$benchmarkGroups = $this->getCurrentStudy()->getBenchmarkGroups();
+        foreach ($benchmarkGroups as $benchmarkGroup) {
+            $submittedValues[] = $this->getSubmittedValuesGroup($benchmarkGroup, $observation, $year);
+        }
+
+        return $submittedValues;
+    }
+
+    protected function getSubmittedValuesGroup($benchmarkGroup, $observation, $year)
+    {
+        $variable = $this->getVariableSubstitutionService();
+
+        $groupData = array(
+            'benchmarkGroup' => $benchmarkGroup->getName(),
+            'benchmarks' => array()
+        );
+        $benchmarks = $benchmarkGroup->getChildren($year);
+
+        foreach ($benchmarks as $benchmark) {
+            if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                /** @var \Mrss\Entity\BenchmarkHeading $heading */
+                $heading = $benchmark;
+                $groupData['benchmarks'][] = array(
+                    'heading' => true,
+                    'name' => $variable->substitute($heading->getName()),
+                    'description' => $variable->substitute($heading->getDescription())
+                );
+                continue;
+            }
+
+
+            $value = $observation->get($benchmark->getDbColumn());
+            $value = $benchmark->format($value);
+
+            $row = array(
+                'benchmark' => $benchmark,
+                'value' => $value,
+                'benchmarkName' => $variable->substitute($benchmark->getReportLabel())
+            );
+
+            $groupData['benchmarks'][] = $row;
+        }
+
+        return $groupData;
+    }
+
+    /**
+     * Switch systems and redirect to /data-entry
+     */
+    public function dataEntrySwitchAction()
+    {
+        $systemId = $this->params()->fromRoute('systemId');
+        $redirect = $this->params()->fromQuery('redirect');
+        if (empty($redirect)) {
+            $redirect = '/data-entry';
+        }
+
+        // Make sure they have access to this system
+        if ($this->currentCollege()->hasSystemMembership($systemId)) {
+            $this->setActiveSystem($systemId);
+        }
+
+        return $this->redirect()->toUrl($redirect);
     }
 
     protected function getSubscription($year = null)

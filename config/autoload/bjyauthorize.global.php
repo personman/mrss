@@ -206,6 +206,11 @@ return array(
                     'action' => array('add', 'edit'),
                     'roles' => array('contact')
                 ),
+                array(
+                    'controller' => 'observations',
+                    'action' => array('dataEntrySwitch'),
+                    'roles' => array('viewer')
+                ),
 
                 // Data users:
                 array(
@@ -338,7 +343,7 @@ return array(
                 ),
                 array(
                     'controller' => 'subscription',
-                    'action' => array('delete', 'sendinvoice', 'reportAccess'),
+                    'action' => array('delete', 'sendinvoice', 'reportAccess', 'adminEdit'),
                     'roles' => array('admin')
                 ),
                 array(

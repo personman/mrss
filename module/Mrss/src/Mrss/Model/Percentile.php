@@ -66,13 +66,13 @@ class Percentile extends AbstractModel
      * @param $forPercentChange
      * @return PercentileEntity[]
      */
-    public function findByBenchmarkAndPercentile($benchmark, $percentile, $forPercentChange = false)
+    public function findByBenchmarkAndPercentile($benchmark, $percentile, $forPercentChange = false, $systemId = null)
     {
         return $this->getRepository()->findBy(
             array(
                 'benchmark' => $benchmark,
                 'percentile' => $percentile,
-                'system' => null,
+                'system' => $systemId,
                 'forPercentChange' => $forPercentChange
             ),
             array(
@@ -96,8 +96,8 @@ class Percentile extends AbstractModel
             AND p.forPercentChange = ?3 ';
 
         if ($system) {
-            //$dql .= ' AND p.system = ?3';
-            $dql .= ' AND p.system IS NOT NULL';
+            $dql .= ' AND p.system = ?4';
+            //$dql .= ' AND p.system IS NOT NULL';
         } else {
             $dql .= ' AND p.system IS NULL';
         }
@@ -109,7 +109,7 @@ class Percentile extends AbstractModel
         $query->setParameter(3, $forPercentChange);
 
         if ($system) {
-            //$query->setParameter(3, $system);
+            $query->setParameter(4, $system->getId());
         }
 
         $query->execute();

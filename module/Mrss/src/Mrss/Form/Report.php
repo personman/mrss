@@ -7,8 +7,16 @@ use Zend\InputFilter\Input;
 
 class Report extends AbstractForm
 {
-    public function __construct()
+    protected $systems = array();
+    protected $studyConfig;
+    protected $entityManager;
+
+    public function __construct($systems = array(), $studyConfig = null, $entityManager = null)
     {
+        $this->systems = $systems;
+        $this->studyConfig = $studyConfig;
+        $this->entityManager = $entityManager;
+
         // Call the parent constructor
         parent::__construct('report');
         $this->addBasicFields();
@@ -21,6 +29,7 @@ class Report extends AbstractForm
     {
         $this->addId();
         $this->addName('Name', null, true);
+        $this->addSystems();
         $this->addDescription();
     }
 
@@ -37,5 +46,37 @@ class Report extends AbstractForm
         $inputFilter->add($input);
 
         return $inputFilter;
+    }
+
+    protected function addSystems()
+    {
+        if ($this->systems) {
+            $field = array(
+                'name' => 'system',
+                //'type' => 'Select',
+                'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+                'options' => array(
+                    'label' => ucwords($this->studyConfig->system_label),
+                    'object_manager' => $this->entityManager,
+                    'target_class' => 'Mrss\Entity\System'
+                ),
+                'attributes' => array(
+                    'options' => $this->getSystemOptions()
+                )
+            );
+
+            $this->add($field);
+
+        }
+    }
+
+    protected function getSystemOptions()
+    {
+        $options = array();
+        foreach ($this->systems as $system) {
+            $options[$system->getId()] = $system->getName();
+        }
+
+        return $options;
     }
 }

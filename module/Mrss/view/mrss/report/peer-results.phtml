@@ -36,14 +36,17 @@ $this->headScript()->appendFile(
 </p>
 <?php endif ?>
 
-<p>
+<div class="reportDownloads">
     <a href="<?= $this->url(
         'reports/peer-results',
         array('format' => 'excel')
-    ) ?>" class="btn btn-default">Download</a>
-</p>
+    ) ?>" class="btn btn-default">
+        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+        Download
+    </a>
+</div>
 
-<div class="container-fluid">
+<div class="container-fluid report">
     <?php foreach ($report['sections'] as $section): ?>
 
         <div class="row-fluid row">
@@ -60,10 +63,12 @@ $this->headScript()->appendFile(
             <div class="span6 col-md-6">
                 <table class="table table-hover table-bordered table-striped">
                     <thead>
-                        <tr>
+                        <tr class="topHeading">
                             <th><?= $studyConfig->institution_label ?></th>
                             <th>Value</th>
+                            <?php if ($includePercentiles): ?>
                             <th>National<br>% Rank</th>
+                            <?php endif ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,19 +78,14 @@ $this->headScript()->appendFile(
                                     <?= $peerData['label'] ?>
                                 </td>
                                 <td>
-                                    <?php
-                                        $value = $peerData['value'];
-                                        if ($section['isNumber']) {
-                                            $value = number_format($peerData['value'], $section['decimal_places']);
-                                        }
-                                    ?>
-
-                                    <?= $section['prefix'] . $value . $section['suffix'] ?></td>
+                                    <?= $peerData['formatted'] ?>
                                 </td>
 
+                                <?php if ($includePercentiles): ?>
                                 <td>
                                     <?= round($peerData['percentileRank']) ?>%
                                 </td>
+                                <?php endif ?>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
@@ -97,7 +97,7 @@ $this->headScript()->appendFile(
 </div>
 
 <?php if (!empty($report['skipped'])): ?>
-    <p>The following metrics are not included in the report because fewer than 5 or your selected peers reported data for them:</p>
+    <p>The following metrics are not included in the report because fewer than <?= $this->studyConfig()->min_peers ?> or your selected peers reported data for them:</p>
 
     <ul>
         <?php foreach ($report['skipped'] as $benchmark): ?>

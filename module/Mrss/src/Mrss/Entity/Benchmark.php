@@ -703,7 +703,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
         return $isNumerical;
     }
 
-    protected function getOptionsForForm()
+    public function getOptionsForForm()
     {
         $options = explode("\n", $this->getOptions());
 
@@ -846,7 +846,8 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             $inputFilter['validators'][] = array(
                 'name' => 'Regex',
                 'options' => array(
-                    'pattern' => '/-?^\d+$/',
+                    //'pattern' => '/-?^\d+$/',
+                    'pattern' => '/^-?\d+$/',
                     'messages' => array(
                         'regexNotMatch' => 'Use the format 12'
                     )
@@ -996,7 +997,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                         $suffix;
                 }
             }
-        } elseif ($this->isNumericalRadio()) {
+        } elseif ($this->isNumericalRadio() && !is_null($value) && $value != '') {
             $options = $this->getOptionsForForm();
             $keys = array_keys($options);
             if ($closestKey = ($this->getClosest($value, $keys))) {
@@ -1062,7 +1063,10 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             'stu_fac_ratio' => 2,
             'stud_inst_serv_ratio' => 2,
             'empl_inst_serv_ratio' => 2,
-            'institution_conversion_factor' => 9
+            'institution_conversion_factor' => 9,
+            // ICMA:
+            'poverty' => 1,
+            'unempl_rate' => 1
         );
 
         $decimalPlaces = 0;
@@ -1080,6 +1084,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
             // Floats should get 2
             if ($this->getInputType() == 'float') {
+                $decimalPlaces = 2;
+            }
+
+            // Added for Envisio
+            if ($this->getInputType() == 'dollars') {
                 $decimalPlaces = 2;
             }
         }

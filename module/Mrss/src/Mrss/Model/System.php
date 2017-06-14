@@ -36,6 +36,7 @@ class System extends AbstractModel
 
     /**
      * Find all systems, ordered by name
+     * @return \Mrss\Entity\System[]
      */
     public function findAll()
     {

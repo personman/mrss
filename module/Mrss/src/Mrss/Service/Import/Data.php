@@ -6,6 +6,8 @@ use Mrss\Service\Import;
 use PHPExcel_Worksheet_Row;
 use Mrss\Entity\Subscription as SubscriptionEntity;
 use Mrss\Entity\College as CollegeEntity;
+use Mrss\Entity\SystemMembership;
+use PHPExcel_Cell;
 
 class Data extends Import
 {
@@ -14,6 +16,12 @@ class Data extends Import
 
     /** @var \Mrss\Model\Subscription $subscriptionModel */
     protected $subscriptionModel;
+
+    /** @var \Mrss\Model\System $systemModel */
+    protected $systemModel;
+
+    /** @var \Mrss\Model\SystemMembership $systemMembershipModel */
+    protected $membershipModel;
 
     /** @var \Mrss\Model\Observation $observationModel */
     protected $observationModel;
@@ -27,21 +35,38 @@ class Data extends Import
     /** @var \Mrss\Entity\Study $stuyd */
     protected $study;
 
-    protected $year = 2014;
+    protected $year = null;
+
+    protected $systemId = null;
+
+    protected $debug = false;
 
 
-    protected $file = 'data/imports/envisio-import-safety.xlsx';
+    //protected $file = 'data/imports/envisio-import-icma.xlsx';
+    //protected $file = 'data/imports/envisio-import-safety.xlsx';
+    protected $file = 'data/imports/full-icma-import.xlsx';
+    //protected $file = 'data/imports/vbc-import-final.xlsx';
 
     protected $map = array();
 
-    public function import()
+    public function import($serviceManager)
     {
+        $this->serviceManager = $serviceManager;
+
         $this->excel = $this->openFile($this->file);
 
-        $sheets = array(
+        /*$sheets = array(
             0 => 2014,
             1 => 2015,
-            2 => 2016
+            2 => 2016,
+            //3 => 2013,
+        );*/
+
+        $sheets = array(
+            0 => 2016,
+            1 => 2015,
+            2 => 2014,
+            3 => 2013
         );
 
         foreach ($sheets as $index => $year) {
@@ -74,39 +99,119 @@ class Data extends Import
         $data = $this->getDataFromRow($row);
 
         if (empty($data['ipeds'])) {
-            return false;
+            $name = $data['name'];
+            $nameParts = explode(', ', $name);
+            $name = $nameParts[0];
+            $state = $nameParts[1];
+
+            $college = $this->getCollegeModel()->findByNameAndState($name, $state);
+
+            if ($college) {
+                $data['ipeds'] = $college->getIpeds();
+
+                if ($this->debug) {
+                    echo "<p>Found city by name ($name) and state ($state): {$college->getNameAndState()}</p>";
+                }
+            } else {
+                if ($this->debug) {
+                    echo "<p>Unable to find by city ($name) and state ($state).</p>";
+                }
+
+
+                // Create college
+                $ipeds = $this->getCollegeModel()->findMaxIpeds();
+                $ipeds++;
+
+                $collegeInfo = array(
+                    'ipeds' => $ipeds,
+                    'name' => $name,
+                    'state' => $state,
+                    'abbreviation' => '',
+
+                );
+
+
+                $this->createCollege($collegeInfo);
+
+                $data['ipeds'] = $ipeds;
+
+                if ($this->debug) {
+                    echo "<p>Created city ($name).</p>";
+                }
+            }
         }
 
         $ipeds = $data['ipeds'];
         unset($data['ipeds']);
 
-        if ($college = $this->getCollege($ipeds)) {
+        $college = $this->getCollege($ipeds);
+
+        if (!$college) {
+            // Create it
+        }
+
+
+
+        if ($college) {
             $subscription = $this->getSubscriptionModel()->findOne($this->year, $college->getId(), $this->study->getId());
 
             if (empty($subscription)) {
                 $subscription = $this->createSubscription($college);
             }
 
+            $year = $subscription->getYear();
             $subscription->setBenchmarkModel($this->getBenchmarkmodel());
             $subscription->setDatumModel($this->getDatumModel());
 
             foreach ($data as $dbColumn => $value) {
                 $value = $this->processValue($dbColumn, $value);
+                if (empty($value)) {
+                    $value = null;
+                }
                 $subscription->setValue($dbColumn, $value);
+
+                if ($this->debug) {
+                    echo "<p>$year: {$college->getName()} - $dbColumn: $value</p>";
+                }
             }
 
             $this->getSubscriptionModel()->save($subscription);
             $this->getSubscriptionModel()->getEntityManager()->flush();
 
-            pr($college->getName());
-            pr($data);
+            // Add system membership
+            $this->connectToSystem($college);
+        } else {
+            if ($this->debug) {
+                echo "<p>Ipeds present ({$data['ipeds']}) but unable to find city.</p>";
+            }
+        }
+    }
 
+    protected function connectToSystem($college)
+    {
+        if ($this->systemId) {
+            $system = $this->getSystemModel()->find($this->systemId);
+
+            // See if the membership exists
+            $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $this->year);
+
+            if (!$membership) {
+                $membership = new SystemMembership();
+                $membership->setSystem($system);
+                $membership->setCollege($college);
+                $membership->setYear($this->year);
+                $membership->setDataVisibility('public');
+
+                $this->getSystemMembershipModel()->save($membership);
+            }
         }
     }
 
     protected function processValue($dbColumn, $value)
     {
+        $benchmark = $this->getBenchmarkmodel()->findOneByDbColumn($dbColumn);
 
+        $value = trim($value);
         if (stristr($value, ':')) {
             $valueParts = explode(':', $value);
             $minutes = $valueParts[0];
@@ -115,6 +220,32 @@ class Data extends Import
             $minuteSeconds = $minutes * 60;
             $seconds += $minuteSeconds;
             $value = $seconds;
+        }
+
+        // Strip out % and $
+        $value = str_replace(array('%', '$'), array('', ''), $value);
+
+
+        if (stristr($value, '.')) {
+
+            if ($benchmark) {
+                if ($benchmark->isPercent() && $benchmark->getDbColumn() != 'vcr1') {
+                    $value = $value * 100;
+                }
+
+            } else {
+                echo 'Benchmark not found for ' . $dbColumn;
+            }
+        }
+
+        if ($benchmark && $benchmark->isNumericalRadio()) {
+            $options = $benchmark->getOptionsForForm();
+
+            $flipped = array_flip($options);
+
+            if (isset($flipped[$value])) {
+                $value = $flipped[$value];
+            }
         }
 
 
@@ -255,17 +386,46 @@ class Data extends Import
      */
     protected function getMap()
     {
+        if (count($this->map) == 0) {
+            //$headerRow = $this->excel->getActiveSheet()->row
+            //$rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
+
+
+            $row = $this->excel->getActiveSheet()->getRowIterator(2)->current();
+
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $this->map['name'] = 0; // Placeholder
+
+            foreach ($cellIterator as $key => $cell) {
+                if ($cell->getValue()) {
+                    //$coordinate = $cell->getCoordinate();
+                    //$column = $cell->getColumn();
+                    $column = PHPExcel_Cell::columnIndexFromString($cell->getColumn());
+
+                    $this->map[$cell->getValue()] = $column - 1;
+                }
+
+            }
+
+        }
+
+        //pr($this->map);
+
+        return $this->map;
+
         $map = array(
             'name', // Not used
             'ipeds',
-            //'population',
-            //'median_household_income',
-            //'poverty',
+            'population',
+            'median_household_income',
+            'poverty',
             'fireresponse',
             'totalfireservicecalls',
             'policeresponsetimes',
             'policecalls1',
-            /*'vcr1',
+            'vcr1',
             'pcr',
             'vccr',
             'pccr',
@@ -282,7 +442,7 @@ class Data extends Import
             'trashbill',
             'wastediv',
             'employ1',
-            'bondrating'*/
+            'bondrating'
         );
 
         $withNumbers = array();
@@ -331,6 +491,36 @@ class Data extends Import
         return $this;
     }
 
+    /**
+     * @return \Mrss\Model\System
+     */
+    public function getSystemModel()
+    {
+        return $this->systemModel;
+    }
 
+    /**
+     * @param \Mrss\Model\System $model
+     * @return Data
+     */
+    public function setSystemModel($model)
+    {
+        $this->systemModel = $model;
+        return $this;
+    }
 
+    public function setSystemMembershipModel($model)
+    {
+        $this->membershipModel = $model;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\SystemMembership
+     */
+    public function getSystemMembershipModel()
+    {
+        return $this->membershipModel;
+    }
 }

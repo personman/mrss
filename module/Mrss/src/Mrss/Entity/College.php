@@ -474,7 +474,7 @@ class College
      * @param Study $study
      * @return Subscription[]
      */
-    public function getSubscriptionsForStudy(Study $study)
+    public function getSubscriptionsForStudy(Study $study, $forReports = false, $system = null)
     {
         $subscriptions = array();
         foreach ($this->getSubscriptions() as $sub) {
@@ -491,6 +491,25 @@ class College
             $study->getId();
 
             if ($sub->getStudy()->getId() == $study->getId()) {
+
+                // Exclude current year if reports are closed
+                if ($forReports) {
+                    if ($system) {
+                        if ($system->getCurrentYear() == $sub->getYear() && !$system->getReportsOpen()) {
+                            continue;
+                        }
+                    } else {
+                        if ($study->getCurrentYear() == $sub->getYear() && !$study->getReportsOpen()) {
+                            continue;
+                        }
+                    }
+                }
+
+                if ($system && !$this->hasSystemMembership($system->getId(), $sub->getYear())) {
+
+                    continue;
+                }
+
                 $subscriptions[$sub->getYear()] = $sub;
             }
         }
@@ -635,17 +654,56 @@ class College
         return $this;
     }
 
+    /**
+     * @return ArrayCollection|\Mrss\Entity\SystemMembership[]
+     */
     public function getSystemMemberships()
     {
         return $this->systemMemberships;
     }
 
-    public function getSystemNames()
+    /**
+     * @return \Mrss\Entity\System[]
+     */
+    public function getSystems()
     {
         $systems = array();
         foreach ($this->getSystemMemberships() as $membership) {
             $systems[$membership->getSystem()->getId()] = $membership->getSystem();
         }
+
+        return $systems;
+    }
+
+    public function getSystem()
+    {
+        $systems = $this->getSystems();
+        $system = array_pop($systems);
+
+        return $system;
+    }
+
+    public function hasSystemAdmin($userId)
+    {
+        foreach ($this->getSystems() as $system) {
+            foreach ($system->getAdmins() as $admin) {
+                if ($admin->getId() == $userId) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function getSystemNames($year = null)
+    {
+        if ($year) {
+            $systems = $this->getSystemsByYear($year);
+        } else {
+            $systems = $this->getSystems();
+        }
+
 
         $names = array();
         foreach ($systems as $system) {
@@ -653,5 +711,45 @@ class College
         }
 
         return $names;
+    }
+
+    public function getSystemsByYear($year)
+    {
+        $systems = array();
+        foreach ($this->getSystemMemberships() as $systemMembership) {
+            if ($year == $systemMembership->getYear()) {
+                $systems[] = $systemMembership->getSystem();
+            }
+        }
+
+        return $systems;
+    }
+
+    public function getSystemIdsByYear($year)
+    {
+        $systems = array();
+        foreach ($this->getSystemMemberships() as $systemMembership) {
+            if ($year == $systemMembership->getYear()) {
+                $systems[] = $systemMembership->getSystem()->getId();
+            }
+        }
+
+        return $systems;
+    }
+
+    public function hasSystemMembership($systemId, $year = null)
+    {
+        $has = false;
+        foreach ($this->getSystemMemberships() as $systemMembership) {
+            if ($systemMembership->getSystem()->getId() == $systemId) {
+                if ($year === null || $systemMembership->getYear() == $year) {
+                    $has = true;
+
+                    break;
+                }
+            }
+        }
+
+        return $has;
     }
 }

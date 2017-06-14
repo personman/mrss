@@ -112,6 +112,8 @@ class Report
      */
     protected $observationModel;
 
+    protected $system;
+
     /**
      * @var Smtp
      */
@@ -257,6 +259,14 @@ class Report
                 $subscriptions = array();
             }
 
+            if ($this->debug) {
+                $collegeIds = array();
+                foreach ($subscriptions as $sub) {
+                    $collegeIds[] = $sub->getCollege()->getId();
+                }
+                $this->debug($collegeIds);
+            }
+
             $data = $this->getDataFromSubscriptions($subscriptions, $benchmark, $skipNull);
         }
 
@@ -299,12 +309,17 @@ class Report
                 // Leave out null values
                 if ($skipNull && $value === null) {
                     $skipped++;
+                    $benchmarkId = $benchmark->getId();
+                    $message = "Skipped college id $collegeId, benchmark id $benchmarkId because it is null.";
+                    $this->debug($message);
                     continue;
                 }
 
                 // Also skip suppressed data
                 if (in_array($benchmarkGroupId, $suppressed)) {
                     $skipped++;
+                    $message = "Skipped form id $benchmarkGroupId for college id $collegeId because it is suppressed.";
+                    $this->debug($message);
                     continue;
                 }
 
@@ -404,6 +419,10 @@ class Report
                 }
 
             }
+        }
+
+        if ($benchmark->isNumericalRadio()) {
+            $decimalPlaces = 1;
         }
 
         return $decimalPlaces;
@@ -733,10 +752,25 @@ class Report
         );
     }
 
-    protected function getSystem()
+    public function setSystem($system)
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Entity\System
+     */
+    public function getSystem()
+    {
+        return $this->system;
+    }
+
+    /*protected function getSystem()
     {
         return null;
-    }
+    }*/
 
     protected function loadPercentileData($benchmarkData, $benchmark, $year, $forPercentChange = false)
     {
@@ -1062,14 +1096,32 @@ class Report
                 )
             ),
             'dataDefinition' => $dataDefinition,
+            'lang' => array(
+                'thousandsSep' => ','
+            ),
+            'options' => array(
+                'lang' => array(
+                    'thousandsSep' => ','
+                )
+            )
         );
 
+        $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
         if ($benchmark->isPercent()) {
-            $chart['yAxis']['max'] = 100;
-            $chart['yAxis']['tickInterval'] = 25;
+            if ($forceScale) {
+                $chart['yAxis']['max'] = 100;
+                $chart['yAxis']['tickInterval'] = 25;
+            }
+
             $chart['yAxis']['labels'] = array(
                 'format' => '{value}%'
             );
+        }
+
+        if ($benchmark->isNumericalRadio()) {
+            $keys = array_keys($benchmark->getOptionsForForm());
+            $maxKey = max($keys);
+            $chart['yAxis']['max'] = $maxKey;
         }
 
         if (!empty($chartConfig['yAxisMax'])) {
@@ -1085,7 +1137,7 @@ class Report
 
         if ($benchmark->isDollars() && !$forPercntChange) {
             $chart['yAxis']['labels'] = array(
-                'format' => '${value}'
+                'format' => '${value:,.0f}'
             );
         }
 
@@ -1104,6 +1156,7 @@ class Report
     {
         // Default
         $color = '#0065A1';
+        $color = $this->getChartColor(1);
 
         // Override for Max
         if ($this->getStudy()->getId() == 2) {
@@ -1118,9 +1171,28 @@ class Report
         //$color = '#002C57';
         $color = '#9cc03e';
 
+        $color = $this->getChartColor(0);
+
+
         return $color;
     }
 
+
+    public function getChartColors()
+    {
+        return explode('|', $this->getStudyConfig()->chart_colors);
+    }
+
+    public function getChartColor($key)
+    {
+        $color = null;
+        $colors = $this->getChartColors();
+        if (!empty($colors[$key])) {
+            $color = $colors[$key];
+        }
+
+        return $color;
+    }
 
     protected function isNoelLevitz($dbColumn)
     {
@@ -1185,6 +1257,11 @@ class Report
             $format = "{y:$numberFormat}%";
         } elseif ($benchmark->isDollars()) {
             $format = "\${y:$numberFormat}";
+        } elseif ($benchmark->isNumericalRadio()) {
+            $options = $benchmark->getOptionsForForm();
+            $options = json_encode($options);
+            $format = '{numericalOptions: ' . $options . '}';
+
         }
 
         if ($benchmark->getInputType() == 'minutesseconds') {
@@ -1451,7 +1528,7 @@ class Report
     }
 
     /**
-     * @return \Mrss\Model\PercentChange
+     * @return \Mrss\Model\System
      */
     public function getSystemModel()
     {
@@ -1763,5 +1840,17 @@ class Report
     public function getStudyConfig()
     {
         return $this->studyConfig;
+    }
+
+    public function getBenchmarkGroups($subscription)
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
+            $benchmarkGroups = $system->getReportStructure()->getPages();
+        } else {
+            $study = $this->getStudy();
+            $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        }
+
+        return $benchmarkGroups;
     }
 }

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
+use Doctrine\Common\Collections\Criteria;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
@@ -61,6 +62,7 @@ class System
 
     /**
      * @ORM\OneToMany(targetEntity="SystemMembership", mappedBy="system")
+     * @ORM\OrderBy({"created" = "DESC"})
      */
     protected $memberships;
 
@@ -69,6 +71,47 @@ class System
      * @ORM\JoinColumn(name="dataEntryStructure_id", referencedColumnName="id", nullable=true)
      */
     protected $dataEntryStructure = null;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Structure", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="reportStructure_id", referencedColumnName="id", nullable=true)
+     */
+    protected $reportStructure = null;
+
+
+    // Pushed down from the study entity:
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $currentYear;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $enrollmentOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $pilotOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $dataEntryOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $outlierReportsOpen;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $reportsOpen;
+
+
 
     public function __construct()
     {
@@ -217,6 +260,34 @@ class System
     /**
      * @return null|SystemMembership[]
      */
+    public function getRecentMemberships($year, $limit = 3)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('year', $year))
+            ->setMaxResults($limit);
+
+        $memberships = $this->getMemberships()->matching($criteria);
+
+        return $memberships;
+    }
+
+    /**
+     * @param $year
+     * @return \Mrss\Entity\SystemMembership[]
+     */
+    public function getMembershipsByYear($year)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('year', $year));
+
+        $memberships = $this->getMemberships()->matching($criteria);
+
+        return $memberships;
+    }
+
+    /**
+     * @return null|SystemMembership[]
+     */
     public function getMemberships()
     {
         return $this->memberships;
@@ -233,7 +304,7 @@ class System
     }
 
     /**
-     * @return mixed
+     * @return \Mrss\Entity\Structure
      */
     public function getDataEntryStructure()
     {
@@ -250,6 +321,23 @@ class System
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\Structure
+     */
+    public function getReportStructure()
+    {
+        return $this->reportStructure;
+    }
+
+    /**
+     * @param mixed $reportStructure
+     * @return System
+     */
+    public function setReportStructure($reportStructure)
+    {
+        $this->reportStructure = $reportStructure;
+        return $this;
+    }
 
 
     /**
@@ -268,6 +356,11 @@ class System
         }
 
         return $systemAdmins;
+    }
+
+    public function getChildren()
+    {
+        return array();
     }
 
     public function getViewers()
@@ -354,5 +447,80 @@ class System
         }
 
         return $subscriptions;
+    }
+
+
+
+    public function setCurrentYear($year)
+    {
+        $this->currentYear = $year;
+
+        return $this;
+    }
+
+    public function getCurrentYear()
+    {
+        return $this->currentYear;
+    }
+
+    public function getLatestReportYear()
+    {
+        $year = $this->getCurrentYear();
+        if (!$this->getReportsOpen()) {
+            $year = $year - 1;
+        }
+
+        return $year;
+    }
+
+    public function getCurrentYearMinus($minus)
+    {
+        $minus = intval($minus);
+
+        return $this->currentYear - $minus;
+    }
+
+    public function setEnrollmentOpen($enrollmentOpen)
+    {
+        $this->enrollmentOpen = $enrollmentOpen;
+
+        return $this;
+    }
+
+    public function getEnrollmentOpen()
+    {
+        return $this->enrollmentOpen;
+    }
+
+    public function setDataEntryOpen($dataEntryOpen)
+    {
+        $this->dataEntryOpen = $dataEntryOpen;
+
+        return $this;
+    }
+
+    public function getDataEntryOpen()
+    {
+        return $this->dataEntryOpen;
+    }
+
+    public function setReportsOpen($reportsOpen)
+    {
+        $this->reportsOpen = $reportsOpen;
+    }
+
+    public function getReportsOpen()
+    {
+        return $this->reportsOpen;
+    }
+
+    public function setOutlierReportsOpen($reportsOpen)
+    {
+        $this->outlierReportsOpen = $reportsOpen;
+    }
+
+    public function getOutlierReportsOpen()
+    {
+        return $this->outlierReportsOpen;
     }
 }

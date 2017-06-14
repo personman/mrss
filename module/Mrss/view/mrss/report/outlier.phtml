@@ -4,7 +4,12 @@ $this->headScript()->appendFile(
     'text/javascript'
 ); ?>
 
-<h2>Outlier Report</h2>
+<h2>
+    <?php if ($system): ?>
+        <?= $system->getName() ?>
+    <?php endif ?>
+    Outlier Report
+</h2>
 
 <p>
     As a final check of <?= $year ?> <?= $studyName ?> data, we have identified values to the data elements listed below that are unusually large or small relative to mean values in the data set.  We have defined these outliers fairly conservatively and have included values that are more than two standard deviations above or below aggregate means.<br>
@@ -37,7 +42,8 @@ $this->headScript()->appendFile(
         array(
             'outliers' => $outliers,
             'admin' => false,
-            'showDetails' => $showDetails
+            'showDetails' => $showDetails,
+            'system' => $system
         )
     ) ?>
 

@@ -8,13 +8,17 @@ use Zend\Validator\Regex;
 
 class College extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct($includeExec = false)
+    protected $includeCanada = false;
+
+    public function __construct($includeExec = false, $includeCanada = false, $institutionLabel = 'Institution')
     {
+        $this->includeCanada = $includeCanada;
+
         parent::__construct('institution');
 
-        $this->setLabel('Institution');
+        $this->setLabel($institutionLabel);
 
-        $this->addBasicFields();
+        $this->addBasicFields($institutionLabel);
 
         if ($includeExec) {
             $this->addExecutiveFields();
@@ -22,14 +26,14 @@ class College extends Fieldset implements InputFilterProviderInterface
         }
     }
 
-    protected function addBasicFields()
+    protected function addBasicFields($institutionLabel)
     {
         $this->add(
             array(
                 'name' => 'name',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Name of Institution'
+                    'label' => 'Name of ' . $institutionLabel
                 ),
                 'attributes' => array(
                     'id' => 'institution-name'
@@ -42,7 +46,7 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'name' => 'abbreviation',
                 'type' => 'Text',
                 'options' => array(
-                    'label' => 'Abbreviation for Institution'
+                    'label' => 'Abbreviation for ' . $institutionLabel
                 ),
                 'attributes' => array(
                     'id' => 'institution-abbreviation'
@@ -268,59 +272,6 @@ class College extends Fieldset implements InputFilterProviderInterface
     
     public function getStates()
     {
-        return array(
-            '' => 'Select State',
-            'AL' => 'Alabama',
-            'AK' => 'Alaska',
-            'AZ' => 'Arizona',
-            'AR' => 'Arkansas',
-            'CA' => 'California',
-            'CO' => 'Colorado',
-            'CT' => 'Connecticut',
-            'DE' => 'Delaware',
-            'DC' => 'District Of Columbia',
-            'FL' => 'Florida',
-            'GA' => 'Georgia',
-            'HI' => 'Hawaii',
-            'ID' => 'Idaho',
-            'IL' => 'Illinois',
-            'IN' => 'Indiana',
-            'IA' => 'Iowa',
-            'KS' => 'Kansas',
-            'KY' => 'Kentucky',
-            'LA' => 'Louisiana',
-            'ME' => 'Maine',
-            'MD' => 'Maryland',
-            'MA' => 'Massachusetts',
-            'MI' => 'Michigan',
-            'MN' => 'Minnesota',
-            'MS' => 'Mississippi',
-            'MO' => 'Missouri',
-            'MT' => 'Montana',
-            'NE' => 'Nebraska',
-            'NV' => 'Nevada',
-            'NH' => 'New Hampshire',
-            'NJ' => 'New Jersey',
-            'NM' => 'New Mexico',
-            'NY' => 'New York',
-            'NC' => 'North Carolina',
-            'ND' => 'North Dakota',
-            'OH' => 'Ohio',
-            'OK' => 'Oklahoma',
-            'OR' => 'Oregon',
-            'PA' => 'Pennsylvania',
-            'RI' => 'Rhode Island',
-            'SC' => 'South Carolina',
-            'SD' => 'South Dakota',
-            'TN' => 'Tennessee',
-            'TX' => 'Texas',
-            'UT' => 'Utah',
-            'VT' => 'Vermont',
-            'VA' => 'Virginia',
-            'WA' => 'Washington',
-            'WV' => 'West Virginia',
-            'WI' => 'Wisconsin',
-            'WY' => 'Wyoming'
-        );
+        return getStates(true, $this->includeCanada);
     }
 }

@@ -59,14 +59,21 @@ class ReportController extends ReportAdminController
     public function outlierAction()
     {
         $college = $this->currentCollege();
+        $system = $this->getActiveSystem();
         $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
-            ->getOutlierReport($college);
+            ->getOutlierReport($college, $system);
+
+        $studyName = $this->currentStudy()->getName();
+        if ($system) {
+            $studyName = $system->getName();
+        }
 
         return array(
             'report' => $outlierReport,
-            'studyName' => $this->currentStudy()->getName(),
+            'studyName' => $studyName,
             'year' => $this->currentStudy()->getCurrentYear(),
-            'showDetails' => true
+            'showDetails' => true,
+            'system' => $system
         );
     }
 
@@ -74,10 +81,11 @@ class ReportController extends ReportAdminController
     {
         // HTML or Excel?
         $format = $this->params()->fromRoute('format');
+        $year = $this->getYearFromRouteOrStudy();
 
         $forPercentChange = $this->params()->fromRoute('forPercentChange');
 
-        if ($redirect = $this->checkReportsAreOpen()) {
+        if ($redirect = $this->checkReportsAreOpen(true, $year)) {
             return $redirect;
         }
 
@@ -88,22 +96,30 @@ class ReportController extends ReportAdminController
         // Is this a system report?
         $systemVersion = $this->params()->fromRoute('system');
         $system = null;
+        $otherSystems = array();
         if ($systemVersion) {
             // Confirm they're actually part of a system
-            $system = $this->currentCollege()->getSystem();
+            $systemId = $this->getActiveSystemId();
 
-            if (empty($system)) {
+            if (empty($systemId)) {
                 $this->flashMessenger()->addErrorMessage(
                     'Your institution is not part of a system.'
                 );
 
                 return $this->redirect()->toUrl('/members');
+            } else {
+                $system = $this->getSystemModel()->find($systemId);
+
+                $systems = $this->currentCollege()->getSystems();
+                foreach ($systems as $otherSystem) {
+                    //if ($systemId != $otherSystem->getId()) {
+                        $otherSystems[] = $otherSystem;
+                    //}
+                }
             }
         }
 
-        $year = $this->getYearFromRouteOrStudy();
-        $subscriptions = $this->currentCollege()
-            ->getSubscriptionsForStudy($this->currentStudy());
+        $subscriptions = $this->getSubscriptions();
 
         $subscription = $this->getSubscriptionByYear($year);
 
@@ -138,6 +154,10 @@ class ReportController extends ReportAdminController
             $subscriptions = $this->getSubscriptionsForPercentChange($subscriptions);
         }
 
+        if ($system) {
+            $subscriptions = $this->getSubscriptionsForSystem($subscriptions, $system);
+        }
+
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
@@ -146,10 +166,42 @@ class ReportController extends ReportAdminController
             'breakpoints' => $this->getReportService()
                     ->getPercentileBreakPointLabels(),
             'system' => $system,
+            'otherSystems' => $otherSystems,
             'reportPath' => $reportPath,
             'forPercentChange' => $forPercentChange,
             'studyConfig' => $this->getStudyConfig(),
         );
+    }
+
+    protected function getSubscriptions()
+    {
+        $system = null;
+        if ($this->getServiceLocator()->get('Study')->use_structures) {
+            $system = $this->getActiveSystem();
+        }
+
+        $subscriptions = $this->currentCollege()
+            ->getSubscriptionsForStudy($this->currentStudy(), true, $system);
+
+        return $subscriptions;
+    }
+
+    /**
+     * @param \Mrss\Entity\Subscription[] $subscriptions
+     * @param $system
+     */
+    protected function getSubscriptionsForSystem($subscriptions, $system)
+    {
+        $newSubscriptions = array();
+        foreach ($subscriptions as $subscription) {
+            $year = $subscription->getYear();
+            if ($subscription->getCollege()->hasSystemMembership($system->getId(), $year)) {
+                $newSubscriptions[] = $subscription;
+                //pr($subscription->getYear());
+            }
+        }
+
+        return $newSubscriptions;
     }
 
     /**
@@ -326,10 +378,7 @@ class ReportController extends ReportAdminController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
-        /** @var \Mrss\Model\Subscription $subscriptionModel */
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-        $subs = $subscriptionModel
-            ->findByCollegeAndStudy($this->currentCollege()->getId(), $study->getId());
+        $subs = $this->getSubscriptions();
         $years = array();
         foreach ($subs as $sub) {
             if (!$study->getReportsOpen() && $sub->getYear() == $study->getCurrentYear()) {
@@ -340,6 +389,33 @@ class ReportController extends ReportAdminController
         rsort($years);
 
         $defaultBenchmarks = $this->getPeerBenchmarks($years[0], true);
+
+        // Is this a system report?
+        $systemVersion = $this->getStudyConfig()->use_structures;
+        $system = null;
+        $otherSystems = array();
+        if ($systemVersion) {
+            // Confirm they're actually part of a system
+            $systemId = $this->getActiveSystemId();
+
+            if (empty($systemId)) {
+                $this->flashMessenger()->addErrorMessage(
+                    'Your ' . $this->getStudyConfig()->institution_label . ' is not part of a system.'
+                );
+
+                return $this->redirect()->toUrl('/members');
+            } else {
+                $system = $this->getSystemModel()->find($systemId);
+
+                $systemMemberships = $this->currentCollege()->getSystems();
+                foreach ($systemMemberships as $systemMembership) {
+                    //if ($systemId != $systemMembership->getId()) {
+                        $otherSystems[] = $systemMembership;
+                    //}
+                }
+            }
+        }
+
 
         $form = new PeerComparison(
             $years,
@@ -422,7 +498,9 @@ class ReportController extends ReportAdminController
             'form' => $form,
             'peerGroup' => $peerGroup,
             'peerGroups' => $peerGroups,
-            'criteria' => $criteria
+            'criteria' => $criteria,
+            'system' => $system,
+            'otherSystems' => $otherSystems
         );
     }
 
@@ -466,8 +544,13 @@ class ReportController extends ReportAdminController
             return $redirect;
         }
 
+        $config = $this->getStudyConfig();
+        $includePercentiles = $config->peer_percentiles;
+
+
         /** @var \Mrss\Service\Report\Peer $peerService */
         $peerService = $this->getServiceLocator()->get('service.report.peer');
+        $peerService->setIncludePercentiles($includePercentiles);
 
         $format = $this->params()->fromRoute('format');
 
@@ -487,7 +570,8 @@ class ReportController extends ReportAdminController
         return array(
             'peerGroupName' => $peerGroupName,
             'report' => $report,
-            'studyConfig' => $this->getStudyConfig()
+            'studyConfig' => $this->getStudyConfig(),
+            'includePercentiles' => $includePercentiles
         );
     }
 
@@ -514,7 +598,7 @@ class ReportController extends ReportAdminController
             return $redirect;
         }
 
-        $form = new PeerComparisonDemographics($this->currentStudy());
+        $form = new PeerComparisonDemographics($this->currentStudy(), $this->getStudyConfig());
 
         $criteria = $this->getCriteriaFromSession();
         $form->setData($criteria);
@@ -564,6 +648,11 @@ class ReportController extends ReportAdminController
 
     public function strengthsAction()
     {
+        if ($redirect = $this->checkReportsAreOpen()) {
+            return $redirect;
+        }
+
+
         $threshold = 75;
 
         /** @var \Mrss\Service\Report\Executive $report */
@@ -574,12 +663,14 @@ class ReportController extends ReportAdminController
         $observation = $this->currentCollege()->getObservationForYear($year);
         $report->setObservation($observation);
 
+        $activeSystem = $this->getActiveSystem();
+        $report->setSystem($activeSystem);
+
 
         $strengths = $report->getStrengths(false, $threshold);
         $weaknesses = $report->getWeaknesses($threshold);
 
-        $subscriptions = $this->currentCollege()
-            ->getSubscriptionsForStudy($this->currentStudy());
+        $subscriptions = $this->getSubscriptions();
 
         $subscription = $this->getSubscriptionModel()
             ->findOne($year, $this->currentCollege(), $this->currentStudy());
@@ -589,11 +680,39 @@ class ReportController extends ReportAdminController
         }
 
 
+        $system = null;
+        $otherSystems = array();
+        if ($this->getStudyConfig()->use_structures) {
+            // Confirm they're actually part of a system
+            $systemId = $this->getActiveSystemId();
+
+            if (empty($systemId)) {
+                $this->flashMessenger()->addErrorMessage(
+                    'Your institution is not part of a system.'
+                );
+
+                return $this->redirect()->toUrl('/members');
+            } else {
+                $system = $this->getSystemModel()->find($systemId);
+
+                $systems = $this->currentCollege()->getSystems();
+                foreach ($systems as $otherSystem) {
+                    $otherSystems[] = $otherSystem;
+                }
+            }
+        }
+
+
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
             'strengths' => $strengths,
-            'weaknesses' => $weaknesses
+            'weaknesses' => $weaknesses,
+            'system' => $system,
+            'otherSystems' => $otherSystems,
+            'threshold' => $threshold,
+            'lowThreshold' => 100 - $threshold,
+            'reportUrl' => ($this->getStudyConfig()->use_structures) ? 'network' : 'national'
         );
 
     }
@@ -620,9 +739,9 @@ class ReportController extends ReportAdminController
      *
      * @return \Zend\Http\Response
      */
-    public function checkReportsAreOpen()
+    public function checkReportsAreOpen($freeReport = false, $year = null)
     {
-        $open = $this->checkReportAccess();
+        $open = $this->checkReportAccess($freeReport, $year);
 
         if (!$open) {
             $this->flashMessenger()->addErrorMessage(
@@ -640,8 +759,23 @@ class ReportController extends ReportAdminController
      *
      * @return boolean
      */
-    protected function checkReportAccess()
+    protected function checkReportAccess($freeReport = false, $year = null)
     {
+        if ($this->getStudyConfig()->college_report_access_checkbox && !$freeReport) {
+            if ($college = $this->getCollege()) {
+                if (!$college->hasReportAccess()) {
+                    return false;
+                }
+            }
+        }
+
+        if ($this->getStudyConfig()->use_structures) {
+            $system = $this->getActiveSystem();
+            if (!$system->getReportsOpen() && $system->getCurrentYear() == $year) {
+                return false;
+            }
+        }
+
         // Temporarily open them up no matter what.
         return true;
 
@@ -664,7 +798,9 @@ class ReportController extends ReportAdminController
         }
 
         // Check the current study's report setting
-        if (!$this->currentStudy()->getReportsOpen()) {
+        if ($this->getStudyConfig()->use_structures) {
+
+        } elseif (!$this->currentStudy()->getReportsOpen()) {
             return false;
         }
     }
@@ -702,6 +838,8 @@ class ReportController extends ReportAdminController
                 );
             }
 
+            $colleges = $this->filterCollegesBySystem($colleges, $year);
+
             $collegeData = array();
             foreach ($colleges as $college) {
                 $collegeData[] = array(
@@ -722,6 +860,29 @@ class ReportController extends ReportAdminController
         }
     }
 
+    protected function filterCollegesBySystem($colleges, $year)
+    {
+        if ($this->getStudyConfig()->use_structures) {
+            $filteredColleges = array();
+
+            $activeSystem = $this->getActiveSystem();
+
+            $memberColleges = $activeSystem->getMemberColleges();
+            foreach ($colleges as $college) {
+                if (!empty($memberColleges[$college->getId()])) {
+                    $memberCollegeInfo = $memberColleges[$college->getId()];
+                    if (in_array($year, $memberCollegeInfo['years'])) {
+                        $filteredColleges[] = $college;
+                    }
+                }
+            }
+
+            $colleges = $filteredColleges;
+        }
+
+        return $colleges;
+    }
+
     public function getPeerBenchmarks($year, $collapse = false)
     {
         $this->longRunningScript();
@@ -732,7 +893,7 @@ class ReportController extends ReportAdminController
         $study = $this->currentStudy();
 
         $benchmarkGroupData = array();
-        foreach ($study->getBenchmarkGroupsBySubscription($subscription) as $benchmarkGroup) {
+        foreach ($this->getBenchmarkGroups($subscription) as $benchmarkGroup) {
             $group = $benchmarkGroup->getName();
             $benchmarkData = array();
 
@@ -773,7 +934,7 @@ class ReportController extends ReportAdminController
 
                 $count = 10;
 
-                if ($count >= 5) {
+                if ($count >= $this->getStudyConfig()->min_peers) {
                     $benchmarkData[] = array(
                         'name' => $benchmark->getPeerReportLabel(),
                         'id' => $benchmark->getId()

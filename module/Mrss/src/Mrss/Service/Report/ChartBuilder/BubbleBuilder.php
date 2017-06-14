@@ -60,8 +60,19 @@ class BubbleBuilder extends ChartBuilder
         }
 
 
-        $subscriptions = $this->getSubscriptionModel()
-            ->findWithPartialObservations($study, $year, $dbColumns, true, true, $benchmarkGroupIds);
+        $subscriptions = array();
+        if (!$this->getStudyConfig()->use_structures) {
+            $subscriptions = $this->getSubscriptionModel()
+                ->findWithPartialObservations($study, $year, $dbColumns, true, true, $benchmarkGroupIds);
+        } else {
+            $system = $this->getSystem();
+            $memberships = $system->getMembershipsByYear($year);
+
+            foreach ($memberships as $membership) {
+                $subscriptions[] = $membership->getCollege()->getSubscriptionByStudyAndYear($this->getStudy()->getId(), $year);
+            }
+        }
+
 
         $xFormat = $this->getFormat($xBenchmark);
         $yFormat = $this->getFormat($yBenchmark);
@@ -161,7 +172,7 @@ class BubbleBuilder extends ChartBuilder
         if (empty($config['hideNational'])) {
             $series[] = array(
                 'type' => $type,
-                'name' => 'Institutions',
+                'name' => $this->getStudyConfig()->institutions_label,
                 'color' => $this->getNationalColor(),
                 //'showInLegend' => false,
                 'data' => $data,
@@ -235,7 +246,8 @@ class BubbleBuilder extends ChartBuilder
         }
 
         // Percentages should have the axis as 0-100
-        if ($yBenchmark->isPercent()) {
+        $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
+        if ($yBenchmark->isPercent() && $forceScale) {
             $bubbleChart->setYAxisMax(100);
             $bubbleChart->setYAxisMin(0);
         }

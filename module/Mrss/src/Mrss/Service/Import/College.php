@@ -25,7 +25,7 @@ class College extends Import
 
         $entity = $this->getEntity($data);
 
-        if ($system = $this->saveSystem($data['systemName'])) {
+        if (!empty($data['systemName']) && $system = $this->saveSystem($data['systemName'])) {
             $entity->setSystem($system);
         }
 
@@ -38,7 +38,7 @@ class College extends Import
 
         $rowData = array();
         foreach ($this->getMap() as $property => $column) {
-            $rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
+            $rowData[$property] = trim($this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue());
         }
 
         return $rowData;
@@ -51,21 +51,21 @@ class College extends Import
     protected function getMap()
     {
         return array(
-            'opeId' => 0,
-            'ipeds' => 1,
-            'systemName' => 2,
-            'name' => 3,
-            'address' => 4,
-            'city' => 5,
-            'state' => 6,
-            'zip' => 7
+            //'opeId' => 0,
+            'ipeds' => 2,
+            //'systemName' => 2,
+            'name' => 0,
+            //'address' => 4,
+            'city' => 0,
+            'state' => 1,
+            //'zip' => 7
         );
     }
 
     public function getEntity($rowData)
     {
         // First, see if there's a matching entity in the db already
-        $entity = $this->getCollegeModel()->findOneByOpeId($rowData['opeId']);
+        $entity = $this->getCollegeModel()->findOneByIpeds($rowData['ipeds']);
 
         // If not, create a blank one
         if (empty($entity)) {
@@ -73,13 +73,15 @@ class College extends Import
         }
 
         // Now plug in the data
-        $entity->setOpeId($rowData['opeId']);
+        //$entity->setOpeId($rowData['opeId']);
         $entity->setIpeds($rowData['ipeds']);
         $entity->setName($rowData['name']);
-        $entity->setAddress($rowData['address']);
+        $entity->setAbbreviation($rowData['name']);
+        //$entity->setAddress($rowData['address']);
         $entity->setCity($rowData['city']);
         $entity->setState($rowData['state']);
-        $entity->setZip($rowData['zip']);
+        //$entity->setZip($rowData['zip']);
+
 
         return $entity;
     }

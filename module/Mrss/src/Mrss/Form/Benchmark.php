@@ -34,7 +34,8 @@ class Benchmark extends AbstractForm
                     version will be used in reports. For dynamic years, use [year], [year_minus_2], etc.'
                 ),
                 'attributes' => array(
-                    'rows' => 8
+                    'rows' => 8,
+                    'id' => 'reportDescription'
                 )
             )
         );
@@ -117,12 +118,12 @@ class Benchmark extends AbstractForm
                 'attributes' => array(
                     'id' => 'inputType',
                     'options' => array(
+                        'float' => 'Number',
                         'number' => 'Whole Number',
                         'percent' => 'Percent',
                         'wholepercent' => 'Whole Percent',
                         'dollars' => 'Dollars',
                         'wholedollars' => 'Whole Dollars',
-                        'float' => 'Float',
                         'text' => 'Text',
                         'textarea' => 'Textarea',
                         'radio' => 'Radio',

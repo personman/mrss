@@ -69,6 +69,15 @@ class College extends AbstractModel
         );
     }
 
+    public function findMaxIpeds()
+    {
+        $college = $this->getRepository()->findOneBy(array(), array('ipeds' => 'DESC'), 1);
+
+        $ipeds = intval($college->getIpeds());
+
+        return $ipeds;
+    }
+
     /**
      * @param array $state
      * @return \Mrss\Entity\College[]
@@ -78,6 +87,20 @@ class College extends AbstractModel
         return $this->getRepository()->findBy(
             array('state' => $state),
             array('name' => 'ASC')
+        );
+    }
+
+    /**
+     * @param array $state
+     * @return \Mrss\Entity\College[]
+     */
+    public function findByNameAndState($name, $state)
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+                'name' => $name,
+                'state' => $state
+            )
         );
     }
 

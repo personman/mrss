@@ -32,3 +32,8 @@ ol.example li.placeholder:before {
 .table td a {
     text-decoration: underline !important;
 }
+
+.table td a.benchmarkDataLink {
+    color: #FFF;
+    text-decoration: none !important;
+}

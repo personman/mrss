@@ -2,7 +2,6 @@
 
 namespace Mrss\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Service\Report;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
@@ -11,7 +10,7 @@ use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Log\Formatter\Simple;
 
-class ReportAdminController extends AbstractActionController
+class ReportAdminController extends BaseController
 {
     /**
      * @var Report
@@ -142,8 +141,22 @@ class ReportAdminController extends AbstractActionController
             'observationIds' => $observationIds,
             'systemIds' => $systemIds,
             'collegeIds' => $collegeIds,
-            'benchmarkIds' => $benchmarkIds
+            'benchmarkIds' => $benchmarkIds,
+            'systemBenchmarks' => $this->getSystemBenchmarks($currentYear)
         );
+    }
+
+    protected function getSystemBenchmarks($year)
+    {
+        $systemBenchmarks = array();
+
+        foreach ($this->getSystemModel()->findAll() as $system) {
+            $benchmarkIds = $system->getDataEntryStructure()->getBenchmarkIdsForYear($year);
+
+            $systemBenchmarks[$system->getId()] = $benchmarkIds;
+        }
+
+        return $systemBenchmarks;
     }
 
     public function debug($message, $var)
@@ -424,14 +437,6 @@ class ReportAdminController extends AbstractActionController
         return $this->getServiceLocator()->get('service.report.changes');
     }
 
-    /**
-     * @return \Mrss\Model\System
-     */
-    protected function getSystemModel()
-    {
-        return $this->getServiceLocator()->get('model.system');
-    }
-
     public function calculateOneSystemAction()
     {
         takeYourTime();
@@ -561,16 +566,21 @@ class ReportAdminController extends AbstractActionController
 
         $benchmarkId = $this->params()->fromRoute('benchmark');
         $year = $this->params()->fromRoute('year');
+        $systemId = $this->params()->fromRoute('system');
         $position = $this->params()->fromRoute('clear');
+
+        if ($systemId == 0) {
+            $systemId = null;
+        }
 
         // First?
         if ($position == 'first') {
-            $this->getOutlierService()->clearOutliers($year);
+            $this->getOutlierService()->clearOutliers($year, $systemId);
         }
 
         // Calculate them
         if ($benchmark = $this->getBenchmarkModel()->find($benchmarkId)) {
-            $this->getOutlierService()->calculateOutlier($benchmark, $year);
+            $this->getOutlierService()->calculateOutlier($benchmark, $year, $systemId);
         }
 
         // Last?
@@ -719,6 +729,28 @@ class ReportAdminController extends AbstractActionController
         );
     }
 
+    protected function getCurrentYear()
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getActiveSystem()) {
+            $year = $system->getCurrentYear();
+        } else {
+            $year = $this->currentStudy()->getCurrentYear();
+        }
+
+        return $year;
+    }
+
+    public function getReportsOpen()
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getActiveSystem()) {
+            $reportsOpen = $system->getReportsOpen();
+        } else {
+            $reportsOpen = $this->currentStudy()->getReportsOpen();
+        }
+
+        return $reportsOpen;
+    }
+
     public function getYearFromRouteOrStudy($college = null)
     {
         if (empty($college)) {
@@ -728,7 +760,7 @@ class ReportAdminController extends AbstractActionController
         $year = $this->params()->fromRoute('year');
 
         if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
+            $year = $this->getCurrentYear();
 
             // But if reports aren't open yet, show them last year's by default
             $impersonationService = $this->getServiceLocator()
@@ -746,8 +778,8 @@ class ReportAdminController extends AbstractActionController
             $subModel = $this->getServiceLocator()->get('model.subscription');
 
             $before = null;
-            if (!$this->currentStudy()->getReportsOpen()) {
-                $before = $this->currentStudy()->getCurrentYear();
+            if (!$this->getReportsOpen()) {
+                $before = $this->getCurrentYear();
             }
 
             $latestSubscription = $subModel->getLatestSubscription($this->currentStudy(), $college->getId(), $before);

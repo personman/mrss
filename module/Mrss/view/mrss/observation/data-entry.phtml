@@ -2,27 +2,35 @@
 <?php /** @var \Mrss\Entity\BenchmarkGroup[] $benchmarkGroups */ ?>
 
 
-<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=6', 'screen,print') ?>
+<?= $this->headLink()->appendStylesheet('/css/data-entry.css?v=9', 'screen,print') ?>
 <?= $this->headLink()->appendStylesheet('/css/data-entry-print.css?v=6', 'print') ?>
 
 <?php
 $this->headScript()->appendFile(
-    '/js/data-entry.js?v=13',
+    '/js/data-entry.js?v=15',
     'text/javascript'
-); ?>
+);
+
+$systemName = null;
+if ($activeSystem) {
+    $systemName = $activeSystem->getName();
+}
+?>
 
 
 <?= $this->partial(
     'mrss/observation/data-entry-nav.partial.phtml',
     array(
         'benchmarkGroup' => $benchmarkGroup,
-        'benchmarkGroups' => $benchmarkGroups
+        'benchmarkGroups' => $benchmarkGroups,
+        'title' => $systemName
     )
 )
 ?>
 
 <div class="row">
     <div class="col-md-9 span9">
+
         <h1>
             <?= $benchmarkGroup->getName() ?>
         </h1>

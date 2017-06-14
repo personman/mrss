@@ -152,6 +152,10 @@ class BenchmarkController extends AbstractActionController
                 );
             }
 
+        } else {
+            // Set default years
+            $form->get('yearsAvailable')
+                ->setValue(array(2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020));
         }
 
         return array(
@@ -361,6 +365,29 @@ class BenchmarkController extends AbstractActionController
         $response->setStatusCode(200);
         $response->setContent('ok');
         return $response;
+    }
+
+    public function dataAction()
+    {
+        $year = $this->params()->fromRoute('year');
+        $benchmarkId = $this->params()->fromRoute('id');
+
+        $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
+        $subscriptions = $this->getSubscriptionModel()->findByStudyAndYear($this->currentStudy()->getId(), $year);
+
+        return array(
+            'benchmark' => $benchmark,
+            'subscriptions' => $subscriptions,
+            'year' => $year
+        );
+    }
+
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    protected function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
     }
 
     /**

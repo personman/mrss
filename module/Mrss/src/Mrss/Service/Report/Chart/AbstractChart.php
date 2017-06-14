@@ -38,7 +38,10 @@ abstract class AbstractChart
                 'enabled' => false
             ),
             'plotOptions' => array(),
-            'series' => array()
+            'series' => array(),
+            'lang' => array(
+                'thousandsSep' => ','
+            )
         );
 
         // Use this load function for all charts unless they override

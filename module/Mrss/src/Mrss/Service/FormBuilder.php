@@ -46,6 +46,7 @@ class FormBuilder
             $element = $this->addPriorYearValue($element, $elementProvider);
 
             $form->add($element);
+
             $inputFilter->add($elementProvider->getFormElementInputFilter());
         }
 

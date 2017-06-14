@@ -63,7 +63,7 @@ span.smallNote {
 body .explore .form-horizontal .control-label {
     text-align: left;
 }
-body .form-horizontal .controls {
+body .explore .form-horizontal .controls {
     margin-left: 5px;
 }
 .explore form input:not([type=checkbox]):not([type=submit]), .explore form textarea {
@@ -96,8 +96,8 @@ select {
 }
 
 /*#control-group-regression,*/ #control-group-content {
-    display: none;
-}
+                                   display: none;
+                               }
 
 .report-item-preview {
     width: 500px;
@@ -107,7 +107,7 @@ select {
     width: 1140px;
 }
 
-#controls-percentiles {
+#controls-percentiles, #controls-colleges {
     margin: 30px 10px 0 45px;
 }
 #controls-percentiles label input {

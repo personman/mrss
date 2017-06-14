@@ -7,7 +7,7 @@
 
     <?= $this->headTitle() ?>
 
-    <link rel="stylesheet" type="text/css" href="/css/app.css?v=10">
+    <link rel="stylesheet" type="text/css" href="/css/app.css?v=13">
     <link rel="stylesheet" type="text/css" href="/css/content.css">
     <link rel="stylesheet" type="text/css" href="/css/tooltipster.css">
 
@@ -17,7 +17,7 @@
     <link href="/css/content.css" rel="stylesheet" type="text/css" />
 
     <?php if ($cssFile = $this->studyConfig()->css): ?>
-        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=23">
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=32">
     <?php endif ?>
 
     <?php if ($cssPrintFile = $this->studyConfig()->css_print): ?>
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" href="/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 
-    <link rel="stylesheet" href="/css/govbenchmark.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/govbenchmark.css?v=3" type="text/css" media="screen" />
 
 
     <!-- jQuery -->
@@ -47,7 +47,10 @@
 
 
 </head>
-<body>
+
+<?php $bodyId = ($this->bodyId) ? 'id="' . $this->bodyId . '"' : null ?>
+
+<body <?= $bodyId ?>>
 
 <?php $headerTitle = $this->studyConfig()->header_title; ?>
 <?php if ($headerTitle) {
@@ -103,9 +106,22 @@
                     <?= $this->zfcUserLoginWidget() ?>
                 </div>
             <?php else: ?>
-                <div id="headerButtons">
-                    <?php if ($webinar): ?>
+                <div>
+                    <?php if (false): ?>
                         <a href="/webinar" class="btn schedule-btn" role="button" id="schedule-demo">FREE WEBINAR</a>
+
+                    <?php else: ?>
+                        <?php $user = $this->zfcUserIdentity(); ?>
+                        <?php //$this->directionClass = 'dropdown-menu-right' ?>
+
+                        <div class="userMenu" id="bs-example-navbar-collapse-1">
+                            <?php //$menuOptions = array('ulClass' => 'nav pull-right') ?>
+                            <?php $partial = array('mrss/menu/nccbp-navigation.phtml', 'default') ?>
+                            <?= $this->navigation()
+                                ->menu('envisiousernavigation')
+                                ->setPartial($partial)
+                                ->render(); ?>
+                        </div>
                     <?php endif ?>
                 </div>
             <?php endif ?>
@@ -166,16 +182,6 @@
 <!-- END HEADER -->
 
 <!-- BEGIN BODY -->
-<?php foreach ($this->flashMessages(true) as $namespace => $messages) : ?>
-    <?php if (count($messages)) : ?>
-        <?php if ($namespace == 'error') $namespace = 'danger' ?>
-        <?php foreach ($messages as $message) : ?>
-            <div class="alert alert-<?=$namespace?>">
-                <?php echo $message; ?>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-<?php endforeach; ?>
 
 <?php if ($this->zfcUserImpersonatorDisplayName()): ?>
     <div class="impersonation">
@@ -188,10 +194,24 @@
     </div>
 <?php endif ?>
 
+
+<?php foreach ($this->flashMessages(true) as $namespace => $messages) : ?>
+    <?php if (count($messages)) : ?>
+        <?php if ($namespace == 'error') $namespace = 'danger' ?>
+        <?php foreach ($messages as $message) : ?>
+            <div class="alert alert-<?=$namespace?>">
+                <?php echo $message; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+<?php endforeach; ?>
+
+
 <?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
 
+<?php $contentWrapper = (!empty($wrapperId)) ? 'content-' . $wrapperId : 'content'; ?>
 <?php if (empty($this->noWrapper)): ?>
-    <div id="content">
+    <div id="content" class="<?= $contentWrapper ?>">
 
         <div class="container-fluid container">
             <div class="row-fluid row">
@@ -208,7 +228,7 @@
     </div>
 
 <?php else: ?>
-    <div id="content">
+    <div id="content" class="<?= $contentWrapper ?>">
         <div class="container-fluid container">
             <div class="row-fluid row">
                 <div class="span12 col-xs-12">
@@ -300,6 +320,12 @@
 
     </script>
 <?php endif ?>
+
+<script>
+    var institutionsLabel = '<?= $this->studyConfig()->institutions_label ?>';
+    var benchmarkLabel = '<?= ucwords($this->studyConfig()->benchmark_label) ?>';
+
+</script>
 
 </body>
 </html>

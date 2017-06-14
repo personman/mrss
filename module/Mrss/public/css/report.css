@@ -22,7 +22,6 @@ tr.topHeading th.benchmarkGroupTitle {
 .report tbody td {
     text-align: right;
 }
-
 .report tbody td.benchmarkLabel {
     text-align: left;
     font-weight: bold;
@@ -99,9 +98,14 @@ tr.topHeading th.nationalPercentiles {
 }
 
 .nationalDataDefinition {
-    margin: 10px;
+    width: 600px;
+    margin: 10px auto;
     text-align: left;
     font-style: italic;
+}
+
+.chartWrapper, .chart, .highcharts-container {
+    margin: 0 auto;
 }
 
 .report tbody tr.reportSubHeading {

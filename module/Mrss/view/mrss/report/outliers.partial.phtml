@@ -6,7 +6,6 @@ $thStyle = "$tdStyle background: #DDD; color: #000";
 $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
 ?>
 
-
 <style>
     .sourceHeading {
         width: 50%;
@@ -60,7 +59,11 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
                                             $url .= '#' . $baseBenchmark['dbColumn'];
                                             ?>
 
-                                            <td style="min-width: 92px; <?= $tdStyle ?>"><a class="underline" href="<?= $url ?>">Edit Form <?= $baseBenchmark['benchmarkGroup'] ?></a></td>
+                                            <td style="min-width: 92px; <?= $tdStyle ?>">
+                                            <?php if (!$system): ?>
+                                                <a class="underline" href="<?= $url ?>">Edit Form <?= $baseBenchmark['benchmarkGroup'] ?></a>
+                                            <?php endif ?>
+                                            </td>
 
                                         <?php endif ?>
                                     </tr>
@@ -99,7 +102,9 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
 
                             $url .= '#' . $outlier['dbColumn'];
                             ?>
+                            <?php if (!$system): ?>
                             <a href="<?= $url ?>">Edit Form <?= $outlier['benchmarkGroupId'] ?></a>
+                            <?php endif ?>
                         <?php endif ?>
                     </td>
                 <?php endif ?>

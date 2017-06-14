@@ -43,21 +43,23 @@ class Outliers extends Report
         return $stats;
     }
 
-    public function clearOutliers($year)
+    public function clearOutliers($year, $systemId)
     {
         // Clear any existing outliers for the year/study
         $studyId = $this->getStudy()->getId();
         $this->getOutlierModel()
-            ->deleteByStudyAndYear($studyId, $year);
+            ->deleteByStudyAndYear($studyId, $year, $systemId);
         $this->getOutlierModel()->getEntityManager()->flush();
     }
 
-    public function calculateOutlier($benchmark, $year)
+    public function calculateOutlier($benchmark, $year, $systemId = null)
     {
         $calculator = $this->getCalculator();
 
+        $system = $this->getSystemModel()->find($systemId);
+
         // Get the data for all subscribers (skip nulls)
-        $data = $this->collectDataForBenchmark($benchmark, $year);
+        $data = $this->collectDataForBenchmark($benchmark, $year, true, $system);
 
         // If there's no data, move on
         if (empty($data)) {
@@ -78,6 +80,7 @@ class Outliers extends Report
             $outlier->setYear($year);
             $problem = $outlierInfo['problem'];
             $outlier->setProblem($problem);
+            $outlier->setSystem($system);
             $college = $this->getOutlierModel()->getEntityManager()
                 ->getReference('Mrss\Entity\College', $outlierInfo['college']);
             $outlier->setCollege($college);
@@ -100,6 +103,7 @@ class Outliers extends Report
                     $outlier->setYear($year);
                     $problem = 'missing';
                     $outlier->setProblem($problem);
+                    $outlier->setSystem($system);
                     $college = $this->getOutlierModel()->getEntityManager()
                         ->getReference('Mrss\Entity\College', $collegeId);
                     $outlier->setCollege($college);
@@ -306,7 +310,7 @@ class Outliers extends Report
         return $equation;
     }
 
-    public function getOutlierReport(College $college)
+    public function getOutlierReport(College $college, $system = null)
     {
         $report = array();
         $study = $this->getStudy();
@@ -317,7 +321,7 @@ class Outliers extends Report
 
 
         $outliers = $this->getOutlierModel()
-            ->findByCollegeStudyAndYear($college, $study, $year);
+            ->findByCollegeStudyAndYear($college, $study, $year, $system);
         $report[] = array(
             'college' => $college,
             'outliers' => $this->prepareOutlierRows($outliers)

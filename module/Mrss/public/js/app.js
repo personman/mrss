@@ -4,10 +4,26 @@ var menuSearchPlaceholder = 'Search Institutions';
 
 $(function() {
     addAdminMenuSearch();
+    configHighcharts();
 });
+
+function configHighcharts()
+{
+    if (typeof Highcharts != 'undefined') {
+        Highcharts.setOptions({
+            lang: {
+                thousandsSep: ','
+            }
+        });
+    }
+}
 
 function addAdminMenuSearch()
 {
+    if (institutionsLabel) {
+        menuSearchPlaceholder = menuSearchPlaceholder.replace('Institutions', institutionsLabel);
+    }
+
     // The li and form
     var li = $('<li>');
     var form = $('<form>');
@@ -138,6 +154,40 @@ function minuteSecondFormatter(val)
     return val
 }
 
+function numericRadio(val, map)
+{
+    var formatted = null;
+
+    if (map) {
+        var value = null;
+        if (typeof val.value != 'undefined') {
+            value = val.value
+        } else {
+            value = val.y
+        }
+
+        map = jQuery.parseJSON(map)
+        var keys = Object.keys(map)
+        var nearestKey = closest(value, keys)
+        formatted = map[nearestKey];
+    }
+
+    return formatted;
+}
+
+function closest (num, arr) {
+    var curr = arr[0];
+    var diff = Math.abs (num - curr);
+    for (var val = 0; val < arr.length; val++) {
+        var newdiff = Math.abs (num - arr[val]);
+        if (newdiff < diff) {
+            diff = newdiff;
+            curr = arr[val];
+        }
+    }
+    return curr;
+}
+
 function pad(pad, str, padLeft) {
     if (typeof str === 'undefined')
         return pad;
@@ -146,4 +196,10 @@ function pad(pad, str, padLeft) {
     } else {
         return (str + pad).substring(0, pad.length);
     }
+}
+
+function ucwords (str) {
+    return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+        return $1.toUpperCase();
+    });
 }

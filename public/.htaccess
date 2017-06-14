@@ -6,6 +6,24 @@ order allow,deny
 allow from all
 </Files>
 
+
+#favicon
+RewriteCond %{HTTP_HOST} ^maximizingresources.org$ [NC]
+RewriteRule ^favicon\.ico$ images/max-favicon.ico [L,NC]
+
+RewriteCond %{HTTP_HOST} ^gb.dan.com$ [NC]
+RewriteRule ^favicon\.ico$ envisio-favicon.ico [L,NC]
+
+RewriteCond %{HTTP_HOST} ^app.benchmark.envisio.com$ [NC]
+RewriteRule ^favicon\.ico$ envisio-favicon.ico [L,NC]
+
+RewriteCond %{HTTP_HOST} ^workforceproject.org$ [NC]
+RewriteRule ^favicon\.ico$ images/workforce-favicon.ico [L,NC]
+
+RewriteCond %{HTTP_HOST} ^alpha.nccbp.dan.com$ [NC]
+RewriteRule ^favicon\.ico$ images/nccbp-favicon.ico [L,NC]
+
+
 # No access to the IP address
 RewriteCond %{HTTP_HOST} ^192\.232\.207\.42 [NC]
 RewriteRule .* - [F]
@@ -125,16 +143,6 @@ RewriteRule ^.*$ - [NC,L]
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]
 RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
-
-#favicon
-RewriteCond %{HTTP_HOST} ^maximizingresources.org$ [NC]
-RewriteRule ^favicon\.ico$ images/max-favicon.ico [L,NC]
-
-RewriteCond %{HTTP_HOST} ^workforceproject.org$ [NC]
-RewriteRule ^favicon\.ico$ images/workforce-favicon.ico [L,NC]
-
-RewriteCond %{HTTP_HOST} ^alpha.nccbp.dan.com$ [NC]
-RewriteRule ^favicon\.ico$ images/nccbp-favicon.ico [L,NC]
 
 
 # compress text, html, javascript, css, xml:

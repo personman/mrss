@@ -8,11 +8,13 @@
 
 
 <style type="text/css">
-
+    select option {
+        white-space: pre;
+    }
 </style>
 
 <?php
-$this->headLink()->appendStylesheet('/css/custom-report.css?v=3');
+$this->headLink()->appendStylesheet('/css/custom-report.css?v=4');
 $this->headLink()->appendStylesheet('/css/chosen.min.css');
 
 $this->headScript()->appendFile(
@@ -30,7 +32,7 @@ $this->headScript()->appendFile(
 );*/
 
 $this->headScript()->appendFile(
-    '/js/explore.js?v=8',
+    '/js/explore.js?v=10',
     'text/javascript'
 );
 
@@ -46,6 +48,8 @@ $this->headScript()->appendFile(
         <?php $this->headScript()->captureStart() ?>
         var defaultBreakpoints = <?= json_encode($defaultBreakpoints) ?>;
         var benchmarksByInputType = <?= json_encode($benchmarksByInputType) ?>;
+        var peerMembers = <?= json_encode($peerMembers) ?>;
+        var formData = <?= json_encode($formData) ?>;
         <?php $this->headScript()->captureEnd() ?>
     </script>
 <?php endif ?>

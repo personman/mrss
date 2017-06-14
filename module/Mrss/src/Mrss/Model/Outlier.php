@@ -65,12 +65,14 @@ class Outlier extends AbstractModel
     public function findByCollegeStudyAndYear(
         CollegeEntity $college,
         StudyEntity $study,
-        $year
+        $year,
+        $system = null
     ) {
         $criteria = array(
             'college' => $college,
             'study' => $study,
-            'year' => $year
+            'year' => $year,
+            'system' => $system
         );
 
         return $this->getRepository()->findBy($criteria);
@@ -128,13 +130,14 @@ class Outlier extends AbstractModel
         $this->getEntityManager()->flush();
     }
 
-    public function deleteByStudyAndYear($studyId, $year)
+    public function deleteByStudyAndYear($studyId, $year, $systemId = null)
     {
         $query = $this->getEntityManager()->createQuery(
-            'DELETE Mrss\Entity\Outlier p WHERE p.year = ?1 AND p.study = ?2'
+            'DELETE Mrss\Entity\Outlier p WHERE p.year = ?1 AND p.study = ?2 AND p.system = ?3'
         );
         $query->setParameter(1, $year);
         $query->setParameter(2, $studyId);
+        $query->setParameter(3, $systemId);
 
         $query->execute();
     }

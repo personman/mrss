@@ -40,6 +40,13 @@ class SystemMembership
     protected $dataVisibility;
 
     /**
+     * @Gedmo\Mapping\Annotation\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -127,5 +134,20 @@ class SystemMembership
     {
         $this->dataVisibility = $dataVisibility;
         return $this;
+    }
+
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 }

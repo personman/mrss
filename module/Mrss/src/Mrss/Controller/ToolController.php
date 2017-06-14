@@ -285,7 +285,8 @@ class ToolController extends AbstractActionController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
-        $subs = $study->getSubscriptionsForYear();
+        //$subs = $study->getSubscriptionsForYear(); // Current year only, faster
+        $subs = $study->getSubscriptions(); // All years, slower
 
         $dbColumnsIncluded = $study->getDbColumnsIncludedInCompletion();
 
@@ -1606,8 +1607,9 @@ class ToolController extends AbstractActionController
 
     public function importDataAction()
     {
+        $this->longRunningScript();
         $importer = $this->getServiceLocator()->get('service.import.data');
 
-        $importer->import();
+        $importer->import($this->getServiceLocator());
     }
 }

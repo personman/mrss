@@ -13,7 +13,7 @@
 
 // Note: This navigation setup is modified by module/Mrss/src/Mrss/Service/
 // NavigationFactory.php
-return array(
+$navigation = array(
     'navigation' => array(
         'default' => array(
             'home' => array(
@@ -635,9 +635,65 @@ return array(
                 'pages' => getAdminMenu()
             )
         ),
-        'admin' => getAdminMenu()
+        'envisio' => array(
+            'home' => array(
+                'label' => 'Home',
+                'route' => 'home'
+            ),
+
+            'data-entry' => getDataMenu(),
+            'reports' => getReportMenu(),
+
+            'data-documentation' => array(
+                'label' => 'Resources',
+                'uri' => '#',
+                'pages' => array(
+                    'faq' => array(
+                        'label' => 'Historical Data',
+                        'uri' => '/submitted-values'
+                    ),
+                    'calculations' => array(
+                        'label' => 'Formulas',
+                        'uri' => '/calculations'
+                    ),
+                    'dictionary' => array(
+                        'label' => 'Data Dictionary',
+                        'uri' => '/data-dictionary'
+                    ),
+                )
+            ),
+            'help' => array(
+                'label' => 'Help',
+                'uri' => '#',
+                'pages' => array(
+                    /*'faq' => array(
+                        'label' => 'FAQ',
+                        'uri' => '/faq'
+                    ),*/
+                    'contact' => array(
+                        'label' => 'Contact Us',
+                        'uri' => '/contact'
+                    ),
+                )
+            ),
+            'account' => getAccountMenu(),
+            'admin' => array(
+                'label' => '<span class="glyphicon glyphicon-cog icon icon-cog adminMenuIcon"></span>',
+                'uri' => '/admin',
+                'resource' => 'adminMenu',
+                'privilege' => 'view',
+                'pages' => getAdminMenu()
+            )
+        ),
+        'admin' => getAdminMenu(),
+        //'envisiousernavigation' => getAdminMenu(),//getUserMenu()
     )
 );
+
+//prd($navigation['navigation']['nccbp']);
+$navigation['navigation']['envisiousernavigation'] = getUserMenu(false);
+
+return $navigation;
 
 
 
@@ -810,7 +866,7 @@ function getAdminMenu()
 {
     return array(
     'dashboard' => array(
-        'label' => 'Memberships',
+        'label' => 'Overview',
         'route' => 'admin'
     ),
     'institutions' => array(
@@ -818,6 +874,10 @@ function getAdminMenu()
         'controller' => 'colleges',
         'action' => 'index',
         'route' => 'colleges'
+    ),
+    'systems' => array(
+        'label' => 'Systems',
+        'route' => 'systems'
     ),
     'studies' => array(
         'label' => 'Study Setup',
@@ -839,10 +899,6 @@ function getAdminMenu()
     'demographic-criteria' => array(
         'label' => 'Demographic Criteria',
         'route' => 'criteria'
-    ),
-    array(
-        'label' => 'Systems',
-        'route' => 'systems'
     ),
     array(
         'label' => 'Pages',
@@ -867,4 +923,44 @@ function getAdminMenu()
     )*/
 );
 
+}
+
+
+function getUserMenu($includeAdmin = false)
+{
+    $menu = array(
+        'user' => array(
+            'label' => 'Your Account',
+            'route' => 'data-entry',
+            'class' => 'dropdown-menu-right',
+            'pages' => array(
+                'account' => array(
+                    'label' => 'My Settings',
+                    'route' => 'account',
+                ),
+                'institution' => array(
+                    'label' => 'Manage Your City',
+                    'route' => 'institution/edit'
+                ),
+                'users' => array(
+                    'label' => 'Manage Your City\'s Users',
+                    'route' => 'institution/users'
+                ),
+                'peer-groups' => array(
+                    'label' => 'Manage Your Peer Groups',
+                    'route' => 'peer-groups'
+                ),
+                'logout' => array(
+                    'label' => 'Sign Out',
+                    'route' => 'zfcuser/logout',
+                )
+            )
+        )
+    );
+
+    if ($includeAdmin) {
+        $menu['user']['pages']['admin'] = getAdminMenu();
+    }
+
+    return $menu;
 }

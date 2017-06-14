@@ -48,6 +48,17 @@ return array(
                 )
             ),
 
+            'members' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/members',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action' => 'index'
+                    )
+                )
+            ),
+
             'submitted-values' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
@@ -61,6 +72,19 @@ return array(
                     )
                 )
             ),
+            'network-switch' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/network-switch/:systemId',
+                    'defaults' => array(
+                        'controller' => 'observations',
+                        'action' => 'dataEntrySwitch',
+                        'systemId' => null
+                    )
+                ),
+            ),
+
             // Data entry route with benchmarkGroup id
             // We could support a benchmarkGroup short name for nicer urls in the
             // future
@@ -836,6 +860,17 @@ return array(
                             )
                         )
                     ),
+                    'data' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/data/:id/:year',
+                            'defaults' => array(
+                                'action' => 'data',
+                                'id' => 0,
+                                'year' => null
+                            )
+                        )
+                    ),
                     'add' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -1129,12 +1164,13 @@ return array(
                     'calculate-outlier' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/calculate-outlier/:benchmark/:year[/:clear]',
+                            'route' => '/calculate-outlier/:benchmark/:year/:system[/:clear]',
                             'defaults' => array(
                                 'action' => 'calculateOutlier',
                                 'benchmark' => 0,
                                 'clear' => false,
-                                'year' => null
+                                'year' => null,
+                                'system' => 0
                             )
                         )
                     ),
@@ -1186,6 +1222,19 @@ return array(
                         'type' => 'segment',
                         'options' => array(
                             'route' => '/system[/:year][/:format]',
+                            'defaults' => array(
+                                'action' => 'national',
+                                'year' => null,
+                                'format' => 'html',
+                                'system' => true
+                            )
+                        )
+                    ),
+                    // Alias for system above
+                    'network' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/network[/:year][/:format]',
                             'defaults' => array(
                                 'action' => 'national',
                                 'year' => null,
@@ -1791,6 +1840,15 @@ return array(
                                 'action' => 'definitions'
                             )
                         )
+                    ),
+                    'settings' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/settings',
+                            'defaults' => array(
+                                'action' => 'accountSettings'
+                            )
+                        )
                     )
                 )
             ),
@@ -1932,6 +1990,16 @@ return array(
                                 'action' => 'reportAccess'
                             )
                         )
+                    ),
+                    'add' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/add/:college',
+                            'defaults' => array(
+                                'action' => 'adminAdd',
+                                'college' => 0
+                            )
+                        )
                     )
                 )
             ),
@@ -1954,6 +2022,17 @@ return array(
                             'defaults' => array(
                                 'action' => 'memberships',
                                 'year' => null
+                            )
+                        )
+                    ),
+                    'memberships-edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/memberships/edit/:id',
+                            'defaults' => array(
+                                'action' => 'adminEdit',
+                                'controller' => 'subscription',
+                                'id' => null
                             )
                         )
                     ),
@@ -2026,6 +2105,15 @@ return array(
                             'route' => '/clean-up',
                             'defaults' => array(
                                 'action' => 'cleanUp',
+                            )
+                        )
+                    ),
+                    'settings' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/settings',
+                            'defaults' => array(
+                                'action' => 'settings',
                             )
                         )
                     ),
@@ -2521,7 +2609,7 @@ return array(
                     )
                 )
             ),
-            'members' => array(
+            /*'members' => array(
                 'type' => 'segment',
                 'options' => array(
                     'route' => '/members',
@@ -2530,7 +2618,7 @@ return array(
                         'action' => 'view'
                     )
                 )
-            ),
+            ),*/
             'reset-password' => array(
                 'type' => 'literal',
                 'options' => array(

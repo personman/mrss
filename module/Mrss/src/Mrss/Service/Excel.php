@@ -14,8 +14,9 @@ use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
 use PHPExcel_Cell;
 use PHPExcel_Shared_Date;
+use PHPExcel_Style_Alignment;
 
-class Excel
+class Excel extends Report
 {
     // Maximum row count
     protected $rowCount = 300;
@@ -51,12 +52,22 @@ class Excel
 
     protected $studyConfig;
 
+    protected $year;
+
+    protected $exportFilename = 'data-export.xlsx';
+
+    protected $fromTemplate = false;
+
+    protected $headingRowStyle = null;
+
     /**
      * @deprecated
      * @param Subscription $subscription
      */
     public function getExcelForSubscription(Subscription $subscription)
     {
+        $this->year = $subscription->getYear();
+
         $excel = new PHPExcel();
         $this->writeHeaders($excel);
         $this->writeBody($excel, $subscription);
@@ -71,11 +82,13 @@ class Excel
      */
     public function getExcelForSubscriptions($subscriptions)
     {
-        $excel = new PHPExcel();
+        $excel = $this->createOrOpenExcel();
+
         $subscription = $subscriptions[0];
+        $this->year = $subscription->getYear();
 
         if ($subscription->getStudy()->getId() != 4) {
-            $this->writeHeadersSystem($excel, $subscriptions);
+            $this->writeHeadersSystem($excel->getActiveSheet(), $subscriptions);
             $this->writeBodySystem($excel, $subscriptions);
         }
 
@@ -95,8 +108,33 @@ class Excel
             }
         }
 
+        if ($this->getStudyConfig()->use_structures) {
+            $collegeName = $subscription->getCollege()->getName();
+            $systemName = $this->getSystem()->getName();
+            $systemName = "$collegeName $systemName";
+            $systemName = str_replace(' ', '-', $systemName);
+
+            $this->exportFilename = $systemName . '-' . $this->year . '.xlsx';
+        }
 
         $this->download($excel);
+    }
+
+    protected function createOrOpenExcel()
+    {
+        // Open the template Excel file (this takes some time)
+        $template = $this->getStudyConfig()->export_template;
+        $filename = 'data/imports/' . $template;
+
+
+        if ($template && $excel = PHPExcel_IOFactory::load($filename)) {
+            // Ok
+            $this->fromTemplate = true;
+        } else {
+            $excel = new PHPExcel();
+        }
+
+        return $excel;
     }
 
     public function writeHeaders(PHPExcel $spreadsheet)
@@ -122,31 +160,41 @@ class Excel
         $headerRow->getFont()->setBold(true);
 
         // Label column align right
-        $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
-            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        if (!$this->fromTemplate) {
+            $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
+                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-        // Value column background
-        $sheet->getStyle('B1:B' . $this->rowCount)->getFill()
-            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
+            // Value column background
+            $sheet->getStyle('B1:B' . $this->rowCount)->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
+        }
 
     }
 
     /**
-     * @param PHPExcel $spreadsheet
+     * @param PHPExcel_Worksheet $sheet
      * @param Subscription[] $subscriptions
      */
-    public function writeHeadersSystem(PHPExcel $spreadsheet, $subscriptions)
+    public function writeHeadersSystem(PHPExcel_Worksheet $sheet, $subscriptions)
     {
-        $sheet = $spreadsheet->getActiveSheet();
 
-        // Benchmark label
-        $sheet->setCellValueByColumnAndRow(0, 1, 'Label');
-        $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+        $benchmarkLabel = 'Label';
+        $dataDefinitionLabel = 'Data Definition';
 
         // Label column align right
-        $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
-            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        if (!$this->fromTemplate) {
+            $sheet->getStyle('A1:A' . $this->rowCount)->getAlignment()
+                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        } else {
+            $benchmarkLabel = strtoupper($benchmarkLabel);
+            $dataDefinitionLabel = strtoupper($dataDefinitionLabel);
+        }
+
+        // Benchmark label
+        $sheet->setCellValueByColumnAndRow(0, 1, $benchmarkLabel);
+        $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+
 
         $column = 1;
         foreach ($subscriptions as $subscription) {
@@ -154,12 +202,16 @@ class Excel
             $collegeHeader = $college->getName() . " \r("
                 . $college->getIpeds() . ')';
 
+            if ($this->fromTemplate) {
+                $collegeHeader = strtoupper($collegeHeader);
+            }
+
             $sheet->setCellValueByColumnAndRow($column, 1, $collegeHeader);
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
             $column++;
         }
 
-        $sheet->setCellValueByColumnAndRow($column, 1, 'Data Definition');
+        $sheet->setCellValueByColumnAndRow($column, 1, $dataDefinitionLabel);
         $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         $column++;
 
@@ -170,17 +222,22 @@ class Excel
         // Bold header
         $headerRow = $sheet->getStyle('A1:Z1');
         $headerRow->getFont()->setBold(true);
+
+        $sheet->getStyle('A1:C1')->getAlignment()
+            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:C1')->getAlignment()
+            ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
     }
 
     public function writeBody(PHPExcel $spreadsheet, Subscription $subscription)
     {
-        $year = $subscription->getStudy()->getCurrentYear();
+        $this->year = $subscription->getStudy()->getCurrentYear();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Loop over each benchmark, adding a row
         $row = 2;
         foreach ($subscription->getStudy()->getBenchmarkGroups() as $benchmarkGroup) {
-            $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($year);
+            $benchmarks = $benchmarkGroup->getNonComputedBenchmarksForYear($this->year);
             $this->writeBenchmarkGroupRow($sheet, $row, $benchmarkGroup);
             $row++;
 
@@ -199,26 +256,88 @@ class Excel
     {
         $exampleSubscription = $subscriptions[0];
         $study = $exampleSubscription->getStudy();
-        $year = $study->getCurrentYear();
+        $this->year = $study->getCurrentYear();
 
         $sheet = $spreadsheet->getActiveSheet();
+        //$benchmarkGroups = $study->getBenchmarkGroups();
+        $benchmarkGroups = $this->getBenchmarkGroups($exampleSubscription);
 
-        // Loop over each benchmark, adding a row
-        $row = 2;
-        foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
-            $this->writeBenchmarkGroupRow($sheet, $row, $benchmarkGroup);
-            $row++;
+        if (false) {
+            // Loop over each benchmark, adding a row
+            $this->row = 2;
+            foreach ($benchmarkGroups as $benchmarkGroup) {
+                $this->writeBenchmarkGroup($sheet, $benchmarkGroup, $subscriptions);
+            }
+        } else {
+            // Remove the original
+            $originalSheet = $spreadsheet->getActiveSheet()->copy();
+            $this->headingRowStyle = $originalSheet->getStyle('A2');
+            //$originalSheet->removeRow(2);
 
-            $benchmarks = $benchmarkGroup->getChildren($year, false);
-            foreach ($benchmarks as $benchmark) {
-                if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
-                    $this->writeSubHeading($sheet, $row, $benchmark);
+            $spreadsheet->removeSheetByIndex($spreadsheet->getActiveSheetIndex());
+
+            // Add one benchmark group per sheet
+            $index = 0;
+            foreach ($benchmarkGroups as $benchmarkGroup) {
+                // Title
+                $shortTitle = $benchmarkGroup->getUrl() . ' ' . $benchmarkGroup->getName();
+                $shortTitle = substr($shortTitle, 0, 31);
+                $shortTitle = str_replace(array('&', '/'), array('', ' '), $shortTitle);
+
+                // Clone or create?
+                if ($this->fromTemplate) {
+                    $sheet = clone $originalSheet;
+                    $sheet->removeRow(2);
+                    $sheet->setTitle($shortTitle);
+                    $spreadsheet->addSheet($sheet);
+                    $spreadsheet->setActiveSheetIndex($spreadsheet->getIndex($sheet));
                 } else {
-                    $this->writeRowSystem($sheet, $row, $benchmark, $subscriptions);
+                    $sheet = $spreadsheet->createSheet($index);
+                    $sheet->setTitle($shortTitle);
                 }
 
-                $row++;
+                //$spreadsheet->addSheet($sheet, $index);
+                $spreadsheet->setActiveSheetIndex($index);
+
+
+
+                $this->writeHeadersSystem($spreadsheet->getActiveSheet(), $subscriptions);
+
+                $this->row = 2;
+                $this->writeBenchmarkGroup($sheet, $benchmarkGroup, $subscriptions);
+
+                $sheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+                $sheet->getColumnDimensionByColumn(1)->setAutoSize(true);
+                $sheet->getColumnDimension('C')->setWidth(90);
+                $sheet->getColumnDimension('C')->setAutoSize(false);
+
+                //$sheet->getColumnDimensionByColumn(2)->setAutoSize(true);
+                $sheet->getStyle('C1:C' . $this->rowCount)->getAlignment()->setWrapText(true);
+                $sheet->getStyle('A1:C' . $this->rowCount)->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
+                //$sheet->getColumnDimension(3)->setVisible(false);
+
+                $index++;
             }
+
+            // At the end, make the first sheet active
+            $spreadsheet->setActiveSheetIndex(0);
+        }
+    }
+
+    protected function writeBenchmarkGroup(PHPExcel_Worksheet $sheet, $benchmarkGroup, $subscriptions)
+    {
+        $this->writeBenchmarkGroupRow($sheet, $this->row, $benchmarkGroup);
+        $this->row++;
+
+        $benchmarks = $benchmarkGroup->getChildren($this->year, false);
+        foreach ($benchmarks as $benchmark) {
+            if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
+                $this->writeSubHeading($sheet, $this->row, $benchmark);
+            } else {
+                $this->writeRowSystem($sheet, $this->row, $benchmark, $subscriptions);
+            }
+
+            $this->row++;
         }
     }
 
@@ -228,13 +347,19 @@ class Excel
         $sheet->setCellValue('A' . $row, $benchmarkGroup->getName());
 
         $theRow = $sheet->getStyle('A' . $row);
+
+        if ($this->fromTemplate) {
+            $this->styleHeading($sheet, $row);
+        } else {
+            $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()->setARGB($this->blankBackground);
+        }
+
         $theRow->getFont()->setBold(true);
 
-        $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
-            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($this->blankBackground);
-
         $sheet->getStyle('A' . $row)->getFont()->setSize(14);
+        $sheet->getRowDimension($row)->setRowHeight(-1);
     }
 
     /**
@@ -282,19 +407,25 @@ class Excel
             $value = $subscription->getObservation()->get($benchmark->getDbColumn());
             $sheet->setCellValueByColumnAndRow($column, $row, $value);
 
-            $sheet->getStyleByColumnAndRow($column, $row)->getFill()
-                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-                ->getStartColor()->setARGB($this->getValueColumnBackground());
-
+            if (!$this->fromTemplate) {
+                $sheet->getStyleByColumnAndRow($column, $row)->getFill()
+                    ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB($this->getValueColumnBackground());
+            }
 
             $column++;
         }
+
+        $definition = $benchmark->getDescription();
+
+        // Remove html special chars
+        $definition = preg_replace("/&#?[a-z0-9]{2,8};/i", "", $definition);
 
         // Write the data definition
         $sheet->setCellValueByColumnAndRow(
             $column,
             $row,
-            $this->getVariableSubstitution()->substitute(strip_tags($benchmark->getDescription()))
+            $this->getVariableSubstitution()->substitute(strip_tags($definition))
         );
         $column++;
 
@@ -307,12 +438,34 @@ class Excel
         $subheading = $this->getVariableSubstitution()->substitute($heading->getName());
         $sheet->setCellValue('A' . $row, $subheading);
 
-        $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
-            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($this->blankBackground);
+        if ($this->fromTemplate) {
+            if ($this->headingRowStyle) {
+                //$sheet->duplicateStyle($this->headingRowStyle, 'A' . $row . ':C' . $row);
 
-        $theRow = $sheet->getStyle('A' . $row);
-        $theRow->getFont()->setBold(true);
+                $this->styleHeading($sheet, $row);
+            }
+        } else {
+            $sheet->getStyle('B' . $row . ':P' . $row)->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()->setARGB($this->blankBackground);
+
+            $theRow = $sheet->getStyle('A' . $row);
+            $theRow->getFont()->setBold(true);
+        }
+
+    }
+
+    protected function styleHeading($sheet, $row)
+    {
+        $sheet->getStyle('A' . $row . ':C' . $row)->getFill()
+            ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('636463');
+
+        $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle('A' . $row)->getFont()->getColor()->setRGB('FFFFFF');
+        $sheet->getStyle('A' . $row)->getFont()->setBold(true);
+
+        $sheet->getRowDimension(1)->setRowHeight(-1);
     }
 
     public function download($spreadsheet)
@@ -327,7 +480,7 @@ class Excel
                 'Content-Type: '.
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             );
-            header('Content-Disposition: attachment;filename="data-export.xlsx"');
+            header('Content-Disposition: attachment;filename="' . $this->exportFilename . '"');
             header('Cache-Control: max-age=0');
 
             $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
@@ -366,14 +519,33 @@ class Excel
         $excel->setActiveSheetIndex(0);
         $sheet = $excel->getActiveSheet();
 
-        // For testing whether a dbColumn is valid
-        $emptyObservation = new Observation();
-        $emptySubObservation = new SubObservation();
 
         $customizedData = $this->applyImportCustomizations($excel);
         if ($customizedData) {
             return $customizedData;
         }
+
+        $data = array();
+        foreach ($excel->getAllSheets() as $sheet) {
+            $sheetData = $this->getDataFromSheet($sheet);
+
+            foreach ($sheetData as $ipeds => $values) {
+                if (isset($data[$ipeds])) {
+                    $data[$ipeds] = array_merge($data[$ipeds], $values);
+                } else {
+                    $data[$ipeds] = $values;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    protected function getDataFromSheet(PHPExcel_Worksheet $sheet)
+    {
+        // For testing whether a dbColumn is valid
+        $emptyObservation = new Observation();
+        $emptySubObservation = new SubObservation();
 
         $colleges = $this->getCollegesFromExcel($sheet);
         $data = array();
@@ -1270,7 +1442,7 @@ class Excel
         return $this->valueColumnBackground;
     }
 
-    public function setStudyConfig($config)
+    /*public function setStudyConfig($config)
     {
         $this->studyConfig = $config;
 
@@ -1280,5 +1452,18 @@ class Excel
     protected function getStudyConfig()
     {
         return $this->studyConfig;
+    }*/
+
+    public function getBenchmarkGroups($subscription)
+    {
+        if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
+            $benchmarkGroups = $system->getDataEntryStructure()->getPages();
+        } else {
+            $study = $this->getStudy();
+            $benchmarkGroups = $study->getBenchmarkGroupsBySubscription($subscription);
+        }
+
+        return $benchmarkGroups;
     }
+
 }
