@@ -27,10 +27,15 @@ class BaseController extends AbstractActionController
     public function getActiveSystem()
     {
         $systemId = $this->getActiveSystemId();
-        $system = $this->getSystemModel()->find($systemId);
+
+        $system = null;
+        if ($systemId) {
+            $system = $this->getSystemModel()->find($systemId);
+        }
 
         return $system;
     }
+
     public function getActiveSystemId()
     {
         $systemId = $this->getActiveSystemContainer()->system_id;

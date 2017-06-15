@@ -594,7 +594,7 @@ class ObservationController extends BaseController
                 'form' => $form,
                 'observation' => $observation,
                 'benchmarkGroup' => $benchmarkGroup,
-                'benchmarkGroups' => $this->getBenchmarkGroups(),
+                'benchmarkGroups' => $this->getBenchmarkGroups($subscription),
                 'nccbpSubscription' => $nccbpSubscription,
                 'variable' => $this->getVariableSubstitutionService(),
                 'dataDefinitionForm' => $this->getDataDefinitionForm(),
