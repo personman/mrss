@@ -276,14 +276,16 @@ class LineBuilder extends ChartBuilder
 
                 $config = $this->getConfig();
 
-                foreach ($config['colleges'] as $collegeId) {
-                    $college = $this->getCollegeModel()->find($collegeId);
-                    $data = $this->getDataForCollege($dbColumn, $college);
+                if (!empty($config['colleges'])) {
+                    foreach ($config['colleges'] as $collegeId) {
+                        $college = $this->getCollegeModel()->find($collegeId);
+                        $data = $this->getDataForCollege($dbColumn, $college);
 
-                    $series[] = array(
-                        'name' => $college->getNameAndState(),
-                        'data' => array_values($data),
-                    );
+                        $series[] = array(
+                            'name' => $college->getNameAndState(),
+                            'data' => array_values($data),
+                        );
+                    }
                 }
             }
 

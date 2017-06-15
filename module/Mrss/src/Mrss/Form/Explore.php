@@ -389,11 +389,13 @@ class Explore extends AbstractForm
     {
         $filter = parent::getInputFilter();
         $filter->get('peerGroup')->setRequired(false);
-        $filter->get('colleges')->setRequired(false);
         $filter->get('hideMine')->setRequired(false);
         $filter->get('percentiles')->setRequired(false);
 
-        //pr($filter);
+        if ($filter->has('colleges')) {
+            $filter->get('colleges')->setRequired(false);
+        }
+
         return $filter;
     }
 

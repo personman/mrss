@@ -95,4 +95,14 @@ class SubscriptionAdmin extends AbstractForm
 
         $this->add($this->getButtonFieldset());
     }
+
+    public function getInputFilter()
+    {
+        $filter = parent::getInputFilter();
+        if ($filter->has('systems')) {
+            $filter->get('systems')->setRequired(false);
+        }
+
+        return $filter;
+    }
 }
