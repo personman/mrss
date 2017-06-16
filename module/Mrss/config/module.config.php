@@ -146,9 +146,10 @@ return array(
                     'print' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/print',
+                            'route' => '/print[/:showData]',
                             'defaults' => array(
-                                'action' => 'print'
+                                'action' => 'print',
+                                'showData' => false
                             )
                         )
                     ),
