@@ -295,6 +295,10 @@ abstract class AbstractChart
         if ($widthSetting == 'full') {
             $config['chart']['width'] = 1020;
             $config['chart']['height'] = 600;
+
+            $config['legend']['layout'] = "horizontal";
+            $config['legend']['width'] = 800;
+            $config['legend']['itemWidth'] = 200;
         }
 
         $this->setConfig($config);
