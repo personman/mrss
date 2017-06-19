@@ -6,6 +6,11 @@
     float: left;
 }
 
+.complete-chart-box.full-width {
+    width: 1040px;
+    height: 640px;
+}
+
 /* Custom reports */
 .customReport p.reportDescription {
     margin-left: 20px;
