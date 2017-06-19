@@ -17,9 +17,15 @@ class Line extends AbstractChart
             'title' => array(
                 'style' => array(
                     'width' => '300px'
+                    //'height' => $this->getHeight()
                 ),
             )
         );
+
+        //pr($config);
+        //if ($this->getWidthSetting() == 'full') {
+            //$config['chart']['height'] = 900;
+        //}
 
         $config['plotOptions'] = array(
             'line' => array(

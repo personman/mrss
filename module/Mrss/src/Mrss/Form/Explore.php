@@ -92,6 +92,23 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'width',
+                'type' => 'Select',
+                'options' => array(
+                    'label' => 'Width'
+                ),
+                'attributes' => array(
+                    'id' => 'width',
+                    'options' => array(
+                        'half' => 'Half',
+                        'full' => 'Full'
+                    )
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'title',
                 'type' => 'Text',
                 'options' => array(

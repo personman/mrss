@@ -71,6 +71,7 @@ class BarBuilder extends ChartBuilder
             ->setSeries($series)
             ->setXFormat($xFormat)
             ->setXLabel($xLabel)
+            ->setWidth($this->getWidthSetting())
             ->setCategories($chartXCategories);
 
         return $barChart->getConfig();

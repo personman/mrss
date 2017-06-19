@@ -147,4 +147,15 @@ class ChartBuilder extends Report
 
         return $system;
     }
+
+    public function getWidthSetting()
+    {
+        $config = $this->getConfig();
+        $setting = 'half';
+        if (!empty($config['width']) && $config['width'] == 'full') {
+            $setting = 'full';
+        }
+
+        return $setting;
+    }
 }

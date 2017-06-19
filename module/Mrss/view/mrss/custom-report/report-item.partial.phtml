@@ -1,11 +1,12 @@
 <?php /** @var \Mrss\Entity\ReportItem $item */ ?>
-<div class="complete-chart-box" id="item_<?= $item->getId() ?>">
+<div class="<?= $item->getWrapperClass() ?>" id="item_<?= $item->getId() ?>">
 
     <?php if ($item->isText()): ?>
         <div class="custom-report-text">
             <?= $item->getText() ?>
         </div>
     <?php else: ?>
+        <?php //pr($item->getCacheChart()); ?>
         <?= $this->chart($item->getCacheChart()) ?>
     <?php endif ?>
 

@@ -68,6 +68,7 @@ function updateFormForChartType()
     var benchmark2 = $('#control-group-benchmark2')
     var yearField = $('#control-group-years')
     var system = $('#control-group-system')
+    var width = $('#control-group-width')
     var peerGroup = $('#control-group-peerGroup')
     var makePeerCohort = $('#control-group-makePeerCohort')
     var colleges = $('#control-group-colleges')
@@ -90,6 +91,7 @@ function updateFormForChartType()
         textEditor.slideDown()
         chart.slideUp()
         footnotes.slideUp()
+        width.show()
         //title.show()
         previewButton.hide()
     } else {
@@ -112,6 +114,7 @@ function updateFormForChartType()
         hideMine.show()
         hideNational.show()
         regression.show()
+        width.show()
     }
 
     // Scatter
@@ -126,6 +129,7 @@ function updateFormForChartType()
         hideMine.show()
         hideNational.show()
         regression.show()
+        width.show()
     }
 
     // Line
@@ -141,6 +145,7 @@ function updateFormForChartType()
         hideNational.show()
         percentiles.show()
         makePeerCohort.show()
+        width.show()
 
         if (getMultiTrendHiddenValue()) {
             addSecondBenchmarkButtonClicked(benchmark2);
@@ -162,6 +167,7 @@ function updateFormForChartType()
         system.show()
         yearField.show()
         percentiles.show()
+        width.show()
         populateDefaultBreakpoints()
     }
 
@@ -173,6 +179,7 @@ function updateFormForChartType()
         system.show()
         yearField.show()
         peerGroup.show()
+        width.show()
     }
 }
 
@@ -182,8 +189,9 @@ function peerGroupChanged()
     var colleges = $('#control-group-colleges')
     var peerSelect = $('#peerGroup')
     var selectedPeerGroup = peerSelect.val()
+    var chartType = $('#inputType').val()
 
-    if (selectedPeerGroup && colleges.find('input').length) {
+    if (selectedPeerGroup && colleges.find('input').length && chartType == 'line') {
         colleges.show()
 
         // Select peer members

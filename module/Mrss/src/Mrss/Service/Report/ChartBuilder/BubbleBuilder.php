@@ -233,6 +233,7 @@ class BubbleBuilder extends ChartBuilder
             ->setXLabel($xLabel)
             ->setYLabel($yLabel)
             ->setRegression($regression)
+            ->setWidth($this->getWidthSetting())
             ->addMedianLines($xMedian, $yMedian);
 
         if (!empty($zBenchmark)) {

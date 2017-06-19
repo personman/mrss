@@ -78,7 +78,8 @@ class LineBuilder extends ChartBuilder
             ->setYLabel($yLabel)
             ->setYFormat($this->getFormat($benchmark))
             ->setCategories($xCategories)
-            ->setSeries($series);
+            ->setSeries($series)
+            ->setWidth($this->getWidthSetting());
 
         // Percentages should have the axis as 0-100
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;

@@ -25,6 +25,10 @@ span.smallNote {
     min-height: 390px;
 }
 
+.full-width .custom-report-text {
+
+}
+
 .custom-report-text h1 {
     border-bottom: none;
 }

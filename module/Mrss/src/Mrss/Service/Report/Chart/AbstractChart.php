@@ -287,4 +287,18 @@ abstract class AbstractChart
 
         $this->setConfig($config);
     }
+
+    public function setWidth($widthSetting = 'half')
+    {
+        $config = $this->getConfig();
+
+        if ($widthSetting == 'full') {
+            $config['chart']['width'] = 1020;
+            $config['chart']['height'] = 600;
+        }
+
+        $this->setConfig($config);
+
+        return $this;
+    }
 }

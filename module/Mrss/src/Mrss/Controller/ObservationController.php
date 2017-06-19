@@ -404,7 +404,7 @@ class ObservationController extends BaseController
 
         }
 
-        // Phasing out observation for subscripton
+        // Phasing out observation for subscription
         $subscription = $observation->getSubscription();
 
         $oldData = $subscription->getAllData();

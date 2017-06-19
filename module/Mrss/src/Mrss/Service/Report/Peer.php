@@ -328,7 +328,7 @@ class Peer extends Report
         return $this->getChartColor(1);
     }
 
-    public function getPeerBarChart(BenchmarkEntity $benchmark, $data, $title = null, $subtitle = null)
+    public function getPeerBarChart(BenchmarkEntity $benchmark, $data, $title = null, $subtitle = null, $widthSetting = 'half')
     {
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
@@ -396,6 +396,7 @@ class Peer extends Report
             ->setSeries($series)
             ->setXFormat($format)
             ->removeTickMarks()
+            ->setWidth($widthSetting)
             ->setCategories($chartXCategories);
 
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
