@@ -187,6 +187,7 @@ function updateFormForChartType()
 function peerGroupChanged()
 {
     var colleges = $('#control-group-colleges')
+    var peerGroupAverage = $('#control-group-peerGroupAverage')
     var peerSelect = $('#peerGroup')
     var selectedPeerGroup = peerSelect.val()
     var chartType = $('#inputType').val()
@@ -215,6 +216,12 @@ function peerGroupChanged()
         })
     } else {
         colleges.hide()
+    }
+
+    if (selectedPeerGroup && chartType == 'line') {
+        peerGroupAverage.show()
+    } else {
+        peerGroupAverage.hide()
     }
 }
 
@@ -320,6 +327,7 @@ function post_to_url(path, params, method) {
 
 function populateDefaultBreakpoints(breakPoints)
 {
+    console.log('populate...')
     var percentileInputs = $('#control-group-percentiles input')
 
     if (!breakPoints) {
@@ -335,7 +343,10 @@ function populateDefaultBreakpoints(breakPoints)
             }
         })
 
-        if (allBlank) {
+        console.log('All blank:')
+        console.log(allBlank)
+
+        if (allBlank && !hasChartPreview()) {
             percentileInputs.each(function() {
                 var input = $(this)
 
@@ -347,6 +358,12 @@ function populateDefaultBreakpoints(breakPoints)
             })
         }
     }
+}
+
+function hasChartPreview()
+{
+    //console.log($('#chart svg').length)
+    return $('#chart svg').length
 }
 
 function getDefaultBreakpoints()

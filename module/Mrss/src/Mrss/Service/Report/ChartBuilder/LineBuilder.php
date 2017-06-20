@@ -178,24 +178,36 @@ class LineBuilder extends ChartBuilder
 
             $mediansData = array();
             $peerMediansData = array();
-            foreach ($percentiles as $percentile) {
-                $medianData = $this->getMedianData($benchmark, $percentile);
+            $peerMeansData = array();
 
-                list($peerMedianData, $peerIds) = $this->getPeerMedianData(
+            if (count($percentiles)) {
+                foreach ($percentiles as $percentile) {
+                    $medianData = $this->getMedianData($benchmark, $percentile);
+
+                    list($peerMedianData, $peerIds, $peerMeansData) = $this->getPeerMedianData(
+                        $peerGroup,
+                        $benchmark,
+                        $percentile
+                    );
+
+                    $mediansData[$percentile] = $medianData;
+                    $peerMediansData[$percentile] = $peerMedianData;
+                }
+            } else {
+                list($peerMedianData, $peerIds, $peerMeansData) = $this->getPeerMedianData(
                     $peerGroup,
                     $benchmark,
-                    $percentile
+                    50
                 );
-
-                $mediansData[$percentile] = $medianData;
-                $peerMediansData[$percentile] = $peerMedianData;
             }
+
 
             $allData[$dbColumn] = array(
                 'data' => $data,
                 'mediansData' => $mediansData,
                 'peerMediansData' => $peerMediansData,
-                'peerIds' => $peerIds
+                'peerIds' => $peerIds,
+                'peerMeansData' => $peerMeansData
             );
         }
 
@@ -215,6 +227,7 @@ class LineBuilder extends ChartBuilder
             $mediansData = $dataForBenchmark['mediansData'];
             $peerMediansData = $dataForBenchmark['peerMediansData'];
             $peerIds = $dataForBenchmark['peerIds'];
+            $peerMeansData = $dataForBenchmark['peerMeansData'];
 
             if (empty($config['hideMine'])) {
                 $name = $this->getCollege()->getName();
@@ -288,6 +301,14 @@ class LineBuilder extends ChartBuilder
                 }
             }
 
+
+            if (!empty($peerGroup) && !empty($config['peerGroupAverage']) && !empty($peerMeansData)) {
+                $series[] = array(
+                    'name' => $peerGroup->getName() . ' Average',
+                    'data' => array_values($peerMeansData)
+                );
+            }
+
             $i++;
         }
 
@@ -355,7 +376,7 @@ class LineBuilder extends ChartBuilder
         $peerIds = array();
         if (!empty($peerGroup)) {
             if ($peerGroup) {
-                list($peerMedianData, $peerIds) = $this->getPeerMedians(
+                list($peerMedianData, $peerIds, $peerMeansData) = $this->getPeerMedians(
                     $peerGroup,
                     $dbColumn,
                     $percentile
@@ -364,8 +385,9 @@ class LineBuilder extends ChartBuilder
         }
 
         $peerMedianData = $this->fillInGaps($peerMedianData);
+        $peerMeansData = $this->fillInGaps($peerMeansData);
 
-        return array($peerMedianData, $peerIds);
+        return array($peerMedianData, $peerIds, $peerMeansData);
     }
 
     public function getPeerFootnote($peerIds)
@@ -452,6 +474,7 @@ class LineBuilder extends ChartBuilder
         */
 
         $peerMedians = array();
+        $peerMeans = array();
         foreach ($years as $year) {
             if (empty($peersData[$year])) {
                 $peerMedians[$year] = null;
@@ -467,6 +490,8 @@ class LineBuilder extends ChartBuilder
                 $result = $calculator->getValueForPercentile($breakpoint);
 
                 $peerMedians[$year] = $result;
+
+                $peerMeans[$year] = $calculator->getMean();
             }
         }
 
@@ -476,7 +501,7 @@ class LineBuilder extends ChartBuilder
             $collegeIds = array();
         }
 
-        return array($peerMedians, $collegeIds);
+        return array($peerMedians, $collegeIds, $peerMeans);
     }
 
     public function getAllPeerData($peerGroup, $years)

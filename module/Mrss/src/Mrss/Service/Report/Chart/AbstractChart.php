@@ -302,7 +302,7 @@ abstract class AbstractChart
         } else {
             $config['legend']['layout'] = "horizontal";
             $config['legend']['width'] = 430;
-            $config['legend']['itemWidth'] = 200;
+            $config['legend']['itemWidth'] = 210;
 
         }
 

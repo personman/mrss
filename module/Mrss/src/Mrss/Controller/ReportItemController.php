@@ -36,6 +36,11 @@ class ReportItemController extends CustomReportController
         $chart = null;
         if ($this->getRequest()->isPost()) {
             $post = $this->params()->fromPost();
+
+            if (!isset($post['percentiles'])) {
+                $post['percentiles'] = array();
+            }
+
             $form->setData($post);
 
             if ($form->isValid()) {
