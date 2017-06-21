@@ -267,10 +267,6 @@ class LineBuilder extends ChartBuilder
                     }
 
                     $nationalLabel = "$nationalOrNetwork $label";
-                    if (!empty($config['multiTrend'])) {
-                        $nationalLabel = $this->getSeriesName($nationalLabel, $dbColumn);
-                    }
-
 
                     $series[] = array(
                         'name' => $this->getSeriesName($nationalLabel, $dbColumn),
@@ -313,7 +309,7 @@ class LineBuilder extends ChartBuilder
 
             if (!empty($peerGroup) && !empty($config['peerGroupAverage']) && !empty($peerMeansData)) {
                 $series[] = array(
-                    'name' => $peerGroup->getName() . ' Average',
+                    'name' => $this->getSeriesName($peerGroup->getName() . ' Average', $dbColumn),
                     'data' => array_values($peerMeansData)
                 );
             }
