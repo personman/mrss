@@ -327,7 +327,6 @@ function post_to_url(path, params, method) {
 
 function populateDefaultBreakpoints(breakPoints)
 {
-    console.log('populate...')
     var percentileInputs = $('#control-group-percentiles input')
 
     if (!breakPoints) {
@@ -342,9 +341,6 @@ function populateDefaultBreakpoints(breakPoints)
                 allBlank = false
             }
         })
-
-        console.log('All blank:')
-        console.log(allBlank)
 
         if (allBlank && !hasChartPreview()) {
             percentileInputs.each(function() {

@@ -235,7 +235,7 @@ function setUpCancelAndPreview()
 function legendLabelFormatter(label, multiTrend)
 {
     var formatted = label.name
-console.log(label.name)
+//console.log(label.name)
     if (multiTrend) {
         var labelParts = label.name.split('|')
         //formatted = "<h4>" + labelParts[1] + "</h4><br>" + labelParts[0]

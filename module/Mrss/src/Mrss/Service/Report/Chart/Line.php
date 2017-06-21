@@ -43,7 +43,7 @@ class Line extends AbstractChart
         //$config['legend']['title']['text'] = "Test Legend Title";
         //$config['legend']['useHTML'] = true;
         //$config['legend']['labelFormatter'] = "legendLabelFormatter";
-        $config['legend']['layout'] = "vertical";
+        //$config['legend']['layout'] = "vertical";
         //$config['multiTrend'] = false;
 
 

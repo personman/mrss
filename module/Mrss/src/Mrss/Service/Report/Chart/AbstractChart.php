@@ -297,12 +297,19 @@ abstract class AbstractChart
             $config['chart']['height'] = 600;
 
             $config['legend']['layout'] = "horizontal";
-            $config['legend']['width'] = 800;
-            $config['legend']['itemWidth'] = 200;
+            $config['legend']['width'] = 860;
+            $config['legend']['itemWidth'] = 210;
+            $config['legend']['itemStyle'] = array(
+                'width' => '175px'
+            );
+
         } else {
             $config['legend']['layout'] = "horizontal";
             $config['legend']['width'] = 430;
             $config['legend']['itemWidth'] = 210;
+            $config['legend']['itemStyle'] = array(
+                'width' => '180px'
+            );
 
         }
 

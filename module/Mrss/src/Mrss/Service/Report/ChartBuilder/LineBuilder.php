@@ -214,6 +214,19 @@ class LineBuilder extends ChartBuilder
         return $allData;
     }
 
+    protected function getSeriesName($name, $dbColumn)
+    {
+        $config = $this->getConfig();
+
+        if (!empty($config['multiTrend'])) {
+            $benchmark = $this->getBenchmark($dbColumn);
+            //$name .= '|' . $benchmark->getDescriptiveReportLabel();
+            $name .= ' - ' . $benchmark->getDescriptiveReportLabel();
+        }
+
+        return $name;
+    }
+
     public function getSeries($allData, $peerGroup = null)
     {
         $config = $this->getConfig();
@@ -230,11 +243,7 @@ class LineBuilder extends ChartBuilder
             $peerMeansData = $dataForBenchmark['peerMeansData'];
 
             if (empty($config['hideMine'])) {
-                $name = $this->getCollege()->getName();
-                if (!empty($config['multiTrend'])) {
-                    $benchmark = $this->getBenchmark($dbColumn);
-                    $name .= '|' . $benchmark->getDescriptiveReportLabel();
-                }
+                $name = $this->getSeriesName($this->getCollege()->getNameAndState(), $dbColumn);
 
                 $series[] = array(
                     'name' => $name,
@@ -259,13 +268,12 @@ class LineBuilder extends ChartBuilder
 
                     $nationalLabel = "$nationalOrNetwork $label";
                     if (!empty($config['multiTrend'])) {
-                        $benchmark = $this->getBenchmark($dbColumn);
-                        $nationalLabel .= '|' . $benchmark->getDescriptiveReportLabel();
+                        $nationalLabel = $this->getSeriesName($nationalLabel, $dbColumn);
                     }
 
 
                     $series[] = array(
-                        'name' => $nationalLabel,
+                        'name' => $this->getSeriesName($nationalLabel, $dbColumn),
                         'data' => array_values($medianData),
                         'color' => $this->getNationalColor($i)
                     );
@@ -281,8 +289,9 @@ class LineBuilder extends ChartBuilder
                         $label = $this->getOrdinal($percentile);
                     }
 
+                    $label = $peerGroup->getName() . ' ' . $label;
                     $series[] = array(
-                        'name' => $peerGroup->getName() . ' ' . $label,
+                        'name' => $this->getSeriesName($label, $dbColumn),
                         'data' => array_values($peerMedianData),
                         'color' => $this->getPeerColor($i)
                     );
@@ -295,7 +304,7 @@ class LineBuilder extends ChartBuilder
                     $data = $this->getDataForCollege($dbColumn, $college);
 
                     $series[] = array(
-                        'name' => $college->getNameAndState(),
+                        'name' => $this->getSeriesName($college->getNameAndState(), $dbColumn),
                         'data' => array_values($data),
                     );
                 }
@@ -311,7 +320,6 @@ class LineBuilder extends ChartBuilder
 
             $i++;
         }
-
 
         return $series;
     }
@@ -372,7 +380,7 @@ class LineBuilder extends ChartBuilder
         $dbColumn = $benchmark->getDbColumn();
 
         // Peer group median
-        $peerMedianData = array();
+        $peerMedianData = $peerMeansData = array();
         $peerIds = array();
         if (!empty($peerGroup)) {
             if ($peerGroup) {
