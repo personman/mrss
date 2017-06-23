@@ -258,18 +258,21 @@ class Explore extends AbstractForm
             );
         }
 
-        $this->add(
-            array(
-                'name' => 'peerGroupAverage',
-                'type' => 'Zend\Form\Element\Checkbox',
-                'options' => array(
-                    'label' => 'Peer Group Average'
-                ),
-                'attributes' => array(
-                    'id' => 'peerGroupAverage'
+        if ($this->studyConfig->use_structures) {
+            $this->add(
+                array(
+                    'name' => 'peerGroupAverage',
+                    'type' => 'Zend\Form\Element\Checkbox',
+                    'options' => array(
+                        'label' => 'Peer Group Average'
+                    ),
+                    'attributes' => array(
+                        'id' => 'peerGroupAverage'
+                    )
                 )
-            )
-        );
+            );
+        }
+
 
         $this->add(
             array(
@@ -421,7 +424,11 @@ class Explore extends AbstractForm
         $filter->get('peerGroup')->setRequired(false);
         $filter->get('hideMine')->setRequired(false);
         $filter->get('percentiles')->setRequired(false);
-        $filter->get('peerGroupAverage')->setRequired(false);
+
+        if ($filter->has('peerGroupAverage')) {
+            $filter->get('peerGroupAverage')->setRequired(false);
+        }
+
 
         if ($filter->has('colleges')) {
             $filter->get('colleges')->setRequired(false);
