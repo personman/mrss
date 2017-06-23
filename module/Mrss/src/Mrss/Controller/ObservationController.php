@@ -441,7 +441,7 @@ class ObservationController extends BaseController
 
         }
 
-        // Phasing out observation for subscripton
+        // Phasing out observation for subscription
         $subscription = $observation->getSubscription();
 
         $oldData = $subscription->getAllData();
@@ -632,8 +632,10 @@ class ObservationController extends BaseController
         if (!is_null($roundTo)) {
             foreach ($form as $element) {
                 $value = $element->getValue();
-                $value = round($value, $roundTo);
-                $element->setValue($value);
+                if (!is_null($value)) {
+                    $value = round($value, $roundTo);
+                    $element->setValue($value);
+                }
             }
         }
 

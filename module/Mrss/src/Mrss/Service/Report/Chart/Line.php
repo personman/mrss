@@ -17,9 +17,15 @@ class Line extends AbstractChart
             'title' => array(
                 'style' => array(
                     'width' => '300px'
+                    //'height' => $this->getHeight()
                 ),
             )
         );
+
+        //pr($config);
+        //if ($this->getWidthSetting() == 'full') {
+            //$config['chart']['height'] = 900;
+        //}
 
         $config['plotOptions'] = array(
             'line' => array(
@@ -37,7 +43,7 @@ class Line extends AbstractChart
         //$config['legend']['title']['text'] = "Test Legend Title";
         //$config['legend']['useHTML'] = true;
         //$config['legend']['labelFormatter'] = "legendLabelFormatter";
-        $config['legend']['layout'] = "vertical";
+        //$config['legend']['layout'] = "vertical";
         //$config['multiTrend'] = false;
 
 

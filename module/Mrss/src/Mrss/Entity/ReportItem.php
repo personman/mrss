@@ -385,4 +385,25 @@ class ReportItem
 
         return $config['content'];
     }
+
+    public function getWidth()
+    {
+        $config = $this->getConfig(true);
+        $width = 'half';
+        if (!empty($config['width']) && $config['width'] == 'full') {
+            $width = 'full';
+        }
+
+        return $width;
+    }
+
+    public function getWrapperClass()
+    {
+        $class = 'complete-chart-box';
+        if ($this->getWidth() == 'full') {
+            $class = 'complete-chart-box full-width';
+        }
+
+        return $class;
+    }
 }

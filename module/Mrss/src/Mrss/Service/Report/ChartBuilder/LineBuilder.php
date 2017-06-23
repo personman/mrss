@@ -78,7 +78,8 @@ class LineBuilder extends ChartBuilder
             ->setYLabel($yLabel)
             ->setYFormat($this->getFormat($benchmark))
             ->setCategories($xCategories)
-            ->setSeries($series);
+            ->setSeries($series)
+            ->setWidth($this->getWidthSetting());
 
         // Percentages should have the axis as 0-100
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
@@ -177,28 +178,53 @@ class LineBuilder extends ChartBuilder
 
             $mediansData = array();
             $peerMediansData = array();
-            foreach ($percentiles as $percentile) {
-                $medianData = $this->getMedianData($benchmark, $percentile);
+            $peerMeansData = array();
 
-                list($peerMedianData, $peerIds) = $this->getPeerMedianData(
+            if (count($percentiles)) {
+                foreach ($percentiles as $percentile) {
+                    $medianData = $this->getMedianData($benchmark, $percentile);
+
+                    list($peerMedianData, $peerIds, $peerMeansData) = $this->getPeerMedianData(
+                        $peerGroup,
+                        $benchmark,
+                        $percentile
+                    );
+
+                    $mediansData[$percentile] = $medianData;
+                    $peerMediansData[$percentile] = $peerMedianData;
+                }
+            } else {
+                list($peerMedianData, $peerIds, $peerMeansData) = $this->getPeerMedianData(
                     $peerGroup,
                     $benchmark,
-                    $percentile
+                    50
                 );
-
-                $mediansData[$percentile] = $medianData;
-                $peerMediansData[$percentile] = $peerMedianData;
             }
+
 
             $allData[$dbColumn] = array(
                 'data' => $data,
                 'mediansData' => $mediansData,
                 'peerMediansData' => $peerMediansData,
-                'peerIds' => $peerIds
+                'peerIds' => $peerIds,
+                'peerMeansData' => $peerMeansData
             );
         }
 
         return $allData;
+    }
+
+    protected function getSeriesName($name, $dbColumn)
+    {
+        $config = $this->getConfig();
+
+        if (!empty($config['multiTrend'])) {
+            $benchmark = $this->getBenchmark($dbColumn);
+            //$name .= '|' . $benchmark->getDescriptiveReportLabel();
+            $name .= ' - ' . $benchmark->getDescriptiveReportLabel();
+        }
+
+        return $name;
     }
 
     public function getSeries($allData, $peerGroup = null)
@@ -214,13 +240,10 @@ class LineBuilder extends ChartBuilder
             $mediansData = $dataForBenchmark['mediansData'];
             $peerMediansData = $dataForBenchmark['peerMediansData'];
             $peerIds = $dataForBenchmark['peerIds'];
+            $peerMeansData = $dataForBenchmark['peerMeansData'];
 
             if (empty($config['hideMine'])) {
-                $name = $this->getCollege()->getName();
-                if (!empty($config['multiTrend'])) {
-                    $benchmark = $this->getBenchmark($dbColumn);
-                    $name .= '|' . $benchmark->getDescriptiveReportLabel();
-                }
+                $name = $this->getSeriesName($this->getCollege()->getNameAndState(), $dbColumn);
 
                 $series[] = array(
                     'name' => $name,
@@ -244,14 +267,9 @@ class LineBuilder extends ChartBuilder
                     }
 
                     $nationalLabel = "$nationalOrNetwork $label";
-                    if (!empty($config['multiTrend'])) {
-                        $benchmark = $this->getBenchmark($dbColumn);
-                        $nationalLabel .= '|' . $benchmark->getDescriptiveReportLabel();
-                    }
-
 
                     $series[] = array(
-                        'name' => $nationalLabel,
+                        'name' => $this->getSeriesName($nationalLabel, $dbColumn),
                         'data' => array_values($medianData),
                         'color' => $this->getNationalColor($i)
                     );
@@ -267,8 +285,9 @@ class LineBuilder extends ChartBuilder
                         $label = $this->getOrdinal($percentile);
                     }
 
+                    $label = $peerGroup->getName() . ' ' . $label;
                     $series[] = array(
-                        'name' => $peerGroup->getName() . ' ' . $label,
+                        'name' => $this->getSeriesName($label, $dbColumn),
                         'data' => array_values($peerMedianData),
                         'color' => $this->getPeerColor($i)
                     );
@@ -282,16 +301,23 @@ class LineBuilder extends ChartBuilder
                         $data = $this->getDataForCollege($dbColumn, $college);
 
                         $series[] = array(
-                            'name' => $college->getNameAndState(),
+                            'name' => $this->getSeriesName($college->getNameAndState(), $dbColumn),
                             'data' => array_values($data),
                         );
                     }
                 }
             }
 
+
+            if (!empty($peerGroup) && !empty($config['peerGroupAverage']) && !empty($peerMeansData)) {
+                $series[] = array(
+                    'name' => $this->getSeriesName($peerGroup->getName() . ' Average', $dbColumn),
+                    'data' => array_values($peerMeansData)
+                );
+            }
+
             $i++;
         }
-
 
         return $series;
     }
@@ -352,11 +378,11 @@ class LineBuilder extends ChartBuilder
         $dbColumn = $benchmark->getDbColumn();
 
         // Peer group median
-        $peerMedianData = array();
+        $peerMedianData = $peerMeansData = array();
         $peerIds = array();
         if (!empty($peerGroup)) {
             if ($peerGroup) {
-                list($peerMedianData, $peerIds) = $this->getPeerMedians(
+                list($peerMedianData, $peerIds, $peerMeansData) = $this->getPeerMedians(
                     $peerGroup,
                     $dbColumn,
                     $percentile
@@ -365,8 +391,9 @@ class LineBuilder extends ChartBuilder
         }
 
         $peerMedianData = $this->fillInGaps($peerMedianData);
+        $peerMeansData = $this->fillInGaps($peerMeansData);
 
-        return array($peerMedianData, $peerIds);
+        return array($peerMedianData, $peerIds, $peerMeansData);
     }
 
     public function getPeerFootnote($peerIds)
@@ -453,6 +480,7 @@ class LineBuilder extends ChartBuilder
         */
 
         $peerMedians = array();
+        $peerMeans = array();
         foreach ($years as $year) {
             if (empty($peersData[$year])) {
                 $peerMedians[$year] = null;
@@ -468,6 +496,8 @@ class LineBuilder extends ChartBuilder
                 $result = $calculator->getValueForPercentile($breakpoint);
 
                 $peerMedians[$year] = $result;
+
+                $peerMeans[$year] = $calculator->getMean();
             }
         }
 
@@ -477,7 +507,7 @@ class LineBuilder extends ChartBuilder
             $collegeIds = array();
         }
 
-        return array($peerMedians, $collegeIds);
+        return array($peerMedians, $collegeIds, $peerMeans);
     }
 
     public function getAllPeerData($peerGroup, $years)

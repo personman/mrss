@@ -287,4 +287,34 @@ abstract class AbstractChart
 
         $this->setConfig($config);
     }
+
+    public function setWidth($widthSetting = 'half')
+    {
+        $config = $this->getConfig();
+
+        if ($widthSetting == 'full') {
+            $config['chart']['width'] = 1020;
+            $config['chart']['height'] = 600;
+
+            $config['legend']['layout'] = "horizontal";
+            $config['legend']['width'] = 860;
+            $config['legend']['itemWidth'] = 210;
+            $config['legend']['itemStyle'] = array(
+                'width' => '175px'
+            );
+
+        } else {
+            $config['legend']['layout'] = "horizontal";
+            $config['legend']['width'] = 430;
+            $config['legend']['itemWidth'] = 210;
+            $config['legend']['itemStyle'] = array(
+                'width' => '180px'
+            );
+
+        }
+
+        $this->setConfig($config);
+
+        return $this;
+    }
 }

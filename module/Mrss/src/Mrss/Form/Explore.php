@@ -92,6 +92,23 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'width',
+                'type' => 'Select',
+                'options' => array(
+                    'label' => 'Width'
+                ),
+                'attributes' => array(
+                    'id' => 'width',
+                    'options' => array(
+                        'half' => 'Half',
+                        'full' => 'Full'
+                    )
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'title',
                 'type' => 'Text',
                 'options' => array(
@@ -243,6 +260,19 @@ class Explore extends AbstractForm
 
         $this->add(
             array(
+                'name' => 'peerGroupAverage',
+                'type' => 'Zend\Form\Element\Checkbox',
+                'options' => array(
+                    'label' => 'Peer Group Average'
+                ),
+                'attributes' => array(
+                    'id' => 'peerGroupAverage'
+                )
+            )
+        );
+
+        $this->add(
+            array(
                 'name' => 'makePeerCohort',
                 'type' => 'Zend\Form\Element\Checkbox',
                 'options' => array(
@@ -391,6 +421,7 @@ class Explore extends AbstractForm
         $filter->get('peerGroup')->setRequired(false);
         $filter->get('hideMine')->setRequired(false);
         $filter->get('percentiles')->setRequired(false);
+        $filter->get('peerGroupAverage')->setRequired(false);
 
         if ($filter->has('colleges')) {
             $filter->get('colleges')->setRequired(false);

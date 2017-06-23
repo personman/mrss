@@ -72,7 +72,7 @@ class PeerBuilder extends BarBuilder
             $this->addFootnote("$peerGroupName: $peerNames.");
         }
 
-        return $this->getPeerService()->getPeerBarChart($xBenchmark, $chartValues, $title, $subtitle);
+        return $this->getPeerService()->getPeerBarChart($xBenchmark, $chartValues, $title, $subtitle, $this->getWidthSetting());
     }
 
 
