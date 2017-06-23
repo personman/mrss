@@ -186,6 +186,7 @@ class ObservationController extends BaseController
     public function printAction()
     {
         $formService = $this->getFormBuilder();
+        $showData = $this->params()->fromRoute('showData');
 
         $currentStudy = $this->currentStudy();
         $subscription = $this->currentObservation()->getSubscription();
@@ -206,6 +207,10 @@ class ObservationController extends BaseController
             $class = 'data-entry-form form-horizontal ' . $benchmarkGroup->getFormat();
 
             $form->setAttribute('class', $class);
+
+            if ($showData) {
+                $form->bind($subscription->getObservation());
+            }
 
             $forms[] = array(
                 'form' => $form,
