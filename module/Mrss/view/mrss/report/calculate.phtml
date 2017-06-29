@@ -47,7 +47,7 @@ $this->headScript()->appendFile(
     h3 {
        margin-top: 25px;
     }
-    .calculation-progress, .system-progress, .calculate-changes-progress, .calculate-changes-percentiles-progress, .outlier-email-progress, .outlier-progress {
+    .calculation-progress, .system-progress, .calculate-changes-progress, .calculate-changes-percentiles-progress, .outlier-email-progress, .outlier-progress, .validation-progress {
         display: none;
     }
 
@@ -193,6 +193,46 @@ $this->headScript()->appendFile(
 
         </div>
     </div>
+
+
+    <?php if ($this->studyConfig()->validation_class): ?>
+    <h3>Find Data Issues</h3>
+    <div class="row-fluid row">
+        <div class="span6 col-md-4">
+            <p>
+                Run all data validations. This is run automatically as users submit data. It only needs to be run here if the data validation rules have been changed while data entry was open.
+            </p>
+
+        </div>
+
+        <div class="span6 col-md-5" id="validation-progress-<?= $year ?>">
+            <div class="progress validation-progress">
+                <div class="bar progress-bar"
+                     role="progressbar"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: 0%;"></div>
+            </div>
+
+        </div>
+
+        <div class="col-md-1">
+            <span class="progress-label"></span>
+        </div>
+
+        <div class="span6 col-md-2">
+            <a class="btn btn-default validation-compute" id="validation-<?= $year ?>" href="#">Run Data Validation</a>
+            <br>
+            <?php /* if (!empty($calculationDates['report'])): ?>
+            Prepared on <?= $calculationDates['report'] ?>
+        <?php else: ?>
+            Not yet prepared.
+        <?php endif */ ?>
+
+        </div>
+    </div>
+    <?php endif ?>
 
 
     <h3>National Report</h3>

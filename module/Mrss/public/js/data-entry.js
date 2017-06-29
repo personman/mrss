@@ -647,12 +647,19 @@ function setupForm2Totals()
 
         // Calculate the total of two fields
         var total = 0;
+        var hasBlank = false
+
         for (var si in sources) {
             var sourceId = sources[si];
             var sourceField = $('#' + sourceId);
             var val = sourceField.val();
             if (val == '') {
-                val = 0;
+                hasBlank = true
+                val = 0
+                //total = ' '
+                //continue;
+            } else {
+
             }
 
             total = total + parseInt(val);
@@ -663,6 +670,10 @@ function setupForm2Totals()
             })
         }
 
+        if (hasBlank) {
+            total = null;
+        }
+
         // Replace the input with a span showing the total
         var input = $('#' + totalId);
         var span = $('<span>');
@@ -670,11 +681,21 @@ function setupForm2Totals()
 
         input.after(span);
 
-        // Show the total in the span
-        span.html(total.toString());
+        //console.log(total)
 
-        // And populate the value to the hidden input
-        input.val(total.toString());
+        // Show the total in the span
+
+
+        if (hasBlank) {
+            span.html('Data missing above.')
+            input.val('')
+        } else {
+            span.html(total.toString());
+
+            // And populate the value to the hidden input
+            input.val(total.toString());
+        }
+
         input.hide();
     }
 }

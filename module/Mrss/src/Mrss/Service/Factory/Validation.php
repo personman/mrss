@@ -23,6 +23,9 @@ class Validation implements FactoryInterface
             $service->setValidator($validator);
         }
 
+        $benchmarkModel = $sm->get('model.benchmark');
+        $service->setBenchmarkModel($benchmarkModel);
+
         // Set the user
         $userService = $sm->get('zfcuser_auth_service');
         $user = $userService->getIdentity();

@@ -151,9 +151,12 @@ class ReportAdminController extends BaseController
         $systemBenchmarks = array();
 
         foreach ($this->getSystemModel()->findAll() as $system) {
-            $benchmarkIds = $system->getDataEntryStructure()->getBenchmarkIdsForYear($year);
+            $structure = $benchmarkIds = $system->getDataEntryStructure();
+            if ($structure) {
+                $structure->getBenchmarkIdsForYear($year);
 
-            $systemBenchmarks[$system->getId()] = $benchmarkIds;
+                $systemBenchmarks[$system->getId()] = $benchmarkIds;
+            }
         }
 
         return $systemBenchmarks;
@@ -283,6 +286,64 @@ class ReportAdminController extends BaseController
         $viewParams = array(
             'status' => $status,
             'observation' => $observationId
+        );
+
+        if ($debug) {
+            $logger = $this->getObservationModel()->getEntityManager()->getConfiguration()->getSQLLogger();
+
+            $this->queryLogger($logger);
+            $viewParams['logger'] = $logger;
+
+            $view = new ViewModel($viewParams);
+            $view->setTerminal(true);
+        } else {
+            $view = new JsonModel($viewParams);
+        }
+
+        return $view;
+    }
+
+    public function validateOneAction()
+    {
+
+        $debug = $this->params()->fromRoute('debug', false);
+
+        takeYourTime();
+
+
+        if (!$debug) {
+            $this->disableQueryLogging();
+        }
+
+        $observationId = $this->params()->fromRoute('observation');
+
+        $debugColumn = $this->params()->fromRoute('benchmark');
+
+        $status = 'ok';
+
+        $observation = $this->getObservationModel()->find($observationId);
+
+
+        if ($observation) {
+            $validationService = $this->getServiceLocator()->get('service.validation');
+
+            try {
+                $issues = $validationService->validate($observation);
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+                //echo "! " . $message;
+                $status = $message;
+
+            }
+        } else {
+            $status = '404';
+        }
+
+
+        $viewParams = array(
+            'status' => $status,
+            'observation' => $observationId,
+            'issues' => count($issues)
         );
 
         if ($debug) {

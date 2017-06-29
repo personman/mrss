@@ -4,6 +4,7 @@ namespace Mrss\Service;
 
 use Mrss\Entity\Issue;
 use Mrss\Model\Issue as IssueModel;
+use Mrss\Model\Benchmark as BenchmarkModel;
 use Mrss\Entity\College;
 
 class Validation
@@ -13,6 +14,8 @@ class Validation
     protected $user;
 
     protected $issueModel;
+
+    protected $benchmarkModel;
 
     protected $validator;
 
@@ -27,7 +30,10 @@ class Validation
         $this->collectExistingIssues($observation->getCollege());
 
         $validator = $this->getValidator();
+
         if (!empty($validator)) {
+            $validator->setBenchmarkModel($this->getBenchmarkModel());
+
             $issues = $validator->runValidation($observation, $priorObservation);
             $this->saveIssues($issues, $observation);
         }
@@ -129,6 +135,21 @@ class Validation
     public function getIssueModel()
     {
         return $this->issueModel;
+    }
+
+    public function setBenchmarkModel(BenchmarkModel $benchmarkModel)
+    {
+        $this->benchmarkModel = $benchmarkModel;
+
+        return $this;
+    }
+
+    /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        return $this->benchmarkModel;
     }
 
     public function setValidator($validator)

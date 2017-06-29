@@ -1058,6 +1058,19 @@ return array(
                             )
                         )
                     ),
+                    'validate-one' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/validate-one/:observation[/:debug][/:benchmark]',
+                            'defaults' => array(
+                                'action' => 'validateOne',
+                                'year' => null,
+                                'observation' => 0,
+                                'debug' => false,
+                                'benchmark' => false
+                            )
+                        )
+                    ),
                     'calculate' => array(
                         'type' => 'segment',
                         'options' => array(

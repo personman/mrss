@@ -4,6 +4,7 @@ return array(
     'layout' => 'nccbp.phtml',
     'css' => 'nccbp.css',
     'navigation' => 'nccbp_navigation',
+    'validation_class' => 'NCCBPValidation',
     'benchmark_completion_heatmap' => true,
     'form_to_exclude_from_strengths' => 1,
     'percent_change_report_columns' => array(
