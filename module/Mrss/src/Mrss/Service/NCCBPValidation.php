@@ -78,6 +78,19 @@ class NCCBPValidation extends AbstractValidation
                     'expenditures_other'
                 )
             ),
+            array(
+                // Total:
+                'tot_operate_rev',
+                // Parts:
+                array(
+                    '$tuition_fees_sour',
+                    '$loc_sour',
+                    '$state_sour',
+                    'private_sour',
+                    '$sales_sour',
+                    '$other_sour'
+                )
+            ),
         );
     }
 
