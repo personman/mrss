@@ -30,6 +30,11 @@ class NavigationFactory extends DefaultNavigationFactory
 
     protected $isAdmin;
 
+    public function getStudyConfig()
+    {
+        return $this->serviceLocator->get('Study');
+    }
+
     public function getPages(ServiceLocatorInterface $serviceLocator)
     {
         $pages = $this->getPagesArray($serviceLocator);
@@ -237,8 +242,12 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         // Hide data issues from all non-AAUP studies
-        if ($currentStudy->getId() != 4) {
+        if (empty($this->getStudyConfig()->validation_class)) {
             unset($pages['admin']['pages']['issues/staff']);
+        }
+
+        if ($currentStudy->getId() != 4) {
+
         }
 
         // Since it's the first year of aaup, don't show the report menu until open and paid

@@ -26,6 +26,61 @@ class NCCBPValidation extends AbstractValidation
         //$this->addIssue('Unexpected zero', 'zero', 2);
     }
 
+    public function validateTotals()
+    {
+        foreach ($this->getTotalsConfig() as $config) {
+            $totalCol = $config[0];
+            $columns = $config[1];
+
+            $total = $this->observation->get($totalCol);
+
+            $sum = 0;
+            foreach ($columns as $column) {
+                $sum += $this->observation->get($column);
+            }
+
+            if ($total && $sum && round($total) != round($sum)) {
+                $totalBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($totalCol);
+                $name = $totalBenchmark->getDescriptiveReportLabel();
+                $message = "The sum of the preceding fields does not match the $name.";
+                $code = "total_mismatch_$totalCol";
+                $formUrl = $totalBenchmark->getBenchmarkGroup()->getUrl();
+
+                $this->addIssue($message, $code, $formUrl);
+            }
+        }
+    }
+
+    protected function getTotalsConfig()
+    {
+        return array(
+            array(
+                // Total:
+                'revenue_total',
+                // Parts:
+                array(
+                    'revenue_ll',
+                    'revenue_continuing_education',
+                    'revenue_abe',
+                    'revenue_contract_training',
+                    'revenue_other'
+                )
+            ),
+            array(
+                // Total:
+                'expenditures_total',
+                // Parts:
+                array(
+                    'expenditures_ll',
+                    'expenditures_continuing_education',
+                    'expenditures_abe',
+                    'expenditures_contract_training',
+                    'expenditures_other'
+                )
+            ),
+        );
+    }
+
     public function validatePassingGrades()
     {
         foreach ($this->getPassingConfig() as $config) {
