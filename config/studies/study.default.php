@@ -29,6 +29,7 @@ return array(
     'export_sheet_names' => null,
     'export_template' => null,
     'validation_class' => null,
+    'validation_require_note' => true,
     'free_to_join' => false,
     'agreement_template' => null,
     'custom_excel_template' => null,

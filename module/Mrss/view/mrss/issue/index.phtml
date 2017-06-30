@@ -4,17 +4,24 @@
 
 <script>
     <?php $this->headScript()->captureStart() ?>
+
+    var requireNote = <?= ($this->studyConfig()->validation_require_note) ? '1' : '0' ?>;
+
     $(function() {
         $('a.confirmData').click(function() {
             var issue = $(this).parents('.issue');
 
-            console.log(issue);
+            //console.log(issue);
 
-            // Hide the buttons
-            issue.find('.issueButtons').hide();
+            if (requireNote) {
+                // Hide the buttons
+                issue.find('.issueButtons').hide();
 
-            // Show the form
-            issue.find('.userNote').show();
+                // Show the form
+                issue.find('.userNote').show();
+            } else {
+                issue.find('form').submit();
+            }
 
             return false;
         });
