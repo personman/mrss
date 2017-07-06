@@ -60,9 +60,9 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
                                             ?>
 
                                             <td style="min-width: 92px; <?= $tdStyle ?>">
-                                            <?php if (!$system): ?>
-                                                <a class="underline" href="<?= $url ?>">Edit Form <?= $baseBenchmark['benchmarkGroup'] ?></a>
-                                            <?php endif ?>
+                                                <?php if (!$system): ?>
+                                                    <a class="underline" href="<?= $url ?>">Edit Form <?= $baseBenchmark['benchmarkGroup'] ?></a>
+                                                <?php endif ?>
                                             </td>
 
                                         <?php endif ?>
@@ -103,7 +103,7 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
                             $url .= '#' . $outlier['dbColumn'];
                             ?>
                             <?php if (empty($system)): ?>
-                            <a href="<?= $url ?>">Edit Form <?= $outlier['benchmarkGroupId'] ?></a>
+                                <a href="<?= $url ?>">Edit Form <?= $outlier['benchmarkGroupId'] ?></a>
                             <?php endif ?>
                         <?php endif ?>
                     </td>

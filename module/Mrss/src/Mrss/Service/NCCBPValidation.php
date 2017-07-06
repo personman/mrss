@@ -4,6 +4,20 @@ namespace Mrss\Service;
 
 class NCCBPValidation extends AbstractValidation
 {
+    public function validateAutomatic()
+    {
+        // Everyone gets these issues, automatically
+        $message = "For Pell Grant Eligible Students, include both those that did receive them and those that did not receive them because of administrative or other hurdles.";
+        $code = "auto_pell";
+        $form = '1';
+        $this->addIssue($message, $code, $form);
+
+        $message = 'Under revenue sources, include all revenue, even if it is labeled as “non-operating” on your financial statements.';
+        $code = "auto_revenue_sources";
+        $form = '21';
+        $this->addIssue($message, $code, $form);
+    }
+
     public function validateZeros()
     {
         foreach ($this->getBenchmarksThatShouldNotBeZero() as $benchmark) {
@@ -14,7 +28,7 @@ class NCCBPValidation extends AbstractValidation
             if ($value === 0.0 || $value === '0') {
                 $label = $benchmark->getDescriptiveReportLabel();
                 $this->addIssue(
-                    'Unexpected zero: ' . $label,
+                    'Unexpected zero: ' . $label . '. If none or not offered at your institution, please leave blank.',
                     'zero_' . $col,
                     $benchmark->getBenchmarkGroup()->getUrl()
                 );
@@ -185,7 +199,7 @@ class NCCBPValidation extends AbstractValidation
     protected function getBenchmarksThatShouldNotBeZero()
     {
         $model = $this->getBenchmarkModel();
-        $formUrlsToSkip = array('12', '17', 'NC3', 'NC5');
+        $formUrlsToSkip = array('12', '17', 'NC3', 'NC5', 'NC6');
 
         $benchmarks = array();
         foreach ($model->findAll() as $benchmark) {
