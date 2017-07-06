@@ -102,7 +102,7 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
 
                             $url .= '#' . $outlier['dbColumn'];
                             ?>
-                            <?php if (!$system): ?>
+                            <?php if (empty($system)): ?>
                             <a href="<?= $url ?>">Edit Form <?= $outlier['benchmarkGroupId'] ?></a>
                             <?php endif ?>
                         <?php endif ?>
