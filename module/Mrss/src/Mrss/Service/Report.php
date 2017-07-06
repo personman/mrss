@@ -98,6 +98,11 @@ class Report
     protected $systemModel;
 
     /**
+     * @var \Mrss\Model\Issue
+     */
+    protected $issueModel;
+
+    /**
      * @var \Mrss\Model\PercentChange
      */
     protected $percentChangeModel;
@@ -1533,6 +1538,18 @@ class Report
     public function getSystemModel()
     {
         return $this->systemModel;
+    }
+
+    public function setIssueModel($model)
+    {
+        $this->issueModel = $model;
+
+        return $this;
+    }
+
+    public function getIssueModel()
+    {
+        return $this->issueModel;
     }
 
     public function setPercentChangeModel($model)

@@ -17,7 +17,8 @@ You can also find this report on the web at <a href="<?= $this->serverUrl('/repo
 <?= $this->partial(
     'mrss/report/outliers.partial.phtml',
     array(
-        'outliers' => $outliers
+        'outliers' => $outliers,
+        'issues' => $issues
     )
 ); ?><br>
 <br>

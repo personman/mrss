@@ -56,7 +56,11 @@ class Outliers extends Report
     {
         $calculator = $this->getCalculator();
 
-        $system = $this->getSystemModel()->find($systemId);
+        $system = null;
+        if ($systemId) {
+            $system = $this->getSystemModel()->find($systemId);
+        }
+
 
         // Get the data for all subscribers (skip nulls)
         $data = $this->collectDataForBenchmark($benchmark, $year, true, $system);
@@ -370,6 +374,8 @@ class Outliers extends Report
             $collegeName = $college->getName();
             $year = $this->getStudy()->getCurrentYear();
 
+            $issues = $this->getIssueModel()->findByCollege($college, $year);
+
 
 
             $deadline = "August 2, " . date('Y');
@@ -392,7 +398,8 @@ class Outliers extends Report
                 'replyTo' => $replyTo,
                 'replyToName' => $replyToName,
                 'replyToPhone' => $replyToPhone,
-                'outliers' => $outliers
+                'outliers' => $outliers,
+                'issues' => $issues
             );
 
             // Select a view for the email body

@@ -31,13 +31,17 @@ class Issue extends AbstractModel
      * @param $college
      * @return IssueEntity[]
      */
-    public function findByCollege($college)
+    public function findByCollege($college, $year = null)
     {
-        return $this->getRepository()->findBy(
-            array(
-                'college' => $college
-            )
+        $params = array(
+            'college' => $college
         );
+
+        if ($year) {
+            $params['year'] = $year;
+        }
+
+        return $this->getRepository()->findBy($params);
     }
 
     /**

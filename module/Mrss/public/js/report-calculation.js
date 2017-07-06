@@ -29,7 +29,7 @@ function setUpOutlierCalculation()
         progressBar = $('#outlier-progress-' + year + ' .progress-bar');
 
         // Get the benchmark Ids
-        var info = getOutlierBenchmarks();
+        var info = getOutlierBenchmarks(year);
 
         urlStack = [];
         for (var si in info) {
@@ -69,7 +69,7 @@ function setUpOutlierCalculation()
     })
 }
 
-function getOutlierBenchmarks()
+function getOutlierBenchmarks(year)
 {
     var info = [];
     if (Object.keys(systemBenchmarks).length) {

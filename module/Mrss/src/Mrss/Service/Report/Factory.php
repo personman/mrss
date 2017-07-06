@@ -45,6 +45,7 @@ class Factory implements AbstractFactoryInterface
         $report->setSettingModel($sm->get('model.setting'));
         $report->setOutlierModel($sm->get('model.outlier'));
         $report->setSystemModel($sm->get('model.system'));
+        $report->setIssueModel($sm->get('model.issue'));
         $report->setPercentChangeModel($sm->get('model.percentchange'));
         $report->setComputedService($sm->get('computedFields'));
         $report->setMailTransport($sm->get('mail.transport'));

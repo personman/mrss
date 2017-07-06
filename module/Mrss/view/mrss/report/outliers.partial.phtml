@@ -118,3 +118,18 @@ $tStyle = "border: 1px solid #DDD; border-collapse: collapse;";
 <?php else: ?>
     No outliers.
 <?php endif ?>
+
+<br>
+    New for 2017, we have added several new checks to identify possible issues with your data.
+
+    <?php if (!empty($issues)): ?>
+    If any are identified for your college, you may see them here: <a href="<?= $this->url(
+            'issues',
+            array(),
+            array('force_canonical' => true)
+        );
+
+        ?>">Data Issues</a>.  Additionally, you will find this link on the data entry page on the NCCBP website.
+    <?php else: ?>
+        However, none have been found with the data for your institution.
+    <?php endif ?>

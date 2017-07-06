@@ -58,6 +58,7 @@ class ReportController extends ReportAdminController
 
     public function outlierAction()
     {
+        $year = $this->currentStudy()->getCurrentYear();
         $college = $this->currentCollege();
         $system = $this->getActiveSystem();
         $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
@@ -68,12 +69,15 @@ class ReportController extends ReportAdminController
             $studyName = $system->getName();
         }
 
+        $issues = $this->getIssueModel()->findByCollege($college, $year);
+
         return array(
             'report' => $outlierReport,
             'studyName' => $studyName,
-            'year' => $this->currentStudy()->getCurrentYear(),
+            'year' => $year,
             'showDetails' => true,
-            'system' => $system
+            'system' => $system,
+            'issues' => $issues
         );
     }
 
