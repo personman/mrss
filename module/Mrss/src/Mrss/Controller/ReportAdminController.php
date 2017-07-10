@@ -652,7 +652,8 @@ class ReportAdminController extends BaseController
         $view = new JsonModel(
             array(
                 'status' => 'ok',
-                'benchmark' => $benchmarkId
+                'benchmark' => $benchmarkId,
+                'position' => $position
             )
         );
 

@@ -132,12 +132,24 @@ class Outlier extends AbstractModel
 
     public function deleteByStudyAndYear($studyId, $year, $systemId = null)
     {
+        $delete = 'DELETE Mrss\Entity\Outlier p WHERE p.year = ?1 AND p.study = ?2';
+        if ($systemId) {
+            $delete .= ' AND p.system = ?3';
+        } else {
+            $delete .= ' AND p.system IS NULL';
+        }
+        // AND p.system = ?3'
         $query = $this->getEntityManager()->createQuery(
-            'DELETE Mrss\Entity\Outlier p WHERE p.year = ?1 AND p.study = ?2 AND p.system = ?3'
+            $delete
         );
+
         $query->setParameter(1, $year);
         $query->setParameter(2, $studyId);
-        $query->setParameter(3, $systemId);
+
+        if ($systemId) {
+            $query->setParameter(3, $systemId);
+        }
+
 
         $query->execute();
     }
