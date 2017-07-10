@@ -381,7 +381,7 @@ class Outliers extends Report
 
 
 
-            $deadline = "August 2, " . date('Y');
+            $deadline = "July 28, " . date('Y');
             $replyTo = "michelletaylor@jccc.edu";
             $replyToName = "Michelle Taylor";
             $replyToPhone = "(913) 469-3831";
