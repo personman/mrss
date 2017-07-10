@@ -179,9 +179,12 @@ class Outliers extends Report
 
             $outliers = $this->prepareOutlierRows($outliers, $includeDetails);
 
+            $issues = $this->getIssueModel()->findByCollege($college, $year);
+
             $report[] = array(
                 'college' => $college,
-                'outliers' => $outliers
+                'outliers' => $outliers,
+                'issues' => $issues
             );
         }
 

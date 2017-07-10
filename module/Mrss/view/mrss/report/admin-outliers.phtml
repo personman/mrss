@@ -18,7 +18,10 @@
         $college = $collegeInfo['college'];
 
         /** @var \Mrss\Entity\Outlier[] $outliers */
-        $outliers = $collegeInfo['outliers']
+        $outliers = $collegeInfo['outliers'];
+
+        /** @var \Mrss\Entity\Issue[] $issues */
+        $outliers = $collegeInfo['issues'];
     ?>
 
     <h2><?= $college->getName() ?></h2>
@@ -33,7 +36,8 @@
         array(
             'outliers' => $outliers,
             'admin' => true,
-            'showDetails' => $showDetails
+            'showDetails' => $showDetails,
+            'issues' => $issues
         )
     ) ?>
 
