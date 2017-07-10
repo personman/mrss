@@ -2,6 +2,23 @@ Dear <?= $studyName ?> Member:<br>
 <br>
 As a final check of <?= $year ?> <?= $studyName ?> data, we have identified values to the data elements that are unusually large or small relative to mean values in the data set.  Your college had no data elements that were in this range, therefore no corrections to your data are required. However, you may revise any data even if it is not flagged as an outlier or add additional data during the data verification process.<br>
 <br>
+New for 2017, we have added several new checks to identify possible issues with your data.
+
+<?php if (!empty($issues)): ?>
+    If any are identified for your college, you may see them here: <a href="<?= $this->url(
+        'issues',
+        array(),
+        array('force_canonical' => true)
+    );
+
+    ?>">Data Issues</a>.  Additionally, you will find this link on the data entry page on the NCCBP website.
+<?php else: ?>
+    However, none have been found with the data for your institution.
+<?php endif ?>
+
+<br>
+<br>
+
 <?= $replyToName ?><br>
 <?= $replyTo ?><br>
 <?= $replyToPhone ?>
