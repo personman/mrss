@@ -165,6 +165,10 @@ class CollegeController extends AbstractActionController
                     //pr($system);
                 }
 
+                if (is_array($system) && count($system) == 0) {
+                    $system = '';
+                }
+
                 $collegeData[$college->getId()] = array(
                     'name' => $college->getName(),
                     'state' => $college->getState(),
@@ -172,6 +176,8 @@ class CollegeController extends AbstractActionController
                 );
             }
 
+
+            pr($collegeData);
 
             $markers = json_encode($markers);
 
