@@ -1564,7 +1564,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
     public function createOrUpdateObservation(\Mrss\Entity\College $college, $year = null)
     {
         if (!$year) {
-            $this->getCurrentYear();
+            $year = $this->getCurrentYear();
         }
 
         /** @var \Mrss\Model\Observation $observationModel */
