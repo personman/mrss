@@ -177,8 +177,6 @@ class CollegeController extends AbstractActionController
             }
 
 
-            pr($collegeData);
-
             $markers = json_encode($markers);
 
             $forCache = array(
