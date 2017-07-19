@@ -58,9 +58,13 @@ class ReportController extends ReportAdminController
 
     public function outlierAction()
     {
-        $year = $this->currentStudy()->getCurrentYear();
+        $system = null;
+        if ($this->getStudyConfig()->use_structures) {
+            $system = $this->getActiveSystem();
+        }
+
         $college = $this->currentCollege();
-        $system = $this->getActiveSystem();
+        $year = $this->currentStudy()->getCurrentYear();
         $outlierReport = $this->getServiceLocator()->get('service.report.outliers')
             ->getOutlierReport($college, $system);
 
