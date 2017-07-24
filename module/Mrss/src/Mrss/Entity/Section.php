@@ -33,7 +33,7 @@ class Section
     protected $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="BenchmarkGroup", inversedBy="sections")
+     * @ORM\ManyToMany(targetEntity="BenchmarkGroup", inversedBy="sections", cascade={"persist"})
      * @ORM\JoinTable(name="sections_benchmark_groups")
      * @var \Mrss\Entity\BenchmarkGroup[]
      */
@@ -209,5 +209,10 @@ class Section
     {
         $this->study = $study;
         return $this;
+    }
+
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 }

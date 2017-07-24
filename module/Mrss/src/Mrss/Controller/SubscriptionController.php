@@ -604,14 +604,17 @@ class SubscriptionController extends BaseController
                     $subscription->getYear()
                 );
 
+                $modules = $this->params()->fromPost('modules');
                 $this->updateSections(
                     $subscription,
-                    $this->params()->fromPost('modules')
+                    $modules
                 );
 
                 $this->getSubscriptionModel()->save($subscription);
 
                 $this->getSubscriptionModel()->getEntityManager()->flush();
+
+                //prd($subscription->getSectionIds());
 
                 $this->flashMessenger()->addSuccessMessage('Saved');
                 return $this->redirect()

@@ -161,7 +161,7 @@ class Subscription
     protected $paidNotes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Section", mappedBy="subscriptions")
+     * @ORM\ManyToMany(targetEntity="Section", mappedBy="subscriptions", cascade={"persist"})
      * @ORM\JoinTable(name="subscription_sections")
      * @var \Mrss\Entity\Section[]
      */
@@ -753,9 +753,9 @@ class Subscription
             $originals[$section->getId()] = $section;
         }
 
-
         foreach ($sections as $section) {
             if (!$this->sections->contains($section)) {
+                $section->getSubscriptions()->add($this);
                 $this->sections->add($section);
             }
             unset($originals[$section->getId()]);
@@ -772,6 +772,7 @@ class Subscription
         }
 
         foreach ($removeThese as $section) {
+            $section->getSubscriptions()->removeElement($this);
             $this->sections->removeElement($section);
         }
 
