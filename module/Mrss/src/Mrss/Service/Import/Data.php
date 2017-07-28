@@ -32,20 +32,25 @@ class Data extends Import
     /** @var \Mrss\Model\Datum $datumModel */
     protected $datumModel;
 
-    /** @var \Mrss\Entity\Study $stuyd */
+    /** @var \Mrss\Entity\Study $study */
     protected $study;
 
     protected $year = null;
 
     protected $systemId = null;
 
-    protected $debug = false;
+    protected $debug = true;
+
+    protected $createColleges = false;
 
 
     //protected $file = 'data/imports/envisio-import-icma.xlsx';
     //protected $file = 'data/imports/envisio-import-safety.xlsx';
-    protected $file = 'data/imports/full-icma-import.xlsx';
+    //protected $file = 'data/imports/full-icma-import.xlsx';
     //protected $file = 'data/imports/vbc-import-final.xlsx';
+
+    protected $file = 'data/imports/mobility.xlsx';
+
 
     protected $map = array();
 
@@ -63,10 +68,10 @@ class Data extends Import
         );*/
 
         $sheets = array(
-            0 => 2016,
-            1 => 2015,
-            2 => 2014,
-            3 => 2013
+            0 => 2017,
+            //1 => 2015,
+            //2 => 2014,
+            //3 => 2013
         );
 
         foreach ($sheets as $index => $year) {
@@ -98,15 +103,21 @@ class Data extends Import
     {
         $data = $this->getDataFromRow($row);
 
+        //prd($data);
+
         if (empty($data['ipeds'])) {
             $name = $data['name'];
             $nameParts = explode(', ', $name);
-            $name = $nameParts[0];
-            $state = $nameParts[1];
 
-            $college = $this->getCollegeModel()->findByNameAndState($name, $state);
+            if (count($nameParts) > 1) {
+                $name = $nameParts[0];
+                $state = $nameParts[1];
 
-            if ($college) {
+                $college = $this->getCollegeModel()->findByNameAndState($name, $state);
+            }
+
+
+            if (!empty($college)) {
                 $data['ipeds'] = $college->getIpeds();
 
                 if ($this->debug) {
@@ -117,26 +128,27 @@ class Data extends Import
                     echo "<p>Unable to find by city ($name) and state ($state).</p>";
                 }
 
+                if ($this->createColleges) {
+                    // Create college
+                    $ipeds = $this->getCollegeModel()->findMaxIpeds();
+                    $ipeds++;
 
-                // Create college
-                $ipeds = $this->getCollegeModel()->findMaxIpeds();
-                $ipeds++;
+                    $collegeInfo = array(
+                        'ipeds' => $ipeds,
+                        'name' => $name,
+                        'state' => $state,
+                        'abbreviation' => '',
 
-                $collegeInfo = array(
-                    'ipeds' => $ipeds,
-                    'name' => $name,
-                    'state' => $state,
-                    'abbreviation' => '',
-
-                );
+                    );
 
 
-                $this->createCollege($collegeInfo);
+                    $this->createCollege($collegeInfo);
 
-                $data['ipeds'] = $ipeds;
+                    $data['ipeds'] = $ipeds;
 
-                if ($this->debug) {
-                    echo "<p>Created city ($name).</p>";
+                    if ($this->debug) {
+                        echo "<p>Created city ($name).</p>";
+                    }
                 }
             }
         }
