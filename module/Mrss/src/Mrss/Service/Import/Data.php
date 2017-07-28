@@ -39,7 +39,7 @@ class Data extends Import
 
     protected $systemId = null;
 
-    protected $debug = true;
+    protected $debug = false;
 
     protected $createColleges = false;
 
