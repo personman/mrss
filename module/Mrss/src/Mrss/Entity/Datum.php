@@ -21,6 +21,7 @@ class Datum
 
     /**
      * @ORM\ManyToOne(targetEntity="Subscription", inversedBy="data")
+     * @ORM\JoinColumn(name="subscription_id", referencedColumnName="id", onDelete="CASCADE")
      * @var Subscription
      */
     protected $subscription;
