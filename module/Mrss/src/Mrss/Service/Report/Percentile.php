@@ -84,10 +84,15 @@ class Percentile extends Report
         $percentileModel = $this->getPercentileModel();
         $percentileRankModel = $this->getPercentileRankModel();
 
+        $systemId = null;
+        if ($system) {
+            $systemId = $system->getId();
+        }
+
         $msg = array(
             'benchmark' => $benchmark->getId(),
             'year' => $year,
-            'system' => $system->getId()
+            'system' => $systemId
         );
         $this->debug($msg);
 

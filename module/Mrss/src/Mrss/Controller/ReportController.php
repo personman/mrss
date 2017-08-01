@@ -90,6 +90,7 @@ class ReportController extends ReportAdminController
         // HTML or Excel?
         $format = $this->params()->fromRoute('format');
         $year = $this->getYearFromRouteOrStudy();
+        $benchmarkGroupId = $this->params()->fromRoute('benchmarkGroupId', null);
 
         $forPercentChange = $this->params()->fromRoute('forPercentChange');
 
@@ -149,7 +150,7 @@ class ReportController extends ReportAdminController
             $reportService = $this->getNationService($forPercentChange);
         }
 
-        $reportData = $reportService->getData($subscription, $system);
+        $reportData = $reportService->getData($subscription, $system, $benchmarkGroupId);
 
 
         // Download?

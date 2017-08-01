@@ -260,7 +260,7 @@ class User extends Fieldset implements InputFilterProviderInterface
         $descriptions = array();
 
         if (!empty($roles['viewer'])) {
-            $descriptions[] = '<em>View Reports Only</em> users can only view reports.';
+            $descriptions[] = '<em>View Reports Only</em> users can only view reports and create custom reports.';
         }
 
         if (!empty($roles['contact'])) {

@@ -849,6 +849,12 @@ class Report
                 $forPercentChange
             );
 
+        /*pr($this->getObservation()->getCollege()->getId());
+        pr($benchmark->getId());
+        pr($year);
+        //pr($this->getSystem()->getId());
+        pr($forPercentChange);*/
+
         if (!empty($percentileRank)) {
             $benchmarkData['percentile_rank_id'] = $percentileRank->getId();
             $benchmarkData['percentile_rank'] = $percentileRank->getRank();
@@ -905,6 +911,8 @@ class Report
             $benchmarkData['percentile_rank'] = $rank;
             $benchmarkData['do_not_format_rank'] = true;
         }
+
+        //prd($benchmarkData);
 
         return $benchmarkData;
     }

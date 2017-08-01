@@ -73,6 +73,14 @@ class National extends Max
         return $data[0]['benchmarks'];
     }
 
+    public function getOneForm($formId)
+    {
+        /** @var \Mrss\Service\Report\National $report */
+        $report = $this->getServiceManager()->get('service.report.national');
+        $data = $report->getData($this->getSubscription(), false, $formId);
+        return $data[0]['benchmarks'];
+    }
+
     protected function getSystem()
     {
         return null;

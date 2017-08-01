@@ -1257,6 +1257,19 @@ return array(
                             )
                         )
                     ),
+                    'social-mobility' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/social-mobility[/:year][/:format]',
+                            'defaults' => array(
+                                'action' => 'national',
+                                'year' => null,
+                                'format' => 'html',
+                                'system' => false,
+                                'benchmarkGroupId' => 41
+                            )
+                        )
+                    ),
                     'summary' => array(
                         'type' => 'segment',
                         'options' => array(

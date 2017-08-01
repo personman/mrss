@@ -44,6 +44,7 @@ class National extends Report
         $benchmarkGroups = $this->getBenchmarkGroups($subscription);
 
         foreach ($benchmarkGroups as $benchmarkGroup) {
+            $formHasBenchmarks = false;
             if (!empty($benchmarkGroupId) && $benchmarkGroup->getId() != $benchmarkGroupId) {
                 continue;
             }
@@ -70,6 +71,8 @@ class National extends Report
                     continue;
                 }
 
+                $formHasBenchmarks = true;
+
                 /** @var \Mrss\Entity\BenchmarkHeading $benchmark */
                 if ($this->isBenchmarkExcludeFromReport($benchmark)) {
                     continue;
@@ -85,7 +88,9 @@ class National extends Report
                 $groupData['benchmarks'][] = $benchmarkData;
             }
 
-            $reportData[] = $groupData;
+            if ($formHasBenchmarks) {
+                $reportData[] = $groupData;
+            }
 
         }
 

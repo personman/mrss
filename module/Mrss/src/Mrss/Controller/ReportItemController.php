@@ -151,9 +151,6 @@ class ReportItemController extends CustomReportController
         // @todo: support system year/open
         $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
 
-
-
-
         $peerGroups = $this->getPeerGroupOptions();
         $includeTrends = $this->getIncludeTrends();
         $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
@@ -358,6 +355,8 @@ class ReportItemController extends CustomReportController
                         'label' => $this->getVariableSubstitutionService()->substitute($heading->getName()),
                         'value' => null
                     );
+                    continue;
+                } elseif (!$benchmark->getIncludeInOtherReports()) {
                     continue;
                 }
 
