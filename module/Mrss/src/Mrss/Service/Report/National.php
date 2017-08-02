@@ -36,6 +36,7 @@ class National extends Report
         $this->setSystem($system);
         $year = $observation->getYear();
         $this->getVariableSubstitution()->setStudyYear($year);
+        $formsToSkip = array(41);
 
         $reportData = array();
 
@@ -46,6 +47,10 @@ class National extends Report
         foreach ($benchmarkGroups as $benchmarkGroup) {
             $formHasBenchmarks = false;
             if (!empty($benchmarkGroupId) && $benchmarkGroup->getId() != $benchmarkGroupId) {
+                continue;
+            }
+
+            if (empty($benchmarkGroupId) && !empty($formsToSkip) && in_array($benchmarkGroup->getId(), $formsToSkip)) {
                 continue;
             }
 

@@ -179,6 +179,7 @@ class ReportController extends ReportAdminController
             'reportPath' => $reportPath,
             'forPercentChange' => $forPercentChange,
             'studyConfig' => $this->getStudyConfig(),
+            'benchmarkGroupId' => $benchmarkGroupId
         );
     }
 

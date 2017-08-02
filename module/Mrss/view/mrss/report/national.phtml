@@ -53,6 +53,7 @@ $this->headScript()->appendFile(
     </ul>
 <?php endif ?>
 
+<?php if (empty($benchmarkGroupId)): ?>
 <ul class="nav nav-pills report-nav year-nav">
     <?php foreach ($subscriptions as $subscription): ?>
         <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
@@ -61,7 +62,6 @@ $this->headScript()->appendFile(
         </li>
     <?php endforeach ?>
 </ul>
-
 
 
 <div class="reportDownloads">
@@ -88,6 +88,8 @@ $this->headScript()->appendFile(
     </a>
     <?php endif ?>
 </div>
+<?php endif ?>
+
 
 <br>
 <br>

@@ -56,6 +56,16 @@ class NccbpNavigationFactory extends NavigationFactory
                 array_unshift($pages['data-documentation']['pages'], $workbook);
             }
 
+            // Social mobility report
+            if (true) {
+                $mobility = array(
+                    'label' => 'Social Mobility Report',
+                    'uri' => '/reports/social-mobility'
+                );
+
+                $pages['reports']['pages']['social-mobility'] = $mobility;
+            }
+
         } else {
             unset($pages['help']);
         }
