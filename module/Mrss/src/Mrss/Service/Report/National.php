@@ -58,6 +58,7 @@ class National extends Report
 
             $groupData = array(
                 'benchmarkGroup' => $benchmarkGroup->getName(),
+                'benchmarkGroupDescription' => $benchmarkGroup->getDescription(),
                 'timeframe' => $this->getVariableSubstitution()->substitute($benchmarkGroup->getTimeframe()),
                 'url' => $benchmarkGroup->getUrl(),
                 'benchmarks' => array()

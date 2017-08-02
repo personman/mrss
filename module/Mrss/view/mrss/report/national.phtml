@@ -117,6 +117,12 @@ $this->headScript()->appendFile(
 
         </h3>
 
+        <?php if (!empty($benchmarkGroupId)): ?>
+        <p>
+            <?= $benchmarkGroup['benchmarkGroupDescription'] ?>
+        </p>
+        <?php endif ?>
+
         <?php if (empty($system)) {
             $heading = 'National Percentiles';
 
