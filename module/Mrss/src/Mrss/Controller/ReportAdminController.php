@@ -153,12 +153,13 @@ class ReportAdminController extends BaseController
         foreach ($this->getSystemModel()->findAll() as $system) {
             $structure = $benchmarkIds = $system->getDataEntryStructure();
             if ($structure) {
-                $structure->getBenchmarkIdsForYear($year);
+                $benchmarkIds = $structure->getBenchmarkIdsForYear($year);
 
                 $systemBenchmarks[$system->getId()] = $benchmarkIds;
             }
         }
 
+        //prd($systemBenchmarks);
         return $systemBenchmarks;
     }
 
