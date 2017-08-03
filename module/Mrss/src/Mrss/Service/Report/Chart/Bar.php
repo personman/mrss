@@ -23,7 +23,8 @@ class Bar extends AbstractChart
             'title' => false,
             'gridLineWidth' => 0,
             'labels' => array(
-                'format' => '' // Placeholder until the format is set
+                'format' => '', // Placeholder until the format is set
+                'step' => 1
             )
         );
 
