@@ -39,5 +39,6 @@ return array(
     'contact_instructions' => '',
     'copyright' => date('Y') . " Envisio",
     'footerLogo' => '',
-    'footerSocial' => ''
+    'footerSocial' => '',
+    'freemium' => true,
 );

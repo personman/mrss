@@ -13,7 +13,7 @@ use Mrss\Form\Fieldset\Executive;
 
 class SubscriptionAdmin extends AbstractForm
 {
-    public function __construct($systems = array(), $systemLabel = 'System', $sections = array())
+    public function __construct($systems = array(), $systemLabel = 'System', $sections = array(), $freemium = false)
     {
         $currentYear = date('Y');
         $years = range($currentYear - 10, $currentYear + 5);
@@ -58,6 +58,23 @@ class SubscriptionAdmin extends AbstractForm
                 )
             )
         );
+
+        if ($freemium) {
+            $this->add(
+                array(
+                    'name' => 'free',
+                    'type' => 'Checkbox',
+                    'options' => array(
+                        'label' => 'Free',
+                    ),
+                    'attributes' => array(
+                        'id' => 'free',
+
+                    )
+                )
+            );
+        }
+
 
         if (count($systems)) {
             $this->add(

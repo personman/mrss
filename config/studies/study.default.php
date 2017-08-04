@@ -31,6 +31,7 @@ return array(
     'validation_class' => null,
     'validation_require_note' => true,
     'free_to_join' => false,
+    'freemium' => false,
     'agreement_template' => null,
     'custom_excel_template' => null,
     'percent_change_report_columns' => array(),
