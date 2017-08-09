@@ -228,10 +228,9 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
         return '';
     }
 
-    public function getChildren($year = null, $includeComputed = true)
+    public function getChildren($year = null, $includeComputed = true, $organization = 'data-entry')
     {
         $structure = array($this->getPageStructure());
-
 
         // Recursive
         $this->loadChildren($structure, $year, $includeComputed);

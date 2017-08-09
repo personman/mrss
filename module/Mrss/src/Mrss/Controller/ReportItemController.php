@@ -346,7 +346,7 @@ class ReportItemController extends CustomReportController
         foreach ($this->getAllBenchmarkGroups($subscription, $system) as $benchmarkGroup) {
             $groupChildren = array();
 
-            foreach ($benchmarkGroup->getChildren() as $benchmark) {
+            foreach ($benchmarkGroup->getChildren(null, true, 'report') as $benchmark) {
                 if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
                     /** @var \Mrss\Entity\BenchmarkHeading $heading */
                     $heading = $benchmark;
