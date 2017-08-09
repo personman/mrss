@@ -105,8 +105,15 @@
 
     <li>
         <a href="<?= $this->url(
+            'admin/equations'
+
+        ) ?>">Check All Equations</a> - Loop over all equations, checking for bad formatting and incorrect variables. Does not calculate any data.
+    </li>
+
+    <li>
+        <a href="<?= $this->url(
             'tools/analyze-equation'
-        ) ?>">Analyze Equation</a> - Calculate one computed benchmark for one institution to troubleshoot the equation.
+        ) ?>">Analyze Equation</a> - Calculate one computed benchmark for one institution to troubleshoot the equation. Calculates using real data.
     </li>
 </ul>
 

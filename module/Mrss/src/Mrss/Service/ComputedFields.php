@@ -169,7 +169,8 @@ class ComputedFields
         $result = true;
         $vars = array();
         foreach ($variables as $variable) {
-            if (!$observation->has($variable)) {
+            $benchmark = $this->getBenchmarkModel()->findOneByDbColumn($variable);
+            if (!$benchmark) {
                 $result = false;
                 $error = "$variable does not exist in the observation";
             } else {

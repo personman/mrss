@@ -56,6 +56,16 @@
             </a>
         </li>
 
+        <li>
+            <a href="<?= $this->url(
+                'tools/analyze-equation',
+                array('id' => $study->getId())
+            ) ?>">
+                <span class="icon-upload glyphicon glyphicon-ok"></span>
+                Check Individual Equations
+            </a>
+        </li>
+
         <?php $orgs = array('data-entry' => 'Data entry', 'report' => 'Reports'); ?>
         <li>
             Organize for:
