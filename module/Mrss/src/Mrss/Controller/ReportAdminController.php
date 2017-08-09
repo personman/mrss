@@ -408,7 +408,11 @@ class ReportAdminController extends BaseController
             }
         }
 
-        pr($tables);
+        if (count($tables)) {
+            echo 'Tables: ';
+            pr($tables);
+        }
+
 
         asort($params);
         //pr($params);

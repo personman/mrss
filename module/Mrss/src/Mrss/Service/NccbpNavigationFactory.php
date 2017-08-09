@@ -57,7 +57,7 @@ class NccbpNavigationFactory extends NavigationFactory
             }
 
             // Social mobility report
-            if (false) {
+            if (true) {
                 $mobility = array(
                     'label' => 'Social Mobility Report',
                     'uri' => '/reports/social-mobility'
