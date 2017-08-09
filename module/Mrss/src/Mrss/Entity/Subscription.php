@@ -156,6 +156,11 @@ class Subscription
     protected $paid = false;
 
     /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    protected $free = false;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $paidNotes;
@@ -613,6 +618,25 @@ class Subscription
     public function setPaid($paid)
     {
         $this->paid = $paid;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFree()
+    {
+        return $this->free;
+    }
+
+    /**
+     * @param mixed $free
+     * @return $this
+     */
+    public function setFree($free)
+    {
+        $this->free = $free;
 
         return $this;
     }

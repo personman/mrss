@@ -535,6 +535,21 @@ class College
         return $hasAccess;
     }
 
+    public function getFree()
+    {
+        $free = false;
+        foreach ($this->getSubscriptions() as $subscription) {
+            if ($subscription->getFree()) {
+                $free = true;
+
+                // Even one year is enough
+                continue;
+            }
+        }
+
+        return $free;
+    }
+
 
     public function getFullAddress($lineBreak = "<br>")
     {

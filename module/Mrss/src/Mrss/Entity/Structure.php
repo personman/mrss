@@ -250,10 +250,10 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
 
                 $this->children[] = $item;
             } elseif ($this->childIsBenchmark($child)) {
-                $item = $this->getBenchmark($child['benchmark']);
-
-                if (($year === null || $item->isAvailableForYear($year)) && ($includeComputed || !$item->getComputed())) {
-                    $this->children[] = $item;
+                if ($item = $this->getBenchmark($child['benchmark'])) {
+                    if (($year === null || $item->isAvailableForYear($year)) && ($includeComputed || !$item->getComputed())) {
+                        $this->children[] = $item;
+                    }
                 }
             }
 

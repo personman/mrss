@@ -2277,7 +2277,9 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             }
         }
 
-        $form = new SubscriptionAdmin($systemOptions, $systemLabel, $sectionOptions);
+        $freemium = $this->getStudyConfig()->freemium;
+
+        $form = new SubscriptionAdmin($systemOptions, $systemLabel, $sectionOptions, $freemium);
 
         $form->get('collegeId')->setValue($collegeId);
 

@@ -116,6 +116,10 @@
                             <th><?= ucwords($this->studyConfig()->system_label) ?></th>
                         <?php endif ?>
 
+                        <?php if ($this->studyConfig()->freemium): ?>
+                            <th>Free</th>
+                        <?php endif ?>
+
                         <th>Action</th>
 
                     </tr>
@@ -166,6 +170,14 @@
                         <?php if ($this->studyConfig()->use_structures): ?>
                             <td>
                                 <?= implode(', ', $subscription->getCollege()->getSystemNames($subscription->getYear())) ?>
+                            </td>
+                        <?php endif ?>
+
+                        <?php if ($this->studyConfig()->freemium): ?>
+                            <td>
+                                <?php if ($subscription->getFree()): ?>
+                                    <span class="icon-upload glyphicon glyphicon-ok"></span>
+                                <?php endif ?>
                             </td>
                         <?php endif ?>
 
