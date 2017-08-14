@@ -17,6 +17,7 @@
         <a href="<?= $this->url('users/import') ?>">Import users</a> - Take users from an Excel file and insert them into the database.
     </li>
 
+    <?php if (false): // Deprecated (was a one-off task for Victoria ?>
     <li>
         <a href="<?= $this->url(
             'tools/exceldiff'
@@ -24,6 +25,7 @@
         file with column C containing all emails from column A that are not in column
         B. Used for email blasts.
     </li>
+    <?php endif ?>
 
     <li>
         <a href="<?= $this->url(

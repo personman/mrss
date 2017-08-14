@@ -51,6 +51,7 @@ class Data extends Import
 
     protected $file = 'data/imports/mobility.xlsx';
 
+    protected $auditService;
 
     protected $map = array();
 
@@ -60,19 +61,7 @@ class Data extends Import
 
         $this->excel = $this->openFile($this->file);
 
-        /*$sheets = array(
-            0 => 2014,
-            1 => 2015,
-            2 => 2016,
-            //3 => 2013,
-        );*/
-
-        $sheets = array(
-            0 => 2017,
-            //1 => 2015,
-            //2 => 2014,
-            //3 => 2013
-        );
+        $sheets = $this->getSheets();
 
         foreach ($sheets as $index => $year) {
             $this->year = $year;
@@ -95,8 +84,21 @@ class Data extends Import
             }
         }
 
+        return array(
+            'status' => 'success'
+        );
+    }
 
-        die('import finished');
+    protected function getSheets()
+    {
+        $allSheets = $this->excel->getWorksheetIterator();
+
+        $sheets = array();
+        foreach ($allSheets as $sheet) {
+            $sheets[$this->excel->getIndex($sheet)] = $sheet->getTitle();
+        }
+
+        return $sheets;
     }
 
     protected function saveRow(PHPExcel_Worksheet_Row $row)
@@ -174,6 +176,7 @@ class Data extends Import
             $year = $subscription->getYear();
             $subscription->setBenchmarkModel($this->getBenchmarkmodel());
             $subscription->setDatumModel($this->getDatumModel());
+            $oldData = $subscription->getAllData();
 
             foreach ($data as $dbColumn => $value) {
                 $value = $this->processValue($dbColumn, $value);
@@ -186,6 +189,10 @@ class Data extends Import
                     echo "<p>$year: {$college->getName()} - $dbColumn: $value</p>";
                 }
             }
+
+            $newData = $subscription->getAllData();
+
+            $this->getAuditService()->logChangesNew($oldData, $newData, 'admin-import', $subscription);
 
             $this->getSubscriptionModel()->save($subscription);
             $this->getSubscriptionModel()->getEntityManager()->flush();
@@ -534,5 +541,29 @@ class Data extends Import
     public function getSystemMembershipModel()
     {
         return $this->membershipModel;
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @return \Mrss\Service\ObservationAudit $observationAudit
+     */
+    protected function getAuditService()
+    {
+        if (empty($this->auditService)) {
+            $this->auditService = $this->serviceManager->get('service.observationAudit');
+        }
+
+        return $this->auditService;
     }
 }

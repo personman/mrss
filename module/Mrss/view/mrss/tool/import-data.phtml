@@ -1,0 +1,7 @@
+<h1>Import Data</h1>
+
+<div class="well">
+    Upload an Excel file with tabs/sheets named for years. Column B should be <?= strtolower($this->studyConfig()->institution_label) ?> ID numbers. Row 2 should be <?= $this->studyConfig()->benchmark_label ?> DB columns / variable names. Column A and row 1 are ignored, but should contain human-readable names.
+</div>
+
+<?= $this->ztbForm($this->form->prepare()) ?>

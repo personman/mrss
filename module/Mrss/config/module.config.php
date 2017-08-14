@@ -2414,6 +2414,15 @@ return array(
                             )
                         )
                     ),
+                    'upload-data' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/upload-data',
+                            'defaults' => array(
+                                'action' => 'uploadData',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

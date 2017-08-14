@@ -72,6 +72,10 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
                     in academic division
                     <?= $subObservation->getName() ?>
                 <?php endif ?>
+
+                <?php if ($changeSet->getSubscription()->getYear() != $this->currentStudy()->getCurrentYear()): ?>
+                    (<?= $changeSet->getSubscription()->getYear() ?>)
+                <?php endif ?>
             </td>
 
 
