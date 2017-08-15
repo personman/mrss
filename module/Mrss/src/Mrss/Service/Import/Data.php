@@ -55,6 +55,8 @@ class Data extends Import
 
     protected $map = array();
 
+    protected $multPercent = false;
+
     public function import($serviceManager)
     {
         $this->serviceManager = $serviceManager;
@@ -248,7 +250,7 @@ class Data extends Import
         if (stristr($value, '.')) {
 
             if ($benchmark) {
-                if ($benchmark->isPercent() && $benchmark->getDbColumn() != 'vcr1') {
+                if ($benchmark->isPercent() && $benchmark->getDbColumn() != 'vcr1' && $this->multPercent) {
                     $value = $value * 100;
                 }
 
