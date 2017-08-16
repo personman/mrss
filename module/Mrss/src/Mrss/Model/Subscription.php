@@ -148,9 +148,8 @@ class Subscription extends AbstractModel
             $dataForSub = $this->getAllDataForSubscription($subInfo['id']);
 
             $allData[] = array(
+                $subInfo['name'] . ', ' . $subInfo['state'],
                 $subInfo['ipeds'],
-                $subInfo['name'],
-                $subInfo['state'],
                 'data' => $dataForSub
             );
         }

@@ -1,7 +1,7 @@
 <h1>Import Data</h1>
 
 <div class="well">
-    Upload an Excel file with tabs/sheets named for years. Column B should be <?= strtolower($this->studyConfig()->institution_label) ?> ID numbers. Row 2 should be <?= $this->studyConfig()->benchmark_label ?> DB columns / variable names. Column A and row 1 are ignored, but should contain human-readable names.
+    Upload an Excel file with tabs/sheets named for years. Column B should be <?= strtolower($this->studyConfig()->institution_label) ?> ID numbers. Row 2 should be <?= $this->studyConfig()->benchmark_label ?> DB columns / variable names. Column A and row 1 are ignored, but should contain human-readable names. Download the current data in that format here: <strong><a href="/export">Exports</a></strong>. The export will be a CSV file for one year. To re-import that data, save the file as Excel and rename the sheet/tab to the year. Note that this import can change large amounts of data, so taking a database backup first is recommended. You will have a chance to view the data changes after they are processed.
 </div>
 
 <?= $this->ztbForm($this->form->prepare()) ?>

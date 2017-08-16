@@ -10,6 +10,10 @@
     </li>
 
     <li>
+        <a href="<?= $this->url('tools/import-data') ?>">Import data</a> - Administrators may import data for all <?= strtolower($this->studyConfig()->institutions_label) ?>.
+    </li>
+
+    <li>
         <a href="<?= $this->url('colleges/import') ?>">Import institutions</a> - Take institutions from an Excel file and insert them into the database.
     </li>
 

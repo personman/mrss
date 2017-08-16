@@ -145,9 +145,8 @@ class DataExport
     protected function writeHeaders($year)
     {
         $headers = array(
-            'IPEDS',
-            'Institution',
-            'State'
+            'Name',
+            'ipeds',
         );
 
         $headers2 = $headers3 = array(null, null, null);
