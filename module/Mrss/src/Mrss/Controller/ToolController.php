@@ -1608,8 +1608,52 @@ class ToolController extends AbstractActionController
     public function importDataAction()
     {
         $this->longRunningScript();
-        $importer = $this->getServiceLocator()->get('service.import.data');
+        $importer = $this->getImportDataService();
 
-        $importer->import($this->getServiceLocator());
+        $form = $importer->getForm();
+
+        // Handle the form
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $filename = $data['file']['tmp_name'];
+
+                $importer->setFile($filename);
+                $importer->import($this->getServiceLocator());
+
+                $this->flashMessenger()->addSuccessMessage("Your import was processed. Please review the <a href='/admin/changes'>recent data changes</a>.");
+                return $this->redirect()->toUrl('/tools/import-data');
+
+
+            }
+        }
+
+        //
+
+        return array(
+            'form' => $form
+        );
+    }
+
+    public function uploadDataAction()
+    {
+
+    }
+
+    /**
+     * @return \Mrss\Service\Import\Data
+     */
+    protected function getImportDataService()
+    {
+        return $this->getServiceLocator()->get('service.import.data');
     }
 }
