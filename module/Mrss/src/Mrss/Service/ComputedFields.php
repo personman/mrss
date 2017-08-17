@@ -51,6 +51,8 @@ class ComputedFields
 
     protected $variableService;
 
+    protected $recursionLevel = 0;
+
     public function calculate(
         Benchmark $benchmark,
         Observation $observation,
@@ -262,8 +264,7 @@ class ComputedFields
 
             // If any of the variables are null or '', bail out
             if ($value === null || $value === '') {
-                // As long as there's no division or multiplication involved, we can assume nulls are 0
-                if (!$this->skipEmpty || ((strpos($equation, '/') === false && strpos($equation, '*') === false))) {
+                if ($this->shouldAssumeNullMeansZero($equation)) {
                     $value = 0;
                 } else {
                     $errors[] = "Missing variable: $variable. ";
@@ -317,7 +318,11 @@ class ComputedFields
         return $preparedEquation;
     }
 
-    protected $recursionLevel = 0;
+    protected function shouldAssumeNullMeansZero($equation)
+    {
+        // As long as there's no division or multiplication involved, we can assume nulls are 0
+        $nullMeansZero = (!$this->skipEmpty || ((strpos($equation, '/') === false && strpos($equation, '*') === false)));
+    }
 
     /**
      * If an equation includes a benchmark that's computed, drop in the equation

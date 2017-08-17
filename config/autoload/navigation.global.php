@@ -344,10 +344,10 @@ $navigation = array(
                         'label' => 'Benchmark Calculations',
                         'uri' => '/calculations'
                     ),
-                    'changes' => array(
+                    /*'changes' => array(
                         'label' => 'Changes and Errata',
                         'uri' => '/changes'
-                    ),
+                    ),*/
                 )
             ),
             'help' => array(
