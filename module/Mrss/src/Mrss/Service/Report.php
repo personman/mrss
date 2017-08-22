@@ -810,7 +810,12 @@ class Report
 
         $formatted = array();
         foreach ($percentileData as $percentile) {
-            $formatted[] = $benchmark->format($percentile);
+            if ($forPercentChange) {
+                $formatted[] = round($percentile) . '%';
+            } else {
+                $formatted[] = $benchmark->format($percentile);
+            }
+
         }
 
         $benchmarkData['percentiles_formatted'] = $formatted;
