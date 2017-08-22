@@ -146,10 +146,11 @@ class DataExport
     {
         $headers = array(
             'Name',
-            'ipeds',
+            'ID',
         );
 
-        $headers2 = $headers3 = array(null, null, null);
+        $headers2 = array(null, 'ipeds');
+        //$headers3 = array(null, null);
 
 
         $row = 1;
@@ -165,7 +166,7 @@ class DataExport
 
                 $headers2[] = $benchmark->getDbColumn();
 
-                $headers3[] = $benchmark->getBenchmarkGroup()->getName();
+                //$headers3[] = $benchmark->getBenchmarkGroup()->getName();
 
                 /*
                 $sheet->setCellValueByColumnAndRow(
@@ -192,7 +193,7 @@ class DataExport
 
         $this->addCsvRow($headers);
         $this->addCsvRow($headers2);
-        $this->addCsvRow($headers3);
+        //$this->addCsvRow($headers3);
     }
 
     /**
