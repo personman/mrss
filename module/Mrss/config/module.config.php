@@ -285,6 +285,15 @@ return array(
                                 'id' => 0
                             )
                         )
+                    ),
+                    'info' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/info',
+                            'defaults' => array(
+                                'action' => 'info',
+                            )
+                        )
                     )
                 )
             ),

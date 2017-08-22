@@ -7,6 +7,7 @@ use Mrss\Form\Study;
 use Mrss\Model\Study as StudyModel;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class StudyController extends AbstractActionController
 {
@@ -57,6 +58,39 @@ class StudyController extends AbstractActionController
             'years' => $years,
             'colleges' => $colleges
         );
+    }
+
+    public function infoAction()
+    {
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        $year = $study->getCurrentYear();
+
+        // Total members
+        $subscriptionCount = $this->getSubscriptionModel()->countByStudyAndYear(
+            $study->getId(),
+            $year
+        );
+
+
+        $params = array(
+            'year' => $year,
+            'study' => $study->getName(),
+            'studyDescription' => $study->getDescription(),
+            'memberships' => $subscriptionCount
+        );
+        $viewModel = new JsonModel($params);
+
+        return $viewModel;
+    }
+
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    protected function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
     }
 
     public function editAction()

@@ -10,7 +10,7 @@ return array(
         'beta.maximizingresources.org' => 2,
         'beta.workforceproject.org' => 3,
         'beta.nccbp.org' => 1,
-        'new.nccbp.org' => 1,
+        'new.nccbp.org' => 6,
         'www.nccbp.org' => 1,
         'nccbp.org' => 1,
         'maximizingresources.org' => 2,

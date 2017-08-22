@@ -89,6 +89,11 @@ return array(
                     'roles' => array('guest')
                 ),
                 array(
+                    'controller' => 'studies',
+                    'action' => 'info',
+                    'roles' => array('guest')
+                ),
+                array(
                     'controller' => 'PhlyContact\Controller\Contact',
                     'roles' => array('guest')
                 ),
