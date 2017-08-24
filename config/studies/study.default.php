@@ -16,6 +16,7 @@ return array(
     'show_peer_data_you_did_not_submit' => false,
     'percent_chart_scale_1_100' => true,
     'college_report_access_checkbox' => false,
+    'treat_null_as_zero_for_add_sub' => true,
     'layout' => 'layout.phtml',
     'navigation' => 'navigation',
     'favicon' => '/favicon.ico',

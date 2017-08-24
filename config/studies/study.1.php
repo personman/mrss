@@ -8,6 +8,7 @@ return array(
     'validation_require_note' => false,
     'benchmark_completion_heatmap' => true,
     'form_to_exclude_from_strengths' => 1,
+    'treat_null_as_zero_for_add_sub' => false,
     'percent_change_report_columns' => array(
         'ft_cr_head',
         'tuition_fees',

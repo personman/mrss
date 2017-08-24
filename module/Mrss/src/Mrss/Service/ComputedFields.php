@@ -53,6 +53,8 @@ class ComputedFields
 
     protected $recursionLevel = 0;
 
+    protected $studyConfig;
+
     public function calculate(
         Benchmark $benchmark,
         Observation $observation,
@@ -318,10 +320,15 @@ class ComputedFields
         return $preparedEquation;
     }
 
+    protected function getStudySettingForAddEquation()
+    {
+        return $this->getStudyConfig()->treat_null_as_zero_for_add_sub;
+    }
+
     protected function shouldAssumeNullMeansZero($equation)
     {
         // As long as there's no division or multiplication involved, we can assume nulls are 0
-        $nullMeansZero = (!$this->skipEmpty || ((strpos($equation, '/') === false && strpos($equation, '*') === false)));
+        $nullMeansZero = (!$this->skipEmpty || ($this->getStudySettingForAddEquation() && strpos($equation, '/') === false && strpos($equation, '*') === false));
 
         return $nullMeansZero;
     }
@@ -638,5 +645,17 @@ class ComputedFields
     public function getVariableService()
     {
         return $this->variableService;
+    }
+
+    public function setStudyConfig($config)
+    {
+        $this->studyConfig = $config;
+
+        return $this;
+    }
+
+    protected function getStudyConfig()
+    {
+        return $this->studyConfig;
     }
 }

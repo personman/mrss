@@ -21,6 +21,9 @@ class ComputedFields implements FactoryInterface
         $subObservationModel = $sm->get('model.subObservation');
         $computedFields->setSubObservationModel($subObservationModel);
 
+        $studyConfig = $sm->get('study');
+        $computedFields->setStudyConfig($studyConfig);
+
         $currentStudy = $sm->get('ControllerPluginManager')
             ->get('currentStudy')->getCurrentStudy();
         $computedFields->setStudy($currentStudy);
