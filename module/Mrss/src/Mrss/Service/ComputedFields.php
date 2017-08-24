@@ -322,6 +322,8 @@ class ComputedFields
     {
         // As long as there's no division or multiplication involved, we can assume nulls are 0
         $nullMeansZero = (!$this->skipEmpty || ((strpos($equation, '/') === false && strpos($equation, '*') === false)));
+
+        return $nullMeansZero;
     }
 
     /**
