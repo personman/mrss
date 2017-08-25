@@ -308,7 +308,7 @@ class ReportController extends ReportAdminController
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
 
         // Don't show current executive report yet @todo: use a study setup checkbox for this
-        $yearToSkip = null;
+        $yearToSkip = 2017;
         if (!$open) {
             $yearToSkip = $this->currentStudy()->getCurrentYear();
         }
