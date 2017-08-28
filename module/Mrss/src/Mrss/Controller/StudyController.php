@@ -65,10 +65,8 @@ class StudyController extends AbstractActionController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
-        $year = $study->getCurrentYear();
-
         $years = array();
-        foreach ($this->getSubscriptionModel()->getYearsWithSubscriptions() as $year) {
+        foreach ($this->getSubscriptionModel()->getYearsWithSubscriptions($study) as $year) {
             // Total members
             $subscriptionCount = $this->getSubscriptionModel()->countByStudyAndYear(
                 $study->getId(),
@@ -81,6 +79,7 @@ class StudyController extends AbstractActionController
         }
 
 
+        $year = $study->getCurrentYear();
 
 
         $params = array(
