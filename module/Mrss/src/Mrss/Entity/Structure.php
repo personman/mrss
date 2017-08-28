@@ -321,7 +321,7 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
     {
         $benchmarksForYear = array();
         foreach ($this->getAllBenchmarks($includeCalculated) as $benchmark) {
-            if ($benchmark->isAvailableForYear($year)) {
+            if ($benchmark && $benchmark->isAvailableForYear($year)) {
                 $benchmarksForYear[] = $benchmark;
             }
         }
