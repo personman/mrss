@@ -343,6 +343,32 @@ class Subscription extends AbstractModel
         return $years;
     }
 
+    public function getYearsAndRevenue(StudyEntity $study)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $qb = $connection->createQueryBuilder();
+
+        // The query
+        $qb->select('year', 'SUM(paymentAmount) AS revenue', 'COUNT(id) AS count');
+        $qb->from('subscriptions', 's');
+        $qb->andWhere('study_id = :study_id');
+        $qb->setParameter('study_id', $study->getId());
+        $qb->groupBy('year');
+        $qb->orderBy('year', 'DESC');
+
+        $data = $qb->execute()->fetchAll();
+
+        $years = array();
+        foreach ($data as $row) {
+            $years[$row['year']] = array(
+                'count' => $row['count'],
+                'revenue' => $row['revenue']
+            );
+        }
+
+        return $years;
+    }
+
     public function getYearsWithReports(StudyEntity $study, CollegeEntity $college)
     {
         $subs = $this->findByCollegeAndStudy($college->getId(), $study->getId());
