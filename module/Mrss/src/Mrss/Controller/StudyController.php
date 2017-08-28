@@ -67,18 +67,27 @@ class StudyController extends AbstractActionController
 
         $year = $study->getCurrentYear();
 
-        // Total members
-        $subscriptionCount = $this->getSubscriptionModel()->countByStudyAndYear(
-            $study->getId(),
-            $year
-        );
+        $years = array();
+        foreach ($this->getSubscriptionModel()->getYearsWithSubscriptions() as $year) {
+            // Total members
+            $subscriptionCount = $this->getSubscriptionModel()->countByStudyAndYear(
+                $study->getId(),
+                $year
+            );
+
+            $years[$year] = array(
+                'count' => $subscriptionCount
+            );
+        }
+
+
 
 
         $params = array(
             'year' => $year,
             'study' => $study->getName(),
             'studyDescription' => $study->getDescription(),
-            'memberships' => $subscriptionCount
+            'memberships' => $years
         );
         $viewModel = new JsonModel($params);
 
