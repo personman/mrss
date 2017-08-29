@@ -51,7 +51,7 @@ class CurrentObservation extends AbstractPlugin
         $observation = $this->getObservationModel()->findOne($collegeId, $year);
 
         if (empty($observation)) {
-            throw new \Exception('Unable to get current observation.');
+            throw new \Exception("Unable to get current observation (plugin) for college $collegeId and year $year.");
         }
 
         return $observation;
