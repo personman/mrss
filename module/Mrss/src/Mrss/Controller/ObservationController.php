@@ -365,11 +365,12 @@ class ObservationController extends BaseController
 
         $observationModel = $this->getServiceLocator()->get('model.observation');
 
+        $collegeId = $college->getId();
         /** @var \Mrss\Entity\Observation $observation */
-        $observation = $observationModel->findOne($college->getId(), $year);
+        $observation = $observationModel->findOne($collegeId, $year);
 
         if (empty($observation)) {
-            throw new \Exception('Unable to get current observation.');
+            throw new \Exception("Unable to get current observation for college $collegeId and year $year.");
         }
 
         return $observation;
