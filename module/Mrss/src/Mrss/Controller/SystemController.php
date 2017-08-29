@@ -130,15 +130,36 @@ class SystemController extends AbstractActionController
         return $this->getServiceLocator()->get('Study')->system_label;
     }
 
+    /**
+     * @return \Mrss\Model\Subscription
+     */
+    protected function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
+    }
+
     public function addcollegeAction()
     {
         $collegeModel = $this->getServiceLocator()->get('model.college');
-        $form = new \Mrss\Form\SystemCollege($collegeModel);
+        $years = $this->getSubscriptionModel()->getYearsWithSubscriptions($this->currentStudy());
+        $form = new \Mrss\Form\SystemCollege($collegeModel, $years);
 
         $systemId = $this->params('system_id');
         $system = $this->getSystemModel()->find($systemId);
 
-        $year = $this->currentStudy()->getCurrentYear();
+        $collegeId = $this->params()->fromRoute('college_id');
+        if ($collegeId) {
+            //$college = $this->
+            $form->get('college_id')->setValue($collegeId);
+
+            $college = $collegeModel->find($collegeId);
+            $yearsEnabled = $this->getYearsWithMembership($system, $college);
+
+            $form->get('years')->setValue($yearsEnabled);
+        }
+
+
+        //$year = $this->currentStudy()->getCurrentYear();
 
         if (empty($system)) {
             throw new \Exception('System not found');
@@ -159,22 +180,28 @@ class SystemController extends AbstractActionController
                     throw new \Exception('Invalid college chosen.');
                 }
 
-                // See if the membership exists
-                $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $year);
 
-                if (!$membership) {
-                    $membership = new SystemMembership();
-                    $membership->setSystem($system);
-                    $membership->setCollege($college);
-                    $membership->setYear($year);
-                    $membership->setDataVisibility('public');
+                foreach ($years as $year) {
+                    $enabled = in_array($year, $data['years']);
 
-                    $this->getSystemMembershipModel()->save($membership);
+
+                    // See if the membership exists
+                    $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $year);
+
+                    if (!$membership && $enabled) {
+                        // Add it
+                        $membership = new SystemMembership();
+                        $membership->setSystem($system);
+                        $membership->setCollege($college);
+                        $membership->setYear($year);
+                        $membership->setDataVisibility('public');
+
+                        $this->getSystemMembershipModel()->save($membership);
+                    } elseif ($membership && !$enabled) {
+                        // Remove it
+                        $this->getSystemMembershipModel()->delete($membership);
+                    }
                 }
-
-                // (old way): Actually write the association
-                //$college->setSystem($system);
-                //$collegeModel->save($college);
 
                 $this->getServiceLocator()->get('em')->flush();
 
@@ -189,6 +216,30 @@ class SystemController extends AbstractActionController
             'form' => $form,
             'system' => $system
         );
+    }
+
+    protected function getMemberships($system, $college)
+    {
+        $years = $this->getSubscriptionModel()->getYearsWithSubscriptions($this->currentStudy());
+
+        $memberships = array();
+        foreach ($years as $year) {
+            // See if the membership exists
+            $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $year);
+
+            if ($membership) {
+                $memberships[$year] = $membership;
+            }
+        }
+
+        return $memberships;
+    }
+
+    protected function getYearsWithMembership($system, $college)
+    {
+        $memberships = $this->getMemberships($system, $college);
+
+        return array_keys($memberships);
     }
 
     /**

@@ -137,18 +137,22 @@ $vowels = array('a', 'e', 'i', 'o', 'u');
 
 <table class="table table-striped table-hover">
     <?php foreach ($system->getMemberColleges() as $collegeInfo): ?>
+        <?php $college = $collegeInfo['college']; ?>
         <tr>
             <td>
-                <?= $collegeInfo['college']->getName() ?>  (<?= implode(', ', $collegeInfo['years']) ?>)
+                <?= $college->getName() ?>  (<?= implode(', ', $collegeInfo['years']) ?>)
             </td>
-            <? /*<td>
+            <td>
                 <a href="<?= $this->url(
-                    'systems/removecollege',
-                    array('college_id' => $college->getId())
-                ) ?>" title="Remove from system">
-                    X
+                    'systems/editmember',
+                    array(
+                        'college_id' => $college->getId(),
+                        'system_id' => $system->getId()
+                    )
+                ) ?>" title="Edit">
+                    Edit
                 </a>
-            </td> */ ?>
+            </td>
         </tr>
     <?php endforeach ?>
 </table>

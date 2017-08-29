@@ -16,7 +16,7 @@ class SystemCollege extends AbstractForm
 {
     protected $collegeModel;
 
-    public function __construct(College $collegeModel)
+    public function __construct(College $collegeModel, $years)
     {
         $this->collegeModel = $collegeModel;
 
@@ -43,6 +43,18 @@ class SystemCollege extends AbstractForm
             )
         );
 
+        $combined = array_combine($years, $years);
+        $this->add(
+            array(
+                'name' => 'years',
+                'type' => 'Zend\Form\Element\MultiCheckbox',
+                'options' => array(
+                    'label' => 'Years',
+                    'value_options' => $combined
+                )
+            )
+        );
+
         $this->add($this->getButtonFieldset());
     }
 
@@ -56,5 +68,14 @@ class SystemCollege extends AbstractForm
         }
 
         return $options;
+    }
+
+    public function getInputFilter()
+    {
+        $filter = parent::getInputFilter();
+        $filter->get('years')->setRequired(false);
+
+        //pr($filter);
+        return $filter;
     }
 }

@@ -783,6 +783,17 @@ return array(
                             )
                         )
                     ),
+                    'editmember' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/editmember/:system_id/:college_id',
+                            'defaults' => array(
+                                'action' => 'addcollege',
+                                'college_id' => 0,
+                                'system_id' => 0
+                            )
+                        )
+                    ),
                     'addadmin' => array(
                         'type' => 'segment',
                         'options' => array(
