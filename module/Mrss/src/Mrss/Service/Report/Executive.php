@@ -364,6 +364,12 @@ class Executive extends Report
 
         $ranks = array();
         foreach ($percentileRanks as $pRank) {
+            // Skip disabled benchmarks
+            if (!$pRank->getBenchmark()->isAvailableForYear($year)) {
+                continue;
+            }
+
+
             $name = $pRank->getBenchmark()->getDescriptiveReportLabel();
             $append = '';
             if (!$pRank->getBenchmark()->getHighIsBetter()) {
