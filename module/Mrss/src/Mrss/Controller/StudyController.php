@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Service\Report\Chart\Line;
 use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Study;
 use Mrss\Model\Study as StudyModel;
@@ -84,6 +85,7 @@ class StudyController extends AbstractActionController
         }
 
 
+
         $year = $study->getCurrentYear();
 
 
@@ -91,11 +93,100 @@ class StudyController extends AbstractActionController
             'year' => $year,
             'study' => $study->getName(),
             'studyDescription' => $study->getDescription(),
-            'memberships' => $years
+            'memberships' => $years,
+            'progress' => $this->getSubscriptionProgressChart($study)
         );
+
         $viewModel = new JsonModel($params);
 
         return $viewModel;
+    }
+
+    protected function getSubscriptionProgressChart()
+    {
+
+
+        $chart = new Line();
+
+        $series = array();
+        foreach ($this->getProgressChartData() as $year => $data) {
+            $series[] = array(
+                'name' => $year,
+                'data' => array_values($data)
+            );
+        }
+
+        $chart->setTitle('Membership');
+        $chart->setSeries($series);
+
+
+        return $chart->getConfig();
+    }
+
+    protected function getProgressChartData()
+    {
+        $allData = array();
+
+        /** @var \Mrss\Entity\Study $study */
+        $study = $this->currentStudy();
+
+        foreach ($this->getSubscriptionModel()->getYearsWithSubscriptions($study) as $year) {
+            if ($year < 2013) {
+                continue;
+            }
+
+            $subs = $this->getSubscriptionModel()->findByStudyAndYear($study->getId(), $year, false, 's.created ASC');
+
+            $firstSubDate = null;
+            $count = 0;
+            $subsInfo = array();
+            foreach ($subs as $subscription) {
+                $count++;
+
+                if ($this->isDateInvalid($subscription->getCreated())) {
+                    continue;
+                }
+
+                if (empty($firstSubDate)) {
+                    $firstSubDate = $subscription->getCreated();
+                }
+
+                $daysAfterFirst = $subscription->getCreated()->diff($firstSubDate)->days;
+                //pr($daysAfterFirst);
+
+                $subsInfo[$daysAfterFirst] = $count;
+
+            }
+
+            $subsInfo = $this->fillInGaps($subsInfo);
+
+            $allData[$year] = $subsInfo;
+        }
+
+        return $allData;
+    }
+
+    protected function fillInGaps($subsInfo)
+    {
+        $max = max(array_keys($subsInfo));
+        $range = range(0, $max);
+
+        $total = 0;
+        $newSubsInfo = array();
+        foreach ($range as $key) {
+            if (isset($subsInfo[$key])) {
+                $total = $subsInfo[$key];
+            }
+
+            $newSubsInfo[$key] = $total;
+        }
+
+        return $newSubsInfo;
+    }
+
+    protected function isDateInvalid(\DateTime $date)
+    {
+        return ($date->format('Y') == '-0001');
     }
 
     /**
