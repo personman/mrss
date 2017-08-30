@@ -94,7 +94,7 @@ class StudyController extends AbstractActionController
             'study' => $study->getName(),
             'studyDescription' => $study->getDescription(),
             'memberships' => $years,
-            'progress' => $this->getSubscriptionProgressChart($study)
+            'progress' => $this->getSubscriptionProgressChart()
         );
 
         $viewModel = new JsonModel($params);
@@ -117,7 +117,10 @@ class StudyController extends AbstractActionController
         }
 
         $chart->setTitle('Membership');
-        $chart->setSeries($series);
+        $chart->setSeries($series)
+            ->setXLabel('Days')
+            ->setYLabel('Members')
+            ->setWidth('half');
 
 
         return $chart->getConfig();

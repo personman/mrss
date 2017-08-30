@@ -1383,6 +1383,7 @@
                 fn = events[i];
 
                 // If the event handler return false, prevent the default handler from executing
+                console.log(fn)
                 if (fn && fn.call(el, eventArguments) === false) {
                     eventArguments.preventDefault();
                 }
