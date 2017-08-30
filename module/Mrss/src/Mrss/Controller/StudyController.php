@@ -116,6 +116,8 @@ class StudyController extends AbstractActionController
             );
         }
 
+
+
         $chart->setTitle('Membership');
         $chart->setSeries($series)
             ->setXLabel('Days')
@@ -123,7 +125,10 @@ class StudyController extends AbstractActionController
             ->setWidth('half');
 
 
-        return $chart->getConfig();
+        $config = $chart->getConfig();
+        unset($config['chart']['events']);
+
+        return $config;
     }
 
     protected function getProgressChartData()
