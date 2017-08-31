@@ -118,7 +118,7 @@ class StudyController extends AbstractActionController
 
 
 
-        $chart->setTitle('Membership');
+        $chart->setTitle('NCCBP Membership');
         $chart->setSeries($series)
             ->setXLabel('Days')
             ->setYLabel('Members')
