@@ -100,7 +100,8 @@ class ReportItemController extends CustomReportController
         }
 
         if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
+            $year = $data['year'];
+            //$year = $this->currentStudy()->getCurrentYear();
         }
 
         // Reset button proxy hidden fields

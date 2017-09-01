@@ -104,10 +104,13 @@ class ChartBuilder extends Report
 
     public function substituteVariablesInFootnotes()
     {
+        $config = $this->getConfig();
+        $year = $config['year'];
+
         $subbedFootnotes = array();
         foreach ($this->footnotes as $footnote) {
             $subbedFootnotes[] = $this->getVariableSubstitution()
-                ->setStudyYear($this->getYear())->substitute($footnote);
+                ->setStudyYear($year)->substitute($footnote);
         }
 
         $this->footnotes = $subbedFootnotes;
