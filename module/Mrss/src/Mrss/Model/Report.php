@@ -73,6 +73,22 @@ class Report extends AbstractModel
         );
     }
 
+    /**
+     * Find all reports that were copied from the supplied id:
+     * @param $reportId
+     * @param $study
+     * @return ReportEntity[]
+     */
+    public function findBySourceId($reportId, $study)
+    {
+        return $this->getRepository()->findBy(
+            array(
+                'study' => $study,
+                'sourceReportId' => $reportId
+            )
+        );
+    }
+
     public function findByEmptyCache($studyId)
     {
         $sql = "SELECT r.id, r.name, c.name AS college
