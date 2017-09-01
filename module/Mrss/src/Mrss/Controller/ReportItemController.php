@@ -111,6 +111,10 @@ class ReportItemController extends CustomReportController
         // Substitute variables (years)
         $footnotes = $this->subFootnoteVariables($footnotes, $year);
 
+        if (empty($data)) {
+            $data = array();
+        }
+
         $viewModel = new ViewModel(array(
             'form' => $form,
             'chart' => $chart,
