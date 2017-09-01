@@ -377,7 +377,7 @@ class CustomReportController extends ReportController
         if ($peerGroup = $this->getSamplePeerGroup($user)) {
             $peerGroupId = $peerGroup->getId();
         } else {
-            $peerGroupIdToCopy = 3465; // Peer group for sample reports
+            $peerGroupIdToCopy = 12650; // Peer group for sample reports
             //$peerGroupIdToCopy = null; // Peer group for sample reports
             $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $user);
         }
