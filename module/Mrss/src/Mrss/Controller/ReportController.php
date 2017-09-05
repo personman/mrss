@@ -927,7 +927,8 @@ class ReportController extends ReportAdminController
                     'crd_stud_minc',
                     'loc_sour',
                     'state_sour',
-                    'tuition_fees_sour'
+                    'tuition_fees_sour',
+                    'hs_stud_hdct'
                 );
 
                 if (($this->currentStudy()->getId() == 1 &&$benchmarkGroup->getId() == 1) &&
