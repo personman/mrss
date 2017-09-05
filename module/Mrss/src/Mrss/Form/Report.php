@@ -50,7 +50,8 @@ class Report extends AbstractForm
 
     protected function addSystems()
     {
-        if ($this->systems) {
+        // Only ask for a system/network here if we're using the Network feature (Envisio)
+        if ($this->systems && $this->studyConfig->use_structures) {
             $field = array(
                 'name' => 'system',
                 //'type' => 'Select',
