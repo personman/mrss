@@ -334,8 +334,8 @@ class CustomReportController extends ReportController
             $colleges = $this->getAllColleges();
 
             // Test with JCCC
-            $college = $this->getCollegeModel()->find(101);
-            $colleges = array($college);
+            //$college = $this->getCollegeModel()->find(101);
+            //$colleges = array($college);
 
             foreach ($colleges as $college) {
                 // Skip the current college to prevent dupes
