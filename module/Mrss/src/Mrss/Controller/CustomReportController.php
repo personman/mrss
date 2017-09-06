@@ -331,7 +331,9 @@ class CustomReportController extends ReportController
             $count = 0;
             $duplicatesSkipped = 0;
 
-            $colleges = $this->getAllColleges();
+            $year = $this->currentStudy()->getCurrentYear();
+
+            $colleges = $this->getAllColleges($year);
 
             // Test with JCCC
             //$college = $this->getCollegeModel()->find(101);
@@ -345,7 +347,7 @@ class CustomReportController extends ReportController
 
                 foreach ($college->getUsers() as $user) {
                     if (!$this->userHasReport($user)) {
-                        $this->copyCustomReport($report, $user);
+                        //$this->copyCustomReport($report, $user);
                         $count++;
                     } else {
                         $duplicatesSkipped++;
@@ -355,6 +357,7 @@ class CustomReportController extends ReportController
                     //pr("$count. {$college->getName()} {$user->getFullName()}");
                 }
             }
+
 
             $elapsed = round(microtime(true) - $start);
             $this->flashMessenger()->addSuccessMessage(
@@ -400,9 +403,17 @@ class CustomReportController extends ReportController
         $this->getReportModel()->getEntityManager()->flush();
     }
 
-    protected function getAllColleges()
+    protected function getAllColleges($year = null)
     {
-        return $this->getCollegeModel()->findByStudy($this->currentStudy());
+        $study = $this->currentStudy();
+
+        if ($year) {
+            $colleges = $this->getCollegeModel()->findByStudyAndYear($study, $year);
+        } else {
+            $colleges = $this->getCollegeModel()->findByStudy($study);
+        }
+
+        return $colleges;
     }
 
     /** @return \Mrss\Model\College */
