@@ -347,7 +347,7 @@ class CustomReportController extends ReportController
 
                 foreach ($college->getUsers() as $user) {
                     if (!$this->userHasReport($user)) {
-                        //$this->copyCustomReport($report, $user);
+                        $this->copyCustomReport($report, $user);
                         $count++;
                     } else {
                         $duplicatesSkipped++;
