@@ -321,7 +321,8 @@ class CustomReportController extends ReportController
         $settingsModel = $this->getServiceLocator()->get('model.setting');
 
 
-        $settingsModel->setValueForIdentifier('copy_done', false);
+        // Force enable:
+        //$settingsModel->setValueForIdentifier('copy_done', false);
 
 
         $copyDone = $settingsModel->getValueForIdentifier('copy_done');
