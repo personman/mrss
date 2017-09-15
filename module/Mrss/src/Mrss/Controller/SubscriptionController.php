@@ -1575,7 +1575,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $observation = $observationModel->findOne(
             $college->getId(),
-            $this->getCurrentYear()
+            $year
         );
 
         if (empty($observation)) {
