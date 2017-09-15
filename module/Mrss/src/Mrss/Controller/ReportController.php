@@ -308,7 +308,7 @@ class ReportController extends ReportAdminController
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
 
         // Don't show current executive report yet @todo: use a study setup checkbox for this
-        $yearToSkip = 2017;
+        $yearToSkip = null;//2017;
         if (!$open) {
             $yearToSkip = $this->currentStudy()->getCurrentYear();
         }
@@ -927,7 +927,8 @@ class ReportController extends ReportAdminController
                     'crd_stud_minc',
                     'loc_sour',
                     'state_sour',
-                    'tuition_fees_sour'
+                    'tuition_fees_sour',
+                    'hs_stud_hdct'
                 );
 
                 if (($this->currentStudy()->getId() == 1 &&$benchmarkGroup->getId() == 1) &&

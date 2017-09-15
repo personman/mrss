@@ -293,6 +293,20 @@ class CustomReportController extends ReportController
         return $response;
     }
 
+    protected $userIdsWhoAlreadyHaveIt = array();
+
+    protected function prepareUsersWhoAlreadyHaveIt($sourceId)
+    {
+        foreach ($this->getReportModel()->findBySourceId($sourceId, $this->currentStudy()) as $report) {
+            $this->userIdsWhoAlreadyHaveIt[] = $report->getUser()->getId();
+        }
+    }
+
+    protected function userHasReport($user)
+    {
+        return in_array($user->getId(), $this->userIdsWhoAlreadyHaveIt);
+    }
+
     public function copyAction()
     {
         $this->longRunningScript();
@@ -301,30 +315,54 @@ class CustomReportController extends ReportController
         $id = $this->params()->fromRoute('id');
         $report = $this->getReport($id);
 
+        $this->prepareUsersWhoAlreadyHaveIt($id);
+
         /** @var \Mrss\Model\Setting $settingsModel */
         $settingsModel = $this->getServiceLocator()->get('model.setting');
+
+
+        // Force enable:
+        //$settingsModel->setValueForIdentifier('copy_done', false);
+
+
         $copyDone = $settingsModel->getValueForIdentifier('copy_done');
 
 
         if (empty($copyDone)) {
             $count = 0;
-            foreach ($this->getAllColleges() as $college) {
+            $duplicatesSkipped = 0;
+
+            $year = $this->currentStudy()->getCurrentYear();
+
+            $colleges = $this->getAllColleges($year);
+
+            // Test with JCCC
+            //$college = $this->getCollegeModel()->find(101);
+            //$colleges = array($college);
+
+            foreach ($colleges as $college) {
                 // Skip the current college to prevent dupes
                 if ($college->getId() == $this->currentCollege()->getId()) {
                     //continue;
                 }
 
                 foreach ($college->getUsers() as $user) {
-                    $this->copyCustomReport($report, $user);
-                    $count++;
+                    if (!$this->userHasReport($user)) {
+                        $this->copyCustomReport($report, $user);
+                        $count++;
+                    } else {
+                        $duplicatesSkipped++;
+                    }
+
 
                     //pr("$count. {$college->getName()} {$user->getFullName()}");
                 }
             }
 
+
             $elapsed = round(microtime(true) - $start);
             $this->flashMessenger()->addSuccessMessage(
-                "Report copied to all users at all institutions ($count) in $elapsed seconds.
+                "Report copied to all users at all institutions ($count) in $elapsed seconds. $duplicatesSkipped duplicates skipped.
             Now <a href='/reports/custom/admin'>rebuild the cache</a>."
             );
 
@@ -343,7 +381,7 @@ class CustomReportController extends ReportController
         if ($peerGroup = $this->getSamplePeerGroup($user)) {
             $peerGroupId = $peerGroup->getId();
         } else {
-            $peerGroupIdToCopy = 3465; // Peer group for sample reports
+            $peerGroupIdToCopy = 12650; // Peer group for sample reports
             //$peerGroupIdToCopy = null; // Peer group for sample reports
             $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $user);
         }
@@ -366,13 +404,23 @@ class CustomReportController extends ReportController
         $this->getReportModel()->getEntityManager()->flush();
     }
 
-    protected function getAllColleges()
+    protected function getAllColleges($year = null)
     {
-        /** @var \Mrss\Model\College $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $study = $this->currentStudy();
 
-        return $collegeModel->findByStudy($this->currentStudy());
-        //return $collegeModel->findByState('MO');
+        if ($year) {
+            $colleges = $this->getCollegeModel()->findByStudyAndYear($study, $year);
+        } else {
+            $colleges = $this->getCollegeModel()->findByStudy($study);
+        }
+
+        return $colleges;
+    }
+
+    /** @return \Mrss\Model\College */
+    protected function getCollegeModel()
+    {
+        return $this->getServiceLocator()->get('model.college');
     }
 
     protected function getSamplePeerGroup($user)

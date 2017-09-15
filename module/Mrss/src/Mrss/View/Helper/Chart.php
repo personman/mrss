@@ -39,6 +39,10 @@ class Chart extends AbstractHelper
 
     public function showChart($chartConfig)
     {
+        if (!is_array($chartConfig)) {
+            return false;
+        }
+
         $this->headScript();
         $chartConfigJson = $this->encodeAndAddEvents($chartConfig);
 

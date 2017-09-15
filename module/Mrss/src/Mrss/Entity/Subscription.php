@@ -131,6 +131,7 @@ class Subscription
     /**
      * @Gedmo\Mapping\Annotation\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @var \DateTime
      */
     protected $created;
 
@@ -354,6 +355,9 @@ class Subscription
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getCreated()
     {
         return $this->created;

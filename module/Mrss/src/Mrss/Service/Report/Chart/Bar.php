@@ -12,6 +12,9 @@ class Bar extends AbstractChart
 
         $config['chart']['type'] = 'column';
 
+        // The x-axis labels were getting cut off. This helps:
+        $config['chart']['marginRight'] = 30;
+
         $config['plotOptions']['series'] = array(
             'animation' => false,
             //'dataLabels' => array('crop' => false)

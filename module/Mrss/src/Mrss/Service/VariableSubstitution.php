@@ -40,9 +40,11 @@ class VariableSubstitution
 
     public function getVariables()
     {
-        if (!count($this->variables)) {
+        $year = $this->getStudyYear();
+
+        if (empty($this->variables[$year])) {
             $range = range(-7, 2);
-            $variables = array('year' => $this->getStudyYear());
+            $variables = array('year' => $year);
             foreach ($range as $offset) {
                 $value = $this->getStudyYear() + $offset;
                 if ($offset > 0) {
@@ -55,10 +57,9 @@ class VariableSubstitution
                 $variables[$variable] = $value;
             }
 
-            $this->variables = $variables;
+            $this->variables[$year] = $variables;
         }
 
-
-        return $this->variables;
+        return $this->variables[$year];
     }
 }
