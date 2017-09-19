@@ -53,19 +53,7 @@
     <div class="executiveReportIntro">
         <h3>Key National Benchmarks – Where Does Your Institution Stand?</h3>
 
-        <p>Your college participated in the National Community College Benchmark Project in <?= $year ?>.  This research is conducted annually by The National Higher Education Benchmarking Institute (NHEBI).  We would like to share some of the key results of this study with you. The report illustrates how your college compared to national data, representing <?= $memberCount ?> community colleges.</p>
-
-        <p>The full NCCBP report, available online, contains more than 150 benchmarks on student demographics, measures of student success, faculty and staff data, workforce and community outreach, and institutional characteristics and effectiveness metrics.</p>
-
-        <p>Member colleges use the benchmarks to support:
-        </p><ul>
-            <li>Strategic planning and selection of KPIs</li>
-            <li>Accreditation</li>
-            <li>Internal and external accountability activities</li>
-            <li>Institutional transparency</li>
-            <li>Documentation of student success</li>
-        </ul>
-        <p></p>
+        <?= $reportData['intro'] ?>
 
     </div>
 
@@ -148,13 +136,7 @@
     <div class="executiveReportFooter">
         <div class="executiveReportMoreInfo">
             <h3>More Information</h3>
-            <p>Thank you for being an NCCBP member. Find more information on the NCCBP by visiting our website <a href="http://nccbp.org">NCCBP.org</a> or by calling or emailing the Benchmark Institute.</p>
-
-            <p>Your research office will be able to provide additional benchmarks from the research, including peer comparisons.</p>
-
-            <p>A new feature in the NCCBP reports this year is the capability for each institution to design custom reports.  This feature gives access to your institution's trend data for the years it was a member from 2007 to <?= $year ?>.</p>
-
-            <p class="executiveReportLinkToThisPage">To view reports online, go to <a href="http://nccbp.org/reports">NCCBP.org/reports</a> and log in.</p>
+            <?= $reportData['moreInfo'] ?>
 
         </div>
 

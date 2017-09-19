@@ -363,7 +363,7 @@ class ReportController extends ReportAdminController
                 'college' => $college,
                 'open' => $open,
                 'media' => $media,
-                'memberCount' => $memberCount,
+                //'memberCount' => $memberCount,
                 'autoPrint' => $autoPrint
             )
         );

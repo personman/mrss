@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\Study;
 use Mrss\Entity\Subscription;
 use Mrss\Entity\User;
 use Mrss\Entity\College;
@@ -1575,7 +1576,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $observation = $observationModel->findOne(
             $college->getId(),
-            $this->getCurrentYear()
+            $year
         );
 
         if (empty($observation)) {
@@ -2188,6 +2189,30 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         die;
     }
 
+    /**
+     * These are dbColumns for benchmarks that are selected as demographic criteria but that shouldn't
+     * be included in them ember download (NCCBP only).
+     * @return array
+     */
+    protected function getCriteriaToSkipForDownload()
+    {
+        return array(
+            'CFI'
+        );
+    }
+
+    protected function getCriteria(Study $study)
+    {
+        $criteria = array();
+        foreach ($study->getCriteria() as $criterion) {
+            if (!in_array($criterion->getBenchmark()->getDbColumn(), $this->getCriteriaToSkipForDownload())) {
+                $criteria[] = $criterion;
+            }
+        }
+
+        return $criteria;
+    }
+
     protected function getSubscriptionsForExport($year)
     {
         $model = $this->getSubscriptionModel();
@@ -2211,7 +2236,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         }
 
         $headers = array($this->getStudyConfig()->institution_label, 'State', 'IPEDS Unit ID');
-        foreach ($study->getCriteria() as $criterion) {
+        foreach ($this->getCriteria($study) as $criterion) {
             $headers[] = $criterion->getName();
         }
 
@@ -2228,7 +2253,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
                 $college->getIpeds(),
             );
 
-            foreach ($study->getCriteria() as $criterion) {
+            foreach ($this->getCriteria($study) as $criterion) {
                 $exportRow[] = $observation->get($criterion->getBenchmark()->getDbColumn());
             }
 

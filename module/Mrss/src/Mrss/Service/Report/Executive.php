@@ -19,7 +19,55 @@ class Executive extends Report
         $reportData['strengths'] = $this->getStrengths();
         $reportData['weaknesses'] = $this->getWeaknesses();
 
+        $reportData['intro'] = $this->getIntro();
+        $reportData['moreInfo'] = $this->getMoreInfo();
+
         return $reportData;
+    }
+
+    protected function getIntro()
+    {
+        $year = $this->getObservation()->getYear();
+        $memberCount = count($this->getStudy()->getSubscriptionsForYear($year));
+
+        if ($year < 2017) {
+            $intro = "<p>Your college participated in the National Community College Benchmark Project in $year.  This research is conducted annually by The National Higher Education Benchmarking Institute (NHEBI).  We would like to share some of the key results of this study with you. The report illustrates how your college compared to national data, representing $memberCount community colleges.</p>
+
+            <p>The full NCCBP report, available online, contains more than 150 benchmarks on student demographics, measures of student success, faculty and staff data, workforce and community outreach, and institutional characteristics and effectiveness metrics.</p>
+
+            <p>Member colleges use the benchmarks to support:
+            </p><ul>
+                <li>Strategic planning and selection of KPIs</li>
+                <li>Accreditation</li>
+                <li>Internal and external accountability activities</li>
+                <li>Institutional transparency</li>
+                <li>Documentation of student success</li>
+            </ul>
+            <p></p>";
+        } else {
+            $intro = "<p>Thank you for participating in the National Community College Benchmark Project in 2017. The report illustrates how your college compared to national data, representing 242 community colleges. The full NCCBP report, available online, contains more than 150 benchmarks, including new financial and social mobility measures.</p>";
+        }
+
+        return $intro;
+    }
+
+    protected function getMoreInfo()
+    {
+        $year = $this->getObservation()->getYear();
+
+        $info = "<p>Thank you for being an NCCBP member. Find more information on the NCCBP by visiting our website <a href=\"http://nccbp.org\">NCCBP.org</a> or by calling or emailing the Benchmark Institute.</p>
+
+            <p>Your research office will be able to provide additional benchmarks from the research, including peer comparisons.</p>
+
+            <p>A new feature in the NCCBP reports this year is the capability for each institution to design custom reports.  This feature gives access to your institution's trend data for the years it was a member from 2007 to <?= $year ?>.</p>
+
+            <p class=\"executiveReportLinkToThisPage\">To view reports online, go to <a href=\"http://nccbp.org/reports\">NCCBP.org/reports</a> and log in.</p>";
+
+        if ($year >= 2017) {
+            $info = "<p>Find more information on the NCCBP by visiting our website <a href=\"http://nccbp.org\">NCCBP.org</a> or by calling or emailing the Benchmark Institute.</p>";
+        }
+
+        return $info;
     }
 
     public function getExecutiveReportConfig($year)
