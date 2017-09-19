@@ -2236,6 +2236,11 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         }
 
         $headers = array($this->getStudyConfig()->institution_label, 'State', 'IPEDS Unit ID');
+
+        if ($this->getStudy()->hasSections()) {
+            $headers[] = 'Modules';
+        }
+
         foreach ($this->getCriteria($study) as $criterion) {
             $headers[] = $criterion->getName();
         }
@@ -2252,6 +2257,10 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
                 $college->getState(),
                 $college->getIpeds(),
             );
+
+            if ($this->getStudy()->hasSections()) {
+                $exportRow[] = $sub->getSectionNames();
+            }
 
             foreach ($this->getCriteria($study) as $criterion) {
                 $exportRow[] = $observation->get($criterion->getBenchmark()->getDbColumn());

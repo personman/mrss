@@ -5,6 +5,14 @@ namespace Mrss\Service;
 use PHPExcel;
 use PHPExcel_Style_Alignment;
 
+/**
+ * Class DownloadColleges
+ *
+ * Note: this is not the code that powers the NCCBP national report member list.
+ * That's in SubscriptionController
+ *
+ * @package Mrss\Service
+ */
 class DownloadColleges extends Report
 {
     protected $study;
