@@ -4,11 +4,19 @@ h1.title {
 }
 
 #executiveReport .chart {
-    border-bottom: 1px solid #CCC;
+    /*border-bottom: 1px solid #CCC;*/
     margin: 0px 0px 10px 0px;
     width: 100%;
     height: 280px;
     padding:  0 0 10px 0;
+}
+
+#executiveReport .complete-chart-box.tall .chart {
+    height: 450px;
+}
+
+.complete-chart-box.tall {
+    height: 520px;
 }
 
 .complete-chart-box {

@@ -28,7 +28,7 @@
     </ul>
 
 
-    <?php if ($year == 2017): ?>
+    <?php if (false && $year == 2017): ?>
 
         <p>
             The 2017 Executive Report will be produced in October.  It is mailed to the college president and made available here at that time.  Watch for an email announcing when it is ready.
@@ -59,7 +59,7 @@
 
     <?php foreach ($reportData['important'] as $importantChart): ?>
 
-        <div class="complete-chart-box">
+        <div class="complete-chart-box<?php if ($year >= 2017) echo ' tall' ?>">
             <?= $this->chart($importantChart['chart']) ?>
 
 
@@ -125,12 +125,13 @@
     </div>
     </div>
 
-
+    <?php if ($year < 2017): ?>
     <div class="executiveReportPeerCallout">
         <h4>Next Steps &mdash; Peer Comparisons</h4>
 
         <p>The NCCBP On-Line Peer Comparison Tool allows you to compare your results to similar community colleges.  Please contact us if you would like assistance using this tool.</p>
     </div>
+    <?php endif ?>
 
 
     <div class="executiveReportFooter">

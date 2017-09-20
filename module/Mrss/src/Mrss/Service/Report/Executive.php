@@ -72,8 +72,8 @@ class Executive extends Report
 
     public function getExecutiveReportConfig($year)
     {
-        return array(
-            array(
+        $config = array(
+            'top-left' => array(
                 'title' => 'Full-time Students Completed or Transferred in Three Years',
                 'stacked' => true,
                 'percent' => true,
@@ -87,7 +87,8 @@ class Executive extends Report
                     before fall ' . ($year - 1)  . '.'
 
             ),
-            array(
+
+            'top-right' => array(
                 'title' => 'Part-time Students Completed or Transferred in Six Years',
                 'stacked' => true,
                 'percent' => true,
@@ -100,7 +101,8 @@ class Executive extends Report
                  certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before
                  fall ' . ($year - 1)  . '.'
             ),
-            array(
+
+            'middle-left' => array(
                 'title' => 'Persistence Rate',
                 'percent' => true,
                 'benchmarks' => array(
@@ -112,7 +114,8 @@ class Executive extends Report
                     ($year - 1) . '), or for the next fall term (Fall ' . ($year - 1)  . '). This metric excludes
                      students who graduated or completed certificates in the time frame.'
             ),
-            array(
+
+            'middle-right' => array(
                 'title' => 'Instructional Cost per FTE Student',
                 'dollars' => true,
                 'max' => 15000,
@@ -123,7 +126,8 @@ class Executive extends Report
                  travel and equipment for all full- and part-time faculty and other instructional administration
                  and support personnel per full-time equivalent student.'
             ),
-            array(
+
+            'bottom-left' => array(
                 'title' => 'College-level Courses:<br>Completer Success Rate',
                 'percent' => true,
                 'benchmarks' => array(
@@ -132,7 +136,8 @@ class Executive extends Report
                 'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or
                 Pass in college-level credit courses in fall ' . ($year - 2)  . '.'
             ),
-            array(
+
+            'bottom-right' => array(
                 'title' => "Developmental Completer <br>Success Rate",
                 'percent' => true,
                 'benchmarks' => array(
@@ -144,6 +149,62 @@ class Executive extends Report
             )
 
         );
+
+        if ($year >= 2017) {
+            $config = $this->updateConfig($config, $year);
+        }
+
+        return $config;
+    }
+
+    protected function updateConfig($config, $year)
+    {
+
+        // Change middle right to CFI
+        $config['middle-right'] = array(
+            'title' => "Composite Financial Indicator",
+            'percent' => false,
+            'benchmarks' => array(
+                'CFI' => 'CFI',
+            ),
+            'description' => 'This indicator was developed in Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.'
+        );
+
+        // Move Dev Completer success rate from bottom right to bottom left
+        $bottomRight = $config['bottom-right'];
+        $bottomLeft = $config['bottom-left'];
+        $config['bottom-left'] = $bottomRight;
+
+
+        // Add social mobility to bottom right
+        $config['bottom-right'] = array(
+            'title' => "Social Mobility",
+            'percent' => false,
+            'benchmarks' => array(
+                'omr_kq2up_pQ' => 'Social Mobility',
+            ),
+            'description' => 'The percent of students from the college that moved up two or more income quintiles (rounded from longitudinal sample).'
+        );
+
+        // Backup measures if there's no data reported
+        if (true || !$this->getObservation()->get('CFI')) {
+            $config['middle-right'] = array(
+                'title' => "Revenue and Expenses per FTE Student",
+                'percent' => false,
+                'benchmarks' => array(
+                    'op_rev_SFTE' => 'Revenue per FTE Student',
+                    'op_ex_SFTE' => 'Expenses per FTE Student',
+                ),
+                'description' => 'Total revenues per FTE (full-time equivalent) student and Total Expenditures per FTE (full-time equivalent) student'
+            );
+        }
+
+        // If they've got no social mobility data, use the old bottom left chart
+        if (true || !$this->getObservation()->get('omr_kq2up_pQ')) {
+            $config['bottom-right'] = $bottomLeft;
+        }
+
+        return $config;
     }
 
     public function getExecutiveImportant()
@@ -211,6 +272,13 @@ class Executive extends Report
             $format,
             $roundedFormat
         );
+
+        // Adjust
+        $year = $this->getObservation()->getYear();
+        if ($year >= 2017) {
+            $highChartsConfig['chart']['height'] = 450;
+        }
+
 
         return array(
             'chart' => $highChartsConfig,

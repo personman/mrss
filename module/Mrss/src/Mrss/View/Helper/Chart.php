@@ -43,14 +43,23 @@ class Chart extends AbstractHelper
             return false;
         }
 
+        $class = 'chart';
+        if (!empty($chartConfig['chart']['height']) && $height = $chartConfig['chart']['height']) {
+            if ($height > 280) {
+                $class .= ' tall';
+            }
+        }
+
+
         $this->headScript();
         $chartConfigJson = $this->encodeAndAddEvents($chartConfig);
+
 
 
         $html = '<div class="chartWrapper">';
 
         $chartId = 'chart_' . $chartConfig['id'];
-        $html .= "<div id='$chartId' class='chart'></div>";
+        $html .= "<div id='$chartId' class='$class'></div>";
 
         $html .= "<script type='text/javascript'>
         $(function() {
