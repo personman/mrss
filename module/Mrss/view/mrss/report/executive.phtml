@@ -1,12 +1,13 @@
 <?php
 //$open = false;
 //$media = 'screen,print';
+$cssVersion = 11;
 ?>
 <?php $this->headTitle()->prepend('Executive Report') ?>
 <?php $this->headTitle()->prepend($college->getName()) ?>
 
-<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=10', 'screen,print') ?>
-<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=10', $media) ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=' . $cssVersion, 'screen,print') ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=' . $cssVersion, $media) ?>
 
 <?= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
 

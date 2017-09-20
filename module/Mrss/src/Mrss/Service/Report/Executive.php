@@ -276,7 +276,7 @@ class Executive extends Report
         // Adjust
         $year = $this->getObservation()->getYear();
         if ($year >= 2017) {
-            $highChartsConfig['chart']['height'] = 450;
+            $highChartsConfig['chart']['height'] = 420;
         }
 
 
