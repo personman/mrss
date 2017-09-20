@@ -157,7 +157,7 @@ return array(
                         'outlier',
                         'summary',
                         'executive',
-                        'executiveprint',
+                        //'executiveprint',
                         'peer',
                         'peerResults',
                         'deletePeerGroup',
