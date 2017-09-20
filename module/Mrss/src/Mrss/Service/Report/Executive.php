@@ -187,7 +187,7 @@ class Executive extends Report
         );
 
         // Backup measures if there's no data reported
-        if (true || !$this->getObservation()->get('CFI')) {
+        if (!$this->getObservation()->get('CFI')) {
             $config['middle-right'] = array(
                 'title' => "Revenue and Expenses per FTE Student",
                 'percent' => false,
@@ -200,7 +200,7 @@ class Executive extends Report
         }
 
         // If they've got no social mobility data, use the old bottom left chart
-        if (true || !$this->getObservation()->get('omr_kq2up_pQ')) {
+        if (!$this->getObservation()->get('omr_kq2up_pQ')) {
             $config['bottom-right'] = $bottomLeft;
         }
 
