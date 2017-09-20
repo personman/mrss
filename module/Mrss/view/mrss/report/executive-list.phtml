@@ -8,6 +8,7 @@
 
 <textarea id="list" cols="80" rows="100">
 <?php foreach ($ipedsIds as $ipeds): ?>
-<?= $this->serverUrl($this->url('reports/executive-print', array('ipeds' => $ipeds))) . "\n" ?>
+<?///= $this->serverUrl($this->url('reports/executive-print', array('ipeds' => $ipeds))) . "\n" ?>
+<?= $this->serverUrl('/reports/executive-print-admin/' . $ipeds) . "\n" ?>
 <?php endforeach ?>
 </textarea>
