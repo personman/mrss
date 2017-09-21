@@ -332,6 +332,14 @@ class Executive extends Report
                 $dataPoint['dataLabels']['enabled'] = true;
                 $dataPoint['color'] = $this->yourCollegeColors[$iteration];
 
+                // Put labels at an angle for FTE rev/exp
+                if (in_array('op_rev_SFTE', array_keys($config['benchmarks']))) {
+                    $dataPoint['dataLabels']['rotation'] = 320;
+                    $dataPoint['dataLabels']['align'] = 'left';
+                    $dataPoint['dataLabels']['x'] = 0;
+                    $dataPoint['dataLabels']['y'] = -3;
+                }
+
                 // Don't show them for stacked bars (we'll show the total)
                 if (!empty($config['stacked'])) {
                     $dataPoint['dataLabels']['enabled'] = false;
