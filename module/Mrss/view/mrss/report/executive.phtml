@@ -136,33 +136,41 @@ $cssVersion = 13;
 
 
     <div class="executiveReportFooter">
-        <div class="executiveReportMoreInfo">
-            <h3>More Information</h3>
-            <?= $reportData['moreInfo'] ?>
+        <div class="row">
+            <div class="col-xs-3">
 
+                    <h3>More Information</h3>
+                    <?= $reportData['moreInfo'] ?>
+            </div>
+
+            <div class="col-xs-3">
+                <p class="directorName">
+                    Dr. Lou Guthrie, Director<br>
+                    National Higher Education<br>
+                    Benchmarking Institute
+                </p>
+            </div>
+
+            <div class="col-xs-3">
+                <p class="directorContact">
+                    Johnson County Community College<br>
+                    12345 College Blvd.<br>
+                    Overland Park, KS  66210<br>
+                    913-469-8500 Ext. 4019<br>
+                    E-mail: <a href="mailto:louguthrie@jccc.edu">louguthrie@jccc.edu</a><br>
+                    Twitter: <a href="http://twitter.com/EdBenchmark" target="_blank">@EdBenchmark</a>
+                </p>
+            </div>
+
+            <div class="col-xs-2">
+                <p class="instituteLogo">
+                    <img src="/images/benchmark_logo_black.png" />
+                </p>
+
+            </div>
         </div>
 
-        <div class="executiveReportDirector">
-            <p class="directorName">
-                Dr. Lou Guthrie, Director<br>
-                National Higher Education<br>
-                Benchmarking Institute
-            </p>
 
-            <p class="directorContact">
-                Johnson County Community College<br>
-                12345 College Blvd.<br>
-                Overland Park, KS  66210<br>
-                913-469-8500 Ext. 4019<br>
-                E-mail: <a href="mailto:louguthrie@jccc.edu">louguthrie@jccc.edu</a><br>
-                Twitter: <a href="http://twitter.com/EdBenchmark" target="_blank">@EdBenchmark</a>
-            </p>
-
-            <p class="instituteLogo">
-                <img src="/images/benchmark_logo_black.png" />
-            </p>
-
-        </div>
 
 
 
@@ -252,7 +260,8 @@ $cssVersion = 13;
 
         // Swap out the logo for a higher quality one for printing
         $('.logo img')
-            .attr('src', '/images/nccbp-logo-cmyk.svg')
+            //.attr('src', '/images/nccbp-logo-cmyk.svg')
+            .attr('src', '/images/NCCBP-logo-c-nc.png')
             //.css('width', '300px')
 
     }

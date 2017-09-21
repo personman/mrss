@@ -316,13 +316,16 @@ class Executive extends Report
         $chartData = array();
 
         foreach ($chartValues as $key => $value) {
+            // Show labels for medians
+            $labelEnabled = ($key == 50);
+
             $dataPoint = array(
                 'name' => $label,
                 'y' => floatval($value),
                 'color' => $this->seriesColors[$iteration],
                 'dataLabels' => array(
                     'format' => $roundedFormat,
-                    'enabled' => false
+                    'enabled' => $labelEnabled
                 )
             );
 
@@ -331,19 +334,19 @@ class Executive extends Report
                 // Show the value as a dataLabel for Your College
                 $dataPoint['dataLabels']['enabled'] = true;
                 $dataPoint['color'] = $this->yourCollegeColors[$iteration];
+            }
 
-                // Put labels at an angle for FTE rev/exp
-                if (in_array('op_rev_SFTE', array_keys($config['benchmarks']))) {
-                    $dataPoint['dataLabels']['rotation'] = 320;
-                    $dataPoint['dataLabels']['align'] = 'left';
-                    $dataPoint['dataLabels']['x'] = 0;
-                    $dataPoint['dataLabels']['y'] = -3;
-                }
+            // Put labels at an angle for FTE rev/exp (long dollar amounts)
+            if (in_array('op_rev_SFTE', array_keys($config['benchmarks']))) {
+                $dataPoint['dataLabels']['rotation'] = 320;
+                $dataPoint['dataLabels']['align'] = 'left';
+                $dataPoint['dataLabels']['x'] = 0;
+                $dataPoint['dataLabels']['y'] = -3;
+            }
 
-                // Don't show them for stacked bars (we'll show the total)
-                if (!empty($config['stacked'])) {
-                    $dataPoint['dataLabels']['enabled'] = false;
-                }
+            // Don't show them for stacked bars (we'll show the total)
+            if (!empty($config['stacked'])) {
+                $dataPoint['dataLabels']['enabled'] = false;
             }
 
             $chartData[] = $dataPoint;
