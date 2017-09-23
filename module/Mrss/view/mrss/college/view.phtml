@@ -138,7 +138,7 @@
                                 'observation',
                                 array('id' => $subscription->getObservation()->getId())
                             ) ?>">
-                                <?= $subscription->getCompletion() ?>%
+                                <?= round($subscription->getCompletion(), 1) ?>%
                             </a>
                         </td>
                         <td>

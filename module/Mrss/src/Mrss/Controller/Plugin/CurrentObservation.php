@@ -48,7 +48,8 @@ class CurrentObservation extends AbstractPlugin
         if ($year === null) {
             $config = $this->getStudyConfig();
             if ($config->use_structures) {
-                die('missing year in plugin CurrentObservation, line 51');
+                //debug_print_backtrace();
+                //die('missing year in plugin CurrentObservation, line 51');
             } else {
                 $year = $this->getCurrentStudyPlugin()->getCurrentStudy()->getCurrentYear();
             }
