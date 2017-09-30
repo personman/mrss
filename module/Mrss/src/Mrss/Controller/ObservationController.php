@@ -395,6 +395,7 @@ class ObservationController extends BaseController
             $structure = $this->getStructure();
             $structure->setPage($url);
             $benchmarkGroup = $structure->getBenchmarkGroup();
+            $structure->setPage(null);
         } else {
             /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
             $benchmarkGroup = $this->getServiceLocator()

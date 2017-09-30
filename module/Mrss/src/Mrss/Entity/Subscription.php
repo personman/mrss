@@ -426,9 +426,6 @@ class Subscription
 
     public function updateCompletion($dbColumnsIncluded = array())
     {
-
-
-
         $completion = 0;
         if ($this->getStudyConfig()->use_structures) {
 
@@ -459,10 +456,10 @@ class Subscription
 
         $this->setCompletion($completion);
 
-        if ($this->getCollege()->getId() == 1144 && $this->getYear() == 2016) {
-            //pr($totalFields);
-            //pr($completedFields);
-            //pr($completion);
+        if (false && $this->getCollege()->getId() == 1269 && $this->getYear() == 2016) {
+            pr($totalFields);
+            pr($completedFields);
+            prd($completion);
 
 
             //prd($completion2);
