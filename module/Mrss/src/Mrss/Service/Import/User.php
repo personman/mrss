@@ -57,6 +57,7 @@ class User extends Import
                     $user->setLastName($lastName);
                     $user->setCollege($college);
                     $user->addStudy($this->getStudy());
+                    $user->setState(1);
 
                     // Role
                     $role =  'viewer';
