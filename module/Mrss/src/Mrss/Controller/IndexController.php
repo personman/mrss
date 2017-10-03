@@ -31,7 +31,7 @@ class IndexController extends AbstractActionController
 
         $viewParams = array(
             'systems' => $systems,
-            'observation' => $this->currentObservation(),
+            'observation' => $this->currentObservation($year),
             'yearRange' => $yearRange,
             'year' => $year
         );

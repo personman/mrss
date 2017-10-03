@@ -92,6 +92,15 @@ form#system-admin-switch select {
     width: 137px;
 }
 
+.data-entry-form .input-group .form-control input[type="text"],
+.data-entry-form .input-group input[type="text"] {
+    width: 150px;
+}
+
+.data-entry-form input[type="text"] {
+    width: 168px;
+}
+
 .input-group .input-group-addon {
     font-size: 90%;
     padding: 6px 5px;

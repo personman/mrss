@@ -9,6 +9,7 @@
 </div>
 
 <?php foreach ($systems as $system): ?>
+    <?php $yearRange = 'FY ' . $system->getCurrentYear() ?>
 <div class="network-wrap">
     <h1><?= $system->getName() ?></h1>
 

@@ -30,6 +30,8 @@ class CurrentObservation extends AbstractPlugin
      */
     protected $currentCollegePlugin;
 
+    protected $studyConfig;
+
     /**
      * @return Observation
      */
@@ -44,7 +46,14 @@ class CurrentObservation extends AbstractPlugin
         $collegeId = $this->getCurrentCollegePlugin()->getCurrentCollege()->getId();
 
         if ($year === null) {
-            $year = $this->getCurrentStudyPlugin()->getCurrentStudy()->getCurrentYear();
+            $config = $this->getStudyConfig();
+            if ($config->use_structures) {
+                //debug_print_backtrace();
+                //die('missing year in plugin CurrentObservation, line 51');
+            } else {
+                $year = $this->getCurrentStudyPlugin()->getCurrentStudy()->getCurrentYear();
+            }
+
         }
 
         /** @var \Mrss\Entity\Observation $observation */
@@ -106,5 +115,23 @@ class CurrentObservation extends AbstractPlugin
     public function getCurrentCollegePlugin()
     {
         return $this->currentCollegePlugin;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStudyConfig()
+    {
+        return $this->studyConfig;
+    }
+
+    /**
+     * @param mixed $studyConfig
+     * @return CurrentObservation
+     */
+    public function setStudyConfig($studyConfig)
+    {
+        $this->studyConfig = $studyConfig;
+        return $this;
     }
 }

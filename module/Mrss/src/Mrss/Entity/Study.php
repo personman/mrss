@@ -613,6 +613,8 @@ class Study
             $percentage = 0;
         }
 
+        //pr($total); pr($completed); pr($percentage);
+
         return $percentage;
     }
 

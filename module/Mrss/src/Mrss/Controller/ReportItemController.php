@@ -341,12 +341,17 @@ class ReportItemController extends CustomReportController
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
 
+        $year = $study->getCurrentYear();
+        if ($this->getStudyConfig()->use_structures) {
+            $year = $this->getActiveSystem()->getCurrentYear();
+        }
+
         //$subscription = $this->getSubscriptionByYear($this->currentStudy()->getCurrentYear());
 
         //$benchmarks = $study->getStructuredBenchmarks(true, 'dbColumn', $subscription);
 
         $benchmarks = array();
-        $subscription = $this->currentObservation()->getSubscription();
+        $subscription = $this->currentObservation($year)->getSubscription();
         $system = $this->report->getSystem();
         foreach ($this->getAllBenchmarkGroups($subscription, $system) as $benchmarkGroup) {
             $groupChildren = array();

@@ -176,6 +176,7 @@ class Subscription
 
     protected $benchmarkModel;
     protected $datumModel;
+    protected $studyConfig;
     protected $allData = array();
 
     public function __construct()
@@ -297,6 +298,21 @@ class Subscription
         return $method;
     }
 
+    /**
+     * @return \Mrss\Entity\System
+     */
+    public function getPrimarySystem()
+    {
+        $systems = $this->getCollege()->getSystemsByYear($this->getYear());
+        $primarySystems = $this->getStudyConfig()->primary_systems->toArray();
+
+        foreach ($systems as $system) {
+            if (in_array($system->getId(), $primarySystems)) {
+                return $system;
+            }
+        }
+    }
+
     public function setPaymentSystemName($systemName)
     {
         $this->paymentSystemName = $systemName;
@@ -387,28 +403,67 @@ class Subscription
         return $this->completion;
     }
 
+    protected function getP()
+    {
+
+    }
+    protected function getColumnsToCount()
+    {
+        $columns = array();
+        if ($this->getStudyConfig()->use_structures) {
+            $system = $this->getPrimarySystem();
+            $benchmarks = $system->getDataEntryStructure()->getBenchmarksForYear($this->getYear(), false);
+
+            foreach ($benchmarks as $benchmark) {
+                $columns[] = $benchmark->getDbColumn();
+            }
+        } else {
+            $columns = $this->getStudy()->getDbColumnsIncludedInCompletion();
+        }
+
+        return $columns;
+    }
+
     public function updateCompletion($dbColumnsIncluded = array())
     {
-        $completedFields = 0;
+        $completion = 0;
+        if ($this->getStudyConfig()->use_structures) {
 
-        if (!count($dbColumnsIncluded)) {
-            $dbColumnsIncluded = $this->getStudy()->getDbColumnsIncludedInCompletion();
-        }
+            $system = $this->getPrimarySystem();
+            if ($system) {
+                $completion = $system->getDataEntryStructure()->getCompletionPercentageForObservation($this->getObservation());
+            }
+        } else {
+            $completedFields = 0;
 
-        $totalFields = count($dbColumnsIncluded);
+            if (!count($dbColumnsIncluded)) {
+                $dbColumnsIncluded = $this->getColumnsToCount();
+            }
 
-        foreach ($this->getData() as $datum) {
-            if (in_array($datum->getDbColumn(), $dbColumnsIncluded)) {
-                if ($datum->getValue() !== null) {
-                    $completedFields++;
+            $totalFields = count($dbColumnsIncluded);
+
+            foreach ($this->getData() as $datum) {
+                if (in_array($datum->getDbColumn(), $dbColumnsIncluded)) {
+                    if ($datum->getValue() !== null) {
+                        $completedFields++;
+                    }
                 }
             }
+
+            $completion = $completedFields / $totalFields * 100;
+            $completion = round($completion, 1);
         }
 
-        $completion = $completedFields / $totalFields * 100;
-        $completion = round($completion, 1);
-
         $this->setCompletion($completion);
+
+        if (false && $this->getCollege()->getId() == 1269 && $this->getYear() == 2016) {
+            pr($totalFields);
+            pr($completedFields);
+            prd($completion);
+
+
+            //prd($completion2);
+        }
     }
 
     /**
@@ -887,5 +942,23 @@ class Subscription
         $subSectionCount = count($this->getSectionIds());
 
         return ($studySectionCount && $studySectionCount > $subSectionCount);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStudyConfig()
+    {
+        return $this->studyConfig;
+    }
+
+    /**
+     * @param mixed $studyConfig
+     * @return Subscription
+     */
+    public function setStudyConfig($studyConfig)
+    {
+        $this->studyConfig = $studyConfig;
+        return $this;
     }
 }

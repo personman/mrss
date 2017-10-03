@@ -38,6 +38,9 @@ class ModelInjector
             $entity->setDatumModel(
                 $this->serviceLocator->get('model.datum')
             );
+            $entity->setStudyConfig(
+                $this->serviceLocator->get('study')
+            );
         }
     }
 }

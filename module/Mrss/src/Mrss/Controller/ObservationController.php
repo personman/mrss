@@ -165,7 +165,7 @@ class ObservationController extends BaseController
 
         $issues = $this->getIssueModel()->findForCollege($this->currentCollege());
 
-        $year = $this->getCurrentStudy()->getCurrentYear();
+        $year = $this->getCurrentYear();
         //$nextYear = $year + 1;
         //$yearRange = "$year - $nextYear";
         $yearRange = "FY $year";
@@ -333,8 +333,10 @@ class ObservationController extends BaseController
      */
     public function getCurrentObservation()
     {
+        $year = $this->getCurrentYear();
+
         if (empty($this->currentObservation)) {
-            $this->currentObservation = $this->currentObservation();
+            $this->currentObservation = $this->currentObservation($year);
         }
 
         return $this->currentObservation;
@@ -342,7 +344,7 @@ class ObservationController extends BaseController
 
     public function getLastYearObservation()
     {
-        $year = $this->getCurrentStudy()->getCurrentYear();
+        $year = $this->getCurrentYear();
         $lastYear = $year - 1;
         $collegeId = $user = $this->zfcUserAuthentication()->getIdentity()->getCollege()->getId();
 
@@ -393,6 +395,7 @@ class ObservationController extends BaseController
             $structure = $this->getStructure();
             $structure->setPage($url);
             $benchmarkGroup = $structure->getBenchmarkGroup();
+            $structure->setPage(null);
         } else {
             /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
             $benchmarkGroup = $this->getServiceLocator()
@@ -401,6 +404,32 @@ class ObservationController extends BaseController
         }
 
         return $benchmarkGroup;
+    }
+
+    protected function getDataEntryOpen()
+    {
+        $open = false;
+
+        // Is this per system/network or study-wide
+        if ($this->getStudyConfig()->use_structures) {
+            $open = $this->getActiveSystem()->getDataEntryOpen();
+        } else {
+            $open = $this->currentStudy()->getDataEntryOpen();
+        }
+
+        return $open;
+    }
+
+    protected function getCurrentYear()
+    {
+        // Is this per system/network or study-wide
+        if ($this->getStudyConfig()->use_structures) {
+            $year = $this->getActiveSystem()->getCurrentYear();
+        } else {
+            $year = $this->getCurrentStudy()->getCurrentYear();
+        }
+
+        return $year;
     }
 
     public function dataEntryAction($staffView = false)
@@ -416,7 +445,7 @@ class ObservationController extends BaseController
             throw new \Exception('Benchmark group not found');
         }
 
-        $dataEntryOpen = $this->currentStudy()->getDataEntryOpen();
+        $dataEntryOpen = $this->getDataEntryOpen();
 
         // SubObs?
         if ($benchmarkGroup->getUseSubObservation()) {
@@ -433,7 +462,7 @@ class ObservationController extends BaseController
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $observation = $ObservationModel->findOne(
                     $this->currentCollege(),
-                    $this->currentStudy()->getCurrentYear() - 1
+                    $this->getCurrentYear() - 1
                 );
 
                 if (empty($observation)) {
@@ -590,7 +619,7 @@ class ObservationController extends BaseController
             $conversionFactor = $observation->get('institution_conversion_factor');
         }
 
-        $year = $this->getCurrentStudy()->getCurrentYear();
+        $year = $this->getCurrentYear();
         //$nextYear = $year + 1;
         //$yearRange = "$year - $nextYear";
         $yearRange = "FY $year";
@@ -865,7 +894,7 @@ class ObservationController extends BaseController
         $request = $this->getRequest();
         if ($request->isPost()) {
             // Is data entry open?
-            if (!$study->getDataEntryOpen()) {
+            if (!$this->getDataEntryOpen()) {
                 $this->flashMessenger()->addErrorMessage('Data entry is closed.');
                 return $this->redirect()->toRoute('data-entry/import');
             }
@@ -1189,7 +1218,7 @@ class ObservationController extends BaseController
         $study = $this->currentStudy();
         $subscriptions = $system->getSubscriptionsByStudyAndYear(
             $study->getId(),
-            $study->getCurrentYear()
+            $this->getCurrentYear()
         );
 
         $excelService = new \Mrss\Service\Excel();
@@ -1259,12 +1288,12 @@ class ObservationController extends BaseController
         $year = $this->params()->fromRoute('year');
 
         if (empty($year)) {
-            $year = $this->currentStudy()->getCurrentYear();
+            $year = $this->getCurrentYear();
 
             // Are we checking for reports or data entry being open?
             $open = $this->currentStudy()->getReportsOpen();
             if (!$checkReportOpen) {
-                $open = $this->currentStudy()->getDataEntryOpen();
+                $open = $this->getDataEntryOpen();
             }
 
             // Submitted values are for last year's data, until reports open

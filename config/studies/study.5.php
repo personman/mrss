@@ -21,6 +21,7 @@ return array(
     'show_peer_data_you_did_not_submit' => true, // Temporary!!
     'percent_chart_scale_1_100' => false,
     'use_structures' => true,
+    'primary_systems' => array(2, 3), // Envisio's national city and county networks
     'system_benchmarks' => true,
     'system_label' => 'network',
     'show_institution_in_report_heading' => true,

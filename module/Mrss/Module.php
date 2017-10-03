@@ -507,6 +507,7 @@ class Module
                     $plugin->setObservationModel($model);
                     $plugin->setCurrentStudyPlugin($sm->get('currentStudy'));
                     $plugin->setCurrentCollegePlugin($sm->get('currentCollege'));
+                    $plugin->setStudyConfig($sm->getServiceLocator()->get('study'));
 
                     return $plugin;
                 },
