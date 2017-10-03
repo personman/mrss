@@ -9,6 +9,7 @@ class Executive extends Report
     protected $yourCollegeLabel = 'Your College';
     protected $seriesColors;
     protected $yourCollegeColors;
+    protected $labelMedians = false;
 
     public function getData()
     {
@@ -167,7 +168,8 @@ class Executive extends Report
             'benchmarks' => array(
                 'CFI' => 'CFI',
             ),
-            'description' => 'This indicator was developed in Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.'
+            //'description' => 'This indicator was developed in Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.',
+            'description' => 'The Composite Financial Index is a weighed score of the primary reserve ratio, net income ratio, return on net assets ratio and the viability ratio. Source: Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.'
         );
 
         // Move Dev Completer success rate from bottom right to bottom left
@@ -183,7 +185,8 @@ class Executive extends Report
             'benchmarks' => array(
                 'omr_kq2up_pQ' => 'Social Mobility',
             ),
-            'description' => 'The percent of students from the college that moved up two or more income quintiles (rounded from longitudinal sample).'
+            //'description' => 'The percent of students from the college that moved up two or more income quintiles (rounded from longitudinal sample).'
+            'description' => 'The percent of students from the college that moved up two or more income quintiles. Source: Equality of Opportunity Project.'
         );
 
         // Backup measures if there's no data reported
@@ -317,7 +320,7 @@ class Executive extends Report
 
         foreach ($chartValues as $key => $value) {
             // Show labels for medians
-            $labelEnabled = ($key == 50);
+            $labelEnabled = ($key == 50 && $this->labelMedians);
 
             $dataPoint = array(
                 'name' => $label,
