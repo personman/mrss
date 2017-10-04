@@ -208,12 +208,14 @@ $cssVersion = 13;
         })
 
         // Handle not reported for non-stack charts
-        var ycLabel = $('.highcharts-data-labels text:first-child');
+        var ycLabel = $('.highcharts-data-labels text:first-child, .highcharts-data-labels div:first-child');
         var parent;
         ycLabel.each(function() {
             label = $(this);
+            //console.log(label.text())
             if (zeros.indexOf(label.text()) > -1) {
-                label.text('Not Reported');
+                //label.text("Not Reported");
+                label.text("");
                 label.attr('x', -23);
 
                 if (label.parent().parent().parent().parent().is(parent)) {

@@ -168,7 +168,7 @@ class Executive extends Report
             'benchmarks' => array(
                 'CFI' => 'CFI',
             ),
-            //'description' => 'This indicator was developed in Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.',
+            //'description' => 'This indicator  puwas developed in Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.',
             'description' => 'The Composite Financial Index is a weighed score of the primary reserve ratio, net income ratio, return on net assets ratio and the viability ratio. Source: Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.'
         );
 
@@ -341,11 +341,43 @@ class Executive extends Report
 
             // Put labels at an angle for FTE rev/exp (long dollar amounts)
             if (in_array('op_rev_SFTE', array_keys($config['benchmarks']))) {
-                $dataPoint['dataLabels']['rotation'] = 320;
-                $dataPoint['dataLabels']['align'] = 'left';
-                $dataPoint['dataLabels']['x'] = 0;
-                $dataPoint['dataLabels']['y'] = -3;
+                if ($dataPoint['y']) {
+                    $dataPoint['dataLabels']['rotation'] = 320;
+                    $dataPoint['dataLabels']['align'] = 'left';
+                    $dataPoint['dataLabels']['x'] = 0;
+                    $dataPoint['dataLabels']['y'] = -3;
+                }
+
+
+
             }
+
+            // Not reported shouldn't get rotated and might need a line break
+            if (!($dataPoint['y'])) {
+                //$dataPoint['dataLabels']['rotation'] = 270;
+                //$dataPoint['dataLabels']['align'] = 'left';
+                //$dataPoint['dataLabels']['x'] = 2;
+                //$dataPoint['dataLabels']['y'] = -70;
+                $dataPoint['dataLabels']['useHTML'] = true;
+                $dataPoint['dataLabels']['style'] = array(
+                    'fontSize' => "8px",
+                    'fontWeight' => 'bold',
+                    //'width' => '10px'
+
+                );
+
+            }
+
+
+            // rotated
+            if (false && !($dataPoint['y'])) {
+                $dataPoint['dataLabels']['rotation'] = 270;
+                $dataPoint['dataLabels']['align'] = 'left';
+                $dataPoint['dataLabels']['x'] = 2;
+                $dataPoint['dataLabels']['y'] = -70;
+
+            }
+
 
             // Don't show them for stacked bars (we'll show the total)
             if (!empty($config['stacked'])) {
