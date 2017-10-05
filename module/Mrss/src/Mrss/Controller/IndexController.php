@@ -33,7 +33,9 @@ class IndexController extends AbstractActionController
             'systems' => $systems,
             'observation' => $this->currentObservation($year),
             'yearRange' => $yearRange,
-            'year' => $year
+            'year' => $year,
+            'observationModel' => $this->getServiceLocator()->get('model.observation'),
+            'college' => $college
         );
 
         return new ViewModel($viewParams);
