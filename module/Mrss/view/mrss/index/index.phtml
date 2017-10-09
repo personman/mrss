@@ -9,69 +9,70 @@
 </div>
 
 <?php foreach ($systems as $system): ?>
-    <?php $yearRange = 'FY ' . $system->getCurrentYear() ?>
-<div class="network-wrap">
-    <h1><?= $system->getName() ?></h1>
+    <?php $yearRange = 'FY ' . $system->getCurrentYear(); ?>
+    <?php $observation = $observationModel->findOne($college->getId(), $system->getCurrentYear()); ?>
+    <div class="network-wrap">
+        <h1><?= $system->getName() ?></h1>
 
-    <div class="col-sm-3 network-progress">
-        <div class="row">
+        <div class="col-sm-3 network-progress">
+            <div class="row">
 
-            <?php $completion =  round($system->getDataEntryStructure()->getCompletionPercentageForObservation($observation)); ?>
+                <?php $completion =  round($system->getDataEntryStructure()->getCompletionPercentageForObservation($observation)); ?>
 
-            <?php
+                <?php
                 $chart = new \Mrss\Service\Report\Chart\Gauge($system->getId(), $completion);
 
                 echo $this->chart($chart->getConfig());
 
-            ?>
-
-            <span>Data Entry Progress <?= $yearRange ?></span></div>
-    </div>
-
-    <div class="col-sm-6 network-dataentry">
-        <ul>
-    <li><strong>Service Area <?= $yearRange ?></strong></li>
-
-            <?php foreach ($system->getDataEntryStructure()->getPages() as $benchmarkGroup): ?>
-                <?php $bgCompletion = round($benchmarkGroup->getCompletionPercentageForObservation($observation)); ?>
-                <?php
-                $completionColor = '#cc181e'; // Red
-                if ($bgCompletion > 75) {
-                    $completionColor = '#5fa80b'; // Green
-                } else if ($bgCompletion > 50) {
-                    $completionColor = '#fbb41e'; // Yellow
-                }
-
                 ?>
 
-            <li>
-                <a href="/network-switch/<?= $system->getId() . '?redirect=' . urlencode('/data-entry/' . $benchmarkGroup->getUrl()) ?>">
-                <span class="service-area-type"><?= $benchmarkGroup->getUrl() ?>: <?= $benchmarkGroup->getLabel() ?></span>
-                <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
-                    <div class="data-entry-progress-bar">
-                        <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
-                    </div>
-                </div>
-                </a>
-            </li>
-            <?php endforeach ?>
-        </ul>
-        <a class="data-entry-readmore">Show All [+]</a></div>
+                <span>Data Entry Progress <?= $yearRange ?></span></div>
+        </div>
 
-    <div class="col-sm-3 network-contributor"><strong class="big-number"><?= count($system->getColleges()) ?> <span>Cities</span></strong>
-
-        <div class="newest-contributors"><strong>Newest Members</strong>
-
+        <div class="col-sm-6 network-dataentry">
             <ul>
-                <?php foreach ($system->getRecentMemberships($year) as $systemMembership): ?>
-                <li><?= $systemMembership->getCollege()->getName() ?></li>
+                <li><strong>Service Area <?= $yearRange ?></strong></li>
+
+                <?php foreach ($system->getDataEntryStructure()->getPages() as $benchmarkGroup): ?>
+                    <?php $bgCompletion = round($benchmarkGroup->getCompletionPercentageForObservation($observation)); ?>
+                    <?php
+                    $completionColor = '#cc181e'; // Red
+                    if ($bgCompletion > 75) {
+                        $completionColor = '#5fa80b'; // Green
+                    } else if ($bgCompletion > 50) {
+                        $completionColor = '#fbb41e'; // Yellow
+                    }
+
+                    ?>
+
+                    <li>
+                        <a href="/network-switch/<?= $system->getId() . '?redirect=' . urlencode('/data-entry/' . $benchmarkGroup->getUrl()) ?>">
+                            <span class="service-area-type"><?= $benchmarkGroup->getUrl() ?>: <?= $benchmarkGroup->getLabel() ?></span>
+                            <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
+                                <div class="data-entry-progress-bar">
+                                    <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
                 <?php endforeach ?>
             </ul>
-        </div>
-    </div>
+            <a class="data-entry-readmore">Show All [+]</a></div>
 
-    <div class="clear">&nbsp;</div>
-</div>
+        <div class="col-sm-3 network-contributor"><strong class="big-number"><?= count($system->getColleges()) ?> <span>Cities</span></strong>
+
+            <div class="newest-contributors"><strong>Newest Members</strong>
+
+                <ul>
+                    <?php foreach ($system->getRecentMemberships($year) as $systemMembership): ?>
+                        <li><?= $systemMembership->getCollege()->getName() ?></li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
+        </div>
+
+        <div class="clear">&nbsp;</div>
+    </div>
 <?php endforeach ?>
 
 
