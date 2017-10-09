@@ -342,7 +342,7 @@ class Executive extends Report
             // Put labels at an angle for FTE rev/exp (long dollar amounts)
             if (in_array('op_rev_SFTE', array_keys($config['benchmarks']))) {
                 if ($dataPoint['y']) {
-                    $dataPoint['dataLabels']['rotation'] = 320;
+                    $dataPoint['dataLabels']['rotation'] = 270;
                     $dataPoint['dataLabels']['align'] = 'left';
                     $dataPoint['dataLabels']['x'] = 0;
                     $dataPoint['dataLabels']['y'] = -3;
