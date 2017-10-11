@@ -353,7 +353,7 @@ class ObservationController extends BaseController
         return $model->findOne($collegeId, $lastYear);
     }
 
-    public function getCurrentObservationByIpeds($ipeds)
+    public function getCurrentObservationByIpeds($ipeds, $year = null)
     {
         /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $this->getServiceLocator()->get('model.college');
@@ -363,7 +363,14 @@ class ObservationController extends BaseController
             throw new \Exception('No college found for ipeds id: ' . $ipeds);
         }
 
-        $year = $this->currentStudy()->getCurrentYear();
+        if (!$year) {
+            if ($this->getStudyConfig()->use_structures) {
+                $year = $this->getActiveSystem()->getCurrentYear();
+            } else {
+                $year = $this->currentStudy()->getCurrentYear();
+            }
+
+        }
 
         $observationModel = $this->getServiceLocator()->get('model.observation');
 
@@ -1141,11 +1148,16 @@ class ObservationController extends BaseController
     public function exportAction()
     {
         $collegeId = $this->getActiveCollege()->getId();
+        $year = null;
+        if ($this->getStudyConfig()->use_structures) {
+            $year = $this->getActiveSystem()->getCurrentYear();
+        }
 
         $subscriptionModel = $this->getSubscriptionModel();
         $subscription = $subscriptionModel->findCurrentSubscription(
             $this->currentStudy(),
-            $collegeId
+            $collegeId,
+            $year
         );
 
         if (empty($subscription)) {

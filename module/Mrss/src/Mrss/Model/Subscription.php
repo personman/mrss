@@ -307,12 +307,17 @@ class Subscription extends AbstractModel
      *
      * @param StudyEntity $study
      * @param $collegeId
+     * @param $year
      * @return \Mrss\Entity\Subscription
      */
-    public function findCurrentSubscription(StudyEntity $study, $collegeId)
+    public function findCurrentSubscription(StudyEntity $study, $collegeId, $year = null)
     {
+        if (!$year) {
+            $year = $study->getCurrentYear();
+        }
+
         return $this->findOne(
-            $study->getCurrentYear(),
+            $year,
             $collegeId,
             $study->getId()
         );
