@@ -7,7 +7,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend;
 
-class IndexController extends AbstractActionController
+class IndexController extends BaseController
 {
     public function indexAction()
     {
@@ -29,13 +29,20 @@ class IndexController extends AbstractActionController
         //$yearRange = "$year - $nextYear";
         $yearRange = "FY $year";
 
+        // News page
+        $news = null;
+        if ($newsPageId = $this->getStudyConfig()->news_page_id) {
+            $news = $this->getPageModel()->find($newsPageId);
+        }
+
         $viewParams = array(
             'systems' => $systems,
             'observation' => $this->currentObservation($year),
             'yearRange' => $yearRange,
             'year' => $year,
             'observationModel' => $this->getServiceLocator()->get('model.observation'),
-            'college' => $college
+            'college' => $college,
+            'news' => $news
         );
 
         return new ViewModel($viewParams);

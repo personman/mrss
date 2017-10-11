@@ -1,12 +1,26 @@
 <?php /** @var \Mrss\Entity\System[] $systems */ ?>
 
+<style>
+    .homepage > div {
+        padding: 30px;
+    }
+    .homepage div h2, .homepage div h1 {
+        text-align: center;
+    }
+    .homepage div h1 {
+        font-weight: normal;
+        font-size: 175%;
+    }
+    .homepage div h2 {
+        font-weight: normal;
+        font-size: 260%;
+    }
+</style>
 
 
-<div class="slider-container" style="height: 350px">
-    <div class="slider-container-overlay">&nbsp;</div>
-
-    <!--<div class="carousel"><img src="http://design.app.benchmark.envisio.com/images/chart.jpg" /></div-->
-</div>
+<div class="row homepage">
+<div class="col-md-4">
+    <h2>Network Membership</h2>
 
 <?php foreach ($systems as $system): ?>
     <?php $yearRange = 'FY ' . $system->getCurrentYear(); ?>
@@ -16,10 +30,8 @@
 
     } ?>
     <div class="network-wrap">
-        <h1><?= $system->getName() ?></h1>
+        <h1><?= $system->getName() ?> (<?= count($system->getColleges()) ?> Cities)</h1>
 
-        <div class="col-sm-3 network-progress">
-            <div class="row">
 
                 <?php $completion =  round($system->getDataEntryStructure()->getCompletionPercentageForObservation($observation)); ?>
 
@@ -30,54 +42,30 @@
 
                 ?>
 
-                <span>Data Entry Progress <?= $yearRange ?></span></div>
-        </div>
+                <!--<span>Data Entry Progress <?= $yearRange ?></span>-->
 
-        <div class="col-sm-6 network-dataentry">
-            <ul>
-                <li><strong>Service Area <?= $yearRange ?></strong></li>
-
-                <?php foreach ($system->getDataEntryStructure()->getPages() as $benchmarkGroup): ?>
-                    <?php $bgCompletion = round($benchmarkGroup->getCompletionPercentageForObservation($observation)); ?>
-                    <?php
-                    $completionColor = '#cc181e'; // Red
-                    if ($bgCompletion > 75) {
-                        $completionColor = '#5fa80b'; // Green
-                    } else if ($bgCompletion > 50) {
-                        $completionColor = '#fbb41e'; // Yellow
-                    }
-
-                    ?>
-
-                    <li>
-                        <a href="/network-switch/<?= $system->getId() . '?redirect=' . urlencode('/data-entry/' . $benchmarkGroup->getUrl()) ?>">
-                            <span class="service-area-type"><?= $benchmarkGroup->getUrl() ?>: <?= $benchmarkGroup->getLabel() ?></span>
-                            <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
-                                <div class="data-entry-progress-bar">
-                                    <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                <?php endforeach ?>
-            </ul>
-            <a class="data-entry-readmore">Show All [+]</a></div>
-
-        <div class="col-sm-3 network-contributor"><strong class="big-number"><?= count($system->getColleges()) ?> <span>Cities</span></strong>
-
-            <div class="newest-contributors"><strong>Newest Members</strong>
-
-                <ul>
-                    <?php foreach ($system->getRecentMemberships($year) as $systemMembership): ?>
-                        <li><?= $systemMembership->getCollege()->getName() ?></li>
-                    <?php endforeach ?>
-                </ul>
-            </div>
-        </div>
 
         <div class="clear">&nbsp;</div>
     </div>
 <?php endforeach ?>
+
+</div>
+
+    <div class="col-md-4">
+        <h2>Community</h2>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ipsum dolor sit met, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a liqua. Ut enim ad minim venom, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea comido consequat. Luis aute irure dolor in reprehenderit in voluptate relit esse cillim dolore eu fuggita nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit animé id est labour.</p>
+    </div>
+
+    <div class="col-md-4">
+        <h2>govBenchmark News</h2>
+
+        <?php if ($news) echo $news->getContent() ?>
+    </div>
+
+
+</div>
+
 
 
 <script>

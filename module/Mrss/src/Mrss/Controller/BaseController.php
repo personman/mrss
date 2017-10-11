@@ -165,4 +165,12 @@ class BaseController extends AbstractActionController
     {
         return $this->getServiceLocator()->get('model.issue');
     }
+
+    /**
+     * @return \Mrss\Model\Issue
+     */
+    protected function getPageModel()
+    {
+        return $this->getServiceLocator()->get('model.page');
+    }
 }

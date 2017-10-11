@@ -8,12 +8,11 @@ use Mrss\Entity\Page as PageEntity;
 use Mrss\Form\Page as PageForm;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
-class PageController extends AbstractActionController
+class PageController extends BaseController
 {
     public function indexAction()
     {
-        $pageModel = $this->getServiceLocator()
-            ->get('model.page');
+        $pageModel = $this->getPageModel();
         $pages = $pageModel->findAll();
 
         return array(
