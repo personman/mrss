@@ -54,6 +54,13 @@ class IndexController extends BaseController
         return new ViewModel();
     }
 
+    public function communityAction()
+    {
+        return array(
+            'currentUser' => $this->getCurrentUser()
+        );
+    }
+
     /**
      * @return \Mrss\Entity\College
      */

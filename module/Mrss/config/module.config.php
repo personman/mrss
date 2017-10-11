@@ -1973,6 +1973,16 @@ return array(
                     )
                 )
             ),
+            'community' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/community',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action' => 'community'
+                    )
+                )
+            ),
             'import' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
