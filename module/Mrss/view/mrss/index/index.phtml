@@ -18,6 +18,9 @@
     .chatWrapper {
         margin-top: 47px;
     }
+    .newsWrapper {
+        margin-top: 40px;
+    }
 </style>
 
 
@@ -106,6 +109,7 @@
     <div class="col-md-4">
         <h2>govBenchmark News</h2>
 
+        <div class="newsWrapper">
         <?php if ($news): ?>
             <?php if($currentUser->getRole() == 'admin'): ?>
                 <p>
@@ -118,7 +122,7 @@
             <?= $news->getContent() ?>
         <?php endif ?>
 
-
+        </div>
 
     </div>
 
