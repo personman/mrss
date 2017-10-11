@@ -14,7 +14,7 @@ return array(
     'navigation' => 'envisio_navigation',
     'round_data_entry_to' => 2,
     'export_template' => 'govbenchmark-template.xlsx',
-    'news_page_id' => 65,
+    'news_page_id' => 67,
     'benchmark_completion_heatmap' => true,
     'college_report_access_checkbox' => true,
     'percent_change_report_columns' => array(

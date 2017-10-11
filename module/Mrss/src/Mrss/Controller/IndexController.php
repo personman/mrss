@@ -42,7 +42,8 @@ class IndexController extends BaseController
             'year' => $year,
             'observationModel' => $this->getServiceLocator()->get('model.observation'),
             'college' => $college,
-            'news' => $news
+            'news' => $news,
+            'currentUser' => $this->getCurrentUser()
         );
 
         return new ViewModel($viewParams);

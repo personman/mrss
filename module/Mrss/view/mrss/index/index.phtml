@@ -65,7 +65,20 @@
     <div class="col-md-4">
         <h2>govBenchmark News</h2>
 
-        <?php if ($news) echo $news->getContent() ?>
+        <?php if ($news): ?>
+            <?php if($currentUser->getRole() == 'admin'): ?>
+                <p>
+                    <a href="/pages/edit/<?php echo $news->getId() ?>">
+                        Edit news
+                    </a>
+                </p>
+            <?php endif ?>
+
+            <?= $news->getContent() ?>
+        <?php endif ?>
+
+
+
     </div>
 
 
