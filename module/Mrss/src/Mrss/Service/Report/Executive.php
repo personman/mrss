@@ -282,6 +282,20 @@ class Executive extends Report
             $highChartsConfig['chart']['height'] = 370;
         }
 
+        // Show the CFI plotline on zero only
+        if (in_array('CFI', array_keys($config['benchmarks']))) {
+            $highChartsConfig['yAxis']['plotLines'] = array(
+                array(
+                    'color' => '#C0D0DE',
+                    'value' => 0,
+                    'width' => 1,
+                    'zIndex' => 99
+                )
+            );
+            //prd($highChartsConfig);
+        }
+
+
 
         return array(
             'chart' => $highChartsConfig,
