@@ -282,7 +282,7 @@ class Executive extends Report
             $highChartsConfig['chart']['height'] = 370;
         }
 
-        // Show the CFI plotline on zero only
+        // Show the CFI plotline on zero only (there are negative values)
         if (in_array('CFI', array_keys($config['benchmarks']))) {
             $highChartsConfig['yAxis']['plotLines'] = array(
                 array(
@@ -372,13 +372,13 @@ class Executive extends Report
                 //$dataPoint['dataLabels']['align'] = 'left';
                 //$dataPoint['dataLabels']['x'] = 2;
                 //$dataPoint['dataLabels']['y'] = -70;
-                $dataPoint['dataLabels']['useHTML'] = true;
-                $dataPoint['dataLabels']['style'] = array(
+                //$dataPoint['dataLabels']['useHTML'] = true;
+                /*$dataPoint['dataLabels']['style'] = array(
                     'fontSize' => "8px",
                     'fontWeight' => 'bold',
                     //'width' => '10px'
 
-                );
+                );*/
 
             }
 

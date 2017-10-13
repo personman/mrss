@@ -192,7 +192,7 @@ $cssVersion = 13;
     }
 
     function fixupExecCharts() {
-    var zeros = [0, '0%', '0.00%', '$0']
+    var zeros = [0, '0%', '0.00%', '$0', '', null]
     //$(function() {
         // Only show the first stack total label
         $('.highcharts-stack-labels text').hide();
@@ -211,11 +211,10 @@ $cssVersion = 13;
         var ycLabel = $('.highcharts-data-labels text:first-child, .highcharts-data-labels div:first-child');
         var parent;
         ycLabel.each(function() {
-            label = $(this);
-            //console.log(label.text())
+            var label = $(this);
             if (zeros.indexOf(label.text()) > -1) {
-                //label.text("Not Reported");
-                label.text("");
+                label.text("Not Reported");
+                //label.text("");
                 label.attr('x', -23);
 
                 if (label.parent().parent().parent().parent().is(parent)) {
