@@ -229,17 +229,21 @@ $cssVersion = 13;
         // the neighbor's label blank
         multiCharts = [
             'chart_w_comp_succ',
-            'chart_fall_fall_pers'
+            'chart_fall_fall_pers',
+            'chart_op_ex_SFTE'
+
         ];
 
         for (var i in multiCharts) {
             var multiChart = multiCharts[i]
-            var labels = $('#' + multiChart + ' .highcharts-data-labels text:first-child tspan');
+            var labels = $('#' + multiChart + ' .highcharts-data-labels text:first-child');
 
             values = [];
             labels.each(function() {
                 values.push($(this).text());
             })
+
+            console.log(values); console.log(multiChart);
 
             if ((values[0] == 'Not Reported' && values[1] != 'Not Reported')) {
                 $(labels[0]).hide()
@@ -268,6 +272,14 @@ $cssVersion = 13;
             //.css('width', '300px')
 
     }
+
+    function formatLargeMoney(axis)
+    {
+        var thousands = axis.value / 1000;
+
+        return '$' + thousands + 'K';
+    }
+
     <?php $this->headScript()->captureEnd() ?>
 </script>
 

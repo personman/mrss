@@ -105,6 +105,9 @@ class Chart extends AbstractHelper
         $minuteSecondFormatter = 'ormatter":function () {return minuteSecondFormatter(this)}';
         $config = str_replace('ormat":"minuteSecondFormatter"', $minuteSecondFormatter, $config);
 
+        $largeMoneyFormatter  = 'ormatter":function () {return formatLargeMoney(this)}';
+        $config = str_replace('ormatter":"formatLargeMoney"', $largeMoneyFormatter, $config);
+
 
         $regex = '/ormat":"{numericalOptions: {(.*?)}"/';
         preg_match($regex, $config, $matches);

@@ -194,6 +194,7 @@ class Executive extends Report
             $config['middle-right'] = array(
                 'title' => "Revenue and Expenses per FTE Student",
                 'percent' => false,
+                'dollars' => true,
                 'benchmarks' => array(
                     'op_rev_SFTE' => 'Revenue per FTE Student',
                     'op_ex_SFTE' => 'Expenses per FTE Student',
@@ -479,8 +480,11 @@ class Executive extends Report
         }
 
         if (!empty($config['dollars'])) {
-            $highChartsConfig['yAxis']['labels']['format'] =  '${value}';
+            //$highChartsConfig['yAxis']['labels']['format'] =  '${value}';
+            $highChartsConfig['yAxis']['labels']['formatter'] =  'formatLargeMoney';
+            unset($highChartsConfig['yAxis']['labels']['format']);
         }
+
 
         return $highChartsConfig;
     }
