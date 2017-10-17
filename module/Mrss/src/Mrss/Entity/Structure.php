@@ -183,6 +183,10 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
     {
         $debug = false;
 
+        if (empty($observation)) {
+            return 0;
+        }
+
         $benchmarks = $this->getBenchmarksForYear($observation->getYear(), false);
         $total = count($benchmarks);
 

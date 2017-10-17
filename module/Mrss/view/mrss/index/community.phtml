@@ -12,7 +12,7 @@
             "displayname" => $currentUser->getDisplayName(),
             "email" => $currentUser->getEmail(),
             "avatar" => "//gravatar.com/avatar/" . md5(strtolower(trim($currentUser->getEmail()))),
-            "is_admin" => false,
+            "is_admin" => ($currentUser->getRole() == 'admin'),
         ),
     );
 
