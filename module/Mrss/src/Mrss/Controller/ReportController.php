@@ -285,7 +285,7 @@ class ReportController extends ReportAdminController
 
     public function executiveAction()
     {
-        $open = false;
+        $open = true;
 
         if ($this->params()->fromRoute('open')) {
             $open = true;
