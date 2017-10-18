@@ -338,10 +338,10 @@ class ReportItemController extends CustomReportController
         $space = "<span class='indentOption'>&nbsp;&nbsp;&nbsp;</span>";
         $space = "";
 
-        /** @var \Mrss\Entity\Study $study */
-        $study = $this->currentStudy();
+        ///** @var \Mrss\Entity\Study $study */
+        //$study = $this->currentStudy();
 
-        $year = $study->getCurrentYear();
+        $year = $this->getYearFromRouteOrStudy($this->getCollege());
         if ($this->getStudyConfig()->use_structures) {
             $year = $this->getActiveSystem()->getCurrentYear();
         }

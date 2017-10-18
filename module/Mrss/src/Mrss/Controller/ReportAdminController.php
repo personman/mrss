@@ -818,49 +818,6 @@ class ReportAdminController extends BaseController
         return $reportsOpen;
     }
 
-    public function getYearFromRouteOrStudy($college = null)
-    {
-        if (empty($college)) {
-            $college = $this->currentCollege();
-        }
-
-        $year = $this->params()->fromRoute('year');
-
-        if (empty($year)) {
-            $year = $this->getCurrentYear();
-
-            // But if reports aren't open yet, show them last year's by default
-            $impersonationService = $this->getServiceLocator()
-                ->get('zfcuserimpersonate_user_service');
-            $isJCCC = (!empty($college) && ($college->getId() == 101) || $impersonationService->isImpersonated());
-            $isMax = $this->currentStudy()->getId() == 2;
-
-            // Allow access to Max reports for user feedback
-            if (!$isMax && !$isJCCC && !$this->currentStudy()->getReportsOpen()) {
-                $year = $year - 1;
-            }
-
-            // New
-            /** @var \Mrss\Model\Subscription $subModel */
-            $subModel = $this->getServiceLocator()->get('model.subscription');
-
-            $before = null;
-            if (!$this->getReportsOpen()) {
-                $before = $this->getCurrentYear();
-            }
-
-            $latestSubscription = $subModel->getLatestSubscription($this->currentStudy(), $college->getId(), $before);
-
-            if (!empty($latestSubscription)) {
-                $year = $latestSubscription->getYear();
-            }
-        }
-
-        return $year;
-    }
-
-
-
 
     // The following methods are for Maximizing Resources only and should be moved to a class of their own or generalized
 
