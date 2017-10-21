@@ -31,8 +31,10 @@ class Report extends AbstractForm
         $this->addName('Name', null, true);
         $this->addSystems();
         
-        if ($this->studyConfig->allow_public_custom_report) {
+        if (false && $this->studyConfig->allow_public_custom_report) {
             $this->addPublic();
+        } else {
+            $this->addPublicHidden();
         }
         
         $this->addDescription();
@@ -55,6 +57,16 @@ class Report extends AbstractForm
         );
     }
 
+
+    public function addPublicHidden()
+    {
+        $this->add(
+            array(
+                'type' => 'hidden',
+                'name' => 'permission',
+            )
+        );
+    }
     public function getInputFilterSetup()
     {
         $inputFilter = new InputFilter();

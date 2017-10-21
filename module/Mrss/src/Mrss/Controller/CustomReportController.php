@@ -76,7 +76,11 @@ class CustomReportController extends ReportController
 
         if ($this->getRequest()->isPost()) {
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $data = $this->params()->fromPost();
+            if (empty($data['permission'])) {
+                $data['permission'] = 'private';
+            }
+            $form->setData($data);
 
             if ($form->isValid()) {
                 $this->getReportModel()->save($report);
@@ -264,18 +268,20 @@ class CustomReportController extends ReportController
 
             $public = ($report && $this->allowPublic() && $report->isPublic());
 
-            if ($report && !$public) {
+            if ((!$report && $this->public) || ($report && $this->public && !$report->isPublic())) {
+                return null;
+            }
+
+            if ($report) {
                 $college = $report->getUser()->getCollege();
 
-                if (!$admin && $college->getId() != $this->currentCollege()->getId()) {
+                if (!$admin && !$public && $college->getId() != $this->currentCollege()->getId()) {
                     throw new \Exception('You cannot edit reports that do not belong to your college.');
                 }
 
             }
 
-            if (!$report && $this->public) {
-                return null;
-            }
+
 
         }
 
