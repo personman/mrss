@@ -31,7 +31,7 @@ class Report extends AbstractForm
         $this->addName('Name', null, true);
         $this->addSystems();
         
-        if (false && $this->studyConfig->allow_public_custom_report) {
+        if ($this->studyConfig->allow_public_custom_report) {
             $this->addPublic();
         } else {
             $this->addPublicHidden();
