@@ -36,6 +36,7 @@ return array(
     'freemium' => false,
     'agreement_template' => null,
     'custom_excel_template' => null,
+    'allow_public_custom_report' => false,
     'percent_change_report_columns' => array(),
     'welcome_email' => 'welcome',
     'outlier_email' => 'outliers.email',

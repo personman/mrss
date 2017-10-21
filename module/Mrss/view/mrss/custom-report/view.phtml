@@ -23,17 +23,21 @@ $this->headScript()->appendFile(
 <?php endif ?>
 
 <div class="customReport">
+    <?php if (empty($public)): ?>
     <div class="back">
         <a href="/reports/custom">
             <span class="glyphicon glyphicon-arrow-left"></span>
             Back to Custom Reports
         </a>
     </div>
+    <?php endif ?>
 
+    <?php if (empty($public)): ?>
     <?= $this->partial(
         'mrss/custom-report/report-controls.partial.phtml',
         array('report' => $report, 'active' => 'view')
     ) ?>
+    <?php endif ?>
 
     <h1><?= $this->escapeHtml($report->getName()) ?></h1>
 

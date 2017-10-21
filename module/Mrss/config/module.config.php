@@ -1567,6 +1567,16 @@ return array(
                                     )
                                 )
                             ),
+                            'public' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/public/:id',
+                                    'defaults' => array(
+                                        'action' => 'publicView',
+                                        'id' => 0,
+                                    )
+                                )
+                            ),
                             'print' => array(
                                 'type' => 'segment',
                                 'options' => array(

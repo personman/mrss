@@ -1,5 +1,14 @@
 <?php /** @var \Mrss\Entity\Report $report */ ?>
 <div class="btn-group heading-btns" role="group">
+    <?php if ($report->isPublic()): ?>
+    <a href="<?= $this->url('reports/custom/public', array('id' => $report->getId())) ?>"
+       class="btn btn-default"
+       title="Public URL of report.">
+        <span class="glyphicon glyphicon-share"></span>
+        Public
+    </a>
+    <?php endif ?>
+
     <a href="<?= $this->url('reports/custom/view', array('id' => $report->getId())) ?>"
        class="btn btn-default<?php if ($active == 'view') echo ' active' ?>"
        title="View the report.">
