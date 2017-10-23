@@ -329,6 +329,8 @@ class LineBuilder extends ChartBuilder
             $college = $this->getCollege();
         }
 
+        $benchmark = $this->getBenchmark($dbColumn);
+
         // Get the college's reported data
         $subscriptions = $college->getSubscriptionsForStudy($this->getStudy(), false, $this->getSystem());
 
@@ -340,6 +342,12 @@ class LineBuilder extends ChartBuilder
                 continue;
             }
 
+            //pr($benchmark->getYearsAvailable());
+            // Skip if the benchmark isn't even available for the year
+            if (!$benchmark->isAvailableForYear($subscription->getYear())) {
+                continue;
+            }
+
             $value = $subscription->getObservation()->get($dbColumn);
             if ($value !== null) {
                 $value = floatval($value);
@@ -348,6 +356,8 @@ class LineBuilder extends ChartBuilder
             $data[$subscription->getYear()] = $value;
         }
         ksort($data);
+
+        //prd($data);
 
         $this->setYears(array_keys($data));
         $data = $this->fillInGaps($data);
