@@ -344,7 +344,7 @@ class LineBuilder extends ChartBuilder
 
             //pr($benchmark->getYearsAvailable());
             // Skip if the benchmark isn't even available for the year
-            if (!$benchmark->isAvailableForYear($subscription->getYear())) {
+            if (!$this->showYear($subscription->getYear())) {
                 continue;
             }
 
@@ -363,6 +363,22 @@ class LineBuilder extends ChartBuilder
         $data = $this->fillInGaps($data);
 
         return $data;
+    }
+
+    /**
+     * Is at least one benchmark available for the year?
+     */
+    protected function showYear($year)
+    {
+        $showYear = false;
+        foreach ($this->getDbColumns() as $dbColumn) {
+            $benchmark = $this->getBenchmark($dbColumn);
+            if ($benchmark->isAvailableForYear($year)) {
+                $showYear = true;
+            }
+        }
+
+        return $showYear;
     }
 
     public function getMedianData($benchmark, $percentile)
