@@ -1,12 +1,32 @@
 <?php /** @var \Mrss\Entity\System[] $systems */ ?>
 
+<style>
+    .homepage > div {
+        padding: 30px;
+    }
+    .homepage div h2, .homepage div h1 {
+        text-align: center;
+    }
+    .homepage div h1 {
+        font-weight: normal;
+        font-size: 175%;
+    }
+    .homepage div h2 {
+        font-weight: normal;
+        font-size: 260%;
+    }
+    .chatWrapper {
+        margin-top: 47px;
+    }
+    .newsWrapper {
+        margin-top: 40px;
+    }
+</style>
 
 
-<div class="slider-container" style="height: 350px">
-    <div class="slider-container-overlay">&nbsp;</div>
-
-    <!--<div class="carousel"><img src="http://design.app.benchmark.envisio.com/images/chart.jpg" /></div-->
-</div>
+<div class="row homepage">
+<div class="col-md-4">
+    <h2>My Networks</h2>
 
 <?php foreach ($systems as $system): ?>
     <?php $yearRange = 'FY ' . $system->getCurrentYear(); ?>
@@ -16,10 +36,8 @@
 
     } ?>
     <div class="network-wrap">
-        <h1><?= $system->getName() ?></h1>
+        <h1><?= $system->getName() ?> (<?= count($system->getColleges()) ?> Cities)</h1>
 
-        <div class="col-sm-3 network-progress">
-            <div class="row">
 
                 <?php $completion =  round($system->getDataEntryStructure()->getCompletionPercentageForObservation($observation)); ?>
 
@@ -30,54 +48,87 @@
 
                 ?>
 
-                <span>Data Entry Progress <?= $yearRange ?></span></div>
-        </div>
+                <!--<span>Data Entry Progress <?= $yearRange ?></span>-->
 
-        <div class="col-sm-6 network-dataentry">
-            <ul>
-                <li><strong>Service Area <?= $yearRange ?></strong></li>
-
-                <?php foreach ($system->getDataEntryStructure()->getPages() as $benchmarkGroup): ?>
-                    <?php $bgCompletion = round($benchmarkGroup->getCompletionPercentageForObservation($observation)); ?>
-                    <?php
-                    $completionColor = '#cc181e'; // Red
-                    if ($bgCompletion > 75) {
-                        $completionColor = '#5fa80b'; // Green
-                    } else if ($bgCompletion > 50) {
-                        $completionColor = '#fbb41e'; // Yellow
-                    }
-
-                    ?>
-
-                    <li>
-                        <a href="/network-switch/<?= $system->getId() . '?redirect=' . urlencode('/data-entry/' . $benchmarkGroup->getUrl()) ?>">
-                            <span class="service-area-type"><?= $benchmarkGroup->getUrl() ?>: <?= $benchmarkGroup->getLabel() ?></span>
-                            <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
-                                <div class="data-entry-progress-bar">
-                                    <div class="data-entry-progress" style="background:<?= $completionColor ?>; width: <?= $bgCompletion ?>%;">&nbsp;</div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                <?php endforeach ?>
-            </ul>
-            <a class="data-entry-readmore">Show All [+]</a></div>
-
-        <div class="col-sm-3 network-contributor"><strong class="big-number"><?= count($system->getColleges()) ?> <span>Cities</span></strong>
-
-            <div class="newest-contributors"><strong>Newest Members</strong>
-
-                <ul>
-                    <?php foreach ($system->getRecentMemberships($year) as $systemMembership): ?>
-                        <li><?= $systemMembership->getCollege()->getName() ?></li>
-                    <?php endforeach ?>
-                </ul>
-            </div>
-        </div>
 
         <div class="clear">&nbsp;</div>
     </div>
 <?php endforeach ?>
+
+</div>
+
+    <div class="col-md-4">
+        <a href="/community"><h2>Community Chat</h2></a>
+
+        <div class="chatWrapper">
+
+            <?php if (!$currentUser): ?>
+            <a class="muut" href="https://muut.com/i/govbenchmark">govbenchmark</a> <script src="//cdn.muut.com/1/moot.min.js"></script>
+
+            <?php else: ?>
+            <?php
+            // give us the user data
+            $user = array(
+                'user' => array(
+                    "id" => $currentUser->getId(),
+                    "displayname" => $currentUser->getDisplayName(),
+                    "email" => $currentUser->getEmail(),
+                    "avatar" => "//gravatar.com/avatar/" . md5(strtolower(trim($currentUser->getEmail()))),
+                    "is_admin" => ($currentUser->getRole() == 'admin'),
+                ),
+            );
+
+            $message = base64_encode(json_encode($user));
+            $timestamp = time();
+            $signature = sha1('6ANKNxwOWChTfH62gsvbDa4Y' . ' ' . $message . ' ' . $timestamp);
+
+            ?>
+            <link rel="stylesheet" href="//cdn.muut.com/1/moot.css">
+                <script src="//cdn.muut.com/1/moot.min.js"></script>
+                <a id="my-community" href="https://muut.com/i/govbenchmark">Community</a>
+
+                <script>
+                    $('#my-community').muut({
+                        sso: true,
+                        api: {
+                            // API key for "govbenchmark"- community
+                            key: 'EbrH8g4SRS',
+
+                            // generate following on the server side (see below)
+                            message: '<?= $message ?>',
+                            signature: '<?= $signature ?>',
+                            timestamp: '<?= $timestamp ?>'
+                        }
+                    })
+                </script>
+
+            <?php endif ?>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <h2>govBenchmark News</h2>
+
+        <div class="newsWrapper">
+        <?php if ($news): ?>
+            <?php if($currentUser->getRole() == 'admin'): ?>
+                <p>
+                    <a href="/pages/edit/<?php echo $news->getId() ?>">
+                        Edit news
+                    </a>
+                </p>
+            <?php endif ?>
+
+            <?= $news->getContent() ?>
+        <?php endif ?>
+
+        </div>
+
+    </div>
+
+
+</div>
+
 
 
 <script>

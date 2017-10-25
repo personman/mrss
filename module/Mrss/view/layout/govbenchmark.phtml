@@ -17,7 +17,7 @@
     <link href="/css/content.css" rel="stylesheet" type="text/css" />
 
     <?php if ($cssFile = $this->studyConfig()->css): ?>
-        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=32">
+        <link rel="stylesheet" type="text/css" href="/css/<?= $cssFile ?>?v=33">
     <?php endif ?>
 
     <?php if ($cssPrintFile = $this->studyConfig()->css_print): ?>
@@ -304,6 +304,7 @@
 </script>
 
 <?php echo $this->headScript() ?>
+<?php echo $this->inlineScript() ?>
 
 <?php if ($googleAnalyticsKey = $this->currentStudy()->getGoogleAnalyticsKey()): ?>
     <script type="text/javascript">

@@ -318,14 +318,4 @@ class PeerGroupController extends ReportController
             'form' => $form
         );
     }
-
-    /**
-     * @return \Mrss\Entity\User
-     */
-    public function getCurrentUser()
-    {
-        $currentUser = $this->zfcUserAuthentication()->getIdentity();
-
-        return $currentUser;
-    }
 }

@@ -2351,6 +2351,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
                     $subscription->setObservation($this->createOrUpdateObservation($college, $year));
                     $subscription->setCompletion(0);
                     $subscription->setReportAccess(true);
+                    $subscription->setFree($data['free']);
 
                     $this->getSubscriptionModel()->save($subscription);
                     $this->getSubscriptionModel()->getEntityManager()->flush();

@@ -15,6 +15,8 @@ use Zend\View\Model\ViewModel;
 
 class CustomReportController extends ReportController
 {
+    protected $public = false;
+
     /**
      * List a college's reports
      *
@@ -70,11 +72,15 @@ class CustomReportController extends ReportController
 
         $form->bind($report);
 
-        //pr($form->get('system')->getValue());
+        //pr($form->get('permission')->getValue());
 
         if ($this->getRequest()->isPost()) {
             // Hand the POST data to the form for validation
-            $form->setData($this->params()->fromPost());
+            $data = $this->params()->fromPost();
+            if (empty($data['permission'])) {
+                $data['permission'] = 'private';
+            }
+            $form->setData($data);
 
             if ($form->isValid()) {
                 $this->getReportModel()->save($report);
@@ -146,11 +152,34 @@ class CustomReportController extends ReportController
             $this->showAllLabels($report);
         }
 
+
         return array(
             'report' => $report,
             'print' => $print,
             'printMedia' => $printMedia
         );
+    }
+
+    /**
+     * This action displays a custom report with no authentication, if it's marked public and config allows
+     */
+    public function publicViewAction()
+    {
+        $this->public = true;
+        $allowPublic = $this->allowPublic();
+        $id = $this->params()->fromRoute('id');
+        $report = $this->getReport($id);
+
+        if ($report && $allowPublic && $report->isPublic()) {
+            $params = $this->viewAction();
+            $params['public'] = true;
+            $view = new ViewModel($params);
+            $view->setTemplate('mrss/custom-report/view.phtml');
+            return $view;
+        } else {
+            $this->flashMessenger()->addErrorMessage('Report not found.');
+            return $this->redirect()->toUrl('/');
+        }
     }
 
     protected function showAllLabels(Report $report)
@@ -220,6 +249,10 @@ class CustomReportController extends ReportController
         return $this->getServiceLocator()->get('model.report.item');
     }
 
+    public function allowPublic()
+    {
+        return $this->getStudyConfig()->allow_public_custom_report;
+    }
 
     /**
      * @param $id
@@ -231,11 +264,25 @@ class CustomReportController extends ReportController
         if (!empty($id)) {
             $report = $this->getReportModel()->find($id);
             $admin = $this->isAllowed('adminMenu', 'view');
-            $college = $report->getUser()->getCollege();
 
-            if (!$admin && $college->getId() != $this->currentCollege()->getId()) {
-                throw new \Exception('You cannot edit reports that do not belong to your college.');
+
+            $public = ($report && $this->allowPublic() && $report->isPublic());
+
+            if ((!$report && $this->public) || ($report && $this->public && !$report->isPublic())) {
+                return null;
             }
+
+            if ($report) {
+                $college = $report->getUser()->getCollege();
+
+                if (!$admin && !$public && $college->getId() != $this->currentCollege()->getId()) {
+                    throw new \Exception('You cannot edit reports that do not belong to your college.');
+                }
+
+            }
+
+
+
         }
 
         $currentUser = $this->zfcUserAuthentication()->getIdentity();

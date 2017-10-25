@@ -83,6 +83,11 @@ class Report
     protected $sourceReportId;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $permission;
+
+    /**
      * @param mixed $college
      */
     public function setCollege($college)
@@ -222,5 +227,28 @@ class Report
     {
         $this->system = $system;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPermission()
+    {
+        return $this->permission;
+    }
+
+    /**
+     * @param mixed $permission
+     * @return Report
+     */
+    public function setPermission($permission)
+    {
+        $this->permission = $permission;
+        return $this;
+    }
+
+    public function isPublic()
+    {
+        return ($this->getPermission() == 'public');
     }
 }

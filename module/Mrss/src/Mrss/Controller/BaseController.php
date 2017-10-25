@@ -206,4 +206,22 @@ class BaseController extends AbstractActionController
 
         return $year;
     }
+
+    /**
+     * @return \Mrss\Model\Issue
+     */
+    protected function getPageModel()
+    {
+        return $this->getServiceLocator()->get('model.page');
+    }
+
+    /**
+     * @return \Mrss\Entity\User
+     */
+    public function getCurrentUser()
+    {
+        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+
+        return $currentUser;
+    }
 }

@@ -30,9 +30,43 @@ class Report extends AbstractForm
         $this->addId();
         $this->addName('Name', null, true);
         $this->addSystems();
+        
+        if ($this->studyConfig->allow_public_custom_report) {
+            $this->addPublic();
+        } else {
+            $this->addPublicHidden();
+        }
+        
         $this->addDescription();
     }
 
+    public function addPublic()
+    {
+        $this->add(
+            array(
+                'type' => 'Radio',
+                'name' => 'permission',
+                'options' => array(
+                    'label' => 'Report Permissions',
+                    'value_options' => array(
+                        'private' => 'Private',
+                        'public' => 'Public'
+                    )
+                )
+            )
+        );
+    }
+
+
+    public function addPublicHidden()
+    {
+        $this->add(
+            array(
+                'type' => 'hidden',
+                'name' => 'permission',
+            )
+        );
+    }
     public function getInputFilterSetup()
     {
         $inputFilter = new InputFilter();

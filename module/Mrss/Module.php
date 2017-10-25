@@ -570,6 +570,13 @@ class Module
 
                     return $helper;
                 },
+                'muut' => function($sm) {
+                    $helper = new View\Helper\Muut();
+                    $studyConfig = $sm->getServiceLocator()->get('study');
+                    $helper->setConfig($studyConfig->muut);
+
+                    return $helper;
+                },
                 'systemAdmin' => function($sm) {
                     $helper = new View\Helper\SystemAdmin;
 

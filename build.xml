@@ -243,6 +243,14 @@
         <echo>Done.</echo>
     </target>
 
+    <target name="sync-envisio-db">
+        <exec command="ssh eb@app.benchmark.envisio.com 'shopt -s expand_aliases; ./envisiodump; tar czf envisio.production.tgz  govbenchmark.sql;'" passthru="true"/>
+        <exec command="scp eb@app.benchmark.envisio.com:envisio.production.tgz /tmp" passthru="true" />
+        <exec command="tar zxf /tmp/envisio.production.tgz -C /tmp" passthru="true" />
+        <exec command="mysql -u root -proot eb_dev &lt; /tmp/govbenchmark.sql" passthru="true" />
+        <echo>Done.</echo>
+    </target>
+
     <target name="sync-nccbp-ob">
         <exec command="scp max@maximizingresources.org:nccbp.org/module/Mrss/src/Mrss/Entity/Observation.php /tmp" passthru="true" />
         <exec command="mv /tmp/Observation.php module/Mrss/src/Mrss/Entity/" passthru="true" />

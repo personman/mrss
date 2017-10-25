@@ -14,6 +14,8 @@ return array(
     'navigation' => 'envisio_navigation',
     'round_data_entry_to' => 2,
     'export_template' => 'govbenchmark-template.xlsx',
+    'news_page_id' => 65,
+    'allow_public_custom_report' => true,
     'benchmark_completion_heatmap' => true,
     'college_report_access_checkbox' => true,
     'percent_change_report_columns' => array(
@@ -42,4 +44,9 @@ return array(
     'footerLogo' => '',
     'footerSocial' => '',
     'freemium' => true,
+    'muut-disable' => array(
+        'name' => 'govbenchmark',
+        'key' => 'EbrH8g4SRS',
+        'secret' => '6ANKNxwOWChTfH62gsvbDa4Y'
+    )
 );

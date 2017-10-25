@@ -94,6 +94,11 @@ return array(
                     'roles' => array('guest')
                 ),
                 array(
+                    'controller' => 'customReports',
+                    'action' => 'publicView',
+                    'roles' => array('guest')
+                ),
+                array(
                     'controller' => 'PhlyContact\Controller\Contact',
                     'roles' => array('guest')
                 ),

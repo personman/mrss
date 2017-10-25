@@ -1567,6 +1567,16 @@ return array(
                                     )
                                 )
                             ),
+                            'public' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/public/:id',
+                                    'defaults' => array(
+                                        'action' => 'publicView',
+                                        'id' => 0,
+                                    )
+                                )
+                            ),
                             'print' => array(
                                 'type' => 'segment',
                                 'options' => array(
@@ -1970,6 +1980,16 @@ return array(
                     'defaults' => array(
                         'controller' => 'index',
                         'action' => 'glossary'
+                    )
+                )
+            ),
+            'community' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/community',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action' => 'community'
                     )
                 )
             ),
