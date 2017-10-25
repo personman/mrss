@@ -1,43 +1,4 @@
 <h1>Community</h1>
 
-<?php if (!$currentUser): ?>
-    <a class="muut" href="https://muut.com/i/govbenchmark">govbenchmark</a> <script src="//cdn.muut.com/1/moot.min.js"></script>
+<?= $this->muut($currentUser); ?>
 
-<?php else: ?>
-    <?php
-    // give us the user data
-    $user = array(
-        'user' => array(
-            "id" => $currentUser->getId(),
-            "displayname" => $currentUser->getDisplayName(),
-            "email" => $currentUser->getEmail(),
-            "avatar" => "//gravatar.com/avatar/" . md5(strtolower(trim($currentUser->getEmail()))),
-            "is_admin" => ($currentUser->getRole() == 'admin'),
-        ),
-    );
-
-    $message = base64_encode(json_encode($user));
-    $timestamp = time();
-    $signature = sha1('6ANKNxwOWChTfH62gsvbDa4Y' . ' ' . $message . ' ' . $timestamp);
-
-    ?>
-    <link rel="stylesheet" href="//cdn.muut.com/1/moot.css">
-    <script src="//cdn.muut.com/1/moot.min.js"></script>
-    <a id="my-community" href="https://muut.com/i/govbenchmark">Community</a>
-
-    <script>
-        $('#my-community').muut({
-            sso: true,
-            api: {
-                // API key for "govbenchmark"- community
-                key: 'EbrH8g4SRS',
-
-                // generate following on the server side (see below)
-                message: '<?= $message ?>',
-                signature: '<?= $signature ?>',
-                timestamp: '<?= $timestamp ?>'
-            }
-        })
-    </script>
-
-<?php endif ?>

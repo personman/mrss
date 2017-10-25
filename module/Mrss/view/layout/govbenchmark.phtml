@@ -304,6 +304,7 @@
 </script>
 
 <?php echo $this->headScript() ?>
+<?php echo $this->inlineScript() ?>
 
 <?php if ($googleAnalyticsKey = $this->currentStudy()->getGoogleAnalyticsKey()): ?>
     <script type="text/javascript">

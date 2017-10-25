@@ -44,4 +44,9 @@ return array(
     'footerLogo' => '',
     'footerSocial' => '',
     'freemium' => true,
+    'muut' => array(
+        'name' => 'govbenchmark',
+        'key' => 'EbrH8g4SRS',
+        'secret' => '6ANKNxwOWChTfH62gsvbDa4Y'
+    )
 );

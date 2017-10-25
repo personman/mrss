@@ -60,6 +60,7 @@ return array(
     'institution_label' => 'Institution',
     'institutions_label' => 'Institutions',
     'news_page_id' => null,
+    'muut' => null,
     'logged_out_header_button' => '<a href="/schedule-demo" class="btn schedule-btn" role="button" id="schedule-demo">SCHEDULE DEMO</a>',
     'copyright' => "2004 - " . date('Y') . " Johnson County Community College",
     'footerLogo' => '<a href="/benchmarking-institute"><img src="/images/benchmark_logo.png" /></a>',
