@@ -604,6 +604,18 @@ class College
         return $years;
     }
 
+    public function getLatestSubscription(Study $study)
+    {
+        $subs = array();
+        foreach ($this->getSubscriptionsForStudy($study) as $sub) {
+            $subs[$sub->getYear()] = $sub;
+        }
+
+        krsort($subs);
+
+        return array_pop($subs);
+    }
+
     public function getObservationForYear($year)
     {
         $observations = $this->getObservations();

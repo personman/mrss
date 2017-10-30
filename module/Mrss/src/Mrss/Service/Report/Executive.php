@@ -212,12 +212,13 @@ class Executive extends Report
     }
 
     /**
-     * Do they have a valid CFI value?
+     * Do they have a valid CFI value? Wallace state didn't in 2017
      */
     protected function hasCFI()
     {
         $hasCFI = $this->getObservation()->get('CFI');
 
+        // Wallace state
         if ($this->getObservation()->getId() == 4925) {
             //pr($this->getObservation()->getId());
             $hasCFI = false;
