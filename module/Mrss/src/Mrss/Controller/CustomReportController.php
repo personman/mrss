@@ -381,17 +381,21 @@ class CustomReportController extends ReportController
 
             $year = $this->currentStudy()->getCurrentYear();
 
-            $colleges = $this->getAllColleges($year);
+            // Limit to one state?
+            $state = 'MO';
+
+            if ($state) {
+                $colleges = $this->getStateColleges($state);
+            } else {
+                $colleges = $this->getAllColleges($year);
+            }
+
 
             // Test with JCCC
             //$college = $this->getCollegeModel()->find(101);
             //$colleges = array($college);
 
             foreach ($colleges as $college) {
-                // Skip the current college to prevent dupes
-                if ($college->getId() == $this->currentCollege()->getId()) {
-                    //continue;
-                }
 
                 foreach ($college->getUsers() as $user) {
                     if (!$this->userHasReport($user)) {
@@ -460,6 +464,13 @@ class CustomReportController extends ReportController
         } else {
             $colleges = $this->getCollegeModel()->findByStudy($study);
         }
+
+        return $colleges;
+    }
+
+    protected function getStateColleges($state)
+    {
+        $colleges = $this->getCollegeModel()->findByState($state);
 
         return $colleges;
     }
