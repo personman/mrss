@@ -16,6 +16,11 @@ use Zend\View\Model\ViewModel;
 class CustomReportController extends ReportController
 {
     protected $public = false;
+    //protected $peerGroupIdToCopy = 12650; // Peer group for sample reports
+    //protected $peerGroupName = "Random Peer Group for Sample Report";
+
+    protected $peerGroupIdToCopy = 14883; // Peer group for sample reports
+    protected $peerGroupName = "2017 Missouri";
 
     /**
      * List a college's reports
@@ -432,9 +437,8 @@ class CustomReportController extends ReportController
         if ($peerGroup = $this->getSamplePeerGroup($user)) {
             $peerGroupId = $peerGroup->getId();
         } else {
-            $peerGroupIdToCopy = 12650; // Peer group for sample reports
             //$peerGroupIdToCopy = null; // Peer group for sample reports
-            $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $user);
+            $peerGroupId = $this->copyPeerGroup($this->peerGroupIdToCopy, $user);
         }
 
 
@@ -483,9 +487,7 @@ class CustomReportController extends ReportController
 
     protected function getSamplePeerGroup($user)
     {
-        $name = "Random Peer Group for Sample Report";
-
-        return $this->getPeerGroupModel()->findOneByUserAndName($user, $name);
+        return $this->getPeerGroupModel()->findOneByUserAndName($user, $this->peerGroupName);
     }
 
     /**
