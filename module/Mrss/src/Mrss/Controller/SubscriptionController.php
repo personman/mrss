@@ -1513,7 +1513,9 @@ class SubscriptionController extends BaseController
 
         // Modules/sections
         $selectedSections = $this->getSelectedSections($draftSubscription);
-        $subscription->setSections($selectedSections);
+
+        //prd($selectedSections);
+        $subscription->updateSections($selectedSections);
 
 
         $this->getSubscriptionModel()->save($subscription);
