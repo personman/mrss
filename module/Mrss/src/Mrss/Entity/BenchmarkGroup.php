@@ -290,6 +290,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->getName();
     }
 
+    public function hasBenchmarksForYear($year)
+    {
+        $benchmarks = $this->getNonComputedBenchmarksForYear($year);
+
+        return (count($benchmarks) > 0);
+    }
+
     /**
      * Leave out computed benchmarks, we don't need to show them in the form
      *

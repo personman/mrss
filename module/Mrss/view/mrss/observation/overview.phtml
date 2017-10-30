@@ -106,6 +106,8 @@
 <?php foreach ($benchmarkGroups as $benchmarkGroup): ?>
     <?php /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */ ?>
 
+    <?php if (!$benchmarkGroup->hasBenchmarksForYear($observation->getYear())) continue; ?>
+
     <div class="row row-fluid">
         <div class="span1 col-md-1">
 

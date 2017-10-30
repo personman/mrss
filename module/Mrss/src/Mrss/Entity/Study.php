@@ -194,6 +194,10 @@ class Study
 
             $benchmarkGroups = array();
             foreach ($this->getBenchmarkGroups() as $benchmarkGroup) {
+                if (!$benchmarkGroup->hasBenchmarksForYear($subscription->getYear())) {
+                    continue;
+                }
+
                 if (in_array($benchmarkGroup->getId(), $benchmarkGroupIds)) {
                     $benchmarkGroups[] = $benchmarkGroup;
                 }
