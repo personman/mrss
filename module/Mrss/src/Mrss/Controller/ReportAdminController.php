@@ -17,7 +17,7 @@ class ReportAdminController extends BaseController
      */
     protected $reportService;
 
-    protected $debug = true;
+    protected $debug = false;
 
     /**
      * @return Report\Percentile

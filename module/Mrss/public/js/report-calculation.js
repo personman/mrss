@@ -363,13 +363,11 @@ function setUpSystems()
                 var url = baseUrl + systemId + '/' + benchmarkId + '/' + year;
 
                 // First and last
-                if (si == 0 && bi == 0) {
+                if (bi == 0) {
                     url = url + '/last';
-                } else if ((si == lastSystemId) && (bi == lastBenchmarkId)) {
+                } else if (bi == lastBenchmarkId) {
                     url = url + '/first';
                 }
-
-
 
                 urlStack.push(url);
             }
