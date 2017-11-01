@@ -190,7 +190,7 @@ class Executive extends Report
         );
 
         // Backup measures if there's no data reported
-        if (!$this->getObservation()->get('CFI')) {
+        if (!$this->hasCFI()) {
             $config['middle-right'] = array(
                 'title' => "Revenue and Expenses per FTE Student",
                 'percent' => false,
@@ -209,6 +209,22 @@ class Executive extends Report
         }
 
         return $config;
+    }
+
+    /**
+     * Do they have a valid CFI value? Wallace state didn't in 2017
+     */
+    protected function hasCFI()
+    {
+        $hasCFI = $this->getObservation()->get('CFI');
+
+        // Wallace state
+        if ($this->getObservation()->getId() == 4925) {
+            //pr($this->getObservation()->getId());
+            $hasCFI = false;
+        }
+
+        return $hasCFI;
     }
 
     public function getExecutiveImportant()

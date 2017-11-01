@@ -16,6 +16,11 @@ use Zend\View\Model\ViewModel;
 class CustomReportController extends ReportController
 {
     protected $public = false;
+    //protected $peerGroupIdToCopy = 12650; // Peer group for sample reports
+    //protected $peerGroupName = "Random Peer Group for Sample Report";
+
+    protected $peerGroupIdToCopy = 14883; // Peer group for sample reports
+    protected $peerGroupName = "2017 Missouri";
 
     /**
      * List a college's reports
@@ -381,17 +386,21 @@ class CustomReportController extends ReportController
 
             $year = $this->currentStudy()->getCurrentYear();
 
-            $colleges = $this->getAllColleges($year);
+            // Limit to one state?
+            $state = 'MO';
+
+            if ($state) {
+                $colleges = $this->getStateColleges($state);
+            } else {
+                $colleges = $this->getAllColleges($year);
+            }
+
 
             // Test with JCCC
             //$college = $this->getCollegeModel()->find(101);
             //$colleges = array($college);
 
             foreach ($colleges as $college) {
-                // Skip the current college to prevent dupes
-                if ($college->getId() == $this->currentCollege()->getId()) {
-                    //continue;
-                }
 
                 foreach ($college->getUsers() as $user) {
                     if (!$this->userHasReport($user)) {
@@ -428,9 +437,8 @@ class CustomReportController extends ReportController
         if ($peerGroup = $this->getSamplePeerGroup($user)) {
             $peerGroupId = $peerGroup->getId();
         } else {
-            $peerGroupIdToCopy = 12650; // Peer group for sample reports
             //$peerGroupIdToCopy = null; // Peer group for sample reports
-            $peerGroupId = $this->copyPeerGroup($peerGroupIdToCopy, $user);
+            $peerGroupId = $this->copyPeerGroup($this->peerGroupIdToCopy, $user);
         }
 
 
@@ -464,6 +472,13 @@ class CustomReportController extends ReportController
         return $colleges;
     }
 
+    protected function getStateColleges($state)
+    {
+        $colleges = $this->getCollegeModel()->findByState($state);
+
+        return $colleges;
+    }
+
     /** @return \Mrss\Model\College */
     protected function getCollegeModel()
     {
@@ -472,9 +487,7 @@ class CustomReportController extends ReportController
 
     protected function getSamplePeerGroup($user)
     {
-        $name = "Random Peer Group for Sample Report";
-
-        return $this->getPeerGroupModel()->findOneByUserAndName($user, $name);
+        return $this->getPeerGroupModel()->findOneByUserAndName($user, $this->peerGroupName);
     }
 
     /**
