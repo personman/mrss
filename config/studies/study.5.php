@@ -44,7 +44,7 @@ return array(
     'footerLogo' => '',
     'footerSocial' => '',
     'freemium' => true,
-    'muut-disable' => array(
+    'muut' => array(
         'name' => 'govbenchmark-com',
         'key' => 'UoyCJIKsWo',
         'secret' => 'KMzk9tfsI4uvQUrrLt2aplsh'
