@@ -187,10 +187,16 @@ class ObservationController extends BaseController
     {
         $formService = $this->getFormBuilder();
         $showData = $this->params()->fromRoute('showData');
+        $year = $this->getYearFromRouteOrStudy();
 
         $currentStudy = $this->currentStudy();
-        $subscription = $this->currentObservation()->getSubscription();
-        $year = $this->currentObservation()->getYear();
+        $subscription = $this->currentObservation($year)->getSubscription();
+
+        //$subscription = $this->getCurrentUser()->getCollege()->getLatestSubscription($currentStudy);
+        //$year = $subscription->getYear();
+        //prd($year);
+
+        //$year = $this->currentObservation()->getYear();
 
         $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($subscription);
         $dataEntryOpen = true;

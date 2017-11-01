@@ -35,5 +35,10 @@ return array(
         //'institutional_demographics_ged_awarded',
         //'all_ce_courses_canceled'
     ),
-    'contact_instructions' => 'You can also reach us by phone: Dr. Lou Guthrie, Director, 913-469-8500 x4019 or Michelle Taylor, Senior Research &amp; Data Analyst, 913-469-8500 x3648.'
+    'contact_instructions' => 'You can also reach us by phone: Dr. Lou Guthrie, Director, 913-469-8500 x4019 or Michelle Taylor, Senior Research &amp; Data Analyst, 913-469-8500 x3648.',
+    'muut' => array(
+        'name' => 'benchmarking-institute',
+        'key' => 'EkkvhumnsD',
+        'secret' => 'C5QeOZNbJ8HZiC315wblaVDk'
+    )
 );

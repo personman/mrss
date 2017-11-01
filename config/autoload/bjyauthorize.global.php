@@ -86,6 +86,7 @@ return array(
                 // Guests can see the index and user controller
                 array(
                     'controller' => 'index',
+                    'action' => array('index', 'glossary'),
                     'roles' => array('guest')
                 ),
                 array(
@@ -152,6 +153,12 @@ return array(
                     'action' => array('dictionary', 'calculations'),
                     'roles' => array('user')
                 ),
+                array(
+                    'controller' => 'index',
+                    'action' => 'community',
+                    'roles' => array('user')
+                ),
+
 
                 // Report viewers:
                 array(

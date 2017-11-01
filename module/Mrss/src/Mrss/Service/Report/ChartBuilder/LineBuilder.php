@@ -66,7 +66,8 @@ class LineBuilder extends ChartBuilder
 
 
 
-        $xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
+        //$xCategories = $this->offsetYears(array_keys($data), $benchmark->getYearOffset());
+        $xCategories = $this->offsetYears($this->getYears(), $benchmark->getYearOffset());
         $yLabel = $benchmark->getDescriptiveReportLabel();
         if (!empty($config['multiTrend'])) {
             $yLabel = '';
@@ -298,7 +299,8 @@ class LineBuilder extends ChartBuilder
                 if (!empty($config['colleges'])) {
                     foreach ($config['colleges'] as $collegeId) {
                         $college = $this->getCollegeModel()->find($collegeId);
-                        $data = $this->getDataForCollege($dbColumn, $college);
+                        $years = $this->getYears();
+                        $data = $this->getDataForCollege($dbColumn, $college, $years);
 
                         $series[] = array(
                             'name' => $this->getSeriesName($college->getNameAndState(), $dbColumn),
@@ -323,7 +325,7 @@ class LineBuilder extends ChartBuilder
     }
 
 
-    public function getDataForCollege($dbColumn, $college = null)
+    public function getDataForCollege($dbColumn, $college = null, $years = null)
     {
         if (null === $college) {
             $college = $this->getCollege();
@@ -339,6 +341,11 @@ class LineBuilder extends ChartBuilder
             // Skip current year if reporting isn't open yet.
             if ($this->getStudy()->getCurrentYear() == $subscription->getYear()
                 && !$this->getStudy()->getReportsOpen()) {
+                continue;
+            }
+
+            // Skip years not includes, if any
+            if ($years && !in_array($subscription->getYear(), $years)) {
                 continue;
             }
 
@@ -359,7 +366,10 @@ class LineBuilder extends ChartBuilder
 
         //prd($data);
 
-        $this->setYears(array_keys($data));
+        if (!$years) {
+            $this->setYears(array_keys($data));
+        }
+
         $data = $this->fillInGaps($data);
 
         return $data;

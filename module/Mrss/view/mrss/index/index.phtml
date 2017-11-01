@@ -1,4 +1,4 @@
-<?php if (true): ?>
+<?php if (false): ?>
     <?php /** @var \Mrss\Entity\System[] $systems */ ?>
 
 
@@ -108,166 +108,128 @@
 
 <?php else: ?>
 
-<?php /** @var \Mrss\Entity\System[] $systems */ ?>
+    <?php /** @var \Mrss\Entity\System[] $systems */ ?>
 
-<style>
-    .homepage > div {
-        padding: 30px;
-    }
-    .homepage div h2, .homepage div h1 {
-        text-align: center;
-    }
-    .homepage div h1 {
-        font-weight: normal;
-        font-size: 175%;
-    }
-    .homepage div h2 {
-        font-weight: normal;
-        font-size: 260%;
-    }
-    .chatWrapper {
-        margin-top: 47px;
-    }
-    .newsWrapper {
-        margin-top: 40px;
-    }
-</style>
-
-
-<div class="row homepage">
-<div class="col-md-4">
-    <h2>My Networks</h2>
-
-<?php foreach ($systems as $system): ?>
-    <?php $yearRange = 'FY ' . $system->getCurrentYear(); ?>
-    <?php $observation = $observationModel->findOne($college->getId(), $system->getCurrentYear()); ?>
-    <?php if ($_SERVER['REMOTE_ADDR'] == '216.185.233.188') {
-        //pr($college->getId()); pr($system->getCurrentYear()); pr($system->getId());
-
-    } ?>
-    <div class="network-wrap">
-        <h1><?= $system->getName() ?> (<?= count($system->getColleges()) ?> Cities)</h1>
+    <style>
+        .homepage > div {
+            padding: 30px;
+        }
+        .homepage div h2, .homepage div h1 {
+            text-align: center;
+        }
+        .homepage div h1 {
+            font-weight: normal;
+            font-size: 175%;
+        }
+        .homepage div h2 {
+            font-weight: normal;
+            font-size: 260%;
+        }
+        .chatWrapper {
+            margin-top: 47px;
+        }
+        .newsWrapper {
+            margin-top: 40px;
+        }
+    </style>
 
 
-                <?php $completion =  round($system->getDataEntryStructure()->getCompletionPercentageForObservation($observation)); ?>
+    <div class="row homepage">
+        <div class="col-md-4">
+            <h2>My Networks</h2>
 
-                <?php
-                $chart = new \Mrss\Service\Report\Chart\Gauge($system->getId(), $completion);
+            <?php foreach ($systems as $system): ?>
+                <?php $yearRange = 'FY ' . $system->getCurrentYear(); ?>
+                <?php $observation = $observationModel->findOne($college->getId(), $system->getCurrentYear()); ?>
+                <?php if ($_SERVER['REMOTE_ADDR'] == '216.185.233.188') {
+                    //pr($college->getId()); pr($system->getCurrentYear()); pr($system->getId());
 
-                echo $this->chart($chart->getConfig());
-
-                ?>
-
-                <!--<span>Data Entry Progress <?= $yearRange ?></span>-->
+                } ?>
+                <div class="network-wrap">
+                    <h1><?= $system->getName() ?> (<?= count($system->getColleges()) ?> Cities)</h1>
 
 
-        <div class="clear">&nbsp;</div>
+                    <?php $completion =  round($system->getDataEntryStructure()->getCompletionPercentageForObservation($observation)); ?>
+
+                    <?php
+                    $chart = new \Mrss\Service\Report\Chart\Gauge($system->getId(), $completion);
+
+                    echo $this->chart($chart->getConfig());
+
+                    ?>
+
+                    <!--<span>Data Entry Progress <?= $yearRange ?></span>-->
+
+
+                    <div class="clear">&nbsp;</div>
+                </div>
+            <?php endforeach ?>
+
+        </div>
+
+        <div class="col-md-4">
+            <a href="/community"><h2>Community Chat</h2></a>
+
+            <div class="chatWrapper">
+
+
+                    <?= $this->muut($currentUser) ?>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <h2>govBenchmark News</h2>
+
+            <div class="newsWrapper">
+                <?php if ($news): ?>
+                    <?php if($currentUser->getRole() == 'admin'): ?>
+                        <p>
+                            <a href="/pages/edit/<?php echo $news->getId() ?>">
+                                Edit news
+                            </a>
+                        </p>
+                    <?php endif ?>
+
+                    <?= $news->getContent() ?>
+                <?php endif ?>
+
+            </div>
+
+        </div>
+
+
     </div>
-<?php endforeach ?>
 
-</div>
 
-    <div class="col-md-4">
-        <a href="/community"><h2>Community Chat</h2></a>
 
-        <div class="chatWrapper">
+    <script>
+        $( ".network-wrap .network-dataentry ul" ).each(function( index ) {
+            $(this).children('li').each(function( index ) {
+                if (index > 5) {
+                    $(this).css('display', 'none');
+                }
+            });
+        });
 
-            <?php if (!$currentUser): ?>
-            <a class="muut" href="https://muut.com/i/govbenchmark">govbenchmark</a> <script src="//cdn.muut.com/1/moot.min.js"></script>
-
-            <?php else: ?>
-            <?php
-            // give us the user data
-            $user = array(
-                'user' => array(
-                    "id" => $currentUser->getId(),
-                    "displayname" => $currentUser->getDisplayName(),
-                    "email" => $currentUser->getEmail(),
-                    "avatar" => "//gravatar.com/avatar/" . md5(strtolower(trim($currentUser->getEmail()))),
-                    "is_admin" => ($currentUser->getRole() == 'admin'),
-                ),
-            );
-
-            $message = base64_encode(json_encode($user));
-            $timestamp = time();
-            $signature = sha1('6ANKNxwOWChTfH62gsvbDa4Y' . ' ' . $message . ' ' . $timestamp);
-
-            ?>
-            <link rel="stylesheet" href="//cdn.muut.com/1/moot.css">
-                <script src="//cdn.muut.com/1/moot.min.js"></script>
-                <a id="my-community" href="https://muut.com/i/govbenchmark">Community</a>
-
-                <script>
-                    $('#my-community').muut({
-                        sso: true,
-                        api: {
-                            // API key for "govbenchmark"- community
-                            key: 'EbrH8g4SRS',
-
-                            // generate following on the server side (see below)
-                            message: '<?= $message ?>',
-                            signature: '<?= $signature ?>',
-                            timestamp: '<?= $timestamp ?>'
+        $( ".data-entry-readmore" ).each(function( index ) {
+            var showAll = false;
+            $(this).click(function(){
+                if (showAll == false) {
+                    $(this).text('Show Less [-]');
+                    $(this).prev('.network-wrap .network-dataentry ul').children('li').css('display', 'block');
+                    showAll = true;
+                } else {
+                    $(this).text('Show All [+]');
+                    $(this).prev('.network-wrap .network-dataentry ul').children('li').each(function( index ) {
+                        if (index > 5) {
+                            $(this).css('display', 'none');
                         }
-                    })
-                </script>
-
-            <?php endif ?>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <h2>govBenchmark News</h2>
-
-        <div class="newsWrapper">
-        <?php if ($news): ?>
-            <?php if($currentUser->getRole() == 'admin'): ?>
-                <p>
-                    <a href="/pages/edit/<?php echo $news->getId() ?>">
-                        Edit news
-                    </a>
-                </p>
-            <?php endif ?>
-
-            <?= $news->getContent() ?>
-        <?php endif ?>
-
-        </div>
-
-    </div>
-
-
-</div>
-
-
-
-<script>
-    $( ".network-wrap .network-dataentry ul" ).each(function( index ) {
-        $(this).children('li').each(function( index ) {
-            if (index > 5) {
-                $(this).css('display', 'none');
-            }
+                        showAll = false;
+                    });
+                }
+            });
         });
-    });
-
-    $( ".data-entry-readmore" ).each(function( index ) {
-        var showAll = false;
-        $(this).click(function(){
-            if (showAll == false) {
-                $(this).text('Show Less [-]');
-                $(this).prev('.network-wrap .network-dataentry ul').children('li').css('display', 'block');
-                showAll = true;
-            } else {
-                $(this).text('Show All [+]');
-                $(this).prev('.network-wrap .network-dataentry ul').children('li').each(function( index ) {
-                    if (index > 5) {
-                        $(this).css('display', 'none');
-                    }
-                    showAll = false;
-                });
-            }
-        });
-    });
-</script>
+    </script>
 
 <?php endif ?>
