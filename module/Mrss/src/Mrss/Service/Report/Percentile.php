@@ -142,6 +142,9 @@ class Percentile extends Report
             $percentileEntity->setSystem($system);
         }
 
+        $message = "Count: $count";
+        $this->debug($message);
+
         $percentileModel->save($percentileEntity);
 
         // Percentile ranks

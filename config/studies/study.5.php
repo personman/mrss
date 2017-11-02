@@ -45,8 +45,8 @@ return array(
     'footerSocial' => '',
     'freemium' => true,
     'muut-disable' => array(
-        'name' => 'govbenchmark',
-        'key' => 'EbrH8g4SRS',
-        'secret' => '6ANKNxwOWChTfH62gsvbDa4Y'
+        'name' => 'govbenchmark-community',
+        'key' => 'UoyCJIKsWo',
+        'secret' => 'KMzk9tfsl4uvQUrrLt2apIsh'
     )
 );
