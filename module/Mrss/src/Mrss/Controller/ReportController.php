@@ -246,8 +246,10 @@ class ReportController extends ReportAdminController
 
     protected function getSubscriptionByYear($year)
     {
+        $currentCollege = $this->currentCollege();
+
         return $this->getSubscriptionModel()
-            ->findOne($year, $this->currentCollege(), $this->currentStudy());
+            ->findOne($year, $currentCollege, $this->currentStudy());
     }
 
     public function summaryAction()
