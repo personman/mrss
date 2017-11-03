@@ -82,8 +82,15 @@ class Peer extends Report
                 /** @var \Mrss\Entity\College $college */
                 /** @var \Mrss\Entity\Observation $observation */
 
-                $observation = $observations[$college->getId()];
-                $value = $observation->get($benchmark->getDbColumn());
+                $value = null;
+                if (!empty($observations[$college->getId()])) {
+                    $observation = $observations[$college->getId()];
+                    $value = $observation->get($benchmark->getDbColumn());
+                } else {
+                    $this->getErrorLog()->err("Cannot find observation for college " . $college->getId() . " : " . $college->getName());
+                }
+
+
 
                 if ($value !== null) {
                     $data[$college->getId()] = $value;
