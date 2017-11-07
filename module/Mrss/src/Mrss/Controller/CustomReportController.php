@@ -566,7 +566,12 @@ class CustomReportController extends ReportController
     {
         $sampleGroup = $this->getPeerGroupModel()->find($this->peerGroupIdToCopy);
 
-        return $this->getPeerGroupModel()->findOneByUserAndName($user, $sampleGroup->getName());
+        $group = null;
+        if ($sampleGroup) {
+            $group = $this->getPeerGroupModel()->findOneByUserAndName($user, $sampleGroup->getName());
+        }
+
+        return $group;
     }
 
     /**

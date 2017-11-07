@@ -158,7 +158,12 @@ class LineBuilder extends ChartBuilder
 
         $peerGroupConfig = $config['peerGroup'];
         $peerGroupModel = $this->getPeerGroupModel();
-        $peerGroup = $peerGroupModel->find($peerGroupConfig);
+
+        $peerGroup = null;
+        if ($peerGroupConfig) {
+            $peerGroup = $peerGroupModel->find($peerGroupConfig);
+        }
+
 
         foreach ($dbColumns as $dbColumn) {
             $benchmark = $this->getBenchmark($dbColumn);
