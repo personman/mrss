@@ -9,6 +9,8 @@ use Mrss\Service\Report\Calculator;
 
 class BubbleBuilder extends ChartBuilder
 {
+    protected $yMin = 0;
+
     public function getChart()
     {
         $config = $this->getConfig();
@@ -140,6 +142,10 @@ class BubbleBuilder extends ChartBuilder
                 // Save 'em for the median
                 $xvals[] = $xVal;
                 $yVals[] = $yVal;
+
+                if ($yVal < $this->yMin) {
+                    $this->yMin = $yVal;
+                }
             }
 
         }
@@ -250,7 +256,7 @@ class BubbleBuilder extends ChartBuilder
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
         if ($yBenchmark->isPercent() && $forceScale) {
             $bubbleChart->setYAxisMax(100);
-            $bubbleChart->setYAxisMin(0);
+            $bubbleChart->setYAxisMin($this->yMin);
         }
 
         $chart = $bubbleChart->getConfig();

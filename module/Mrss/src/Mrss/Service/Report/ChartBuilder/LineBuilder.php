@@ -86,11 +86,25 @@ class LineBuilder extends ChartBuilder
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
         if ($benchmark->isPercent() && empty($config['percentScaleZoom']) && $forceScale) {
             $chart->setYAxisMax(100);
-            $chart->setYAxisMin(0);
+            $chart->setYAxisMin($this->getYMin($series));
         }
 
 
         return $chart->getConfig();
+    }
+
+    protected function getYMin($series)
+    {
+        $yMin = 0;
+        foreach ($series as $serie) {
+            foreach ($serie['data'] as $datum) {
+                if ($datum < $yMin) {
+                    $yMin = $datum;
+                }
+            }
+        }
+
+        return $yMin;
     }
 
     public function getDbColumns()
