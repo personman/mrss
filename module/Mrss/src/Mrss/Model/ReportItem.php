@@ -26,6 +26,15 @@ class ReportItem extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    public function findBySourceItem($sourceItemId, $userId)
+    {
+        return $this->getRepository()->findOneBy(
+            array(
+
+            )
+        );
+    }
+
     public function clearCache($studyId)
     {
         $sql = "UPDATE report_items i

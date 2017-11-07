@@ -351,13 +351,25 @@ class CustomReportController extends ReportController
     protected function prepareUsersWhoAlreadyHaveIt($sourceId)
     {
         foreach ($this->getReportModel()->findBySourceId($sourceId, $this->currentStudy()) as $report) {
-            $this->userIdsWhoAlreadyHaveIt[] = $report->getUser()->getId();
+            $this->userIdsWhoAlreadyHaveIt[$report->getUser()->getId()] = $report;
         }
     }
 
     protected function userHasReport($user)
     {
-        return in_array($user->getId(), $this->userIdsWhoAlreadyHaveIt);
+        $userIds = array_keys($this->userIdsWhoAlreadyHaveIt);
+        return in_array($user->getId(), $$userIds);
+    }
+
+    protected function getReportToUpdate($userId)
+    {
+        $report = null;
+
+        if (!empty($this->userIdsWhoAlreadyHaveIt[$userId])) {
+            $report = $this->userIdsWhoAlreadyHaveIt[$userId];
+        }
+
+        return $report;
     }
 
     public function publishAction()
@@ -427,16 +439,6 @@ class CustomReportController extends ReportController
 
         $this->prepareUsersWhoAlreadyHaveIt($id);
 
-        /** @var \Mrss\Model\Setting $settingsModel */
-        $settingsModel = $this->getServiceLocator()->get('model.setting');
-
-
-        // Force enable:
-        //$settingsModel->setValueForIdentifier('copy_done', false);
-
-
-        $copyDone = $settingsModel->getValueForIdentifier('copy_done');
-
 
         if (empty($copyDone)) {
             $count = 0;
@@ -500,10 +502,9 @@ class CustomReportController extends ReportController
         }
 
 
-        $report = new Report;
+        $report = $this->getOrCreateReport($user);
         //$report->setCollege($college);
-        $report->setUser($user);
-        $report->setStudy($this->currentStudy());
+
         $report->setName($sourceReport->getName());
         $report->setDescription($sourceReport->getDescription());
         $report->setSourceReportId($sourceReport->getId());
@@ -515,6 +516,19 @@ class CustomReportController extends ReportController
         }
 
         $this->getReportModel()->getEntityManager()->flush();
+    }
+
+    protected function getOrCreateReport($user)
+    {
+        if ($this->userHasReport($user)) {
+            $report = $this->getReportToUpdate($user->getId());
+        } else {
+            $report = new Report;
+            $report->setUser($user);
+            $report->setStudy($this->currentStudy());
+        }
+
+        return $report;
     }
 
     protected function getAllColleges($year = null)
@@ -595,17 +609,28 @@ class CustomReportController extends ReportController
         $config = $sourceItem->getConfig();
         $config['peerGroup'] = $peerGroupId;
 
-        $item = new ReportItem();
+        $item = $this->getOrCreateItem($sourceItem);
         $item->setReport($newReport);
-        $item->setName($sourceItem->getName());
+
         $item->setSequence($sourceItem->getSequence());
         $item->setType($sourceItem->getType());
         $item->setDescription($sourceItem->getDescription());
         $item->setYear($sourceItem->getYear());
         $item->setConfig($config);
+        $item->setSourceItemId($sourceItem->getId());
         $item->setHighlightedCollege($sourceItem->getReport()->getCollege());
 
         $this->getReportItemModel()->save($item);
+    }
+
+    protected function getOrCreateItem(ReportItem $sourceItem)
+    {
+        if ($item = $this->getReportItemModel()->find())
+        $item = new ReportItem();
+
+        $item->setName($sourceItem->getName());
+
+        return $item;
     }
 
     /**

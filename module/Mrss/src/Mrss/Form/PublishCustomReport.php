@@ -41,7 +41,7 @@ class PublishCustomReport extends AbstractForm
                 'options' => array(
                     'label' => 'Peer Group to Publish To',
                     'empty_option' => 'Select a peer group',
-                    'help-block' => 'Each user at each member of the peer group will get a copy of the report.'
+                    'help-block' => 'Each user at each member of the peer group will get a copy of the report. <a href="/peer-groups">Manage your peer groups</a>.'
                 ),
                 'attributes' => array(
                     'id' => 'target',

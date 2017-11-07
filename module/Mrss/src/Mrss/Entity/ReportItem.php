@@ -103,6 +103,11 @@ class ReportItem
      */
     protected $sequence;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $sourceItemId;
+
 
     /**
      * @param mixed $benchmark1
@@ -338,6 +343,24 @@ class ReportItem
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSourceItemId()
+    {
+        return $this->sourceItemId;
+    }
+
+    /**
+     * @param mixed $sourceItemId
+     * @return ReportItem
+     */
+    public function setSourceItemId($sourceItemId)
+    {
+        $this->sourceItemId = $sourceItemId;
+        return $this;
     }
 
     public function getCacheChart()
