@@ -138,6 +138,11 @@ class User implements UserInterface, ProviderInterface
      */
     private $peerGroups;
 
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    protected $systemsAdministered;
+
     public function __construct()
     {
         $this->studies = new ArrayCollection();
@@ -524,5 +529,27 @@ class User implements UserInterface, ProviderInterface
     public function getPeerGroups()
     {
         return $this->peerGroups;
+    }
+
+    /**
+     * @param array $systemIds
+     * @return $this
+     */
+    public function setSystemsAdministered($systemIds)
+    {
+        $this->systemsAdministered = implode('|', $systemIds);
+
+        return $this;
+    }
+
+    public function getSystemsAdministered()
+    {
+        if ($this->systemsAdministered) {
+            $systemIds = explode('|', $this->systemsAdministered);
+        } else {
+            $systemIds = array();
+        }
+
+        return $systemIds;
     }
 }
