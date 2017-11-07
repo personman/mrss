@@ -131,6 +131,13 @@ class User implements UserInterface, ProviderInterface
      */
     protected $dataDefinitions;
 
+    /**
+     * Bidirectional - One-To-Many (INVERSE SIDE)
+     *
+     * @ORM\OneToMany(targetEntity="PeerGroup", mappedBy="user")
+     */
+    private $peerGroups;
+
     public function __construct()
     {
         $this->studies = new ArrayCollection();
@@ -373,6 +380,11 @@ class User implements UserInterface, ProviderInterface
         return $role;
     }
 
+    public function isAdmin()
+    {
+        return ($this->getRole() == 'admin');
+    }
+
     /**
      * @return \Zend\Permissions\Acl\Role\RoleInterface[]
      */
@@ -497,5 +509,20 @@ class User implements UserInterface, ProviderInterface
         }
 
         return false;
+    }
+
+    public function setPeerGroups($groups)
+    {
+        $this->peerGroups = $groups;
+
+        return $this;
+    }
+
+    /**
+     * @return PeerGroup[]
+     */
+    public function getPeerGroups()
+    {
+        return $this->peerGroups;
     }
 }

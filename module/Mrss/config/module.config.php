@@ -1627,6 +1627,16 @@ return array(
                                     )
                                 )
                             ),
+                            'publish' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/publish/:id',
+                                    'defaults' => array(
+                                        'action' => 'publish',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
                             'delete' => array(
                                 'type' => 'segment',
                                 'options' => array(

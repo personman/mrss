@@ -35,10 +35,9 @@
     </a>
 
     <?php if ($this->isAllowed('adminMenu', 'view')): ?>
-    <a href="<?= $this->url('reports/custom/copy', array('id' => $report->getId())) ?>"
+    <a href="<?= $this->url('reports/custom/publish', array('id' => $report->getId())) ?>"
        class="btn btn-default<?php if ($active == 'copy') echo ' active' ?>"
-       title="Copy this report to all institutions."
-       onclick="return confirm('Are you sure you want to copy this to every institution?')">
+       title="Copy this report to other <?= $this->studyConfig()->institutions_label ?>.">
         <span class="glyphicon glyphicon-duplicate"></span>
         Copy
     </a>

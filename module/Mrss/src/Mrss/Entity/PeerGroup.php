@@ -37,7 +37,7 @@ class PeerGroup
     protected $college;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="peerGroups")
      * @ORM\JoinColumn(
      * name="user_id",
      * referencedColumnName="id",

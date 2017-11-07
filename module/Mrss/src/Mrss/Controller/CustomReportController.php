@@ -4,6 +4,7 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\PeerGroup;
 use Mrss\Form\Explore;
+use Mrss\Form\PublishCustomReport;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
@@ -41,7 +42,7 @@ class CustomReportController extends ReportController
             $webinarLink = '/free-webinar';
         }
 
-        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+        $currentUser = $this->getCurrentUser();
 
         return array(
             'webinarLink' => $webinarLink,
@@ -290,7 +291,7 @@ class CustomReportController extends ReportController
 
         }
 
-        $currentUser = $this->zfcUserAuthentication()->getIdentity();
+        $currentUser = $this->getCurrentUser();
 
         if (empty($report)) {
             $report = new Report;
@@ -357,6 +358,63 @@ class CustomReportController extends ReportController
     protected function userHasReport($user)
     {
         return in_array($user->getId(), $this->userIdsWhoAlreadyHaveIt);
+    }
+
+    public function publishAction()
+    {
+        $form = $this->getPublishForm();
+        $reportId = $this->params()->fromRoute('id');
+
+        if (!$this->canPublish($reportId)) {
+            $this->flashMessenger()->addErrorMessage("I'm sorry, Dave. I'm afraid I can't do that.");
+            return $this->redirect()->toUrl('/reports/custom');
+        }
+
+        $report = $this->getReportModel()->find($reportId);
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            $form->setData($data);
+
+            if ($form->isValid()) {
+                die('valid');
+            }
+        }
+
+        return array(
+            'form' => $form,
+            'report' => $report
+        );
+    }
+
+    /**
+     * Can the current user publish the report?
+     * @param $id
+     * @return bool
+     */
+    protected function canPublish($id)
+    {
+        $can = false;
+        if ($this->getCurrentUser()->isAdmin()) {
+            $can = true;
+        } elseif ($this->userOwnsReport($id)) {
+            $can = true;
+        }
+
+        return $can;
+    }
+
+    protected function userOwnsReport($id)
+    {
+        // @todo: implement
+        return false;
+    }
+
+    protected function getPublishForm()
+    {
+        $form = new PublishCustomReport($this->getCurrentUser());
+
+        return $form;
     }
 
     public function copyAction()
