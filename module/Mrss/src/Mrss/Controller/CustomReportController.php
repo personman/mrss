@@ -20,8 +20,8 @@ class CustomReportController extends ReportController
     //protected $peerGroupIdToCopy = 12650; // Peer group for sample reports
     //protected $peerGroupName = "Random Peer Group for Sample Report";
 
-    protected $peerGroupIdToCopy = 14883; // Peer group for sample reports
-    protected $peerGroupName = "2017 Missouri";
+    protected $peerGroupIdToCopy; // Peer group for sample reports
+    //protected $peerGroupName = "2017 Missouri";
 
     /**
      * List a college's reports
@@ -358,7 +358,7 @@ class CustomReportController extends ReportController
     protected function userHasReport($user)
     {
         $userIds = array_keys($this->userIdsWhoAlreadyHaveIt);
-        return in_array($user->getId(), $$userIds);
+        return in_array($user->getId(), $userIds);
     }
 
     protected function getReportToUpdate($userId)
@@ -389,7 +389,11 @@ class CustomReportController extends ReportController
             $form->setData($data);
 
             if ($form->isValid()) {
-                die('valid');
+
+                $data = $form->getData();
+                $this->peerGroupIdToCopy = $reportId;
+
+                return $this->copyReport($report, $data['target'], $data['group']);
             }
         }
 
@@ -429,66 +433,67 @@ class CustomReportController extends ReportController
         return $form;
     }
 
-    public function copyAction()
+    public function copyReport(Report $report, $targetPeerGroupId, $peerGroup)
     {
         $this->longRunningScript();
         $start = microtime(true);
 
-        $id = $this->params()->fromRoute('id');
-        $report = $this->getReport($id);
+        $this->prepareUsersWhoAlreadyHaveIt($report->getId());
+        $this->peerGroupIdToCopy = $peerGroup;
 
-        $this->prepareUsersWhoAlreadyHaveIt($id);
-
-
-        if (empty($copyDone)) {
+        if (true) {
             $count = 0;
             $duplicatesSkipped = 0;
 
-            $year = $this->currentStudy()->getCurrentYear();
+            //$year = $this->currentStudy()->getCurrentYear();
 
-            // Limit to one state?
-            $state = 'MO';
-
-            if ($state) {
-                $colleges = $this->getStateColleges($state);
-            } else {
-                $colleges = $this->getAllColleges($year);
-            }
-
-
-            // Test with JCCC
-            //$college = $this->getCollegeModel()->find(101);
-            //$colleges = array($college);
-
+            $colleges = $this->getTargetColleges($targetPeerGroupId);
             foreach ($colleges as $college) {
 
                 foreach ($college->getUsers() as $user) {
-                    if (!$this->userHasReport($user)) {
+                    //if (!$this->userHasReport($user)) {
+                    if (true) {
                         $this->copyCustomReport($report, $user);
                         $count++;
                     } else {
                         $duplicatesSkipped++;
                     }
-
-
-                    //pr("$count. {$college->getName()} {$user->getFullName()}");
                 }
             }
 
 
             $elapsed = round(microtime(true) - $start);
             $this->flashMessenger()->addSuccessMessage(
-                "Report copied to all users at all institutions ($count) in $elapsed seconds. $duplicatesSkipped duplicates skipped.
+                "Report copied to all users at peer group members ($count) in $elapsed seconds. $duplicatesSkipped duplicates skipped.
             Now <a href='/reports/custom/admin'>rebuild the cache</a>."
             );
 
-            $settingsModel->setValueForIdentifier('copy_done', true);
         } else {
             $this->flashMessenger()->addErrorMessage('Copy already done.');
         }
 
 
         return $this->redirect()->toRoute('reports/custom');
+    }
+
+    protected function getTargetColleges($peerGroupId)
+    {
+        $peerGroup = $this->getPeerGroupModel()->find($peerGroupId);
+
+        $colleges = $this->getCollegeModel()->findByIds($peerGroup->getPeers());
+
+        return $colleges;
+
+
+        // Limit to one state?
+        /*$state = 'MO';
+
+        if ($state) {
+            $colleges = $this->getStateColleges($state);
+        } else {
+            $colleges = $this->getAllColleges($year);
+        }
+        */
     }
 
     protected function copyCustomReport(Report $sourceReport, $user)
@@ -559,7 +564,9 @@ class CustomReportController extends ReportController
 
     protected function getSamplePeerGroup($user)
     {
-        return $this->getPeerGroupModel()->findOneByUserAndName($user, $this->peerGroupName);
+        $sampleGroup = $this->getPeerGroupModel()->find($this->peerGroupIdToCopy);
+
+        return $this->getPeerGroupModel()->findOneByUserAndName($user, $sampleGroup->getName());
     }
 
     /**
@@ -598,7 +605,7 @@ class CustomReportController extends ReportController
     }
 
     /**
-     * Strip out anything that shouldn't be copied.
+     * Strip out anything that should not be copied.
      *
      * @param $sourceItem
      * @param $newReport
@@ -609,7 +616,7 @@ class CustomReportController extends ReportController
         $config = $sourceItem->getConfig();
         $config['peerGroup'] = $peerGroupId;
 
-        $item = $this->getOrCreateItem($sourceItem);
+        $item = $this->getOrCreateItem($sourceItem, $newReport->getId());
         $item->setReport($newReport);
 
         $item->setSequence($sourceItem->getSequence());
@@ -618,15 +625,21 @@ class CustomReportController extends ReportController
         $item->setYear($sourceItem->getYear());
         $item->setConfig($config);
         $item->setSourceItemId($sourceItem->getId());
-        $item->setHighlightedCollege($sourceItem->getReport()->getCollege());
+        $item->setHighlightedCollege($newReport->getCollege());
 
         $this->getReportItemModel()->save($item);
     }
 
-    protected function getOrCreateItem(ReportItem $sourceItem)
+    protected function getOrCreateItem(ReportItem $sourceItem, $reportId)
     {
-        if ($item = $this->getReportItemModel()->find())
-        $item = new ReportItem();
+        if ($item = $this->getReportItemModel()->findBySourceItem($sourceItem->getId(), $reportId)) {
+            // Found it. Just update it
+
+        } else {
+            // None yet. Create one.
+            $item = new ReportItem();
+        }
+
 
         $item->setName($sourceItem->getName());
 

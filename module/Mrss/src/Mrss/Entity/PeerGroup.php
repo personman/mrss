@@ -182,7 +182,7 @@ class PeerGroup
     }
 
     /**
-     * @return \Mrss\Entity\College[]
+     * @return array
      */
     public function getPeers()
     {

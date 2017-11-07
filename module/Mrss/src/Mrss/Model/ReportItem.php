@@ -26,11 +26,12 @@ class ReportItem extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
-    public function findBySourceItem($sourceItemId, $userId)
+    public function findBySourceItem($sourceItemId, $reportId)
     {
         return $this->getRepository()->findOneBy(
             array(
-
+                'sourceItemId' => $sourceItemId,
+                'report' => $reportId,
             )
         );
     }

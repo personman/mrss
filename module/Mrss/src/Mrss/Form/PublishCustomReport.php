@@ -21,7 +21,7 @@ class PublishCustomReport extends AbstractForm
         $this->addPeerGroupTarget();
         $this->addPeerGroupGroup();
 
-        $this->add($this->getButtonFieldset());
+        $this->add($this->getButtonFieldset('Copy'));
 
 
         $this->setInputFilter($this->getInputFilterSetup());
