@@ -347,10 +347,22 @@ class System
     {
         $systemAdmins = array();
 
+        // New way:
         foreach ($this->getColleges() as $college) {
             foreach ($college->getUsers() as $user) {
-                if ($user->getRole() == $role) {
+                if ($user->administersSystem($this->getId())) {
                     $systemAdmins[] = $user;
+                }
+            }
+        }
+
+        // Old way
+        if (empty($systemAdmins)) {
+            foreach ($this->getColleges() as $college) {
+                foreach ($college->getUsers() as $user) {
+                    if ($user->getRole() == $role) {
+                        $systemAdmins[] = $user;
+                    }
                 }
             }
         }

@@ -552,4 +552,28 @@ class User implements UserInterface, ProviderInterface
 
         return $systemIds;
     }
+
+    public function addSystemAdministered($systemId)
+    {
+        $existingSystems = $this->getSystemsAdministered();
+
+        if (!in_array($systemId, $existingSystems)) {
+            $existingSystems[] = $systemId;
+        }
+
+        $this->setSystemsAdministered($existingSystems);
+    }
+
+    /**
+     * Check to see if the user is a system admin for the given system
+     *
+     * @param $systemId
+     * @return bool
+     */
+    public function administersSystem($systemId)
+    {
+        $systemIds = $this->getSystemsAdministered();
+
+        return (in_array($systemId, $systemIds));
+    }
 }

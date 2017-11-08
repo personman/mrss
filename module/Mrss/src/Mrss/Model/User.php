@@ -22,6 +22,10 @@ class User extends AbstractModel
         return $this->getRepository()->findOneBy(array('email' => $email));
     }
 
+    /**
+     * @param $id
+     * @return null|UserEntity
+     */
     public function find($id)
     {
         return $this->getRepository()->find($id);

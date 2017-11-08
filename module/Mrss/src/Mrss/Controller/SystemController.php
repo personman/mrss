@@ -270,6 +270,14 @@ class SystemController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Model\User
+     */
+    protected function getUserModel()
+    {
+        return $this->getServiceLocator()->get('model.user');
+    }
+
+    /**
      * Show a list of all users attached to colleges in the system and promote
      * the selected user to system_admin
      */
@@ -300,7 +308,7 @@ class SystemController extends AbstractActionController
                 $data = $form->getData();
 
                 // Get the user
-                $userModel = $this->getServiceLocator()->get('model.user');
+                $userModel = $this->getUserModel();
                 $user = $userModel->find($data['user_id']);
 
                 if (empty($user)) {
@@ -308,7 +316,12 @@ class SystemController extends AbstractActionController
                 }
 
                 // Set the role and save
-                $user->setRole($data['role']);
+                //$user->setRole($data['role']);
+
+                // New regime for Envisio: leave role, but set systemsAdministered
+                $user->addSystemAdministered($systemId);
+
+
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
 
