@@ -144,6 +144,11 @@ class User implements UserInterface, ProviderInterface
     protected $systemsAdministered;
 
     /**
+     * @ORM\Column(type="string", length=60)
+     */
+    protected $systemsViewer;
+
+    /**
      * @Gedmo\Mapping\Annotation\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @var \DateTime $created
@@ -571,6 +576,17 @@ class User implements UserInterface, ProviderInterface
         $this->setSystemsAdministered($existingSystems);
     }
 
+    public function removeSystemAministered($systemId)
+    {
+        $existingSystems = $this->getSystemsAdministered();
+
+        if (($key = array_search($systemId, $existingSystems)) !== false) {
+            unset($existingSystems[$key]);
+        }
+
+        $this->setSystemsAdministered($existingSystems);
+    }
+
     /**
      * Check to see if the user is a system admin for the given system
      *
@@ -583,6 +599,51 @@ class User implements UserInterface, ProviderInterface
 
         return (in_array($systemId, $systemIds));
     }
+
+    /**
+     * @param array $systemIds
+     * @return $this
+     */
+    public function setSystemsViewer($systemIds)
+    {
+        $this->systemsViewer = implode('|', $systemIds);
+
+        return $this;
+    }
+
+    public function getSystemsViewer()
+    {
+        if ($this->systemsViewer) {
+            $systemIds = explode('|', $this->systemsViewer);
+        } else {
+            $systemIds = array();
+        }
+
+        return $systemIds;
+    }
+
+    public function addSystemViewer($systemId)
+    {
+        $existingSystems = $this->getSystemsViewer();
+
+        if (!in_array($systemId, $existingSystems)) {
+            $existingSystems[] = $systemId;
+        }
+
+        $this->setSystemsViewer($existingSystems);
+    }
+
+    public function removeSystemViewer($systemId)
+    {
+        $existingSystems = $this->getSystemsViewer();
+
+        if (($key = array_search($systemId, $existingSystems)) !== false) {
+            unset($existingSystems[$key]);
+        }
+
+        $this->setSystemsViewer($existingSystems);
+    }
+
 
     /**
      * @param $created

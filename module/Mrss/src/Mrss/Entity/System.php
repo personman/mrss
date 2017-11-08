@@ -345,6 +345,11 @@ class System
      */
     public function getAdmins($role = 'system_admin')
     {
+        if ($role == 'system_viewer') {
+            return $this->getSystemViewers();
+        }
+
+
         $systemAdmins = array();
 
         // New way:
@@ -357,7 +362,7 @@ class System
         }
 
         // Old way
-        if (empty($systemAdmins)) {
+        /*if (empty($systemAdmins)) {
             foreach ($this->getColleges() as $college) {
                 foreach ($college->getUsers() as $user) {
                     if ($user->getRole() == $role) {
@@ -365,9 +370,27 @@ class System
                     }
                 }
             }
-        }
+        }*/
 
         return $systemAdmins;
+    }
+
+    public function getSystemViewers()
+    {
+        $role = 'system_viewer';
+        $systemViewers = array();
+
+        if (empty($systemViewers)) {
+            foreach ($this->getColleges() as $college) {
+                foreach ($college->getUsers() as $user) {
+                    if ($user->getRole() == $role) {
+                        $systemViewers[] = $user;
+                    }
+                }
+            }
+        }
+
+        return $systemViewers;
     }
 
     public function getChildren()

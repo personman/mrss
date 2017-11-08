@@ -808,10 +808,11 @@ return array(
                     'removeadmin' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/removeadmin/:user_id',
+                            'route' => '/removeadmin/:user_id/:role',
                             'defaults' => array(
                                 'action' => 'removeadmin',
-                                'user_id' => 0
+                                'user_id' => 0,
+                                'role' => null
                             )
                         )
                     ),

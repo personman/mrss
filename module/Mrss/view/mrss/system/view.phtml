@@ -51,7 +51,10 @@
             <td>
                 <a href="<?= $this->url(
                     'systems/removeadmin',
-                    array('user_id' => $user->getId())
+                    array(
+                        'user_id' => $user->getId(),
+                        'role' => 'system_admin'
+                    )
                 ) ?>" title="Remove <?= $this->studyConfig()->system_label ?> admin role from this user">
                     X
                 </a>
@@ -89,7 +92,10 @@
             <td>
                 <a href="<?= $this->url(
                     'systems/removeadmin',
-                    array('user_id' => $user->getId())
+                    array(
+                        'user_id' => $user->getId(),
+                        'role' => 'system_viewer'
+                    )
                 ) ?>" title="Remove system viewer role from this user">
                     X
                 </a>

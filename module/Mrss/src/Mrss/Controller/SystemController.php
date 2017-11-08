@@ -287,8 +287,9 @@ class SystemController extends AbstractActionController
         $role = $this->params('role');
 
         $roleLabel = 'admin';
+
         if ($role == 'system_viewer') {
-            $roleLabel = 'viewer';
+            return $this->addSystemViewerAction();
         }
 
         $systemModel = $this->getServiceLocator()->get('model.system');
@@ -345,10 +346,71 @@ class SystemController extends AbstractActionController
         return $viewModel;
     }
 
+    // Keep the old way for system viewer. Hmm, wait.
+    public function addSystemViewerAction()
+    {
+        $systemId = $this->params('system_id');
+        $role = $this->params('role');
+
+        $roleLabel = 'admin';
+        if ($role == 'system_viewer') {
+            $roleLabel = 'viewer';
+        }
+
+        $systemModel = $this->getServiceLocator()->get('model.system');
+        $system = $systemModel->find($systemId);
+
+        if (empty($system)) {
+            throw new \Exception('System not found');
+        }
+
+        $form = new \Mrss\Form\SystemAdmin($system, $role);
+
+        // Process the form, promoting the user
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                // Get the user
+                $userModel = $this->getServiceLocator()->get('model.user');
+                $user = $userModel->find($data['user_id']);
+
+                if (empty($user)) {
+                    throw new \Exception('User not found');
+                }
+
+                // Set the role and save
+                $user->setRole($data['role']);
+                $userModel->save($user);
+                $this->getServiceLocator()->get('em')->flush();
+
+                // Show a message and redirect
+                $noun = ucwords($this->getSystemLabel());
+                $this->flashMessenger()->addSuccessMessage("$noun $roleLabel added.");
+                return $this->redirect()
+                    ->toRoute('systems/view', array('id' => $system->getId()));
+            }
+        }
+
+        $viewModel = new ViewModel(
+            array(
+                'form' => $form,
+                'roleLabel' => $roleLabel,
+                'system' => $system
+            )
+        );
+        //$viewModel->setTerminal(true);
+
+        return $viewModel;
+    }
+
     public function removeadminAction()
     {
         $userId = $this->params('user_id');
-        $userModel = $this->getServiceLocator()->get('model.user');
+        $role = $this->params('role');
+        $userModel = $this->getUserModel();
         $user = $userModel->find($userId);
 
         if (empty($user)) {
@@ -367,6 +429,14 @@ class SystemController extends AbstractActionController
 
         // Remove the system admin role
         $user->setRole($newRole);
+
+
+        if ($role == 'system_admin') {
+            $user->removeSystemAministered($system->getId());
+        } elseif ($role == 'system_viewer') {
+            $user->removeSystemViewer($system->getId());
+        }
+
         $userModel->save($user);
         $this->getServiceLocator()->get('em')->flush();
 
@@ -374,7 +444,6 @@ class SystemController extends AbstractActionController
             ->addSuccessMessage('System admin role removed from user.');
         return $this->redirect()
             ->toRoute('systems/view', array('id' => $system->getId()));
-
     }
 
     public function getSystem($id)
