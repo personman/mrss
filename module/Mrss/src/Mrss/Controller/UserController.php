@@ -14,7 +14,7 @@ use Zend\Mail\Message;
 use Zend\Mime\Part as MimePart;
 use Zend\Mime\Message as MimeMessage;
 
-class UserController extends AbstractActionController
+class UserController extends BaseController
 {
     /**
      * For admins editing user accounts
@@ -475,6 +475,15 @@ class UserController extends AbstractActionController
             $collegeId = $this->params()->fromQuery('college_id');
         }
 
+        /** @var \Mrss\Entity\User $user */
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        // Check permissions
+        if (!$user->administersSystem($this->getActiveSystemId())) {
+            $this->flashMessenger()->addErrorMessage("You do not have permission to do that.");
+            return $this->redirect()->toUrl($referer);
+        }
+
         // Clear active college and return to system overview
         if ($collegeId == 'overview') {
             $this->getSystemAdminSessionContainer()->college = null;
@@ -486,7 +495,7 @@ class UserController extends AbstractActionController
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $college = $collegeModel->find($collegeId);
         $targetSystem = $college->getSystem();
-        $user = $this->zfcUserAuthentication()->getIdentity();
+
         $userSystem = $user->getCollege()->getSystem();
         $role = $user->getRole();
 

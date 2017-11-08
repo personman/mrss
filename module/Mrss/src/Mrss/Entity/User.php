@@ -576,7 +576,7 @@ class User implements UserInterface, ProviderInterface
         $this->setSystemsAdministered($existingSystems);
     }
 
-    public function removeSystemAministered($systemId)
+    public function removeSystemAdministered($systemId)
     {
         $existingSystems = $this->getSystemsAdministered();
 

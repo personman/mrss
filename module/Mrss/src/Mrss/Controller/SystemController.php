@@ -432,7 +432,7 @@ class SystemController extends AbstractActionController
 
 
         if ($role == 'system_admin') {
-            $user->removeSystemAministered($system->getId());
+            $user->removeSystemAdministered($system->getId());
         } elseif ($role == 'system_viewer') {
             $user->removeSystemViewer($system->getId());
         }

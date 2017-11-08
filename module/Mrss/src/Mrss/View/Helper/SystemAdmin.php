@@ -7,6 +7,7 @@ use Mrss\Entity\User;
 use Mrss\Controller\Plugin\SystemActiveCollege;
 use Mrss\Controller\Plugin\CurrentStudy as CurrentStudyPlugin;
 use Zend\Form\Form;
+use Zend\Session\Container;
 
 /**
  * If the user is a system admin, let them switch colleges
@@ -30,9 +31,22 @@ class SystemAdmin extends AbstractHelper
 
     protected $activeCollege;
 
+    protected $activeSystemContainer;
+
     public function __invoke($allowed = false)
     {
+
+        $allowed = $this->getAllowed();
+
         return $this->showCollegeSwitcher($allowed);
+    }
+
+    protected function getAllowed()
+    {
+        $systemId = $this->getActiveSystemId();
+        $user = $this->getUser();
+
+        return $user->administersSystem($systemId);
     }
 
     public function showCollegeSwitcher($allowed)
@@ -40,6 +54,12 @@ class SystemAdmin extends AbstractHelper
         $html = '';
 
         $user = $this->getUser();
+
+        if (!$user->administersSystem($this->getActiveSystemId())) {
+            return false;
+
+        }
+
         if (!empty($user) && $allowed) {
             $activeCollege = $this->getActiveCollege();
 
@@ -65,7 +85,7 @@ class SystemAdmin extends AbstractHelper
                 $returnOr = "<a href='$overviewUrl'>return to the $systemName system</a> or ";
             }
 
-            $html = "<div class='well'>
+            $html = "<div class='well system-impersonation'>
                 You are working as <strong>$collegeName</strong>. You
                 may $returnOr switch to another institution:
                 $form
@@ -220,5 +240,23 @@ class SystemAdmin extends AbstractHelper
     public function getCurrentStudyPlugin()
     {
         return $this->currentStudyPlugin;
+    }
+
+    protected function getActiveSystemId()
+    {
+        // This session container should match what's in BaseController
+        $systemId = $this->getActiveSystemContainer()->system_id;
+
+        return $systemId;
+    }
+
+    public function getActiveSystemContainer()
+    {
+        if (empty($this->activeSystemContainer)) {
+            $container = new Container('active_system');
+            $this->activeSystemContainer = $container;
+        }
+
+        return $this->activeSystemContainer;
     }
 }
