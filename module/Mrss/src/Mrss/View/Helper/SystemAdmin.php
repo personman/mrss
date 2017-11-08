@@ -46,7 +46,12 @@ class SystemAdmin extends AbstractHelper
         $systemId = $this->getActiveSystemId();
         $user = $this->getUser();
 
-        return $user->administersSystem($systemId);
+        $allowed = false;
+        if ($user) {
+            $allowed = $user->administersSystem($systemId);
+        }
+
+        return $allowed;
     }
 
     public function showCollegeSwitcher($allowed)
@@ -54,6 +59,10 @@ class SystemAdmin extends AbstractHelper
         $html = '';
 
         $user = $this->getUser();
+
+        if (!$user) {
+            return false;
+        }
 
         if (!$user->administersSystem($this->getActiveSystemId())) {
             return false;
