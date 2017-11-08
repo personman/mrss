@@ -321,6 +321,7 @@ class SystemController extends AbstractActionController
 
                 // New regime for Envisio: leave role, but set systemsAdministered
                 $user->addSystemAdministered($systemId);
+                $user->setRole($role);
 
 
                 $userModel->save($user);
