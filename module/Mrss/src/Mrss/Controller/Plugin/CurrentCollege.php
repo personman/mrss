@@ -17,6 +17,8 @@ use ZfcUser\Controller\Plugin\ZfcUserAuthentication as UserPlugin;
  */
 class CurrentCollege extends AbstractPlugin
 {
+    protected $activeSystemContainer;
+
     /**
      * @var CollegeModel
      */
@@ -43,7 +45,10 @@ class CurrentCollege extends AbstractPlugin
             return null;
         }
 
-        if (($user->getRole() == 'system_admin' || $user->getRole() == 'system_viewer')
+
+        $canAdmin = $user->administersSystem($this->getActiveSystemId());
+
+        if ($canAdmin && ($user->getRole() == 'system_admin' || $user->getRole() == 'system_viewer')
             && !empty($this->getSystemAdminSessionContainer()->college)) {
 
 
@@ -97,5 +102,22 @@ class CurrentCollege extends AbstractPlugin
         $container = new Container('system_admin');
         
         return $container;
+    }
+
+    protected function getActiveSystemId()
+    {
+        $systemId = $this->getActiveSystemContainer()->system_id;
+
+        return $systemId;
+    }
+
+    public function getActiveSystemContainer()
+    {
+        if (empty($this->activeSystemContainer)) {
+            $container = new Container('active_system');
+            $this->activeSystemContainer = $container;
+        }
+
+        return $this->activeSystemContainer;
     }
 }

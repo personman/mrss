@@ -53,7 +53,8 @@
                     'systems/removeadmin',
                     array(
                         'user_id' => $user->getId(),
-                        'role' => 'system_admin'
+                        'role' => 'system_admin',
+                        'system_id' => $system->getId()
                     )
                 ) ?>" title="Remove <?= $this->studyConfig()->system_label ?> admin role from this user">
                     X

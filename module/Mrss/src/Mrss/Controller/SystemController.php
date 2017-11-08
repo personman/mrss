@@ -411,6 +411,7 @@ class SystemController extends AbstractActionController
     {
         $userId = $this->params('user_id');
         $role = $this->params('role');
+        $systemId = $this->params('system_id');
         $userModel = $this->getUserModel();
         $user = $userModel->find($userId);
 
@@ -419,24 +420,32 @@ class SystemController extends AbstractActionController
         }
 
         // What system were they in (for redirection)?
-        $system = $user->getCollege()->getSystem();
+        $system = $this->getSystem($systemId);
+
+        $updateRole = false;
+        if ($role == 'system_admin') {
+            $user->removeSystemAdministered($system->getId());
+            $updateRole = (count($user->getSystemsAdministered()) == 0);
+        } elseif ($role == 'system_viewer') {
+            $user->removeSystemViewer($system->getId());
+            $updateRole = (count($user->getSystemsViewer()) == 0);
+        }
 
         // What should the new role be?
         $oldRole = $user->getRole();
+
         $newRole = 'data';
         if ($oldRole == 'system_viewer') {
             $newRole = 'viewer';
         }
 
         // Remove the system admin role
-        $user->setRole($newRole);
-
-
-        if ($role == 'system_admin') {
-            $user->removeSystemAdministered($system->getId());
-        } elseif ($role == 'system_viewer') {
-            $user->removeSystemViewer($system->getId());
+        if ($updateRole) {
+            $user->setRole($newRole);
         }
+
+
+
 
         $userModel->save($user);
         $this->getServiceLocator()->get('em')->flush();

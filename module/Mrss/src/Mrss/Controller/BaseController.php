@@ -163,6 +163,14 @@ class BaseController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Model\College
+     */
+    public function getCollegeModel()
+    {
+        return $this->getServiceLocator()->get('model.college');
+    }
+
+    /**
      * @return \Mrss\Model\Issue
      */
     protected function getIssueModel()

@@ -144,10 +144,14 @@ class ObservationController extends BaseController
         }
 
         // Handle system admins
+        /** @var \Mrss\Entity\User $user */
         $user = $this->zfcUserAuthentication()->getIdentity();
         if ($user->getRole() == 'system_admin'
             && empty($this->getSystemAdminSessionContainer()->college)) {
-            return $this->systemadminoverviewAction();
+            if ($user->administersSystem($this->getActiveSystemId())) {
+                return $this->systemadminoverviewAction();
+            }
+
         }
 
         // Regular users

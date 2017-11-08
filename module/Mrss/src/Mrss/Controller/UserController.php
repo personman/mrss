@@ -492,15 +492,13 @@ class UserController extends BaseController
         }
 
         // Make sure that this college belongs to the right system
-        $collegeModel = $this->getServiceLocator()->get('model.college');
+        $collegeModel = $this->getCollegeModel();
         $college = $collegeModel->find($collegeId);
-        $targetSystem = $college->getSystem();
+        $activeSystemId = $this->getActiveSystemId();
 
-        $userSystem = $user->getCollege()->getSystem();
-        $role = $user->getRole();
+        $hasMembership = $college->hasSystemMembership($activeSystemId);
 
-        if (empty($targetSystem) || empty($userSystem) || !$this->isAllowed('systemSwitch', 'view')
-            || $userSystem != $targetSystem) {
+        if (empty($hasMembership) || !$this->isAllowed('systemSwitch', 'view')) {
             throw new \Exception(
                 'You do not have permission to enter data for that college'
             );
