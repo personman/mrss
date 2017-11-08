@@ -143,6 +143,13 @@ class User implements UserInterface, ProviderInterface
      */
     protected $systemsAdministered;
 
+    /**
+     * @Gedmo\Mapping\Annotation\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     * @var \DateTime $created
+     */
+    protected $created;
+
     public function __construct()
     {
         $this->studies = new ArrayCollection();
@@ -576,4 +583,24 @@ class User implements UserInterface, ProviderInterface
 
         return (in_array($systemId, $systemIds));
     }
+
+    /**
+     * @param $created
+     * @return $this
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
 }
