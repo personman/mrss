@@ -14,7 +14,8 @@
             <a href="<?= $this->url(
                 'data-entry/edit',
                 array(
-                    'benchmarkGroup' => $bGroup->getUrl()
+                    'benchmarkGroup' => $bGroup->getUrl(),
+                    'year' => $year
                 )
             ) ?>" title="<?= $bGroup->getName() ?>" class="infotip">
                 <?= $bGroup->getUrl() ?>
@@ -22,3 +23,4 @@
         </li>
     <?php endforeach ?>
 </ul>
+

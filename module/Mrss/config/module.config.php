@@ -92,10 +92,11 @@ return array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/data-entry',
+                    'route' => '/data-entry/:year',
                     'defaults' => array(
                         'controller' => 'observations',
                         'action' => 'overview',
+                        'year' => 0
                     )
                 ),
                 'child_routes' => array(
@@ -106,11 +107,11 @@ return array(
                             'route' => '/:benchmarkGroup',
                             'defaults' => array(
                                 'action' => 'dataEntry',
-                                'benchmarkGroup' => 0
+                                'benchmarkGroup' => 0,
                             )
                         ),
                         'child_routes' => array(
-                            'subob' => array(
+                            /*'subob' => array(
                                 'type' => 'segment',
                                 'may_terminate' => true,
                                 'options' => array(
@@ -135,7 +136,7 @@ return array(
                                         )
                                     )
                                 )
-                            ),
+                            ),*/
                             'check' => array(
                                 'type' => 'segment',
                                 'options' => array(

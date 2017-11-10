@@ -752,6 +752,35 @@ class College
         return $systems;
     }
 
+    public function getYears($systemId = null)
+    {
+        $years = array();
+        if ($systemId) {
+            $years = $this->getYearsBySystem($systemId);
+        } else {
+            foreach ($this->getSystemMemberships() as $systemMembership) {
+                if (!in_array($systemMembership->getYear(), $years)) {
+                    $years[] = $systemMembership->getYear();
+                }
+            }
+        }
+
+        rsort($years);
+        return $years;
+    }
+
+    public function getYearsBySystem($systemId)
+    {
+        $years = array();
+        foreach ($this->getSystemMemberships() as $systemMembership) {
+            if ($systemId == $systemMembership->getSystem()->getId()) {
+                $years[] = $systemMembership->getYear();
+            }
+        }
+
+        return $years;
+    }
+
     public function getSystemIdsByYear($year)
     {
         $systems = array();

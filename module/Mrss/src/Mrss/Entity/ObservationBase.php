@@ -124,10 +124,14 @@ class ObservationBase
     {
         $subscriptions = $this->getSubscriptions();
 
+        //echo 'needle: ' . $this->getYear();
+        //echo 'hay: ';
+
         $subscription = null;
         foreach ($subscriptions as $sub) {
             if ($sub->getYear() == $this->getYear()) {
                 $subscription = $sub;
+                //pr($sub->getYear());
             }
         }
 

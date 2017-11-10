@@ -137,6 +137,8 @@ class ObservationController extends BaseController
         }
     }
 
+
+
     public function overviewAction()
     {
         if ($redirect = $this->redirectIfNoMembership()) {
@@ -183,7 +185,10 @@ class ObservationController extends BaseController
             'subscription' => $membership,
             'structure' => $this->getStructure(),
             'yearRange' => $yearRange,
-            'activeSystem' => $this->getActiveSystem()
+            'activeSystem' => $this->getActiveSystem(),
+            'year' => $year,
+            'years' => $this->getCurrentUser()->getCollege()->getYears($this->getActiveSystemId()),
+            'canEditPrior' => $this->canEditPrior()
         );
     }
 
@@ -346,7 +351,8 @@ class ObservationController extends BaseController
         $year = $this->getCurrentYear();
 
         if (empty($this->currentObservation)) {
-            $this->currentObservation = $this->currentObservation($year);
+            $observation = $this->currentObservation($year);
+            $this->currentObservation = $observation;
         }
 
         return $this->currentObservation;
@@ -446,6 +452,14 @@ class ObservationController extends BaseController
             $year = $this->getCurrentStudy()->getCurrentYear();
         }
 
+        if ($this->getStudyConfig()->prior_year_edits) {
+            $paramYear = $this->params()->fromRoute('year');
+
+            if ($paramYear) {
+                $year = $paramYear;
+            }
+        }
+
         return $year;
     }
 
@@ -475,11 +489,12 @@ class ObservationController extends BaseController
         } catch (\Exception $e) {
             // If the observation is not found, check a prior year
             if (empty($observation)) {
+                $lastYear = $this->getCurrentYear() - 1;
                 /** @var \Mrss\Model\Observation $ObservationModel */
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $observation = $ObservationModel->findOne(
                     $this->currentCollege(),
-                    $this->getCurrentYear() - 1
+                    $lastYear
                 );
 
                 if (empty($observation)) {
@@ -607,8 +622,18 @@ class ObservationController extends BaseController
                 // Save and edit button?
                 $data = $this->params()->fromPost();
                 if (!empty($data['buttons']['save-edit'])) {
-                    $redirect = '/data-entry/' . $benchmarkGroup->getUrl();
+                    $redirect = $this->url()->fromRoute('data-entry/edit', array(
+                        'benchmarkGroup' => $benchmarkGroup->getUrl(),
+                        'year' => $subscription->getYear()
+                    ));
+
+                } else {
+                    $redirect = $this->url()->fromRoute('data-entry', array(
+                        'year' => $subscription->getYear()
+                    ));
                 }
+
+
 
                 if (empty($issues)) {
                     $this->flashMessenger()->addSuccessMessage('Data saved.');
@@ -654,7 +679,10 @@ class ObservationController extends BaseController
                 'staffView' => $staffView,
                 'conversionFactor' => $conversionFactor,
                 'activeSystem' => $this->getActiveSystem(),
-                'yearRange' => $yearRange
+                'yearRange' => $yearRange,
+                'year' => $year,
+                'years' => $this->getCurrentUser()->getCollege()->getYears($this->getActiveSystemId()),
+                'canEditPrior' => $this->canEditPrior()
             )
         );
 
@@ -663,6 +691,17 @@ class ObservationController extends BaseController
         $this->checkForCustomTemplate($benchmarkGroup, $view);
 
         return $view;
+    }
+
+    protected function canEditPrior()
+    {
+        $activeSystem = $this->getActiveSystemId();
+        $canEdit = false;
+        if ($activeSystem) {
+            $canEdit = $this->getCurrentUser()->administersSystem($activeSystem);
+        }
+
+        return $canEdit;
     }
 
     /**

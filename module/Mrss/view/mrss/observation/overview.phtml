@@ -28,6 +28,16 @@
 
 <?php endif ?>
 
+<?= $this->partial(
+    'mrss/observation/data-entry-year.partial.phtml',
+    array(
+        'year' => $year,
+        'years' => $years,
+        'canEditPrior' => $canEditPrior
+    )
+)
+?>
+
 <?php if (!$this->studyConfig()->use_structures): ?>
 
 <?php if (true && $this->currentStudy()->getId() == 1): ?>
@@ -249,6 +259,10 @@
 
                 <li>
                     <a href="/data-entry/<?= $benchmarkGroup->getUrl() ?>">
+                    <a href="<?= $this->url('data-entry/edit', array(
+                        'benchmarkGroup' => $benchmarkGroup->getId(),
+                        'year' => $year
+                    )) ?>">
                         <span class="service-area-type"><?= $benchmarkGroup->getUrl() ?>: <?= $benchmarkGroup->getLabel() ?></span>
                         <div class="service-area-type-progress"><strong style="color:<?= $completionColor ?>"><?= $bgCompletion ?>%</strong>
                             <div class="data-entry-progress-bar">

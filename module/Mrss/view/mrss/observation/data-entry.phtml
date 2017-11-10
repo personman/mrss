@@ -23,7 +23,19 @@ if ($activeSystem) {
     array(
         'benchmarkGroup' => $benchmarkGroup,
         'benchmarkGroups' => $benchmarkGroups,
-        'title' => $systemName
+        'title' => $systemName,
+        'year' => $year
+    )
+)
+?>
+
+<?= $this->partial(
+    'mrss/observation/data-entry-year.partial.phtml',
+    array(
+        'year' => $year,
+        'years' => $years,
+        'canEditPrior' => $canEditPrior,
+        'benchmarkGroup' => $benchmarkGroup,
     )
 )
 ?>

@@ -1,0 +1,24 @@
+
+<?php if ($this->studyConfig()->prior_year_edits && $canEditPrior): ?>
+    <ul class="nav nav-pills form-nav">
+        <li class="form-nav-head">
+            <h3>
+                Year:
+            </h3>
+        </li>
+
+        <?php foreach ($years as $listYear): ?>
+            <li<? if ($listYear == $year) echo ' class="active"' ?>>
+                <a href="<?= $this->url(
+                    'data-entry/edit',
+                    array(
+                        'year' => $listYear,
+                        'benchmarkGroup' => $benchmarkGroup->getId()
+                    )
+                ) ?>" title="<?= $listYear ?>" class="infotip">
+                    <?= $listYear ?>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>

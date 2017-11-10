@@ -29,6 +29,7 @@ return array(
     'show_institution_in_report_heading' => true,
     'anonymous_peers' => false,
     'peer_percentiles' => false,
+    'prior_year_edits' => true,
     'min_peers' => 0,
     'include_canada' => true,
     'chart_colors' => '#a2ce5d|#007ca0|#828387|#fbb41e',
