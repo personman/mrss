@@ -425,10 +425,10 @@ class SystemController extends AbstractActionController
         $updateRole = false;
         if ($role == 'system_admin') {
             $user->removeSystemAdministered($system->getId());
-            $updateRole = (count($user->getSystemsAdministered()) == 0);
+            $updateRole = (count($user->getSystemsAdministered(true)) == 0);
         } elseif ($role == 'system_viewer') {
             $user->removeSystemViewer($system->getId());
-            $updateRole = (count($user->getSystemsViewer()) == 0);
+            $updateRole = (count($user->getSystemsViewer(true)) == 0);
         }
 
         // What should the new role be?
@@ -453,7 +453,7 @@ class SystemController extends AbstractActionController
         $this->flashMessenger()
             ->addSuccessMessage('System admin role removed from user.');
         return $this->redirect()
-            ->toRoute('systems/view', array('id' => $system->getId()));
+            ->toRoute('systems/view', array('id' => $systemId));
     }
 
     public function getSystem($id)

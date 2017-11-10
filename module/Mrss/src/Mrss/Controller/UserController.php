@@ -164,7 +164,14 @@ class UserController extends BaseController
                     return $this->redirect()->toUrl('/' . $post['redirect']);
                 }
 
-                return $this->redirect()->toRoute('institution/users');
+
+                if ($this->getCurrentUser()->isAdmin()) {
+                    $redirect = $this->redirect()->toRoute('colleges/view', array('id' => $user->getCollege()->getId()));
+                } else {
+                    $redirect = $this->redirect()->toRoute('institution/users');
+                }
+
+                return $redirect;
             } else {
                 $this->flashMessenger()->addErrorMessage('Correct errors below.');
             }

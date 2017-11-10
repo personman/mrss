@@ -141,12 +141,12 @@ class User implements UserInterface, ProviderInterface
     /**
      * @ORM\Column(type="string", length=60)
      */
-    protected $systemsAdministered;
+    protected $systemsAdministered = '';
 
     /**
      * @ORM\Column(type="string", length=60)
      */
-    protected $systemsViewer;
+    protected $systemsViewer = '';
 
     /**
      * @Gedmo\Mapping\Annotation\Timestampable(on="create")
@@ -158,6 +158,7 @@ class User implements UserInterface, ProviderInterface
     public function __construct()
     {
         $this->studies = new ArrayCollection();
+        $this->systemsAdministered = '';
     }
 
     /**
@@ -549,17 +550,25 @@ class User implements UserInterface, ProviderInterface
      */
     public function setSystemsAdministered($systemIds)
     {
-        $this->systemsAdministered = implode('|', $systemIds);
+        if (is_array($systemIds)) {
+            $this->systemsAdministered = implode('|', $systemIds);
+        } else {
+            $this->systemsAdministered = $systemIds;
+        }
 
         return $this;
     }
 
-    public function getSystemsAdministered()
+    public function getSystemsAdministered($asArray = false)
     {
-        if ($this->systemsAdministered) {
-            $systemIds = explode('|', $this->systemsAdministered);
-        } else {
-            $systemIds = array();
+        $systemIds = $this->systemsAdministered;
+
+        if ($asArray) {
+            if ($systemIds) {
+                $systemIds = explode('|', $this->systemsAdministered);
+            } else {
+                $systemIds = array();
+            }
         }
 
         return $systemIds;
@@ -567,7 +576,7 @@ class User implements UserInterface, ProviderInterface
 
     public function addSystemAdministered($systemId)
     {
-        $existingSystems = $this->getSystemsAdministered();
+        $existingSystems = $this->getSystemsAdministered(true);
 
         if (!in_array($systemId, $existingSystems)) {
             $existingSystems[] = $systemId;
@@ -578,7 +587,7 @@ class User implements UserInterface, ProviderInterface
 
     public function removeSystemAdministered($systemId)
     {
-        $existingSystems = $this->getSystemsAdministered();
+        $existingSystems = $this->getSystemsAdministered(true);
 
         if (($key = array_search($systemId, $existingSystems)) !== false) {
             unset($existingSystems[$key]);
@@ -595,7 +604,7 @@ class User implements UserInterface, ProviderInterface
      */
     public function administersSystem($systemId)
     {
-        $systemIds = $this->getSystemsAdministered();
+        $systemIds = $this->getSystemsAdministered(true);
 
         return (in_array($systemId, $systemIds));
     }
@@ -611,12 +620,15 @@ class User implements UserInterface, ProviderInterface
         return $this;
     }
 
-    public function getSystemsViewer()
+    public function getSystemsViewer($asArray = false)
     {
-        if ($this->systemsViewer) {
-            $systemIds = explode('|', $this->systemsViewer);
-        } else {
-            $systemIds = array();
+        $systemIds = $this->systemsViewer;
+        if ($asArray) {
+            if ($systemIds) {
+                $systemIds = explode('|', $this->systemsViewer);
+            } else {
+                $systemIds = array();
+            }
         }
 
         return $systemIds;
@@ -624,7 +636,7 @@ class User implements UserInterface, ProviderInterface
 
     public function addSystemViewer($systemId)
     {
-        $existingSystems = $this->getSystemsViewer();
+        $existingSystems = $this->getSystemsViewer(true);
 
         if (!in_array($systemId, $existingSystems)) {
             $existingSystems[] = $systemId;
@@ -635,7 +647,7 @@ class User implements UserInterface, ProviderInterface
 
     public function removeSystemViewer($systemId)
     {
-        $existingSystems = $this->getSystemsViewer();
+        $existingSystems = $this->getSystemsViewer(true);
 
         if (($key = array_search($systemId, $existingSystems)) !== false) {
             unset($existingSystems[$key]);

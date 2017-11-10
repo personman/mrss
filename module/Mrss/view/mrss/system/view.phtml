@@ -95,7 +95,8 @@
                     'systems/removeadmin',
                     array(
                         'user_id' => $user->getId(),
-                        'role' => 'system_viewer'
+                        'role' => 'system_viewer',
+                        'system_id' => $system->getId()
                     )
                 ) ?>" title="Remove system viewer role from this user">
                     X
