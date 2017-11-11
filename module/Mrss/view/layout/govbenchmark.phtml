@@ -194,6 +194,8 @@
     </div>
 <?php endif ?>
 
+<?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
+
 
 <?php foreach ($this->flashMessages(true) as $namespace => $messages) : ?>
     <?php if (count($messages)) : ?>
@@ -207,7 +209,7 @@
 <?php endforeach; ?>
 
 
-<?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
+
 
 <?php $contentWrapper = (!empty($wrapperId)) ? 'content-' . $wrapperId : 'content'; ?>
 <?php if (empty($this->noWrapper)): ?>
