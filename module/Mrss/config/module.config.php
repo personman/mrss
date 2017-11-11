@@ -92,7 +92,7 @@ return array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/data-entry/:year',
+                    'route' => '/data-entry[/:year]',
                     'defaults' => array(
                         'controller' => 'observations',
                         'action' => 'overview',

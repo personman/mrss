@@ -8,13 +8,22 @@
         </li>
 
         <?php foreach ($years as $listYear): ?>
+            <? $params = array (
+                'year' => $listYear
+            );
+
+            $route = 'data-entry';
+            if (!empty($benchmarkGroup)) {
+                $params['benchmarkGroup'] = $benchmarkGroup->getUrl();
+                $route = 'data-entry/edit';
+            }
+
+            ?>
+
             <li<? if ($listYear == $year) echo ' class="active"' ?>>
                 <a href="<?= $this->url(
-                    'data-entry/edit',
-                    array(
-                        'year' => $listYear,
-                        'benchmarkGroup' => $benchmarkGroup->getId()
-                    )
+                    $route,
+                    $params
                 ) ?>" title="<?= $listYear ?>" class="infotip">
                     <?= $listYear ?>
                 </a>

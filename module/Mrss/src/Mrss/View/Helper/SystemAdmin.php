@@ -33,6 +33,8 @@ class SystemAdmin extends AbstractHelper
 
     protected $activeSystemContainer;
 
+    protected $systemModel;
+
     public function __invoke($allowed = false)
     {
 
@@ -177,7 +179,9 @@ class SystemAdmin extends AbstractHelper
     {
         $requireSubscription = false;
 
-        $system = $this->getUser()->getCollege()->getSystem();
+        //$system = $this->getUser()->getCollege()->getSystem();
+        $systemId = $this->getActiveSystemId();
+        $system = $this->getSystemModel()->find($systemId);
 
         if (empty($system)) {
             throw new \Exception('System not found');
@@ -267,5 +271,21 @@ class SystemAdmin extends AbstractHelper
         }
 
         return $this->activeSystemContainer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSystemModel()
+    {
+        return $this->systemModel;
+    }
+
+    /**
+     * @param mixed $systemModel
+     */
+    public function setSystemModel($systemModel)
+    {
+        $this->systemModel = $systemModel;
     }
 }

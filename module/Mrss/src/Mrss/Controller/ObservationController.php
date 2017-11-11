@@ -151,7 +151,7 @@ class ObservationController extends BaseController
         if ($user->getRole() == 'system_admin'
             && empty($this->getSystemAdminSessionContainer()->college)) {
             if ($user->administersSystem($this->getActiveSystemId())) {
-                return $this->systemadminoverviewAction();
+                //return $this->systemadminoverviewAction();
             }
 
         }

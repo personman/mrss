@@ -599,6 +599,9 @@ class Module
                         ->get('currentStudy');
                     $helper->setCurrentStudyPlugin($plugin);
 
+                    $systemModel = $sm->getServiceLocator()->get('model.system');
+                    $helper->setSystemModel($systemModel);
+
                     return $helper;
                 },
                 'chart' => function($sm) {
