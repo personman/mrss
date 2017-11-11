@@ -505,7 +505,6 @@ class UserController extends BaseController
 
         $hasMembership = $college->hasSystemMembership($activeSystemId);
 
-        prd($hasMembership);
         if (empty($hasMembership) || !$this->isAllowed('systemSwitch', 'view')) {
             throw new \Exception(
                 'You do not have permission to enter data for that college'
