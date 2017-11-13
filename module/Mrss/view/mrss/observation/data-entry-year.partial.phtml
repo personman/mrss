@@ -12,7 +12,10 @@
                 'year' => $listYear
             );
 
-            $route = 'data-entry';
+            if (empty($route)) {
+                $route = 'data-entry';
+            }
+
             if (!empty($benchmarkGroup)) {
                 $params['benchmarkGroup'] = $benchmarkGroup->getUrl();
                 $route = 'data-entry/edit';

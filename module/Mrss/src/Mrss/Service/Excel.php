@@ -84,6 +84,7 @@ class Excel extends Report
     {
         $excel = $this->createOrOpenExcel();
 
+        // @todo: because of this line, we're no longer supporting a system upload w/ multiple colleges
         $subscription = $subscriptions[0];
         $this->year = $subscription->getYear();
 
@@ -231,7 +232,7 @@ class Excel extends Report
 
     public function writeBody(PHPExcel $spreadsheet, Subscription $subscription)
     {
-        $this->year = $subscription->getStudy()->getCurrentYear();
+        $this->year = $subscription->getYear();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Loop over each benchmark, adding a row
@@ -256,7 +257,7 @@ class Excel extends Report
     {
         $exampleSubscription = $subscriptions[0];
         $study = $exampleSubscription->getStudy();
-        $this->year = $study->getCurrentYear();
+        //$this->year = $;
 
         $sheet = $spreadsheet->getActiveSheet();
         //$benchmarkGroups = $study->getBenchmarkGroups();

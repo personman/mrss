@@ -88,11 +88,23 @@ return array(
             // Data entry route with benchmarkGroup id
             // We could support a benchmarkGroup short name for nicer urls in the
             // future
+            'data-entry-overview' => array(
+                'type' => 'segment',
+                'may_terminate' => true,
+                'options' => array(
+                    'route' => '/data-entry',
+                    'defaults' => array(
+                        'controller' => 'observations',
+                        'action' => 'overview',
+                        'year' => 0
+                    )
+                ),
+            ),
             'data-entry' => array(
                 'type' => 'segment',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/data-entry[/:year]',
+                    'route' => '/data-entry/:year',
                     'defaults' => array(
                         'controller' => 'observations',
                         'action' => 'overview',
@@ -155,7 +167,8 @@ return array(
                         'options' => array(
                             'route' => '/import',
                             'defaults' => array(
-                                'action' => 'import'
+                                'action' => 'import',
+                                //'year' => 0
                             )
                         )
                     ),
@@ -181,9 +194,10 @@ return array(
                     'template' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/template',
+                            'route' => '/template[/:year]',
                             'defaults' => array(
-                                'action' => 'template'
+                                'action' => 'template',
+                                'year' => 0
                             )
                         )
                     ),

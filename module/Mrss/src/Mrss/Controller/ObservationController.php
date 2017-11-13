@@ -313,6 +313,7 @@ class ObservationController extends BaseController
 
     /**
      * Return the user's college or the active college for a system_admin
+     * @return \Mrss\Entity\College|\Mrss\Controller\Plugin\CurrentCollege
      */
     public function getActiveCollege()
     {
@@ -452,7 +453,9 @@ class ObservationController extends BaseController
             $year = $this->getCurrentStudy()->getCurrentYear();
         }
 
-        if ($this->getStudyConfig()->prior_year_edits) {
+        // This is the security bit. Users who can't edit prior year should always have the
+        // year set to current year, regardless of whether they've altered the year in the url.
+        if ($this->canEditPrior()) {
             $paramYear = $this->params()->fromRoute('year');
 
             if ($paramYear) {
@@ -695,10 +698,13 @@ class ObservationController extends BaseController
 
     protected function canEditPrior()
     {
-        $activeSystem = $this->getActiveSystemId();
         $canEdit = false;
-        if ($activeSystem) {
-            $canEdit = $this->getCurrentUser()->administersSystem($activeSystem);
+        if ($this->getStudyConfig()->prior_year_edits) {
+            $activeSystem = $this->getActiveSystemId();
+
+            if ($activeSystem) {
+                $canEdit = $this->getCurrentUser()->administersSystem($activeSystem);
+            }
         }
 
         return $canEdit;
@@ -939,6 +945,7 @@ class ObservationController extends BaseController
 
         // Get the import form
         $form = new ImportData('import');
+        $year = $this->params()->fromRoute('year');
 
         $errorMessages = array();
 
@@ -1026,7 +1033,7 @@ class ObservationController extends BaseController
                     if ($inputFilter->isValid()) {
                         // Now we actually save the data to the observation
                         // @todo: phasing out observation, plus ipeds could be generic instead
-                        $observation = $this->getCurrentObservationByIpeds($ipeds);
+                        $observation = $this->getCurrentObservationByIpeds($ipeds, $year);
 
                         $subscription = $observation->getSubscription();
 
@@ -1139,7 +1146,10 @@ class ObservationController extends BaseController
             'form' => $form,
             'useDirectDownloadLink' => $useDirectDownloadLink,
             'errorMessages' => $errorMessages,
-            'activeSystem' => $this->getActiveSystem()
+            'activeSystem' => $this->getActiveSystem(),
+            'year' => $year,
+            'years' => $this->getCurrentUser()->getCollege()->getYears($this->getActiveSystemId()),
+            'canEditPrior' => $this->canEditPrior()
         );
     }
 
@@ -1153,7 +1163,7 @@ class ObservationController extends BaseController
         $direct = false;
         $subscription = $this->getSubscription();
 
-        if ($subscription->getCompletion() > 0) {
+        if ($subscription->getCompletion() == 0) {
             $direct = true;
         }
 
@@ -1197,10 +1207,7 @@ class ObservationController extends BaseController
     public function exportAction()
     {
         $collegeId = $this->getActiveCollege()->getId();
-        $year = null;
-        if ($this->getStudyConfig()->use_structures) {
-            $year = $this->getActiveSystem()->getCurrentYear();
-        }
+        $year = $this->getCurrentYear();
 
         $subscriptionModel = $this->getSubscriptionModel();
         $subscription = $subscriptionModel->findCurrentSubscription(

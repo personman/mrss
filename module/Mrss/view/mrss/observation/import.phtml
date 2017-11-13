@@ -14,6 +14,19 @@ $this->headScript()->appendFile(
     <h1><?= $activeSystem->getName() ?> Data Upload</h1>
 <?php endif ?>
 
+<?php if ($canEditPrior): ?>
+<?= $this->partial(
+    'mrss/observation/data-entry-year.partial.phtml',
+    array(
+        'year' => $year,
+        'years' => $years,
+        'canEditPrior' => $canEditPrior,
+        'route' => 'data-entry/import'
+    )
+)
+?>
+    <br><br>
+<?php endif ?>
 
 <?php if (!empty($errorMessages)): ?>
     <div class="well">
@@ -37,7 +50,7 @@ $this->headScript()->appendFile(
 <?php endif ?>
 
 <?php
-$url = $this->url('data-entry/export');
+$url = $this->url('data-entry/export', array('year' => $year));
 $directLink  = '/data-entry/template';
 $downloadId = 'download';
 $downloadNote = "<strong>Note:</strong> This file can take several minutes to download because it is being pre-populated with your data. If you encounter problems downloading the pre-populated file, please try downloading the blank template <a href='$directLink'>here</a>.";

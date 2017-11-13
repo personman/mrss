@@ -5,6 +5,10 @@ namespace Mrss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 
+/**
+ * @method \Mrss\Entity\Study currentStudy()
+ * @method Plugin\CurrentCollege currentCollege()
+ */
 class BaseController extends AbstractActionController
 {
     protected $activeSystemContainer;
