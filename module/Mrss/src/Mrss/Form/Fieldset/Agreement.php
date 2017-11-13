@@ -5,7 +5,6 @@ namespace Mrss\Form\Fieldset;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Validator\Digits;
-use Zend\Validator\InArray;
 
 class Agreement extends Fieldset implements InputFilterProviderInterface
 {
@@ -39,7 +38,7 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
 
     }
 
-    protected function addSignatureElements()
+    protected function addAgree()
     {
         $this->add(
             array(
@@ -58,7 +57,10 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 )
             )
         );
+    }
 
+    protected function addSignature()
+    {
         $this->add(
             array(
                 'name' => 'signature',
@@ -75,6 +77,10 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
             )
         );
 
+    }
+
+    protected function addTitle()
+    {
         $this->add(
             array(
                 'name' => 'title',
@@ -89,7 +95,10 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 )
             )
         );
+    }
 
+    protected function addAuth()
+    {
         $this->add(
             array(
                 'name' => 'authorization',
@@ -102,8 +111,28 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                     'unchecked_value' => 'no'
                 ),
                 'attributes' => array(
-                    //'required' => true,
                     'id' => 'authorization'
+                )
+            )
+        );
+    }
+
+    protected function addSignatureElements()
+    {
+        $this->addAgree();
+        $this->addSignature();
+        $this->addTitle();
+        $this->addAuth();
+    }
+
+    protected function getDigitValidator($message = 'You must agree to the terms to subscribe')
+    {
+        return array(
+            'name' => 'Digits',
+            'break_chain_on_failure' => true,
+            'options' => array(
+                'messages' => array(
+                    Digits::NOT_DIGITS => $message
                 )
             )
         );
@@ -115,16 +144,7 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
             'agree' => array(
                 'required' => true,
                 'validators' => array(
-                    array(
-                        'name' => 'Digits',
-                        'break_chain_on_failure' => true,
-                        'options' => array(
-                            'messages' => array(
-                                Digits::NOT_DIGITS => 'You must agree to the terms to
-                                subscribe'
-                            )
-                        )
-                    )
+                    $this->getDigitValidator()
                 )
             ),
             'signature' => array(
@@ -136,16 +156,7 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
             'authorization' => array(
                 'required' => true,
                 'validators' => array(
-                    array(
-                        'name' => 'Digits',
-                        'break_chain_on_failure' => true,
-                        'options' => array(
-                            'messages' => array(
-                                Digits::NOT_DIGITS => 'You must check the
-                                authorization checkbox to continue'
-                            )
-                        )
-                    )
+                    $this->getDigitValidator('You must check the authorization checkbox to continue')
                 )
             ),
         );
