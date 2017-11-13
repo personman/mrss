@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\College;
 use Mrss\Entity\Study;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -10,7 +11,7 @@ use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
 
 /**
  * @method Study currentStudy()
- * @method Plugin\CurrentCollege currentCollege()
+ * @method College currentCollege()
  * @method Plugin\CurrentObservation currentObservation()
  * @method Request getRequest()
  * @method ZfcUserAuthentication zfcUserAuthentication()
@@ -137,7 +138,7 @@ class BaseController extends AbstractActionController
     }
 
     /**
-     * @return \Mrss\Entity\College
+     * @return College
      */
     protected function getCollege()
     {

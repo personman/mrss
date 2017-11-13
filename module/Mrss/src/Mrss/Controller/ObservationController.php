@@ -4,11 +4,14 @@
 namespace Mrss\Controller;
 
 use Mrss\Entity\BenchmarkGroup;
+use Mrss\Entity\College;
+use Mrss\Entity\Subscription;
 use Mrss\Form\ImportData;
 //use Mrss\Service\DataEntryHydrator;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
 use Mrss\Service\Excel;
+use Mrss\Service\Excel as ExcelImport;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use Zend\Form\Form;
@@ -290,8 +293,7 @@ class ObservationController extends BaseController
         }
 
         // Make sure that this college belongs to the right system
-        $collegeModel = $this->getServiceLocator()->get('model.college');
-        $college = $collegeModel->find($collegeId);
+        $college = $this->getCollegeModel()->find($collegeId);
         $targetSystem = $college->getSystem();
         $user = $this->zfcUserAuthentication()->getIdentity();
         $userSystem = $user->getCollege()->getSystem();
@@ -315,7 +317,7 @@ class ObservationController extends BaseController
 
     /**
      * Return the user's college or the active college for a system_admin
-     * @return \Mrss\Entity\College|\Mrss\Controller\Plugin\CurrentCollege
+     * @return College|\Mrss\Controller\Plugin\CurrentCollege
      */
     public function getActiveCollege()
     {
@@ -365,7 +367,7 @@ class ObservationController extends BaseController
     {
         $year = $this->getCurrentYear();
         $lastYear = $year - 1;
-        $collegeId = $user = $this->zfcUserAuthentication()->getIdentity()->getCollege()->getId();
+        $collegeId = $this->zfcUserAuthentication()->getIdentity()->getCollege()->getId();
 
         /** @var \Mrss\Model\Observation $model */
         $model = $this->getServiceLocator()->get('model.observation');
@@ -434,8 +436,6 @@ class ObservationController extends BaseController
 
     protected function getDataEntryOpen()
     {
-        $open = false;
-
         // Is this per system/network or study-wide
         if ($this->getStudyConfig()->use_structures) {
             $open = $this->getActiveSystem()->getDataEntryOpen();
@@ -535,6 +535,8 @@ class ObservationController extends BaseController
         );
 
         $viewHelperManager = $this->getServiceLocator()->get('viewhelpermanager');
+
+        /** @var \ZfcTwitterBootstrap\Form\View\Helper\FormDescription $descriptionHelper */
         $descriptionHelper = $viewHelperManager->get('ztbformdescription');
         $descriptionHelper->setBlockWrapper('<div class="help-block">%s</div>');
 
@@ -579,7 +581,7 @@ class ObservationController extends BaseController
                 // This may take a minute
                 takeYourTime();
 
-                $enr = $observation->get('ipeds_enr');
+                //$enr = $observation->get('ipeds_enr');
 
                 $ObservationModel = $this->getServiceLocator()->get('model.observation');
                 $ObservationModel->save($observation);
@@ -1280,14 +1282,15 @@ class ObservationController extends BaseController
     public function exportsystemAction()
     {
         $user = $this->zfcUserAuthentication()->getIdentity();
-        $system = $user->getCollege()->getSystem();
+        //$system = $user->getCollege()->getSystem();
+        $system = $this->getActiveSystem();
         $study = $this->currentStudy();
         $subscriptions = $system->getSubscriptionsByStudyAndYear(
             $study->getId(),
             $this->getCurrentYear()
         );
 
-        $excelService = new \Mrss\Service\Excel();
+        $excelService = new ExcelImport();
         $excelService->getExcelForSubscriptions($subscriptions);
         $excelService->setVariableSubstition($this->getVariableSubstitutionService());
     }
@@ -1299,10 +1302,10 @@ class ObservationController extends BaseController
      * b) a system admin user in the same system as the college, or
      * c) an admin user (those cats can do anything)
      *
-     * @param \Mrss\Entity\College $college
+     * @param College $college
      * @throws \Exception
      */
-    public function checkPermissionsForImport(\Mrss\Entity\College $college)
+    public function checkPermissionsForImport(College $college)
     {
         $user = $this->zfcUserAuthentication()->getIdentity();
 
@@ -1340,7 +1343,6 @@ class ObservationController extends BaseController
     public function allAction()
     {
         $currentStudy = $this->currentStudy();
-        $benchmarkGroups = $currentStudy->getBenchmarkGroups();
         $observation = $this->getCurrentObservation();
 
         return array(
@@ -1363,7 +1365,7 @@ class ObservationController extends BaseController
             }
 
             // Submitted values are for last year's data, until reports open
-            $college = $this->currentCollege();
+            //$college = $this->currentCollege();
             if ($checkReportOpen && !$open) {
                 $year = $year - 1;
             }
@@ -1505,7 +1507,7 @@ class ObservationController extends BaseController
 
 
 
-    protected function getSubmittedValues($subscription)
+    protected function getSubmittedValues(Subscription $subscription)
     {
         $observation = $subscription->getObservation();
         $year = $subscription->getYear();
@@ -1522,6 +1524,12 @@ class ObservationController extends BaseController
         return $submittedValues;
     }
 
+    /**
+     * @param \Mrss\Entity\BenchmarkGroup $benchmarkGroup
+     * @param \Mrss\Entity\Observation $observation
+     * @param $year
+     * @return array
+     */
     protected function getSubmittedValuesGroup($benchmarkGroup, $observation, $year)
     {
         $variable = $this->getVariableSubstitutionService();
@@ -1544,6 +1552,7 @@ class ObservationController extends BaseController
                 continue;
             }
 
+            /** @var \Mrss\Entity\Benchmark $benchmark */
 
             $value = $observation->get($benchmark->getDbColumn());
             $value = $benchmark->format($value);
@@ -1650,6 +1659,7 @@ class ObservationController extends BaseController
                     $row++;
                     continue;
                 } else {
+                    /** @var \Mrss\Entity\Benchmark $b */
                     $b = $benchmark['benchmark'];
                 }
 
