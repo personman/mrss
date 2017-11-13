@@ -10,14 +10,37 @@ use Zend\Validator\InArray;
 class Agreement extends Fieldset implements InputFilterProviderInterface
 {
     protected $offerCodes = array();
+    protected $studyName;
 
     public function __construct($studyName = 'MRSS', $offerCodes = array())
     {
+        $this->studyName = $studyName;
         // Case insensitive search
         $this->offerCodes = array_map('strtolower', $offerCodes);
 
         parent::__construct('agreement');
 
+        $this->addSignatureElements();
+
+        if (!empty($offerCodes)) {
+            $this->add(
+                array(
+                    'name' => 'offerCode',
+                    'type' => 'Text',
+                    'options' => array(
+                        'label' => 'Offer Code',
+                    ),
+                    'attributes' => array(
+                        'id' => 'offerCode'
+                    )
+                )
+            );
+        }
+
+    }
+
+    protected function addSignatureElements()
+    {
         $this->add(
             array(
                 'name' => 'agree',
@@ -74,7 +97,7 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 'options' => array(
                     'label' => 'Authorization',
                     'help-block' => 'I hereby authorize my institution\'s
-                    participation in the ' . $studyName,
+                    participation in the ' . $this->studyName,
                     'checked_value' => 1,
                     'unchecked_value' => 'no'
                 ),
@@ -84,32 +107,11 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 )
             )
         );
-
-        if (!empty($offerCodes)) {
-            $this->add(
-                array(
-                    'name' => 'offerCode',
-                    'type' => 'Text',
-                    'options' => array(
-                        'label' => 'Offer Code',
-                    ),
-                    'attributes' => array(
-                        'id' => 'offerCode'
-                    )
-                )
-            );
-        }
-
     }
 
-    /**
-     * Form validation
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
+    protected function getBasicFilters()
     {
-        $filters = array(
+        return array(
             'agree' => array(
                 'required' => true,
                 'validators' => array(
@@ -147,6 +149,16 @@ class Agreement extends Fieldset implements InputFilterProviderInterface
                 )
             ),
         );
+    }
+
+    /**
+     * Form validation
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification()
+    {
+        $filters = $this->getBasicFilters();
 
         // See if the offer code is valid
         if (!empty($this->offerCodes)) {
