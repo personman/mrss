@@ -946,6 +946,11 @@ class ObservationController extends BaseController
         return $groupedConfig;
     }
 
+    /**
+     * @todo: Reformat this and break it down, probably make it a service
+     * @return array|\Zend\Http\Response
+     * @throws \Exception
+     */
     public function importAction()
     {
         takeYourTime();
@@ -1107,7 +1112,7 @@ class ObservationController extends BaseController
             }
 
             // How did that go?
-            if (empty($errorMessages)) {
+            if (!empty($observation) && empty($errorMessages)) {
                 // Merge subobservations
                 if ($this->getCurrentStudy()->hasSubobservations()) {
                     $observation->mergeSubobservations();
@@ -1458,6 +1463,7 @@ class ObservationController extends BaseController
             ->getSubscriptionsForStudy($this->getCurrentStudy());
 
         // Set the year to be the most recent they have a subscription for
+        $latestYear = false;
         foreach ($subscriptions as $sub) {
             $latestYear = $sub->getYear();
             break;
@@ -1468,13 +1474,8 @@ class ObservationController extends BaseController
         }
 
         // Get the observation
-        $subscriptionModel = $this->getSubscriptionModel();
         $subscription = $this->getSubscription($year);
         $observation = $subscription->getObservation();
-
-        // We'll use the report service to determine decimal places
-        /** @var \Mrss\Service\Report $reportService */
-        $reportService = $this->getServiceLocator()->get('service.report');
 
         if (empty($observation)) {
             $collegeId = $this->currentCollege()->getId();

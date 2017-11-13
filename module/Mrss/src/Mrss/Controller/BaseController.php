@@ -5,6 +5,7 @@ namespace Mrss\Controller;
 use Mrss\Entity\College;
 use Mrss\Entity\Study;
 use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
@@ -14,7 +15,9 @@ use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
  * @method College currentCollege()
  * @method Plugin\CurrentObservation currentObservation()
  * @method Request getRequest()
+ * @method Response getResponse()
  * @method ZfcUserAuthentication zfcUserAuthentication()
+ * @method boolean isAllowed($resource, $privilege = null)
  */
 class BaseController extends AbstractActionController
 {
@@ -262,5 +265,13 @@ class BaseController extends AbstractActionController
     public function getObservationModel()
     {
         return $this->getServiceLocator()->get('model.observation');
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->getServiceLocator()->get('em');
     }
 }

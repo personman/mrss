@@ -5,12 +5,10 @@ namespace Mrss\Controller;
 use Mrss\Entity\PeerGroup;
 use Mrss\Form\Explore;
 use Mrss\Form\PublishCustomReport;
-use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
 use Mrss\Entity\Report;
 use Mrss\Entity\ReportItem;
-use Mrss\Entity\College;
 use Mrss\Entity\User as User;
 use Zend\View\Model\ViewModel;
 
@@ -65,20 +63,18 @@ class CustomReportController extends ReportController
 
         $form->setHydrator(
             new DoctrineHydrator(
-                $this->getServiceLocator()->get('em'),
+                $this->getEntityManager(),
                 'Mrss\Entity\Report'
             )
         );
 
-        $id = $this->params('id');
-        if (empty($id) && $this->getRequest()->isPost()) {
-            $id = $this->params()->fromPost('id');
+        $reportId = $this->params('id');
+        if (empty($reportId) && $this->getRequest()->isPost()) {
+            $reportId = $this->params()->fromPost('id');
         }
-        $report = $this->getReport($id);
+        $report = $this->getReport($reportId);
 
         $form->bind($report);
-
-        //pr($form->get('permission')->getValue());
 
         if ($this->getRequest()->isPost()) {
             // Hand the POST data to the form for validation
@@ -99,9 +95,7 @@ class CustomReportController extends ReportController
                     array('id' => $report->getId())
                 );
             }
-
         }
-
 
         return array(
             'form' => $form,
@@ -116,8 +110,8 @@ class CustomReportController extends ReportController
 
     public function buildAction()
     {
-        $id = $this->params()->fromRoute('id');
-        $report = $this->getReport($id);
+        $reportId = $this->params()->fromRoute('id');
+        $report = $this->getReport($reportId);
         $this->populateCache($report);
 
         return array(
@@ -145,9 +139,9 @@ class CustomReportController extends ReportController
 
     public function viewAction()
     {
-        $id = $this->params()->fromRoute('id');
+        $reportId = $this->params()->fromRoute('id');
         $print = $this->params()->fromRoute('print');
-        $report = $this->getReport($id);
+        $report = $this->getReport($reportId);
         $this->populateCache($report);
 
         $printMedia = 'print';
@@ -157,7 +151,6 @@ class CustomReportController extends ReportController
             // For the print version, show all labels
             $this->showAllLabels($report);
         }
-
 
         return array(
             'report' => $report,
@@ -173,8 +166,8 @@ class CustomReportController extends ReportController
     {
         $this->public = true;
         $allowPublic = $this->allowPublic();
-        $id = $this->params()->fromRoute('id');
-        $report = $this->getReport($id);
+        $reportId = $this->params()->fromRoute('id');
+        $report = $this->getReport($reportId);
 
         if ($report && $allowPublic && $report->isPublic()) {
             $params = $this->viewAction();
@@ -198,8 +191,8 @@ class CustomReportController extends ReportController
             }
 
             if ($chart['chart']['type'] == 'column') {
-                foreach ($chart['series'] as $key => &$series) {
-                    foreach ($series['data'] as $dataKey => &$dataPoint) {
+                foreach ($chart['series'] as &$series) {
+                    foreach ($series['data'] as &$dataPoint) {
                         if (isset($dataPoint['dataLabels'])) {
                             $dataPoint['dataLabels']['enabled'] = true;
                         }
@@ -218,8 +211,8 @@ class CustomReportController extends ReportController
 
     public function deleteAction()
     {
-        $id = $this->params('id');
-        $report = $this->getReport($id);
+        $reportId = $this->params('id');
+        $report = $this->getReport($reportId);
 
         $name = $report->getName();
 
@@ -261,14 +254,14 @@ class CustomReportController extends ReportController
     }
 
     /**
-     * @param $id
+     * @param $reportId
      * @throws \Exception
      * @return Report
      */
-    public function getReport($id)
+    public function getReport($reportId)
     {
-        if (!empty($id)) {
-            $report = $this->getReportModel()->find($id);
+        if (!empty($reportId)) {
+            $report = $this->getReportModel()->find($reportId);
             $admin = $this->isAllowed('adminMenu', 'view');
 
 
@@ -284,18 +277,13 @@ class CustomReportController extends ReportController
                 if (!$admin && !$public && $college->getId() != $this->currentCollege()->getId()) {
                     throw new \Exception('You cannot edit reports that do not belong to your college.');
                 }
-
             }
-
-
-
         }
 
         $currentUser = $this->getCurrentUser();
 
         if (empty($report)) {
             $report = new Report;
-            //$report->setCollege($this->currentCollege());
             $report->setUser($currentUser);
             $report->setCollege($currentUser->getCollege());
             $report->setStudy($this->currentStudy());
@@ -334,8 +322,8 @@ class CustomReportController extends ReportController
 
     public function rebuildCacheAction()
     {
-        if ($id = $this->params()->fromRoute('id')) {
-            $report = $this->getReport($id);
+        if ($reportId = $this->params()->fromRoute('id')) {
+            $report = $this->getReport($reportId);
             $this->populateCache($report);
         }
 
@@ -346,18 +334,18 @@ class CustomReportController extends ReportController
         return $response;
     }
 
-    protected $userIdsWhoAlreadyHaveIt = array();
+    protected $userIdsWhoHaveIt = array();
 
     protected function prepareUsersWhoAlreadyHaveIt($sourceId)
     {
         foreach ($this->getReportModel()->findBySourceId($sourceId, $this->currentStudy()) as $report) {
-            $this->userIdsWhoAlreadyHaveIt[$report->getUser()->getId()] = $report;
+            $this->userIdsWhoHaveIt[$report->getUser()->getId()] = $report;
         }
     }
 
-    protected function userHasReport($user)
+    protected function userHasReport(User $user)
     {
-        $userIds = array_keys($this->userIdsWhoAlreadyHaveIt);
+        $userIds = array_keys($this->userIdsWhoHaveIt);
         return in_array($user->getId(), $userIds);
     }
 
@@ -365,8 +353,8 @@ class CustomReportController extends ReportController
     {
         $report = null;
 
-        if (!empty($this->userIdsWhoAlreadyHaveIt[$userId])) {
-            $report = $this->userIdsWhoAlreadyHaveIt[$userId];
+        if (!empty($this->userIdsWhoHaveIt[$userId])) {
+            $report = $this->userIdsWhoHaveIt[$userId];
         }
 
         return $report;
@@ -405,22 +393,23 @@ class CustomReportController extends ReportController
 
     /**
      * Can the current user publish the report?
-     * @param $id
+     *
+     * @param $reportId
      * @return bool
      */
-    protected function canPublish($id)
+    protected function canPublish($reportId)
     {
         $can = false;
         if ($this->getCurrentUser()->isAdmin()) {
             $can = true;
-        } elseif ($this->userOwnsReport($id)) {
+        } elseif ($this->userOwnsReport($reportId)) {
             $can = true;
         }
 
         return $can;
     }
 
-    protected function userOwnsReport($id)
+    protected function userOwnsReport($reportId)
     {
         // @todo: implement
         return false;
@@ -523,7 +512,7 @@ class CustomReportController extends ReportController
         $this->getReportModel()->getEntityManager()->flush();
     }
 
-    protected function getOrCreateReport($user)
+    protected function getOrCreateReport(User $user)
     {
         if ($this->userHasReport($user)) {
             $report = $this->getReportToUpdate($user->getId());
@@ -554,12 +543,6 @@ class CustomReportController extends ReportController
         $colleges = $this->getCollegeModel()->findByState($state);
 
         return $colleges;
-    }
-
-    /** @return \Mrss\Model\College */
-    protected function getCollegeModel()
-    {
-        return $this->getServiceLocator()->get('model.college');
     }
 
     protected function getSamplePeerGroup($user)
