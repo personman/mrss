@@ -3,9 +3,6 @@
 namespace Mrss\Controller;
 
 use Mrss\Entity\ReportItem;
-use Zend\Mvc\Controller\AbstractActionController;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Mrss\Entity\Chart;
 use Mrss\Form\Explore;
 use Zend\View\Model\ViewModel;
 
@@ -45,8 +42,6 @@ class ReportItemController extends CustomReportController
 
             if ($form->isValid()) {
                 $data = $form->getData();
-
-                //pr($data);
 
                 if (!empty($data['multiTrend']) && $data['multiTrend'] == 'false') {
                     $data['multiTrend'] = 0;
@@ -99,9 +94,8 @@ class ReportItemController extends CustomReportController
             }
         }
 
-        if (empty($year)) {
+        if (empty($year) && !empty($data)) {
             $year = $data['year'];
-            //$year = $this->currentStudy()->getCurrentYear();
         }
 
         // Reset button proxy hidden fields
@@ -140,31 +134,43 @@ class ReportItemController extends CustomReportController
         return $members;
     }
 
-    public function getForm()
+    protected function getSystemsIfStructures()
     {
-        $benchmarks = $this->getBenchmarks();
+        $systems = null;
+        if ($this->getStudyConfig()->use_structures) {
+            $systems = $this->getSystems();
+        }
+
+        return $systems;
+    }
+
+    /**
+     * @return array|\Mrss\Entity\College[]
+     */
+    protected function getCollegesIfStructures()
+    {
         $colleges = array();
         if ($this->getStudyConfig()->use_structures) {
             $colleges = $this->getAllColleges();
         }
 
-        /** @var \Mrss\Entity\Study $study */
-        $study = $this->currentStudy();
+        return $colleges;
+    }
 
-
+    public function getForm()
+    {
+        $benchmarks = $this->getBenchmarks();
+        $colleges = $this->getCollegesIfStructures();
 
         // @todo: support system year/open
-        $years = $this->getSubscriptionModel()->getYearsWithReports($study, $this->currentCollege());
+        $years = $this->getSubscriptionModel()
+            ->getYearsWithReports($this->currentStudy(), $this->currentCollege());
 
         $peerGroups = $this->getPeerGroupOptions();
         $includeTrends = $this->getIncludeTrends();
         $allBreakpoints = $this->getReportService()->getPercentileBreakpoints();
 
-        $systems = null;
-        if ($this->getStudyConfig()->use_structures) {
-            $systems = $this->currentCollege()->getSystems();
-        }
-
+        $systems = $this->getSystemsIfStructures();
 
         $form = new Explore(
             $benchmarks,
@@ -200,9 +206,9 @@ class ReportItemController extends CustomReportController
     {
         // Are we editing an existing report item?
         $item = null;
-        $item_id = $this->params()->fromRoute('item_id');
-        if ($item_id) {
-            $item = $this->getReportItemModel()->find($item_id);
+        $itemId = $this->params()->fromRoute('item_id');
+        if ($itemId) {
+            $item = $this->getReportItemModel()->find($itemId);
         }
 
         return $item;
@@ -210,10 +216,10 @@ class ReportItemController extends CustomReportController
 
     public function reorderAction()
     {
-        $id = $this->params()->fromRoute('id');
+        $itemId = $this->params()->fromRoute('id');
         $data = array_flip($this->params()->fromPost('item'));
 
-        $report = $this->getReport($id);
+        $report = $this->getReport($itemId);
         foreach ($report->getItems() as $item) {
             if (isset($data[$item->getId()])) {
                 $item->setSequence($data[$item->getId()]);
@@ -232,13 +238,13 @@ class ReportItemController extends CustomReportController
 
     public function deleteAction()
     {
-        $id = $this->params()->fromRoute('id');
-        $item_id = $this->params()->fromRoute('item_id');
+        $reportId = $this->params()->fromRoute('id');
+        $itemId = $this->params()->fromRoute('item_id');
 
-        $report = $this->getReport($id);
+        $report = $this->getReport($reportId);
 
         foreach ($report->getItems() as $item) {
-            if ($item->getId() == $item_id) {
+            if ($item->getId() == $itemId) {
                 $this->getReportItemModel()->delete($item);
                 $this->flashMessenger()->addSuccessMessage('Item deleted.');
             }
@@ -327,28 +333,12 @@ class ReportItemController extends CustomReportController
 
     protected function getBenchmarks()
     {
-        /*if ($this->getStudyConfig()->use_structures) {
-            return $this->getStructureBenchmarks();
-        }*/
-
-        $space = "&u#160;";
-        //$space = "\xA0";
-        //$space = "&nbsp;";
-        //$space = "\u0020";
-        $space = "<span class='indentOption'>&nbsp;&nbsp;&nbsp;</span>";
         $space = "";
-
-        ///** @var \Mrss\Entity\Study $study */
-        //$study = $this->currentStudy();
 
         $year = $this->getYearFromRouteOrStudy($this->getCollege());
         if ($this->getStudyConfig()->use_structures) {
             $year = $this->getActiveSystem()->getCurrentYear();
         }
-
-        //$subscription = $this->getSubscriptionByYear($this->currentStudy()->getCurrentYear());
-
-        //$benchmarks = $study->getStructuredBenchmarks(true, 'dbColumn', $subscription);
 
         $benchmarks = array();
         $subscription = $this->currentObservation($year)->getSubscription();
@@ -357,6 +347,7 @@ class ReportItemController extends CustomReportController
             $groupChildren = array();
 
             foreach ($benchmarkGroup->getChildren(null, true, 'report') as $benchmark) {
+                /** @var \Mrss\Entity\Benchmark $benchmark */
                 if (get_class($benchmark) == 'Mrss\Entity\BenchmarkHeading') {
                     /** @var \Mrss\Entity\BenchmarkHeading $heading */
                     $heading = $benchmark;
@@ -383,8 +374,6 @@ class ReportItemController extends CustomReportController
                 'label' => $benchmarkGroup->getName(),
                 'options' => $groupChildren
             );
-
-            //pr($benchmarkGroup->getName());
 
             $benchmarks[] = $benchmarkGroupInfo;
         }

@@ -5,7 +5,6 @@ namespace Mrss\Controller;
 use Mrss\Form\PeerCollege;
 use Mrss\Form\PeerGroup as PeerGroupForm;
 use Mrss\Entity\PeerGroup;
-use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\PeerComparisonDemographics;
 
@@ -124,14 +123,6 @@ class PeerGroupController extends ReportController
     }
 
     /**
-     * @return \Mrss\Model\College
-     */
-    protected function getCollegeModel()
-    {
-        return $this->getServiceLocator()->get('model.college');
-    }
-
-    /**
      * @return \Mrss\Model\PeerGroup
      */
     public function getPeerGroupModel()
@@ -139,16 +130,16 @@ class PeerGroupController extends ReportController
         return $this->getServiceLocator()->get('model.peer.group');
     }
 
-    public function getPeerGroup($id = null)
+    public function getPeerGroup($groupId = null)
     {
-        if (empty($id)) {
+        if (empty($groupId)) {
             $peerGroup = new PeerGroup();
             //$peerGroup->setCollege($this->currentCollege());
             $peerGroup->setUser($this->getCurrentUser());
             $peerGroup->setStudy($this->currentStudy());
             $peerGroup->setYear($this->currentStudy()->getCurrentYear());
         } else {
-            $peerGroup = $this->getPeerGroupModel()->find($id);
+            $peerGroup = $this->getPeerGroupModel()->find($groupId);
 
             $this->checkPeerGroupOwnership($peerGroup);
         }
@@ -156,7 +147,7 @@ class PeerGroupController extends ReportController
         return $peerGroup;
     }
 
-    protected function checkPeerGroupOwnership($peerGroup)
+    protected function checkPeerGroupOwnership(PeerGroup $peerGroup)
     {
         // Make sure it belongs to the logged-in user
         if ($this->getCurrentUser()->getId() != $peerGroup->getUser()->getId()) {
@@ -174,7 +165,7 @@ class PeerGroupController extends ReportController
 
         $form->setHydrator(
             new DoctrineHydrator(
-                $this->getServiceLocator()->get('em'),
+                $this->getEntityManager(),
                 'Mrss\Entity\PeerGroup'
             )
         );
@@ -184,10 +175,10 @@ class PeerGroupController extends ReportController
 
     public function deletePeerAction()
     {
-        $id = $this->params()->fromRoute('id');
+        $groupId = $this->params()->fromRoute('id');
         $peer = $this->params()->fromRoute('peer');
 
-        $peerGroup = $this->getPeerGroup($id);
+        $peerGroup = $this->getPeerGroup($groupId);
         $peerGroup->removePeer($peer);
 
         $this->getPeerGroupModel()->save($peerGroup);
@@ -203,8 +194,8 @@ class PeerGroupController extends ReportController
 
         $form = new PeerCollege($colleges, $this->getStudyConfig());
 
-        $id = $this->params()->fromRoute('id');
-        $peerGroup = $this->getPeerGroup($id);
+        $groupId = $this->params()->fromRoute('id');
+        $peerGroup = $this->getPeerGroup($groupId);
 
         // Process form submission, if any
         if ($this->getRequest()->isPost()) {
@@ -223,7 +214,7 @@ class PeerGroupController extends ReportController
 
                 return $this->redirect()->toRoute(
                     'peer-groups/edit',
-                    array('id' => $id)
+                    array('id' => $groupId)
                 );
             }
         }
@@ -239,8 +230,8 @@ class PeerGroupController extends ReportController
     {
         $form = new PeerComparisonDemographics($this->currentStudy(), $this->getStudyConfig());
 
-        $id = $this->params()->fromRoute('id');
-        $peerGroup = $this->getPeerGroup($id);
+        $groupId = $this->params()->fromRoute('id');
+        $peerGroup = $this->getPeerGroup($groupId);
 
         // Bind an empty peer group just to serve as the container for these criteria
         /*$emptyPeerGroup = new PeerGroup();
@@ -309,7 +300,7 @@ class PeerGroupController extends ReportController
 
                 return $this->redirect()->toRoute(
                     'peer-groups/edit',
-                    array('id' => $id)
+                    array('id' => $groupId)
                 );
             }
         }

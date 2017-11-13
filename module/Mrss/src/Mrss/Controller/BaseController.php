@@ -3,6 +3,7 @@
 namespace Mrss\Controller;
 
 use Mrss\Entity\College;
+use Mrss\Entity\Observation;
 use Mrss\Entity\Study;
 use Zend\Http\Request;
 use Zend\Http\Response;
@@ -13,7 +14,7 @@ use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
 /**
  * @method Study currentStudy()
  * @method College currentCollege()
- * @method Plugin\CurrentObservation currentObservation()
+ * @method Observation currentObservation($year = null)
  * @method Request getRequest()
  * @method Response getResponse()
  * @method ZfcUserAuthentication zfcUserAuthentication()
@@ -105,6 +106,11 @@ class BaseController extends AbstractActionController
         return $benchmarkGroups;
     }
 
+    /**
+     * @param $subscription
+     * @param null $system
+     * @return array|\Mrss\Entity\BenchmarkGroup[]|\Mrss\Entity\Structure[]
+     */
     protected function getAllBenchmarkGroups($subscription, $system = null)
     {
         if ($this->getStudyConfig()->use_structures) {
