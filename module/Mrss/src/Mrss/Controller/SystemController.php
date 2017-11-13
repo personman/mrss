@@ -3,14 +3,13 @@
 namespace Mrss\Controller;
 
 use Mrss\Entity\SystemMembership;
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\System as SystemForm;
 use Mrss\Entity\System;
 use Mrss\Entity\Structure;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\ViewModel;
 
-class SystemController extends AbstractActionController
+class SystemController extends BaseController
 {
     /**
      * Show the current systems
@@ -105,7 +104,6 @@ class SystemController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -117,7 +115,6 @@ class SystemController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage("$noun saved.");
                 return $this->redirect()->toRoute('systems');
             }
-
         }
 
         return array(
@@ -141,7 +138,8 @@ class SystemController extends AbstractActionController
     public function addcollegeAction()
     {
         $collegeModel = $this->getServiceLocator()->get('model.college');
-        $years = $this->getSubscriptionModel()->getYearsWithSubscriptions($this->currentStudy());
+        $years = $this->getSubscriptionModel()
+            ->getYearsWithSubscriptions($this->currentStudy());
         $form = new \Mrss\Form\SystemCollege($collegeModel, $years);
 
         $systemId = $this->params('system_id');
@@ -186,7 +184,8 @@ class SystemController extends AbstractActionController
 
 
                     // See if the membership exists
-                    $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $year);
+                    $membership = $this->getSystemMembershipModel()
+                        ->findBySystemCollegeYear($system, $college, $year);
 
                     if (!$membership && $enabled) {
                         // Add it
@@ -209,7 +208,6 @@ class SystemController extends AbstractActionController
                 return $this->redirect()
                     ->toRoute('systems/view', array('id' => $system->getId()));
             }
-
         }
 
         return array(
@@ -220,12 +218,14 @@ class SystemController extends AbstractActionController
 
     protected function getMemberships($system, $college)
     {
-        $years = $this->getSubscriptionModel()->getYearsWithSubscriptions($this->currentStudy());
+        $years = $this->getSubscriptionModel()
+            ->getYearsWithSubscriptions($this->currentStudy());
 
         $memberships = array();
         foreach ($years as $year) {
             // See if the membership exists
-            $membership = $this->getSystemMembershipModel()->findBySystemCollegeYear($system, $college, $year);
+            $membership = $this->getSystemMembershipModel()
+                ->findBySystemCollegeYear($system, $college, $year);
 
             if ($membership) {
                 $memberships[$year] = $membership;
@@ -329,7 +329,8 @@ class SystemController extends AbstractActionController
 
                 // Show a message and redirect
                 $noun = ucwords($this->getSystemLabel());
-                $this->flashMessenger()->addSuccessMessage("$noun $roleLabel added.");
+                $this->flashMessenger()
+                    ->addSuccessMessage("$noun $roleLabel added.");
                 return $this->redirect()
                     ->toRoute('systems/view', array('id' => $system->getId()));
             }
@@ -347,7 +348,14 @@ class SystemController extends AbstractActionController
         return $viewModel;
     }
 
-    // Keep the old way for system viewer. Hmm, wait.
+    /**
+     * Add system viewer
+     *
+     * Keep the old way for system viewer. Hmm, wait.
+     *
+     * @return \Zend\Http\Response|ViewModel
+     * @throws \Exception
+     */
     public function addSystemViewerAction()
     {
         $systemId = $this->params('system_id');
@@ -389,7 +397,8 @@ class SystemController extends AbstractActionController
 
                 // Show a message and redirect
                 $noun = ucwords($this->getSystemLabel());
-                $this->flashMessenger()->addSuccessMessage("$noun $roleLabel added.");
+                $this->flashMessenger()
+                    ->addSuccessMessage("$noun $roleLabel added.");
                 return $this->redirect()
                     ->toRoute('systems/view', array('id' => $system->getId()));
             }

@@ -342,6 +342,7 @@ class System
 
     /**
      * Return a list of system admins for this system
+     * @return \Mrss\Entity\User[]
      */
     public function getAdmins($role = 'system_admin')
     {

@@ -47,7 +47,7 @@ class SubscriptionController extends BaseController
 
     protected $log;
 
-    protected $subscriptionDraftModel;
+    protected $draftModel;
 
     protected $draftSubscription;
 
@@ -69,7 +69,7 @@ class SubscriptionController extends BaseController
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
         $study = $this->currentStudy();
 
-
+        $collegeId = null;
         if ($college = $this->currentCollege()) {
             $collegeId = $college->getId();
         } else {
@@ -183,7 +183,6 @@ class SubscriptionController extends BaseController
      */
     public function joinFreeAction()
     {
-        //$this->ge
         $form = new SubscriptionFree();
 
         $formHasErrors = 0;
@@ -197,8 +196,7 @@ class SubscriptionController extends BaseController
                 $data = $form->getData();
 
                 $collegeId = $data['id'];
-                $college = $this->getServiceLocator()
-                    ->get('model.college')->find($collegeId);
+                $college = $this->getCollegeModel()->find($collegeId);
 
                 if (!empty($college)) {
                     $data = array(
@@ -287,16 +285,6 @@ class SubscriptionController extends BaseController
         );
 
         return new JsonModel($response);
-    }
-
-    /**
-     * @return \Mrss\Model\College
-     */
-    protected function getCollegeModel()
-    {
-        $collegeModel = $this->getServiceLocator()->get('model.college');
-
-        return $collegeModel;
     }
 
     protected function getAllColleges()
@@ -2133,7 +2121,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
     public function setSubscriptionDraftModel($model)
     {
-        $this->subscriptionDraftModel = $model;
+        $this->draftModel = $model;
     }
 
     /**
@@ -2150,12 +2138,12 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
      */
     public function getSubscriptionDraftModel()
     {
-        if (empty($this->subscriptionDraftModel)) {
-            $this->subscriptionDraftModel = $this->getServiceLocator()
+        if (empty($this->draftModel)) {
+            $this->draftModel = $this->getServiceLocator()
                 ->get('model.subscription.draft');
         }
 
-        return $this->subscriptionDraftModel;
+        return $this->draftModel;
     }
 
     public function downloadAction()

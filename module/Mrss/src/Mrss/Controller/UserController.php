@@ -82,7 +82,6 @@ class UserController extends BaseController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $post = $this->params()->fromPost();
 
@@ -146,7 +145,6 @@ class UserController extends BaseController
                         $user->addStudy($this->currentStudy());
                         $sendWelcomeEmail = true;
                     }
-
                 }
 
                 // Save
@@ -165,7 +163,8 @@ class UserController extends BaseController
 
 
                 if ($this->getCurrentUser()->isAdmin()) {
-                    $redirect = $this->redirect()->toRoute('colleges/view', array('id' => $user->getCollege()->getId()));
+                    $redirect = $this->redirect()
+                        ->toRoute('colleges/view', array('id' => $user->getCollege()->getId()));
                 } else {
                     $redirect = $this->redirect()->toRoute('institution/users');
                 }
@@ -174,7 +173,6 @@ class UserController extends BaseController
             } else {
                 $this->flashMessenger()->addErrorMessage('Correct errors below.');
             }
-
         }
 
         return array(
@@ -249,7 +247,6 @@ class UserController extends BaseController
         $message->getHeaders()->get('content-type')->setType('multipart/alternative');
 
         $mailer->send($message);
-
     }
 
     /**
@@ -292,7 +289,6 @@ class UserController extends BaseController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $post = $this->params()->fromPost();
 
@@ -442,7 +438,15 @@ class UserController extends BaseController
             $editingSelf = true;
         }
 
-        $fieldset = new UserForm('user', false, $adminControls, $entityManager, $roleSubset, $roleChoices, $editingSelf);
+        $fieldset = new UserForm(
+            'user',
+            false,
+            $adminControls,
+            $entityManager,
+            $roleSubset,
+            $roleChoices,
+            $editingSelf
+        );
         $fieldset->add(
             array(
                 'name' => 'id',

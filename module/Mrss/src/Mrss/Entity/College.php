@@ -472,6 +472,8 @@ class College
 
     /**
      * @param Study $study
+     * @param boolean $forReports
+     * @param null|System $system
      * @return Subscription[]
      */
     public function getSubscriptionsForStudy(Study $study, $forReports = false, $system = null)
@@ -740,6 +742,10 @@ class College
         return $names;
     }
 
+    /**
+     * @param $year
+     * @return System[]
+     */
     public function getSystemsByYear($year)
     {
         $systems = array();

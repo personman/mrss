@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *
+ */
 
 namespace Mrss\Controller;
 
@@ -8,8 +11,16 @@ use Mrss\Entity\Page;
 use Mrss\Form\Page as PageForm;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
+/**
+ * Class PageController
+ *
+ * @package Mrss\Controller
+ */
 class PageController extends BaseController
 {
+    /**
+     * @return array
+     */
     public function indexAction()
     {
         $pageModel = $this->getPageModel();
@@ -20,6 +31,9 @@ class PageController extends BaseController
         );
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function editAction()
     {
         $pageId = $this->params('id');
@@ -88,10 +102,16 @@ class PageController extends BaseController
         );
     }
 
+    /**
+     * Get redirect
+     *
+     * @return \Zend\Http\Response|null
+     */
     protected function getRedirect()
     {
         $pageRoute = $this->getPageRoute();
-        // Customize for NCCBP. report-only viewers can't access member home @todo: generalize
+        // Customize for NCCBP. report-only viewers can't access member home
+        // @todo: generalize
         if ($pageRoute == 'members' && $this->currentStudy()->getId() == 1) {
             $auth = $this->zfcUserAuthentication();
 
@@ -105,6 +125,11 @@ class PageController extends BaseController
         }
     }
 
+    /**
+     * Get page route
+     *
+     * @return mixed|string|\Zend\Mvc\Controller\Plugin\Params
+     */
     protected function getPageRoute()
     {
         $pageRoute = $this->params('pageRoute');
@@ -117,6 +142,9 @@ class PageController extends BaseController
 
     /**
      * Look a page up by its route and display it
+     *
+     * @return array
+     * @throws \Exception
      */
     public function viewAction()
     {
@@ -142,6 +170,13 @@ class PageController extends BaseController
         );
     }
 
+    /**
+     * Get wrapper ID
+     *
+     * @param Page $page
+     *
+     * @return string
+     */
     protected function getWrapperId(Page $page)
     {
         $wrapperId = $page->getRoute();
@@ -152,6 +187,13 @@ class PageController extends BaseController
         return $wrapperId;
     }
 
+    /**
+     * Adjust layout
+     *
+     * @param Page $page
+     *
+     * @return null
+     */
     protected function adjustLayout(Page $page)
     {
         if (!$page->getShowWrapper()) {
@@ -160,6 +202,11 @@ class PageController extends BaseController
         $this->layout()->setOption('wrapperId', $this->getWrapperId($page));
     }
 
+    /**
+     * Get page from file
+     *
+     * @return null|string
+     */
     protected function getPageFromFile()
     {
         // Load from html file for dev
