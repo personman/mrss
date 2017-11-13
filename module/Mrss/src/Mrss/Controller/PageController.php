@@ -60,7 +60,6 @@ class PageController extends BaseController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Handle deletes
             $buttons = $this->params()->fromPost('buttons');
             if (!empty($buttons['delete'])) {

@@ -50,8 +50,6 @@ class CurrentCollege extends AbstractPlugin
 
         if ($canAdmin && ($user->getRole() == 'system_admin' || $user->getRole() == 'system_viewer')
             && !empty($this->getSystemAdminSessionContainer()->college)) {
-
-
             $college = $this->getCollegeModel()->find(
                 $this->getSystemAdminSessionContainer()->college
             );

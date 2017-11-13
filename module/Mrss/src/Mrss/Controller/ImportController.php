@@ -252,7 +252,6 @@ class ImportController extends AbstractActionController
         $form->setAttribute('method', 'post');
 
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -265,7 +264,6 @@ class ImportController extends AbstractActionController
                 $result = preg_replace('/(\d+) \=\> /', '', $result);
                 $result = preg_replace('/array \(/', 'array(', $result);
                 $result = preg_replace('/\>(\s+)array/s', '> array', $result);
-
             }
         }
 

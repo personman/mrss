@@ -118,8 +118,6 @@ class ReportAdminController extends BaseController
             foreach ($systems as $system) {
                 $systemIds[$year][] = $system->getId();
             }
-
-
         }
 
         // Get System ids
@@ -277,7 +275,6 @@ class ReportAdminController extends BaseController
                 $message = $e->getMessage();
                 //echo "! " . $message;
                 $status = $message;
-
             }
         } else {
             $status = '404';
@@ -334,7 +331,6 @@ class ReportAdminController extends BaseController
                 $message = $e->getMessage();
                 //echo "! " . $message;
                 $status = $message;
-
             }
         } else {
             $status = '404';
@@ -405,7 +401,6 @@ class ReportAdminController extends BaseController
                         $params[$param]++;
                     }
                 }
-
             }
         }
 
@@ -555,7 +550,6 @@ class ReportAdminController extends BaseController
         );
 
         return $view;
-
     }
 
     public function calculateSystemsAction()
@@ -749,7 +743,6 @@ class ReportAdminController extends BaseController
         return array(
             'preview' => $stats['preview']
         );
-
     }
 
     protected function longRunningScript()
@@ -819,7 +812,8 @@ class ReportAdminController extends BaseController
     }
 
 
-    // The following methods are for Maximizing Resources only and should be moved to a class of their own or generalized
+    // The following methods are for Maximizing Resources only and should be moved to a
+    // class of their own or generalized
 
 
     public function institutionalAction()

@@ -59,7 +59,6 @@ class CurrentObservation extends AbstractPlugin
             } else {
                 $year = $this->getCurrentStudyPlugin()->getCurrentStudy()->getCurrentYear();
             }
-
         }
 
         /** @var \Mrss\Entity\Observation $observation */

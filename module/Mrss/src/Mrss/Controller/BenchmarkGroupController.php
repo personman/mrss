@@ -34,7 +34,6 @@ class BenchmarkGroupController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -50,7 +49,6 @@ class BenchmarkGroupController extends AbstractActionController
                     array('study' => $benchmarkGroup->getStudy()->getId())
                 );
             }
-
         }
 
         return array(
@@ -77,7 +75,6 @@ class BenchmarkGroupController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -93,7 +90,6 @@ class BenchmarkGroupController extends AbstractActionController
                     array('study' => $study->getId())
                 );
             }
-
         }
 
         return array(

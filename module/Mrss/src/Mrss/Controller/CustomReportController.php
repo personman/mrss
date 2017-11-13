@@ -59,7 +59,11 @@ class CustomReportController extends ReportController
 
     public function addAction()
     {
-        $form = new ReportForm($this->getSystems(), $this->getStudyConfig(), $this->getReportItemModel()->getEntityManager());
+        $form = new ReportForm(
+            $this->getSystems(),
+            $this->getStudyConfig(),
+            $this->getEntityManager()
+        );
 
         $form->setHydrator(
             new DoctrineHydrator(
@@ -198,7 +202,6 @@ class CustomReportController extends ReportController
                         }
                     }
                 }
-
             }
 
             if ($chart['chart']['type'] == 'line') {
@@ -377,7 +380,6 @@ class CustomReportController extends ReportController
             $form->setData($data);
 
             if ($form->isValid()) {
-
                 $data = $form->getData();
                 $this->peerGroupIdToCopy = $reportId;
 
@@ -438,7 +440,6 @@ class CustomReportController extends ReportController
 
             $colleges = $this->getTargetColleges($targetPeerGroupId);
             foreach ($colleges as $college) {
-
                 foreach ($college->getUsers() as $user) {
                     //if (!$this->userHasReport($user)) {
                     if (true) {
@@ -453,10 +454,10 @@ class CustomReportController extends ReportController
 
             $elapsed = round(microtime(true) - $start);
             $this->flashMessenger()->addSuccessMessage(
-                "Report copied to all users at peer group members ($count) in $elapsed seconds. $duplicatesSkipped duplicates skipped.
-            Now <a href='/reports/custom/admin'>rebuild the cache</a>."
+                "Report copied to all users at peer group members ($count) in $elapsed seconds." .
+                "$duplicatesSkipped duplicates skipped." .
+                "Now <a href='/reports/custom/admin'>rebuild the cache</a>."
             );
-
         } else {
             $this->flashMessenger()->addErrorMessage('Copy already done.');
         }
@@ -622,7 +623,6 @@ class CustomReportController extends ReportController
     {
         if ($item = $this->getReportItemModel()->findBySourceItem($sourceItem->getId(), $reportId)) {
             // Found it. Just update it
-
         } else {
             // None yet. Create one.
             $item = new ReportItem();

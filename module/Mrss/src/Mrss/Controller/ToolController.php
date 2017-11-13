@@ -10,21 +10,17 @@ use Mrss\Entity\ReportItem;
 use Mrss\Form\AnalyzeEquation;
 use Mrss\Form\Email;
 use Mrss\Service\Export\Lapsed;
-use Mrss\Service\NhebiSubscriptions\Mrss;
 use Zend\Mail\Message;
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Form\Exceldiff;
 use PHPExcel;
-use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Row;
 use PHPExcel_Style_Fill;
 use Mrss\Service\NccbpMigration;
 use Zend\Session\Container;
 use Mrss\Service\Export\User as ExportUser;
-use Zend\View\Model\JsonModel;
 
-class ToolController extends AbstractActionController
+class ToolController extends BaseController
 {
     public function indexAction()
     {
@@ -273,7 +269,6 @@ class ToolController extends AbstractActionController
         $this->longRunningScript();
         //takeYourTime();
 
-        $start = microtime(1);
         $subscriptions = 0;
         $batchSize = 100;
         $currentBatch = $this->params()->fromQuery('batch', 1);
@@ -297,14 +292,16 @@ class ToolController extends AbstractActionController
 
             $subscriptions++;
 
-            if ($subscriptions < $firstOfBatch) continue;
+            if ($subscriptions < $firstOfBatch) {
+                continue;
+            }
 
             $subscription->updateCompletion($dbColumnsIncluded);
             $subscriptionModel->save($subscription);
 
 
 
-            if (false && $subscriptions % $flushEvery == 0) {
+            if (false) { // && $subscriptions % $flushEvery == 0) {
                 $subscriptionModel->getEntityManager()->flush();
                 echo 'flushed ';
             }
@@ -334,16 +331,15 @@ class ToolController extends AbstractActionController
         prd(count($queryLogger->queries));
         */
 
-        $elapsed = round(microtime(1) - $start, 3);
+        //$elapsed = round(microtime(1) - $start, 3);
 
         //prd($elapsed);
 
-        $memory = round(memory_get_peak_usage() / 1024 / 1024);
+        //$memory = round(memory_get_peak_usage() / 1024 / 1024);
 
         $this->flashMessenger()
             ->addSuccessMessage("$subscriptions processed.");// in $elapsed seconds. Memory used: $memory MB");
         return $this->redirect()->toRoute('tools');
-
     }
 
     public function bestAction()
@@ -462,12 +458,6 @@ class ToolController extends AbstractActionController
     public function copyDataAction()
     {
         $this->longRunningScript();
-
-        // $source => $destination. Use benchmark ids
-        $map = array(
-
-        );
-
         $service = $this->getServiceLocator()->get('copyData');
 
         $benchmarks = array(
@@ -493,13 +483,13 @@ class ToolController extends AbstractActionController
     
     /**
      * @return \Zend\Http\Response
-     * @deprecated 
+     * @deprecated
      */
     public function copyDataActionDeprecated()
     {
         // Copy one year's data for the study to another. dangerous
         $from = $this->params()->fromRoute('from');
-        $to = $this->params()->fromRoute('to');
+        $copyTo = $this->params()->fromRoute('to');
 
         /** @var \Mrss\Model\Observation $observationModel */
         $observationModel = $this->getServiceLocator()->get('model.observation');
@@ -509,7 +499,7 @@ class ToolController extends AbstractActionController
 
         // This assumes we've already moved the subscriptions to the new correct year.
         $subscriptionModel = $this->getSubscriptionModel();
-        $subscriptions = $subscriptionModel->findByStudyAndYear($this->currentStudy()->getId(), $to);
+        $subscriptions = $subscriptionModel->findByStudyAndYear($this->currentStudy()->getId(), $copyTo);
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
@@ -518,11 +508,11 @@ class ToolController extends AbstractActionController
         $count = 0;
         foreach ($subscriptions as $subscription) {
             $college = $subscription->getCollege();
-            $newObservation = $observationModel->findOne($college->getId(), $to);
+            $newObservation = $observationModel->findOne($college->getId(), $copyTo);
 
             if (!$newObservation) {
                 $newObservation = new Observation();
-                $newObservation->setYear($to);
+                $newObservation->setYear($copyTo);
                 $newObservation->setCollege($college);
             }
 
@@ -543,7 +533,6 @@ class ToolController extends AbstractActionController
                             if ($college->getId() == 101) {
                                 //pr($oldObservation->getId() . ' -> ' . $newObservation->getId());
                                 //pr($dbColumn . ': ' . $value);
-
                             }
                         }
                     }
@@ -563,10 +552,9 @@ class ToolController extends AbstractActionController
 
 
         //prd("$count values copied from $from to $to.");
-        $this->flashMessenger()->addSuccessMessage("$count values copied from $from to $to.");
+        $this->flashMessenger()->addSuccessMessage("$count values copied from $from to $copyTo.");
 
         return $this->redirect()->toUrl('/tools');
-
     }
 
     /**
@@ -666,7 +654,6 @@ class ToolController extends AbstractActionController
                 'emails' => implode(', ', $emails),
                 'zeros' => $info['count']
             );
-
         }
 
         // Download?
@@ -706,6 +693,8 @@ class ToolController extends AbstractActionController
         foreach ($this->currentStudy()->getBenchmarkGroups() as $benchmarkGroup) {
             /** @var \Mrss\Entity\BenchmarkGroup $benchmarkGroup */
 
+            $sequence = 1;
+
             $benchmarks = array();
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
                 $benchmarks[$benchmark->getId()] = $benchmark;
@@ -719,6 +708,7 @@ class ToolController extends AbstractActionController
             foreach ($benchmarkGroup->getChildren() as $child) {
                 $sequence = $child->getSequence();
 
+                /** @var \Mrss\Entity\Benchmark $child */
                 if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
                     unset($headings[$child->getId()]);
                     continue;
@@ -729,11 +719,13 @@ class ToolController extends AbstractActionController
 
             // Now deal with any leftovers (invisible)
             foreach ($headings as $heading) {
+                /** @var \Mrss\Entity\BenchmarkHeading $heading */
                 $heading->setSequence(++$sequence);
 
                 $this->getBenchmarHeadingkModel()->save($heading);
             }
 
+            /** @var \Mrss\Entity\Benchmark $benchmark */
             foreach ($benchmarks as $benchmark) {
                 if ($type == 'reports') {
                     $benchmark->setReportSequence(++$sequence);
@@ -745,12 +737,9 @@ class ToolController extends AbstractActionController
             }
 
             $this->getBenchmarkModel()->getEntityManager()->flush();
-
         }
 
         $this->getBenchmarkModel()->getEntityManager()->flush();
-
-
     }
 
     public function repairSequencesAction()
@@ -825,7 +814,6 @@ class ToolController extends AbstractActionController
             );
 
             if ($benchmark->getComputed() && $equation = $benchmark->getEquation()) {
-
                 $variables = $computedFields->getVariables($equation);
 
                 $dbColumn = $benchmark->getDbColumn();
@@ -901,8 +889,6 @@ class ToolController extends AbstractActionController
     public function copyPeerGroupsAction()
     {
         takeYourTime();
-        $start = microtime(true);
-
 
         /** @var \Mrss\Model\College $collegeModel */
         $collegeModel = $this->getServiceLocator()->get('model.college');
@@ -913,18 +899,15 @@ class ToolController extends AbstractActionController
 
         $copiedCount = 0;
 
-
         $start = microtime(true);
-
-
         $colleges = $collegeModel->findAll();
 
         $flushEvery = 50;
-        $i = 0;
+        $iteration = 0;
 
         foreach ($colleges as $college) {
             foreach ($college->getPeerGroups() as $peerGroup) {
-                $peerGroupMap[$peerGroup->getId()] = array();
+                //$peerGroupMap[$peerGroup->getId()] = array();
 
                 foreach ($college->getUsers() as $user) {
                     $newGroup = new PeerGroup();
@@ -943,20 +926,19 @@ class ToolController extends AbstractActionController
 
 
                     $copiedCount++;
-
                 }
                 //pr($peerGroup->getName());
             }
 
 
-            $i++;
+            $iteration++;
 
 
-            if ($i % $flushEvery == 0) {
+            if ($iteration % $flushEvery == 0) {
                 $peerGroupModel->getEntityManager()->flush();
             }
 
-            if ($i == 100) {
+            if ($iteration == 100) {
                 //$elapsed = microtime(true) - $start;
                 //prd($elapsed);
             }
@@ -989,7 +971,7 @@ class ToolController extends AbstractActionController
 
         $reports = $reportModel->findAll();
 
-        $i = 0;
+        $iteration = 0;
         foreach ($reports as $report) {
             $college = $report->getCollege();
 
@@ -1036,18 +1018,16 @@ class ToolController extends AbstractActionController
 
                         $reportItemModel->save($newItem);
                         //$reportItemModel->getEntityManager()->flush();
-
                     }
                 }
             }
 
-            $i++;
+            $iteration++;
 
 
-            if ($i % $flushEvery == 0) {
+            if ($iteration % $flushEvery == 0) {
                 $reportModel->getEntityManager()->flush();
             }
-
         }
 
         $reportModel->getEntityManager()->flush();
@@ -1104,11 +1084,11 @@ class ToolController extends AbstractActionController
 
                     ob_start();
                     $devNull = $this->forward()->dispatch('reports', $params);
+                    unset($devNull);
                     $result = ob_get_clean();
                 } else {
                     $message = "That institution did not submit data in $year.";
                 }
-
             }
         }
 
@@ -1119,39 +1099,21 @@ class ToolController extends AbstractActionController
         );
     }
 
-    protected function getUrlContents($url) {
-        $ch = curl_init();
+    protected function getUrlContents($url)
+    {
+        $curlHandle = curl_init();
         $timeout = 5;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $data = curl_exec($ch);
-        curl_close($ch);
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $data = curl_exec($curlHandle);
+        curl_close($curlHandle);
 
         return $data;
     }
 
-    /**
-     * @return \Mrss\Model\Observation
-     */
-    protected function getObservationModel()
-    {
-        return $this->getServiceLocator()->get('model.observation');
-    }
-
-    /**
-     * @return \Mrss\Model\College
-     */
-    protected function getCollegeModel()
-    {
-        $collegeModel = $this->getServiceLocator()->get('model.college');
-
-        return $collegeModel;
-    }
-
     protected function getAllColleges()
     {
-
         $colleges = array();
         foreach ($this->getCollegeModel()->findAll() as $college) {
             $colleges[$college->getId()] = $college->getNameAndState();
@@ -1167,13 +1129,11 @@ class ToolController extends AbstractActionController
         $subsWithSuppressions = array();
         foreach ($subscriptions as $subscription) {
             if ($suppressions = $subscription->getSuppressionList()) {
-
                 $subsWithSuppressions[] = array(
                     'college' => $subscription->getCollege()->getNameAndState(),
                     'suppressions' => $suppressions
                 );
             }
-
         }
 
         return array(
@@ -1188,7 +1148,6 @@ class ToolController extends AbstractActionController
         $usersWithSuppressions = array();
         foreach ($subscriptions as $subscription) {
             if ($suppressions = $subscription->getSuppressionList()) {
-
                 foreach ($subscription->getCollege()->getDataUsers() as $user) {
                     $usersWithSuppressions[] = array(
                         'email' => $user->getEmail(),
@@ -1294,7 +1253,6 @@ class ToolController extends AbstractActionController
 
         $response = $this->getResponse()->setContent($responseText);
         return $response;
-
     }
 
     public function emailTestAction()
@@ -1354,9 +1312,9 @@ class ToolController extends AbstractActionController
             705, // 178022
         );
 
-        $to = 137; // 177995;
+        $copyTo = 137; // 177995;
 
-        $mergeService->merge($from, $to);
+        $mergeService->merge($from, $copyTo);
 
         //pr($mergeService);
         die('test');
@@ -1423,7 +1381,6 @@ class ToolController extends AbstractActionController
 
 
         if ($oldGroup = $model->find($oldGroupId)) {
-
             if ($newGroup = $model->findOneByUserAndName($user, $oldGroup->getName())) {
                 $id = $newGroup->getId();
             }
@@ -1531,7 +1488,6 @@ class ToolController extends AbstractActionController
             pr($ob->getId());
             pr($ob->getCollege()->getNameAndState());
             pr($ob->getYear());
-
         }
 
         $elapsed = microtime(true) - $start;
@@ -1630,10 +1586,11 @@ class ToolController extends AbstractActionController
                 $importer->setFile($filename);
                 $importer->import($this->getServiceLocator());
 
-                $this->flashMessenger()->addSuccessMessage("Your import was processed. Please review the <a href='/admin/changes'>recent data changes</a>.");
+                $this->flashMessenger()->addSuccessMessage(
+                    "Your import was processed. " .
+                    "Please review the <a href='/admin/changes'>recent data changes</a>."
+                );
                 return $this->redirect()->toUrl('/tools/import-data');
-
-
             }
         }
 
@@ -1646,7 +1603,6 @@ class ToolController extends AbstractActionController
 
     public function uploadDataAction()
     {
-
     }
 
     /**

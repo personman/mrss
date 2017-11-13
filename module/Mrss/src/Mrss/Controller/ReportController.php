@@ -481,7 +481,6 @@ class ReportController extends ReportAdminController
                             "The peer group $name has been saved."
                         );
                     }
-
                 }
 
                 //$this->savePeerGroupToSession($peerGroup);
@@ -726,7 +725,6 @@ class ReportController extends ReportAdminController
             'lowThreshold' => 100 - $threshold,
             'reportUrl' => ($this->getStudyConfig()->use_structures) ? 'network' : 'national'
         );
-
     }
 
     public function bestPerformersResultAction()
@@ -811,7 +809,6 @@ class ReportController extends ReportAdminController
 
         // Check the current study's report setting
         if ($this->getStudyConfig()->use_structures) {
-
         } elseif (!$this->currentStudy()->getReportsOpen()) {
             return false;
         }
@@ -865,7 +862,6 @@ class ReportController extends ReportAdminController
                     'colleges' => $collegeData
                 )
             );
-
         } else {
             $this->flashMessenger()->addErrorMessage('Missing year.');
             return $this->redirect()->toUrl('/');

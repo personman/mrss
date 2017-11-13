@@ -62,8 +62,6 @@ class BaseController extends AbstractActionController
                     // The first one will do
                     $systemId = $systemMembership->getSystem()->getId();
                 }
-
-
             }
         }
 
@@ -97,7 +95,6 @@ class BaseController extends AbstractActionController
         if ($this->getStudyConfig()->use_structures) {
             $structure = $this->getStructure();
             $benchmarkGroups = $structure->getPages();
-
         } else {
             $currentStudy = $this->currentStudy();
             $benchmarkGroups = $currentStudy->getBenchmarkGroupsBySubscription($subscription);
@@ -114,7 +111,6 @@ class BaseController extends AbstractActionController
     protected function getAllBenchmarkGroups($subscription, $system = null)
     {
         if ($this->getStudyConfig()->use_structures) {
-
             if ($system) {
                 $systems = array($system);
             } else {

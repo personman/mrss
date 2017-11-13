@@ -89,7 +89,6 @@ class IpedsInstitutionController extends AbstractActionController
 
                 $model->save($institution);
                 $count++;
-
             }
 
             $this->getServiceLocator()->get('em')->flush();
@@ -99,7 +98,6 @@ class IpedsInstitutionController extends AbstractActionController
             $this->flashMessenger()->addSuccessMessage(
                 "$count institutions imported."
             );
-
         } else {
             $this->flashMessenger()->addErrorMessage(
                 'Import failed. Make sure the file exists.'

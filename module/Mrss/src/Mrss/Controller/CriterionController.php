@@ -97,7 +97,6 @@ class CriterionController extends AbstractActionController
             $criterion = new CriterionEntity();
             $criterion->setStudy($this->currentStudy());
         } else {
-
         }
 
         return $criterion;

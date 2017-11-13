@@ -38,7 +38,6 @@ class SubObservationController extends AbstractActionController
         }
 
         return $this->observationModel;
-
     }
 
     public function editAction()
@@ -136,7 +135,6 @@ class SubObservationController extends AbstractActionController
                     array('benchmarkGroup' => $benchmarkGroup->getUrl())
                 );
             }
-
         }
 
 

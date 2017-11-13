@@ -40,7 +40,6 @@ class HeadingController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $data = $this->params()->fromPost();
 

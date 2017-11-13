@@ -134,7 +134,6 @@ class BenchmarkController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $data = $this->params()->fromPost();
             $form->setData($data);
@@ -151,7 +150,6 @@ class BenchmarkController extends AbstractActionController
                     array('study' => $benchmarkGroup->getStudy()->getId())
                 );
             }
-
         } else {
             // Set default years
             $form->get('yearsAvailable')
@@ -183,7 +181,6 @@ class BenchmarkController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $data = $this->params()->fromPost();
             if (empty($data['computeAfter'])) {
@@ -231,7 +228,6 @@ class BenchmarkController extends AbstractActionController
                         ->getStudy()->getId())
                 );
             }
-
         }
 
         return array(

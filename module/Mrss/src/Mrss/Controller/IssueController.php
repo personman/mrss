@@ -128,7 +128,6 @@ class IssueController extends AbstractActionController
     public function massUpdateAction()
     {
         if ($this->getRequest()->isPost()) {
-
             $buttons = $this->params()->fromPost('buttons');
 
             if (!empty($buttons['sendBack'])) {
@@ -168,7 +167,6 @@ class IssueController extends AbstractActionController
             }
 
             $this->flashMessenger()->addSuccessMessage("$count $noun updated.");
-
         }
 
         return $this->redirect()->toRoute('issues/staff');

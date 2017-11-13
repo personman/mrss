@@ -58,7 +58,6 @@ class SectionController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -68,7 +67,6 @@ class SectionController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('Module saved.');
                 return $this->redirect()->toRoute('sections', array('study' => $study->getId()));
             }
-
         }
 
         return array(

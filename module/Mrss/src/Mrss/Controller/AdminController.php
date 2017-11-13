@@ -330,7 +330,5 @@ class AdminController extends AbstractActionController
     public function cleanUpAction()
     {
         $study = $this->currentStudy();
-
-
     }
 }

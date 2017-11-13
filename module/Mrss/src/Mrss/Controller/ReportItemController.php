@@ -317,8 +317,6 @@ class ReportItemController extends CustomReportController
 
     protected function getStructureBenchmarks()
     {
-
-
     }
 
     /**

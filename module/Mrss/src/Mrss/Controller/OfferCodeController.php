@@ -54,7 +54,6 @@ class OfferCodeController extends AbstractActionController
         $form->get('study')->setValue($studyId);
 
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -68,7 +67,6 @@ class OfferCodeController extends AbstractActionController
                     array('study' => $studyId)
                 );
             }
-
         }
 
         return array(

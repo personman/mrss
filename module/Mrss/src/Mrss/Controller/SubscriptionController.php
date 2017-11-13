@@ -146,7 +146,6 @@ class SubscriptionController extends BaseController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -161,7 +160,6 @@ class SubscriptionController extends BaseController
                 } else {
                     return $this->redirect()->toRoute('subscribe/user-agreement');
                 }
-
             } else {
                 $this->flashMessenger()->addErrorMessage(
                     "Please correct the problems below."
@@ -213,13 +211,10 @@ class SubscriptionController extends BaseController
                     } else {
                         return $this->redirect()->toRoute('subscribe/user-agreement');
                     }
-
                 } else {
                     $this->flashMessenger()->addErrorMessage("Unable to find institution.");
                     return $this->redirect()->toUrl('/participate');
                 }
-
-
             } else {
                 $formHasErrors = 1;
             }
@@ -400,7 +395,6 @@ class SubscriptionController extends BaseController
         $form->add($fieldset);
 
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -473,7 +467,6 @@ class SubscriptionController extends BaseController
         $form = new SubscriptionModule($sections);
 
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -483,7 +476,6 @@ class SubscriptionController extends BaseController
 
                 return $this->redirect()->toRoute('subscribe/user-agreement');
             }
-
         }
 
         return array(
@@ -528,7 +520,6 @@ class SubscriptionController extends BaseController
         $form = new SubscriptionModule($sections);
 
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -546,7 +537,6 @@ class SubscriptionController extends BaseController
 
                 return $this->redirect()->toRoute('subscribe/payment');
             }
-
         }
 
         return array(
@@ -562,7 +552,7 @@ class SubscriptionController extends BaseController
 
         $selectedSystems = $subscription->getCollege()->getSystemsByYear($subscription->getYear());
         $systemIds = array();
-        foreach($selectedSystems as $sys) {
+        foreach ($selectedSystems as $sys) {
             $systemIds[] = $sys->getId();
         }
 
@@ -838,7 +828,6 @@ class SubscriptionController extends BaseController
             $offerCode = $agreement['offerCode'];
 
             if ($this->getStudy()->checkOfferCode($offerCode)) {
-
                 $amount = $this->getStudy()
                     ->getOfferCodePrice($offerCode);
                 $skipOtherDiscounts = $this->getStudy()
@@ -896,19 +885,16 @@ class SubscriptionController extends BaseController
                     $systemForm->getData(),
                     true
                 );
-
             }
         }
     }
 
     public function completeAction()
     {
-
     }
 
     public function joinedAction()
     {
-
     }
 
     /**
@@ -1532,9 +1518,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             $stmt = $this->getSubscriptionModel()->getEntityManager()->getConnection()->prepare($sql);
             $stmt->execute(array('subscription_id' => $subscriptionId));
         }
-
-
-
     }
 
     protected function getSubscriptionStatus($method)
@@ -1653,7 +1636,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $invoice->setSubject(
             $this->getInvoiceSubject($subscription, $paymentMethod, $update)
-
         );
 
         $body = $this->getInvoiceBody($subscription, $adminUser, $dataUser, $update);
@@ -1826,7 +1808,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             takeYourTime();
 
             return $this->deleteAllSubscriptions();
-
         } else {
             $subscription = $subscriptionModel->find($subscriptionId);
         }
@@ -1928,7 +1909,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
                     $count = count($benchmarkKeysToNull);
                     $message .= "$count fields cleared out from this year's observation. ";
-
                 }
             }
         }
@@ -2030,7 +2010,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
         $this->getSubscriptionDraftModel()->save($draft);
         $this->getSubscriptionDraftModel()->getEntityManager()->flush();
-
     }
 
     public function setIpeds($ipeds)
@@ -2052,7 +2031,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             } elseif ($college = $this->currentCollege()) {
                 $ipeds = $college->getIpeds();
             } elseif ($draft = $this->getDraftSubscription()) {
-
                 $ipeds = $draft->getIpeds();
 
                 if (empty($ipeds)) {
@@ -2373,7 +2351,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
     {
         $sections = $this->getSectionsByIds($sections);
         $subscription->updateSections($sections);
-
     }
     protected function updateSystemMemberships(College $college, $systemIds, $year)
     {
@@ -2394,7 +2371,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
                 $membership->setDataVisibility('public');
 
                 $this->getSystemMembershipModel()->save($membership);
-
             }
 
             // Remove from existing list since this doesn't need deletion
@@ -2413,7 +2389,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
             } else {
                 //die('cannot find');
             }
-
         }
 
         $this->getSystemMembershipModel()->getEntityManager()->flush();

@@ -21,6 +21,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Alignment;
+
 //use PHPExcel_Shared_Font;
 
 /**
@@ -101,7 +102,6 @@ class ObservationController extends BaseController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -121,7 +121,6 @@ class ObservationController extends BaseController
                     )
                 );
             }
-
         }
 
         return array(
@@ -157,7 +156,6 @@ class ObservationController extends BaseController
             if ($user->administersSystem($this->getActiveSystemId())) {
                 //return $this->systemadminoverviewAction();
             }
-
         }
 
         // Regular users
@@ -236,7 +234,6 @@ class ObservationController extends BaseController
                 'form' => $form,
                 'benchmarkGroup' => $benchmarkGroup
             );
-
         }
 
         return array(
@@ -390,7 +387,6 @@ class ObservationController extends BaseController
             } else {
                 $year = $this->currentStudy()->getCurrentYear();
             }
-
         }
 
         $observationModel = $this->getServiceLocator()->get('model.observation');
@@ -490,7 +486,6 @@ class ObservationController extends BaseController
 
         try {
             $observation = $this->getCurrentObservation();
-
         } catch (\Exception $e) {
             // If the observation is not found, check a prior year
             if (empty($observation)) {
@@ -510,7 +505,6 @@ class ObservationController extends BaseController
                     return $this->redirect()->toUrl('/');
                 }
             }
-
         }
 
         // Phasing out observation for subscription
@@ -632,7 +626,6 @@ class ObservationController extends BaseController
                         'benchmarkGroup' => $benchmarkGroup->getUrl(),
                         'year' => $subscription->getYear()
                     ));
-
                 } else {
                     $redirect = $this->url()->fromRoute('data-entry', array(
                         'year' => $subscription->getYear()
@@ -652,7 +645,6 @@ class ObservationController extends BaseController
                 //$redirect = '/';
                 return $this->redirect()->toUrl($redirect);
             }
-
         }
 
         // Is the college subscribed to NCCBP for this year
@@ -880,7 +872,6 @@ class ObservationController extends BaseController
             } else {
                 prd($subscription->getId());
             }
-
         }
     }
 
@@ -924,7 +915,6 @@ class ObservationController extends BaseController
             $template = 'grouped.phtml';
             $view->setTemplate('mrss/observation/' . $template);
             $view->setVariable('groupedConfig', $groupedConfig);
-
         } elseif ($template = $dataEntryTemplates->$groupId) {
             $view->setTemplate($template);
         }
@@ -1087,7 +1077,6 @@ class ObservationController extends BaseController
 
                         $observationModel->save($observation);
                     } else {
-
                         foreach ($inputFilter->getInvalidInput() as $error) {
                             // Get the benchmark so we can show the label in the error
                             $benchmark = $benchmarkModel->findOneByDbColumn(
@@ -1328,7 +1317,6 @@ class ObservationController extends BaseController
                 if ($college->hasSystemAdmin($user->getId())) {
                     $authorized = true;
                 }
-
             }
         }
 
@@ -1637,7 +1625,6 @@ class ObservationController extends BaseController
         );
 
         foreach ($submittedValues as $benchmarkGroup) {
-
             // Header
             $headerRow = array(
                 $benchmarkGroup['benchmarkGroup']

@@ -163,7 +163,6 @@ class StudyController extends AbstractActionController
                 //pr($daysAfterFirst);
 
                 $subsInfo[$daysAfterFirst] = $count;
-
             }
 
             $subsInfo = $this->fillInGaps($subsInfo);
@@ -228,7 +227,6 @@ class StudyController extends AbstractActionController
 
         // Handle form submission
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -240,7 +238,6 @@ class StudyController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('Study saved.');
                 return $this->redirect()->toRoute('studies');
             }
-
         }
 
         return array(

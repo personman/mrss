@@ -259,7 +259,6 @@ class CollegeController extends AbstractActionController
 
         // Process the form
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -285,7 +284,6 @@ class CollegeController extends AbstractActionController
 
                 return $redirect;
             }
-
         }
 
 
@@ -305,7 +303,6 @@ class CollegeController extends AbstractActionController
 
         // Process the form
         if ($this->getRequest()->isPost()) {
-
             // Hand the POST data to the form for validation
             $form->setData($this->params()->fromPost());
 
@@ -320,7 +317,6 @@ class CollegeController extends AbstractActionController
                 // Get the redirect
                 return $this->redirect()->toUrl('/colleges');
             }
-
         }
 
         return array(
@@ -406,7 +402,6 @@ class CollegeController extends AbstractActionController
         $response->setContent($json);
 
         return $response;
-
     }
 
     /**

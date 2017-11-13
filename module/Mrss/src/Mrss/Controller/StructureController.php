@@ -10,7 +10,6 @@ class StructureController extends AbstractActionController
 {
     public function indexAction()
     {
-
     }
 
     public function editAction()
