@@ -2,12 +2,18 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\Study;
+use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
+use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
 
 /**
- * @method \Mrss\Entity\Study currentStudy()
+ * @method Study currentStudy()
  * @method Plugin\CurrentCollege currentCollege()
+ * @method Plugin\CurrentObservation currentObservation()
+ * @method Request getRequest()
+ * @method ZfcUserAuthentication zfcUserAuthentication()
  */
 class BaseController extends AbstractActionController
 {
@@ -175,6 +181,14 @@ class BaseController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Model\Benchmark
+     */
+    public function getBenchmarkModel()
+    {
+        return $this->getServiceLocator()->get('model.benchmark');
+    }
+
+    /**
      * @return \Mrss\Model\Issue
      */
     protected function getIssueModel()
@@ -239,5 +253,13 @@ class BaseController extends AbstractActionController
         $currentUser = $this->zfcUserAuthentication()->getIdentity();
 
         return $currentUser;
+    }
+
+    /**
+     * @return \Mrss\Model\Observation
+     */
+    public function getObservationModel()
+    {
+        return $this->getServiceLocator()->get('model.observation');
     }
 }

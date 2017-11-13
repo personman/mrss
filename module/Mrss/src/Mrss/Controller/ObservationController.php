@@ -3,8 +3,9 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\BenchmarkGroup;
 use Mrss\Form\ImportData;
-use Mrss\Service\DataEntryHydrator;
+//use Mrss\Service\DataEntryHydrator;
 use Mrss\Entity\Observation;
 use Mrss\Entity\SubObservation;
 use Mrss\Service\Excel;
@@ -13,12 +14,17 @@ use Zend\Session\Container;
 use Zend\Form\Form;
 use Zend\Form\Element;
 use PHPExcel;
-use PHPExcel_Worksheet;
+//use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Alignment;
-use PHPExcel_Shared_Font;
+//use PHPExcel_Shared_Font;
 
+/**
+ * Class ObservationController
+ *
+ * @package Mrss\Controller
+ */
 class ObservationController extends BaseController
 {
     protected $systemAdminSessionContainer;
@@ -28,7 +34,6 @@ class ObservationController extends BaseController
     public function viewAction()
     {
         $observationId = $this->params('id');
-        $ObservationModel = $this->getServiceLocator()->get('model.observation');
 
         $benchmarkGroupUrl = $this->params('benchmarkGroup');
         if (!empty($benchmarkGroupUrl)) {
@@ -38,7 +43,7 @@ class ObservationController extends BaseController
             $benchmarkGroup = null;
         }
 
-        $observation = $ObservationModel->find($observationId);
+        $observation = $this->getObservationModel()->find($observationId);
 
         if (1 && !empty($benchmarkGroup)) {
             // Don't allow saving
@@ -75,15 +80,13 @@ class ObservationController extends BaseController
         $observationId = $this->params('id');
         $benchmarkGroupId = $this->params('benchmarkGroup');
 
-        $ObservationModel = $this->getServiceLocator()->get('model.observation');
-        $observation = $ObservationModel->find($observationId);
+        $observationModel = $this->getObservationModel();
+        $observation = $observationModel->find($observationId);
 
-        $benchmarkGroup = $this->getServiceLocator()
-            ->get('model.benchmark.group')
+        $benchmarkGroup = $this->getBenchmarkGroupModel()
             ->find($benchmarkGroupId);
 
-        $formService = $this->getServiceLocator()
-            ->get('service.formBuilder');
+        $formService = $this->getFormBuilder();
         $form = $formService->buildForm($benchmarkGroup, $observation->getYear());
 
         $form->setAttribute('class', 'form-horizontal');
@@ -100,7 +103,7 @@ class ObservationController extends BaseController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $ObservationModel->save($observation);
+                $observationModel->save($observation);
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
 
@@ -136,8 +139,6 @@ class ObservationController extends BaseController
             return $this->redirect()->toUrl('/renew');
         }
     }
-
-
 
     public function overviewAction()
     {
@@ -199,6 +200,7 @@ class ObservationController extends BaseController
         $year = $this->getYearFromRouteOrStudy();
 
         $currentStudy = $this->currentStudy();
+        /** @var \Mrss\Entity\Subscription $subscription */
         $subscription = $this->currentObservation($year)->getSubscription();
 
         //$subscription = $this->getCurrentUser()->getCollege()->getLatestSubscription($currentStudy);
@@ -549,10 +551,9 @@ class ObservationController extends BaseController
 
         // Hard-coded binding of best practices. @todo: make this more elegant
         if ($form->has('best_practices')) {
-            $bp = $form->get('best_practices');
-            $bpValue = explode("\n", $bp->getValue());
-            $bp->setValue($bpValue);
-            //prd($_POST);
+            $bestPractice = $form->get('best_practices');
+            $bpValue = explode("\n", $bestPractice->getValue());
+            $bestPractice->setValue($bpValue);
         }
 
 
@@ -722,12 +723,17 @@ class ObservationController extends BaseController
         return $formService;
     }
 
+    /**
+     * @param $form
+     * @return \Zend\Form\Form
+     */
     protected function roundFormValues($form)
     {
         $roundTo = $this->getStudyConfig()->round_data_entry_to;
 
         if (!is_null($roundTo)) {
             foreach ($form as $element) {
+                /** @var \Zend\Form\Element $element */
                 $value = $element->getValue();
                 if (!is_null($value)) {
                     $value = round($value, $roundTo);
@@ -739,7 +745,7 @@ class ObservationController extends BaseController
         return $form;
     }
 
-    protected function updateCompletion($observation)
+    protected function updateCompletion(Observation $observation)
     {
         // Calculate completion
         $completion = $this->currentStudy()->getCompletionPercentage($observation);
@@ -760,13 +766,13 @@ class ObservationController extends BaseController
         $count = count($issues);
         $noun = ($count == 1) ? 'problem' : 'problems';
 
-        $message = "Your data was saved but we identified $count potential $noun with it.
-                        <a href='/issues'>Please review</a>.";
+        $message = "Your data was saved but we identified $count potential $noun with it." .
+                        "<a href='/issues'>Please review</a>.";
 
         return $message;
     }
 
-    protected function getDataEntryLayout($benchmarkGroup)
+    protected function getDataEntryLayout(BenchmarkGroup $benchmarkGroup)
     {
         $studyConfig = $this->getStudyConfig();
 
@@ -896,12 +902,15 @@ class ObservationController extends BaseController
     /**
      * If a custom template is set up for this benchmarkGroup, switch to it.
      * Get the id and file name from config (differs in production)
+     *
+     * @param \Mrss\Entity\BenchmarkGroup $benchmarkGroup
+     * @param \Zend\View\Model\ViewModel $view
      */
     public function checkForCustomTemplate($benchmarkGroup, $view)
     {
         $config = $this->getServiceLocator()->get('Config');
 
-        $id = $benchmarkGroup->getId();
+        $groupId = $benchmarkGroup->getId();
         $shortName = $benchmarkGroup->getShortName();
 
         $studyConfig = $this->getStudyConfig();
@@ -914,7 +923,7 @@ class ObservationController extends BaseController
             $view->setTemplate('mrss/observation/' . $template);
             $view->setVariable('groupedConfig', $groupedConfig);
 
-        } elseif ($template = $dataEntryTemplates->$id) {
+        } elseif ($template = $dataEntryTemplates->$groupId) {
             $view->setTemplate($template);
         }
     }
@@ -1038,7 +1047,7 @@ class ObservationController extends BaseController
                         $subscription = $observation->getSubscription();
 
                         // Clone for logging
-                        $oldObservation = clone $observation;
+                        //$oldObservation = clone $observation;
                         $oldData = $subscription->getAllData();
 
                         // Handle any subobservations
@@ -1139,12 +1148,12 @@ class ObservationController extends BaseController
             }
         }
 
-        $useDirectDownloadLink = $this->useDirectDownloadLink();
+        $useDirectDownload = $this->useDirectDownloadLink();
 
 
         return array(
             'form' => $form,
-            'useDirectDownloadLink' => $useDirectDownloadLink,
+            'useDirectDownloadLink' => $useDirectDownload,
             'errorMessages' => $errorMessages,
             'activeSystem' => $this->getActiveSystem(),
             'year' => $year,
@@ -1224,7 +1233,7 @@ class ObservationController extends BaseController
 
         $excelService = new Excel();
         $excelService->setBenchmarkModel(
-            $this->getServiceLocator()->get('model.benchmark')
+            $this->getBenchmarkModel()
         );
         $excelService->setCurrentStudy($this->currentStudy());
         $excelService->setVariableSubstition($this->getVariableSubstitutionService());
@@ -1266,17 +1275,6 @@ class ObservationController extends BaseController
     public function importsystemAction()
     {
         return $this->importAction();
-
-
-        // Get the import form
-        $form = new ImportData('import');
-
-        $errorMessages = array();
-
-        return array(
-            'form' => $form,
-            'errorMessages' => $errorMessages
-        );
     }
 
     public function exportsystemAction()

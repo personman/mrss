@@ -9,7 +9,7 @@ use Mrss\Model\Observation as ObservationModel;
 /**
  * Class CurrentObservation
  *
- * The dataset we are working with.
+ * The data set we are working with.
  *
  * @package Mrss\Controller\Plugin
  */
@@ -33,6 +33,7 @@ class CurrentObservation extends AbstractPlugin
     protected $studyConfig;
 
     /**
+     * @param $year
      * @return Observation
      */
     public function __invoke($year = null)
@@ -40,6 +41,11 @@ class CurrentObservation extends AbstractPlugin
         return $this->getCurrentObservation($year);
     }
 
+    /**
+     * @param null $year
+     * @return Observation
+     * @throws \Exception
+     */
     public function getCurrentObservation($year = null)
     {
         // Find the observation by the year and the user's college
