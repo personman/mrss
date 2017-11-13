@@ -2,9 +2,8 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\User;
 use PHPExcel;
-use Symfony\Component\Stopwatch\Stopwatch;
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\User as UserEntity;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\AbstractForm;
@@ -26,7 +25,7 @@ class UserController extends BaseController
     {
         $passwordReset = null;
 
-        $id = $this->params('id');
+        $userId = $this->params('id');
         $postUser = $this->params()->fromPost('user', array());
 
 
@@ -34,7 +33,7 @@ class UserController extends BaseController
         $collegeModel = $this->getServiceLocator()->get('model.college');
         $redirect = $this->params('redirect');
 
-        if ($id == 'add' || (empty($id) && empty($postUser['id']))) {
+        if ($userId == 'add' || (empty($userId) && empty($postUser['id']))) {
             $user = new UserEntity();
             $user->setId('add');
             $user->setPassword('nothing');
@@ -57,15 +56,15 @@ class UserController extends BaseController
 
             $user->setCollege($college);
         } else {
-            if (empty($id)) {
-                $id = $postUser['id'];
+            if (empty($userId)) {
+                $userId = $postUser['id'];
             }
 
-            if (empty($id)) {
+            if (empty($userId)) {
                 throw new \Exception('User ID is required');
             }
 
-            $user = $userModel->find($id);
+            $user = $userModel->find($userId);
 
             // Display password reset links to admins
             if ($this->isAllowed('adminMenu', 'view')) {
@@ -420,12 +419,12 @@ class UserController extends BaseController
         return $response;
     }
 
-    protected function getUserForm($user)
+    protected function getUserForm(User $user)
     {
         $form = new AbstractForm('user');
 
         $adminControls = $this->isAllowed('adminMenu', 'view');
-        $em = $this->getServiceLocator()->get('em');
+        $entityManager = $this->getEntityManager();
 
         // Can this user choose from a subset of roles?
         $roleSubset = $this->isAllowed('membership', 'view');
@@ -443,7 +442,7 @@ class UserController extends BaseController
             $editingSelf = true;
         }
 
-        $fieldset = new UserForm('user', false, $adminControls, $em, $roleSubset, $roleChoices, $editingSelf);
+        $fieldset = new UserForm('user', false, $adminControls, $entityManager, $roleSubset, $roleChoices, $editingSelf);
         $fieldset->add(
             array(
                 'name' => 'id',
@@ -458,7 +457,7 @@ class UserController extends BaseController
 
         $form->setHydrator(
             new DoctrineHydrator(
-                $this->getServiceLocator()->get('em'),
+                $entityManager,
                 'Mrss\Entity\User'
             )
         );
@@ -521,8 +520,7 @@ class UserController extends BaseController
 
     protected function populateUserStudies()
     {
-        $collegeModel = $this->getServiceLocator()->get('model.college');
-        foreach ($collegeModel->findAll() as $college) {
+        foreach ($this->getCollegeModel()->findAll() as $college) {
             foreach ($college->getSubscriptions() as $subscription) {
                 $study = $subscription->getStudy();
                 foreach ($college->getUsers() as $user) {
@@ -534,10 +532,17 @@ class UserController extends BaseController
         $this->getServiceLocator()->get('em')->flush();
     }
 
+    /**
+     * @return \Mrss\Service\Import\User
+     */
+    protected function getUserImportService()
+    {
+        return $this->getServiceLocator()->get('service.import.users');
+    }
+
     public function importAction()
     {
-        $service = $this->getServiceLocator()->get('service.import.users');
-        $form = $service->getForm();
+        $form = $this->getUserImportService()->getForm();
 
         // Handle the form
         /** @var \Zend\Http\PhpEnvironment\Request $request */
@@ -555,7 +560,7 @@ class UserController extends BaseController
                 $data = $form->getData();
                 $filename = $data['file']['tmp_name'];
 
-                $stats = $service->import($filename);
+                $stats = $this->getUserImportService()->import($filename);
 
                 $this->flashMessenger()->addSuccessMessage($stats);
                 return $this->redirect()->toRoute('users/import');
@@ -568,6 +573,24 @@ class UserController extends BaseController
     }
 
     /**
+     * @return \Zend\View\Helper\ServerUrl
+     */
+    protected function getServerUrl()
+    {
+        return $this->getServiceLocator()
+            ->get('viewhelpermanager')->get('serverUrl');
+    }
+
+    /**
+     * @return \Zend\View\Helper\Url
+     */
+    protected function getUrlHelper()
+    {
+        return $this->getServiceLocator()
+            ->get('viewhelpermanager')->get('url');
+    }
+
+    /**
      * Generate a one-time login link for all users that haven't logged in.
      * Export to Excel.
      */
@@ -575,7 +598,6 @@ class UserController extends BaseController
     {
         takeYourTime();
 
-        $sw = new Stopwatch();
         $saveEvery = 20;
 
         // Get all users who have never logged in
@@ -585,15 +607,12 @@ class UserController extends BaseController
             array('email', 'name', 'college', 'loginLink')
         );
 
-        $i = 0;
+        $iteration = 0;
         foreach ($users as $user) {
             $userId = $user->getId();
 
-            $serverUrl = $this->getServiceLocator()
-                ->get('viewhelpermanager')->get('serverUrl');
-
-            $urlHelper = $this->getServiceLocator()
-                ->get('viewhelpermanager')->get('url');
+            $serverUrl = $this->getServerUrl();
+            $urlHelper = $this->getUrlHelper();
 
             // Build the one-time login url
             $key = $this->getPasswordResetKey($userId);
@@ -614,9 +633,9 @@ class UserController extends BaseController
             );
 
 
-            $i++;
+            $iteration++;
 
-            if ($i % $saveEvery == 0) {
+            if ($iteration % $saveEvery == 0) {
                 $this->getServiceLocator()->get('em')->flush();
             }
         }
@@ -648,13 +667,14 @@ class UserController extends BaseController
 
     public function resetAction()
     {
-        $id = $this->params()->fromRoute('id');
+        $userId = $this->params()->fromRoute('id');
 
-        $key = $this->getPasswordResetKey($id);
+        $key = $this->getPasswordResetKey($userId);
+        unset($key);
 
         $this->flashMessenger()->addSuccessMessage("Password reset key generated.");
 
-        return $this->redirect()->toRoute('users/edit', array('id' => $id));
+        return $this->redirect()->toRoute('users/edit', array('id' => $userId));
     }
 
     protected function getPasswordResetKey($userId)
@@ -663,11 +683,18 @@ class UserController extends BaseController
         $passwordService = $this->getServiceLocator()
             ->get('goalioforgotpassword_password_service');
 
-        if ($existing = $passwordService->getPasswordMapper()->findByUser($userId)) {
+        /** @var \GoalioForgotPassword\Mapper\Password $passwordMapper */
+        $passwordMapper = $passwordService->getPasswordMapper();
+
+        /** @var \GoalioForgotPassword\Entity\Password $existing */
+        if ($existing = $passwordMapper->findByUserId($userId)) {
             $key = $existing->getRequestKey();
         } else {
             $passwordService->cleanPriorForgotRequests($userId);
-            $class = $passwordService->getOptions()->getPasswordEntityClass();
+
+            /** @var \GoalioForgotPassword\Options\ModuleOptions $options */
+            $options = $passwordService->getOptions();
+            $class = $options->getPasswordEntityClass();
 
             /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
             $model = new $class;
@@ -675,7 +702,7 @@ class UserController extends BaseController
             $model->setUserId($userId);
             $model->setRequestTime(new \DateTime('now'));
             $model->generateRequestKey();
-            $passwordService->getPasswordMapper()->persist($model);
+            $passwordMapper->persist($model);
 
             $key = $model->getRequestKey();
         }
@@ -803,7 +830,10 @@ class UserController extends BaseController
         return $this->redirect()->toRoute('zfcuserimpersonate/unimpersonate');
     }
 
-    public function getSystemAdminSessionContainer()
+    /**
+     * @return Container
+     */
+    protected function getSystemAdminSessionContainer()
     {
         $containerName = 'system_admin';
 
