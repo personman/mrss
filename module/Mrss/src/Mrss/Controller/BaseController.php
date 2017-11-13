@@ -242,7 +242,7 @@ class BaseController extends AbstractActionController
     }
 
     /**
-     * @return \Mrss\Model\Issue
+     * @return \Mrss\Model\Page
      */
     protected function getPageModel()
     {

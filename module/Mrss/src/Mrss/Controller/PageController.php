@@ -3,8 +3,8 @@
 
 namespace Mrss\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Mrss\Entity\Page as PageEntity;
+use Mrss\Entity\Page;
 use Mrss\Form\Page as PageForm;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
@@ -22,25 +22,25 @@ class PageController extends BaseController
 
     public function editAction()
     {
-        $id = $this->params('id');
-        if (empty($id) && $this->getRequest()->isPost()) {
-            $id = $this->params()->fromPost('id');
+        $pageId = $this->params('id');
+        if (empty($pageId) && $this->getRequest()->isPost()) {
+            $pageId = $this->params()->fromPost('id');
         }
 
         $pageModel = $this->getServiceLocator()
             ->get('model.page');
-        $page = $pageModel->find($id);
+        $page = $pageModel->find($pageId);
 
         if (empty($page)) {
             $page = new PageEntity;
         }
 
-        $em = $this->getServiceLocator()->get('em');
+        $entityManager = $this->getEntityManager();
 
         // Build form
-        $form = new PageForm($em);
+        $form = new PageForm($entityManager);
 
-        $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\Page'));
+        $form->setHydrator(new DoctrineHydrator($entityManager, 'Mrss\Entity\Page'));
         $form->bind($page);
         $form->setInputFilter($page->getInputFilter());
 
@@ -81,7 +81,6 @@ class PageController extends BaseController
                 );
                 return $this->redirect()->toRoute('pages');
             }
-
         }
 
         return array(
@@ -89,19 +88,12 @@ class PageController extends BaseController
         );
     }
 
-    /**
-     * Look a page up by its route and display it
-     */
-    public function viewAction()
+    protected function getRedirect()
     {
-        $pageRoute = $this->params('pageRoute');
-        if (empty($pageRoute)) {
-            $pageRoute = '';
-        }
-
+        $pageRoute = $this->getPageRoute();
         // Customize for NCCBP. report-only viewers can't access member home @todo: generalize
         if ($pageRoute == 'members' && $this->currentStudy()->getId() == 1) {
-            $auth = $this->getServiceLocator()->get('zfcuser_auth_service');
+            $auth = $this->zfcUserAuthentication();
 
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
@@ -109,14 +101,31 @@ class PageController extends BaseController
                     // Redirect them to the executive report
                     return $this->redirect()->toUrl('/reports/executive');
                 }
-
             }
         }
+    }
 
-        $pageModel = $this->getServiceLocator()
-            ->get('model.page');
-        $page = $pageModel->findOneByRouteAndStudy(
-            $pageRoute,
+    protected function getPageRoute()
+    {
+        $pageRoute = $this->params('pageRoute');
+        if (empty($pageRoute)) {
+            $pageRoute = '';
+        }
+
+        return $pageRoute;
+    }
+
+    /**
+     * Look a page up by its route and display it
+     */
+    public function viewAction()
+    {
+        if ($redirect = $this->getRedirect()) {
+            return $redirect;
+        }
+
+        $page = $this->getPageModel()->findOneByRouteAndStudy(
+            $this->getPageRoute(),
             $this->currentStudy()->getId()
         );
 
@@ -124,10 +133,35 @@ class PageController extends BaseController
             throw new \Exception('Page not found');
         }
 
-        if (!$page->getShowWrapper()) {
-            $this->layout()->noWrapper = true;
+        $this->adjustLayout($page);
+
+        return array(
+            'page' => $page,
+            'pageFromFile' => $this->getPageFromFile(),
+            'wrapperId' => $this->getWrapperId($page)
+        );
+    }
+
+    protected function getWrapperId(Page $page)
+    {
+        $wrapperId = $page->getRoute();
+        if (empty($wrapperId)) {
+            $wrapperId = 'home';
         }
 
+        return $wrapperId;
+    }
+
+    protected function adjustLayout(Page $page)
+    {
+        if (!$page->getShowWrapper()) {
+            $this->layout()->setOption('noWrapper', true);
+        }
+        $this->layout()->setOption('wrapperId', $this->getWrapperId($page));
+    }
+
+    protected function getPageFromFile()
+    {
         // Load from html file for dev
         $pageFromFile = null;
         if ($fileName = $this->params()->fromQuery('page')) {
@@ -142,17 +176,6 @@ class PageController extends BaseController
             }
         }
 
-        $wrapperId = $page->getRoute();
-        if (empty($wrapperId)) {
-            $wrapperId = 'home';
-        }
-
-        $this->layout()->wrapperId = $wrapperId;
-
-        return array(
-            'page' => $page,
-            'pageFromFile' => $pageFromFile,
-            'wrapperId' => $wrapperId
-        );
+        return $pageFromFile;
     }
 }
