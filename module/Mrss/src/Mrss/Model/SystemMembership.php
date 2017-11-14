@@ -23,6 +23,12 @@ class SystemMembership extends AbstractModel
         return $this->getRepository()->find($id);
     }
 
+    /**
+     * @param $system
+     * @param $college
+     * @param $year
+     * @return null|\Mrss\Entity\SystemMembership
+     */
     public function findBySystemCollegeYear($system, $college, $year)
     {
         return $this->getRepository()->findOneBy(array(

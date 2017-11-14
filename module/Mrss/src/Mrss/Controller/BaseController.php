@@ -179,6 +179,14 @@ class BaseController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Model\Subscription
+     */
+    public function getSubscriptionModel()
+    {
+        return $this->getServiceLocator()->get('model.subscription');
+    }
+
+    /**
      * @return \Mrss\Model\College
      */
     public function getCollegeModel()

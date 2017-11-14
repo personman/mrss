@@ -2,6 +2,9 @@
 
 namespace Mrss\Controller;
 
+use Mrss\Entity\College as CollegeEntity;
+use Mrss\Entity\Criterion;
+use Mrss\Entity\Section;
 use Mrss\Entity\Study;
 use Mrss\Entity\Subscription;
 use Mrss\Entity\User;
@@ -39,7 +42,7 @@ use Zend\View\Model\ViewModel;
  *
  * @package Mrss\Controller
  */
-class SubscriptionController extends BaseController
+class SubscriptionController extends SubscriptionBaseController
 {
     protected $sessionContainer;
 
@@ -251,9 +254,10 @@ class SubscriptionController extends BaseController
             $defaultState = 0;
 
             $user = $this->createOrUpdateUser($userData, $defaultRole, $college, $defaultState);
+            //unset($user);
         }
 
-        $this->getSubscriptionModel()->getEntityManager()->flush();
+        $this->getEntityManager()->flush();
 
         // redirect
         return $this->redirect()->toRoute('joined');
@@ -981,6 +985,9 @@ class SubscriptionController extends BaseController
         return new JsonModel(array('subscribed' => $result));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function checkSubscriptionIsInProgress()
     {
         if (!$sub = $this->getDraftSubscription()) {
@@ -989,6 +996,8 @@ class SubscriptionController extends BaseController
                 over.'
             );
         }
+
+        unset($sub);
     }
 
     /**
@@ -1034,14 +1043,18 @@ class SubscriptionController extends BaseController
         return $this->sessionContainer;
     }
 
+    /**
+     * @param SubscriptionDraft $subscriptionDraft
+     * @return Section[]|array
+     */
     protected function getSelectedSections($subscriptionDraft)
     {
+        $sections = array();
         if (is_object($subscriptionDraft)) {
             $sectionIds = json_decode($subscriptionDraft->getSections(), true);
 
             $sections = $this->getSectionsByIds($sectionIds);
         }
-
 
         return $sections;
     }
@@ -1087,8 +1100,7 @@ class SubscriptionController extends BaseController
             $college = $this->createOrUpdateCollege($institutionForm);
         } else {
             $collegeId = $subscriptionForm['college_id'];
-            $college = $this->getServiceLocator()
-                ->get('model.college')->find($collegeId);
+            $college = $this->getCollegeModel()->find($collegeId);
         }
 
         // Create the observation
@@ -1164,7 +1176,7 @@ class SubscriptionController extends BaseController
     {
         // Now clear out the draft subscription
         $this->getSubscriptionDraftModel()->delete($subscriptionDraft);
-        $this->getServiceLocator()->get('em')->flush();
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -1300,7 +1312,7 @@ class SubscriptionController extends BaseController
 
     /**
      * @param $institutionForm
-     * @return \Mrss\Entity\College
+     * @return CollegeEntity
      */
     public function createOrUpdateCollege($institutionForm)
     {
@@ -1309,20 +1321,22 @@ class SubscriptionController extends BaseController
         $college = $collegeModel->findOneByIpeds($institutionForm['ipeds']);
 
         if (empty($college)) {
-            $college = new \Mrss\Entity\College;
+            $college = new CollegeEntity;
             $needFlush = true;
         }
 
         $hydrator = new DoctrineHydrator(
-            $this->getServiceLocator()->get('em'),
+            $this->getEntityManager(),
             'Mrss\Entity\College'
         );
+
+        /** @var CollegeEntity $college */
         $college = $hydrator->hydrate($institutionForm, $college);
         $collegeModel->save($college);
 
         if (!empty($needFlush)) {
             // Flush so we'll have an id
-            $this->getServiceLocator()->get('em')->flush();
+            $this->getEntityManager()->flush();
         }
 
         return $college;
@@ -1500,6 +1514,10 @@ class SubscriptionController extends BaseController
         return $subscription;
     }
 
+    /**
+     * @param Subscription $subscription
+     * @throws \Doctrine\DBAL\DBALException
+     */
     protected function createDataRows($subscription)
     {
         // First, make sure there aren't any
@@ -1508,12 +1526,9 @@ class SubscriptionController extends BaseController
 
         $count = count($data);
 
-        //$this->flashMessenger()->addSuccessMessage("Count is $count.");
-        //$this->flashMessenger()->addSuccessMessage("subscription_id is $subscriptionId.");
-
         if ($count == 0) {
-            $sql = "INSERT INTO data_values (subscription_id, benchmark_id, dbColumn)
-SELECT :subscription_id, id, dbColumn FROM benchmarks;";
+            $sql = "INSERT INTO data_values (subscription_id, benchmark_id, dbColumn) ".
+                "SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
             $stmt = $this->getSubscriptionModel()->getEntityManager()->getConnection()->prepare($sql);
             $stmt->execute(array('subscription_id' => $subscriptionId));
@@ -1538,7 +1553,7 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         return $status;
     }
     
-    public function createOrUpdateObservation(\Mrss\Entity\College $college, $year = null)
+    public function createOrUpdateObservation(CollegeEntity $college, $year = null)
     {
         if (!$year) {
             $year = $this->getCurrentYear();
@@ -1645,8 +1660,9 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
     }
 
     /**
-     * @param \Mrss\Entity\Subscription $subscription
+     * @param Subscription $subscription
      * @param $paymentMethod
+     * @param bool $update
      * @return string
      */
     protected function getInvoiceSubject($subscription, $paymentMethod, $update = false)
@@ -1676,7 +1692,10 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
     }
 
     /**
-     * @param \Mrss\Entity\Subscription $subscription
+     * @param Subscription $subscription
+     * @param User $adminUser
+     * @param User $dataUser
+     * @param bool $update
      * @return string
      */
     protected function getInvoiceBody($subscription, $adminUser, $dataUser, $update = false)
@@ -2103,15 +2122,6 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
     }
 
     /**
-     * @return \Mrss\Model\Subscription
-     */
-    public function getSubscriptionModel()
-    {
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-        return $subscriptionModel;
-    }
-
-    /**
      * @return \Mrss\Model\SubscriptionDraft
      */
     public function getSubscriptionDraftModel()
@@ -2169,6 +2179,10 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
         );
     }
 
+    /**
+     * @param Study $study
+     * @return Criterion[]
+     */
     protected function getCriteria(Study $study)
     {
         $criteria = array();
@@ -2197,7 +2211,12 @@ SELECT :subscription_id, id, dbColumn FROM benchmarks;";
 
             $subscriptions = array();
             foreach ($colleges as $college) {
-                $subscriptions[] = $college['college']->getSubscriptionByStudyAndYear($study->getId(), $year);
+                /** @var CollegeEntity $collegeEntity */
+                $collegeEntity = $college['college'];
+                $subscriptions[] = $collegeEntity->getSubscriptionByStudyAndYear(
+                    $study->getId(),
+                    $year
+                );
             }
         } else {
             $subscriptions = $model->findByStudyAndYear($study->getId(), $year);
