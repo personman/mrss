@@ -4,9 +4,7 @@ namespace Mrss\Model;
 
 use Doctrine\ORM\QueryBuilder;
 use \Mrss\Entity\College as CollegeEntity;
-use \Mrss\Entity\PeerGroup as PeerGroupEntity;
 use \Mrss\Entity\Study as StudyEntity;
-use Zend\Debug\Debug;
 
 /**
  * Class College
@@ -71,7 +69,7 @@ class College extends AbstractModel
 
     public function findMaxIpeds()
     {
-        $college = $this->getRepository()->findOneBy(array(), array('ipeds' => 'DESC'), 1);
+        $college = $this->getRepository()->findOneBy(array(), array('ipeds' => 'DESC'));
 
         $ipeds = intval($college->getIpeds());
 
@@ -91,6 +89,7 @@ class College extends AbstractModel
     }
 
     /**
+     * @param $name
      * @param array $state
      * @return \Mrss\Entity\College[]
      */
@@ -199,7 +198,7 @@ class College extends AbstractModel
     /**
      * @param $criteria
      * @param StudyEntity $currentStudy
-     * @param $currentCollege
+     * @param CollegeEntity $currentCollege
      * @return \Mrss\Entity\College[]
      */
     public function findByCriteria($criteria, StudyEntity $currentStudy, $currentCollege, $year)
@@ -227,7 +226,6 @@ class College extends AbstractModel
                 $builder->setParameter('states', $states);
             }
         }
-
 
         $builder = $this->addCriteria($builder, $criteria);
 
@@ -267,53 +265,7 @@ class College extends AbstractModel
                 continue;
             }
 
-            $table = "v" . $iteration;
-            $subQueryBase = "SELECT $table FROM \Mrss\Entity\Datum $table WHERE s.id = $table.subscription AND ";
-
-            if (!empty($value)) {
-                // Criteria that support multiple values, use IN
-                if (is_array($value)) {
-
-                    $subQuery = "$table.stringValue IN (:{$criterion}_in) AND $table.dbColumn = :{$criterion}_col";
-                    $dqlSubqueries[] = $subQueryBase . $subQuery;
-
-
-                    $builder->setParameter(
-                        $criterion . "_in",
-                        $value
-                    );
-
-                    $builder->setParameter(
-                        $criterion . '_col',
-                        $criterion
-                    );
-
-
-                } else {
-                    // Criteria that support a range
-                    $parsedRange = $this->parseRange($value);
-
-
-
-                    $subQuery = "$table.floatValue BETWEEN :{$criterion}_min
-                    AND :{$criterion}_max AND $table.dbColumn = :{$criterion}_col";
-                    $dqlSubqueries[] = $subQueryBase . $subQuery;
-
-
-                    $builder->setParameter(
-                        $criterion . '_min',
-                        $parsedRange['min']
-                    );
-                    $builder->setParameter(
-                        $criterion . '_max',
-                        $parsedRange['max']
-                    );
-                    $builder->setParameter(
-                        $criterion . '_col',
-                        $criterion
-                    );
-                }
-            }
+            $builder = $this->updateBuilderWithCriteron($builder, $criterion, $value, $iteration);
 
             $iteration++;
         }
@@ -321,6 +273,65 @@ class College extends AbstractModel
         if ($dqlSubqueries) {
             foreach ($dqlSubqueries as $dql) {
                 $builder->andWhere($builder->expr()->exists($dql));
+            }
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @param QueryBuilder $builder
+     * @param $criterion
+     * @param $value
+     * @param $iteration
+     * @return QueryBuilder
+     */
+    protected function updateBuilderWithCriteron($builder, $criterion, $value, $iteration)
+    {
+
+        $table = "v" . $iteration;
+        $subQueryBase = "SELECT $table FROM \Mrss\Entity\Datum $table WHERE s.id = $table.subscription AND ";
+
+        if (!empty($value)) {
+            // Criteria that support multiple values, use IN
+            if (is_array($value)) {
+
+                $subQuery = "$table.stringValue IN (:{$criterion}_in) AND $table.dbColumn = :{$criterion}_col";
+                $dqlSubqueries[] = $subQueryBase . $subQuery;
+
+
+                $builder->setParameter(
+                    $criterion . "_in",
+                    $value
+                );
+
+                $builder->setParameter(
+                    $criterion . '_col',
+                    $criterion
+                );
+
+
+            } else {
+                // Criteria that support a range
+                $parsedRange = $this->parseRange($value);
+
+                $subQuery = "$table.floatValue BETWEEN :{$criterion}_min
+                    AND :{$criterion}_max AND $table.dbColumn = :{$criterion}_col";
+                $dqlSubqueries[] = $subQueryBase . $subQuery;
+
+
+                $builder->setParameter(
+                    $criterion . '_min',
+                    $parsedRange['min']
+                );
+                $builder->setParameter(
+                    $criterion . '_max',
+                    $parsedRange['max']
+                );
+                $builder->setParameter(
+                    $criterion . '_col',
+                    $criterion
+                );
             }
         }
 

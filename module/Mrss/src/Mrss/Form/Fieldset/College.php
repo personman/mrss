@@ -80,6 +80,18 @@ class College extends Fieldset implements InputFilterProviderInterface
             )
         );
 
+        $this->addAddressFields();
+
+        $this->add(
+            array(
+                'name' => 'id',
+                'type' => 'Hidden',
+            )
+        );
+    }
+
+    protected function addAddressFields()
+    {
         $this->add(
             array(
                 'name' => 'address',
@@ -148,18 +160,27 @@ class College extends Fieldset implements InputFilterProviderInterface
                 )
             )
         );
-
-        $this->add(
-            array(
-                'name' => 'id',
-                'type' => 'Hidden',
-            )
-        );
     }
 
     protected function addExecutiveFields()
     {
 
+        $this->addExecutiveNameFields();
+
+        $this->add(
+            array(
+                'name' => 'execEmail',
+                'type' => 'Text',
+                'required' => true,
+                'options' => array(
+                    'label' => 'E-Mail Address'
+                ),
+            )
+        );
+    }
+
+    protected function addExecutiveNameFields()
+    {
         $this->add(
             array(
                 'name' => 'execTitle',
@@ -209,17 +230,6 @@ class College extends Fieldset implements InputFilterProviderInterface
                 'required' => true,
                 'options' => array(
                     'label' => 'Last Name'
-                ),
-            )
-        );
-
-        $this->add(
-            array(
-                'name' => 'execEmail',
-                'type' => 'Text',
-                'required' => true,
-                'options' => array(
-                    'label' => 'E-Mail Address'
                 ),
             )
         );
