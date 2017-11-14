@@ -363,8 +363,7 @@ class SubscriptionBaseController extends BaseController
 
     protected function getAllColleges()
     {
-        $collegeModel = $this->getCollegeModel();
-        $colleges = $collegeModel->findAll();
+        $colleges = $this->getCollegeModel()->findAll();
 
         $allColleges = array();
         foreach ($colleges as $college) {

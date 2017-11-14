@@ -31,7 +31,7 @@ class SystemAdmin extends AbstractHelper
 
     protected $activeCollege;
 
-    protected $activeSystemContainer;
+    protected $activeSysContainer;
 
     protected $systemModel;
 
@@ -117,7 +117,7 @@ class SystemAdmin extends AbstractHelper
         return $url;
     }
 
-    public function getSwitchForm()
+    protected function getSwitchForm()
     {
         $form = new Form();
         $colleges = $this->getColleges();
@@ -175,7 +175,7 @@ class SystemAdmin extends AbstractHelper
      * @return array
      * @throws \Exception
      */
-    public function getColleges()
+    protected function getColleges()
     {
         $requireSubscription = false;
 
@@ -187,6 +187,7 @@ class SystemAdmin extends AbstractHelper
             throw new \Exception('System not found');
         }
 
+        /** @var \Mrss\Entity\Study $study */
         $study = $this->getCurrentStudyPlugin()->getCurrentStudy();
         $colleges = $system->getColleges();
         $collegesKeyed = array();
@@ -250,6 +251,9 @@ class SystemAdmin extends AbstractHelper
         return $this;
     }
 
+    /**
+     * @return CurrentStudy
+     */
     public function getCurrentStudyPlugin()
     {
         return $this->currentStudyPlugin;
@@ -263,20 +267,20 @@ class SystemAdmin extends AbstractHelper
         return $systemId;
     }
 
-    public function getActiveSystemContainer()
+    protected function getActiveSystemContainer()
     {
-        if (empty($this->activeSystemContainer)) {
+        if (empty($this->activeSysContainer)) {
             $container = new Container('active_system');
-            $this->activeSystemContainer = $container;
+            $this->activeSysContainer = $container;
         }
 
-        return $this->activeSystemContainer;
+        return $this->activeSysContainer;
     }
 
     /**
-     * @return mixed
+     * @return \Mrss\Model\System
      */
-    public function getSystemModel()
+    protected function getSystemModel()
     {
         return $this->systemModel;
     }
