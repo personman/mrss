@@ -152,6 +152,11 @@ class College extends AbstractModel
 
     }
 
+    /**
+     * @param $term
+     * @param int $limit
+     * @return CollegeEntity[]
+     */
     public function findByNameAndIdentifiers($term, $limit = 10)
     {
         $term = strtolower($term);

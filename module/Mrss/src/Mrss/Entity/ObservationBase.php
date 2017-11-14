@@ -7,8 +7,6 @@ use Zend\Log\Writer\Stream;
 
 class ObservationBase
 {
-
-
     public function setMigrated($migrated)
     {
         $this->migrated = $migrated;
@@ -93,6 +91,9 @@ class ObservationBase
         return $this;
     }
 
+    /**
+     * @return \Mrss\Entity\SubObservation[]
+     */
     public function getSubObservations()
     {
         return $this->subObservations;

@@ -4,36 +4,25 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\College;
 use Mrss\Form\AbstractForm;
-use Zend\Cache\StorageFactory;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Debug\Debug;
-use Zend\Form\Form;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\View\Model\JsonModel;
-use Zend\View\View;
 
-class CollegeController extends AbstractActionController
+class CollegeController extends BaseController
 {
-
     public function indexAction()
     {
         $this->longRunningScript();
 
-        $Colleges = $this->getServiceLocator()->get('model.college');
-
         // For completion heatmap
-        $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
-        $years = $subscriptionModel
+        $years = $this->getSubscriptionModel()
             ->getYearsWithSubscriptions($this->currentStudy());
 
 
         return array(
-            'colleges' => $Colleges->findAll(),
+            'colleges' => $this->getCollegeModel()->findAll(),
             'years' => $years
         );
     }
-
 
     public function downloadAction()
     {
@@ -52,10 +41,7 @@ class CollegeController extends AbstractActionController
 
     public function viewAction()
     {
-        $Colleges = $this->getServiceLocator()->get('model.college');
-        $college = $Colleges->find($this->params('id'));
-
-        //$Studies = $this->getServiceLocator()->get('model.study');
+        $college = $this->getCollegeModel()->find($this->params('id'));
 
         // Handle invalid id
         if (empty($college)) {
@@ -66,17 +52,8 @@ class CollegeController extends AbstractActionController
         return array(
             'studyConfig' => $this->getStudyConfig(),
             'college' => $college,
-            //'study' => $Studies->find(1)
         );
     }
-
-    protected function getStudyConfig()
-    {
-        $studyConfig = $this->getServiceLocator()->get('study');
-
-        return $studyConfig;
-    }
-
 
     /**
      * This is very slow. Need to store the lat/lng of each college instead of
@@ -86,11 +63,8 @@ class CollegeController extends AbstractActionController
      */
     public function mapAction()
     {
-        $Colleges = $this->getServiceLocator()->get('model.college');
-
-        return array('colleges' => $Colleges->findAll());
+        return array('colleges' => $this->getCollegeModel()->findAll());
     }
-
 
     /**
      * Used for the autocomplete on the free signup page
@@ -101,10 +75,7 @@ class CollegeController extends AbstractActionController
     {
         $term = $this->params()->fromQuery('term');
 
-        /** @var \Mrss\Model\College $model */
-        $model = $this->getServiceLocator()->get('model.college');
-
-        $institutions = $model->findByNameAndIdentifiers($term);
+        $institutions = $this->getCollegeModel()->findByNameAndIdentifiers($term);
         $json = array();
         foreach ($institutions as $institution) {
             $nameAndState = $institution->getName() . ' (' . $institution->getState() . ')';
@@ -136,11 +107,8 @@ class CollegeController extends AbstractActionController
 
         if (!$result) {
             // Get a list of subscriptions to the current study for all years
-            /** @var \Mrss\Model\College $collegeModel */
-            $collegeModel = $this->getServiceLocator()->get('model.college');
-            $studyId = $this->currentStudy()->getId();
 
-            $colleges = $collegeModel->findByStudy($this->currentStudy());
+            $colleges = $this->getCollegeModel()->findByStudy($this->currentStudy());
 
             // Map markers
             $markers = array();
@@ -200,10 +168,8 @@ class CollegeController extends AbstractActionController
         );
     }
 
-    public function getForm()
+    protected function getForm()
     {
-        $em = $this->getServiceLocator()->get('em');
-
         $form = new AbstractForm('college');
 
         $config = $this->getStudyConfig();
@@ -217,7 +183,7 @@ class CollegeController extends AbstractActionController
         $collegeFieldset->setUseAsBaseFieldset(true);
 
         $collegeFieldset->setHydrator(
-            new DoctrineHydrator($em, 'Mrss\Entity\College')
+            new DoctrineHydrator($this->getEntityManager(), 'Mrss\Entity\College')
         );
 
         $form->add($collegeFieldset);
@@ -324,7 +290,7 @@ class CollegeController extends AbstractActionController
         );
     }
 
-    public function deleteCollegeCacheFile()
+    protected function deleteCollegeCacheFile()
     {
         unlink('public/files/all-colleges.json');
     }
@@ -355,6 +321,8 @@ class CollegeController extends AbstractActionController
         } else {
             $service = $this->getServiceLocator()->get('service.import.colleges');
         }
+
+        /** @var \Mrss\Service\Import\College $service */
 
         $form = $service->getForm();
 
@@ -435,18 +403,5 @@ class CollegeController extends AbstractActionController
         }
 
         return json_encode($allColleges);
-    }
-
-
-    protected function longRunningScript()
-    {
-        takeYourTime();
-
-        // Turn off query logging
-        $this->getServiceLocator()
-            ->get('em')
-            ->getConnection()
-            ->getConfiguration()
-            ->setSQLLogger(null);
     }
 }

@@ -293,4 +293,15 @@ class BaseController extends AbstractActionController
         return $this->getServiceLocator()
             ->get('model.benchmark.group');
     }
+
+    protected function longRunningScript()
+    {
+        takeYourTime();
+
+        // Turn off query logging
+        $this->getEntityManager()
+            ->getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(null);
+    }
 }

@@ -491,12 +491,6 @@ class ToolController extends BaseController
         $from = $this->params()->fromRoute('from');
         $copyTo = $this->params()->fromRoute('to');
 
-        /** @var \Mrss\Model\Observation $observationModel */
-        $observationModel = $this->getServiceLocator()->get('model.observation');
-
-        /** @var \Mrss\Model\SubObservation $subObservationModel */
-        $subObservationModel = $this->getServiceLocator()->get('model.subObservation');
-
         // This assumes we've already moved the subscriptions to the new correct year.
         $subscriptionModel = $this->getSubscriptionModel();
         $subscriptions = $subscriptionModel->findByStudyAndYear($this->currentStudy()->getId(), $copyTo);
@@ -508,7 +502,7 @@ class ToolController extends BaseController
         $count = 0;
         foreach ($subscriptions as $subscription) {
             $college = $subscription->getCollege();
-            $newObservation = $observationModel->findOne($college->getId(), $copyTo);
+            $newObservation = $this->getObservationModel()->findOne($college->getId(), $copyTo);
 
             if (!$newObservation) {
                 $newObservation = new Observation();
@@ -518,7 +512,7 @@ class ToolController extends BaseController
 
             $subscription->setObservation($newObservation);
 
-            $oldObservation = $observationModel->findOne($college->getId(), $from);
+            $oldObservation = $this->getObservationModel()->findOne($college->getId(), $from);
 
             foreach ($study->getBenchmarkGroups() as $bGroup) {
                 foreach ($bGroup->getBenchmarks() as $benchmark) {
@@ -542,11 +536,11 @@ class ToolController extends BaseController
             // Just move any subobservations
             foreach ($oldObservation->getSubObservations() as $subOb) {
                 $subOb->setObservation($newObservation);
-                $subObservationModel->save($subOb);
+                $this->getObservationModel()->save($subOb);
             }
 
-            $observationModel->save($newObservation);
-            $observationModel->getEntityManager()->flush();
+            $this->getObservationModel()->save($newObservation);
+            $this->getObservationModel()->getEntityManager()->flush();
         }
 
 
@@ -558,12 +552,12 @@ class ToolController extends BaseController
     }
 
     /**
-     * For populating the yearOffset field in benchmarks that don't have it set up yet
+     * @param $showAll
+     * @return \Mrss\Entity\Benchmark[]
      */
-    public function offsetsAction()
+    protected function getBenchmarksWithoutOffsets($showAll)
     {
         $benchmarks = array();
-        $showAll = $this->params()->fromRoute('all');
 
         /** @var \Mrss\Entity\Study $study */
         $study = $this->currentStudy();
@@ -580,6 +574,18 @@ class ToolController extends BaseController
                 }
             }
         }
+
+        return $benchmarks;
+    }
+
+    /**
+     * For populating the yearOffset field in benchmarks that don't have it set up yet
+     */
+    public function offsetsAction()
+    {
+
+        $showAll = $this->params()->fromRoute('all');
+        $benchmarks = $this->getBenchmarksWithoutOffsets($showAll);
 
         if ($this->getRequest()->isPost()) {
             $benchmarkModel = $this->getServiceLocator()->get('model.benchmark');
@@ -616,8 +622,6 @@ class ToolController extends BaseController
 
     public function zerosAction()
     {
-        $start = microtime(1);
-
         $this->longRunningScript();
 
         /** @var \Mrss\Entity\Study $study */
@@ -628,15 +632,11 @@ class ToolController extends BaseController
         }
 
         $subsWithZeros = $this->getDatumModel()->findZeros($year);
-        //$colleges = $this->getAllColleges();
-
-        //prd($subsWithZeros);
 
         $report = array();
         $users = array();
         foreach ($subsWithZeros as $info) {
             $collegeId = $info['college_id'];
-            //$college = $colleges[$collegeId];
             $college = $this->getCollegeModel()->find($collegeId);
 
             $emails = array();
@@ -706,9 +706,9 @@ class ToolController extends BaseController
             }
 
             foreach ($benchmarkGroup->getChildren() as $child) {
+                /** @var \Mrss\Entity\Benchmark $child */
                 $sequence = $child->getSequence();
 
-                /** @var \Mrss\Entity\Benchmark $child */
                 if (get_class($child) == 'Mrss\Entity\BenchmarkHeading') {
                     unset($headings[$child->getId()]);
                     continue;
@@ -722,7 +722,7 @@ class ToolController extends BaseController
                 /** @var \Mrss\Entity\BenchmarkHeading $heading */
                 $heading->setSequence(++$sequence);
 
-                $this->getBenchmarHeadingkModel()->save($heading);
+                $this->getBenchmarkHeadingModel()->save($heading);
             }
 
             /** @var \Mrss\Entity\Benchmark $benchmark */
@@ -772,11 +772,10 @@ class ToolController extends BaseController
 
     public function equationGraphAction()
     {
-
         $benchmarkGroupId = $this->params()->fromRoute('benchmarkGroup');
         $benchmarkGroupName = null;
         if ($benchmarkGroupId) {
-            $groups = array($benchmarkGroupId);
+            //$groups = array($benchmarkGroupId);
             $benchmarkGroupName = $this->getBenchmarkGroupModel()->find($benchmarkGroupId)->getName();
         }
 
@@ -800,11 +799,6 @@ class ToolController extends BaseController
         $edgesForVis = array();
         $benchmarkIdsWithEdges = array();
         foreach ($allBenchmarks as $benchmark) {
-            //if (!$benchmark->getComputed()) continue;
-
-
-
-
 
             $benchmarksForVis[] = array(
                 'id' => $benchmark->getId(),
@@ -822,12 +816,7 @@ class ToolController extends BaseController
 
                     $dotMarkup .= $newLine;
 
-
-
-
-                    //$groups = array(5, 6, 7);
                     $groups = array();
-                    //$groups = array(4);
 
                     if ($benchmarkGroupId) {
                         $groups = array($benchmarkGroupId);
@@ -860,7 +849,6 @@ class ToolController extends BaseController
             }
         }
 
-        //pr(count($benchmarksForVis));
         $withEdges = array();
         foreach ($benchmarksForVis as $b) {
             if (!empty($benchmarkIdsWithEdges[$b['id']])) {
@@ -885,30 +873,25 @@ class ToolController extends BaseController
      * Copy peer groups attached to colleges, changing the attachment to users.
      * report_item->config needs to be updated to point at new peer group.
      * Also handle copying reports and report items?
+     * @deprecated
      */
     public function copyPeerGroupsAction()
     {
         takeYourTime();
 
-        /** @var \Mrss\Model\College $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
-
         /** @var \Mrss\Model\PeerGroup $peerGroupModel */
         $peerGroupModel = $this->getServiceLocator()->get('model.peer.group');
-
 
         $copiedCount = 0;
 
         $start = microtime(true);
-        $colleges = $collegeModel->findAll();
+        $colleges = $this->getCollegeModel()->findAll();
 
         $flushEvery = 50;
         $iteration = 0;
 
         foreach ($colleges as $college) {
             foreach ($college->getPeerGroups() as $peerGroup) {
-                //$peerGroupMap[$peerGroup->getId()] = array();
-
                 foreach ($college->getUsers() as $user) {
                     $newGroup = new PeerGroup();
 
@@ -924,10 +907,8 @@ class ToolController extends BaseController
                     // Remember ids for newly created groups and their
                     //$peerGroupMap[$peerGroup->getId()][$user->getId()] = $newGroup->getId();
 
-
                     $copiedCount++;
                 }
-                //pr($peerGroup->getName());
             }
 
 
@@ -937,22 +918,9 @@ class ToolController extends BaseController
             if ($iteration % $flushEvery == 0) {
                 $peerGroupModel->getEntityManager()->flush();
             }
-
-            if ($iteration == 100) {
-                //$elapsed = microtime(true) - $start;
-                //prd($elapsed);
-            }
         }
 
         $peerGroupModel->getEntityManager()->flush();
-
-
-        pr($copiedCount);
-
-        $elapsed = microtime(true) - $start;
-        pr($elapsed);
-
-
 
 
 
@@ -1072,7 +1040,7 @@ class ToolController extends BaseController
                 if ($observation) {
                     $observationId = $observation->getId();
 
-                    $url = "http://fcs.dan.com/reports/compute-one/$observationId/1/$dbColumn";
+                    //$url = "http://fcs.dan.com/reports/compute-one/$observationId/1/$dbColumn";
                     //$result = $this->getUrlContents($url);
 
                     $params = array(
@@ -1268,11 +1236,11 @@ class ToolController extends BaseController
 
                 // Build the email
                 $studyConfig = $this->getServiceLocator()->get('study');
-                $from_email = $studyConfig->from_email;
+                $fromEmail = $studyConfig->from_email;
 
                 $message = new Message();
                 $message->setSubject($data['subject']);
-                $message->setFrom($from_email);
+                $message->setFrom($fromEmail);
                 $message->addTo($data['to']);
                 $message->setBody($data['body']);
 
@@ -1360,7 +1328,7 @@ class ToolController extends BaseController
         return $year;
     }
 
-    public function getSubscriptions()
+    protected function getSubscriptions()
     {
         $subscriptionModel = $this->getSubscriptionModel();
 
@@ -1391,10 +1359,9 @@ class ToolController extends BaseController
 
     public function lapsedAction()
     {
-
         $lapsedService = new Lapsed;
         $lapsedService->setStudy($this->currentStudy());
-        $lapsedService->setSubscriptionModel($this->getServiceLocator()->get('model.subscription'));
+        $lapsedService->setSubscriptionModel($this->getSubscriptionModel());
         $lapsedService->export();
 
         die('hello there');
@@ -1431,35 +1398,16 @@ class ToolController extends BaseController
     }
 
     /**
-     * @return \Mrss\Model\Benchmark
-     */
-    public function getBenchmarkModel()
-    {
-        if (empty($this->benchmarkModel)) {
-            $this->benchmarkModel = $this->getServiceLocator()
-                ->get('model.benchmark');
-        }
-
-        return $this->benchmarkModel;
-    }
-
-
-    /**
      * @return \Mrss\Model\BenchmarkHeading
      */
-    public function getBenchmarHeadingkModel()
+    public function getBenchmarkHeadingModel()
     {
         return $this->getServiceLocator()->get('model.benchmark.heading');
     }
 
     /**
-     * @return \Mrss\Model\BenchmarkGroup
+     * @deprecated
      */
-    protected function getBenchmarkGroupModel()
-    {
-        return $this->getServiceLocator()->get('model.benchmark.group');
-    }
-
     public function observationDataMigrationAction()
     {
         takeYourTime();
@@ -1503,7 +1451,7 @@ class ToolController extends BaseController
         die(' ok');
     }
 
-    public function getCurrentSubscription()
+    protected function getCurrentSubscription()
     {
         /** @var \Mrss\Model\Subscription $subscriptionModel */
         $subscriptionModel = $this->getServiceLocator()->get('model.subscription');
@@ -1514,7 +1462,9 @@ class ToolController extends BaseController
     }
 
     /**
-     * During merging of NCCBP and Workforce to modules/sections of the same study, set old memberships up
+     * During merging of NCCBP and Workforce to modules/sections of the same study,
+     * set old memberships up
+     * @deprecated
      */
     public function populateSectionsAction()
     {
@@ -1541,6 +1491,9 @@ class ToolController extends BaseController
         die("$updates subscriptions updated");
     }
 
+    /**
+     * @deprecated
+     */
     public function importWfAction()
     {
         $this->longRunningScript();
@@ -1554,6 +1507,7 @@ class ToolController extends BaseController
     }
 
     /**
+     * @deprecated
      * @return \Zend\Db\Adapter\Adapter
      */
     protected function getWfDb()
