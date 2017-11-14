@@ -675,5 +675,4 @@ class User implements UserInterface, ProviderInterface
     {
         return $this->created;
     }
-
 }

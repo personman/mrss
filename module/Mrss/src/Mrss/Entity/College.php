@@ -493,7 +493,6 @@ class College
             $study->getId();
 
             if ($sub->getStudy()->getId() == $study->getId()) {
-
                 // Exclude current year if reports are closed
                 if ($forReports) {
                     if ($system) {
@@ -508,7 +507,6 @@ class College
                 }
 
                 if ($system && !$this->hasSystemMembership($system->getId(), $sub->getYear())) {
-
                     continue;
                 }
 

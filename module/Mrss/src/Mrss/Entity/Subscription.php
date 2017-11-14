@@ -405,7 +405,6 @@ class Subscription
 
     protected function getP()
     {
-
     }
     protected function getColumnsToCount()
     {
@@ -428,10 +427,10 @@ class Subscription
     {
         $completion = 0;
         if ($this->getStudyConfig()->use_structures) {
-
             $system = $this->getPrimarySystem();
             if ($system) {
-                $completion = $system->getDataEntryStructure()->getCompletionPercentageForObservation($this->getObservation());
+                $completion = $system->getDataEntryStructure()
+                    ->getCompletionPercentageForObservation($this->getObservation());
             }
         } else {
             $completedFields = 0;
@@ -621,7 +620,6 @@ class Subscription
         $data = array();
         foreach ($this->getData() as $datum) {
             if ($benchmark = $datum->getBenchmark()) {
-
                 if ($keyType == 'dbColumn') {
                     $key = $benchmark->getDbColumn();
                 } else {
@@ -826,7 +824,6 @@ class Subscription
         $this->sections = $sections;
 
         return $this;
-
     }
 
     public function updateSections($sections)
@@ -851,7 +848,6 @@ class Subscription
                     $removeThese[] = $section;
                 }
             }
-
         }
 
         foreach ($removeThese as $section) {

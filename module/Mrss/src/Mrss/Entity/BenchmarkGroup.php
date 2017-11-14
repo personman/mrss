@@ -18,8 +18,9 @@ use Zend\InputFilter\Factory as InputFactory;
  * @ORM\Entity
  * @ORM\Table(name="benchmark_groups")
  */
-class BenchmarkGroup implements FormFieldsetProviderInterface,
- InputFilterAwareInterface
+class BenchmarkGroup implements
+    FormFieldsetProviderInterface,
+    InputFilterAwareInterface
 {
     protected $inputFilter;
 
@@ -647,8 +648,13 @@ class BenchmarkGroup implements FormFieldsetProviderInterface,
         return $this->inputFilter;
     }
 
-    public function getChildren($year = null, $includeComputed = true, $organization = 'data-entry', $filterBy = null, $removeEmpty = true)
-    {
+    public function getChildren(
+        $year = null,
+        $includeComputed = true,
+        $organization = 'data-entry',
+        $filterBy = null,
+        $removeEmpty = true
+    ) {
         $children = array();
 
         // Include computed?

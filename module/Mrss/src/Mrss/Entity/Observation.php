@@ -48,6 +48,4 @@ class Observation extends ObservationBase
      * @var Subscription[]
      */
     protected $subscriptions;
-
-
 }

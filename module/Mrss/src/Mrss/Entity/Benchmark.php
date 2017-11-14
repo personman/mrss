@@ -987,7 +987,6 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
                 if (!is_null($value) &&
                     $this->getInputType() != 'radio' &&
                     $this->getInputType() != 'checkboxes') {
-
                     if (null === $decimalPlaces) {
                         $decimalPlaces = $this->getDecimalPlaces();
                     }
@@ -1005,13 +1004,13 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
             } else {
                 $formatted = $value;
             }
-
         }
 
         return $formatted;
     }
 
-    protected function getClosest($search, $arr) {
+    protected function getClosest($search, $arr)
+    {
         $closest = null;
         foreach ($arr as $item) {
             if ($closest === null || abs($search - $closest) > abs($item - $search)) {

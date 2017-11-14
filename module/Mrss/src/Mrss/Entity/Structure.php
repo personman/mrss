@@ -203,14 +203,14 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
                 $hasValue = !is_null($value);
                 pr($hasValue);
             }
-
         }
 
         $completion = 0;
         if ($total) {
             $completion = $populated / $total * 100;
             if ($debug) {
-                pr($populated); pr($total);
+                pr($populated);
+                pr($total);
             }
         }
 
@@ -254,7 +254,8 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
                 $this->children[] = $item;
             } elseif ($this->childIsBenchmark($child)) {
                 if ($item = $this->getBenchmark($child['benchmark'])) {
-                    if (($year === null || $item->isAvailableForYear($year)) && ($includeComputed || !$item->getComputed())) {
+                    $noYearOrAvailable = ($year === null || $item->isAvailableForYear($year));
+                    if ($noYearOrAvailable && ($includeComputed || !$item->getComputed())) {
                         $this->children[] = $item;
                     }
                 }
@@ -264,7 +265,6 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
             if (!empty($child['children'])) {
                 $this->loadChildren($child['children'], $year, $includeComputed);
             }
-
         }
     }
 
@@ -301,7 +301,6 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
     protected function getBenchmarks($structureArray, $includeCalculated = true)
     {
         foreach ($structureArray as $child) {
-
             if ($this->childIsBenchmark($child)) {
                 $benchmarkId = $child['benchmark'];
                 $benchmark = $this->getBenchmark($benchmarkId);
@@ -309,7 +308,6 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
                 if ($includeCalculated || !$benchmark->getComputed()) {
                     $this->benchmarks[] = $benchmark;
                 }
-
             } elseif (!empty($child['children'])) {
                 $this->getBenchmarks($child['children'], $includeCalculated);
             }
