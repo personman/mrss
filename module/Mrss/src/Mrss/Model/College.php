@@ -148,7 +148,6 @@ class College extends AbstractModel
         $query->setParameter('studyId', $studyId);
 
         return $query->getResult();
-
     }
 
     /**
@@ -175,7 +174,6 @@ class College extends AbstractModel
 
         try {
             $results = $query->getResult();
-
         } catch (\Exception $e) {
             return array();
         }
@@ -295,7 +293,6 @@ class College extends AbstractModel
         if (!empty($value)) {
             // Criteria that support multiple values, use IN
             if (is_array($value)) {
-
                 $subQuery = "$table.stringValue IN (:{$criterion}_in) AND $table.dbColumn = :{$criterion}_col";
                 $dqlSubqueries[] = $subQueryBase . $subQuery;
 
@@ -309,8 +306,6 @@ class College extends AbstractModel
                     $criterion . '_col',
                     $criterion
                 );
-
-
             } else {
                 // Criteria that support a range
                 $parsedRange = $this->parseRange($value);

@@ -238,7 +238,6 @@ class Subscription extends AbstractModel
             if ($excludeOutliers) {
                 $subQueries[] = $this->getOutlierExclusionSubquery($benchmark);
             }
-
         }
 
         // Suppression subquery

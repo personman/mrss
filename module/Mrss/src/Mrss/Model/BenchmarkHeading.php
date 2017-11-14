@@ -47,6 +47,5 @@ class BenchmarkHeading extends AbstractModel
     {
         $this->getEntityManager()->remove($heading);
         $this->getEntityManager()->flush();
-
     }
 }

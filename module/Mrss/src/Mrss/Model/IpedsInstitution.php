@@ -39,7 +39,6 @@ class IpedsInstitution extends AbstractModel
 
         try {
             $results = $query->getResult();
-
         } catch (\Exception $e) {
             return array();
         }

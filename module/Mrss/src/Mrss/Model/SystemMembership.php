@@ -58,5 +58,4 @@ class SystemMembership extends AbstractModel
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush();
     }
-
 }
