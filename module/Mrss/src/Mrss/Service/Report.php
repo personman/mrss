@@ -9,7 +9,6 @@ use Mrss\Entity\Observation;
 use Mrss\Entity\Subscription;
 use Mrss\Service\Report\Calculator;
 use Mrss\Service\ComputedFields;
-use Zend\Mail\Transport\Smtp;
 use PHPExcel;
 use PHPExcel_Worksheet;
 use PHPExcel_IOFactory;
@@ -21,113 +20,8 @@ use Zend\Log\Writer\Stream;
 use Zend\Log\Formatter\Simple;
 use \DateTime;
 
-class Report
+class Report extends ReportBase
 {
-    /**
-     * @var Study
-     */
-    protected $study;
-
-    protected $studyConfig;
-
-    /**
-     * @var array
-     */
-    protected $subscriptions = array();
-
-    /**
-     * @var Calculator
-     */
-    protected $calculator;
-
-    protected $serviceManager;
-
-    /**
-     * @var ComputedFields
-     */
-    protected $computedService;
-
-    /**
-     * @var VariableSubstitution
-     */
-    protected $variableSubstitution;
-
-    /**
-     * @var \Mrss\Model\Subscription
-     */
-    protected $subscriptionModel;
-
-    /**
-     * @var \Mrss\Entity\Subscription
-     */
-    protected $subscription;
-
-    /**
-     * @var \Mrss\Model\Benchmark
-     */
-    protected $benchmarkModel;
-
-    /**
-     * @var \Mrss\Model\College
-     */
-    protected $collegeModel;
-
-    /**
-     * @var \Mrss\Model\Percentile
-     */
-    protected $percentileModel;
-
-    /**
-     * @var \Mrss\Model\PercentileRank
-     */
-    protected $percentileRankModel;
-
-    /**
-     * @var \Mrss\Model\Setting
-     */
-    protected $settingModel;
-
-    /**
-     * @var \Mrss\Model\Outlier
-     */
-    protected $outlierModel;
-
-    /**
-     * @var \Mrss\Model\System
-     */
-    protected $systemModel;
-
-    /**
-     * @var \Mrss\Model\Issue
-     */
-    protected $issueModel;
-
-    /**
-     * @var \Mrss\Model\PercentChange
-     */
-    protected $percentChangeModel;
-
-    /**
-     * @var \Mrss\Entity\Observation
-     */
-    protected $observation;
-
-    /**
-     * @var \Mrss\Model\Observation
-     */
-    protected $observationModel;
-
-    protected $system;
-
-    /**
-     * @var Smtp
-     */
-    protected $mailTransport;
-
-    protected $debug = false;
-    
-    protected $start;
-
     protected $college;
     
     public function __construct()
@@ -198,6 +92,7 @@ class Report
      *
      * @param $year
      * @param bool $systems
+     * @param bool $forPercentChange
      * @return string
      */
     public function getReportCalculatedSettingKey($year, $systems = false, $forPercentChange = false)
@@ -221,6 +116,7 @@ class Report
      * Build a unique key for the year and study
      *
      * @param $year
+     * @param string $verb
      * @return string
      */
     public function getOutliersCalculatedSettingKey($year, $verb = 'calculated')
@@ -239,7 +135,7 @@ class Report
         $system = null,
         $forPercentChange = false
     ) {
-        $data = array();
+        //$data = array();
 
         if ($forPercentChange) {
             $changes = $this->getPercentChangeModel()->findByBenchmarkAndYear($benchmark, $year);
@@ -289,7 +185,7 @@ class Report
         $benchmarkGroupId = $benchmark->getBenchmarkGroup()->getId();
 
         $data = array();
-        $iData = array();
+        //$iData = array();
         $skipped = 0;
         /** @var $subscription /Mrss/Entity/Subscription */
         foreach ($subscriptions as $subscription) {
@@ -453,7 +349,7 @@ class Report
      *
      * @param Observation $observation
      * @throws \Exception
-     * @return bool
+     * @return array
      */
     public function getSummaryReportData(Observation $observation)
     {
@@ -544,9 +440,8 @@ class Report
 
     public function getPieChart($chartConfig, Observation $observation, $usePercentage = false)
     {
-
+        $total = 0;
         if ($usePercentage) {
-            $total = 0;
             foreach ($chartConfig['benchmarks'] as $i => $benchmark) {
                 $total += $this->getPieChartValue($benchmark, $observation);
             }
@@ -653,11 +548,11 @@ class Report
 
         throw new \Exception('deprecated');
 
-        $builder = $this->getChartBuilder($config);
+        //$builder = $this->getChartBuilder($config);
 
-        $chart = $builder->getChart();
+        //$chart = $builder->getChart();
 
-        return $chart;
+        //return $chart;
     }
 
     public function getChartBuilder($config)
@@ -691,8 +586,12 @@ class Report
                 break;
         }
 
-        $builder->setYear($year);
-        $builder->setConfig($config);
+        if (!empty($builder)) {
+            $builder->setYear($year);
+            $builder->setConfig($config);
+        } else {
+            $builder = null;
+        }
 
         return $builder;
     }
@@ -705,14 +604,6 @@ class Report
         }
 
         return $new;
-    }
-
-    /**
-     * @return \Mrss\Model\PeerGroup
-     */
-    protected function getPeerGroupModel()
-    {
-        return $this->getServiceManager()->get('model.peer.group');
     }
 
     /**
@@ -757,26 +648,18 @@ class Report
         );
     }
 
-    public function setSystem($system)
-    {
-        $this->system = $system;
-
-        return $this;
-    }
-
-    /**
-     * @return \Mrss\Entity\System
-     */
-    public function getSystem()
-    {
-        return $this->system;
-    }
-
     /*protected function getSystem()
     {
         return null;
     }*/
 
+    /**
+     * @param $benchmarkData
+     * @param Benchmark $benchmark
+     * @param $year
+     * @param bool $forPercentChange
+     * @return mixed
+     */
     protected function loadPercentileData($benchmarkData, $benchmark, $year, $forPercentChange = false)
     {
         $breakpoints = $this->getPercentileBreakpointsForStudy();
@@ -942,6 +825,7 @@ class Report
      * @param $percentileData
      * @param $reportedValue
      * @param $chartConfig
+     * @param bool $forPercentChange
      * @return array
      */
     public function getPercentileChartConfig(
@@ -949,12 +833,11 @@ class Report
         $percentileData,
         $reportedValue,
         $chartConfig,
-        $forPercntChange = false
+        $forPercentChange = false
     ) {
         if (empty($percentileData)) {
             return false;
         }
-
 
         if (empty($chartConfig['title'])) {
             $chartConfig['title'] = $this->getVariableSubstitution()
@@ -982,7 +865,7 @@ class Report
 
         $format = $this->getFormat($benchmark);
 
-        if ($forPercntChange) {
+        if ($forPercentChange) {
             $format = '{y:,.2f}%';
         }
 
@@ -1052,9 +935,18 @@ class Report
             )
         );
 
-        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercntChange);
+        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercentChange);
     }
 
+    /**
+     * @param Benchmark $benchmark
+     * @param $chartConfig
+     * @param $chartXCategories
+     * @param $format
+     * @param $series
+     * @param $forPercntChange
+     * @return array
+     */
     protected function buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercntChange)
     {
         //$seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
@@ -1159,21 +1051,13 @@ class Report
             );
         }
 
-        /*if ($benchmark->getInputType() == 'minutesseconds') {
-            $chart['yAxis']['labels'] = array(
-                'formatter' => 'minuteSecondFormatter'
-            );
-        }*/
-
-        //var_dump($chartConfig);
-        //var_dump($chart);
         return $chart;
     }
 
     protected function getBarChartBarColor()
     {
         // Default
-        $color = '#0065A1';
+        //$color = '#0065A1';
         $color = $this->getChartColor(1);
 
         // Override for Max
@@ -1186,11 +1070,7 @@ class Report
 
     protected function getBarChartHighlightColor()
     {
-        //$color = '#002C57';
-        $color = '#9cc03e';
-
         $color = $this->getChartColor(0);
-
 
         return $color;
     }
@@ -1298,7 +1178,6 @@ class Report
 
     public function getPercentileBreakpointsForStudy()
     {
-        $study = $this->getStudy();
         $config = $this->getServiceManager()->get('study');
 
         $breakpointsString = $config->breakpoints;
@@ -1408,234 +1287,6 @@ class Report
         return 		($uppercase ? strtoupper($letter) : $letter);
     }
 
-    public function setStudy(Study $study)
-    {
-        $this->study = $study;
-
-        return $this;
-    }
-
-    public function getStudy()
-    {
-        return $this->study;
-    }
-
-    public function setComputedService(ComputedFields $service)
-    {
-        $this->computedService = $service;
-
-        return $this;
-    }
-
-    /**
-     * @return ComputedFields
-     */
-    public function getComputedService()
-    {
-        return $this->computedService;
-    }
-
-    /**
-     * @param $serviceManager
-     * @return $this
-     */
-    public function setServiceManager($serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-
-        return $this;
-    }
-
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    public function setSubscriptionModel($model)
-    {
-        $this->subscriptionModel = $model;
-
-        return $this;
-    }
-
-    public function getSubscriptionModel()
-    {
-        return $this->subscriptionModel;
-    }
-
-    public function setBenchmarkModel($model)
-    {
-        $this->benchmarkModel = $model;
-
-        return $this;
-    }
-
-    public function getBenchmarkModel()
-    {
-        return $this->benchmarkModel;
-    }
-
-    public function setCollegeModel($model)
-    {
-        $this->collegeModel = $model;
-
-        return $this;
-    }
-
-    public function getCollegeModel()
-    {
-        return $this->collegeModel;
-    }
-
-    public function setPercentileModel($model)
-    {
-        $this->percentileModel = $model;
-
-        return $this;
-    }
-
-    public function getPercentileModel()
-    {
-        return $this->percentileModel;
-    }
-
-    public function setPercentileRankModel($model)
-    {
-        $this->percentileRankModel = $model;
-
-        return $this;
-    }
-
-    /**
-     * @return \Mrss\Model\PercentileRank
-     */
-    public function getPercentileRankModel()
-    {
-        return $this->percentileRankModel;
-    }
-
-    public function setSettingModel($model)
-    {
-        $this->settingModel = $model;
-
-        return $this;
-    }
-
-    public function getSettingModel()
-    {
-        return $this->settingModel;
-    }
-
-    public function setOutlierModel($model)
-    {
-        $this->outlierModel = $model;
-
-        return $this;
-    }
-
-    public function getOutlierModel()
-    {
-        return $this->outlierModel;
-    }
-
-    public function setSystemModel($model)
-    {
-        $this->systemModel = $model;
-
-        return $this;
-    }
-
-    /**
-     * @return \Mrss\Model\System
-     */
-    public function getSystemModel()
-    {
-        return $this->systemModel;
-    }
-
-    public function setIssueModel($model)
-    {
-        $this->issueModel = $model;
-
-        return $this;
-    }
-
-    public function getIssueModel()
-    {
-        return $this->issueModel;
-    }
-
-    public function setPercentChangeModel($model)
-    {
-        $this->percentChangeModel = $model;
-
-        return $this;
-    }
-
-    /**
-     * @return \Mrss\Model\PercentChange
-     */
-    public function getPercentChangeModel()
-    {
-        return $this->percentChangeModel;
-    }
-
-
-    public function setCalculator(Calculator $calculator)
-    {
-        $this->calculator = $calculator;
-
-        return $this;
-    }
-
-    public function getCalculator()
-    {
-        return $this->calculator;
-    }
-
-    public function setVariableSubstitution(VariableSubstitution $service)
-    {
-        $this->variableSubstitution = $service;
-
-        return $this;
-    }
-
-    /**
-     * @return VariableSubstitution
-     */
-    public function getVariableSubstitution()
-    {
-        return $this->variableSubstitution;
-    }
-
-    public function setMailTransport(Smtp $transport)
-    {
-        $this->mailTransport = $transport;
-
-        return $this;
-    }
-
-    public function getMailTransport()
-    {
-        return $this->mailTransport;
-    }
-
-    protected function debug($variable)
-    {
-        if ($this->debug) {
-            pr($variable);
-        }
-    }
-
-    protected function debugTimer($message = null)
-    {
-        if ($this->debug) {
-            
-            $elapsed = round(microtime(1) - $this->start, 3);
-            $message = $elapsed . "s: " . $message;
-            $this->debug($message);
-        }
-    }
 
     /**
      * @param $year
@@ -1749,27 +1400,11 @@ class Report
 
     public function getCollege()
     {
-        if (empty($this->college) && $ob = $this->getObservation()) {
-            $this->college = $ob->getCollege();
+        if (empty($this->college) && $observation = $this->getObservation()) {
+            $this->college = $observation->getCollege();
         }
 
         return $this->college;
-    }
-
-    protected function getErrorLog($shortFormat = false)
-    {
-        $formatter = new Simple('%message%' . PHP_EOL);
-
-        $writer = new Stream('error.log');
-
-        if ($shortFormat) {
-            $writer->setFormatter($formatter);
-        }
-
-        $logger = new Logger;
-        $logger->addWriter($writer);
-
-        return $logger;
     }
 
     protected function getChartFooter(Benchmark $benchmark)
@@ -1807,10 +1442,10 @@ class Report
      *
      * @param $year
      */
-    public function calculateAllComputedFields($year)
+    protected function calculateAllComputedFields($year)
     {
         $subs = $this->getSubscriptions($year);
-        $start = microtime(1);
+        //$start = microtime(1);
 
         foreach ($subs as $sub) {
             $observation = $sub->getObservation();
@@ -1834,7 +1469,7 @@ class Report
         $this->getSubscriptionModel()->getEntityManager()->flush();
     }
 
-    public function calculateAllSubObservations($year)
+    protected function calculateAllSubObservations($year)
     {
         $subObForms = array();
 
@@ -1858,18 +1493,6 @@ class Report
                 }
             }
         }
-    }
-
-    public function setStudyConfig($config)
-    {
-        $this->studyConfig = $config;
-
-        return $this;
-    }
-
-    public function getStudyConfig()
-    {
-        return $this->studyConfig;
     }
 
     /**
