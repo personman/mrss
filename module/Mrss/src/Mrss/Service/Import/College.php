@@ -38,7 +38,9 @@ class College extends Import
 
         $rowData = array();
         foreach ($this->getMap() as $property => $column) {
-            $rowData[$property] = trim($this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue());
+            $rowData[$property] = trim(
+                $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue()
+            );
         }
 
         return $rowData;

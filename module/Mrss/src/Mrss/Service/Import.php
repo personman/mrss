@@ -100,7 +100,8 @@ class Import
                 continue;
             }
 
-            $rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getCalculatedValue();
+            $rowData[$property] = $this->excel
+                ->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getCalculatedValue();
         }
 
         //prd($rowData);

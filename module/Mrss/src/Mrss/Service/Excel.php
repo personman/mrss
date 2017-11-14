@@ -313,7 +313,8 @@ class Excel extends Report
 
                 //$sheet->getColumnDimensionByColumn(2)->setAutoSize(true);
                 $sheet->getStyle('C1:C' . $this->rowCount)->getAlignment()->setWrapText(true);
-                $sheet->getStyle('A1:C' . $this->rowCount)->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
+                $sheet->getStyle('A1:C' . $this->rowCount)->getAlignment()
+                    ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
                 //$sheet->getColumnDimension(3)->setVisible(false);
 
                 $index++;

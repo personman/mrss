@@ -169,7 +169,8 @@ class Data extends Import
 
 
         if ($college) {
-            $subscription = $this->getSubscriptionModel()->findOne($this->year, $college->getId(), $this->study->getId());
+            $subscription = $this->getSubscriptionModel()
+                ->findOne($this->year, $college->getId(), $this->study->getId());
 
             if (empty($subscription)) {
                 $subscription = $this->createSubscription($college);
@@ -406,10 +407,6 @@ class Data extends Import
     protected function getMap()
     {
         if (count($this->map) == 0) {
-            //$headerRow = $this->excel->getActiveSheet()->row
-            //$rowData[$property] = $this->excel->getActiveSheet()->getCellByColumnAndRow($column, $rowIndex)->getValue();
-
-
             $row = $this->excel->getActiveSheet()->getRowIterator(2)->current();
 
             $cellIterator = $row->getCellIterator();
@@ -431,45 +428,6 @@ class Data extends Import
         //pr($this->map);
 
         return $this->map;
-
-        $map = array(
-            'name', // Not used
-            'ipeds',
-            'population',
-            'median_household_income',
-            'poverty',
-            'fireresponse',
-            'totalfireservicecalls',
-            'policeresponsetimes',
-            'policecalls1',
-            'vcr1',
-            'pcr',
-            'vccr',
-            'pccr',
-            'police2',
-            'libraries',
-            'libraries_per',
-            'libraries1',
-            'park',
-            'trails',
-            'waterbill',
-            'sewerbills',
-            'waterlow',
-            'sewerbills2',
-            'trashbill',
-            'wastediv',
-            'employ1',
-            'bondrating'
-        );
-
-        $withNumbers = array();
-        $iteration = 0;
-
-        foreach ($map as $key) {
-            $withNumbers[$key] = $iteration++;
-        }
-
-        return $withNumbers;
     }
 
     /**

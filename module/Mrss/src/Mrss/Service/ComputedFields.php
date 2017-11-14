@@ -323,8 +323,12 @@ class ComputedFields
 
     protected function shouldAssumeNullMeansZero($equation)
     {
+        $addEquation = $this->getStudySettingForAddEquation();
+        $noMultiplication = (strpos($equation, '/') === false);
+        $noDiv = (strpos($equation, '*') === false);
+
         // As long as there's no division or multiplication involved, we can assume nulls are 0
-        $nullMeansZero = (!$this->skipEmpty || ($this->getStudySettingForAddEquation() && strpos($equation, '/') === false && strpos($equation, '*') === false));
+        $nullMeansZero = (!$this->skipEmpty || ($addEquation && $noMultiplication && $noDiv));
 
         return $nullMeansZero;
     }
