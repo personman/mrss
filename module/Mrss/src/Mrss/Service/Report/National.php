@@ -2,18 +2,13 @@
 
 namespace Mrss\Service\Report;
 
-use Mrss\Entity\Observation;
 use Mrss\Entity\Subscription;
-use Mrss\Entity\Study;
 use Mrss\Entity\Benchmark;
 use Mrss\Entity\System;
 use Mrss\Service\Report;
 use PHPExcel;
-use PHPExcel_Worksheet;
-use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Alignment;
-use PHPExcel_Shared_Font;
 
 class National extends Report
 {
@@ -39,8 +34,6 @@ class National extends Report
         $formsToSkip = array(41);
 
         $reportData = array();
-
-        $study = $this->getStudy();
 
         $benchmarkGroups = $this->getBenchmarkGroups($subscription);
 
@@ -79,7 +72,7 @@ class National extends Report
 
                 $formHasBenchmarks = true;
 
-                /** @var \Mrss\Entity\BenchmarkHeading $benchmark */
+                /** @var \Mrss\Entity\Benchmark $benchmark */
                 if ($this->isBenchmarkExcludeFromReport($benchmark)) {
                     continue;
                 }
@@ -100,12 +93,13 @@ class National extends Report
 
         }
 
-        //prd($reportData);
-        //echo '<pre>' . print_r($reportData, 1) . '</pre>';
-
         return $reportData;
     }
 
+    /**
+     * @param System $system
+     * @return string
+     */
     protected function getDownloadFileName($system = null)
     {
         $filename = 'national-report';
@@ -251,7 +245,7 @@ class National extends Report
         return 'I';
     }
 
-    public function getDownloadHeader($formName)
+    protected function getDownloadHeader($formName)
     {
         // Header
         $headerRow = array(
@@ -264,7 +258,7 @@ class National extends Report
         return $headerRow;
     }
 
-    public function getBenchmarksToExcludeFromReport()
+    protected function getBenchmarksToExcludeFromReport()
     {
         return array(
             'institutional_demographics_campus_environment',
@@ -273,7 +267,7 @@ class National extends Report
         );
     }
 
-    public function isBenchmarkExcludeFromReport(Benchmark $benchmark)
+    protected function isBenchmarkExcludeFromReport(Benchmark $benchmark)
     {
         $toExclude = $this->getBenchmarksToExcludeFromReport();
 

@@ -1872,6 +1872,10 @@ class Report
         return $this->studyConfig;
     }
 
+    /**
+     * @param $subscription
+     * @return array|\Mrss\Entity\BenchmarkGroup[]
+     */
     public function getBenchmarkGroups($subscription)
     {
         if ($this->getStudyConfig()->use_structures && $system = $this->getSystem()) {
