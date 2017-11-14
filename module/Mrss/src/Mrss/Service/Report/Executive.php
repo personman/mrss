@@ -278,7 +278,6 @@ class Executive extends Report
             }
 
             $iteration++;
-
         }
 
         $chartTitle = $config['title'];
@@ -378,9 +377,6 @@ class Executive extends Report
                     $dataPoint['dataLabels']['x'] = 0;
                     $dataPoint['dataLabels']['y'] = -3;
                 }
-
-
-
             }
 
             // Not reported shouldn't get rotated and might need a line break
@@ -396,7 +392,6 @@ class Executive extends Report
                     //'width' => '10px'
 
                 );*/
-
             }
 
 
@@ -406,7 +401,6 @@ class Executive extends Report
                 $dataPoint['dataLabels']['align'] = 'left';
                 $dataPoint['dataLabels']['x'] = 2;
                 $dataPoint['dataLabels']['y'] = -70;
-
             }
 
 

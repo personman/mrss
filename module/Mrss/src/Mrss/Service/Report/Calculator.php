@@ -67,7 +67,6 @@ class Calculator
         $value = ((1 - $g_fraction) * $data[$j_integer - 1]) + ($g_fraction * $data[$j_integer]);
 
         return $value;
-
     }
 
     /**
@@ -124,7 +123,6 @@ class Calculator
                     'value' => $datum,
                     'problem' => $problem
                 );
-
             }
         }
 

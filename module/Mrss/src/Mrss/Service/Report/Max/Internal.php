@@ -76,7 +76,6 @@ class Internal extends Max
                 //$formatted = $benchmark->format($value);
                 $chartData[] = $value;
                 $chartXCategories[] = $label;
-
             } else {
                 pr($dbColumn);
             }
@@ -413,7 +412,6 @@ class Internal extends Max
                                     'data' => array()
                                 );
                             }
-
                         }
                     }
 

@@ -171,7 +171,6 @@ class Percentile extends Report
         }
 
         $this->stats['benchmarks']++;
-
     }
 
     public function clearPercentiles($year, $system = null, $forPercentChange = false)

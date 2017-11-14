@@ -197,7 +197,7 @@ class Peer extends Report
 
             try {
                 $sheet->setTitle($sheetName);
-            } catch ( \Exception $e) {
+            } catch (\Exception $e) {
                 //pr($sheetName);
             }
 
@@ -315,8 +315,6 @@ class Peer extends Report
                 'value' => $value,
                 'formatted' => $benchmark->format($value)
             );
-
-
         }
 
         return $dataWithLabels;

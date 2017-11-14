@@ -227,7 +227,6 @@ class Outliers extends Report
                 $value = floatval($value);
 
                 $value = $benchmark->getPrefix() . number_format($value) . $benchmark->getSuffix();
-
             }
 
             $baseBenchmarks = array();

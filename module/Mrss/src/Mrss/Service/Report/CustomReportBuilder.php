@@ -21,7 +21,6 @@ class CustomReportBuilder extends Report
 
         foreach ($items as $item) {
             if (null == $item->getCache()) {
-
                 $builder = $this
                     ->getChartBuilder($item->getConfig());
                 //$builder->setCollege($report->getCollege());

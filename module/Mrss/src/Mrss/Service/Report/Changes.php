@@ -163,12 +163,12 @@ class Changes extends National
                     $benchmarkData['reported'] = null;
                 }
 
-                $groupData['benchmarks'][] = $benchmarkData;            }
+                $groupData['benchmarks'][] = $benchmarkData;
+            }
 
             if (!empty($groupData['benchmarks'])) {
                 $reportData[] = $groupData;
             }
-
         }
 
         return $reportData;
@@ -235,7 +235,6 @@ class Changes extends National
             if (!empty($groupData['benchmarks'])) {
                 $report[] = $groupData;
             }
-
         }
 
         return $report;
@@ -377,9 +376,9 @@ class Changes extends National
 
         foreach ($benchmark['percentiles'] as $percentile) {
             $dataRow[] = number_format(
-                    $percentile,
-                    $percentileDecimalPlaces
-                ) . '%';
+                $percentile,
+                $percentileDecimalPlaces
+            ) . '%';
         }
 
         return $dataRow;

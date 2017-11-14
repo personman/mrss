@@ -216,12 +216,10 @@ abstract class AbstractChart
 
     public function updateAllFormats()
     {
-
     }
 
     public function updateAllLabels()
     {
-
     }
 
     public function getAxis()
@@ -302,7 +300,6 @@ abstract class AbstractChart
             $config['legend']['itemStyle'] = array(
                 'width' => '175px'
             );
-
         } else {
             $config['legend']['layout'] = "horizontal";
             $config['legend']['width'] = 430;
@@ -310,7 +307,6 @@ abstract class AbstractChart
             $config['legend']['itemStyle'] = array(
                 'width' => '180px'
             );
-
         }
 
         $this->setConfig($config);

@@ -90,7 +90,6 @@ class National extends Report
             if ($formHasBenchmarks) {
                 $reportData[] = $groupData;
             }
-
         }
 
         return $reportData;

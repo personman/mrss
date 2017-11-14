@@ -147,7 +147,6 @@ class BubbleBuilder extends ChartBuilder
                     $this->yMin = $yVal;
                 }
             }
-
         }
 
         $xLabel = $xBenchmark->getDescriptiveReportLabel();

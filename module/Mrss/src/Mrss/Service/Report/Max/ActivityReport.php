@@ -62,7 +62,6 @@ abstract class ActivityReport extends National
             } else {
                 echo "<p>Unable to find benchmark for $dbColumn ";
             }
-
         }
 
 

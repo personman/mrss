@@ -59,7 +59,6 @@ class LineBuilder extends ChartBuilder
                 if (!empty($peerFootnote)) {
                     $this->addFootnote($peerGroup->getName() . ': ' . $peerFootnote);
                 }
-
             }
             break;
         }
@@ -597,8 +596,6 @@ class LineBuilder extends ChartBuilder
                 $otherData = $this->getOtherData($peersData, $dbColumn);
 
                 list($data, $peerIds) = $this->makePeerCohort($peerData, $otherData);
-
-
             } else {
                 foreach ($peerData as $year => $yearData) {
                     foreach ($yearData as $peerId => $datum) {
@@ -676,7 +673,6 @@ class LineBuilder extends ChartBuilder
                         $updatedCohort[] = $collegeId;
                         //pr($year); pr($updatedCohort);
                     }
-
                 }
             }
 
