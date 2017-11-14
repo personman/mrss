@@ -100,7 +100,7 @@ class Benchmark extends AbstractModel
 
     /**
      * Find all benchmarks, ordered by sequence
-     * @return \Mrss\Entity\Benchmark
+     * @return \Mrss\Entity\Benchmark[]
      */
     public function findAll()
     {

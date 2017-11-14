@@ -20,7 +20,8 @@ class Gauge extends AbstractChart
                     'name' => '',
                     'data' => array($completion),
                     'dataLabels' => array(
-                        'format' =>  '<div style="text-align:center"><span style="font-size:25px;color: black">{y}%</span><br/>'
+                        'format' =>  '<div style="text-align:center">' .
+                        '<span style="font-size:25px;color: black">{y}%</span><br/>'
                     )
                 )
             ),

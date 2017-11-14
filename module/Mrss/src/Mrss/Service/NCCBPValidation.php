@@ -2,17 +2,21 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\Benchmark;
+
 class NCCBPValidation extends AbstractValidation
 {
     public function validateAutomatic()
     {
         // Everyone gets these issues, automatically
-        $message = "For Pell Grant Eligible Students, include both those that did receive them and those that did not receive them because of administrative or other hurdles.";
+        $message = "For Pell Grant Eligible Students, include both those that did receive them and those " .
+            "that did not receive them because of administrative or other hurdles.";
         $code = "auto_pell";
         $form = '1';
         $this->addIssue($message, $code, $form);
 
-        $message = 'Under revenue sources, include all revenue, even if it is labeled as “non-operating” on your financial statements.';
+        $message = 'Under revenue sources, include all revenue, even if it is labeled as “non-operating” ' .
+            'on your financial statements.';
         $code = "auto_revenue_sources";
         $form = '21';
         $this->addIssue($message, $code, $form);
@@ -125,7 +129,8 @@ class NCCBPValidation extends AbstractValidation
                     $formUrl = $passMark->getBenchmarkGroup()->getUrl();
                     $code = 'passing_missing_' . $passing;
 
-                    $message = "If your institution does not use passing grades, enter a zero for " . $passMark->getDescriptiveReportLabel() . '.';
+                    $message = "If your institution does not use passing grades, enter a zero for " .
+                        $passMark->getDescriptiveReportLabel() . '.';
 
                     $this->addIssue($message, $code, $formUrl);
                 }
@@ -160,7 +165,9 @@ class NCCBPValidation extends AbstractValidation
                 $benchmark2 = $this->getBenchmarkModel()->findOneByDbColumn($pair[1]);
                 $formUrl = $benchmark1->getBenchmarkGroup()->getUrl();
 
-                $message = "You have entered data for one of the following measures, but not the other. Please enter data for both: " . $benchmark1->getDescriptiveReportLabel() . ', ' . $benchmark2->getDescriptiveReportLabel();
+                $message = "You have entered data for one of the following measures, but not the other. " .
+                    "Please enter data for both: " . $benchmark1->getDescriptiveReportLabel() . ', ' .
+                    $benchmark2->getDescriptiveReportLabel();
                 $code = 'pair_' . $pair[0] . '_' . $pair[1];
 
                 $this->addIssue($message, $code, $formUrl);
@@ -194,6 +201,9 @@ class NCCBPValidation extends AbstractValidation
         );
     }
 
+    /**
+     * @return Benchmark[]
+     */
     protected function getBenchmarksThatShouldNotBeZero()
     {
         $model = $this->getBenchmarkModel();

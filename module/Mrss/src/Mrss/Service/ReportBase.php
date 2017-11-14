@@ -3,6 +3,9 @@
 namespace Mrss\Service;
 
 use Mrss\Entity\Study;
+use Zend\Log\Formatter\Simple;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 use Zend\ServiceManager\ServiceManager;
 use Mrss\Service\Report\Calculator;
 use Zend\Mail\Transport\Smtp;
@@ -381,6 +384,10 @@ class ReportBase
         return $this->studyConfig;
     }
 
+    /**
+     * @param bool $shortFormat
+     * @return Logger
+     */
     protected function getErrorLog($shortFormat = false)
     {
         $formatter = new Simple('%message%' . PHP_EOL);

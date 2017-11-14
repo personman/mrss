@@ -927,7 +927,14 @@ class Report extends ReportBase
             )
         );
 
-        return $this->buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercentChange);
+        return $this->buildPercentileChart(
+            $benchmark,
+            $chartConfig,
+            $chartXCategories,
+            $format,
+            $series,
+            $forPercentChange
+        );
     }
 
     /**
@@ -939,8 +946,14 @@ class Report extends ReportBase
      * @param $forPercntChange
      * @return array
      */
-    protected function buildPercentileChart($benchmark, $chartConfig, $chartXCategories, $format, $series, $forPercntChange)
-    {
+    protected function buildPercentileChart(
+        $benchmark,
+        $chartConfig,
+        $chartXCategories,
+        $format,
+        $series,
+        $forPercntChange
+    ) {
         //$seriesWithDataLabels = $this->forceDataLabelsInSeries($series);
         $dataDefinition = $this->getChartFooter($benchmark);
 

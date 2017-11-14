@@ -70,8 +70,11 @@ class BubbleBuilder extends ChartBuilder
             $system = $this->getSystem();
             $memberships = $system->getMembershipsByYear($year);
 
+
             foreach ($memberships as $membership) {
-                if ($sub = $membership->getCollege()->getSubscriptionByStudyAndYear($this->getStudy()->getId(), $year)) {
+                $memCollege = $membership->getCollege();
+                $studyId = $this->getStudy()->getId();
+                if ($sub = $memCollege->getSubscriptionByStudyAndYear($studyId, $year)) {
                     $subscriptions[] = $sub;
                 }
             }

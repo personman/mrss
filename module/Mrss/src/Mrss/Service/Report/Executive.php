@@ -46,7 +46,8 @@ class Executive extends Report
             </ul>
             <p></p>";
         } else {
-            $intro = "<p>Thank you for participating in the National Community College Benchmark Project in 2017. The report illustrates how your college compared to national data, representing 242 community colleges. The full NCCBP report, available online, contains more than 150 benchmarks, including new financial and social mobility measures.</p>";
+            $intro =
+                "<p>Thank you for participating in the National Community College Benchmark Project in 2017. The report illustrates how your college compared to national data, representing 242 community colleges. The full NCCBP report, available online, contains more than 150 benchmarks, including new financial and social mobility measures.</p>";
         }
 
         return $intro;
@@ -65,7 +66,9 @@ class Executive extends Report
             <p class=\"executiveReportLinkToThisPage\">To view reports online, go to <a href=\"http://nccbp.org/reports\">NCCBP.org/reports</a> and log in.</p>";
 
         if ($year >= 2017) {
-            $info = "<p>Find more information on the NCCBP by visiting our website <a href=\"http://nccbp.org\">NCCBP.org</a> or by calling or emailing the Benchmark Institute.</p>";
+            $info =
+                "<p>Find more information on the NCCBP by visiting our website <a href=\"http://nccbp.org\">" .
+                "NCCBP.org</a> or by calling or emailing the Benchmark Institute.</p>";
         }
 
         return $info;
@@ -83,9 +86,9 @@ class Executive extends Report
                     'ft_minus4_perc_completed' => 'Completed', // Completed in 3 years, full time
                 ),
                 'description' => 'The percent of students out of the unduplicated full-time, first-time,
-                    credit headcount from Fall ' . ($year - 4)  . ' IPEDS GRS cohort who either completed a degree
-                    or certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions
-                    before fall ' . ($year - 1)  . '.'
+                    credit headcount from Fall ' . ($year - 4) . ' IPEDS GRS cohort who either completed a degree
+                    or certificate before fall ' . ($year - 1) . ' or who transferred to four-year institutions
+                    before fall ' . ($year - 1) . '.'
 
             ),
 
@@ -98,9 +101,9 @@ class Executive extends Report
                     'pt_minus7_perc_completed' => 'Completed'
                 ),
                 'description' => 'The percent of part-time students out of the unduplicated part-time, first-time,
-                 credit headcount from Fall ' . ($year - 6)  . ' IPEDS GRS cohort who either completed a degree or
-                 certificate before fall ' . ($year - 1)  . ' or who transferred to four-year institutions before
-                 fall ' . ($year - 1)  . '.'
+                 credit headcount from Fall ' . ($year - 6) . ' IPEDS GRS cohort who either completed a degree or
+                 certificate before fall ' . ($year - 1) . ' or who transferred to four-year institutions before
+                 fall ' . ($year - 1) . '.'
             ),
 
             'middle-left' => array(
@@ -110,9 +113,9 @@ class Executive extends Report
                     'next_term_pers' => 'Next-Term', // Next-term persistence
                     'fall_fall_pers' => 'Fall-Fall', // Fall-fall persistence
                 ),
-                'description' => 'The persistence rate is the percent of Fall ' . ($year - 2)  . ' credit students,
+                'description' => 'The persistence rate is the percent of Fall ' . ($year - 2) . ' credit students,
                     both full- and part-time, who return to the campus for the next term (usually Spring ' .
-                    ($year - 1) . '), or for the next fall term (Fall ' . ($year - 1)  . '). This metric excludes
+                    ($year - 1) . '), or for the next fall term (Fall ' . ($year - 1) . '). This metric excludes
                      students who graduated or completed certificates in the time frame.'
             ),
 
@@ -123,7 +126,7 @@ class Executive extends Report
                 'benchmarks' => array(
                     'cst_fte_stud' => 'Cost Per FTE Student', // Cost per FTE student
                 ),
-                'description' => '' . ($year - 1)  . ' instructional costs include salaries, benefits, supplies,
+                'description' => '' . ($year - 1) . ' instructional costs include salaries, benefits, supplies,
                  travel and equipment for all full- and part-time faculty and other instructional administration
                  and support personnel per full-time equivalent student.'
             ),
@@ -135,7 +138,7 @@ class Executive extends Report
                     'comp_succ' => 'Completer Success Rate', // Completer success rate
                 ),
                 'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or
-                Pass in college-level credit courses in fall ' . ($year - 2)  . '.'
+                Pass in college-level credit courses in fall ' . ($year - 2) . '.'
             ),
 
             'bottom-right' => array(
@@ -146,7 +149,7 @@ class Executive extends Report
                     'w_comp_succ' => 'Writing' // Dev writing enrollee success rate
                 ),
                 'description' => 'The percent of students, institution-wide, who received grades of A, B, C, or
-                Pass in developmental/remedial math and writing courses in fall ' . ($year - 2)  . '.'
+                Pass in developmental/remedial math and writing courses in fall ' . ($year - 2) . '.'
             )
 
         );
@@ -168,8 +171,10 @@ class Executive extends Report
             'benchmarks' => array(
                 'CFI' => 'CFI',
             ),
-            //'description' => 'This indicator  puwas developed in Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.',
-            'description' => 'The Composite Financial Index is a weighed score of the primary reserve ratio, net income ratio, return on net assets ratio and the viability ratio. Source: Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.'
+            'description' => 'The Composite Financial Index is a weighed score of the primary reserve ratio, ' .
+                'net income ratio, return on net assets ratio and the viability ratio. Source: ' .
+                'Strategic Financial Analysis for Higher Education: Identifying, Measuring & Reporting ' .
+                'Financial Risks (Seventh Edition), by KPMG LLP; Prager, Sealy & Co., LLC; Attain LLC.'
         );
 
         // Move Dev Completer success rate from bottom right to bottom left
@@ -185,8 +190,8 @@ class Executive extends Report
             'benchmarks' => array(
                 'omr_kq2up_pQ' => 'Social Mobility',
             ),
-            //'description' => 'The percent of students from the college that moved up two or more income quintiles (rounded from longitudinal sample).'
-            'description' => 'The percent of students from the college that moved up two or more income quintiles. Source: Equality of Opportunity Project.'
+            'description' => 'The percent of students from the college that moved up two or ' .
+                'more income quintiles. Source: Equality of Opportunity Project.'
         );
 
         // Backup measures if there's no data reported
@@ -199,7 +204,8 @@ class Executive extends Report
                     'op_rev_SFTE' => 'Revenue per FTE Student',
                     'op_ex_SFTE' => 'Expenses per FTE Student',
                 ),
-                'description' => 'Total revenues per FTE (full-time equivalent) student and Total Expenditures per FTE (full-time equivalent) student'
+                'description' => 'Total revenues per FTE (full-time equivalent) student and ' .
+                    'Total Expenditures per FTE (full-time equivalent) student'
             );
         }
 
@@ -272,7 +278,6 @@ class Executive extends Report
                     }
 
 
-
                     $chartXCategories[] = $key;
                 }
             }
@@ -310,7 +315,6 @@ class Executive extends Report
             );
             //prd($highChartsConfig);
         }
-
 
 
         return array(
@@ -491,7 +495,7 @@ class Executive extends Report
 
         if (!empty($config['dollars'])) {
             //$highChartsConfig['yAxis']['labels']['format'] =  '${value}';
-            $highChartsConfig['yAxis']['labels']['formatter'] =  'formatLargeMoney';
+            $highChartsConfig['yAxis']['labels']['formatter'] = 'formatLargeMoney';
             unset($highChartsConfig['yAxis']['labels']['format']);
         }
 

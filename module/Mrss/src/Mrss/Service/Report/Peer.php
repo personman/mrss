@@ -87,7 +87,9 @@ class Peer extends Report
                     $observation = $observations[$college->getId()];
                     $value = $observation->get($benchmark->getDbColumn());
                 } else {
-                    $this->getErrorLog()->err("Cannot find observation for college " . $college->getId() . " : " . $college->getName());
+                    $this->getErrorLog()->err(
+                        "Cannot find observation for college " . $college->getId() . " : " . $college->getName()
+                    );
                 }
 
 
@@ -333,8 +335,13 @@ class Peer extends Report
         return $this->getChartColor(1);
     }
 
-    public function getPeerBarChart(BenchmarkEntity $benchmark, $data, $title = null, $subtitle = null, $widthSetting = 'half')
-    {
+    public function getPeerBarChart(
+        BenchmarkEntity $benchmark,
+        $data,
+        $title = null,
+        $subtitle = null,
+        $widthSetting = 'half'
+    ) {
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
         if (empty($title)) {
