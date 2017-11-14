@@ -2,8 +2,6 @@
 
 namespace Mrss\Form;
 
-use Mrss\Form\AbstractForm;
-
 class System extends AbstractForm
 {
     public function __construct($label)
@@ -11,39 +9,36 @@ class System extends AbstractForm
         // Call the parent constructor
         parent::__construct('system');
 
-        $this->add(
-            array(
-                'name' => 'id',
-                'type' => 'Hidden'
-            )
-        );
+        $this->addId();
+        $this->addName('Name of ' . ucwords($label));
+        $this->addAddressFields();
+
 
         $this->add(
             array(
-                'name' => 'name',
-                'type' => 'Text',
+                'name' => 'joinSetting',
+                'type' => 'Select',
+                'required' => true,
                 'options' => array(
-                    'label' => 'Name of ' . ucwords($label)
+                    'label' => 'Join Setting',
                 ),
                 'attributes' => array(
-                    'id' => 'name'
+                    'options' => array(
+                        'open' => 'Open - Anyone can join',
+                        'private' => 'Must request to join'
+                    )
                 )
             )
         );
 
-        /*$this->add(
-            array(
-                'name' => 'ipeds',
-                'type' => 'Text',
-                'options' => array(
-                    'label' => 'IPEDS Unit ID'
-                ),
-                'attributes' => array(
-                    'id' => 'ipdeds'
-                )
-            )
-        );*/
+        $this->addCurrentYear();
+        $this->addOpenClosedElements();
 
+        $this->add($this->getButtonFieldset());
+    }
+
+    protected function addAddressFields()
+    {
         $this->add(
             array(
                 'name' => 'address',
@@ -112,27 +107,5 @@ class System extends AbstractForm
                 )
             )
         );
-
-        $this->add(
-            array(
-                'name' => 'joinSetting',
-                'type' => 'Select',
-                'required' => true,
-                'options' => array(
-                    'label' => 'Join Setting',
-                ),
-                'attributes' => array(
-                    'options' => array(
-                        'open' => 'Open - Anyone can join',
-                        'private' => 'Must request to join'
-                    )
-                )
-            )
-        );
-
-        $this->addCurrentYear();
-        $this->addOpenClosedElements();
-
-        $this->add($this->getButtonFieldset());
     }
 }
