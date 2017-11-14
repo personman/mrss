@@ -4,16 +4,13 @@ namespace Mrss\Controller;
 
 use Mrss\Entity\Benchmark as BenchmarkEntity;
 use Mrss\Entity\Benchmark;
-use Mrss\Model\Observation as ObservationModel;
-use Mrss\Model\College as CollegeModel;
 use Mrss\Form;
-use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Element;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
-class BenchmarkController extends AbstractActionController
+class BenchmarkController extends BaseController
 {
     protected $benchmarkModel;
 
@@ -51,9 +48,7 @@ class BenchmarkController extends AbstractActionController
 
         // Sparklines
         // @todo: use study-wide median for sparkline, if any. Disabled for now.
-        $observationModel = $this->getServiceLocator()->get('model.observation');
-        $percentileModel = $this->getServiceLocator()->get('model.percentile');
-        $sparklines = array();
+        //$sparklines = array();
         $counts = array('benchmarks' => 0, 'collected' => 0, 'computed' => 0);
         foreach ($benchmarkGroups as $benchmarkGroup) {
             foreach ($benchmarkGroup->getBenchmarks() as $benchmark) {
@@ -83,42 +78,10 @@ class BenchmarkController extends AbstractActionController
         );
     }
 
-    public function viewAction()
-    {
-        $collegeIds = array(95, 96, 97, 98, 99, 100, 101, 102, 103);
-
-        $benchmark = $this->getBenchmarkModel()->find($this->params('id'));
-
-        /** @var ObservationModel $observationModel */
-        $observationModel = $this->getServiceLocator()
-            ->get('model.observation');
-
-        $observations = $observationModel->findForChart(
-            $benchmark->getDbColumn(),
-            $collegeIds
-        );
-        $observations = json_encode($observations, JSON_NUMERIC_CHECK);
-
-        // Get the college names
-        /** @var CollegeModel $collegeModel */
-        $collegeModel = $this->getServiceLocator()->get('model.college');
-        $colleges = array();
-        foreach ($collegeIds as $collegeId) {
-            $colleges[] = $collegeModel->find($collegeId);
-        }
-
-        return array(
-            'benchmark' => $benchmark,
-            'observations' => $observations,
-            'colleges' => $colleges
-        );
-    }
-
     public function addAction()
     {
         $benchmarkGroupId = $this->params('benchmarkGroup');
-        $benchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmark.group');
+        $benchmarkGroupModel = $this->getBenchmarkGroupModel();
 
         $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
 
@@ -164,12 +127,12 @@ class BenchmarkController extends AbstractActionController
 
     public function editAction()
     {
-        $id = $this->params('id');
-        if (empty($id) && $this->getRequest()->isPost()) {
-            $id = $this->params()->fromPost('id');
+        $benchmarkId = $this->params('id');
+        if (empty($benchmarkId) && $this->getRequest()->isPost()) {
+            $benchmarkId = $this->params()->fromPost('id');
         }
 
-        $benchmark = $this->getBenchmarkModel()->find($id);
+        $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
 
         // Don't proceed if the benchmark isn't found
         if (empty($benchmark)) {
@@ -284,11 +247,11 @@ class BenchmarkController extends AbstractActionController
 
     public function onReportAction()
     {
-        $id = $this->params()->fromRoute('id');
+        $benchmarkId = $this->params()->fromRoute('id');
         $onReport = $this->params()->fromRoute('value');
 
-        if ($id) {
-            $benchmark = $this->getBenchmarkModel()->find($id);
+        if ($benchmarkId) {
+            $benchmark = $this->getBenchmarkModel()->find($benchmarkId);
 
             $benchmark->setIncludeInNationalReport($onReport);
             $this->getBenchmarkModel()->save($benchmark);
@@ -303,19 +266,14 @@ class BenchmarkController extends AbstractActionController
     public function reorderAction()
     {
         $benchmarkGroupId = $this->params()->fromPost('benchmarkGroupId');
-        $newBenchmarkSequences = $this->params()->fromPost('benchmarks', array());
-        $newBenchmarkHeadingSequences = $this->params()
+        $newSequences = $this->params()->fromPost('benchmarks', array());
+        $newHeadingSequences = $this->params()
             ->fromPost('headings', array());
-        $newBenchmarkSequences = array_flip($newBenchmarkSequences);
-        $newBenchmarkHeadingSequences = array_flip($newBenchmarkHeadingSequences);
-        $benchmarkIds = array_keys($newBenchmarkSequences);
+        $newSequences = array_flip($newSequences);
+        $newHeadingSequences = array_flip($newHeadingSequences);
+        $benchmarkIds = array_keys($newSequences);
 
-        //pr($newBenchmarkSequences);
-        //pr($newBenchmarkHeadingSequences);
-
-        /** @var \Mrss\Model\BenchmarkGroup $benchmarkGroupModel */
-        $benchmarkGroupModel = $this->getServiceLocator()
-            ->get('model.benchmark.group');
+        $benchmarkGroupModel = $this->getBenchmarkGroupModel();
 
         $benchmarkGroup = $benchmarkGroupModel->find($benchmarkGroupId);
 
@@ -323,12 +281,11 @@ class BenchmarkController extends AbstractActionController
         $organization = $user->getAdminBenchmarkSorting();
 
         if (!empty($benchmarkGroup)) {
-            //$benchmarks = $benchmarkGroup->getBenchmarks();
             $benchmarks = $this->getBenchmarkModel()->findByIds($benchmarkIds);
 
             foreach ($benchmarks as $benchmark) {
-                if (isset($newBenchmarkSequences[$benchmark->getId()])) {
-                    $sequence = $newBenchmarkSequences[$benchmark->getId()];
+                if (isset($newSequences[$benchmark->getId()])) {
+                    $sequence = $newSequences[$benchmark->getId()];
 
                     if ($organization == 'report') {
                         $benchmark->setReportSequence($sequence);
@@ -342,17 +299,15 @@ class BenchmarkController extends AbstractActionController
 
             $headings = $benchmarkGroup->getBenchmarkHeadings($organization);
             foreach ($headings as $heading) {
-                if (isset($newBenchmarkHeadingSequences[$heading->getId()])) {
+                if (isset($newHeadingSequences[$heading->getId()])) {
                     $heading->setSequence(
-                        $newBenchmarkHeadingSequences[$heading->getId()]
+                        $newHeadingSequences[$heading->getId()]
                     );
                     $heading->setBenchmarkGroup($benchmarkGroup);
                 }
             }
 
-            //$benchmarkGroupModel->save($benchmarkGroup);
-            $em = $this->getServiceLocator()->get('em');
-            $em->flush();
+            $this->getEntityManager()->flush();
         }
 
         //print_r($benchmarkGroupId); print_r($benchmarks); die;
@@ -379,14 +334,6 @@ class BenchmarkController extends AbstractActionController
     }
 
     /**
-     * @return \Mrss\Model\Subscription
-     */
-    protected function getSubscriptionModel()
-    {
-        return $this->getServiceLocator()->get('model.subscription');
-    }
-
-    /**
      * Get the form and bind the entity
      *
      * @param BenchmarkEntity $benchmark
@@ -395,18 +342,18 @@ class BenchmarkController extends AbstractActionController
     public function getBenchmarkForm(BenchmarkEntity $benchmark)
     {
         // Inject the equation validator
-        $em = $this->getServiceLocator()->get('em');
+        $entityManager = $this->getEntityManager();
         $benchmark->setEquationValidator(
             $this->getServiceLocator()->get('validator.equation')
         );
 
         // Pass in the entity manager for checking uniqueness
-        $benchmark->setEntityManager($em);
+        $benchmark->setEntityManager($entityManager);
 
         // Build form
         $form = new Form\Benchmark;
 
-        $form->setHydrator(new DoctrineHydrator($em, 'Mrss\Entity\Benchmark'));
+        $form->setHydrator(new DoctrineHydrator($entityManager, 'Mrss\Entity\Benchmark'));
         $form->bind($benchmark);
 
         return $form;

@@ -165,7 +165,7 @@ class BaseController extends AbstractActionController
     /**
      * @return \Mrss\Model\System
      */
-    public function getSystemModel()
+    protected function getSystemModel()
     {
         return $this->getServiceLocator()->get('model.system');
     }
@@ -173,7 +173,7 @@ class BaseController extends AbstractActionController
     /**
      * @return \Mrss\Model\SystemMembership
      */
-    public function getSystemMembershipModel()
+    protected function getSystemMembershipModel()
     {
         return $this->getServiceLocator()->get('model.system.membership');
     }
@@ -181,7 +181,7 @@ class BaseController extends AbstractActionController
     /**
      * @return \Mrss\Model\Subscription
      */
-    public function getSubscriptionModel()
+    protected function getSubscriptionModel()
     {
         return $this->getServiceLocator()->get('model.subscription');
     }
@@ -189,7 +189,7 @@ class BaseController extends AbstractActionController
     /**
      * @return \Mrss\Model\College
      */
-    public function getCollegeModel()
+    protected function getCollegeModel()
     {
         return $this->getServiceLocator()->get('model.college');
     }
@@ -197,7 +197,7 @@ class BaseController extends AbstractActionController
     /**
      * @return \Mrss\Model\Benchmark
      */
-    public function getBenchmarkModel()
+    protected function getBenchmarkModel()
     {
         return $this->getServiceLocator()->get('model.benchmark');
     }
@@ -262,7 +262,7 @@ class BaseController extends AbstractActionController
     /**
      * @return \Mrss\Entity\User
      */
-    public function getCurrentUser()
+    protected function getCurrentUser()
     {
         $currentUser = $this->zfcUserAuthentication()->getIdentity();
 
@@ -272,7 +272,7 @@ class BaseController extends AbstractActionController
     /**
      * @return \Mrss\Model\Observation
      */
-    public function getObservationModel()
+    protected function getObservationModel()
     {
         return $this->getServiceLocator()->get('model.observation');
     }
@@ -280,8 +280,17 @@ class BaseController extends AbstractActionController
     /**
      * @return \Doctrine\ORM\EntityManager
      */
-    public function getEntityManager()
+    protected function getEntityManager()
     {
         return $this->getServiceLocator()->get('em');
+    }
+
+    /**
+     * @return \Mrss\Model\BenchmarkGroup
+     */
+    protected function getBenchmarkGroupModel()
+    {
+        return $this->getServiceLocator()
+            ->get('model.benchmark.group');
     }
 }
