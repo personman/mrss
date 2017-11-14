@@ -1,6 +1,7 @@
 <?php
 
 namespace Mrss\Service\Import;
+
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 //use Guzzle\Tests\Service\Mock\Command\Sub\Sub;
 use Mrss\Entity\College;
@@ -32,7 +33,6 @@ class ImportWorkforceData
             $this->importSubscriptionToSection($row);
 
             echo '<hr>';
-
         }
 
         $elapsed = microtime(1) - $start;
@@ -61,9 +61,6 @@ class ImportWorkforceData
             $subscription = $this->handleSubscription($wfSubscription, $college);
             $this->handleData($subscription, $wfSubscription, $college);
         }
-
-
-
     }
 
     protected function createCollege($wfCollege, $wfSubscription)
@@ -153,9 +150,6 @@ class ImportWorkforceData
             $subscription->setDatumModel($this->getDatumModel());
 
             $this->getSubscriptionModel()->save($subscription);
-
-
-
         }
 
         if ($subscription && !$subscription->hasSection($this->getSection())) {

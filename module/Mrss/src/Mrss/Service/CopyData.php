@@ -106,6 +106,4 @@ class CopyData
         $this->benchmarkModel = $benchmarkModel;
         return $this;
     }
-
-
 }

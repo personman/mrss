@@ -157,7 +157,6 @@ ORDER BY n.title";
             foreach ($result as $row) {
                 $this->placeRowInSheet($row);
             }
-
         }
     }
 
@@ -198,7 +197,6 @@ ORDER BY n.title";
 
                     $newResults[] = $row;
                 }
-
             }
 
             $result = $newResults;
@@ -260,7 +258,6 @@ ORDER BY n.title";
         // Now the actual data
         foreach ($row as $key => $value) {
             if ($column = $this->getColumnForField($key)) {
-
                 $sheet->setCellValueByColumnAndRow(
                     $column,
                     $rowNum,

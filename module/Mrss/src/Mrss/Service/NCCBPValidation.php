@@ -33,8 +33,6 @@ class NCCBPValidation extends AbstractValidation
                     $benchmark->getBenchmarkGroup()->getUrl()
                 );
             }
-
-
         }
 
         //$this->addIssue('Unexpected zero', 'zero', 2);
@@ -207,9 +205,7 @@ class NCCBPValidation extends AbstractValidation
                 if (!in_array($benchmark->getBenchmarkGroup()->getUrl(), $formUrlsToSkip)) {
                     $benchmarks[] = $benchmark;
                 }
-
             }
-
         }
 
         return $benchmarks;

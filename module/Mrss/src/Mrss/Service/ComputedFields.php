@@ -77,7 +77,6 @@ class ComputedFields
         if (empty($equationWithVariables)) {
             $result = null;
         } else {
-
             if ($this->getDebug()) {
                 $collegeName = $observation->getCollege()->getName();
                 echo 'Institution:';
@@ -132,7 +131,6 @@ class ComputedFields
             echo '<hr>';
 
             if (false && $this->debugDbColumn) {
-
                 $oids = array();
                 foreach ($this->getStudy()->getSubscriptionsForYear($this->getStudy()->getCurrentYear()) as $sub) {
                     $collegeName = $sub->getCollege()->getName();
@@ -140,8 +138,6 @@ class ComputedFields
 
                     echo "<a href='/reports/compute-one/$obId/1/{$benchmark->getDbColumn()}'>$collegeName</a><br>";
                 }
-
-
             }
         }
 
@@ -525,7 +521,6 @@ class ComputedFields
         }
 
         return $equation;
-
     }
 
     protected function getBenchmarkByDbColumn($dbColumn)

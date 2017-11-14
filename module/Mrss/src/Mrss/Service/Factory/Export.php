@@ -19,6 +19,5 @@ class Export implements FactoryInterface
         $exportService->setSubscriptionModel($subscriptionModel);
 
         return $exportService;
-
     }
 }

@@ -101,11 +101,11 @@ class CollegeCategory extends Import
     protected function mapCategory($number)
     {
         $map = array(
-            1	=> "Doctoral",
-            2	=> "Master's",
-            3	=> "Baccalaureate",
-            4	=> "Associate's with Ranks",
-            5	=> "Associate's without Ranks",
+            1   => "Doctoral",
+            2   => "Master's",
+            3   => "Baccalaureate",
+            4   => "Associate's with Ranks",
+            5   => "Associate's without Ranks",
         );
 
         return $this->mapGeneral($number, $map);

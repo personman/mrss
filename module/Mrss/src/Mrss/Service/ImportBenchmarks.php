@@ -64,7 +64,6 @@ class ImportBenchmarks
             } else {
                 $row = array();
                 foreach ($headers as $key => $field) {
-
                     if (isset($data[$key])) {
                         $row[$field] = trim($data[$key]);
                     } else {
@@ -121,8 +120,6 @@ class ImportBenchmarks
                 // See if it exists in the observation entity
                 $this->checkObservation($benchmark);
             }
-
-
         }
 
         $this->entityManager->flush();
@@ -357,7 +354,6 @@ class ImportBenchmarks
                         'heading',
                         $heading->getDescription()
                     );
-
                 } else {
                     /** @var Benchmark $benchmark */
                     $benchmark = $child;
@@ -382,9 +378,7 @@ class ImportBenchmarks
                         $benchmark->getHighIsBetter(),
                         implode(',', $benchmark->getYearsAvailable())
                     );
-
                 }
-
             }
         }
 

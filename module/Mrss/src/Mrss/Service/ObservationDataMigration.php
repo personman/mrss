@@ -57,7 +57,6 @@ class ObservationDataMigration
 
         if ($sub = $subs[0]) {
             $this->copySubscription($sub);
-
         }
 
         return true;
@@ -145,7 +144,6 @@ class ObservationDataMigration
                     prd($mistakes);
                 }
             }
-
         }
 
         echo 'all done';

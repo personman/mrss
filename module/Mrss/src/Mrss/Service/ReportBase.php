@@ -339,7 +339,6 @@ class ReportBase
     protected function debugTimer($message = null)
     {
         if ($this->debug) {
-
             $elapsed = round(microtime(1) - $this->start, 3);
             $message = $elapsed . "s: " . $message;
             $this->debug($message);
@@ -397,6 +396,4 @@ class ReportBase
 
         return $logger;
     }
-
-
 }

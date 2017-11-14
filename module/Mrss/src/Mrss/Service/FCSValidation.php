@@ -100,7 +100,6 @@ class FCSValidation extends AbstractValidation
 
         if ($category = $this->observation->get('institution_aaup_category')) {
             if ($category == $categoryToCheck) {
-
                 $total = 0;
                 foreach ($ranksToCheck as $rank) {
                     foreach ($this->getContracts(false) as $contract => $contractLabel) {
@@ -114,7 +113,6 @@ class FCSValidation extends AbstractValidation
                     $code = "cat_4_no_rank";
                     $this->addIssue($message, $code, 2);
                 }
-
             }
         }
     }
@@ -242,10 +240,8 @@ class FCSValidation extends AbstractValidation
                             $this->addIssue($message, $code, 2);
                         }
                     }
-
                 }
             }
-
         }
     }
 
@@ -388,7 +384,6 @@ class FCSValidation extends AbstractValidation
             if ($total == 0) {
                 $form3Empty = true;
             }
-
         } elseif ($aggregate == 'Yes') {
             $total = 0;
             foreach ($this->getContracts(false) as $contract => $contractLabel) {
@@ -670,7 +665,6 @@ class FCSValidation extends AbstractValidation
         if ($this->observation->get('institution_aggregate_benefits') == 'No') {
             foreach ($this->getContracts(false) as $contract => $contractLabel) {
                 foreach ($this->getRanks() as $rank => $rankLabel) {
-
                     $salaryTotal = $this->getSalaryTotalForRankAndContract($rank, $contract);
                     $facultyCount = $this->getFacultyTotalForRankAndContract($rank, $contract);
 
@@ -989,9 +983,7 @@ class FCSValidation extends AbstractValidation
                         "salary_decrease_{$contract}_{$rank}",
                         4
                     );
-
                 }
-
             }
         }
     }

@@ -34,7 +34,6 @@ class ImportNccwtp
                 foreach ($this->getBenchmarks() as $benchmark) {
                     //var_dump($benchmark);
                 }
-
             }
         }
     }

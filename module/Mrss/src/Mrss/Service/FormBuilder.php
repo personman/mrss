@@ -70,7 +70,6 @@ class FormBuilder
             $buttons->add($saveEdit);
 
             $form->add($buttons);
-
         }
 
         //echo '<pre>'; print_r($inputFilter);

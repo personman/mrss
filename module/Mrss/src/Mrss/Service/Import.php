@@ -52,8 +52,6 @@ class Import
             if ($count % $saveEvery) {
                 $this->flush();
             }
-
-
         }
 
         $this->flush();

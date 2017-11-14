@@ -85,13 +85,12 @@ class NavigationFactory extends DefaultNavigationFactory
             $user = $auth->getIdentity();
             if ($user && $college = $user->getCollege()) {
                 try {
-			        $systemMemberships = $college->getSystemMemberships();
+                    $systemMemberships = $college->getSystemMemberships();
                     if ($systemMemberships) {
                         // @todo: fix this hack that only allows one system in the menu
                         if ($firstMembership = $systemMemberships[0]) {
                             $system = $firstMembership->getSystem();
                         }
-
                     }
                 } catch (\Exception $e) {
                 }
@@ -129,7 +128,6 @@ class NavigationFactory extends DefaultNavigationFactory
 
 
         if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
-
             // Add the data entry links (if they're logged in
 
             if (!empty($pages['account'])) {
@@ -213,8 +211,6 @@ class NavigationFactory extends DefaultNavigationFactory
                     'uri' => '/financial-tools'
                 );
             }
-
-
         } else {
             // Hide some pages from non-logged-in users
             unset($pages['data-entry']);
@@ -233,7 +229,6 @@ class NavigationFactory extends DefaultNavigationFactory
             // Hide the executive report
             unset($pages['executive']);
             unset($pages['reports']['pages']['executive']);
-
         }
 
         // Hide the partners page for non-MRSS sites
@@ -247,7 +242,6 @@ class NavigationFactory extends DefaultNavigationFactory
         }
 
         if ($currentStudy->getId() != 4) {
-
         }
 
         // Since it's the first year of aaup, don't show the report menu until open and paid

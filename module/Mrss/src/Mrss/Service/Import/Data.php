@@ -248,12 +248,10 @@ class Data extends Import
 
 
         if (stristr($value, '.')) {
-
             if ($benchmark) {
                 if ($benchmark->isPercent() && $benchmark->getDbColumn() != 'vcr1' && $this->multPercent) {
                     $value = $value * 100;
                 }
-
             } else {
                 echo 'Benchmark not found for ' . $dbColumn;
             }
@@ -427,9 +425,7 @@ class Data extends Import
 
                     $this->map[$cell->getValue()] = $column - 1;
                 }
-
             }
-
         }
 
         //pr($this->map);

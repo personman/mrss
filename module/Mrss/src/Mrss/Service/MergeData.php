@@ -114,8 +114,6 @@ class MergeData
             echo "Saving $dbColumn: $value<br>\n";
         }
         $this->getObservationModel()->getEntityManager()->flush();
-
-
     }
 
     /**

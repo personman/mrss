@@ -170,7 +170,6 @@ class Excel extends Report
                 ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
                 ->getStartColor()->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
         }
-
     }
 
     /**
@@ -453,7 +452,6 @@ class Excel extends Report
             $theRow = $sheet->getStyle('A' . $row);
             $theRow->getFont()->setBold(true);
         }
-
     }
 
     protected function styleHeading($sheet, $row)
@@ -487,7 +485,6 @@ class Excel extends Report
             $objWriter = \PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
             //$objWriter->setOffice2003Compatibility(true);
             $objWriter->save('php://output');
-
         } else {
             $objWriter = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel5');
             header('Content-Type: application/vnd.ms-excel');
@@ -552,7 +549,6 @@ class Excel extends Report
         $data = array();
 
         foreach ($colleges as $college) {
-
             $collegeData = array();
             $headerRowSkipped = false;
             foreach ($sheet->getRowIterator() as $row) {
@@ -614,7 +610,6 @@ class Excel extends Report
             }
 
             $data[$college['ipeds']] = $collegeData;
-
         }
 
         return $data;
@@ -1056,7 +1051,6 @@ class Excel extends Report
             $spreadsheet,
             $observation
         );
-
     }
 
     protected function populateMrssSubObservations(
@@ -1259,9 +1253,6 @@ class Excel extends Report
             $gridLayout = $gridLayouts[$benchmarkGroupId];
 
             foreach ($gridLayout as $sectionKey => $section) {
-
-
-
                 if (empty($sheetInfo['sectionStartingCells'][$sectionKey])) {
                     continue;
                 }
@@ -1292,10 +1283,7 @@ class Excel extends Report
                         $currentRow++;
                         $currentColumn = $startingColumn;
                     }
-
                 }
-
-
             }
 
             if (!empty($sheetInfo['extra'])) {
@@ -1303,7 +1291,6 @@ class Excel extends Report
             }
 
             $structure[$benchmarkGroupId]['positions'] = $benchmarkPositions;
-
         }
 
         return $structure;
@@ -1466,5 +1453,4 @@ class Excel extends Report
 
         return $benchmarkGroups;
     }
-
 }

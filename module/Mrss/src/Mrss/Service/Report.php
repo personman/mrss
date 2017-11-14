@@ -140,12 +140,10 @@ class Report extends ReportBase
         if ($forPercentChange) {
             $changes = $this->getPercentChangeModel()->findByBenchmarkAndYear($benchmark, $year);
             $data = $this->getDataFromPercentChanges($changes);
-
         } else {
             $dbColumn = $benchmark->getDbColumn();
             $observation = new Observation;
             if ($observation->has($dbColumn)) {
-
                 // We no longer need the observation here
                 $subscriptions = $this->getSubscriptionModel()->findWithPartialObservations(
                     $this->getStudy(),
@@ -197,7 +195,6 @@ class Report extends ReportBase
 
             /** @var /Mrss/Entity/Observation $observation */
             if (true) {
-
                 try {
                     $value = $subscription->getValue($benchmark);
                 } catch (\Exception $e) {
@@ -248,7 +245,6 @@ class Report extends ReportBase
             $collegeId = $change->getCollege()->getId();
 
             $data[$collegeId] = $changeValue;
-
         }
 
         return $data;
@@ -318,7 +314,6 @@ class Report extends ReportBase
                 } else {
                     $decimalPlaces = 2;
                 }
-
             }
         }
 
@@ -535,7 +530,6 @@ class Report extends ReportBase
             if (!is_null($percentile)) {
                 $value = $percentile->getValue();
             }
-
         } else {
             $value = $observation->get($benchmarkInfo['dbColumn']);
         }
@@ -698,7 +692,6 @@ class Report extends ReportBase
             } else {
                 $formatted[] = $benchmark->format($percentile);
             }
-
         }
 
         $benchmarkData['percentiles_formatted'] = $formatted;
@@ -751,7 +744,6 @@ class Report extends ReportBase
             if ($benchmarkData['reported'] == 0) {
                 $benchmarkData['percentile_rank'] = '-';
             }
-
         } else {
             $benchmarkData['percentile_rank_id'] = '';
             $benchmarkData['percentile_rank'] = '';
@@ -1159,7 +1151,6 @@ class Report extends ReportBase
             $options = $benchmark->getOptionsForForm();
             $options = json_encode($options);
             $format = '{numericalOptions: ' . $options . '}';
-
         }
 
         if ($benchmark->getInputType() == 'minutesseconds') {
@@ -1194,7 +1185,6 @@ class Report extends ReportBase
             if ($label == '50') {
                 $label = 'Median';
             } else {
-
                 $label = $label . 'th';
             }
         }
@@ -1282,9 +1272,9 @@ class Report extends ReportBase
     {
         $num -= 1;
 
-        $letter = 	chr(($num % 26) + 97);
-        $letter .= 	(floor($num/26) > 0) ? str_repeat($letter, floor($num/26)) : '';
-        return 		($uppercase ? strtoupper($letter) : $letter);
+        $letter =   chr(($num % 26) + 97);
+        $letter .=  (floor($num/26) > 0) ? str_repeat($letter, floor($num/26)) : '';
+        return      ($uppercase ? strtoupper($letter) : $letter);
     }
 
 
@@ -1316,7 +1306,6 @@ class Report extends ReportBase
                     if ($sub) {
                         $subscriptions[] = $sub;
                     } else {
-
                     }
 
                     /*foreach ($college->getSubscriptionsForStudy($study) as $sub) {

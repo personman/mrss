@@ -370,7 +370,6 @@ inner join node g on a.group_nid = g.nid";
             }
 
             $this->getPeerGroupModel()->getEntityManager()->flush();
-
         }
 
         $this->saveProgress($count, $count);
@@ -418,7 +417,6 @@ inner join node g on a.group_nid = g.nid";
             // If there's no college, skip them
             $college = $this->findCollegeByAppendedIpeds($row['college']);
             if (!empty($college)) {
-
                 // Does the user already exist?
                 $user = $this->getUserModel()->findOneByEmail($row['mail']);
                 if (empty($user)) {
@@ -453,7 +451,6 @@ inner join node g on a.group_nid = g.nid";
         }
 
         $this->saveProgress($i);
-
     }
 
     public function getRole($contact_type)
@@ -725,7 +722,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                 prd($result);
             }*/
             if ($exampleObservation->has($dbColumn)) {
-
                 // Find the benchmarkGroup
                 $benchmarkGroupShortName = str_replace(
                     'group_',
@@ -822,8 +818,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
                     $hib = $reportField['field_rf_best_practices_high_low_value'];
                     $hib = (intval($hib) == 1);
                     $benchmark->setHighIsBetter($hib);
-
-
                 }
 
                 // Set the benchmark group
@@ -1114,7 +1108,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         }
 
         return $years;
-
     }
 
     /**
@@ -1245,7 +1238,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             // If it's complete, clear the progress
             if (isset($stats['processed']) && isset($stats['total']) &&
                 $stats['processed'] == $stats['total']) {
-
                 $this->getSettingModel()->setValueForIdentifier(
                     $this->importProgressPrefix . $type,
                     ''
@@ -1424,7 +1416,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
         }
 
         return $reportField;
-
     }
 
     public function importSystems()
@@ -1520,7 +1511,6 @@ inner join content_field_data_entry_year y on y.nid = n.nid";
             }
             $system['members'] = $members;
             $systemsWithMembers[$system['title']] = $system;
-
         }
 
         return $systemsWithMembers;

@@ -23,9 +23,7 @@ class NccbpNavigationFactory extends NavigationFactory
             if ($college = $user->getCollege()) {
                 try {
                     $systemMemberships = $college->getSystemMemberships();
-
                 } catch (\Exception $e) {
-
                 }
             }
 
@@ -65,7 +63,6 @@ class NccbpNavigationFactory extends NavigationFactory
 
                 $pages['reports']['pages']['social-mobility'] = $mobility;
             }
-
         } else {
             unset($pages['help']);
         }

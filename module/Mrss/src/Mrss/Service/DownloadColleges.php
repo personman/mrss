@@ -49,7 +49,6 @@ class DownloadColleges extends Report
 
         $sheet->fromArray($this->getHeaders(), null, 'A1');
         $this->row++;
-
     }
 
     protected function getHeaders()
@@ -99,7 +98,6 @@ class DownloadColleges extends Report
             $sheet->getStyle($rowCoordinates)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 
             $this->row++;
-
         }
     }
 
@@ -112,7 +110,6 @@ class DownloadColleges extends Report
         foreach (range(0, $colCount - 1) as $column) {
             $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         }
-
     }
     public function setStudy($study)
     {

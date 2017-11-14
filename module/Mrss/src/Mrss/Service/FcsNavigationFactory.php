@@ -19,7 +19,6 @@ class FcsNavigationFactory extends NavigationFactory
         $user = null;
         $system = null;
         if ($auth->hasIdentity() && $user = $auth->getIdentity()) {
-
             /*if ($college = $user->getCollege()) {
                 $system = $college->getSystem();
             }*/

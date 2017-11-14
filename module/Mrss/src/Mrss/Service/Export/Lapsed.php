@@ -31,10 +31,8 @@ class Lapsed extends Export
 
         // Loop over the colleges
         foreach ($colleges as $college) {
-
             $firstUser = true;
             foreach ($college->getDataUsers() as $user) {
-
                 $collegeName = $college->getName();
                 $yearsSubscribed = implode(', ', $college->getYearsWithSubscriptions($this->getStudy(), false));
                 if (!$firstUser) {

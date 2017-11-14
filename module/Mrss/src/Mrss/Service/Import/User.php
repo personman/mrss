@@ -34,7 +34,6 @@ class User extends Import
         } else {
             $this->addMessage("No college fount for " . $data['ipeds'] . ". Email: " . $data['email-1'] . '. ');
         }
-
     }
 
     protected function saveUsers(CollegeEntity $college, $data)

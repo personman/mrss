@@ -491,6 +491,5 @@ class ObservationGenerator
                 }
             }
         }
-
     }
 }
