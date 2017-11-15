@@ -2,9 +2,9 @@
 
 namespace Mrss\Service\Factory;
 
+use Mrss\Service\DataExport as Exporter;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Mrss\Service\DataExport as Exporter;
 
 class Export implements FactoryInterface
 {

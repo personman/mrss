@@ -2,8 +2,8 @@
 
 namespace Mrss\Service\Factory;
 
-use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\FactoryInterface;
 use Mrss\Service\Import\College as CollegeImporter;
 
 /**
