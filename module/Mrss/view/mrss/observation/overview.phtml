@@ -258,9 +258,8 @@
                 ?>
 
                 <li>
-                    <a href="/data-entry/<?= $benchmarkGroup->getUrl() ?>">
                     <a href="<?= $this->url('data-entry/edit', array(
-                        'benchmarkGroup' => $benchmarkGroup->getId(),
+                        'benchmarkGroup' => $benchmarkGroup->getUrl(),
                         'year' => $year
                     )) ?>">
                         <span class="service-area-type"><?= $benchmarkGroup->getUrl() ?>: <?= $benchmarkGroup->getLabel() ?></span>
