@@ -8,14 +8,18 @@ use Mrss\Service\DataExport as Exporter;
 
 class Export implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $sm)
+    /**
+     * @param ServiceLocatorInterface $serviceManager
+     * @return Exporter
+     */
+    public function createService(ServiceLocatorInterface $serviceManager)
     {
         $exportService = new Exporter();
 
-        $studyModel = $sm->get('model.study');
+        $studyModel = $serviceManager->get('model.study');
         $exportService->setStudyModel($studyModel);
 
-        $subscriptionModel = $sm->get('model.subscription');
+        $subscriptionModel = $serviceManager->get('model.subscription');
         $exportService->setSubscriptionModel($subscriptionModel);
 
         return $exportService;

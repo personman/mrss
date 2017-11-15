@@ -6,16 +6,21 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Mrss\Service\Import\College as CollegeImporter;
 
+/**
+ * Class ImportColleges
+ *
+ * @package Mrss\Service\Factory
+ */
 class ImportColleges implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $sm)
+    public function createService(ServiceLocatorInterface $manager)
     {
         $service = new CollegeImporter();
 
-        $collegeModel = $sm->get('model.college');
+        $collegeModel = $manager->get('model.college');
         $service->setCollegeModel($collegeModel);
 
-        $systemModel = $sm->get('model.system');
+        $systemModel = $manager->get('model.system');
         $service->setSystemModel($systemModel);
 
         return $service;
