@@ -2,6 +2,7 @@
 
 namespace Mrss\Service;
 
+use Mrss\Entity\Study;
 use Mrss\Entity\Subscription;
 use PHPExcel;
 use PHPExcel_Worksheet;
@@ -31,6 +32,9 @@ class UserExport
         return $this;
     }
 
+    /**
+     * @return Study
+     */
     public function getStudy()
     {
         return $this->study;
@@ -81,10 +85,19 @@ class UserExport
         $sheet->setCellValue('L' . $row, 'Email');
         $sheet->setCellValue('M' . $row, 'Phone');
         $sheet->setCellValue('N' . $row, 'Extension');
-        $sheet->setCellValue('N' . $row, 'Role');
+        $sheet->setCellValue('O' . $row, 'Role');
+
+        $column = 'O';
+        // Section
+        if ($this->getStudy()->hasSections()) {
+            foreach ($this->getStudy()->getSections() as $section) {
+                $column++;
+                $sheet->setCellValue($column . $row, $section->getName());
+            }
+        }
 
         // Style 'em
-        $headerRow = $sheet->getStyle('A1:N1');
+        $headerRow = $sheet->getStyle('A1:' . $column . '1');
         $headerRow->getFont()->setBold(true);
     }
 
@@ -117,7 +130,20 @@ class UserExport
                 $sheet->setCellValue('L' . $row, $user->getEmail());
                 $sheet->setCellValue('M' . $row, $user->getPhone());
                 $sheet->setCellValue('N' . $row, $user->getExtension());
-                $sheet->setCellValue('N' . $row, $user->getRole());
+                $sheet->setCellValue('O' . $row, $user->getRole());
+
+                $column = 'O';
+                // Section
+                if ($this->getStudy()->hasSections()) {
+                    foreach ($this->getStudy()->getSections() as $section) {
+                        $hasSection = '';
+                        if ($subscription->hasSection($section)) {
+                            $hasSection = '1';
+                        }
+                        $column++;
+                        $sheet->setCellValue($column . $row, $hasSection);
+                    }
+                }
 
                 $row++;
             }
