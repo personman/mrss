@@ -378,22 +378,4 @@ class BenchmarkController extends BaseController
 
         return $this->benchmarkModel;
     }
-
-    public function generateObservation()
-    {
-        $generator = $this->getObservationGenerator();
-        $generator->generate();
-
-        $extraMessage = $generator->summarizeStats();
-
-        return $extraMessage;
-    }
-
-    /**
-     * @return \Mrss\Service\ObservationGenerator
-     */
-    public function getObservationGenerator()
-    {
-        return $this->getServiceLocator()->get('service.generator');
-    }
 }

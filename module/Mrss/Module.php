@@ -359,7 +359,6 @@ class Module
                 'service.import.colleges.category' => 'Mrss\Service\Factory\ImportCollegeCategory',
                 'service.import.users' => 'Mrss\Service\Factory\ImportUsers',
                 'service.import.workforce.data' => 'Mrss\Service\Factory\ImportWorkforceDataFactory',
-                'service.generator' => 'Mrss\Service\Factory\ObservationGenerator',
                 'service.observation.data.migration' => 'Mrss\Service\Factory\ObservationDataMigration',
                 'service.variableSubstitution' => function ($sm) {
                     $service = new Service\VariableSubstitution();

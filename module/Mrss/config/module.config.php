@@ -2151,17 +2151,6 @@ return array(
                             )
                         )
                     ),
-                    'generate-observation' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => '/generate[/:strip]',
-                            'defaults' => array(
-                                'controller' => 'Admin',
-                                'action' => 'generate',
-                                'strip' => false
-                            )
-                        )
-                    ),
                     'check-migration' => array(
                         'type' => 'segment',
                         'options' => array(

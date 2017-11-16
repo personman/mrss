@@ -180,28 +180,6 @@ class AdminController extends AbstractActionController
         return $this->getServiceLocator()->get('computedFields');
     }
 
-    /**
-     * Build a new Observation entity based on benchmark config
-     */
-    public function generateAction()
-    {
-        /** @var \Mrss\Service\ObservationGenerator $generator */
-        $generator = $this->getServiceLocator()->get('service.generator');
-
-
-        $strip = $this->params()->fromRoute('strip');
-
-        if (!$strip) {
-            $generator->generate(true, true);
-        } else {
-            $generator->stripObservation();
-        }
-
-        $stats = $generator->getStats();
-
-        prd($stats);
-    }
-
     public function checkMigrationAction()
     {
         takeYourTime();
