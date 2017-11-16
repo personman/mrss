@@ -28,7 +28,7 @@ class ImportBenchmarks
     protected $observation;
 
     /** @var ComputedFields */
-    protected $computedFieldsService;
+    protected $computedService;
 
     protected $messages = array();
 
@@ -516,13 +516,13 @@ class ImportBenchmarks
 
     public function setComputedFieldsService(ComputedFields $service)
     {
-        $this->computedFieldsService = $service;
+        $this->computedService = $service;
 
         return $this;
     }
 
     public function getComputedFieldsService()
     {
-        return $this->computedFieldsService;
+        return $this->computedService;
     }
 }
