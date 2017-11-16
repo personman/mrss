@@ -50,7 +50,7 @@ class ImportBenchmarks
             throw new \Exception("Import file $filename does not exist.");
         }
 
-        ini_set('auto_detect_line_endings', true);
+        autoDetectLineEndings();
 
         $fileHandle = fopen($filename, 'r');
         $headers = array();
@@ -63,14 +63,7 @@ class ImportBenchmarks
                 $headers = $data;
                 $this->checkHeaders($headers);
             } else {
-                $row = array();
-                foreach ($headers as $key => $field) {
-                    if (isset($data[$key])) {
-                        $row[$field] = trim($data[$key]);
-                    } else {
-                        $row[$field] = false;
-                    }
-                }
+                $row = $this->processHeader($headers, $data);
 
                 // Check equation
                 $this->checkEquation($row['equation'], $row['dbColumn']);
@@ -81,6 +74,20 @@ class ImportBenchmarks
         }
 
         $this->saveHeadings();
+    }
+
+    protected function processHeader($headers, $data)
+    {
+        $row = array();
+        foreach ($headers as $key => $field) {
+            if (isset($data[$key])) {
+                $row[$field] = trim($data[$key]);
+            } else {
+                $row[$field] = false;
+            }
+        }
+
+        return $row;
     }
 
     protected function checkEquation($equation, $dbColumn)
@@ -200,6 +207,26 @@ class ImportBenchmarks
             return false;
         }
 
+        $benchmark = $this->updateBenchmarkWithArray($benchmark, $row, $benchmarkGroup);
+
+        $sequence = $this->getSequence($benchmark);
+        $benchmark->setSequence($sequence);
+        $benchmark->setReportSequence($sequence);
+
+        $yearsAvailable = explode(',', $row['yearsAvailable']);
+        $benchmark->setYearsAvailable($yearsAvailable);
+
+        $exclude = $benchmark->getExcludeFromCompletion();
+        $benchmark->setExcludeFromCompletion($exclude);
+
+        // Save it
+        $this->getBenchmarkModel()->save($benchmark);
+
+        return $benchmark;
+    }
+
+    protected function updateBenchmarkWithArray(Benchmark $benchmark, $row, $benchmarkGroup)
+    {
         // Remove colon from name
         $name = str_replace(':', '', $row['name']);
 
@@ -223,19 +250,6 @@ class ImportBenchmarks
         $benchmark->setYearsAvailable($this->getYears());
         $benchmark->setComputeIfValuesMissing(false);
         $benchmark->setIncludeInOtherReports(false);
-
-        $sequence = $this->getSequence($benchmark);
-        $benchmark->setSequence($sequence);
-        $benchmark->setReportSequence($sequence);
-
-        $yearsAvailable = explode(',', $row['yearsAvailable']);
-        $benchmark->setYearsAvailable($yearsAvailable);
-
-        $exclude = $benchmark->getExcludeFromCompletion();
-        $benchmark->setExcludeFromCompletion($exclude);
-
-        // Save it
-        $this->getBenchmarkModel()->save($benchmark);
 
         return $benchmark;
     }
@@ -342,53 +356,72 @@ class ImportBenchmarks
         // Loop over benchmark Groups
         $studyBenchmarks = array();
         foreach ($study->getBenchmarkGroups() as $benchmarkGroup) {
-            $formName = $benchmarkGroup->getName();
-            $children = $benchmarkGroup->getChildren();
+            $thisForm = $this->getBenchmarkGroupAsArray($benchmarkGroup);
+            $studyBenchmarks = array_merge($studyBenchmarks, $thisForm);
+        }
 
-            foreach ($children as $child) {
-                if ($child instanceof BenchmarkHeading) {
-                    $heading = $child;
-                    $studyBenchmarks[] = array(
-                        $formName,
-                        $heading->getName(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        $heading->getDbColumn(),
-                        'heading',
-                        $heading->getDescription()
-                    );
-                } else {
-                    /** @var Benchmark $benchmark */
-                    $benchmark = $child;
+        return $studyBenchmarks;
+    }
 
-                    $studyBenchmarks[] = array(
-                        $formName,
-                        $benchmark->getName(),
-                        $benchmark->getReportLabel(),
-                        $benchmark->getPeerReportLabel(),
-                        $benchmark->getDescriptiveReportLabel(),
-                        $benchmark->getYearPrefix(),
-                        $benchmark->getYearOffset(),
-                        $benchmark->getDbColumn(),
-                        $benchmark->getInputType(),
-                        $benchmark->getDescription(),
-                        $benchmark->getOptions(),
-                        $benchmark->getComputed(),
-                        $benchmark->getEquation(),
-                        $benchmark->getExcludeFromCompletion(),
-                        $benchmark->getIncludeInNationalReport(),
-                        $benchmark->getIncludeInBestPerformer(),
-                        $benchmark->getHighIsBetter(),
-                        implode(',', $benchmark->getYearsAvailable())
-                    );
-                }
+    protected function getBenchmarkGroupAsArray(BenchmarkGroup $benchmarkGroup)
+    {
+        $studyBenchmarks = array();
+        $formName = $benchmarkGroup->getName();
+        $children = $benchmarkGroup->getChildren();
+
+        foreach ($children as $child) {
+            if ($child instanceof BenchmarkHeading) {
+                $heading = $child;
+                $studyBenchmarks[] = $this->getHeadingAsArray($heading, $formName);
+            } else {
+                /** @var Benchmark $benchmark */
+                $benchmark = $child;
+
+                $studyBenchmarks[] = $this->getBenchmarkAsArray($benchmark, $formName);
             }
         }
 
         return $studyBenchmarks;
+    }
+
+    protected function getBenchmarkAsArray(Benchmark $benchmark, $formName)
+    {
+        return array(
+            $formName,
+            $benchmark->getName(),
+            $benchmark->getReportLabel(),
+            $benchmark->getPeerReportLabel(),
+            $benchmark->getDescriptiveReportLabel(),
+            $benchmark->getYearPrefix(),
+            $benchmark->getYearOffset(),
+            $benchmark->getDbColumn(),
+            $benchmark->getInputType(),
+            $benchmark->getDescription(),
+            $benchmark->getOptions(),
+            $benchmark->getComputed(),
+            $benchmark->getEquation(),
+            $benchmark->getExcludeFromCompletion(),
+            $benchmark->getIncludeInNationalReport(),
+            $benchmark->getIncludeInBestPerformer(),
+            $benchmark->getHighIsBetter(),
+            implode(',', $benchmark->getYearsAvailable())
+        );
+    }
+
+    protected function getHeadingAsArray(BenchmarkHeading $heading, $formName)
+    {
+        return array(
+            $formName,
+            $heading->getName(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            $heading->getDbColumn(),
+            'heading',
+            $heading->getDescription()
+        );
     }
 
     public function setStudy(Study $study)
