@@ -2,6 +2,7 @@
 
 namespace Mrss\Service;
 
+use Doctrine\ORM\EntityManager;
 use Mrss\Entity\Study;
 use Mrss\Model\Benchmark as BenchmarkModel;
 use Mrss\Model\BenchmarkGroup as BenchmarkGroupModel;
@@ -51,9 +52,9 @@ class ImportBenchmarks
 
         ini_set('auto_detect_line_endings', true);
 
-        $fh = fopen($filename, 'r');
+        $fileHandle = fopen($filename, 'r');
         $headers = array();
-        while (($data = fgetcsv($fh)) !== false) {
+        while (($data = fgetcsv($fileHandle)) !== false) {
             if (count($data) < 2) {
                 continue;
             }
@@ -82,7 +83,7 @@ class ImportBenchmarks
         $this->saveHeadings();
     }
 
-    public function checkEquation($equation, $dbColumn)
+    protected function checkEquation($equation, $dbColumn)
     {
         if (!empty($equation)) {
             $result = $this->getComputedFieldsService()->checkEquation($equation);
@@ -98,14 +99,14 @@ class ImportBenchmarks
     public function getMessages()
     {
         $allMessages = '';
-        foreach ($this->messages as $type => $messages) {
+        foreach ($this->messages as $messages) {
             $allMessages .= implode('', $messages);
         }
 
         return $allMessages;
     }
 
-    public function importRow($row)
+    protected function importRow($row)
     {
         // Find or create the benchmarkGroup
         $benchmarkGroup = $this->findOrCreateBenchmarkGroup($row);
@@ -122,14 +123,14 @@ class ImportBenchmarks
             }
         }
 
-        $this->entityManager->flush();
+        $this->getEntityManager()->flush();
     }
 
     /**
      * @param $row
      * @param \Mrss\Entity\BenchmarkGroup $benchmarkGroup
      */
-    public function addHeading($row, $benchmarkGroup)
+    protected function addHeading($row, $benchmarkGroup)
     {
         $gId = $benchmarkGroup->getId();
         if (!isset($this->headings[$gId])) {
@@ -152,7 +153,7 @@ class ImportBenchmarks
         $this->headings[$gId][] = $heading;
     }
 
-    public function saveHeadings()
+    protected function saveHeadings()
     {
         foreach ($this->headings as $gId => $headings) {
             $group = $this->getBenchmarkGroupModel()->find($gId);
@@ -162,10 +163,10 @@ class ImportBenchmarks
             }
         }
 
-        $this->entityManager->flush();
+        $this->getEntityManager()->flush();
     }
 
-    public function findOrCreateBenchmarkGroup($row)
+    protected function findOrCreateBenchmarkGroup($row)
     {
         $benchmarkGroup = $this->getBenchmarkGroupModel()
             ->findOneByName($row['benchmarkGroup']);
@@ -188,7 +189,7 @@ class ImportBenchmarks
         return $benchmarkGroup;
     }
 
-    public function updateOrCreateBenchmark($row, $benchmarkGroup)
+    protected function updateOrCreateBenchmark($row, $benchmarkGroup)
     {
         $benchmark = $this->getBenchmarkModel()
             ->findOneByDbColumnAndGroup($row['dbColumn'], $benchmarkGroup);
@@ -242,9 +243,9 @@ class ImportBenchmarks
     /**
      * Get the sequence by keeping track of the number of benchmarks per group
      *
-     * @param $benchmark
+     * @param Benchmark|BenchmarkHeading $benchmark
      */
-    public function getSequence($benchmark)
+    protected function getSequence($benchmark)
     {
         $benchmarkGroupName = $benchmark->getBenchmarkGroup()->getName();
         if (!isset($this->sequences[$benchmarkGroupName])) {
@@ -262,7 +263,7 @@ class ImportBenchmarks
      *
      * @param Benchmark $benchmark
      */
-    public function checkObservation(Benchmark $benchmark)
+    protected function checkObservation(Benchmark $benchmark)
     {
         $observation = $this->getObservation();
         $dbColumn = $benchmark->getDbColumn();
@@ -275,9 +276,9 @@ class ImportBenchmarks
         }
     }
 
-    public function getTypeByInputType($inputType)
+    protected function getMap()
     {
-        $map = array(
+        return array(
             'number' => 'integer',
             'dollars' => 'float',
             'wholedollars' => 'float',
@@ -287,6 +288,11 @@ class ImportBenchmarks
             'computed' => 'float',
             'text' => 'string'
         );
+    }
+
+    public function getTypeByInputType($inputType)
+    {
+        $map = $this->getMap();
 
         if (!empty($map[$inputType])) {
             $type = $map[$inputType];
@@ -298,7 +304,7 @@ class ImportBenchmarks
         return $type;
     }
 
-    public function getYears()
+    protected function getYears()
     {
         $year = date('Y');
         $year2 = $year + 1;
@@ -320,18 +326,18 @@ class ImportBenchmarks
             throw new \Exception("Export file $filename does not exist.");
         }
 
-        $fh = fopen($filename, 'w');
+        $fileHandle = fopen($filename, 'w');
 
-        fputcsv($fh, $headers);
+        fputcsv($fileHandle, $headers);
         foreach ($rows as $row) {
-            fputcsv($fh, $row);
+            fputcsv($fileHandle, $row);
         }
-        fclose($fh);
+        fclose($fileHandle);
 
         return true;
     }
 
-    public function getBenchmarkInfo(Study $study)
+    protected function getBenchmarkInfo(Study $study)
     {
         // Loop over benchmark Groups
         $studyBenchmarks = array();
@@ -414,15 +420,23 @@ class ImportBenchmarks
         return $this->benchmarkGroupModel;
     }
 
-    public function setEntityManager($em)
+    public function setEntityManager($entityManager)
     {
-        $this->entityManager = $em;
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
     }
 
     /**
      * A sample (empty) observation
      */
-    public function getObservation()
+    protected function getObservation()
     {
         if (empty($this->observation)) {
             $this->observation = new Observation();
