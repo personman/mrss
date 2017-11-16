@@ -2,8 +2,8 @@
 
 namespace Mrss\Form;
 
+use Mrss\Entity\College;
 use Zend\Form\Element;
-use Zend\Form\Fieldset;
 
 class Explore extends AbstractForm
 {
@@ -16,7 +16,6 @@ class Explore extends AbstractForm
         $peerGroups,
         $includeTrends,
         $allBreakpoints,
-        $systems,
         $studyConfig
     ) {
         // Call the parent constructor
@@ -25,19 +24,18 @@ class Explore extends AbstractForm
         rsort($years);
         $this->studyConfig = $studyConfig;
 
-        $this->addBasicFields($years, $includeTrends);
+        $this->addBasicFields($includeTrends);
+        $this->addMoreBasicFields($years);
         $this->addBenchmarkSelects($benchmarks);
-        $this->addSystemsDropdown($systems);
         $this->addPeerGroupDropdown($peerGroups, $colleges);
-        $this->addAdvancedFields($benchmarks, $allBreakpoints);
+        $this->addAdvancedFields($benchmarks);
+        $this->addMoreAdvancedFields($allBreakpoints);
 
         $this->add($this->getButtons());
     }
 
-    protected function addBasicFields($years, $includeTrends)
+    protected function addBasicFields($includeTrends)
     {
-        $years = array_combine($years, $years);
-
         $this->add(
             array(
                 'name' => 'id',
@@ -89,7 +87,11 @@ class Explore extends AbstractForm
                 )
             )
         );
+    }
 
+    protected function addMoreBasicFields($years)
+    {
+        $years = array_combine($years, $years);
         $this->add(
             array(
                 'name' => 'width',
@@ -188,34 +190,6 @@ class Explore extends AbstractForm
 
     }
 
-    protected function addSystemsDropdown($systems)
-    {
-        return false;
-
-        if (count($systems)) {
-            $systemOptions = array();
-            foreach ($systems as $system) {
-                $systemOptions[$system->getId()] = $system->getName();
-            }
-
-            $this->add(
-                array(
-                    'name' => 'system',
-                    'type' => 'Zend\Form\Element\Select',
-                    'allow_empty' => true,
-                    'required' => false,
-                    'options' => array(
-                        'label' => 'Network',
-                    ),
-                    'attributes' => array(
-                        'options' => $systemOptions,
-                        'id' => 'system'
-                    )
-                )
-            );
-        }
-    }
-
     protected function addPeerGroupDropdown($peerGroups, $colleges)
     {
         $this->add(
@@ -236,7 +210,16 @@ class Explore extends AbstractForm
             )
         );
 
+        $this->addExtraPeerFields($colleges);
 
+
+    }
+
+    /**
+     * @param College[] $colleges
+     */
+    protected function addExtraPeerFields($colleges)
+    {
         if (count($colleges)) {
             $collegeOptions = array();
             foreach ($colleges as $college) {
@@ -286,10 +269,9 @@ class Explore extends AbstractForm
                 )
             )
         );
-
     }
 
-    protected function addAdvancedFields($benchmarks, $allBreakpoints)
+    protected function addAdvancedFields($benchmarks)
     {
         if (true) {
             $this->add(
@@ -337,20 +319,10 @@ class Explore extends AbstractForm
                 )
             )
         );
+    }
 
-        /*$this->add(
-            array(
-                'name' => 'highlightedCollege',
-                'type' => 'Select',
-                'options' => array(
-                    'label' => 'College'
-                ),
-                'attributes' => array(
-                    'options' => $colleges
-                )
-            )
-        );*/
-
+    protected function addMoreAdvancedFields($allBreakpoints)
+    {
         $allBreakpoints = array_combine($allBreakpoints, $allBreakpoints);
         $this->add(
             array(

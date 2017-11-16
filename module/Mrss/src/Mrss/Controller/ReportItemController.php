@@ -179,7 +179,6 @@ class ReportItemController extends CustomReportController
             $peerGroups,
             $includeTrends,
             $allBreakpoints,
-            $systems,
             $this->getStudyConfig()
         );
 
