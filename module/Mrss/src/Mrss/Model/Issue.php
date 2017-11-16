@@ -3,7 +3,6 @@
 namespace Mrss\Model;
 
 use Mrss\Entity\Issue as IssueEntity;
-use Mrss\Model\AbstractModel;
 
 /**
  * Class Issue
@@ -19,16 +18,17 @@ class Issue extends AbstractModel
     protected $entity = 'Mrss\Entity\Issue';
 
     /**
-     * @param $id
+     * @param $issueId
      * @return null|IssueEntity
      */
-    public function find($id)
+    public function find($issueId)
     {
-        return $this->getRepository()->find($id);
+        return $this->getRepository()->find($issueId);
     }
 
     /**
      * @param $college
+     * @param $year
      * @return IssueEntity[]
      */
     public function findByCollege($college, $year = null)
@@ -94,8 +94,8 @@ class Issue extends AbstractModel
             $where .= "(i.status NOT IN (:exclude) $includeNull)";
         }
 
-        $em = $this->getEntityManager();
-        $query = $em->createQuery(
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
             "SELECT i
             FROM Mrss\Entity\Issue i
             $where
