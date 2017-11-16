@@ -8,17 +8,17 @@ use Mrss\Service\Import\User as UserImport;
 
 class ImportUsers implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $sm)
+    public function createService(ServiceLocatorInterface $serviceManager)
     {
         $service = new UserImport();
 
-        $collegeModel = $sm->get('model.college');
+        $collegeModel = $serviceManager->get('model.college');
         $service->setCollegeModel($collegeModel);
 
-        $userModel = $sm->get('model.user');
+        $userModel = $serviceManager->get('model.user');
         $service->setUserModel($userModel);
 
-        $currentStudy = $sm->get('ControllerPluginManager')
+        $currentStudy = $serviceManager->get('ControllerPluginManager')
             ->get('currentStudy')->getCurrentStudy();
         $service->setStudy($currentStudy);
 

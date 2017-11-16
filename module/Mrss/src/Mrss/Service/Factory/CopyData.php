@@ -8,19 +8,18 @@ use Mrss\Service\CopyData as CD;
 
 class CopyData implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $sm)
+    public function createService(ServiceLocatorInterface $serviceManager)
     {
         $service = new CD();
-
-        $subscriptionModel = $sm->get('model.subscription');
-        $service->setSubscriptionModel($subscriptionModel);
-
-        $benchmarkModel = $sm->get('model.benchmark');
-        $service->setBenchmarkModel($benchmarkModel);
-
-        $currentStudy = $sm->get('ControllerPluginManager')
+        $currentStudy = $serviceManager->get('ControllerPluginManager')
             ->get('currentStudy')->getCurrentStudy();
         $service->setStudy($currentStudy);
+
+        $subscriptionModel = $serviceManager->get('model.subscription');
+        $service->setSubscriptionModel($subscriptionModel);
+
+        $benchmarkModel = $serviceManager->get('model.benchmark');
+        $service->setBenchmarkModel($benchmarkModel);
 
         return $service;
     }
