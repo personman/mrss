@@ -14,8 +14,15 @@
 <h4>Export users from <?= $this->currentStudy()->getDescription() ?></h4>
 
 <p>
+    <a href="<?= $this->url('export', array('action' => 'users')) ?>">Export all users from all years </a>
+</p>
+
+
+<p>
     <?php foreach ($years as $year): ?>
         <a href="<?= $this->url('export', array('action' => 'users', 'year' => $year)) ?>">Export users with memberships for <?= $year ?> </a><br>
     <?php endforeach; ?>
 </p>
+
+
 

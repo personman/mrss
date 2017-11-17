@@ -15,6 +15,9 @@ class ExportUsers implements FactoryInterface
         $subscriptionModel = $sm->get('model.subscription');
         $exporter->setSubscriptionModel($subscriptionModel);
 
+        $collegeModel = $sm->get('model.college');
+        $exporter->setCollegeModel($collegeModel);
+
         return $exporter;
     }
 }

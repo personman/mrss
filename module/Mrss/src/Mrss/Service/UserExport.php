@@ -2,6 +2,7 @@
 
 namespace Mrss\Service;
 
+use \Mrss\Entity\College;
 use Mrss\Entity\Study;
 use Mrss\Entity\Subscription;
 use PHPExcel;
@@ -17,6 +18,8 @@ use PHPExcel_IOFactory;
  */
 class UserExport
 {
+    protected $row = 1;
+
     /**
      * @var PHPExcel $excel
      */
@@ -24,6 +27,7 @@ class UserExport
     protected $filename = 'user-export';
     protected $study;
     protected $subscriptionModel;
+    protected $collegeModel;
 
     public function setStudy($study)
     {
@@ -45,9 +49,25 @@ class UserExport
         $this->subscriptionModel = $subscriptionModel;
     }
 
+    /**
+     * @return \Mrss\Model\Subscription
+     */
     public function getSubscriptionModel()
     {
         return $this->subscriptionModel;
+    }
+
+    public function setCollegeModel($collegeModel)
+    {
+        $this->collegeModel = $collegeModel;
+    }
+
+    /**
+     * @return \Mrss\Model\College
+     */
+    public function getCollegeModel()
+    {
+        return $this->collegeModel;
     }
 
     public function export($year = null)
@@ -67,7 +87,7 @@ class UserExport
     protected function writeHeaders()
     {
         $sheet = $this->excel->getActiveSheet();
-        $row = 1;
+        $row = $this->row;
 
         $sheet->setCellValue('A' . $row, 'Institution');
         $sheet->setCellValue('B' . $row, 'IPEDS');
@@ -86,8 +106,9 @@ class UserExport
         $sheet->setCellValue('M' . $row, 'Phone');
         $sheet->setCellValue('N' . $row, 'Extension');
         $sheet->setCellValue('O' . $row, 'Role');
+        $sheet->setCellValue('P' . $row, 'Years');
 
-        $column = 'O';
+        $column = 'P';
         // Section
         if ($this->getStudy()->hasSections()) {
             foreach ($this->getStudy()->getSections() as $section) {
@@ -101,60 +122,92 @@ class UserExport
         $headerRow->getFont()->setBold(true);
     }
 
-    protected function writeData($year)
+    /**
+     * @return \Mrss\Entity\College[]
+     */
+    protected function getColleges()
     {
-        $subscriptions = $this->getSubscriptions($year);
-        $sheet = $this->excel->getActiveSheet();
+        return $this->getCollegeModel()->findAll();
+    }
 
-        $row = 2;
-        foreach ($subscriptions as $subscription) {
-            /** @var \Mrss\Entity\Subscription $subscription */
-            $college = $subscription->getCollege();
-            $users = $college->getUsersByStudy($this->getStudy());
+    protected function writeData($year = null)
+    {
+        $this->row = 2;
 
-            foreach ($users as $user) {
-                // College data
-                $sheet->setCellValue('A' . $row, $college->getName());
-                $sheet->setCellValue('B' . $row, $college->getIpeds());
-                $sheet->setCellValue('C' . $row, $college->getAddress());
-                $sheet->setCellValue('D' . $row, $college->getAddress2());
-                $sheet->setCellValue('E' . $row, $college->getCity());
-                $sheet->setCellValue('F' . $row, $college->getState());
-                $sheet->setCellValue('G' . $row, $college->getZip());
-
-                // User data
-                $sheet->setCellValue('H' . $row, $user->getPrefix());
-                $sheet->setCellValue('I' . $row, $user->getFirstName());
-                $sheet->setCellValue('J' . $row, $user->getLastName());
-                $sheet->setCellValue('K' . $row, $user->getTitle());
-                $sheet->setCellValue('L' . $row, $user->getEmail());
-                $sheet->setCellValue('M' . $row, $user->getPhone());
-                $sheet->setCellValue('N' . $row, $user->getExtension());
-                $sheet->setCellValue('O' . $row, $user->getRole());
-
-                $column = 'O';
-                // Section
-                if ($this->getStudy()->hasSections()) {
-                    foreach ($this->getStudy()->getSections() as $section) {
-                        $hasSection = '';
-                        if ($subscription->hasSection($section)) {
-                            $hasSection = '1';
-                        }
-                        $column++;
-                        $sheet->setCellValue($column . $row, $hasSection);
-                    }
-                }
-
-                $row++;
+        if ($year) {
+            $subscriptions = $this->getSubscriptions($year);
+            foreach ($subscriptions as $subscription) {
+                $college = $subscription->getCollege();
+                $this->writeRowsForCollege($college, $subscription);
+            }
+        } else {
+            foreach ($this->getColleges() as $college) {
+                $this->writeRowsForCollege($college);
             }
         }
 
+
         // Autosize
-        foreach (range(0, 16) as $col) {
+        $sheet = $this->excel->getActiveSheet();
+        foreach (range(0, 19) as $col) {
             $sheet->getColumnDimensionByColumn($col)->setAutosize(true);
         }
     }
 
+    /**
+     * @param College $college
+     * @param null|Subscription $subscription
+     */
+    protected function writeRowsForCollege(College $college, $subscription = null)
+    {
+        $sheet = $this->excel->getActiveSheet();
+
+        $users = $college->getUsersByStudy($this->getStudy());
+
+        foreach ($users as $user) {
+            $row = $this->row;
+
+            // College data
+            $sheet->setCellValue('A' . $row, $college->getName());
+            $sheet->setCellValue('B' . $row, $college->getIpeds());
+            $sheet->setCellValue('C' . $row, $college->getAddress());
+            $sheet->setCellValue('D' . $row, $college->getAddress2());
+            $sheet->setCellValue('E' . $row, $college->getCity());
+            $sheet->setCellValue('F' . $row, $college->getState());
+            $sheet->setCellValue('G' . $row, $college->getZip());
+
+            // User data
+            $sheet->setCellValue('H' . $row, $user->getPrefix());
+            $sheet->setCellValue('I' . $row, $user->getFirstName());
+            $sheet->setCellValue('J' . $row, $user->getLastName());
+            $sheet->setCellValue('K' . $row, $user->getTitle());
+            $sheet->setCellValue('L' . $row, $user->getEmail());
+            $sheet->setCellValue('M' . $row, $user->getPhone());
+            $sheet->setCellValue('N' . $row, $user->getExtension());
+            $sheet->setCellValue('O' . $row, $user->getRole());
+            $sheet->setCellValue('P' . $row, implode(',', $college->getYears()));
+
+            $column = 'P';
+            // Section
+            if ($subscription && $this->getStudy()->hasSections()) {
+                foreach ($this->getStudy()->getSections() as $section) {
+                    $hasSection = '';
+                    if ($subscription->hasSection($section)) {
+                        $hasSection = '1';
+                    }
+                    $column++;
+                    $sheet->setCellValue($column . $row, $hasSection);
+                }
+            }
+
+            $this->row++;
+        }
+    }
+
+    /**
+     * @param $year
+     * @return \Mrss\Entity\Subscription[]
+     */
     protected function getSubscriptions($year)
     {
         if (empty($year)) {
