@@ -35,6 +35,14 @@
 
 </script>
 
+<div class="back">
+    <a href="/colleges">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Back to <?= ucwords($this->studyConfig()->institutions_label) ?>
+    </a>
+</div>
+
+
 <div class="btn-group heading-btns">
     <a class="btn btn-default" href="<?= $this->url('colleges/edit', array('id' => $college->getId())) ?>">
         <i class="glyphicon glyphicon-pencil"></i>

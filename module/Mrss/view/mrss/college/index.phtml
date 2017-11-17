@@ -10,10 +10,6 @@ $this->headScript()->appendFile(
 $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
 
-<?php if ($output = $outputCache->start('admin--Colleges')): ?>
-    <?= $output ?>
-<?php else: ?>
-
 <script>
     <?php $this->headScript()->captureStart() ?>
     $(document).ready(function() {
@@ -31,6 +27,11 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
     <?php $this->headScript()->captureEnd() ?>
 </script>
 
+<?php if ($output || $output = $outputCache->start($cacheKey)): ?>
+    <?= $output ?>
+<?php else: ?>
+
+
 <div class="btn-group heading-btns">
     <a class="btn btn-default" href="<?= $this->url('colleges/download') ?>">
         <i class="glyphicon glyphicon-circle-arrow-down"></i>
@@ -41,10 +42,18 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
         <i class="glyphicon glyphicon-plus"></i>
         Add <?= ucwords($this->studyConfig()->institution_label) ?></a>
     </a>
+    <a class="btn btn-default" href="/colleges?refresh=1" title="This page is cached. It may fall out of date as the underlying records change. Refreshing this page brings it up to date.">
+        <i class="glyphicon glyphicon-refresh"></i>
+        Refresh
+    </a>
 </div>
 
 
-<h1><?= ucwords($this->studyConfig()->institutions_label) ?></h1>
+<h1>
+    <?= ucwords($this->studyConfig()->institutions_label) ?>
+</h1>
+
+
 
 <table class="style1 table heatmap" id="colleges">
     <thead>

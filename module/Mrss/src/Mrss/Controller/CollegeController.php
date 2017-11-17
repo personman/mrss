@@ -5,37 +5,47 @@ namespace Mrss\Controller;
 use Mrss\Entity\College;
 use Mrss\Form\AbstractForm;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\Cache\PatternFactory;
 use Zend\View\Model\JsonModel;
 
 class CollegeController extends BaseController
 {
     public function indexAction()
     {
-        //$cacheKey = 'college-index';
         $this->longRunningScript();
-
-        //$cache = $this->getCache();
-
-        //if ($cache->hasItem($cacheKey)) {
-        //    $colleges = $cache->getItem($cacheKey);
-        //} else {
-            $colleges = $this->getCollegeModel()->findAll();
-        //    $cache->setItem($cacheKey, $colleges);
-        //}
 
         // For completion heatmap
         $years = $this->getSubscriptionModel()
             ->getYearsWithSubscriptions($this->currentStudy());
 
 
-        $outputCache = $outputCache = \Zend\Cache\PatternFactory::factory('output', array(
+        $cacheKey = 'admin--Colleges';
+        $outputCache = PatternFactory::factory('output', array(
             'storage' => 'filesystem',
+            //'options' => array('ttl' => 3600)
         ));
+
+        if (false || $this->params()->fromQuery('refresh')) {
+            $outputCache->getOptions()->getStorage()->removeItem($cacheKey);
+        }
+
+
+        $success = null;
+        $data = $outputCache->getOptions()->getStorage()->getItem($cacheKey, $success);
+        if ($success) {
+            $colleges = array(); // Won't get used
+            //echo 'cached.';
+        } else {
+            //echo 'not cached';
+            $colleges = $this->getCollegeModel()->findAll();
+        }
 
         return array(
             'colleges' => $colleges,
             'years' => $years,
-            'outputCache' => $outputCache
+            'outputCache' => $outputCache,
+            'cacheKey' => $cacheKey,
+            'output' => $data
         );
     }
 
