@@ -110,7 +110,7 @@ class UserExport
 
         $column = 'P';
         // Section
-        if (empty($year) && $this->getStudy()->hasSections()) {
+        if (!empty($year) && $this->getStudy()->hasSections()) {
             foreach ($this->getStudy()->getSections() as $section) {
                 $column++;
                 $sheet->setCellValue($column . $row, $section->getName());
