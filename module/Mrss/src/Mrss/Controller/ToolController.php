@@ -19,6 +19,8 @@ use PHPExcel_Style_Fill;
 use Mrss\Service\NccbpMigration;
 use Zend\Session\Container;
 use Mrss\Service\Export\User as ExportUser;
+use Zend\Mime\Part as MimePart;
+use Zend\Mime\Message as MimeMessage;
 
 class ToolController extends BaseController
 {
@@ -1242,6 +1244,19 @@ class ToolController extends BaseController
                 $message->setSubject($data['subject']);
                 $message->setFrom($fromEmail);
                 $message->addTo($data['to']);
+
+                $content = $data['body'];
+
+                // make a header as html
+                $html = new MimePart($content);
+                $html->type = "text/html";
+                $text = new MimePart(strip_tags($content));
+                $text->type = "text/plain";
+                $body = new MimeMessage();
+                $body->setParts(array($text, $html));
+
+                $message->setBody($body);
+
                 $message->setBody($data['body']);
 
 
