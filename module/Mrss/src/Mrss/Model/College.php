@@ -268,12 +268,6 @@ class College extends AbstractModel
             $iteration++;
         }
 
-        if ($dqlSubqueries) {
-            foreach ($dqlSubqueries as $dql) {
-                $builder->andWhere($builder->expr()->exists($dql));
-            }
-        }
-
         return $builder;
     }
 
@@ -286,9 +280,9 @@ class College extends AbstractModel
      */
     protected function updateBuilderWithCriteron($builder, $criterion, $value, $iteration)
     {
-
         $table = "v" . $iteration;
         $subQueryBase = "SELECT $table FROM \Mrss\Entity\Datum $table WHERE s.id = $table.subscription AND ";
+        $dqlSubqueries = array();
 
         if (!empty($value)) {
             // Criteria that support multiple values, use IN
@@ -329,6 +323,13 @@ class College extends AbstractModel
                 );
             }
         }
+
+        if ($dqlSubqueries) {
+            foreach ($dqlSubqueries as $dql) {
+                $builder->andWhere($builder->expr()->exists($dql));
+            }
+        }
+
 
         return $builder;
     }
