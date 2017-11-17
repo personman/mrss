@@ -78,13 +78,13 @@ class UserExport
 
         // Start building the Excel file
         $this->excel = new PHPExcel();
-        $this->writeHeaders();
+        $this->writeHeaders($year);
         $this->writeData($year);
 
         $this->download();
     }
 
-    protected function writeHeaders()
+    protected function writeHeaders($year = null)
     {
         $sheet = $this->excel->getActiveSheet();
         $row = $this->row;
@@ -110,7 +110,7 @@ class UserExport
 
         $column = 'P';
         // Section
-        if ($this->getStudy()->hasSections()) {
+        if (empty($year) && $this->getStudy()->hasSections()) {
             foreach ($this->getStudy()->getSections() as $section) {
                 $column++;
                 $sheet->setCellValue($column . $row, $section->getName());
