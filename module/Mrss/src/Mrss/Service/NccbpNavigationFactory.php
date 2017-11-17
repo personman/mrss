@@ -49,7 +49,8 @@ class NccbpNavigationFactory extends NavigationFactory
                 $workbook = array(
                     'label' => 'Print Workbook',
                     //'uri' => '/files/nccbp-workbook-2017.pdf',
-                    'uri' => '/data-entry/print',
+                    'route' => 'data-entry/print',
+                    'params' => array('year' => $this->getCurrentStudy()->getCurrentYear())
                 );
                 array_unshift($pages['data-documentation']['pages'], $workbook);
             }
