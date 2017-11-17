@@ -1444,7 +1444,7 @@ class Report extends ReportBase
      *
      * @param $year
      */
-    protected function calculateAllComputedFields($year)
+    public function calculateAllComputedFields($year)
     {
         $subs = $this->getSubscriptions($year);
         //$start = microtime(1);

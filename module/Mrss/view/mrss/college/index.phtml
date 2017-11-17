@@ -1,4 +1,6 @@
+
 <?php
+/** @var \Zend\Cache\Pattern\OutputCache $outputCache */
 
 // Data Tables
 $this->headScript()->appendFile(
@@ -7,6 +9,10 @@ $this->headScript()->appendFile(
 );
 $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 ?>
+
+<?php if ($output = $outputCache->start('admin--Colleges')): ?>
+    <?= $output ?>
+<?php else: ?>
 
 <script>
     <?php $this->headScript()->captureStart() ?>
@@ -127,4 +133,8 @@ $this->headLink()->appendStylesheet('/css/jquery.dataTables.min.css');
 
     <span class="heatmapLegend heatmapCell <?= $sub->getHeatmapClass($allSectionIds) ?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     <?= implode(', ', $allSectionNames) ?>
+<?php endif ?>
+
+<? $outputCache->end() ?>
+
 <?php endif ?>

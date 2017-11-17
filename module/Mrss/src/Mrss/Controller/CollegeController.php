@@ -11,16 +11,31 @@ class CollegeController extends BaseController
 {
     public function indexAction()
     {
+        //$cacheKey = 'college-index';
         $this->longRunningScript();
+
+        //$cache = $this->getCache();
+
+        //if ($cache->hasItem($cacheKey)) {
+        //    $colleges = $cache->getItem($cacheKey);
+        //} else {
+            $colleges = $this->getCollegeModel()->findAll();
+        //    $cache->setItem($cacheKey, $colleges);
+        //}
 
         // For completion heatmap
         $years = $this->getSubscriptionModel()
             ->getYearsWithSubscriptions($this->currentStudy());
 
 
+        $outputCache = $outputCache = \Zend\Cache\PatternFactory::factory('output', array(
+            'storage' => 'filesystem',
+        ));
+
         return array(
-            'colleges' => $this->getCollegeModel()->findAll(),
-            'years' => $years
+            'colleges' => $colleges,
+            'years' => $years,
+            'outputCache' => $outputCache
         );
     }
 
