@@ -89,6 +89,7 @@ class User implements UserInterface, ProviderInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="College", inversedBy="users")
+     * @ORM\JoinColumn(name="college_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $college;
 

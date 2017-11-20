@@ -33,6 +33,7 @@ class Subscription
 
     /**
      * @ORM\ManyToOne(targetEntity="College", inversedBy="subscriptions")
+     * @ORM\JoinColumn(name="college_id", referencedColumnName="id", onDelete="CASCADE")
      * @var College
      */
     protected $college;

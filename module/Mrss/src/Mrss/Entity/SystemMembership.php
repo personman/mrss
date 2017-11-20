@@ -18,12 +18,14 @@ class SystemMembership
 
     /**
      * @ORM\ManyToOne(targetEntity="College", inversedBy="systemMemberships")
+     * @ORM\JoinColumn(name="college_id", referencedColumnName="id", onDelete="CASCADE")
      * @var College
      */
     protected $college;
 
     /**
      * @ORM\ManyToOne(targetEntity="System", inversedBy="memberships")
+     * @ORM\JoinColumn(name="system_id", referencedColumnName="id", onDelete="CASCADE")
      * @var System
      */
     protected $system;

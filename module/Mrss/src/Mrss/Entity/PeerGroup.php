@@ -31,7 +31,7 @@ class PeerGroup
     protected $year;
 
     /**
-     * @ORM\ManyToOne(targetEntity="College")
+     * @ORM\Column(type="integer")
      * @var College
      */
     protected $college;

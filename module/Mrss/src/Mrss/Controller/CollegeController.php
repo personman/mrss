@@ -19,7 +19,7 @@ class CollegeController extends BaseController
             ->getYearsWithSubscriptions($this->currentStudy());
 
 
-        $cacheKey = 'admin--Colleges--' . $this->getCurrentUser()->getId();
+        $cacheKey = 'admin--Colleges--' . $this->currentStudy()->getId();
         $outputCache = PatternFactory::factory('output', array(
             'storage' => 'filesystem',
             //'options' => array('ttl' => 3600)
@@ -78,6 +78,22 @@ class CollegeController extends BaseController
             'studyConfig' => $this->getStudyConfig(),
             'college' => $college,
         );
+    }
+
+    public function deleteAction()
+    {
+        $college = $this->getCollegeModel()->find($this->params('id'));
+
+        if ($college) {
+            $this->getCollegeModel()->delete($college);
+            $this->getCollegeModel()->getEntityManager()->flush();
+
+            $this->flashMessenger()->addSuccessMessage('Deleted.');
+        } else {
+            $this->flashMessenger()->addErrorMessage('Failed to delete.');
+        }
+
+        return $this->redirect()->toRoute('colleges');
     }
 
     /**
