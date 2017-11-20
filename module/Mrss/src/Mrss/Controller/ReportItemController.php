@@ -28,6 +28,8 @@ class ReportItemController extends CustomReportController
             $data = $item->getConfig(true);
             $year = $data['year'];
             $edit = true;
+        } else {
+            $year = $this->getCurrentYear();
         }
 
         $chart = null;
