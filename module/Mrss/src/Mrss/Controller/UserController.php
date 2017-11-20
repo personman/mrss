@@ -710,7 +710,7 @@ class UserController extends BaseController
 
     /**
      * Failed refactor
-     * 
+     *
      * @param $userId
      * @return mixed
      */

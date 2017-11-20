@@ -57,10 +57,15 @@ class BubbleBuilder extends ChartBuilder
 
         if ($size) {
             $zBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($size);
-            $benchmarkGroupIds[] = $zBenchmark->getBenchmarkGroup()->getId();
-            $zFormat = $this->getFormat($zBenchmark);
-        }
+            if ($zBenchmark) {
+                $zFormat = $this->getFormat($zBenchmark);
 
+                $group = $zBenchmark->getBenchmarkGroup();
+                if ($group) {
+                    $benchmarkGroupIds[] = $group->getId();
+                }
+            }
+        }
 
         $subscriptions = array();
         if (!$this->getStudyConfig()->use_structures) {
