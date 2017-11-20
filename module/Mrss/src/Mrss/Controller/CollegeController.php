@@ -19,7 +19,7 @@ class CollegeController extends BaseController
             ->getYearsWithSubscriptions($this->currentStudy());
 
 
-        $cacheKey = 'admin--Colleges';
+        $cacheKey = 'admin--Colleges--' . $this->getCurrentUser()->getId();
         $outputCache = PatternFactory::factory('output', array(
             'storage' => 'filesystem',
             //'options' => array('ttl' => 3600)

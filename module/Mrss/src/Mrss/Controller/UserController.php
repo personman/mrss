@@ -2,6 +2,7 @@
 
 namespace Mrss\Controller;
 
+use GoalioForgotPassword\Mapper\PasswordHydrator;
 use Mrss\Entity\User;
 use PHPExcel;
 use Mrss\Entity\User as UserEntity;
@@ -687,8 +688,53 @@ class UserController extends BaseController
         $passwordService = $this->getServiceLocator()
             ->get('goalioforgotpassword_password_service');
 
+        if ($existing = $passwordService->getPasswordMapper()->findByUser($userId)) {
+            $key = $existing->getRequestKey();
+        } else {
+            $passwordService->cleanPriorForgotRequests($userId);
+            $class = $passwordService->getOptions()->getPasswordEntityClass();
+
+            /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
+            $model = new $class;
+
+            $model->setUserId($userId);
+            $model->setRequestTime(new \DateTime('now'));
+            $model->generateRequestKey();
+            $passwordService->getPasswordMapper()->persist($model);
+
+            $key = $model->getRequestKey();
+        }
+
+        return $key;
+    }
+
+    /**
+     * Failed refactor
+     * 
+     * @param $userId
+     * @return mixed
+     */
+    protected function newgetPasswordResetKey($userId)
+    {
+        /** @var \GoalioForgotPassword\Service\Password $passwordService */
+        $passwordService = $this->getServiceLocator()
+            ->get('goalioforgotpassword_password_service');
+
         /** @var \GoalioForgotPassword\Mapper\Password $passwordMapper */
         $passwordMapper = $passwordService->getPasswordMapper();
+
+        /** @var \GoalioForgotPassword\Options\ModuleOptions $options */
+        $options = $passwordService->getOptions();
+        $class = $options->getPasswordEntityClass();
+
+        $passwordMapper->setHydrator(new PasswordHydrator());
+
+
+        $passwordMapper->setEntityPrototype(new $class);
+
+        $dbAdapter = $this->getServiceLocator()->get('db');
+        $passwordMapper->setDbAdapter($dbAdapter);
+
 
         /** @var \GoalioForgotPassword\Entity\Password $existing */
         if ($existing = $passwordMapper->findByUserId($userId)) {
@@ -696,9 +742,6 @@ class UserController extends BaseController
         } else {
             $passwordService->cleanPriorForgotRequests($userId);
 
-            /** @var \GoalioForgotPassword\Options\ModuleOptions $options */
-            $options = $passwordService->getOptions();
-            $class = $options->getPasswordEntityClass();
 
             /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
             $model = new $class;
