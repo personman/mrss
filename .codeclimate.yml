@@ -5,6 +5,7 @@ exclude_paths:
 - "autoload_classmap.php"
 - "config/*"
 - "data/*"
+- "public/*"
 - "module/Mrss/config/module.config.php"
 - "module/Mrss/Module.php"
 - "public/*"
