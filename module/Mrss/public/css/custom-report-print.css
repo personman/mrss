@@ -28,6 +28,12 @@ a[href]:after {
     width: 420px !important;
 }
 
+.complete-chart-box.full-width {
+    /*width: 400px !important;*/
+    /*width: 300px !important;*/
+    width: 840px !important;
+}
+
 .footer {
     height: 50px;
 }
