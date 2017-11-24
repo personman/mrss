@@ -486,8 +486,18 @@ class CustomReportController extends ReportController
         */
     }
 
+    /**
+     * @param Report $sourceReport
+     * @param User $user
+     * @return bool
+     */
     protected function copyCustomReport(Report $sourceReport, $user)
     {
+        // Don't copy to yourself
+        if ($sourceReport->getUser()->getId() == $user->getId()) {
+            return false;
+        }
+
         // Get or create the sample peer group.
         if ($peerGroup = $this->getSamplePeerGroup($user)) {
             $peerGroupId = $peerGroup->getId();

@@ -184,12 +184,16 @@ class PeerGroup
     /**
      * @return array
      */
-    public function getPeers()
+    public function getPeers($includeThisCollege = false)
     {
         if ($this->peers) {
             $peers = explode('|', $this->peers);
         } else {
             $peers = array();
+        }
+
+        if ($includeThisCollege) {
+            $peers[] = $this->getUser()->getCollege()->getId();
         }
 
         return $peers;

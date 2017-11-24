@@ -364,7 +364,8 @@ class ObservationController extends BaseController
     {
         $year = $this->getCurrentYear();
         $lastYear = $year - 1;
-        $collegeId = $this->zfcUserAuthentication()->getIdentity()->getCollege()->getId();
+
+        $collegeId = $this->currentCollege()->getId();
 
         /** @var \Mrss\Model\Observation $model */
         $model = $this->getServiceLocator()->get('model.observation');
