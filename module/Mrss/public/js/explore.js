@@ -229,7 +229,10 @@ function peerWasUnchecked(peerGroupId, collegeId)
 {
     var wasUnchecked = false
 
+    formData = getFormData();
+
     if (formData) {
+        //console.log(formData)
         var originalPeerGroup = formData['peerGroup'].toString()
         var originalPeers = formData['colleges']
 
@@ -242,6 +245,16 @@ function peerWasUnchecked(peerGroupId, collegeId)
     }
 
     return wasUnchecked
+}
+
+function getFormData()
+{
+    var values = {};
+    $.each($('#explore').serializeArray(), function(i, field) {
+        values[field.name] = field.value;
+    });
+
+    return values;
 }
 
 function exploreFormSubmit()
