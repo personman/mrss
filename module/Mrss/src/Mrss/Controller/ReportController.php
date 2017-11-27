@@ -1072,7 +1072,7 @@ class ReportController extends ReportAdminController
         }
 
         // Always set the college to the current college
-        $peerGroup->setCollege($this->currentCollege());
+        //$peerGroup->setCollege($this->currentCollege());
         $peerGroup->setStudy($this->currentStudy());
 
         return $peerGroup;

@@ -31,7 +31,7 @@ class PeerGroup
     protected $year;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      * @var College
      */
     protected $college;

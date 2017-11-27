@@ -812,4 +812,9 @@ class College
 
         return $has;
     }
+
+    public function toString()
+    {
+        return $this->getId();
+    }
 }
