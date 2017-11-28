@@ -104,6 +104,7 @@ class Factory implements AbstractFactoryInterface
             'service.report.max.activity.as' =>
                 'Mrss\Service\Report\Max\ActivityReport\AcademicSupport',
             'service.report' => 'Mrss\Service\Report',
+            'service.report.non.credit' => 'Mrss\Service\Report\NonCredit',
         );
     }
 

@@ -374,6 +374,36 @@ class ReportController extends ReportAdminController
         return $view;
     }
 
+    public function nonCreditAction()
+    {
+        $service = $this->getNonCreditService();
+
+        $college = $this->currentCollege();
+        $year = $this->getYearFromRouteOrStudy($college);
+
+        /** @var \Mrss\Entity\Observation $observation */
+        $observation = $college->getObservationForYear($year);
+
+        $service->setObservation($observation);
+
+        $reportData = $service->getData();
+
+        //prd(get_class($service));
+        return array(
+            'reportData' => $reportData
+        );
+    }
+
+    /**
+     * @return \Mrss\Service\Report\NonCredit
+     */
+    protected function getNonCreditService()
+    {
+        $service = $this->getServiceLocator()->get('service.report.non.credit');
+
+        return $service;
+    }
+
     public function getMemberCount($year)
     {
         $members = $this->currentStudy()->getSubscriptionsForYear($year);

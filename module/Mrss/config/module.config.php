@@ -1304,6 +1304,19 @@ return array(
                             )
                         )
                     ),
+                    // Non-credit in NCCBP
+                    'non-credit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/non-credit[/:year][/:format]',
+                            'defaults' => array(
+                                'action' => 'nonCredit',
+                                'year' => null,
+                                'format' => 'html',
+                                'system' => true
+                            )
+                        )
+                    ),
                     'social-mobility' => array(
                         'type' => 'segment',
                         'options' => array(
