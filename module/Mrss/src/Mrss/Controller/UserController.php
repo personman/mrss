@@ -904,6 +904,7 @@ class UserController extends BaseController
     public function chatLoginAction()
     {
         $params = $this->params()->fromPost();
+        //$params = $this->params()->fromQuery();
         $jsonParams = json_encode($params);
         $message = "/chat-login called with POST: " . $jsonParams;
         $this->getLog()->info($message);
