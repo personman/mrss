@@ -1,4 +1,39 @@
 <h1>Community</h1>
 
-<?= $this->muut($currentUser); ?>
+<?//= $this->muut($currentUser); ?>
 
+<style>
+    .sidebar__footer {
+        display: none;
+    }
+</style>
+
+
+
+<script>
+    <?php $this->headScript()->captureStart() ?>
+
+    $(function() {
+        //console.log('ready')
+        $('iframe').load(function() {
+            //set
+            //console.log('loaded')
+            //$('.sidebar__footer').hide()
+
+            //var head = jQuery("iframe").contents().find("head");
+            var css = '<style type="text/css">' +
+                '#banner{display:none}; ' +
+                '</style>';
+            //jQuery(head).append(css);
+        })
+    });
+    <?php $this->headScript()->captureEnd() ?>
+</script>
+
+<iframe id="chatEmbed" src="https://govbenchmark.rocket.chat/channel/general"
+        width="100%" height="700" frameborder="0"
+        allowfullscreen>
+    <p>
+            Fallback link for browsers that don't support iframes
+    </p>
+</iframe>
