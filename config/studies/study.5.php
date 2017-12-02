@@ -40,7 +40,7 @@ return array(
     'benchmark_label' => 'measure',
     'form_label' => 'service area',
     'use_gravatar' => true,
-    'contact_instructions' => '',
+    'contact_instructions' => 'You can also reach us by phone: Mike Daniel, Director govBenchmark, 604-256-7055',
     'copyright' => date('Y') . " Envisio",
     'footerLogo' => '',
     'footerSocial' => '',
