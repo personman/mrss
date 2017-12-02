@@ -900,4 +900,14 @@ class UserController extends BaseController
 
         return $studyConfig;
     }
+
+    public function chatLoginAction()
+    {
+        $params = $this->params()->fromPost();
+        $jsonParams = json_encode($params);
+        $message = "/chat-login called with POST: " . $jsonParams;
+        $this->getLog()->info($message);
+
+        prd($jsonParams);
+    }
 }

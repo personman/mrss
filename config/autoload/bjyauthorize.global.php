@@ -112,6 +112,11 @@ return array(
                     'roles' => array('guest')
                 ),
                 array(
+                    'controller' => 'users',
+                    'action' => 'chatLogin',
+                    'roles' => array('guest')
+                ),
+                array(
                     'controller' => 'goalioforgotpassword_forgot',
                     'roles' => array('guest')
                 ),
