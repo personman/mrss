@@ -248,6 +248,8 @@ class UserController extends BaseController
         $message->getHeaders()->get('content-type')->setType('multipart/alternative');
 
         $mailer->send($message);
+
+        $this->flashMessenger()->addSuccessMessage('Welcome email sent.');
     }
 
     /**
