@@ -7,14 +7,6 @@ allow from all
 </Files>
 
 
-<IfModule mod_headers.c>
-Header add Access-Control-Allow-Origin "*"
-Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
-Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
-</IfModule>
-
-
-
 #favicon
 RewriteCond %{HTTP_HOST} ^maximizingresources.org$ [NC]
 RewriteRule ^favicon\.ico$ images/max-favicon.ico [L,NC]
