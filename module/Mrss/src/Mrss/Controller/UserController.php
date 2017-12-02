@@ -920,13 +920,18 @@ class UserController extends BaseController
 
             exit(0);
         }
-        
+
 
 
         $params = $this->params()->fromPost();
         //$params = $this->params()->fromQuery();
         $jsonParams = json_encode($params);
+
+        $headers = $this->params()->fromHeader();
+        $jsonHeaders = json_encode($headers);
+
         $message = "/chat-login called with POST: " . $jsonParams;
+        $message .= " \n and HEADERS: " . $jsonHeaders;
         $this->getLog()->info($message);
 
         prd($jsonParams);
