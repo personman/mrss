@@ -936,7 +936,7 @@ class UserController extends BaseController
         $server = print_r($_SERVER, 1);
         $message = "/chat-login called with POST: " . $jsonParams;
         $message .= " \n and HEADERS: " . $jsonHeaders;
-        $message .= " \n and SERVER: " . $server;
+        $message .= " \n and SERVER: " . $server . "\n\n";
         $this->getLog()->info($message);
 
         //prd($jsonParams);
