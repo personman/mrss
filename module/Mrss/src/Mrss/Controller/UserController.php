@@ -911,7 +911,7 @@ class UserController extends BaseController
         }*/
 
         $corHeaders = array(
-            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Origin' => 'https://govbenchmark.rocket.chat',
             'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept',
             'Access-Control-Allow-Credentials' => true,
             'Access-Control-Max-Age' => 60
