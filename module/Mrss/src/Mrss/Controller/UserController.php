@@ -904,11 +904,20 @@ class UserController extends BaseController
 
     public function chatLoginAction()
     {
-        if (isset($_SERVER['HTTP_ORIGIN'])) {
+        /*if (isset($_SERVER['HTTP_ORIGIN'])) {
             header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
             header('Access-Control-Allow-Credentials: true');
-            header('Access-Control-Max-Age: 86400');    // cache for 1 day
-        }
+            header('Access-Control-Max-Age: 60');    // cache for 1 day
+        }*/
+
+        $corHeaders = array(
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Credentials' => true,
+            'Access-Control-Max-Age' => 60
+
+        );
+        $this->getResponse()->getHeaders()->addHeaders($corHeaders);
 
 // Access-Control headers are received during OPTIONS requests
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -933,10 +942,14 @@ class UserController extends BaseController
         $jsonHeaders = json_encode($headers);
         $jsonHeaders = print_r($headers, 1);
 
+        $responseHeaders = $this->getResponse()->getHeaders()->toArray();
+        $jsonRHeaders = print_r($responseHeaders, 1);
+
         $server = print_r($_SERVER, 1);
         $message = "/chat-login called with POST: " . $jsonParams;
         $message .= " \n and HEADERS: " . $jsonHeaders;
-        $message .= " \n and SERVER: " . $server . "\n\n";
+        $message .= " \n and SERVER: " . $server;
+        $message .= " \n and RESPONSE HEADERS: " . $jsonRHeaders . "\n\n";
         $this->getLog()->info($message);
 
         //prd($jsonParams);
