@@ -956,7 +956,7 @@ class UserController extends BaseController
 
         $viewModel = new JsonModel(
             array(
-                'token' => 'ok',
+                'token' => session_id(),
             )
         );
 
