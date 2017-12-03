@@ -13,6 +13,7 @@ use Zend\Session\Container;
 use Zend\Mail\Message;
 use Zend\Mime\Part as MimePart;
 use Zend\Mime\Message as MimeMessage;
+use Zend\View\Model\JsonModel;
 
 class UserController extends BaseController
 {
@@ -926,14 +927,27 @@ class UserController extends BaseController
         $params = $this->params()->fromPost();
         //$params = $this->params()->fromQuery();
         $jsonParams = json_encode($params);
+        $jsonParams = print_r($params, 1);
 
         $headers = $this->params()->fromHeader();
         $jsonHeaders = json_encode($headers);
+        $jsonHeaders = print_r($headers, 1);
 
+        $server = print_r($_SERVER, 1);
         $message = "/chat-login called with POST: " . $jsonParams;
         $message .= " \n and HEADERS: " . $jsonHeaders;
+        $message .= " \n and SERVER: " . $server;
         $this->getLog()->info($message);
 
-        prd($jsonParams);
+        //prd($jsonParams);
+
+        $viewModel = new JsonModel(
+            array(
+                'result' => 'ok',
+                'error' => ''
+            )
+        );
+
+        return $viewModel;
     }
 }
