@@ -9,12 +9,10 @@ use Mrss\Form\SubscriptionAdmin;
 use Mrss\Entity\Subscription;
 use Mrss\Entity\Observation;
 use Zend\Session\Container;
-use Zend\Log\Writer\Stream;
 use Mrss\Entity\Criterion;
 use Mrss\Entity\Study;
 use Zend\Mail\Message;
 use Mrss\Entity\User;
-use Zend\Log\Logger;
 use PHPExcel;
 
 class SubscriptionBaseController extends BaseController
@@ -558,23 +556,6 @@ class SubscriptionBaseController extends BaseController
                 ->get('goalioforgotpassword_password_service');
         }
         return $this->passwordService;
-    }
-
-    /**
-     * @return Logger
-     */
-    protected function getLog()
-    {
-        if (empty($this->log)) {
-            $filename = 'postback.log';
-            $logger = new Logger;
-            $writer = new Stream($filename);
-            $logger->addWriter($writer);
-
-            $this->log = $logger;
-        }
-
-        return $this->log;
     }
 
     protected function saveTransIdToSession($transId)

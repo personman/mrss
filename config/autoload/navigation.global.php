@@ -662,6 +662,11 @@ $navigation = array(
                     ),
                 )
             ),
+            'contact' => array(
+                'label' => 'Contact Us',
+                'uri' => '/contact',
+                'class' => 'float-right'
+            ),
             'help' => array(
                 'label' => 'Help',
                 'uri' => '#',

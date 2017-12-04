@@ -13,6 +13,7 @@ use Zend\Session\Container;
 use Zend\Mail\Message;
 use Zend\Mime\Part as MimePart;
 use Zend\Mime\Message as MimeMessage;
+use Zend\View\Model\JsonModel;
 
 class UserController extends BaseController
 {
@@ -248,6 +249,8 @@ class UserController extends BaseController
         $message->getHeaders()->get('content-type')->setType('multipart/alternative');
 
         $mailer->send($message);
+
+        $this->flashMessenger()->addSuccessMessage('Welcome email sent.');
     }
 
     /**
@@ -897,5 +900,66 @@ class UserController extends BaseController
         $studyConfig = $this->getServiceLocator()->get('study');
 
         return $studyConfig;
+    }
+
+    public function chatLoginAction()
+    {
+        /*if (isset($_SERVER['HTTP_ORIGIN'])) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 60');    // cache for 1 day
+        }*/
+
+        $corHeaders = array(
+            'Access-Control-Allow-Origin' => 'https://govbenchmark.rocket.chat',
+            'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Credentials' => 'true',
+            'Access-Control-Max-Age' => '60'
+
+        );
+        $this->getResponse()->getHeaders()->addHeaders($corHeaders);
+
+// Access-Control headers are received during OPTIONS requests
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+            exit(0);
+        }
+
+
+
+        $params = $this->params()->fromPost();
+        //$params = $this->params()->fromQuery();
+        $jsonParams = json_encode($params);
+        $jsonParams = print_r($params, 1);
+
+        $headers = $this->params()->fromHeader();
+        $jsonHeaders = json_encode($headers);
+        $jsonHeaders = print_r($headers, 1);
+
+        $responseHeaders = $this->getResponse()->getHeaders()->toArray();
+        $jsonRHeaders = print_r($responseHeaders, 1);
+
+        $server = print_r($_SERVER, 1);
+        $message = "/chat-login called with POST: " . $jsonParams;
+        $message .= " \n and HEADERS: " . $jsonHeaders;
+        $message .= " \n and SERVER: " . $server;
+        $message .= " \n and RESPONSE HEADERS: " . $jsonRHeaders . "\n\n";
+        $this->getLog()->info($message);
+
+        //prd($jsonParams);
+
+        $viewModel = new JsonModel(
+            array(
+                'token' => session_id(),
+            )
+        );
+
+        return $viewModel;
     }
 }

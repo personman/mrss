@@ -2744,6 +2744,16 @@ return array(
                     )
                 )
             ),
+            'chat-login' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/chat-login',
+                    'defaults' => array(
+                        'controller' => 'users',
+                        'action' => 'chatLogin'
+                    )
+                )
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them

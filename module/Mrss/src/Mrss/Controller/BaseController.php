@@ -10,6 +10,8 @@ use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 /**
  * @method Study currentStudy()
@@ -303,5 +305,22 @@ class BaseController extends AbstractActionController
             ->getConnection()
             ->getConfiguration()
             ->setSQLLogger(null);
+    }
+
+    /**
+     * @return Logger
+     */
+    protected function getLog()
+    {
+        if (empty($this->log)) {
+            $filename = 'postback.log';
+            $logger = new Logger;
+            $writer = new Stream($filename);
+            $logger->addWriter($writer);
+
+            $this->log = $logger;
+        }
+
+        return $this->log;
     }
 }
