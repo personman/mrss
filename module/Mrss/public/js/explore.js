@@ -560,7 +560,7 @@ function benchmarkChanged()
 
 function repopulateColleges()
 {
-    if (originalFormData['colleges'].length) {
+    if (typeof originalFormData['colleges'] != 'undefined' && originalFormData['colleges'].length) {
         $("input:checkbox[name='colleges[]']").each(function(i, e) {
             if (originalFormData['colleges'].includes($(this).val())) {
                 $(this)[0].checked = true;

@@ -615,6 +615,16 @@ class CustomReportController extends ReportController
         $config = $sourceItem->getConfig();
         $config['peerGroup'] = $peerGroupId;
 
+        $sourceCollege = $sourceItem->getReport()->getUser()->getCollege();
+        $targetCollege = $newReport->getUser()->getCollege();
+
+        //pr($targetCollege->getId());
+        //pr($config);
+
+        $config = $this->handleItemColleges($config, $sourceCollege, $targetCollege);
+
+        //prd($config);
+
         $item = $this->getOrCreateItem($sourceItem, $newReport->getId());
         $item->setReport($newReport);
 
@@ -624,9 +634,33 @@ class CustomReportController extends ReportController
         $item->setYear($sourceItem->getYear());
         $item->setConfig($config);
         $item->setSourceItemId($sourceItem->getId());
-        $item->setHighlightedCollege($newReport->getCollege());
+        $item->setHighlightedCollege($targetCollege);
 
         $this->getReportItemModel()->save($item);
+    }
+
+    /**
+     * Prevent duplicates when copying
+     *
+     * @param $config
+     * @param $sourceCollege
+     * @param $targetCollege
+     * @return mixed
+     */
+    protected function handleItemColleges($config, $sourceCollege, $targetCollege)
+    {
+        // Is the target college listed in the highlighted colleges?
+        if (isset($config['colleges']) && in_array($targetCollege->getId(), $config['colleges'])) {
+            // Remove it
+            $newColleges = array_diff($config['colleges'], array($targetCollege->getId()));
+
+            // Replace it with the source college
+            $newColleges[] = $sourceCollege->getId();
+
+            $config['colleges'] = $newColleges;
+        }
+
+        return $config;
     }
 
     protected function getOrCreateItem(ReportItem $sourceItem, $reportId)
