@@ -1,1 +1,184 @@
+<?php
+/** @var int $year */
+/** @var array $reportData */
+/** @var bool $autoPrint */
+/** @var string $media */
+/** @var \Mrss\Entity\College $college */
+/** @var \Mrss\Entity\Subscription[] $subscriptions */
+?>
+
+<?php
+//$open = false;
+//$media = 'screen,print';
+$cssVersion = 13;
+?>
+<?php $this->headTitle()->prepend('Non-credit Report') ?>
+<?php $this->headTitle()->prepend($college->getName()) ?>
+
+<?= $this->headLink()->appendStylesheet('/css/executive-report.css?v=' . $cssVersion, 'screen,print') ?>
+<?= $this->headLink()->appendStylesheet('/css/executive-report-print.css?v=' . $cssVersion, $media) ?>
+
+<?= $this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600,700', 'screen,print') ?>
+
+
 <h1>Non-credit Report</h1>
+
+<div id="executiveReport" class="page">
+    <?php if (empty($open)): ?>
+
+        <p>The <?= $year ?> Non-credit Report is not yet available.</p>
+    <?php else: ?>
+    <ul class="nav nav-pills report-nav">
+        <?php foreach ($subscriptions as $subscription): ?>
+
+            <?php if (!$subscription->hasSection(2)) continue ?>
+            <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
+            <li<? if ($subscription->getYear() == $year) echo ' class="active"' ?>>
+                <a href="<?= $this->url('reports/non-credit', array('year' => $subscription->getYear())) ?>"><?= $subscription->getYear() ?></a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+
+
+    <?php if (false && $year == 2017): ?>
+
+        <p>
+            The 2017 Executive Report will be produced in October.  It is mailed to the college president and made available here at that time.  Watch for an email announcing when it is ready.
+        </p>
+
+    <?php else: ?>
+
+
+        <?php foreach ($reportData['important'] as $importantChart): ?>
+
+            <div class="complete-chart-box<?php if ($year >= 2017) echo ' tall' ?>">
+                <?= $this->chart($importantChart['chart']) ?>
+
+
+                <?php if (!empty($importantChart['description'])): ?>
+                    <p><?= $importantChart['description'] ?></p>
+                <?php endif ?>
+
+            </div>
+        <?php endforeach ?>
+
+
+
+
+        <?php //pr($reportData) ?>
+    <?php endif ?>
+</div>
+
+
+    <script type='text/javascript'>
+        <?php $this->headScript()->captureStart() ?>
+        function chartLoaded(event)
+        {
+            var lastChart = this
+            fixupExecCharts()
+        }
+
+        function fixupExecCharts() {
+            var zeros = [0, '0%', '0.00%', '$0', '', null]
+            //$(function() {
+            // Only show the first stack total label
+            $('.highcharts-stack-labels text').hide();
+            $('.highcharts-stack-labels text:first-child').show()
+
+            // Handle not reported
+            var ycLabel = $('.highcharts-stack-labels text:first-child');
+            ycLabel.each(function() {
+                var label = $(this);
+                if (zeros.indexOf(label.text()) > -1) {
+                    label.text('Not Reported');
+                }
+            })
+
+            // Handle not reported for non-stack charts
+            var ycLabel = $('.highcharts-data-labels text:first-child, .highcharts-data-labels div:first-child');
+            var parent;
+            ycLabel.each(function() {
+                var label = $(this);
+                if (zeros.indexOf(label.text()) > -1) {
+                    //label.text("Not Reported");
+                    label.text("");
+                    label.attr('x', -23);
+
+                    if (label.parent().parent().parent().parent().is(parent)) {
+                        label.hide();
+                    }
+
+                    parent = label.parent().parent().parent().parent();
+                }
+            })
+
+            // If a multibar is reported and its neighbor is not, just leave
+            // the neighbor's label blank
+            multiCharts = [
+                'chart_w_comp_succ',
+                'chart_fall_fall_pers',
+                'chart_op_ex_SFTE'
+
+            ];
+
+            for (var i in multiCharts) {
+                var multiChart = multiCharts[i]
+                var labels = $('#' + multiChart + ' .highcharts-data-labels text:first-child');
+
+                values = [];
+                labels.each(function() {
+                    values.push($(this).text());
+                })
+
+                //console.log(values); console.log(multiChart);
+
+                if ((values[0] == 'Not Reported' && values[1] != 'Not Reported')) {
+                    $(labels[0]).hide()
+                }
+                if ((values[1] == 'Not Reported' && values[0] != 'Not Reported')) {
+                    $(labels[1]).hide()
+                }
+
+            }
+
+            // bar stack label
+            $("#chart_pt_perminus7_comp .highcharts-stack-labels text:first-child").attr('visibility', 'show')
+
+            // Shrink completer success labels to avoid overlap
+            $('#chart_w_comp_succ .highcharts-data-labels text')
+                .css('font-size', '10px')
+                .last().attr('x', '7')
+            $('#chart_fall_fall_pers .highcharts-data-labels text')
+                .css('font-size', '10px')
+                .last().attr('x', '7')
+
+            // Swap out the logo for a higher quality one for printing
+            $('.logo img')
+            //.attr('src', '/images/nccbp-logo-cmyk.svg')
+                .attr('src', '/images/NCCBP-logo-c-nc.png')
+            //.css('width', '300px')
+
+        }
+
+        function formatLargeMoney(axis)
+        {
+            var thousands = axis.value / 1000;
+
+            return '$' + thousands + 'K';
+        }
+
+        <?php $this->headScript()->captureEnd() ?>
+    </script>
+
+<?php if ($autoPrint): ?>
+    <script>
+        <?php $this->headScript()->captureStart() ?>
+        $(function() {
+            setTimeout(function() {window.print()}, 2000);
+        });
+        <?php $this->headScript()->captureEnd() ?>
+    </script>
+<?php endif ?>
+
+
+<?php endif ?>

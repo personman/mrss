@@ -10,6 +10,7 @@ class Executive extends Report
     protected $seriesColors;
     protected $yourCollegeColors;
     protected $labelMedians = false;
+    protected $sortPercentileCharts = false;
 
     public function getData()
     {
@@ -258,6 +259,11 @@ class Executive extends Report
 
         $series = array();
         $iteration = 0;
+
+        // Default format
+        $format = $roundedFormat = $this->getFormat(null, 0);
+        $dbColumn = '';
+
         foreach ($config['benchmarks'] as $dbColumn => $label) {
             list($seriesItem, $format, $roundedFormat, $chartValues) = $this->buildBarChart(
                 $config,
@@ -285,6 +291,8 @@ class Executive extends Report
             $iteration++;
         }
 
+        list($series, $chartXCategories) = $this->sortChartData($series, $chartXCategories);
+
         $chartTitle = $config['title'];
 
         $highChartsConfig = $this->getHighchartsConfig(
@@ -304,7 +312,7 @@ class Executive extends Report
         }
 
         // Show the CFI plotline on zero only (there are negative values)
-        if (in_array('CFI', array_keys($config['benchmarks']))) {
+        if ($this->needsZeroLine($config)) {
             $highChartsConfig['yAxis']['plotLines'] = array(
                 array(
                     'color' => '#C0D0DE',
@@ -316,11 +324,24 @@ class Executive extends Report
             //prd($highChartsConfig);
         }
 
+        if (isset($config['legend']) && !$config['legend']) {
+            $highChartsConfig['legend'] = array('enabled' => false);
+        }
 
         return array(
             'chart' => $highChartsConfig,
             'description' => $config['description']
         );
+    }
+
+    /**
+     * @param $config
+     * @return bool
+     */
+    protected function needsZeroLine($config)
+    {
+        return true;
+        //return in_array('CFI', array_keys($config['benchmarks']));
     }
 
     protected function buildBarChart($config, $dbColumn, $label, $iteration)
@@ -338,6 +359,11 @@ class Executive extends Report
 
         // Load the percentiles
         $breakpoints = $this->getPercentileBreakpointsForStudy();
+
+        if (isset($config['percentiles'])) {
+            $breakpoints = $config['percentiles'];
+        }
+
         $percentiles = $this->getPercentileModel()
             ->findByBenchmarkAndYear($benchmark, $this->getYear(), $breakpoints);
 
@@ -416,6 +442,9 @@ class Executive extends Report
             $chartData[] = $dataPoint;
         }
 
+        //pr($chartData);
+        //$chartData = $this->sortChartData($chartData);
+
         $seriesItem = array(
             'name' => $config['benchmarks'][$dbColumn],
             'data' => $chartData,
@@ -423,6 +452,40 @@ class Executive extends Report
         );
 
         return array($seriesItem, $format, $roundedFormat, $chartValues);
+    }
+
+    protected function sortChartData($series, $chartXCategories)
+    {
+        // Only do this if there's just one series
+        if (count($series) == 1 && $this->sortPercentileCharts) {
+            $points = $series[0]['data'];
+
+            $dataOnly = array();
+            foreach ($points as $point) {
+                $dataOnly[] = $point['y'];
+            }
+
+            // Sort the X categories, too
+            $chartValues = array_combine($chartXCategories, $dataOnly);
+            asort($chartValues);
+            $chartXCategories = array_keys($chartValues);
+
+            $sortedPoints = $this->sortByY($points);
+
+
+            $series[0]['data'] = $sortedPoints;
+        }
+
+        return array($series, $chartXCategories);
+    }
+
+    protected function sortByY($array)
+    {
+        array_multisort(array_map(function($element) {
+            return $element['y'];
+        }, $array), SORT_ASC, $array);
+
+        return $array;
     }
 
     protected function getHighchartsConfig($config, $id, $title, $chartXCategories, $series, $format, $roundedFormat)
@@ -509,10 +572,22 @@ class Executive extends Report
             'seriesColors' => array(
                 '#9cc03e', // '#005595' lightened 40%
                 '#3366B4', // '#519548' lightened 30%
+                '#9b62c9',
+                '#ebb164',
+                '#F55',
+                '#5F5',
+                '#55F',
+                '#5FF'
             ),
             'yourCollegeColors' => array(
                 '#507400',
-                '#001A68'
+                '#001A68',
+                '#65318F',
+                '#db891b',
+                '#F00',
+                '#0F0',
+                '#00F',
+                '#0FF',
             )
         );
         // What color will the bar be?

@@ -890,7 +890,10 @@ class Subscription
 
     public function hasSection($section)
     {
-        return in_array($section->getId(), $this->getSectionIds());
+        if (is_object($section)) {
+            $section = $section->getId();
+        }
+        return in_array($section, $this->getSectionIds());
     }
 
     public function getHeatmapClass($sectionIds = null)

@@ -184,6 +184,7 @@ return array(
                         'strengths',
                         'peerBenchmarks',
                         'peerColleges',
+                        'nonCredit',
                         // These are Max/MRSS specific:
                         'institutional',
                         'instructional',

@@ -1145,11 +1145,20 @@ class Report extends ReportBase
         return $seriesWithDataLabels;
     }
 
-    public function getFormat(Benchmark $benchmark, $forceDecimalPlaces = null)
+    /**
+     * @param Benchmark|null $benchmark
+     * @param null $forceDecimalPlaces
+     * @return string
+     */
+    public function getFormat($benchmark, $forceDecimalPlaces = null)
     {
+        if (empty($benchmark)) {
+            return "{y:,.0f}";
+        }
+
         if ($forceDecimalPlaces !== null) {
             $decimalPlaces = $forceDecimalPlaces;
-        } else {
+        } elseif ($benchmark) {
             $decimalPlaces = $this->getDecimalPlaces($benchmark);
         }
 

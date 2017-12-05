@@ -355,7 +355,7 @@ class ReportController extends ReportAdminController
         }
 
         // Membership count
-        $memberCount = $this->getMemberCount($year);
+        //$memberCount = $this->getMemberCount($year);
 
         $view = new ViewModel(
             array(
@@ -376,9 +376,15 @@ class ReportController extends ReportAdminController
 
     public function nonCreditAction()
     {
-        $service = $this->getNonCreditService();
-
+        $open = true;
+        $media = 'print';
+        $autoPrint = false;
         $college = $this->currentCollege();
+
+        $service = $this->getNonCreditService();
+        $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
+
+        //$college = $this->currentCollege();
         $year = $this->getYearFromRouteOrStudy($college);
 
         /** @var \Mrss\Entity\Observation $observation */
@@ -388,9 +394,14 @@ class ReportController extends ReportAdminController
 
         $reportData = $service->getData();
 
-        //prd(get_class($service));
         return array(
-            'reportData' => $reportData
+            'reportData' => $reportData,
+            'year' => $year,
+            'subscriptions' => $subscriptions,
+            'college' => $college,
+            'open' => $open,
+            'media' => $media,
+            'autoPrint' => $autoPrint
         );
     }
 
