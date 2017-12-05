@@ -111,6 +111,8 @@ class ReportItemController extends CustomReportController
             $data = array();
         }
 
+        //pr($data);
+
         $viewModel = new ViewModel(array(
             'form' => $form,
             'chart' => $chart,

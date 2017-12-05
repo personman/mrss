@@ -25,6 +25,8 @@ $(function() {
     $('#peerGroup').change(function() {
         peerGroupChanged();
     })
+
+    repopulateColleges();
 });
 
 function setUpSelects()
@@ -553,5 +555,16 @@ function benchmarkChanged()
         percentScale.show()
     } else {
         percentScale.hide()
+    }
+}
+
+function repopulateColleges()
+{
+    if (originalFormData['colleges'].length) {
+        $("input:checkbox[name='colleges[]']").each(function(i, e) {
+            if (originalFormData['colleges'].includes($(this).val())) {
+                $(this)[0].checked = true;
+            }
+        })
     }
 }

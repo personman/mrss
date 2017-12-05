@@ -49,7 +49,8 @@ $this->headScript()->appendFile(
         var defaultBreakpoints = <?= json_encode($defaultBreakpoints) ?>;
         var benchmarksByInputType = <?= json_encode($benchmarksByInputType) ?>;
         var peerMembers = <?= json_encode($peerMembers) ?>;
-        var formData = <?= json_encode($formData) ?>;
+        var originalFormData = <?= json_encode($formData) ?>;
+        //console.log(originalFormData['colleges'])
         <?php $this->headScript()->captureEnd() ?>
     </script>
 <?php endif ?>
