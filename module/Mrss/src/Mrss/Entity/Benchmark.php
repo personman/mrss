@@ -235,7 +235,11 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
 
     public function getDescription()
     {
-        return $this->description;
+        $description = $this->description;
+
+        $description = str_replace(array('<p>', '</p?'), '', $description);
+        
+        return $description;
     }
 
     public function setReportDescription($description)
