@@ -933,7 +933,7 @@ class UserController extends BaseController
 
 
 
-        $params = $this->params()->fromPost();
+        $params = $this->params()->fromQuery();
         //$params = $this->params()->fromQuery();
         $jsonParams = json_encode($params);
         $jsonParams = print_r($params, 1);
