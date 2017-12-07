@@ -933,7 +933,7 @@ class UserController extends BaseController
 
 
 
-        $params = $this->params()->fromQuery();
+        $params = $this->params()->fromPost();
         //$params = $this->params()->fromQuery();
         $jsonParams = json_encode($params);
         $jsonParams = print_r($params, 1);
@@ -945,8 +945,11 @@ class UserController extends BaseController
         $responseHeaders = $this->getResponse()->getHeaders()->toArray();
         $jsonRHeaders = print_r($responseHeaders, 1);
 
+
+        $userEmail = $this->getCurrentUser()->getEmail();
+
         $server = print_r($_SERVER, 1);
-        $message = "/chat-login called with POST: " . $jsonParams;
+        $message = "/chat-login called user ($userEmail) with POST: " . $jsonParams;
         $message .= " \n and HEADERS: " . $jsonHeaders;
         $message .= " \n and SERVER: " . $server;
         $message .= " \n and RESPONSE HEADERS: " . $jsonRHeaders . "\n\n";
