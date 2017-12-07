@@ -933,6 +933,31 @@ class UserController extends BaseController
 
 
 
+
+        /*$client = new \RocketChatPhp\Client('https://govbenchmark.rocket.chat', 'webhook_token');
+        $client->payload([
+            'text' => 'This will be sent to the webhook!'
+        ]);
+        */
+
+
+        define('REST_API_ROOT', '/api/v1/');
+        define('ROCKET_CHAT_INSTANCE', 'https://govbenchmark.rocket.chat');
+
+        $api = new \RocketChat\Client();
+        echo $api->version(); echo "\n";
+
+// login as the main admin user
+        $admin = new \RocketChat\User('Dan.Ferguson', 'testing4govB');
+        if( $admin->login() ) {
+            echo "admin user logged in\n";
+        };
+        $admin->info();
+        echo "I'm {$admin->nickname} ({$admin->id}) "; echo "\n";
+
+
+
+
         $params = $this->params()->fromPost();
         //$params = $this->params()->fromQuery();
         $jsonParams = json_encode($params);
