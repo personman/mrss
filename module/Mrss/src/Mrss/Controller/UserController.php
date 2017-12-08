@@ -958,8 +958,8 @@ class UserController extends BaseController
             ));
 
 
+            pr($newuser);
             $info = $newuser->info();
-
             $token = $newuser->createToken();
 
 
