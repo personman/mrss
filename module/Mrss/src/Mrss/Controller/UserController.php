@@ -958,8 +958,19 @@ class UserController extends BaseController
             ));
 
 
-            pr($newuser);
+
             $info = $newuser->info();
+
+            if (empty($newuser->id)) {
+                echo 'try to create...';
+
+                $newuser->create();
+
+                pr($newuser);
+            }
+
+            pr($newuser);
+
             $token = $newuser->createToken();
 
 
