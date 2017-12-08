@@ -940,23 +940,57 @@ class UserController extends BaseController
         ]);
         */
 
+        $currentUser = $this->getCurrentUser();
 
         define('REST_API_ROOT', '/api/v1/');
         define('ROCKET_CHAT_INSTANCE', 'https://govbenchmark.rocket.chat');
 
         $api = new \RocketChat\Client();
-        echo $api->version(); echo "\n";
+        //echo $api->version(); echo "\n";
 
 // login as the main admin user
         $admin = new \RocketChat\User('Dan.Ferguson', 'testing4govB');
+
         if( $admin->login() ) {
-            echo "admin user logged in\n";
+            $newuser = new \RocketChat\User($currentUser->getUsername(), 'test1234', array(
+                'nickname' => $currentUser->getFullName(),
+                'email' => $currentUser->getEmail(),
+            ));
+
+
+            $info = $newuser->info();
+
+            $token = $newuser->createToken();
+
+
+/*
+            if( !$newuser->login(false) ) {
+                // actually create the user if it does not exist yet
+                //$newuser->create();
+                echo "user {$newuser->nickname} created ({$newuser->id})\n";
+
+                echo "<br>Trying again...";
+                $result = $newuser->login(false);
+                pr($result);
+
+            } else {
+                echo "User exists already: $newuser->nickname";
+            }
+
+            pr($newuser);
+
+*/
         };
-        $admin->info();
-        echo "I'm {$admin->nickname} ({$admin->id}) "; echo "\n";
 
 
 
+        //$admin->info();
+        //echo "I'm {$admin->nickname} ({$admin->id}) "; echo "\n";
+
+
+
+
+        /*
 
         $params = $this->params()->fromPost();
         //$params = $this->params()->fromQuery();
@@ -979,12 +1013,12 @@ class UserController extends BaseController
         $message .= " \n and SERVER: " . $server;
         $message .= " \n and RESPONSE HEADERS: " . $jsonRHeaders . "\n\n";
         $this->getLog()->info($message);
-
+        */
         //prd($jsonParams);
 
         $viewModel = new JsonModel(
             array(
-                'token' => session_id(),
+                'token' => $token,
             )
         );
 
