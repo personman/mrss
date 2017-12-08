@@ -942,13 +942,15 @@ class UserController extends BaseController
 
         $currentUser = $this->getCurrentUser();
 
-        define('REST_API_ROOT', '/api/v1/');
+        /*define('REST_API_ROOT', '/api/v1/');
         define('ROCKET_CHAT_INSTANCE', 'https://govbenchmark.rocket.chat');
 
         $api = new \RocketChat\Client();
         //echo $api->version(); echo "\n";
+        */
 
-// login as the main admin user
+
+        // login as the main admin user
         $admin = new \RocketChat\User('Dan.Ferguson', 'testing4govB');
 
         if( $admin->login() ) {
@@ -966,10 +968,10 @@ class UserController extends BaseController
 
                 $newuser->create();
 
-                pr($newuser);
+                //pr($newuser);
             }
 
-            pr($newuser);
+            //pr($newuser);
 
             $token = $newuser->createToken();
 
