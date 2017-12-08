@@ -942,12 +942,12 @@ class UserController extends BaseController
 
         $currentUser = $this->getCurrentUser();
 
-        /*define('REST_API_ROOT', '/api/v1/');
+        define('REST_API_ROOT', '/api/v1/');
         define('ROCKET_CHAT_INSTANCE', 'https://govbenchmark.rocket.chat');
 
         $api = new \RocketChat\Client();
         //echo $api->version(); echo "\n";
-        */
+
 
 
         // login as the main admin user
