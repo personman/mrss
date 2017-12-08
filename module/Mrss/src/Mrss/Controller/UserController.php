@@ -949,12 +949,13 @@ class UserController extends BaseController
         //echo $api->version(); echo "\n";
 
 
+        $password = bin2hex(openssl_random_pseudo_bytes(10));
 
         // login as the main admin user
         $admin = new \RocketChat\User('Dan.Ferguson', 'testing4govB');
 
         if( $admin->login() ) {
-            $newuser = new \RocketChat\User($currentUser->getUsername(), 'test1234', array(
+            $newuser = new \RocketChat\User($currentUser->getUsername(), $password, array(
                 'nickname' => $currentUser->getFullName(),
                 'email' => $currentUser->getEmail(),
             ));

@@ -1595,4 +1595,11 @@ class ToolController extends BaseController
     {
         return $this->getServiceLocator()->get('service.import.data');
     }
+
+    public function allGravatarsAction()
+    {
+        return array(
+            'users' => $this->getUserModel()->findAll()
+        );
+    }
 }
