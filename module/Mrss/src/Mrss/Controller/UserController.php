@@ -1018,7 +1018,7 @@ class UserController extends BaseController
 
         $viewModel = new JsonModel(
             array(
-                'token' => $token,
+                'loginToken' => $token,
             )
         );
 
