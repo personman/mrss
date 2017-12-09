@@ -35,6 +35,15 @@
         window.addEventListener('message', function(e) {
             console.log(e.data.eventName); // event name
             console.log(e.data.data); // event data
+
+            if (e.data.eventName == 'unread-changed') {
+                var unreadCount = e.data.data.unread;
+
+                var menuItem = $('.community-menu');
+                menuItem.prepend('<span class="badge badge-important">4</span>')
+
+
+            }
         });
 
 
