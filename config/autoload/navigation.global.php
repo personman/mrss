@@ -647,7 +647,6 @@ $navigation = array(
             'data-documentation' => array(
                 'label' => 'Resources',
                 'uri' => '#',
-                'class' => 'community-menu',
                 'pages' => array(
                     'faq' => array(
                         'label' => 'Historical Data',
@@ -671,7 +670,7 @@ $navigation = array(
             'contact' => array(
                 'label' => 'Contact Us',
                 'uri' => '/contact',
-                'class' => 'float-right'
+                'class' => 'float-right community-menu'
             ),
             'help' => array(
                 'label' => 'Help',
