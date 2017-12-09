@@ -308,6 +308,66 @@
 <?php echo $this->headScript() ?>
 <?php echo $this->inlineScript() ?>
 
+<script>
+    $(function() {
+        if (false) {
+
+
+        // Try to connect to Rocket Chat
+        console.log('about to connect to Rocket chat in govbenchmark.phtml')
+
+        var socket = new WebSocket("wss://govbenchmark.rocket.chat/websocket");
+
+        socket.onopen = function(){
+            console.log("Socket has been opened!");
+
+            var connectMessage = {
+                "msg": "connect",
+                "version": "1",
+                "support": ["1"]
+            }
+
+            connectMessage = JSON.stringify(connectMessage);
+
+            socket.send(connectMessage)
+        }
+
+        socket.onmessage = function(msg){
+            var dataObject = JSON.parse(msg.data)
+
+            console.log(msg);	//Awesome!
+            console.log(dataObject);	//Awesome!
+
+            console.log(msg.data)
+
+            // Ping! Pong! Bing! Bong!
+            if (msg.data == '{"msg":"ping"}') {
+                socket.send('{"msg": "pong"}');
+            }
+
+            // If connected, subscribe
+            if (dataObject.msg == 'connected') {
+                var subMessage = {
+                    "msg": "sub",
+                    "id": "unique-id",
+                    "name": "stream-notify-user",
+                    "params":[
+                        "user-id/event",
+                        false
+                    ]
+                }
+                socket.send(subMessage)
+            }
+        }
+
+
+
+        }
+
+
+    })
+</script>
+
 <?php if ($googleAnalyticsKey = $this->currentStudy()->getGoogleAnalyticsKey()): ?>
     <script type="text/javascript">
 
