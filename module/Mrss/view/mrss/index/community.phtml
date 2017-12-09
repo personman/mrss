@@ -6,6 +6,9 @@
     .sidebar__footer {
         display: none;
     }
+    .badge-danger {
+        background-color: #d43f3a;
+    }
 </style>
 
 
@@ -44,10 +47,11 @@
                 console.log(unreadCount)
                 var menuItem = $('.community-menu');
 
-                menuItem.find('.badge').remove();
+                menuItem.find('.rocket-chat-unread').remove();
 
                 if (unreadCount) {
-                    menuItem.append('<span class="label-danger badge-as-label">' + unreadCount + '</span>')
+                    console.log('appending unread badge...')
+                    menuItem.append('<span class="badge badge-danger rocket-chat-unread">' + unreadCount + '</span>')
                 }
 
 
