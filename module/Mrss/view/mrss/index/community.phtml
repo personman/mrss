@@ -33,12 +33,13 @@
         if (!window.console) window.console = {};
         if (!window.console.log) window.console.log = function () { };
         window.addEventListener('message', function(e) {
-            console.log(e.data.eventName); // event name
-            console.log(e.data.data); // event data
+            //console.log(e.data.eventName); // event name
+            //console.log(e.data.data); // event data
 
             if (e.data.eventName == 'unread-changed') {
                 var unreadCount = e.data.data.unread;
 
+                console.log(unreadCount)
                 var menuItem = $('.community-menu');
 
                 menuItem.find('.badge').remove();
