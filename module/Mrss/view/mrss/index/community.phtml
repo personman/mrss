@@ -41,16 +41,16 @@
             if (e.data.eventName == 'unread-changed') {
                 var unreadCount = e.data.data;
 
-                console.log(e.data.eventName); // event name
-                console.log(e.data.data); // event data
+                //console.log(e.data.eventName); // event name
+                //console.log(e.data.data); // event data
 
-                console.log(unreadCount)
-                var menuItem = $('.community-menu');
+                //console.log(unreadCount)
+                var menuItem = $('.community-menu a');
 
                 menuItem.find('.rocket-chat-unread').remove();
 
                 if (unreadCount) {
-                    console.log('appending unread badge...')
+                    //console.log('appending unread badge...')
                     menuItem.append('<span class="badge badge-danger rocket-chat-unread">' + unreadCount + '</span>')
                 }
 
