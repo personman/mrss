@@ -972,7 +972,7 @@ class UserController extends BaseController
                 //pr($newuser);
             }
 
-            pr($newuser);
+            //pr($newuser);
 
             $token = $newuser->createToken();
 

@@ -309,14 +309,21 @@
 <?php echo $this->inlineScript() ?>
 
 <script>
+    var session = '';
     $(function() {
         if (false) {
 
 
         // Try to connect to Rocket Chat
-        console.log('about to connect to Rocket chat in govbenchmark.phtml')
+        console.log('about to connect to Rocket chat in govbenchmark.phtml');
 
-        var socket = new WebSocket("wss://govbenchmark.rocket.chat/websocket");
+
+        var url = "wss://govbenchmark.rocket.chat/websocket";
+
+
+
+
+        var socket = new WebSocket(url);
 
         socket.onopen = function(){
             console.log("Socket has been opened!");
@@ -343,19 +350,39 @@
             // Ping! Pong! Bing! Bong!
             if (msg.data == '{"msg":"ping"}') {
                 socket.send('{"msg": "pong"}');
+                console.log('pong sent.');
             }
 
-            // If connected, subscribe
+            // If connected, authenticate
             if (dataObject.msg == 'connected') {
+                var token = 'wShiqLZ6QcDLSLjfE1JRZI4_FRihQ1I8rnhV8cmQWK9';
+                var authMessage = {
+                    msg: 'authenticate',
+                    name: 'authenticate',
+                    id: "S7HQaNnWCyZvXveiL",
+                    user_id: "S7HQaNnWCyZvXveiL",
+                    data: {token: token, resume: token},
+                    token: token,
+                    loginToken: token,
+                    resume: token,
+                };
+
+                authMessage = JSON.stringify(authMessage);
+                socket.send(authMessage);
+            }
+
+            // If authenticated, subscribe
+            if (false) {
                 var subMessage = {
                     "msg": "sub",
-                    "id": "unique-id",
+                    "id": "S7HQaNnWCyZvXveiL",
                     "name": "stream-notify-user",
                     "params":[
                         "user-id/event",
                         false
                     ]
                 }
+                subMessage = JSON.stringify(subMessage)
                 socket.send(subMessage)
             }
         }
