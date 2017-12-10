@@ -20,21 +20,9 @@
     <?php $this->headScript()->captureStart() ?>
 
     $(function() {
-        //$('#chatEmbed').attr('src', 'https://govbenchmark.rocket.chat/channel/general');
-        $('#chatEmbed').attr('src', 'https://google.com');
+        $('#chatEmbed').attr('src', 'https://govbenchmark.rocket.chat/channel/general');
+        //$('#chatEmbed').attr('src', 'https://google.com');
 
-        //console.log('ready')
-        $('iframe').load(function() {
-            //set
-            //console.log('loaded')
-            //$('.sidebar__footer').hide()
-
-            //var head = jQuery("iframe").contents().find("head");
-            var css = '<style type="text/css">' +
-                '#banner{display:none}; ' +
-                '</style>';
-            //jQuery(head).append(css);
-        })
 
 
 
