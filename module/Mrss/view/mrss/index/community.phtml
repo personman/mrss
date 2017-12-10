@@ -20,6 +20,8 @@
     <?php $this->headScript()->captureStart() ?>
 
     $(function() {
+        $('#chatEmbed').attr('src', 'https://govbenchmark.rocket.chat/channel/general');
+
         //console.log('ready')
         $('iframe').load(function() {
             //set
@@ -72,7 +74,7 @@
     <?php $this->headScript()->captureEnd() ?>
 </script>
 
-<iframe id="chatEmbed" src="https://govbenchmark.rocket.chat/channel/general"
+<iframe id="chatEmbed"
         width="100%" height="800px" frameborder="0"
         allowfullscreen>
     <p>
