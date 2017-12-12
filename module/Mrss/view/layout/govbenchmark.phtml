@@ -311,14 +311,13 @@
 <script>
     var session = '';
     $(function() {
-        if (false) {
+        if (true) {
 
 
         // Try to connect to Rocket Chat
         console.log('about to connect to Rocket chat in govbenchmark.phtml');
-
-
-        var url = "wss://govbenchmark.rocket.chat/websocket";
+        var token = 'wShiqLZ6QcDLSLjfE1JRZI4_FRihQ1I8rnhV8cmQWK9';
+        var url = "wss://govbenchmark.rocket.chat/websocket?token=" + token;
 
 
 
@@ -327,6 +326,14 @@
 
         socket.onopen = function(){
             console.log("Socket has been opened!");
+
+            /*var authMsg = {
+                type: 'authenticate',
+                payload: {token: token}
+            };
+
+            socket.send(JSON.stringify(authMsg));
+            */
 
             var connectMessage = {
                 "msg": "connect",
@@ -357,14 +364,19 @@
             if (dataObject.msg == 'connected') {
                 var token = 'wShiqLZ6QcDLSLjfE1JRZI4_FRihQ1I8rnhV8cmQWK9';
                 var authMessage = {
-                    msg: 'authenticate',
-                    name: 'authenticate',
+                    msg: 'method',
+                    method: 'login',
+                    params: ['resume', token],
+                    /*name: 'authenticate',
+                    type: 'authenticate',
+                    payload: { token: token },
                     id: "S7HQaNnWCyZvXveiL",
                     user_id: "S7HQaNnWCyZvXveiL",
+                    userId: "S7HQaNnWCyZvXveiL",
                     data: {token: token, resume: token},
                     token: token,
                     loginToken: token,
-                    resume: token,
+                    resume: token,*/
                 };
 
                 authMessage = JSON.stringify(authMessage);
@@ -372,7 +384,8 @@
             }
 
             // If authenticated, subscribe
-            if (false) {
+            //if (false) {
+            if (dataObject.msg == 'connected') {
                 var subMessage = {
                     "msg": "sub",
                     "id": "S7HQaNnWCyZvXveiL",
