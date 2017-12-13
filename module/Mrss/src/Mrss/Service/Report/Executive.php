@@ -490,10 +490,15 @@ class Executive extends Report
 
     protected function getHighchartsConfig($config, $id, $title, $chartXCategories, $series, $format, $roundedFormat)
     {
+        $type = 'column';
+        if (isset($config['type'])) {
+            $type = $config['type'];
+        }
+
         $highChartsConfig = array(
             'id' => $id,
             'chart' => array(
-                'type' => 'column',
+                'type' => $type,
                 'events' => array(
                     'load' => 'chartLoaded'
                 )
@@ -544,6 +549,10 @@ class Executive extends Report
             )
         );
 
+        if (!empty($config['flipData'])) {
+            $highChartsConfig = $this->flipData($highChartsConfig);
+        }
+
         if (!empty($config['stacked'])) {
             $highChartsConfig['plotOptions']['column'] = array(
                 'stacking' => 'normal'
@@ -551,7 +560,13 @@ class Executive extends Report
         }
 
         if (!empty($config['percent'])) {
-            $highChartsConfig['yAxis']['max'] = 100;
+            $chartMax = 100;
+            $maxValue = $this->getMaxValue($series);
+            if ($maxValue < 50) {
+                $chartMax = 50;
+            }
+
+            $highChartsConfig['yAxis']['max'] = $chartMax;
             $highChartsConfig['yAxis']['labels']['format'] = '{value}%';
             $highChartsConfig['yAxis']['tickInterval'] = 25;
         }
@@ -564,6 +579,74 @@ class Executive extends Report
 
 
         return $highChartsConfig;
+    }
+
+    protected function flipData($highChartsConfig)
+    {
+        $oldConfig = $highChartsConfig;
+        //pr($highChartsConfig);
+        $oldCategories = $highChartsConfig['xAxis']['categories'];
+        //pr($oldCategories);
+        $newCategories = array();
+
+        $newSeries = array();
+
+        foreach ($oldCategories as $key => $category) {
+            $newSeries[] = array(
+                'name' => $this->change50ToMedian($category),
+                'data' => array(),
+                'color' => $this->seriesColors[$key]
+            );
+        }
+
+        foreach ($highChartsConfig['series'] as $serie) {
+            $newCategories[] = $this->change50ToMedian($serie['name']);
+
+            foreach ($serie['data'] as $key => $data) {
+                $newData = $data;
+                $newData['name'] = $this->change50ToMedian($oldCategories[$key]);
+                $newData['color'] = $this->seriesColors[$key];
+
+                $newSeries[$key]['data'][] = $newData;
+            }
+        }
+
+        //pr($newCategories);
+        $highChartsConfig['xAxis']['categories'] = $newCategories;
+        $highChartsConfig['series'] = $newSeries;
+
+        //pr($newCategories);
+        //pr($oldConfig['series']);
+        //pr($highChartsConfig['series']);
+        //pr($highChartsConfig);
+
+        return $highChartsConfig;
+    }
+
+    protected function change50ToMedian($name)
+    {
+        if ($name == 50) {
+            $name = 'Median';
+        }
+
+        return $name;
+    }
+
+    protected function getMaxValue($series)
+    {
+        $maxValue = 0;
+        foreach ($series as $serie) {
+            foreach ($serie['data'] as $dataPoint) {
+                if (isset($dataPoint['y'])) {
+                    $value = $dataPoint['y'];
+                    if ($value > $maxValue) {
+                        $maxValue = $value;
+                    }
+                }
+            }
+        }
+
+        return $maxValue;
     }
 
     protected function setUpSeriesColors()

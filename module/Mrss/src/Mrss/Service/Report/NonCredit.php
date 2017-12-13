@@ -24,6 +24,9 @@ class NonCredit extends Executive
                 'title' => 'Program Enrollment',
                 'stacked' => false,
                 //'legend' => false,
+                'type' => 'bar',
+                'percentiles' => array(50),
+                'flipData' => true,
                 'percent' => true,
                 'benchmarks' => array(
                     'll_enrollment_percent' => 'Life and Leisure',
@@ -46,9 +49,12 @@ class NonCredit extends Executive
                 'title' => 'Course Cancellation Rate by Program',
                 'stacked' => false,
                 'percent' => true,
+                'type' => 'bar',
+                'percentiles' => array(50),
+                'flipData' => true,
                 'benchmarks' => array(
                     'll_cancellation_rate' => 'Life and Leisure',
-                    'enrollment_information_courses_canceled' => 'Workforce Training',
+                    'enrollment_information_cancellation_rate' => 'Workforce Training',
                     'abe_cancellation_rate' => 'Adult Basis Education',
                 ),
                 'description' => '* Chart description goes here. *'
@@ -59,6 +65,8 @@ class NonCredit extends Executive
                 'title' => 'Retention by Program',
                 'stacked' => false,
                 'percent' => true,
+                'type' => 'bar',
+                'flipData' => true,
                 'percentiles' => array(50),
                 'benchmarks' => array(
                     'retention_percent_returning_ll_students' => 'Life and Leisure',
@@ -72,6 +80,9 @@ class NonCredit extends Executive
                 'title' => 'Transition from Non-credit to Credit',
                 'stacked' => false,
                 'percent' => true,
+                'percentiles' => array(50),
+                'type' => 'bar',
+                'flipData' => true,
                 'benchmarks' => array(
                     'transition_ll_students' => 'Life and Leisure',
                     'transition_students' => 'Workforce Training',
@@ -114,6 +125,8 @@ class NonCredit extends Executive
             'five-right' => array(
                 'title' => 'Revenue and Expenses by Program',
                 'stacked' => false,
+                'type' => 'bar',
+                'flipData' => true,
                 'percent' => false,
                 'percentiles' => array(50),
                 'benchmarks' => array(
@@ -133,6 +146,8 @@ class NonCredit extends Executive
                 'title' => 'Staffing',
                 'stacked' => false,
                 'percent' => false,
+                'type' => 'bar',
+                'flipData' => true,
                 'percentiles' => array(50),
                 'benchmarks' => array(
                     'staffing_full_time_instructors_percent' => 'Full-time',
@@ -155,6 +170,8 @@ class NonCredit extends Executive
                 'title' => 'Expenses by Category',
                 'stacked' => false,
                 'percent' => false,
+                'type' => 'bar',
+                'flipData' => true,
                 'percentiles' => array(50),
                 'benchmarks' => array(
                     // @todo
@@ -182,5 +199,36 @@ class NonCredit extends Executive
         unset($year);
 
         return $config;
+    }
+
+    protected function setUpSeriesColors()
+    {
+        $colorConfig = $colors = array(
+            'seriesColors' => array(
+                //'#9cc03e', // '#005595' lightened 40%
+                '#3366B4', // '#519548' lightened 30%
+                '#9b62c9',
+                '#999',
+                '#ebb164',
+                '#F55',
+                '#5F5',
+                '#55F',
+                '#5FF'
+            ),
+            'yourCollegeColors' => array(
+                //'#507400',
+                '#001A68',
+                '#65318F',
+                '#555',
+                '#db891b',
+                '#F00',
+                '#0F0',
+                '#00F',
+                '#0FF',
+            )
+        );
+        // What color will the bar be?
+        $this->seriesColors = $colorConfig['seriesColors'];
+        $this->yourCollegeColors = $colorConfig['yourCollegeColors'];
     }
 }
