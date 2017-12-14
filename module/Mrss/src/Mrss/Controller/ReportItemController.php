@@ -70,15 +70,24 @@ class ReportItemController extends CustomReportController
                 $chart = $chartBuilder->getChart();
                 $footnotes = $chartBuilder->getFootnotes();
 
-                // Save it, if requested
-                if ($buttonPressed == 'save') {
-                    if (!empty($data['title']) || $data['presentation'] == 'text') {
-                        $this->saveItem($data, $chart, $footnotes, $item);
-                        $this->flashMessenger()->addSuccessMessage("Saved.");
-                        return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
-                    } else {
-                        $this->flashMessenger()
-                            ->addErrorMessage("You must enter a title to save.");
+                $errors = $chartBuilder->getErrors();
+
+                if (count($errors)) {
+                    foreach ($errors as $error) {
+                        $this->flashMessenger()->addErrorMessage($error);
+                        $chart = $footnotes = null;
+                    }
+                } else {
+                    // Save it, if requested
+                    if ($buttonPressed == 'save') {
+                        if (!empty($data['title']) || $data['presentation'] == 'text') {
+                            $this->saveItem($data, $chart, $footnotes, $item);
+                            $this->flashMessenger()->addSuccessMessage("Saved.");
+                            return $this->redirect()->toRoute('reports/custom/build', array('id' => $report->getId()));
+                        } else {
+                            $this->flashMessenger()
+                                ->addErrorMessage("You must enter a title to save.");
+                        }
                     }
                 }
             }
@@ -90,6 +99,7 @@ class ReportItemController extends CustomReportController
             $builder = $this->getChartBuilder($data);
             $chart = $builder->getChart();
             $footnotes = $builder->getFootnotes();
+
         } else {
             if ($presentationType = $this->params()->fromRoute('type')) {
                 $form->get('presentation')->setValue($presentationType);
@@ -122,7 +132,7 @@ class ReportItemController extends CustomReportController
             'defaultBreakpoints' => $this->getReportService()->getPercentileBreakpointsForStudy(),
             'benchmarksByInputType' => $this->currentStudy()->getBenchmarksByInputType(),
             'peerMembers' => $this->getPeerMembers(),
-            'formData' => $data
+            'formData' => $data,
         ));
 
         return $viewModel;

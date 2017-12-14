@@ -18,6 +18,8 @@ class ChartBuilder extends Report
 
     protected $footnotes = array();
 
+    protected $errors = array();
+
     public function setConfig($config)
     {
         $this->setFootnotes(array());
@@ -100,6 +102,18 @@ class ChartBuilder extends Report
     public function addFootnote($footnote)
     {
         $this->footnotes[] = $footnote;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function addError($error)
+    {
+        $this->errors[] = $error;
+
+        return $this;
     }
 
     public function substituteVariablesInFootnotes()

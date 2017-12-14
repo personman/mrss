@@ -72,6 +72,17 @@ class PeerBuilder extends BarBuilder
             $this->addFootnote("$peerGroupName: $peerNames.");
         }
 
+        // Are there enough peers?
+        if ($this->getStudyConfig()->anonymous_peers) {
+            $minPeers = 5;
+            if (count($includedPeers) < $minPeers) {
+                $chartValues = array();
+                $error = "Not enough peers to display data: Select peer group with at least $minPeers with data.";
+                $this->addError($error);
+            }
+
+        }
+
         return $this->getPeerService()
             ->getPeerBarChart($xBenchmark, $chartValues, $title, $subtitle, $this->getWidthSetting());
     }
