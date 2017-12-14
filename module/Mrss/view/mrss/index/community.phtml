@@ -6,6 +6,12 @@
     .sidebar__footer {
         display: none;
     }
+    .badge-danger {
+        background-color: #d43f3a;
+    }
+    .rocket-chat-unread {
+        margin-left: 6px;
+    }
 </style>
 
 
@@ -14,24 +20,51 @@
     <?php $this->headScript()->captureStart() ?>
 
     $(function() {
-        //console.log('ready')
-        $('iframe').load(function() {
-            //set
-            //console.log('loaded')
-            //$('.sidebar__footer').hide()
+        $('#chatEmbed').attr('src', 'https://govbenchmark.rocket.chat/channel/general');
+        //$('#chatEmbed').attr('src', 'https://google.com');
 
-            //var head = jQuery("iframe").contents().find("head");
-            var css = '<style type="text/css">' +
-                '#banner{display:none}; ' +
-                '</style>';
-            //jQuery(head).append(css);
-        })
+
+
+
+        // Watch for notifications
+        if (!window.console) window.console = {};
+        if (!window.console.log) window.console.log = function () { };
+
+
+        if (true) {
+            window.addEventListener('message', function(e) {
+                console.log(e.data)
+
+                if (e.data.eventName == 'unread-changed') {
+                    var unreadCount = e.data.data;
+
+                    //console.log(e.data.eventName); // event name
+                    console.log(e.data.data); // event data
+
+                    //console.log(unreadCount)
+                    var menuItem = $('.community-menu a');
+
+                    menuItem.find('.rocket-chat-unread').remove();
+
+                    if (unreadCount) {
+                        //console.log('appending unread badge...')
+                        menuItem.append('<span class="badge badge-danger rocket-chat-unread">' + unreadCount + '</span>')
+                    }
+
+
+
+                }
+            });
+        }
+
+
+
     });
     <?php $this->headScript()->captureEnd() ?>
 </script>
 
-<iframe id="chatEmbed" src="https://govbenchmark.rocket.chat/channel/general"
-        width="100%" height="700" frameborder="0"
+<iframe id="chatEmbed"
+        width="100%" height="800px" frameborder="0"
         allowfullscreen>
     <p>
             Fallback link for browsers that don't support iframes

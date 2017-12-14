@@ -308,6 +308,106 @@
 <?php echo $this->headScript() ?>
 <?php echo $this->inlineScript() ?>
 
+<script>
+    var session = '';
+    $(function() {
+        if (false) {
+
+
+        // Try to connect to Rocket Chat
+        console.log('about to connect to Rocket chat in govbenchmark.phtml');
+        var token = 'wShiqLZ6QcDLSLjfE1JRZI4_FRihQ1I8rnhV8cmQWK9';
+        var url = "wss://govbenchmark.rocket.chat/websocket?token=" + token;
+
+
+
+
+        var socket = new WebSocket(url);
+
+        socket.onopen = function(){
+            console.log("Socket has been opened!");
+
+            /*var authMsg = {
+                type: 'authenticate',
+                payload: {token: token}
+            };
+
+            socket.send(JSON.stringify(authMsg));
+            */
+
+            var connectMessage = {
+                "msg": "connect",
+                "version": "1",
+                "support": ["1"]
+            }
+
+            connectMessage = JSON.stringify(connectMessage);
+
+            socket.send(connectMessage)
+        }
+
+        socket.onmessage = function(msg){
+            var dataObject = JSON.parse(msg.data)
+
+            console.log(msg);	//Awesome!
+            console.log(dataObject);	//Awesome!
+
+            console.log(msg.data)
+
+            // Ping! Pong! Bing! Bong!
+            if (msg.data == '{"msg":"ping"}') {
+                socket.send('{"msg": "pong"}');
+                console.log('pong sent.');
+            }
+
+            // If connected, authenticate
+            if (dataObject.msg == 'connected') {
+                var token = 'wShiqLZ6QcDLSLjfE1JRZI4_FRihQ1I8rnhV8cmQWK9';
+                var authMessage = {
+                    msg: 'method',
+                    method: 'login',
+                    params: ['resume', token],
+                    /*name: 'authenticate',
+                    type: 'authenticate',
+                    payload: { token: token },
+                    id: "S7HQaNnWCyZvXveiL",
+                    user_id: "S7HQaNnWCyZvXveiL",
+                    userId: "S7HQaNnWCyZvXveiL",
+                    data: {token: token, resume: token},
+                    token: token,
+                    loginToken: token,
+                    resume: token,*/
+                };
+
+                authMessage = JSON.stringify(authMessage);
+                socket.send(authMessage);
+            }
+
+            // If authenticated, subscribe
+            //if (false) {
+            if (dataObject.msg == 'connected') {
+                var subMessage = {
+                    "msg": "sub",
+                    "id": "S7HQaNnWCyZvXveiL",
+                    "name": "stream-notify-user",
+                    "params":[
+                        "user-id/event",
+                        false
+                    ]
+                }
+                subMessage = JSON.stringify(subMessage)
+                socket.send(subMessage)
+            }
+        }
+
+
+
+        }
+
+
+    })
+</script>
+
 <?php if ($googleAnalyticsKey = $this->currentStudy()->getGoogleAnalyticsKey()): ?>
     <script type="text/javascript">
 

@@ -29,7 +29,8 @@
         "goalio/goalio-forgotpassword-doctrine-orm": "*",
         "thesoftwarefarm/exprlib": "*",
         "rwoverdijk/assetmanager": "1.*",
-        "zendframework/zend-developer-tools": "*"
+        "zendframework/zend-developer-tools": "*",
+        "fab1en/rocket-chat-rest-client": "dev-master"
     },
     "require-dev": {
         "symfony/http-kernel": "2.*",

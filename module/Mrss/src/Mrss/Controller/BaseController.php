@@ -165,6 +165,14 @@ class BaseController extends AbstractActionController
     }
 
     /**
+     * @return \Mrss\Model\User
+     */
+    protected function getUserModel()
+    {
+        return $this->getServiceLocator()->get('model.user');
+    }
+
+    /**
      * @return \Mrss\Model\System
      */
     protected function getSystemModel()

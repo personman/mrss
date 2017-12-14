@@ -2272,6 +2272,15 @@ return array(
                             )
                         )
                     ),
+                    'all-gravatars' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/all-gravatars',
+                            'defaults' => array(
+                                'action' => 'allGravatars'
+                            )
+                        )
+                    ),
                     'best' => array(
                         'type' => 'segment',
                         'options' => array(

@@ -441,7 +441,11 @@ class CustomReportController extends ReportController
             $colleges = $this->getTargetColleges($targetPeerGroupId);
             foreach ($colleges as $college) {
                 foreach ($college->getUsers() as $user) {
-                    //if (!$this->userHasReport($user)) {
+                    // Skip yourself.
+                    if ($user->getId() == $this->getCurrentUser()->getId()) {
+                        continue;
+                    }
+
                     if (true) {
                         $this->copyCustomReport($report, $user);
                         $count++;
@@ -471,6 +475,9 @@ class CustomReportController extends ReportController
         $peerGroup = $this->getPeerGroupModel()->find($peerGroupId);
 
         $colleges = $this->getCollegeModel()->findByIds($peerGroup->getPeers());
+
+        // Add their own college, too, so they can copy it to colleagues.
+        $colleges[] = $this->currentCollege();
 
         return $colleges;
 

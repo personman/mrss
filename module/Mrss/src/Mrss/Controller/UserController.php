@@ -933,6 +933,79 @@ class UserController extends BaseController
 
 
 
+
+        /*$client = new \RocketChatPhp\Client('https://govbenchmark.rocket.chat', 'webhook_token');
+        $client->payload([
+            'text' => 'This will be sent to the webhook!'
+        ]);
+        */
+
+        $currentUser = $this->getCurrentUser();
+
+        define('REST_API_ROOT', '/api/v1/');
+        define('ROCKET_CHAT_INSTANCE', 'https://govbenchmark.rocket.chat');
+
+        $api = new \RocketChat\Client();
+        //echo $api->version(); echo "\n";
+
+
+        $password = bin2hex(openssl_random_pseudo_bytes(10));
+
+        // login as the main admin user
+        $admin = new \RocketChat\User('Dan.Ferguson', 'testing4govB');
+
+        if( $admin->login() ) {
+            $newuser = new \RocketChat\User($currentUser->getUsername(), $password, array(
+                'nickname' => $currentUser->getFullName(),
+                'email' => $currentUser->getEmail(),
+            ));
+
+
+
+            $info = $newuser->info();
+
+            if (empty($newuser->id)) {
+                echo 'try to create...';
+
+                $newuser->create();
+
+                //pr($newuser);
+            }
+
+            //pr($newuser);
+
+            $token = $newuser->createToken();
+
+
+/*
+            if( !$newuser->login(false) ) {
+                // actually create the user if it does not exist yet
+                //$newuser->create();
+                echo "user {$newuser->nickname} created ({$newuser->id})\n";
+
+                echo "<br>Trying again...";
+                $result = $newuser->login(false);
+                pr($result);
+
+            } else {
+                echo "User exists already: $newuser->nickname";
+            }
+
+            pr($newuser);
+
+*/
+        };
+
+
+
+        //$admin->info();
+        //echo "I'm {$admin->nickname} ({$admin->id}) "; echo "\n";
+
+
+
+
+        /*
+
         $params = $this->params()->fromPost();
         //$params = $this->params()->fromQuery();
         $jsonParams = json_encode($params);
@@ -945,18 +1018,21 @@ class UserController extends BaseController
         $responseHeaders = $this->getResponse()->getHeaders()->toArray();
         $jsonRHeaders = print_r($responseHeaders, 1);
 
+
+        $userEmail = $this->getCurrentUser()->getEmail();
+
         $server = print_r($_SERVER, 1);
-        $message = "/chat-login called with POST: " . $jsonParams;
+        $message = "/chat-login called user ($userEmail) with POST: " . $jsonParams;
         $message .= " \n and HEADERS: " . $jsonHeaders;
         $message .= " \n and SERVER: " . $server;
         $message .= " \n and RESPONSE HEADERS: " . $jsonRHeaders . "\n\n";
         $this->getLog()->info($message);
-
+        */
         //prd($jsonParams);
 
         $viewModel = new JsonModel(
             array(
-                'token' => session_id(),
+                'loginToken' => $token,
             )
         );
 
