@@ -603,11 +603,13 @@ class Executive extends Report
             $newCategories[] = $this->change50ToMedian($serie['name']);
 
             foreach ($serie['data'] as $key => $data) {
-                $newData = $data;
-                $newData['name'] = $this->change50ToMedian($oldCategories[$key]);
-                $newData['color'] = $this->seriesColors[$key];
+                if ($oldCategory = $oldCategories[$key]) {
+                    $newData = $data;
+                    $newData['name'] = $this->change50ToMedian($oldCategory);
+                    $newData['color'] = $this->seriesColors[$key];
 
-                $newSeries[$key]['data'][] = $newData;
+                    $newSeries[$key]['data'][] = $newData;
+                }
             }
         }
 
