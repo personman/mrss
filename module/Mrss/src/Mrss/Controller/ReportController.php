@@ -401,7 +401,8 @@ class ReportController extends ReportAdminController
             'college' => $college,
             'open' => $open,
             'media' => $media,
-            'autoPrint' => $autoPrint
+            'autoPrint' => $autoPrint,
+            'firstYear' => 2017
         );
     }
 

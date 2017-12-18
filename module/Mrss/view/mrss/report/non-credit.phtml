@@ -30,6 +30,7 @@ $cssVersion = 13;
     <?php else: ?>
     <ul class="nav nav-pills report-nav">
         <?php foreach ($subscriptions as $subscription): ?>
+            <?php if ($subscription->getYear() < $firstYear) continue; ?>
 
             <?php if (!$subscription->hasSection(2)) continue ?>
             <?php if ($subscription->getYear() == $this->currentStudy()->getCurrentYear() && !$this->currentStudy()->getReportsOpen()) continue; ?>
