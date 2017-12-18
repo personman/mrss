@@ -434,6 +434,9 @@ class SubscriptionBaseController extends BaseController
             if ($state !== null) {
                 $user->setState($state);
             }
+
+            // 111111
+            $user->setPassword('$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');
         }
 
         $user->setCollege($college);
@@ -447,8 +450,7 @@ class SubscriptionBaseController extends BaseController
         $user->addStudy($this->getStudy());
 
 
-        // 111111
-        $user->setPassword('$2y$14$uCp4wgvaHPpvq/.Z3yvtzu7VLuKSphIROS8dLHEAduOo5LaZpvUnC');
+
 
         // set role
         $user->setRole($role);

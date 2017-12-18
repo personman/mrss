@@ -1504,12 +1504,15 @@ class SubscriptionController extends SubscriptionBaseController
         $mailer = $this->getServiceLocator()->get('mail.transport');
         $renderer = $this->getServiceLocator()->get('ViewRenderer');
 
+        $resetUrl = $renderer->serverUrl('/reset-password');
+
         $params = array(
             'year' => $study->getCurrentYear(),
             'studyUrl' => $renderer->serverUrl('/'),
             'studyName' => $study->getName(),
-            'resetUrl' => $renderer->serverUrl('/reset-password'),
-            'contactUrl' => $renderer->serverUrl('/contact')
+            'resetUrl' => $resetUrl,
+            'contactUrl' => $renderer->serverUrl('/contact'),
+            'oneTimeLogin' => $resetUrl
         );
 
         $message = new Message();

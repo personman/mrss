@@ -19,24 +19,6 @@ return array(
     ),
     'router' => array(
         'routes' => array(
-            // @todo: get rid of this general route
-            /*'general' => array(
-                'type' => 'segment',
-                'priority' => -10,
-                'options' => array(
-                    'route' => '/[:controller[/:action[/:id]]]',
-                    'constraints' => array(
-                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'         => '[0-9]+'
-                    ),
-                    'defaults' => array(
-                        'controller' => 'index',
-                        'action' => 'index',
-                        'id' => 0
-                    )
-                )
-            ),/**/
             'home' => array(
                 'type' => 'literal',
                 'options' => array(
