@@ -426,11 +426,11 @@ class Executive extends Report
 
 
             // rotated
-            if (false && !($dataPoint['y'])) {
+            if (!empty($config['verticalLabels'])) {
                 $dataPoint['dataLabels']['rotation'] = 270;
                 $dataPoint['dataLabels']['align'] = 'left';
-                $dataPoint['dataLabels']['x'] = 2;
-                $dataPoint['dataLabels']['y'] = -70;
+                $dataPoint['dataLabels']['x'] = 0;
+                $dataPoint['dataLabels']['y'] = -7;
             }
 
 

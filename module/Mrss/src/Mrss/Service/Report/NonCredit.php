@@ -96,7 +96,7 @@ class NonCredit extends Executive
                 'stacked' => false,
                 'percent' => false,
                 'benchmarks' => array(
-                    'enrollment_information_market_penetration' => 'All Companies',
+                    //'enrollment_information_market_penetration' => 'All Companies',
                     'contract_training_mkt_pen_50' => 'Large Companies',
                 ),
                 'description' => '* Chart description goes here. Test *'
@@ -116,6 +116,7 @@ class NonCredit extends Executive
                 'title' => 'Continuing Education Revenue and Expenses',
                 'stacked' => false,
                 'percent' => false,
+                'verticalLabels' => true,
                 'benchmarks' => array(
                     'revenue_total' => 'Revenue',
                     'expenditures_total' => 'Expenses'
@@ -123,24 +124,22 @@ class NonCredit extends Executive
                 'description' => '* Chart description goes here for exp/rev. *'
             ),
             'five-right' => array(
-                'title' => 'Revenue and Expenses by Program',
+                'title' => 'Expenses by Category',
                 'stacked' => false,
+                'percent' => false,
                 'type' => 'bar',
                 'flipData' => true,
-                'percent' => false,
                 'percentiles' => array(50),
                 'benchmarks' => array(
-                    'revenue_ll_percent' => 'Life and Leisure Revenue',
-                    'revenue_continuing_education_percent' => 'WT Revenue',
-                    'revenue_contract_training_percent' => 'CT Revenue',
-                    'revenue_abe_percent' => 'ABE Revenue',
-                    'expenditures_ll_percent' => 'Life and Leisure Exp',
-                    'expenditures_continuing_education_percent' => 'WT Exp',
-                    'expenditures_contract_training_percent' => 'CT Exp',
-                    'expenditures_abe_percent' => 'ABE Exp'
-
+                    // @todo
+                    'expenditures_salaries_percent' => 'Salaries',
+                    'expenditures_benefits_percent' => 'Benefits',
+                    'expenditures_supplies_percent' => 'Supplies',
+                    'expenditures_marketing_percent' => 'Marketing',
+                    'expenditures_capital_equipment_percent' => 'Equipment',
+                    'expenditures_travel_percent' => 'Travel'
                 ),
-                'description' => '* Chart description for exp/rev by program goes here. *'
+                'description' => '* Chart description for exp by category goes here. *'
             ),
             'six-left' => array(
                 'title' => 'Staffing',
@@ -167,24 +166,6 @@ class NonCredit extends Executive
                 'description' => '* Chart description for ratio goes here. *'
             ),
             'seven-left' => array(
-                'title' => 'Expenses by Category',
-                'stacked' => false,
-                'percent' => false,
-                'type' => 'bar',
-                'flipData' => true,
-                'percentiles' => array(50),
-                'benchmarks' => array(
-                    // @todo
-                    'expenditures_salaries_percent' => 'Salaries',
-                    'expenditures_benefits_percent' => 'Benefits',
-                    'expenditures_supplies_percent' => 'Supplies',
-                    'expenditures_marketing_percent' => 'Marketing',
-                    'expenditures_capital_equipment_percent' => 'Equipment',
-                    'expenditures_travel_percent' => 'Travel'
-                ),
-                'description' => '* Chart description for exp by category goes here. *'
-            ),
-            'seven-right' => array(
                 'title' => 'Return on Investment',
                 'stacked' => false,
                 'percent' => false,
@@ -193,6 +174,21 @@ class NonCredit extends Executive
                     'retained_revenue_roi' => 'Return on Investment'
                 ),
                 'description' => '* Chart description for ratio goes here. *'
+            ),
+            'seven-right' => array(
+                'title' => 'Return on Investment by Program',
+                'stacked' => false,
+                'type' => 'bar',
+                'flipData' => true,
+                'percent' => false,
+                'percentiles' => array(50),
+                'benchmarks' => array(
+                    'll_roi' => 'Life and Leisure',
+                    'wf_roi' => 'Workforce Training',
+                    'contract_training_roi' => 'Contract Training',
+                    'abe_roi' => 'Adult Basic Education',
+                ),
+                'description' => '* Chart description for exp/rev by program goes here. *'
             ),
         );
 
