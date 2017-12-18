@@ -1525,6 +1525,18 @@ class SubscriptionController extends SubscriptionBaseController
         foreach ($users as $user) {
             $message->setTo($user->getEmail());
 
+            $oneTimeLogin = $renderer->serverUrl(
+                $renderer->url(
+                    'zfcuser/resetpassword',
+                    array(
+                        'userId' => $user->getId(),
+                        'token' => $this->getPasswordResetKey($user->getId())
+                    )
+                )
+            );
+
+            $params['oneTimeLogin'] = $oneTimeLogin;
+
             // Plug in the user's name
             $params['fullName'] = $user->getPrefix() . ' ' . $user->getLastName();
 

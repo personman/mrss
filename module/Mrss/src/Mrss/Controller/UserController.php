@@ -685,32 +685,6 @@ class UserController extends BaseController
         return $this->redirect()->toRoute('users/edit', array('id' => $userId));
     }
 
-    protected function getPasswordResetKey($userId)
-    {
-        /** @var \GoalioForgotPassword\Service\Password $passwordService */
-        $passwordService = $this->getServiceLocator()
-            ->get('goalioforgotpassword_password_service');
-
-        if ($existing = $passwordService->getPasswordMapper()->findByUser($userId)) {
-            $key = $existing->getRequestKey();
-        } else {
-            $passwordService->cleanPriorForgotRequests($userId);
-            $class = $passwordService->getOptions()->getPasswordEntityClass();
-
-            /** @var \GoalioForgotPasswordDoctrineORM\Entity\Password $model */
-            $model = new $class;
-
-            $model->setUserId($userId);
-            $model->setRequestTime(new \DateTime('now'));
-            $model->generateRequestKey();
-            $passwordService->getPasswordMapper()->persist($model);
-
-            $key = $model->getRequestKey();
-        }
-
-        return $key;
-    }
-
     /**
      * Failed refactor
      *
