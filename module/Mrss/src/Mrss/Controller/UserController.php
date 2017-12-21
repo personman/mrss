@@ -878,6 +878,8 @@ class UserController extends BaseController
 
     public function chatLoginAction()
     {
+        $log = $this->getLog();
+
         /*if (isset($_SERVER['HTTP_ORIGIN'])) {
             header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
             header('Access-Control-Allow-Credentials: true');
@@ -915,6 +917,7 @@ class UserController extends BaseController
         */
 
         $currentUser = $this->getCurrentUser();
+        $log->info('currentUser: ' . $currentUser->getFullName() . ' - ' . $currentUser->getUsername());
 
         define('REST_API_ROOT', '/api/v1/');
         define('ROCKET_CHAT_INSTANCE', 'https://govbenchmark.rocket.chat');
@@ -936,12 +939,16 @@ class UserController extends BaseController
 
 
 
+            $log->info('About to look up user ' . $currentUser->getUsername());
             $info = $newuser->info();
 
-            if (empty($newuser->id)) {
-                echo 'try to create...';
+            $log->info('Response: ' . print_r($info, 1));
 
-                $newuser->create();
+            if (empty($newuser->id)) {
+                $log->info("Trying to create user...");
+
+                $result = $newuser->create();
+                $log->info('Result: ' . print_r($result, 1));
 
                 //pr($newuser);
             }
@@ -950,6 +957,7 @@ class UserController extends BaseController
 
             $token = $newuser->createToken();
 
+            $log->info('token: ' . $token);
 
 /*
             if( !$newuser->login(false) ) {
@@ -968,7 +976,9 @@ class UserController extends BaseController
             pr($newuser);
 
 */
-        };
+        } else {
+            $log->info('Rocket Chat login failed. Check password.');
+        }
 
 
 
