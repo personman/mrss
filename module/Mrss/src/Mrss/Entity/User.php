@@ -191,7 +191,7 @@ class User implements UserInterface, ProviderInterface
      */
     public function getUsername()
     {
-        if (empty($this->username)) {
+        if (empty($this->username) || $this->username == '.') {
             $this->username = $this->getFirstName() . '.' . $this->getLastName();
         }
 
