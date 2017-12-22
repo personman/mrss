@@ -948,7 +948,14 @@ class UserController extends BaseController
                 $log->info("Trying to create user...");
 
                 $result = $newuser->create();
-                $log->info('Result: ' . print_r($result, 1));
+
+                if ($error = $newuser->getError()) {
+                    $log->alert('Error creating user: ' . $error);
+                } else {
+                    $log->info('Created user. result: ' . print_r($result, 1));
+                }
+
+
 
                 //pr($newuser);
             } else {
