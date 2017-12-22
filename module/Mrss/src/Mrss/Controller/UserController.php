@@ -942,7 +942,7 @@ class UserController extends BaseController
             $log->info('About to look up user ' . $currentUser->getUsername());
             $info = $newuser->info();
 
-            $log->info('Response: ' . print_r($info, 1));
+            //$log->info('Response: ' . print_r($info, 1));
 
             if (empty($newuser->id)) {
                 $log->info("Trying to create user...");
@@ -977,7 +977,7 @@ class UserController extends BaseController
 
 */
         } else {
-            $log->info('Rocket Chat login failed. Check password.');
+            $log->info('Rocket Chat login failed. Check admin password.');
         }
 
 
