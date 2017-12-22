@@ -192,7 +192,9 @@ class User implements UserInterface, ProviderInterface
     public function getUsername()
     {
         if (empty($this->username) || $this->username == '.') {
-            $this->username = $this->getFirstName() . '.' . $this->getLastName();
+            $firstName = str_replace(array(' ', '\''), '.', $this->getFirstName());
+            $lastName = str_replace(array(' ', '\''), '.', $this->getLastName());
+            $this->username = $firstName . '.' . $lastName;
         }
 
         return $this->username;
