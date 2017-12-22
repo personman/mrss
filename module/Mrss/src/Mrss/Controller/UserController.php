@@ -951,6 +951,8 @@ class UserController extends BaseController
                 $log->info('Result: ' . print_r($result, 1));
 
                 //pr($newuser);
+            } else {
+                $log->info('Found user in Rocket Chat.');
             }
 
             //pr($newuser);
