@@ -55,6 +55,11 @@ class NccbpNavigationFactory extends NavigationFactory
                 array_unshift($pages['data-documentation']['pages'], $workbook);
             }
 
+            // Show non-credit report?
+            if (!$this->getSubscription()->hasSection(2)) {
+                unset($pages['reports']['pages']['non-credit']);
+            }
+
             // Social mobility report
             if (true) {
                 $mobility = array(

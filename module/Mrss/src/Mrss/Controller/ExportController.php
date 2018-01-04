@@ -36,7 +36,7 @@ class ExportController extends AbstractActionController
     }
 
     /**
-     * This route is not set up yet @todo
+     * This route is not set up yet
      *
      * @return array
      */

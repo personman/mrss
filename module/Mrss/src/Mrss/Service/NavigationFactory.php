@@ -218,6 +218,12 @@ class NavigationFactory extends DefaultNavigationFactory
             unset($pages['help']);
         }
 
+        if ($currentStudy->getId() != 1) {
+            // Only show non-credit for nccbp
+            unset($pages['reports']['pages']['non-credit']);
+        }
+
+
         // Customize menu by study: Workforce
         if ($currentStudy->getId() != 3) {
             // Only show NCCET for workforce
@@ -331,8 +337,9 @@ class NavigationFactory extends DefaultNavigationFactory
             // No percent change report
             unset($pages['reports']['pages']['percent-change']);
 
-            // No exec report
+            // No exec report or non-credit
             unset($pages['reports']['pages']['executive']);
+            unset($pages['reports']['pages']['non-credit']);
 
             // Change title of national report
             /*$pages['reports']['pages']['national'] = array(

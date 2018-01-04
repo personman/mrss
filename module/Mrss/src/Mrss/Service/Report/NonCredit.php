@@ -17,11 +17,11 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'enrollment_information_ce_enrollment_percent' => '',
                 ),
-                'description' => '* Chart description goes here. *'
+                'description' => 'Percentage of unduplicated continuing education enrollment of total college enrollment.'
 
             ),
             'top-right' => array(
-                'title' => 'Program Enrollment',
+                'title' => '% of Program Enrollment of Total College Enrollment',
                 'stacked' => false,
                 //'legend' => false,
                 'type' => 'bar',
@@ -33,7 +33,7 @@ class NonCredit extends Executive
                     'enrollment_information_workforce_enrollment_percent' => 'Workforce Training',
                     'abe_unduplicated_percent' => 'Adult Basic Education',
                 ),
-                'description' => '* Chart description goes here. *'
+                'description' => 'Percentage of unduplicated program enrollment of total college enrollment.'
             ),
             'two-left' => array(
                 'title' => 'Continuing Education Course Cancellation Rate',
@@ -43,7 +43,7 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'all_ce_cancellation_rate' => 'Cancellation Rate',
                 ),
-                'description' => '* Chart description goes here. *'
+                'description' => 'Percentage of continuing education courses cancelled of courses offered.'
             ),
             'two-right' => array(
                 'title' => 'Course Cancellation Rate by Program',
@@ -57,10 +57,8 @@ class NonCredit extends Executive
                     'enrollment_information_cancellation_rate' => 'Workforce Training',
                     'abe_cancellation_rate' => 'Adult Basis Education',
                 ),
-                'description' => '* Chart description goes here. *'
+                'description' => 'Percentage of courses cancelled of courses offered by program.'
             ),
-            // @todo: Retention by program
-
             'three-left' => array(
                 'title' => 'Retention by Program',
                 'stacked' => false,
@@ -74,7 +72,7 @@ class NonCredit extends Executive
                     'retention_percent_returning_abe_students' => 'Adult Basis Education',
                     'retention_percent_returning_ce_students' => 'Continuing Education'
                 ),
-                'description' => '* Chart description goes here. *'
+                'description' => 'Percentage of returning students of total enrolled Continuing Education students.'
             ),
             'three-right' => array(
                 'title' => 'Transition from Non-credit to Credit',
@@ -89,20 +87,9 @@ class NonCredit extends Executive
                     'transition_abe_students' => 'Adult Basis Education',
                     'transition_ce_students' => 'Continuing Education'
                 ),
-                'description' => '* Chart description goes here. *'
+                'description' => 'Percentage of continuing education students who enroll in a credit course.'
             ),
             'four-left' => array(
-                'title' => 'Market Penetration',
-                'stacked' => false,
-                'percent' => false,
-                'benchmarks' => array(
-                    //'enrollment_information_market_penetration' => 'All Companies',
-                    'contract_training_mkt_pen_50' => 'Large Companies',
-                ),
-                'description' => '* Chart description goes here. Test *'
-            ),
-            // @todo: contract training retention
-            'four-right' => array(
                 'title' => 'Contract Training Retention',
                 'stacked' => false,
                 'percent' => true,
@@ -110,7 +97,19 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'retention_percent_returning_organizations_served' => 'Retention'
                 ),
-                'description' => '* Chart description for contract training retention goes here. *'
+                'description' => 'Percentage of returning organizations of total organizations served.'
+            ),
+
+            'four-right' => array(
+                'title' => 'Contract Training Market Penetration',
+                'subtitle' => 'Companies with 50+ Employees',
+                'stacked' => false,
+                'percent' => false,
+                'benchmarks' => array(
+                    //'enrollment_information_market_penetration' => 'All Companies',
+                    'contract_training_mkt_pen_50' => 'Large Companies',
+                ),
+                'description' => 'Percentage of organizations served of total organizations with 50+ in the service area.'
             ),
             'five-left' => array(
                 'title' => 'Continuing Education Revenue and Expenses',
@@ -121,7 +120,7 @@ class NonCredit extends Executive
                     'revenue_total' => 'Revenue',
                     'expenditures_total' => 'Expenses'
                 ),
-                'description' => '* Chart description goes here for exp/rev. *'
+                'description' => 'Total Gross Revenue - Revenue in support of all non-credit continuing education - include all public, grant and earned revenue from contracting training, continuing education and other.  Total Expenditures - All expenditures resulting from non-credit continuing education - include expenditures from contracting training, continuing education and other and except for institutional or overhead costs.'
             ),
             'five-right' => array(
                 'title' => 'Expenses by Category',
@@ -139,7 +138,7 @@ class NonCredit extends Executive
                     'expenditures_capital_equipment_percent' => 'Equipment',
                     'expenditures_travel_percent' => 'Travel'
                 ),
-                'description' => '* Chart description for exp by category goes here. *'
+                'description' => 'Percentage of expenditures by total expenditures.'
             ),
             'six-left' => array(
                 'title' => 'Staffing',
@@ -153,7 +152,7 @@ class NonCredit extends Executive
                     'staffing_part_time_instructors_percent' => 'Part-time',
                     'staffing_independent_contractors_percent' => 'Contractors'
                 ),
-                'description' => '* Chart description for staffing goes here. *'
+                'description' => 'Percentage of type of instructors by total continuing education instructors.'
             ),
             'six-right' => array(
                 'title' => 'Instructor/Staff Ratio',
@@ -163,7 +162,7 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'staffing_instructor_staff_ratio' => 'Instructor/Staff Ratio'
                 ),
-                'description' => '* Chart description for ratio goes here. *'
+                'description' => 'Total instructors by total staff.'
             ),
             'seven-left' => array(
                 'title' => 'Return on Investment',
@@ -173,7 +172,7 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'retained_revenue_roi' => 'Return on Investment'
                 ),
-                'description' => '* Chart description for ratio goes here. *'
+                'description' => 'Total operating margins is total non-credit revenue minus total non-credit expenditures.'
             ),
             'seven-right' => array(
                 'title' => 'Return on Investment by Program',
@@ -188,7 +187,7 @@ class NonCredit extends Executive
                     'contract_training_roi' => 'Contract Training',
                     'abe_roi' => 'Adult Basic Education',
                 ),
-                'description' => '* Chart description for exp/rev by program goes here. *'
+                'description' => 'Total operating margins is total non-credit revenue minus total non-credit expenditures by program.'
             ),
         );
 

@@ -737,6 +737,10 @@ function getReportMenu()
                 'label' => 'Executive Report',
                 'uri' => '/reports/executive'
             ),
+            'non-credit' => array(
+                'label' => 'Non-credit Report',
+                'uri' => '/reports/non-credit'
+            ),
             'peer' => array(
                 'label' => 'Peer Comparison',
                 'uri' => '/reports/peer'
