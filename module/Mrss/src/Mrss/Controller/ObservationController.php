@@ -730,7 +730,7 @@ class ObservationController extends BaseController
             foreach ($form as $element) {
                 /** @var \Zend\Form\Element $element */
                 $value = $element->getValue();
-                if (!is_null($value)) {
+                if (!is_null($value) && is_numeric($value)) {
                     $value = round($value, $roundTo);
                     $element->setValue($value);
                 }
