@@ -117,6 +117,11 @@ class BenchmarkGroup implements
     protected $sequence;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $showWhenEmpty;
+
+    /**
      * @ORM\OneToMany(targetEntity="Benchmark", mappedBy="benchmarkGroup")
      * @ORM\OrderBy({"sequence" = "ASC"})
      */
