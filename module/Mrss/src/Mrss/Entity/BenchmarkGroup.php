@@ -781,4 +781,22 @@ class BenchmarkGroup implements
 
         return $children;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getShowWhenEmpty()
+    {
+        return $this->showWhenEmpty;
+    }
+
+    /**
+     * @param mixed $showWhenEmpty
+     * @return BenchmarkGroup
+     */
+    public function setShowWhenEmpty($showWhenEmpty)
+    {
+        $this->showWhenEmpty = $showWhenEmpty;
+        return $this;
+    }
 }
