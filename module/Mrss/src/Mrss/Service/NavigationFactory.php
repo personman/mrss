@@ -443,11 +443,16 @@ class NavigationFactory extends DefaultNavigationFactory
         return $this->subscriptionModel;
     }
 
-    protected function getSubscription()
+    protected function getSubscription($forReports = false)
     {
         $subModel = $this->getSubscriptionModel();
         $study = $this->getCurrentStudy();
+
         $year = $study->getCurrentYear();
+        if ($forReports && !$study->getReportsOpen()) {
+            $year = $year - 1;
+        }
+
 
         $subscription = null;
 

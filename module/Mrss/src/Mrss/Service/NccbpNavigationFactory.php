@@ -56,7 +56,8 @@ class NccbpNavigationFactory extends NavigationFactory
             }
 
             // Show non-credit report?
-            if (!$this->getSubscription()->hasSection(2)) {
+            $subscription = $this->getSubscription(true);
+            if (!$subscription || !$subscription->hasSection(2)) {
                 unset($pages['reports']['pages']['non-credit']);
             }
 
