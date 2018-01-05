@@ -97,7 +97,7 @@ class Benchmark implements FormElementProviderInterface, InputFilterAwareInterfa
     protected $benchmarkGroup;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=512)
      */
     protected $yearsAvailable;
 
