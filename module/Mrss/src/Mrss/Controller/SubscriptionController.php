@@ -1456,21 +1456,21 @@ class SubscriptionController extends SubscriptionBaseController
         }
 
         $body =
-            "Study: {$study->getName()}\n" .
-            "Year: $year\n" .
-            "Institution: {$college->getName()}\n" .
+            "Study: {$study->getName()}<br>\n" .
+            "Year: $year<br>\n" .
+            "Institution: {$college->getName()}<br>\n" .
             $amounts .
-            "Payment Method: {$subscription->getPaymentMethodForDisplay()}\n" .
-            "Date: $date\n" .
-            "Address: {$college->getAddress()} {$college->getAddress2()}\n" .
-            "City: {$college->getCity()}\n" .
-            "State: {$college->getState()}\n" .
-            "Zip: {$college->getZip()}\n" .
-            "Digital Signature: {$subscription->getDigitalSignature()}\n" .
-            "Title: {$subscription->getDigitalSignatureTitle()}\n";
+            "Payment Method: {$subscription->getPaymentMethodForDisplay()}<br>\n" .
+            "Date: $date<br>\n" .
+            "Address: {$college->getAddress()} {$college->getAddress2()}<br>\n" .
+            "City: {$college->getCity()}<br>\n" .
+            "State: {$college->getState()}<br>\n" .
+            "Zip: {$college->getZip()}<br>\n" .
+            "Digital Signature: {$subscription->getDigitalSignature()}<br>\n" .
+            "Title: {$subscription->getDigitalSignatureTitle()}<br>\n";
 
         if ($sections = $subscription->getSectionNames()) {
-            $body .= "Module(s): " . $sections . "\n";
+            $body .= "Module(s): " . $sections . "<br>\n";
         }
 
         if ($adminUser && $dataUser) {
