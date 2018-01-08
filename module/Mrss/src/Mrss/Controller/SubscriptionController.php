@@ -1387,7 +1387,18 @@ class SubscriptionController extends SubscriptionBaseController
         );
 
         $body = $this->getInvoiceBody($subscription, $adminUser, $dataUser, $update);
+
+
+        $html = new MimePart($body);
+        $html->type = "text/html";
+        $text = new MimePart(strip_tags($body));
+        $text->type = "text/plain";
+        $body = new MimeMessage();
+        $body->setParts(array($text, $html));
+
         $invoice->setBody($body);
+        $invoice->getHeaders()->get('content-type')->setType('multipart/alternative');
+
 
         $this->getServiceLocator()->get('mail.transport')->send($invoice);
     }
@@ -1450,9 +1461,9 @@ class SubscriptionController extends SubscriptionBaseController
             $newTotal = number_format($newTotal, 2);
             $amountDue = number_format($amountDue, 2);
 
-            $amounts = "Updated Total: $newTotal\n";
-            $amounts .= "Previous Payment: $oldTotal\n";
-            $amounts .= "Amount Due: $amountDue\n";
+            $amounts = "Updated Total: $newTotal<br>\n";
+            $amounts .= "Previous Payment: $oldTotal<br>\n";
+            $amounts .= "Amount Due: $amountDue<br>\n";
         }
 
         $body =
