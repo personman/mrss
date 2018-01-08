@@ -119,7 +119,7 @@ class BenchmarkGroup implements
     /**
      * @ORM\Column(type="boolean")
      */
-    protected $showWhenEmpty;
+    protected $showWhenEmpty = false;
 
     /**
      * @ORM\OneToMany(targetEntity="Benchmark", mappedBy="benchmarkGroup")
