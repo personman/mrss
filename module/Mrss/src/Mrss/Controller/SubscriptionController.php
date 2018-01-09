@@ -1451,7 +1451,7 @@ class SubscriptionController extends SubscriptionBaseController
 
         $amountDue = number_format($subscription->getPaymentAmount(), 2);
 
-        $amounts = "Amount Due: $amountDue\n";
+        $amounts = "Amount Due: $amountDue<br>\n";
         if ($update) {
             $oldTotal = $this->oldTotal;
             $newTotal = $subscription->getPaymentAmount();
