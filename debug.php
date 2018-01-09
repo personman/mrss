@@ -78,9 +78,11 @@ function getStates($includeBlankOption = true, $includeCanada = false)
         'WV' => 'West Virginia',
         'WI' => 'Wisconsin',
         'WY' => 'Wyoming',
+        'FM' => 'Federated States of Micronesia',
         'GU' => 'Guam',
         'PR' => 'Puerto Rico',
-        'VI' => 'Virgin Islands of the U.S.'
+        'MH' => 'Marshall Islands',
+        'VI' => 'Virgin Islands of the U.S.',
     );
 
     if ($includeCanada) {
