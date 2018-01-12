@@ -11,6 +11,12 @@
     height: 640px;
 }
 
+.complete-chart-box.full-width.report-text-wrapper {
+    width: 1040px;
+    height: auto !important;
+}
+
+
 /* Custom reports */
 .customReport p.reportDescription {
     margin-left: 20px;

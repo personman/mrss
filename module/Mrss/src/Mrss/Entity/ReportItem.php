@@ -427,6 +427,11 @@ class ReportItem
             $class = 'complete-chart-box full-width';
         }
 
+        if ($this->isText())
+        {
+            $class .= ' report-text-wrapper';
+        }
+
         return $class;
     }
 }
