@@ -1186,7 +1186,7 @@ class Report extends ReportBase
     public function getPercentileBreakpoints()
     {
         //return array(10, 25, 50, 75, 90);
-        return array(10, 20, 25, 33, 40, 50, 60, 66, 75, 80, 90);
+        return array(0, 10, 20, 25, 33, 40, 50, 60, 66, 75, 80, 90, 100);
     }
 
     public function getPercentileBreakpointsForStudy()
@@ -1227,7 +1227,7 @@ class Report extends ReportBase
 
         $labels = array();
         foreach ($breakpoints as $breakpoint) {
-            $label = $this->getOrdinal($breakpoint);
+            $label = $this->getOrdinal($breakpoint, true);
 
             $labels[] = $label;
         }
@@ -1235,13 +1235,22 @@ class Report extends ReportBase
         return $labels;
     }
 
-    public function getOrdinal($number)
+    public function getOrdinal($number, $minMax = false)
     {
         // We don't want to show 0 or 99, so use > or < for those
         if ($number < 1) {
             $html = '<1<sup>st</sup>';
+
+            if ($minMax && $number === 0) {
+                $html = 'Min';
+            }
         } elseif ($number > 99) {
             $html = '>99<sup>th</sup>';
+
+            if ($minMax && $number == 100) {
+                $html = 'Max';
+            }
+
         } else {
             $rounded = round($number);
 

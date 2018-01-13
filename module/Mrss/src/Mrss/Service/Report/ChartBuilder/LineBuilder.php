@@ -22,7 +22,26 @@ class LineBuilder extends ChartBuilder
 
     public function getYears()
     {
-        return $this->years;
+        $years = $this->years;
+
+        $config = $this->getConfig();
+        if (!empty($config['startYear']) || !empty($config['endYear'])) {
+            $newYears = array();
+            foreach ($years as $year) {
+                if (!empty($config['startYear']) && $year < $config['startYear']) {
+                    continue;
+                }
+                if (!empty($config['endYear']) && $year > $config['endYear']) {
+                    continue;
+                }
+
+                $newYears[] = $year;
+            }
+
+            $years = $newYears;
+        }
+
+        return $years;
     }
 
     public function hasYear($year)
@@ -272,11 +291,12 @@ class LineBuilder extends ChartBuilder
             }
 
             if (empty($config['hideNational'])) {
+                $i = 1;
                 foreach ($mediansData as $percentile => $medianData) {
                     if ($percentile == 50) {
                         $label = 'Median';
                     } else {
-                        $label = $this->getOrdinal($percentile);
+                        $label = $this->getOrdinal($percentile, true);
                     }
 
                     $nationalOrNetwork = 'National';
@@ -286,17 +306,21 @@ class LineBuilder extends ChartBuilder
                     }
 
                     $nationalLabel = "$nationalOrNetwork $label";
+                    $lighten = $i * 5;
 
                     $series[] = array(
                         'name' => $this->getSeriesName($nationalLabel, $dbColumn),
                         'data' => array_values($medianData),
-                        'color' => $this->getNationalColor($i)
+                        'color' => $this->getNationalColor($i, $lighten)
                     );
+
+                    $i++;
                 }
             }
 
 
             if (!empty($peerGroup) && !empty($peerIds) && count($peerIds) >= $this->minimumPeers) {
+                $i = 1;
                 foreach ($peerMediansData as $percentile => $peerMedianData) {
                     if ($percentile == 50) {
                         $label = 'Median';
@@ -304,12 +328,16 @@ class LineBuilder extends ChartBuilder
                         $label = $this->getOrdinal($percentile);
                     }
 
+                    $lighten = $i * 5;
+
                     $label = $peerGroup->getName() . ' ' . $label;
                     $series[] = array(
                         'name' => $this->getSeriesName($label, $dbColumn),
                         'data' => array_values($peerMedianData),
-                        'color' => $this->getPeerColor($i)
+                        'color' => $this->getPeerColor($i, $lighten)
                     );
+
+                    $i++;
                 }
 
                 $config = $this->getConfig();

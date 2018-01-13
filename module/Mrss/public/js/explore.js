@@ -78,6 +78,8 @@ function updateFormForChartType()
     var chart = $('#chart')
     var footnotes = $('.custom-report-footnotes')
     var percentiles = $('#control-group-percentiles')
+    var startYear = $('#control-group-startYear')
+    var endYear = $('#control-group-endYear')
     var hideMine = $('#control-group-hideMine')
     var hideNational = $('#control-group-hideNational')
     var previewButton = $('#previewButton')
@@ -143,6 +145,8 @@ function updateFormForChartType()
         benchmark2.show()
         system.show()
         peerGroup.show()
+        startYear.show()
+        endYear.show()
         hideMine.show()
         hideNational.show()
         percentiles.show()
@@ -560,7 +564,9 @@ function benchmarkChanged()
 
 function repopulateColleges()
 {
-    if (typeof originalFormData['colleges'] != 'undefined' && originalFormData['colleges'].length) {
+    var hasData = (typeof originalFormData['colleges'] != 'undefined' && originalFormData['colleges'] != null)
+
+    if (hasData && originalFormData['colleges'].length) {
         $("input:checkbox[name='colleges[]']").each(function(i, e) {
             if (originalFormData['colleges'].includes($(this).val())) {
                 $(this)[0].checked = true;

@@ -28,7 +28,7 @@ class Explore extends AbstractForm
         $this->addMoreBasicFields($years);
         $this->addBenchmarkSelects($benchmarks);
         $this->addPeerGroupDropdown($peerGroups, $colleges);
-        $this->addAdvancedFields($benchmarks);
+        $this->addAdvancedFields($benchmarks, $years);
         $this->addMoreAdvancedFields($allBreakpoints);
 
         $this->add($this->getButtons());
@@ -271,8 +271,42 @@ class Explore extends AbstractForm
         );
     }
 
-    protected function addAdvancedFields($benchmarks)
+    protected function addAdvancedFields($benchmarks, $years)
     {
+        $years = array_combine($years, $years);
+
+        $this->add(
+            array(
+                'name' => 'startYear',
+                'allow_empty' => true,
+                'type' => 'Zend\Form\Element\Select',
+                'options' => array(
+                    'label' => 'Start Year',
+                    'empty_option' => '',
+                ),
+                'attributes' => array(
+                    'options' => $years,
+                    'id' => 'startYear'
+                )
+            )
+        );
+
+        $this->add(
+            array(
+                'name' => 'endYear',
+                'type' => 'Zend\Form\Element\Select',
+                'allow_empty' => true,
+                'options' => array(
+                    'label' => 'End Year',
+                    'empty_option' => '',
+                ),
+                'attributes' => array(
+                    'options' => $years,
+                    'id' => 'endYear'
+                )
+            )
+        );
+
         if (true) {
             $this->add(
                 array(
@@ -324,6 +358,12 @@ class Explore extends AbstractForm
     protected function addMoreAdvancedFields($allBreakpoints)
     {
         $allBreakpoints = array_combine($allBreakpoints, $allBreakpoints);
+
+        if (isset($allBreakpoints[0])) {
+            $allBreakpoints[0] = 'Minimum';
+            $allBreakpoints[100] = 'Maximum';
+        }
+
         $this->add(
             array(
                 'name' => 'percentiles',
@@ -394,6 +434,8 @@ class Explore extends AbstractForm
     {
         $filter = parent::getInputFilter();
         $filter->get('peerGroup')->setRequired(false);
+        $filter->get('startYear')->setRequired(false);
+        $filter->get('endYear')->setRequired(false);
         $filter->get('hideMine')->setRequired(false);
         $filter->get('percentiles')->setRequired(false);
 

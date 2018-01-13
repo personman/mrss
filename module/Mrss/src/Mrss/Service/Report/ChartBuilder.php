@@ -3,6 +3,7 @@
 namespace Mrss\Service\Report;
 
 use Mrss\Service\Report;
+use MischiefCollective\ColorJizz\Formats\Hex;
 
 class ChartBuilder extends Report
 {
@@ -55,12 +56,16 @@ class ChartBuilder extends Report
         return $this->peers;
     }
 
-    public function getNationalColor($variation = false)
+    public function getNationalColor($variation = false, $lighten = 0)
     {
         $color = '#0065A1';
 
         if ($variation) {
             $color = '#4DB2EE';
+        }
+
+        if ($lighten) {
+            $color = $this->adjustBrightness($color, $lighten);
         }
 
         return $color;
@@ -77,11 +82,24 @@ class ChartBuilder extends Report
         return $color;
     }
 
-    public function getPeerColor($variation = false)
+    function adjustBrightness($hex, $steps)
+    {
+        $color = Hex::fromString($hex);
+
+        $adjusted = '#' . $color->brightness($steps * -0.8)->hue($steps * 2)->toHex()->__toString();
+
+        return $adjusted;
+    }
+
+    public function getPeerColor($variation = false, $lighten = 0)
     {
         $color = '#8F7AB5';
         if ($variation) {
             $color = '#DCC7FF';
+        }
+
+        if ($lighten) {
+            $color = $this->adjustBrightness($color, $lighten);
         }
 
         return $color;

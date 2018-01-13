@@ -42,6 +42,13 @@ class Calculator
             return current($data);
         }
 
+        // Handle min and max
+        if ($percentile === 0) {
+            return min($data);
+        } elseif ($percentile === 100) {
+            return max($data);
+        }
+
         $percentile = $percentile / 100;
 
         sort($data);
