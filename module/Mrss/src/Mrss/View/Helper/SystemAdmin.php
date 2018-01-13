@@ -45,8 +45,8 @@ class SystemAdmin extends AbstractHelper
 
     protected function getAllowed()
     {
-        $systemId = $this->getActiveSystemId();
         $user = $this->getUser();
+        $systemId = $this->getActiveSystemId($user);
 
         $allowed = false;
         if ($user) {
@@ -259,10 +259,20 @@ class SystemAdmin extends AbstractHelper
         return $this->currentStudyPlugin;
     }
 
-    protected function getActiveSystemId()
+    protected function getActiveSystemId($user = false)
     {
         // This session container should match what's in BaseController
         $systemId = $this->getActiveSystemContainer()->system_id;
+
+        // If there's nothing there yet, just grab the first system from their list
+        if (empty($systemId) && !empty($user)) {
+            $systemIds = $user->getSystemsAdministered(true);
+            if ($systemIds) {
+                $systemId = $systemIds[0];
+
+                $this->getActiveSystemContainer()->system_id = $systemId;
+            }
+        }
 
         return $systemId;
     }
