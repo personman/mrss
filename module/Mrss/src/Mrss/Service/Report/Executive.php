@@ -653,28 +653,8 @@ class Executive extends Report
 
     protected function setUpSeriesColors()
     {
-        $colorConfig = $colors = array(
-            'seriesColors' => array(
-                '#9cc03e', // '#005595' lightened 40%
-                '#3366B4', // '#519548' lightened 30%
-                '#9b62c9',
-                '#ebb164',
-                '#F55',
-                '#5F5',
-                '#55F',
-                '#5FF'
-            ),
-            'yourCollegeColors' => array(
-                '#507400',
-                '#001A68',
-                '#65318F',
-                '#db891b',
-                '#F00',
-                '#0F0',
-                '#00F',
-                '#0FF',
-            )
-        );
+        $colorConfig = $colors = getSeriesColors();
+
         // What color will the bar be?
         $this->seriesColors = $colorConfig['seriesColors'];
         $this->yourCollegeColors = $colorConfig['yourCollegeColors'];

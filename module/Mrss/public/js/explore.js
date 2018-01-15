@@ -1,6 +1,7 @@
 var savedCharts = {}
 var editor;
 var secondBenchmarkControls;
+var currentLetter;
 
 $(function() {
     setUpSelects();
@@ -31,6 +32,10 @@ $(function() {
 
 function setUpSelects()
 {
+    // Clear extra benchmark selects. These will be added back by js as needed
+    $('.extraBenchmark').parents('.control-group').remove()
+
+
     /*$('#benchmark1, #benchmark2, #benchmark3').each(function(i, e) {
      $(e).find('option').each(function(i2, e2) {
      if (!e2.disabled) {
@@ -49,6 +54,8 @@ function setUpSelects()
     var multiControls = getMultiControls()
     var peerGroup = $('#control-group-peerGroup')
     peerGroup.before(multiControls)
+
+
 }
 
 function setUpTextarea()
@@ -187,16 +194,17 @@ function updateFormForChartType()
     if (chartType == 'peer') {
         title.show();
         subtitle.show()
-        benchmark1.show()
+        benchmark2.show()
         system.show()
         yearField.show()
         peerGroup.show()
         width.show()
-        //benchmark2.find('label').text(benchmarkLabel)
+        benchmark2.find('label').text(benchmarkLabel)
         //benchmark2.show()
 
         if (getMultiTrendHiddenValue()) {
             addSecondBenchmarkButtonClicked(benchmark2);
+            placeAddSecondBenchmarkButton(benchmark2);
         } else {
             placeAddSecondBenchmarkButton(benchmark2);
         }
@@ -442,7 +450,8 @@ function addSecondBenchmarkButtonClicked(benchmark)
     // Remove any existing UI for this
     $('#secondBenchmarkButtonRemove').remove()
 
-    var letter = getMultiTrendHiddenValue();
+    //var letter = getMultiTrendHiddenValue();
+    var letter = currentLetter;
     //console.log('letter from multitrend hidden:' + letter)
     if (!letter) {
         letter = 'a'
@@ -455,7 +464,8 @@ function addSecondBenchmarkButtonClicked(benchmark)
     displayFilteredSecondBenchmarkSelect(benchmark, letter);
     //removeAddSecondBenchmarkButton();
     //placeRemoveSecondBenchmarkButton(benchmark);
-    setMultiTrendHiddenValue(letter)
+    currentLetter = letter
+    setMultiTrendHiddenValue(true)
 }
 
 function setMultiTrendHiddenValue(value)
@@ -507,7 +517,9 @@ function displayFilteredSecondBenchmarkSelect(benchmarkSelect, letter)
     //var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
     var multiControls = getMultiControls();
 
-    var newBenchmarkContainer = getNewBenchmarkContainer(letter);
+    var value = getSelectedValue();
+
+    var newBenchmarkContainer = getNewBenchmarkContainer(letter, value);
 
     var removeButton = $('<a/>').addClass('btn btn-danger').css('margin-left', '5px').html('X').click(function() {
         $(this).parents('.control-group').remove()
@@ -519,14 +531,33 @@ function displayFilteredSecondBenchmarkSelect(benchmarkSelect, letter)
     newBenchmarkContainer.find('select').chosen({search_contains: true});
 }
 
-function getNewBenchmarkContainer(letter)
+function getSelectedValue()
+{
+    if (typeof selectedExtraBenchmarks == 'object') {
+        selectedExtraBenchmarks = jQuery.makeArray(selectedExtraBenchmarks)
+    }
+    //console.log(selectedExtraBenchmarks)
+    var value = selectedExtraBenchmarks.shift();
+    //var value = '';
+
+    //console.log(value)
+
+    return value
+}
+
+function getNewBenchmarkContainer(letter, value)
 {
     // Change the label and select name
     var inputType = getCurrentInputType()
     var newBenchmarkContainer = secondBenchmarkControls.clone();
-    var label = 'Benchmark ' + letter
+    var label = 'Benchmark'// + letter
     if (benchmarkLabel) {
         label = label.replace('Benchmark', ucwords(benchmarkLabel));
+    }
+
+    //console.log(value)
+    if (!value) {
+        value = $('#benchmark3').val()
     }
 
     newBenchmarkContainer = filterSecondBenchmarkSelect(newBenchmarkContainer, inputType);
@@ -538,7 +569,7 @@ function getNewBenchmarkContainer(letter)
     newBenchmarkContainer.find('.chosen-container').attr('id', 'benchmark2' + letter + '_chosen');
     newBenchmarkContainer.find('select').attr('name', 'benchmark2' + letter).attr('id', 'benchmark2' + letter);
 
-    newBenchmarkContainer.find('select').val($('#benchmark3').val());
+    newBenchmarkContainer.find('select').val(value);
     newBenchmarkContainer.find('select').change(function()
     {
         var selected = $(this).val();
@@ -552,6 +583,7 @@ function getNewBenchmarkContainer(letter)
 function getCurrentInputType()
 {
     var dbColumn = $('#benchmark2').val()
+    //console.log(dbColumn)
     var inputType = benchmarksByInputType[dbColumn]
 
     return inputType
@@ -568,7 +600,6 @@ function cloneBenchmark2()
  */
 function filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType)
 {
-
     var benchmarkOneInputType
     var options = benchmarkTwoContainer.find('select').find('option');
     //console.log(options.length)

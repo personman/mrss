@@ -44,6 +44,13 @@ class Bar extends AbstractChart
         $this->setConfig($config);
     }
 
+    public function enableLegend($enabled = true)
+    {
+        $config = $this->getConfig();
+        $config['legend'] = array('enabled' => $enabled);
+        $this->setConfig($config);
+    }
+
     public function setStacked($stacked = true)
     {
         $config = $this->getConfig();

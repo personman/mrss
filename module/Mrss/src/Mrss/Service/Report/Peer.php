@@ -2,6 +2,7 @@
 
 namespace Mrss\Service\Report;
 
+use MischiefCollective\ColorJizz\Formats\Hex;
 use Mrss\Entity\Benchmark;
 use Mrss\Service\Report;
 use Mrss\Entity\PeerGroup;
@@ -287,14 +288,16 @@ class Peer extends Report
         return $name;
     }
 
-    public function sortAndLabelPeerData($data, College $currentCollege, Benchmark $benchmark)
+    public function sortAndLabelPeerData($data, College $currentCollege, Benchmark $benchmark, $sort = true)
     {
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
-        if ($benchmark->getIncludeInBestPerformer() && !$benchmark->getHighIsBetter()) {
-            asort($data);
-        } else {
-            arsort($data);
+        if ($sort) {
+            if ($benchmark->getIncludeInBestPerformer() && !$benchmark->getHighIsBetter()) {
+                asort($data);
+            } else {
+                arsort($data);
+            }
         }
 
         $dataWithLabels = array();
@@ -362,11 +365,13 @@ class Peer extends Report
 
         $format = $this->getFormat($benchmark);
 
-        $chartData = array();
         $chartXCategories = array();
 
-
+        $i = 0;
         foreach ($series as $key => $serie) {
+            $isYours = false;
+
+            $chartData = array();
             $data = $serie['data'];
 
             foreach ($data as $collegeId => $peerData) {
@@ -377,6 +382,7 @@ class Peer extends Report
 
                 // Your college
                 if ($name == $this->currentCollege->getNameAndState()) {
+                    $isYours = true;
                     $dataLabelEnabled = true;
                     $color = $this->getYourCollegeColor();
 
@@ -392,7 +398,16 @@ class Peer extends Report
                     $color = $this->getPeerColor();
                 }
 
-                $chartXCategories[] = $label;
+                if ($i == 0) {
+                    $chartXCategories[] = $label;
+                }
+
+                if (count($benchmarks) > 1) {
+                    $color = $this->getColor($i, $isYours);
+                }
+
+                //$color = $this->adjustBrightness($color, ($i + 1) * 5);
+
 
                 $chartData[] = array(
                     'name' => $label,
@@ -408,6 +423,8 @@ class Peer extends Report
             }
 
             $series[$key]['data'] = $chartData;
+
+            $i++;
         }
 
 
@@ -420,6 +437,12 @@ class Peer extends Report
         );*/
 
 
+        // Set series colors
+        foreach ($series as $key => $serie) {
+            if ($color = $serie['data'][0]['color']) {
+                $series[$key]['color'] = $color;
+            }
+        }
 
 
 
@@ -435,8 +458,10 @@ class Peer extends Report
         if (count($benchmarks) == 1) {
             $barChart->setOrientationHorizontal();
             $barChart->setStacked(false);
+            $barChart->enableLegend(false);
         } else {
             $barChart->setStacked(true);
+            $barChart->enableLegend(true);
         }
 
 
@@ -527,6 +552,25 @@ class Peer extends Report
         }
 
         return $chart;*/
+    }
+
+    function getColor($measureNumber, $yours = false)
+    {
+        $color = '#666'; // Default to grey
+
+        $allColors = getSeriesColors();
+
+        if ($yours) {
+            $colors = $allColors['yourCollegeColors'];
+        } else {
+            $colors = $allColors['seriesColors'];
+        }
+
+        if (!empty($colors[$measureNumber])) {
+            $color = $colors[$measureNumber];
+        }
+
+        return $color;
     }
 
     /**
@@ -667,5 +711,14 @@ class Peer extends Report
     public function getIncludePercentiles()
     {
         return $this->includePercentiles;
+    }
+
+    function adjustBrightness($hex, $steps)
+    {
+        $color = Hex::fromString($hex);
+
+        $adjusted = '#' . $color->brightness($steps * -0.8)->hue($steps * 2)->toHex()->__toString();
+
+        return $adjusted;
     }
 }

@@ -658,7 +658,7 @@ class LineBuilder extends ChartBuilder
     public function getPeerData($peerGroup, $dbColumn, $year)
     {
         $data = array();
-        foreach ($peerGroup->getPeers() as $collegeId) {
+        foreach ($peerGroup->getPeers($this->getIncludeThisCollege()) as $collegeId) {
             $college = $this->getCollegeModel()->find($collegeId);
 
             if ($ob = $college->getObservationForYear($year)) {

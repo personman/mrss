@@ -98,10 +98,9 @@ class ReportItemController extends CustomReportController
             $post = $this->restoreButtonLabels($post);
             $form->setData($post);
         } elseif (isset($data)) {
-            $builder = $this->getChartBuilder($data);
-            $chart = $builder->getChart();
-            $footnotes = $builder->getFootnotes();
-
+            $chartBuilder = $this->getChartBuilder($data);
+            $chart = $chartBuilder->getChart();
+            $footnotes = $chartBuilder->getFootnotes();
         } else {
             if ($presentationType = $this->params()->fromRoute('type')) {
                 $form->get('presentation')->setValue($presentationType);
@@ -123,7 +122,11 @@ class ReportItemController extends CustomReportController
             $data = array();
         }
 
-        //pr($data);
+        $selectedExtraBenchmarks = array();
+        if ($chartBuilder) {
+            $selectedExtraBenchmarks = $chartBuilder->getSelectedExtraBenchmarks();
+            //pr($selectedExtraBenchmarks);
+        }
 
         $viewModel = new ViewModel(array(
             'form' => $form,
@@ -135,6 +138,7 @@ class ReportItemController extends CustomReportController
             'benchmarksByInputType' => $this->currentStudy()->getBenchmarksByInputType(),
             'peerMembers' => $this->getPeerMembers(),
             'formData' => $data,
+            'selectedExtraBenchmarks' => $selectedExtraBenchmarks
         ));
 
         return $viewModel;

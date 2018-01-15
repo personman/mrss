@@ -50,6 +50,7 @@ $this->headScript()->appendFile(
         var benchmarksByInputType = <?= json_encode($benchmarksByInputType) ?>;
         var peerMembers = <?= json_encode($peerMembers) ?>;
         var originalFormData = <?= json_encode($formData) ?>;
+        var selectedExtraBenchmarks = <?= json_encode(array_values($selectedExtraBenchmarks)) ?>;
         //console.log(originalFormData['colleges'])
         <?php $this->headScript()->captureEnd() ?>
     </script>

@@ -21,12 +21,19 @@ class ChartBuilder extends Report
 
     protected $errors = array();
 
+    protected $selectedExtraBenchmarks = array();
+
     public function setConfig($config)
     {
         $this->setFootnotes(array());
         $this->config = $config;
 
         return $this;
+    }
+
+    protected function getIncludeThisCollege()
+    {
+        return $this->getStudyConfig()->use_structures;
     }
 
     public function getConfig()
@@ -192,5 +199,10 @@ class ChartBuilder extends Report
         }
 
         return $setting;
+    }
+
+    public function getSelectedExtraBenchmarks()
+    {
+        return $this->selectedExtraBenchmarks;
     }
 }

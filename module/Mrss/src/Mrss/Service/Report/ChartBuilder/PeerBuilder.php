@@ -26,7 +26,7 @@ class PeerBuilder extends BarBuilder
         $dbColumns = $this->getDbColumnsFromConfig();
         $benchmarks = $this->getBenchmarksFromConfig();
 
-        pr($config);
+        //pr($config);
         //$xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
 
         $title = $config['title'];
@@ -36,7 +36,9 @@ class PeerBuilder extends BarBuilder
         }
 
         $allChartValues = array();
+        $i = 0;
         foreach ($dbColumns as $dbColumn) {
+            $peerData = array();
             $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
 
             $reportedValue = $this->getReportedValue($dbColumn);
@@ -63,20 +65,25 @@ class PeerBuilder extends BarBuilder
                 }
             }
 
+
             $this->getPeerService()->setCurrentCollege($this->getCollege());
             $this->getPeerService()->setYear($year);
-            $chartValues = $this->getPeerService()->sortAndLabelPeerData($peerData, $this->getCollege(), $xBenchmark);
+            $sort = (count($benchmarks) <= 1);
+            $chartValues = $this->getPeerService()
+                ->sortAndLabelPeerData($peerData, $this->getCollege(), $xBenchmark, $sort);
 
 
             $allChartValues[] = array(
                 'name' => $xBenchmark->getDescriptiveReportLabel(),
-                'data' => $chartValues
+                'data' => $chartValues,
             );
 
             // Add footnotes
             $definition = $xBenchmark->getReportDescription(true);
             $xLabel = $xBenchmark->getDescriptiveReportLabel();
             $this->addFootnote("$xLabel: " . $definition);
+
+            $i++;
         }
 
 
@@ -101,7 +108,7 @@ class PeerBuilder extends BarBuilder
 
         }
 
-        pr($allChartValues);
+        //pr($allChartValues);
 
 
         return $this->getPeerService()
@@ -112,7 +119,7 @@ class PeerBuilder extends BarBuilder
     {
         $config = $this->getConfig();
 
-        $dbColumns = array($config['benchmark2']);
+        $dbColumns = array();
         foreach (range('a', 'g') as $key) {
             $name = 'benchmark2' . $key;
 
@@ -120,6 +127,13 @@ class PeerBuilder extends BarBuilder
                 $dbColumns[] = $config[$name];
             }
         }
+
+        $dbColumns = array_unique($dbColumns);
+
+        $this->selectedExtraBenchmarks = $dbColumns;
+
+        // Add the highlighted data
+        array_unshift($dbColumns, $config['benchmark2']);
 
         return $dbColumns;
     }
