@@ -5,6 +5,7 @@ namespace Mrss\Controller;
 use Mrss\Entity\College;
 use Mrss\Entity\Observation;
 use Mrss\Entity\Study;
+use Mrss\Service\Report;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -356,6 +357,16 @@ class BaseController extends AbstractActionController
         }
 
         return $key;
+    }
+
+    /**
+     * @return Report\Percentile
+     */
+    protected function getPercentileService()
+    {
+        $percentileService = $this->getServiceLocator()->get('service.report.percentile');
+
+        return $percentileService;
     }
 
 }

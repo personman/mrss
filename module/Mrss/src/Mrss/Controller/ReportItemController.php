@@ -41,9 +41,11 @@ class ReportItemController extends CustomReportController
             }
 
             $form->setData($post);
+            pr($post);
 
             if ($form->isValid()) {
                 $data = $form->getData();
+                pr($data);
 
                 if (!empty($data['multiTrend']) && $data['multiTrend'] == 'false') {
                     $data['multiTrend'] = 0;

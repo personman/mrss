@@ -292,6 +292,11 @@ class CustomReportController extends ReportController
             $report->setStudy($this->currentStudy());
         }
 
+        $year = $this->getCurrentYear();
+        $system = $this->getStudyConfig()->use_structures;
+        $updated = $this->getPercentileService()->getReportCalculatedSetting($year, $system, false);
+        $report->setUpdated($updated);
+
         return $report;
     }
 

@@ -45,6 +45,10 @@ function setUpSelects()
 
     cloneBenchmark2();
     $('#benchmark1, #benchmark2, #benchmark3').chosen({search_contains: true})
+
+    var multiControls = getMultiControls()
+    var peerGroup = $('#control-group-peerGroup')
+    peerGroup.before(multiControls)
 }
 
 function setUpTextarea()
@@ -85,6 +89,8 @@ function updateFormForChartType()
     var previewButton = $('#previewButton')
     var regression = $('#control-group-regression')
     var percentScaleZoom = $('#control-group-percentScaleZoom')
+
+
 
     // Hide all by default
     $('#explore .control-group').hide()
@@ -186,6 +192,15 @@ function updateFormForChartType()
         yearField.show()
         peerGroup.show()
         width.show()
+        //benchmark2.find('label').text(benchmarkLabel)
+        //benchmark2.show()
+
+        if (getMultiTrendHiddenValue()) {
+            addSecondBenchmarkButtonClicked(benchmark2);
+        } else {
+            placeAddSecondBenchmarkButton(benchmark2);
+        }
+
     }
 }
 
@@ -243,7 +258,6 @@ function peerWasUnchecked(peerGroupId, collegeId)
         var originalPeers = formData['colleges']
 
         if (originalPeerGroup == peerGroupId) {
-            //console.log(collegeId); console.log(originalPeers); console.log($.inArray(collegeId, originalPeers))
             if ($.inArray(collegeId, originalPeers) == -1) {
                 wasUnchecked = true
             }
@@ -377,7 +391,6 @@ function populateDefaultBreakpoints(breakPoints)
 
 function hasChartPreview()
 {
-    //console.log($('#chart svg').length)
     return $('#chart svg').length
 }
 
@@ -394,11 +407,22 @@ function getDefaultBreakpoints()
     return converted
 }
 
+function getMultiControls()
+{
+    var id = 'multiControls'
+    var multiControls = $('#' + id)
+    if (!multiControls.length) {
+        multiControls = $('<div/>').attr('id', id)//.css('border', '2px solid red')
+    }
+
+    return multiControls
+}
+
 function placeAddSecondBenchmarkButton(benchmark)
 {
     var id = getSecondBenchmarkButtonId();
     var button = $('<a>', {class: 'btn btn-default btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
-    var buttonLabel = 'Add a Second Benchmark'
+    var buttonLabel = 'Add a Benchmark'
     if (benchmarkLabel) {
         buttonLabel = buttonLabel.replace('Benchmark', ucwords(benchmarkLabel));
     }
@@ -409,18 +433,29 @@ function placeAddSecondBenchmarkButton(benchmark)
         return false;
     });
 
-    benchmark.after(button);
+    var multiControls = getMultiControls()
+    multiControls.append(button);
 }
 
 function addSecondBenchmarkButtonClicked(benchmark)
 {
     // Remove any existing UI for this
-    $('#secondBenchmarkButtonRemove, #control-group-benchmark2a').remove()
+    $('#secondBenchmarkButtonRemove').remove()
 
-    displayFilteredSecondBenchmarkSelect(benchmark);
-    removeAddSecondBenchmarkButton();
-    placeRemoveSecondBenchmarkButton(benchmark);
-    setMultiTrendHiddenValue(true)
+    var letter = getMultiTrendHiddenValue();
+    //console.log('letter from multitrend hidden:' + letter)
+    if (!letter) {
+        letter = 'a'
+    } else {
+        letter = String.fromCharCode(letter.charCodeAt() + 1)
+    }
+
+    //console.log(letter)
+
+    displayFilteredSecondBenchmarkSelect(benchmark, letter);
+    //removeAddSecondBenchmarkButton();
+    //placeRemoveSecondBenchmarkButton(benchmark);
+    setMultiTrendHiddenValue(letter)
 }
 
 function setMultiTrendHiddenValue(value)
@@ -433,8 +468,11 @@ function placeRemoveSecondBenchmarkButton(benchmark)
 {
     var id = getSecondBenchmarkButtonId() + 'Remove';
 
-    var button = $('<a>', {class: 'btn btn-default btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
-    button.text('Remove Second Benchmark');
+    var button = $('<a>', {class: 'btn btn-danger btn-xs', id: id, href: '#', style: 'margin-left: 16px'});
+    button.text('Remove a Benchmark');
+    if (benchmarkLabel) {
+        button.text(button.text().replace('Benchmark', ucwords(benchmarkLabel)));
+    }
 
     button.click(function() {
         removeSecondBenchmarkSelect();
@@ -464,36 +502,51 @@ function getSecondBenchmarkButtonId()
     return 'secondBenchmarkButton';
 }
 
-function displayFilteredSecondBenchmarkSelect(benchmarkSelect)
+function displayFilteredSecondBenchmarkSelect(benchmarkSelect, letter)
 {
-    var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
-    var benchmarkTwoContainer = secondBenchmarkControls.clone();
-    var inputType = getCurrentInputType()
+    //var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
+    var multiControls = getMultiControls();
 
-    benchmarkTwoContainer = filterSecondBenchmarkSelect(benchmarkTwoContainer, inputType);
+    var newBenchmarkContainer = getNewBenchmarkContainer(letter);
 
+    var removeButton = $('<a/>').addClass('btn btn-danger').css('margin-left', '5px').html('X').click(function() {
+        $(this).parents('.control-group').remove()
+    })
+    newBenchmarkContainer.find('.controls').append(removeButton)
+
+    multiControls.before(newBenchmarkContainer);
+
+    newBenchmarkContainer.find('select').chosen({search_contains: true});
+}
+
+function getNewBenchmarkContainer(letter)
+{
     // Change the label and select name
-    benchmarkTwoContainer.attr('id', 'control-group-benchmark2a');
-    benchmarkTwoContainer.find('label').text('Second Benchmark');
-    benchmarkTwoContainer.find('.controls').attr('id', 'controls-benchmark2a');
-    benchmarkTwoContainer.find('.chosen-container').attr('id', 'benchmark2a_chosen');
-    benchmarkTwoContainer.find('select').attr('name', 'benchmark2a').attr('id', 'benchmark2a');
+    var inputType = getCurrentInputType()
+    var newBenchmarkContainer = secondBenchmarkControls.clone();
+    var label = 'Benchmark ' + letter
+    if (benchmarkLabel) {
+        label = label.replace('Benchmark', ucwords(benchmarkLabel));
+    }
 
-    benchmarkTwoContainer.find('select').val($('#benchmark3').val());
-    benchmarkTwoContainer.find('select').change(function()
+    newBenchmarkContainer = filterSecondBenchmarkSelect(newBenchmarkContainer, inputType);
+
+
+    newBenchmarkContainer.attr('id', 'control-group-benchmark2' + letter);
+    newBenchmarkContainer.find('label').text(label);
+    newBenchmarkContainer.find('.controls').attr('id', 'controls-benchmark2' + letter);
+    newBenchmarkContainer.find('.chosen-container').attr('id', 'benchmark2' + letter + '_chosen');
+    newBenchmarkContainer.find('select').attr('name', 'benchmark2' + letter).attr('id', 'benchmark2' + letter);
+
+    newBenchmarkContainer.find('select').val($('#benchmark3').val());
+    newBenchmarkContainer.find('select').change(function()
     {
         var selected = $(this).val();
         // Copy to benchmark3
         $('#benchmark3').val(selected);
     });
 
-
-
-
-    benchmarkOneContainer.after(benchmarkTwoContainer);
-
-    benchmarkTwoContainer.find('select').chosen({search_contains: true});
-
+    return newBenchmarkContainer;
 }
 
 function getCurrentInputType()
@@ -537,14 +590,14 @@ function removeAddSecondBenchmarkButton()
 
     $('#' + id).remove();
 
-    setMultiTrendHiddenValue(false)
+    //setMultiTrendHiddenValue(false)
 
     $('#secondBenchmarkButtonRemove').remove()
 }
 
 function getMultiTrendHiddenValue()
 {
-    return $('#multiTrend').val() == 'true';
+    return $('#multiTrend').val();
 }
 
 function benchmarkChanged()
