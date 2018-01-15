@@ -325,7 +325,7 @@ class LineBuilder extends ChartBuilder
                     if ($percentile == 50) {
                         $label = 'Median';
                     } else {
-                        $label = $this->getOrdinal($percentile);
+                        $label = $this->getOrdinal($percentile, true);
                     }
 
                     $lighten = $i * 5;
