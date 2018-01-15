@@ -41,7 +41,12 @@ $this->headScript()->appendFile(
 
     <h1><?= $this->escapeHtml($report->getName()) ?></h1>
 
-    <p class="reportDescription"><?= $report->getDescription() ?></p>
+    <p class="reportDescription">
+        <?= $report->getDescription() ?>
+        <?php if ($dateUpdated = $report->getUpdated()): ?>
+            Last updated on <?= $dateUpdated ?>
+        <?php endif ?>
+    </p>
 
     <div class="reportItems">
         <?php foreach ($report->getItems() as $item): ?>

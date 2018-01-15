@@ -2,6 +2,9 @@ body {
     background: white;
     margin: 0;
 }
+html, body {
+    height: auto;
+}
 
 a[href]:after {
     content: none;
@@ -13,7 +16,7 @@ a[href]:after {
 }
 
 
-.back, .heading-btns, .footer-nav, .socialButtons, .footer-logo, .headerLogin, .btn-group-sm, .addItemButton, .navbar {
+.impersonation, .system-impersonation, .back, .heading-btns, .footer-nav, .socialButtons, .footer-logo, .headerLogin, .btn-group-sm, .addItemButton, .navbar, .footer {
     display: none !important;
 }
 
@@ -34,9 +37,9 @@ a[href]:after {
     width: 840px !important;
 }
 
-.footer {
+/*.footer {
     height: 50px;
-}
+}*/
 
 .highcharts-button {
     display: none;

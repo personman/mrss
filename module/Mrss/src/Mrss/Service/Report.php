@@ -62,6 +62,14 @@ class Report extends ReportBase
         return $yearsWithDates;
     }
 
+    public function getReportCalculatedSetting($year, $systems = false, $forPercentChange = false, $format = 'Y-m-d')
+    {
+        $key = $this->getReportCalculatedSettingKey($year, $systems, $forPercentChange);
+        $date = $this->getDateForSettingKey($key, $format);
+
+        return $date;
+    }
+
     protected function getOutlierDateAndCollege($key, $format = 'Y-m-d H:i')
     {
         $parts = $this->getSettingModel()->getValueForIdentifier($key);
@@ -76,7 +84,7 @@ class Report extends ReportBase
         return $parts;
     }
 
-    protected function getDateForSettingKey($key, $format = 'Y-m-d H:i')
+    public function getDateForSettingKey($key, $format = 'Y-m-d H:i')
     {
         $date = $this->getSettingModel()->getValueForIdentifier($key);
         if ($date) {

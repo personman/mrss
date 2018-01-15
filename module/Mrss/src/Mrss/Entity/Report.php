@@ -88,6 +88,12 @@ class Report
     protected $permission;
 
     /**
+     * This is the date when reports were last calculated. Plugged in on the fly from the settings table.
+     * Not saved in the database
+     */
+    protected $updated;
+
+    /**
      * @param mixed $college
      */
     public function setCollege($college)
@@ -250,5 +256,23 @@ class Report
     public function isPublic()
     {
         return ($this->getPermission() == 'public');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param mixed $updated
+     * @return Report
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+        return $this;
     }
 }

@@ -167,6 +167,8 @@ class ReportController extends ReportAdminController
             $subscriptions = $this->getSubscriptionsForSystem($subscriptions, $system);
         }
 
+        $date = $reportService->getReportCalculatedSetting($year, $system, $forPercentChange);
+
         return array(
             'subscriptions' => $subscriptions,
             'year' => $year,
@@ -179,7 +181,8 @@ class ReportController extends ReportAdminController
             'reportPath' => $reportPath,
             'forPercentChange' => $forPercentChange,
             'studyConfig' => $this->getStudyConfig(),
-            'benchmarkGroupId' => $benchmarkGroupId
+            'benchmarkGroupId' => $benchmarkGroupId,
+            'dateUpdated' => $date
         );
     }
 

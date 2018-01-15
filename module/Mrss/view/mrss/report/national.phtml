@@ -36,6 +36,10 @@ $this->headScript()->appendFile(
 
 <p class="reportPreparedFor">
     Prepared for <?= $college->getName() ?>
+    <?php if ($dateUpdated): ?>
+    <br>
+    Last updated on <?= $dateUpdated ?>
+    <?php endif ?>
 </p>
 
 
