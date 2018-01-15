@@ -23,6 +23,7 @@
         "doctrine/cache": "1.6.*",
         "doctrine/annotations": "1.4.*",
         "doctrine/collections": "1.4.*",
+        "doctrine/inflector": "1.1.*",
         "gedmo/doctrine-extensions": "2.3.*",
         "phpoffice/phpexcel": "1.8.*",
         "mwillbanks/zfc-twitter-bootstrap": "*",
@@ -34,7 +35,7 @@
         "rwoverdijk/assetmanager": "1.*",
         "zendframework/zend-developer-tools": "*",
         "fab1en/rocket-chat-rest-client": "dev-master",
-        "mischiefcollective/colorjizz": "1.*"
+        "mischiefcollective/colorjizz": "dev-master"
     },
     "require-dev": {
         "symfony/http-kernel": "2.*",

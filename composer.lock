@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ffccef2f74010f0f053b9853b6155d2f",
+    "content-hash": "884c5275b24ddf41bd587a2f6a67e45e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -628,33 +628,33 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "dev-master",
+            "version": "1.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "7344124551d4c40ab77c4b58647234c5676aa27b"
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/7344124551d4c40ab77c4b58647234c5676aa27b",
-                "reference": "7344124551d4c40ab77c4b58647234c5676aa27b",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "php": ">=5.3.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.2"
+                "phpunit/phpunit": "4.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Doctrine\\Common\\Inflector\\": "lib/Doctrine/Common/Inflector"
+                "psr-0": {
+                    "Doctrine\\Common\\Inflector\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -691,7 +691,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2018-01-12T11:45:27+00:00"
+            "time": "2015-11-06T14:35:42+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1207,10 +1207,10 @@
         },
         {
             "name": "mischiefcollective/colorjizz",
-            "version": "1.0.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:mikeemoo/ColorJizz-PHP.git",
+                "url": "https://github.com/mikeemoo/ColorJizz-PHP.git",
                 "reference": "361b8a8727d13b67cb593a936a715ad2204ececb"
             },
             "dist": {
@@ -4504,12 +4504,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "546db6f2bf8aefb43f37ce6f2f67fb700c51c1c2"
+                "reference": "05e858fda67518146d174c1f028c4164c0eb1540"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/546db6f2bf8aefb43f37ce6f2f67fb700c51c1c2",
-                "reference": "546db6f2bf8aefb43f37ce6f2f67fb700c51c1c2",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/05e858fda67518146d174c1f028c4164c0eb1540",
+                "reference": "05e858fda67518146d174c1f028c4164c0eb1540",
                 "shasum": ""
             },
             "require": {
@@ -4553,7 +4553,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-03T17:12:09+00:00"
+            "time": "2018-01-13T13:56:42+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -4841,12 +4841,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "6c27ede8f6654de46a998b3b26635d3603992dcb"
+                "reference": "be987baf48262b9b7a17ea6029dbaf03864d22ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/6c27ede8f6654de46a998b3b26635d3603992dcb",
-                "reference": "6c27ede8f6654de46a998b3b26635d3603992dcb",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/be987baf48262b9b7a17ea6029dbaf03864d22ed",
+                "reference": "be987baf48262b9b7a17ea6029dbaf03864d22ed",
                 "shasum": ""
             },
             "require": {
@@ -4916,7 +4916,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-05T07:16:18+00:00"
+            "time": "2018-01-13T14:03:33+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -5212,6 +5212,7 @@
         "phly/phly-contact": 20,
         "mtudor/zfc-user-impersonate": 20,
         "fab1en/rocket-chat-rest-client": 20,
+        "mischiefcollective/colorjizz": 20,
         "codeclimate/php-test-reporter": 20
     },
     "prefer-stable": false,
