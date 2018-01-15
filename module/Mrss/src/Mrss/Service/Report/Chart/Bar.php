@@ -44,6 +44,19 @@ class Bar extends AbstractChart
         $this->setConfig($config);
     }
 
+    public function setStacked($stacked = true)
+    {
+        $config = $this->getConfig();
+
+        if ($stacked) {
+            $config['plotOptions']['series']['stacking'] = 'normal';
+        } else {
+            unset($config['plotOptions']['series']['stacking']);
+        }
+
+        $this->setConfig($config);
+    }
+
     public function updateAllFormats()
     {
         $config = $this->getConfig();

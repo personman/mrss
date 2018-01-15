@@ -335,13 +335,23 @@ class Peer extends Report
         return $this->getChartColor(1);
     }
 
+    /**
+     * @param BenchmarkEntity[] $benchmark
+     * @param $data
+     * @param null $title
+     * @param null $subtitle
+     * @param string $widthSetting
+     * @return array
+     */
     public function getPeerBarChart(
-        BenchmarkEntity $benchmark,
-        $data,
+        $benchmarks,
+        $series,
         $title = null,
         $subtitle = null,
         $widthSetting = 'half'
     ) {
+        $benchmark = $benchmarks[0];
+
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
         if (empty($title)) {
@@ -354,55 +364,66 @@ class Peer extends Report
 
         $chartData = array();
         $chartXCategories = array();
-        foreach ($data as $collegeId => $peerData) {
-            $name = $peerData['label'];
-            $value = round($peerData['value'], $decimalPlaces);
 
-            $label = $this->shortenCollegeName($name);
 
-            // Your college
-            if ($name == $this->currentCollege->getNameAndState()) {
-                $dataLabelEnabled = true;
-                $color = $this->getYourCollegeColor();
+        foreach ($series as $key => $serie) {
+            $data = $serie['data'];
 
-                if ($anonymous) {
-                    //$label = 'Your College';
-                    $label = $this->currentCollege->getAbbreviation();
-                    if (empty($label)) {
-                        $label = $this->currentCollege->getName();
+            foreach ($data as $collegeId => $peerData) {
+                $name = $peerData['label'];
+                $value = round($peerData['value'], $decimalPlaces);
+
+                $label = $this->shortenCollegeName($name);
+
+                // Your college
+                if ($name == $this->currentCollege->getNameAndState()) {
+                    $dataLabelEnabled = true;
+                    $color = $this->getYourCollegeColor();
+
+                    if ($anonymous) {
+                        //$label = 'Your College';
+                        $label = $this->currentCollege->getAbbreviation();
+                        if (empty($label)) {
+                            $label = $this->currentCollege->getName();
+                        }
                     }
+                } else {
+                    $dataLabelEnabled = false;
+                    $color = $this->getPeerColor();
                 }
-            } else {
-                $dataLabelEnabled = false;
-                $color = $this->getPeerColor();
+
+                $chartXCategories[] = $label;
+
+                $chartData[] = array(
+                    'name' => $label,
+                    'y' => $value,
+                    'color' => $color,
+                    'dataLabels' => array(
+                        'enabled' => $dataLabelEnabled,
+                        'crop' => false,
+                        'overflow' => 'none',
+                        'format' => $format
+                    )
+                );
             }
 
-            $chartXCategories[] = $label;
-
-            $chartData[] = array(
-                'name' => $label,
-                'y' => $value,
-                'color' => $color,
-                'dataLabels' => array(
-                    'enabled' => $dataLabelEnabled,
-                    'crop' => false,
-                    'overflow' => 'none',
-                    'format' => $format
-                )
-            );
+            $series[$key]['data'] = $chartData;
         }
 
-        $series = array(
+
+
+        /*$series = array(
             array(
                 'name' => 'Value',
                 'data' => $chartData
             )
-        );
+        );*/
+
+
 
 
 
         $barChart = new Bar;
-        $barChart->setOrientationHorizontal();
         $barChart->setTitle($title)
             ->setSubtitle($subtitle)
             ->setSeries($series)
@@ -410,6 +431,15 @@ class Peer extends Report
             ->removeTickMarks()
             ->setWidth($widthSetting)
             ->setCategories($chartXCategories);
+
+        if (count($benchmarks) == 1) {
+            $barChart->setOrientationHorizontal();
+            $barChart->setStacked(false);
+        } else {
+            $barChart->setStacked(true);
+        }
+
+
 
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
         if ($benchmark->isPercent() && $forceScale) {

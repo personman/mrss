@@ -45,7 +45,7 @@ class Calculator
         // Handle min and max
         if ($percentile === 0) {
             return min($data);
-        } elseif ($percentile === 100) {
+        } elseif ($percentile == 100) {
             return max($data);
         }
 

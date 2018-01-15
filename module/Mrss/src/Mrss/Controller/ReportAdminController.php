@@ -19,15 +19,6 @@ class ReportAdminController extends BaseController
 
     protected $debug = false;
 
-    /**
-     * @return Report\Percentile
-     */
-    protected function getPercentileService()
-    {
-        $percentileService = $this->getServiceLocator()->get('service.report.percentile');
-
-        return $percentileService;
-    }
 
     /**
      * @return \Mrss\Service\ComputedFields

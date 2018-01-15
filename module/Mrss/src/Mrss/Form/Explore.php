@@ -27,6 +27,7 @@ class Explore extends AbstractForm
         $this->addBasicFields($includeTrends);
         $this->addMoreBasicFields($years);
         $this->addBenchmarkSelects($benchmarks);
+        $this->addHiddenBenchmarkSelects($benchmarks);
         $this->addPeerGroupDropdown($peerGroups, $colleges);
         $this->addAdvancedFields($benchmarks, $years);
         $this->addMoreAdvancedFields($allBreakpoints);
@@ -187,7 +188,28 @@ class Explore extends AbstractForm
                 )
             )
         );
+    }
 
+    protected function addHiddenBenchmarkSelects($benchmarks)
+    {
+        foreach (range('a', 'g') as $key) {
+            $this->add(
+                array(
+                    'name' => 'benchmark2' . $key,
+                    'type' => 'Zend\Form\Element\Select',
+                    'allow_empty' => true,
+                    'options' => array(
+                        'label' => 'Measure ' . $key,
+                        'empty_option' => 'None'
+                    ),
+                    'attributes' => array(
+                        'options' => $benchmarks,
+                        'id' => 'benchmark2' . $key,
+                        'class' => 'extraBenchmark'
+                    )
+                )
+            );
+        }
     }
 
     protected function addPeerGroupDropdown($peerGroups, $colleges)
@@ -448,6 +470,9 @@ class Explore extends AbstractForm
             $filter->get('colleges')->setRequired(false);
         }
 
+        foreach (range('a', 'g') as $key) {
+            $filter->get('benchmark2' . $key)->setRequired(false);
+        }
         return $filter;
     }
 

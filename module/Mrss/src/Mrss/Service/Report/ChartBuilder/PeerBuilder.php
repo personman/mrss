@@ -20,10 +20,14 @@ class PeerBuilder extends BarBuilder
     {
         $config = $this->getConfig();
 
-        $x = $config['benchmark1'];
+        //$x = $config['benchmark1'];
         $year = $config['year'];
 
-        $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
+        $dbColumns = $this->getDbColumnsFromConfig();
+        $benchmarks = $this->getBenchmarksFromConfig();
+
+        pr($config);
+        //$xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($x);
 
         $title = $config['title'];
         $subtitle = null;
@@ -31,39 +35,53 @@ class PeerBuilder extends BarBuilder
             $subtitle = $config['subtitle'];
         }
 
-        $reportedValue = $this->getReportedValue($x);
-        $peerData[$this->getCollege()->getId()] = $reportedValue;
+        $allChartValues = array();
+        foreach ($dbColumns as $dbColumn) {
+            $xBenchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn);
 
-        // Get peer group
-        $peerGroupId = $config['peerGroup'];
+            $reportedValue = $this->getReportedValue($dbColumn);
+            $peerData[$this->getCollege()->getId()] = $reportedValue;
 
-        $includedPeers = array();
-        $peerGroupName = null;
-        if ($peerGroup = $this->getPeerGroupModel()->find($peerGroupId)) {
-            $peerGroupName = $peerGroup->getName();
+            // Get peer group
+            $peerGroupId = $config['peerGroup'];
 
-            // Loop over peers
-            foreach ($peerGroup->getPeers() as $collegeId) {
-                if ($observation = $this->getObservationModel()->findOne($collegeId, $year)) {
-                    if ($value = $observation->get($x)) {
-                        $chartXCategories[] = 'blah';
-                        $peerData[$collegeId] = $value;
+            $includedPeers = array();
+            $peerGroupName = null;
+            if ($peerGroup = $this->getPeerGroupModel()->find($peerGroupId)) {
+                $peerGroupName = $peerGroup->getName();
 
-                        $includedPeers[] = $observation->getCollege()->getNameAndState();
+                // Loop over peers
+                foreach ($peerGroup->getPeers() as $collegeId) {
+                    if ($observation = $this->getObservationModel()->findOne($collegeId, $year)) {
+                        if ($value = $observation->get($dbColumn)) {
+                            $chartXCategories[] = 'blah';
+                            $peerData[$collegeId] = $value;
+
+                            $includedPeers[] = $observation->getCollege()->getNameAndState();
+                        }
                     }
                 }
             }
+
+            $this->getPeerService()->setCurrentCollege($this->getCollege());
+            $this->getPeerService()->setYear($year);
+            $chartValues = $this->getPeerService()->sortAndLabelPeerData($peerData, $this->getCollege(), $xBenchmark);
+
+
+            $allChartValues[] = array(
+                'name' => $xBenchmark->getDescriptiveReportLabel(),
+                'data' => $chartValues
+            );
+
+            // Add footnotes
+            $definition = $xBenchmark->getReportDescription(true);
+            $xLabel = $xBenchmark->getDescriptiveReportLabel();
+            $this->addFootnote("$xLabel: " . $definition);
         }
 
 
-        $this->getPeerService()->setCurrentCollege($this->getCollege());
-        $this->getPeerService()->setYear($year);
-        $chartValues = $this->getPeerService()->sortAndLabelPeerData($peerData, $this->getCollege(), $xBenchmark);
 
-        // Add footnotes
-        $definition = $xBenchmark->getReportDescription(true);
-        $xLabel = $xBenchmark->getDescriptiveReportLabel();
-        $this->addFootnote("$xLabel: " . $definition);
+
 
 
         if (!empty($includedPeers)) {
@@ -83,8 +101,39 @@ class PeerBuilder extends BarBuilder
 
         }
 
+        pr($allChartValues);
+
+
         return $this->getPeerService()
-            ->getPeerBarChart($xBenchmark, $chartValues, $title, $subtitle, $this->getWidthSetting());
+            ->getPeerBarChart($benchmarks, $allChartValues, $title, $subtitle, $this->getWidthSetting());
+    }
+
+    protected function getDbColumnsFromConfig()
+    {
+        $config = $this->getConfig();
+
+        $dbColumns = array($config['benchmark2']);
+        foreach (range('a', 'g') as $key) {
+            $name = 'benchmark2' . $key;
+
+            if (!empty($config[$name])) {
+                $dbColumns[] = $config[$name];
+            }
+        }
+
+        return $dbColumns;
+    }
+
+    protected function getBenchmarksFromConfig()
+    {
+        $benchmarks = array();
+        foreach ($this->getDbColumnsFromConfig() as $dbColumn) {
+            if ($benchmark = $this->getBenchmarkModel()->findOneByDbColumn($dbColumn)) {
+                $benchmarks[] = $benchmark;
+            }
+        }
+
+        return $benchmarks;
     }
 
 
