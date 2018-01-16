@@ -305,6 +305,11 @@ class Structure implements FormFieldsetProviderInterface//, InputFilterAwareInte
                 $benchmarkId = $child['benchmark'];
                 $benchmark = $this->getBenchmark($benchmarkId);
 
+                if (empty($benchmark)) {
+                    echo 'Benchmark not found for id: ' . $benchmarkId . '\n<br>';
+                    continue;
+                }
+
                 if ($includeCalculated || !$benchmark->getComputed()) {
                     $this->benchmarks[] = $benchmark;
                 }
