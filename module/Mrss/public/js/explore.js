@@ -4,6 +4,7 @@ var secondBenchmarkControls;
 var currentLetter;
 
 $(function() {
+    cloneBenchmark2();
     setUpSelects();
     setUpTextarea();
 
@@ -48,13 +49,15 @@ function setUpSelects()
      })
      })*/
 
-    cloneBenchmark2();
+
     $('#benchmark1, #benchmark2, #benchmark3').chosen({search_contains: true})
 
-    var multiControls = getMultiControls()
-    var peerGroup = $('#control-group-peerGroup')
-    peerGroup.before(multiControls)
+    //var multiControls = getMultiControls()
 
+    //peerGroup.before(multiControls)
+
+
+    showExtraBechmarks();
 
 }
 
@@ -168,7 +171,7 @@ function updateFormForChartType()
 
         if (getMultiTrendHiddenValue()) {
             addSecondBenchmarkButtonClicked(benchmark2);
-        } else {
+        } else if (!$('.extraBenchmarks').length) {
             placeAddSecondBenchmarkButton(benchmark2);
         }
 
@@ -201,14 +204,25 @@ function updateFormForChartType()
         width.show()
         benchmark2.find('label').text(benchmarkLabel)
         //benchmark2.show()
+        $('.extraBenchmark').show();
 
         if (getMultiTrendHiddenValue()) {
-            addSecondBenchmarkButtonClicked(benchmark2);
+            //addSecondBenchmarkButtonClicked(benchmark2);
             placeAddSecondBenchmarkButton(benchmark2);
         } else {
             placeAddSecondBenchmarkButton(benchmark2);
         }
 
+    }
+}
+
+function showExtraBechmarks()
+{
+    var benchmark2 = $('#control-group-benchmark2')
+
+    while (dbColumn = getSelectedValue()) {
+        //console.log(dbColumn)
+        displayFilteredSecondBenchmarkSelect(benchmark2, dbColumn)
     }
 }
 
@@ -421,6 +435,10 @@ function getMultiControls()
     var multiControls = $('#' + id)
     if (!multiControls.length) {
         multiControls = $('<div/>').attr('id', id)//.css('border', '2px solid red')
+
+        // Place it
+        var peerGroup = $('#control-group-peerGroup')
+        peerGroup.before(multiControls)
     }
 
     return multiControls
@@ -450,22 +468,19 @@ function addSecondBenchmarkButtonClicked(benchmark)
     // Remove any existing UI for this
     $('#secondBenchmarkButtonRemove').remove()
 
-    //var letter = getMultiTrendHiddenValue();
-    var letter = currentLetter;
-    //console.log('letter from multitrend hidden:' + letter)
-    if (!letter) {
-        letter = 'a'
-    } else {
-        letter = String.fromCharCode(letter.charCodeAt() + 1)
-    }
 
     //console.log(letter)
-
-    displayFilteredSecondBenchmarkSelect(benchmark, letter);
+    var value = getSelectedValue();
+    displayFilteredSecondBenchmarkSelect(benchmark, value);
     //removeAddSecondBenchmarkButton();
     //placeRemoveSecondBenchmarkButton(benchmark);
-    currentLetter = letter
+
     setMultiTrendHiddenValue(true)
+
+    // If we're on a line chart and they've added a benchmark, remove the button
+    if ($('#inputType').val() == 'line') {
+        $('#multiControls').hide()
+    }
 }
 
 function setMultiTrendHiddenValue(value)
@@ -512,19 +527,36 @@ function getSecondBenchmarkButtonId()
     return 'secondBenchmarkButton';
 }
 
-function displayFilteredSecondBenchmarkSelect(benchmarkSelect, letter)
+function displayFilteredSecondBenchmarkSelect(benchmarkSelect, value)
 {
+
+    //var letter = getMultiTrendHiddenValue();
+    var letter = currentLetter;
+    //console.log('letter from multitrend hidden:' + letter)
+    if (!letter) {
+        letter = 'a'
+    } else {
+        letter = String.fromCharCode(letter.charCodeAt() + 1)
+    }
+
+    currentLetter = letter
+
+
     //var benchmarkOneContainer = benchmarkSelect.closest('.control-group');
     var multiControls = getMultiControls();
 
-    var value = getSelectedValue();
+    //var value = getSelectedValue();
 
     var newBenchmarkContainer = getNewBenchmarkContainer(letter, value);
 
     var removeButton = $('<a/>').addClass('btn btn-danger').css('margin-left', '5px').html('X').click(function() {
         $(this).parents('.control-group').remove()
+        if ($('#inputType').val() == 'line') {
+            $('#multiControls').show()
+        }
     })
     newBenchmarkContainer.find('.controls').append(removeButton)
+
 
     multiControls.before(newBenchmarkContainer);
 
@@ -537,10 +569,11 @@ function getSelectedValue()
         selectedExtraBenchmarks = jQuery.makeArray(selectedExtraBenchmarks)
     }
     //console.log(selectedExtraBenchmarks)
-    var value = selectedExtraBenchmarks.shift();
-    //var value = '';
 
-    //console.log(value)
+    var value = null;
+    if (selectedExtraBenchmarks.length) {
+        value = selectedExtraBenchmarks.shift();
+    }
 
     return value
 }
@@ -549,8 +582,10 @@ function getNewBenchmarkContainer(letter, value)
 {
     // Change the label and select name
     var inputType = getCurrentInputType()
-    var newBenchmarkContainer = secondBenchmarkControls.clone();
-    var label = 'Benchmark'// + letter
+    //var secondBenchmarkControls = $('#control-group-benchmark2').clone();
+    var newBenchmarkContainer = secondBenchmarkControls.clone(true, true);
+
+    var label = 'Benchmark' //+ letter
     if (benchmarkLabel) {
         label = label.replace('Benchmark', ucwords(benchmarkLabel));
     }
@@ -560,8 +595,11 @@ function getNewBenchmarkContainer(letter, value)
         value = $('#benchmark3').val()
     }
 
+    //console.log(value)
+
     newBenchmarkContainer = filterSecondBenchmarkSelect(newBenchmarkContainer, inputType);
 
+    newBenchmarkContainer.addClass('extraBenchmark')
 
     newBenchmarkContainer.attr('id', 'control-group-benchmark2' + letter);
     newBenchmarkContainer.find('label').text(label);
@@ -591,7 +629,7 @@ function getCurrentInputType()
 
 function cloneBenchmark2()
 {
-    secondBenchmarkControls = $('#control-group-benchmark2').clone();
+    secondBenchmarkControls = $('#control-group-benchmark2').clone(true, true);
 }
 
 /**
@@ -635,7 +673,7 @@ function benchmarkChanged()
 {
     // If we're in multitrend mode, reset the 2nd benchmark when the 1st changes
     if (getMultiTrendHiddenValue()) {
-        addSecondBenchmarkButtonClicked($('#control-group-benchmark2'))
+        //addSecondBenchmarkButtonClicked($('#control-group-benchmark2'))
     }
 
     var percentScale = $('#control-group-percentScaleZoom')

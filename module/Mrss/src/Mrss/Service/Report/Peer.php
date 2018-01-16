@@ -118,7 +118,6 @@ class Peer extends Report
                 $data = $this->addPercentileRanks($data, $benchmark, $year);
             }
 
-
             // Data labels
             $prefix = $suffix = '';
             if ($benchmark->isPercent()) {
@@ -470,6 +469,7 @@ class Peer extends Report
         if ($benchmark->isPercent() && $forceScale) {
             $barChart->setYAxisMax(100);
         }
+
 
         return $barChart->getConfig();
 

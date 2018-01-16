@@ -110,9 +110,45 @@ class PeerBuilder extends BarBuilder
 
         //pr($allChartValues);
 
+        $allChartValues = $this->fillInGaps($allChartValues);
+
 
         return $this->getPeerService()
             ->getPeerBarChart($benchmarks, $allChartValues, $title, $subtitle, $this->getWidthSetting());
+    }
+
+    protected function fillInGaps($array)
+    {
+        // Find all colleges with data
+        $colleges = array();
+        foreach ($array as $key => $series) {
+            foreach ($series['data'] as $collegeId => $datum) {
+                $colleges[$collegeId] = $datum['label'];
+            }
+        }
+
+        // Now the order is set
+        // Loop over the colleges for each series
+        $newArray = array();
+        foreach ($array as $key => $series) {
+            $newArray[$key] = $series;
+            unset($newArray[$key]['data']);
+
+            foreach ($colleges as $collegeId => $label) {
+                $newDatum = array();
+                if (!empty($series['data'][$collegeId])) {
+                    $newDatum = $series['data'][$collegeId];
+                } else {
+                    $newDatum['label'] = $label;
+                    $newDatum['value'] = null;
+                    $newDatum['formatted'] = '';
+                }
+
+                $newArray[$key]['data'][$collegeId] = $newDatum;
+            }
+        }
+
+        return $newArray;
     }
 
     protected function getDbColumnsFromConfig()
