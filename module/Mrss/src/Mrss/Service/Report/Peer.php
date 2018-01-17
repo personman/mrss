@@ -126,11 +126,18 @@ class Peer extends Report
                 $prefix = '$';
             }
 
+            $series = array(
+                array(
+                    'name' => $benchmark->getPeerReportLabel(),
+                    'data' => $data
+                )
+            );
+
             $reportSection = array(
                 'benchmark' => $benchmark->getPeerReportLabel(),
                 'decimal_places' => $this->getDecimalPlaces($benchmark),
-                'data' => $data,
-                'chart' => $this->getPeerBarChart($benchmark, $data),
+                'data' => $data,// $series,//$data,
+                'chart' => $this->getPeerBarChart(array($benchmark), $series),
                 'prefix' => $prefix,
                 'suffix' => $suffix,
                 'isNumber' => $benchmark->isNumber()
