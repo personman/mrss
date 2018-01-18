@@ -882,6 +882,7 @@ class ReportController extends ReportAdminController
             $criteria = $this->getCriteriaFromSession();
             $colleges = $collegeModel->findByCriteria($criteria, $this->currentStudy(), $this->currentCollege(), $year);
 
+            if (isDev()) pr(count($colleges));
 
             if (!empty($benchmarks)) {
                 $benchmarkIds = explode(',', $benchmarks);
