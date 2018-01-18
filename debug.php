@@ -150,6 +150,7 @@ function getSeriesColors()
 function isDev()
 {
     $ips = array(
+        '127.0.0.1',
         '216.185.233.188',
         '216.185.233.187'
     );

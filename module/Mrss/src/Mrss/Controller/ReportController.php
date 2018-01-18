@@ -882,8 +882,6 @@ class ReportController extends ReportAdminController
             $criteria = $this->getCriteriaFromSession();
             $colleges = $collegeModel->findByCriteria($criteria, $this->currentStudy(), $this->currentCollege(), $year);
 
-            //if (isDev()) pr(count($colleges));
-
             if (!empty($benchmarks)) {
                 $benchmarkIds = explode(',', $benchmarks);
                 $colleges = $peerService->filterCollegesByBenchmarks(
@@ -893,7 +891,6 @@ class ReportController extends ReportAdminController
                 );
             }
 
-            //if (isDev()) pr(count($colleges));
             $colleges = $this->filterCollegesBySystem($colleges, $year);
 
             $collegeData = array();
@@ -903,8 +900,6 @@ class ReportController extends ReportAdminController
                     'id' => $college->getId()
                 );
             }
-
-            //if (isDev()) pr(count($colleges));
 
             return new JsonModel(
                 array(
