@@ -892,6 +892,7 @@ class ReportController extends ReportAdminController
                 );
             }
 
+            pr($_SERVER['REMOTE_ADDR']);
             if (isDev()) pr(count($colleges));
             $colleges = $this->filterCollegesBySystem($colleges, $year);
 
