@@ -155,7 +155,9 @@
         var currentHeading = null
         var headingsToAdd = []
         H.each(results, function(item, i) {
-            var nameParts = item.name.split('|')
+            //.log(item.name)
+            var nameString = String(item.name);
+            var nameParts = nameString.split('|')
             if (nameParts[1]) {
                 if (currentHeading == nameParts[1]) {
 

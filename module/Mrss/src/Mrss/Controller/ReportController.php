@@ -882,7 +882,6 @@ class ReportController extends ReportAdminController
             $criteria = $this->getCriteriaFromSession();
             $colleges = $collegeModel->findByCriteria($criteria, $this->currentStudy(), $this->currentCollege(), $year);
 
-
             if (!empty($benchmarks)) {
                 $benchmarkIds = explode(',', $benchmarks);
                 $colleges = $peerService->filterCollegesByBenchmarks(

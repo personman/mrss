@@ -203,6 +203,12 @@ class ChartBuilder extends Report
 
     public function getSelectedExtraBenchmarks()
     {
+        // Clear this out if multitrend is off
+        $config = $this->getConfig();
+        if (empty($config['multiTrend'])) {
+            $this->selectedExtraBenchmarks = array();
+        }
+
         return $this->selectedExtraBenchmarks;
     }
 }

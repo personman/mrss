@@ -68,7 +68,10 @@ class NccbpNavigationFactory extends NavigationFactory
                     'uri' => '/reports/social-mobility'
                 );
 
-                $pages['reports']['pages']['social-mobility'] = $mobility;
+                if (!empty($pages['reports'])) {
+                    $pages['reports']['pages']['social-mobility'] = $mobility;
+                }
+
             }
         } else {
             unset($pages['help']);

@@ -146,3 +146,15 @@ function getSeriesColors()
         )
     );
 }
+
+function isDev()
+{
+    $ips = array(
+        '127.0.0.1',
+        '216.185.233.188',
+        '216.185.233.187'
+    );
+
+    //return true;
+    return (in_array($_SERVER['REMOTE_ADDR'], $ips));
+}

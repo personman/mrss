@@ -238,7 +238,7 @@ class College extends AbstractModel
         // Order
         $builder->orderBy('c.name', 'ASC');
 
-        //echo $builder->getQuery()->getSql();
+
         $colleges = $builder->getQuery()->getResult();
 
         return $colleges;

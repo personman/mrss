@@ -74,7 +74,10 @@ $this->headScript()->appendFile(
             <?php if (!is_object($benchmark)): ?>
                 <?php pr($benchmark); ?>
             <?php endif ?>
-            <?= $this->ztbFormElement($form->get($benchmark->getDbColumn())) ?>
+
+            <?php if ($form->has($benchmark->getDbColumn())): ?>
+                <?= $this->ztbFormElement($form->get($benchmark->getDbColumn())) ?>
+            <?php endif ?>
         <?php endif ?>
 
     <?php endforeach ?>
