@@ -472,7 +472,6 @@ function addSecondBenchmarkButtonClicked(benchmark)
 
     //console.log(letter)
     var value = getSelectedValue();
-    console.log('add second clicked')
     displayFilteredSecondBenchmarkSelect(benchmark, value);
     //removeAddSecondBenchmarkButton();
     //placeRemoveSecondBenchmarkButton(benchmark);
