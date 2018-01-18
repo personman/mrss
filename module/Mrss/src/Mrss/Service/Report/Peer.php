@@ -350,6 +350,7 @@ class Peer extends Report
      * @param null $title
      * @param null $subtitle
      * @param string $widthSetting
+     * @param boolean $percentScaleZoom
      * @return array
      */
     public function getPeerBarChart(
@@ -357,7 +358,8 @@ class Peer extends Report
         $series,
         $title = null,
         $subtitle = null,
-        $widthSetting = 'half'
+        $widthSetting = 'half',
+        $percentScaleZoom = false
     ) {
         $benchmark = $benchmarks[0];
 
@@ -473,8 +475,9 @@ class Peer extends Report
 
 
         $forceScale = $this->getStudyConfig()->percent_chart_scale_1_100;
-        if ($benchmark->isPercent() && $forceScale) {
+        if ($benchmark->isPercent() && $forceScale && !$percentScaleZoom) {
             $barChart->setYAxisMax(100);
+            $barChart->setYAxisMin($this->getYMin($series));
         }
 
 
@@ -727,5 +730,19 @@ class Peer extends Report
         $adjusted = '#' . $color->brightness($steps * -0.8)->hue($steps * 2)->toHex()->__toString();
 
         return $adjusted;
+    }
+
+    protected function getYMin($series)
+    {
+        $yMin = 0;
+        foreach ($series as $serie) {
+            foreach ($serie['data'] as $datum) {
+                if ($datum < $yMin) {
+                    $yMin = $datum;
+                }
+            }
+        }
+
+        return $yMin;
     }
 }

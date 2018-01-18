@@ -112,9 +112,12 @@ class PeerBuilder extends BarBuilder
 
         $allChartValues = $this->fillInGaps($allChartValues);
 
+        $percentScaleZoom = $config['percentScaleZoom'];
 
-        return $this->getPeerService()
-            ->getPeerBarChart($benchmarks, $allChartValues, $title, $subtitle, $this->getWidthSetting());
+        $chart = $this->getPeerService()
+            ->getPeerBarChart($benchmarks, $allChartValues, $title, $subtitle, $this->getWidthSetting(), $percentScaleZoom);
+
+        return $chart;
     }
 
     protected function fillInGaps($array)

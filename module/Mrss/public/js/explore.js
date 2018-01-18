@@ -472,6 +472,7 @@ function addSecondBenchmarkButtonClicked(benchmark)
 
     //console.log(letter)
     var value = getSelectedValue();
+    //console.log('add second clicked')
     displayFilteredSecondBenchmarkSelect(benchmark, value);
     //removeAddSecondBenchmarkButton();
     //placeRemoveSecondBenchmarkButton(benchmark);
@@ -481,6 +482,16 @@ function addSecondBenchmarkButtonClicked(benchmark)
     // If we're on a line chart and they've added a benchmark, remove the button
     if ($('#inputType').val() == 'line') {
         $('#multiControls').hide()
+    }
+
+    // If it's a peer chart, they can add up to seven measures
+    var maxExtra = 6;
+    var extraCount = $('.extraBenchmark').length;
+
+    if ($('#inputType').val() == 'peer') {
+        if (extraCount >= maxExtra) {
+            $('#multiControls').hide()
+        }
     }
 }
 
@@ -553,7 +564,7 @@ function displayFilteredSecondBenchmarkSelect(benchmarkSelect, value)
     //console.log('placing remove button...')
     var removeButton = $('<a/>').addClass('btn btn-danger').css('margin-left', '5px').html('X').click(function() {
         $(this).parents('.control-group').remove()
-        if ($('#inputType').val() == 'line') {
+        if ($('#inputType').val() == 'line' || $('#inputType').val() == 'peer') {
             $('#multiControls').show()
             //$('#benchmark3').val('')
 
