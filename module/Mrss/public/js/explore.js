@@ -169,6 +169,8 @@ function updateFormForChartType()
         makePeerCohort.show()
         width.show()
 
+        //etMultiTrendHiddenValue());
+
         if (getMultiTrendHiddenValue()) {
             addSecondBenchmarkButtonClicked(benchmark2);
         } else if (!$('.extraBenchmarks').length) {
@@ -221,7 +223,6 @@ function showExtraBechmarks()
     var benchmark2 = $('#control-group-benchmark2')
 
     while (dbColumn = getSelectedValue()) {
-        //console.log(dbColumn)
         displayFilteredSecondBenchmarkSelect(benchmark2, dbColumn)
     }
 }
@@ -471,6 +472,7 @@ function addSecondBenchmarkButtonClicked(benchmark)
 
     //console.log(letter)
     var value = getSelectedValue();
+    console.log('add second clicked')
     displayFilteredSecondBenchmarkSelect(benchmark, value);
     //removeAddSecondBenchmarkButton();
     //placeRemoveSecondBenchmarkButton(benchmark);
@@ -549,10 +551,14 @@ function displayFilteredSecondBenchmarkSelect(benchmarkSelect, value)
 
     var newBenchmarkContainer = getNewBenchmarkContainer(letter, value);
 
+    //console.log('placing remove button...')
     var removeButton = $('<a/>').addClass('btn btn-danger').css('margin-left', '5px').html('X').click(function() {
         $(this).parents('.control-group').remove()
         if ($('#inputType').val() == 'line') {
             $('#multiControls').show()
+            //$('#benchmark3').val('')
+
+            setMultiTrendHiddenValue(false)
         }
     })
     newBenchmarkContainer.find('.controls').append(removeButton)
@@ -666,7 +672,11 @@ function removeAddSecondBenchmarkButton()
 
 function getMultiTrendHiddenValue()
 {
-    return $('#multiTrend').val();
+    var value = $('#multiTrend').val();
+    if (value === 'false') {
+        value = false
+    }
+    return value
 }
 
 function benchmarkChanged()
