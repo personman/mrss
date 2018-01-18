@@ -892,8 +892,7 @@ class ReportController extends ReportAdminController
                 );
             }
 
-            pr($_SERVER['REMOTE_ADDR']);
-            if (isDev()) pr(count($colleges));
+            //if (isDev()) pr(count($colleges));
             $colleges = $this->filterCollegesBySystem($colleges, $year);
 
             $collegeData = array();
@@ -904,7 +903,7 @@ class ReportController extends ReportAdminController
                 );
             }
 
-            if (isDev()) pr(count($colleges));
+            //if (isDev()) pr(count($colleges));
 
             return new JsonModel(
                 array(

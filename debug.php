@@ -149,6 +149,11 @@ function getSeriesColors()
 
 function isDev()
 {
-    return true;
-    //return ($_SERVER['REMOTE_ADDR'] == '216.185.233.187');
+    $ips = array(
+        '216.185.233.188',
+        '216.185.233.187'
+    );
+
+    //return true;
+    return (in_array($_SERVER['REMOTE_ADDR'], $ips));
 }
