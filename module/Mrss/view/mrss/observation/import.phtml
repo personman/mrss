@@ -51,7 +51,7 @@ $this->headScript()->appendFile(
 
 <?php
 $url = $this->url('data-entry/export', array('year' => $year));
-$directLink  = '/data-entry/template';
+$directLink  = $this->url('data-entry/template', array('year' => $year));
 $downloadId = 'download';
 $downloadNote = "<strong>Note:</strong> This file can take several minutes to download because it is being pre-populated with your data. If you encounter problems downloading the pre-populated file, please try downloading the blank template <a href='$directLink'>here</a>.";
 

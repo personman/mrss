@@ -57,10 +57,11 @@ class BaseController extends AbstractActionController
     public function getActiveSystemId($role = null)
     {
         $systemId = $this->getActiveSystemContainer()->system_id;
+        $college = $this->currentCollege();
 
         // If none is set yet, just, uh, grab one
-        if (empty($systemId)) {
-            foreach ($this->currentCollege()->getSystemMemberships() as $systemMembership) {
+        if ($college && empty($systemId)) {
+            foreach ($college->getSystemMemberships() as $systemMembership) {
                 if (!$role || ($role == 'system_admin' && $this->getCurrentUser()->administersSystem($systemId))) {
                     // The first one will do
                     $systemId = $systemMembership->getSystem()->getId();

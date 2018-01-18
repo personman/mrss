@@ -1167,10 +1167,13 @@ class ObservationController extends BaseController
     protected function useDirectDownloadLink()
     {
         $direct = false;
-        $subscription = $this->getSubscription();
 
-        if ($subscription->getCompletion() == 0) {
-            $direct = true;
+        if ($this->getStudyConfig()->custom_excel_template) {
+            $subscription = $this->getSubscription();
+
+            if ($subscription->getCompletion() == 0) {
+                $direct = true;
+            }
         }
 
         return $direct;
