@@ -379,6 +379,11 @@ class Explore extends AbstractForm
 
     protected function addMoreAdvancedFields($allBreakpoints)
     {
+        if (!$this->studyConfig->enable_min_max_breakpoints) {
+            unset($allBreakpoints[0]);
+            unset($allBreakpoints[100]);
+        }
+
         $allBreakpoints = array_combine($allBreakpoints, $allBreakpoints);
 
         if (isset($allBreakpoints[0])) {

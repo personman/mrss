@@ -14,6 +14,7 @@ return array(
     'use_structures' => false,
     'primary_systems' => array(),
     'breakpoints' => '10,25,50,75,90',
+    'enable_min_max_breakpoints' => false,
     'show_peer_data_you_did_not_submit' => false,
     'percent_chart_scale_1_100' => true,
     'college_report_access_checkbox' => false,

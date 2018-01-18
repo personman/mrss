@@ -15,6 +15,7 @@ return array(
     'round_data_entry_to' => 2,
     'export_template' => 'govbenchmark-template.xlsx',
     'news_page_id' => 65,
+    'enable_min_max_breakpoints' => true,
     'allow_public_custom_report' => true,
     'benchmark_completion_heatmap' => true,
     'college_report_access_checkbox' => true,
