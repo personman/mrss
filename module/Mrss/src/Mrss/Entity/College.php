@@ -604,6 +604,10 @@ class College
         return $years;
     }
 
+    /**
+     * @param Study $study
+     * @return \Mrss\Entity\Subscription
+     */
     public function getLatestSubscription(Study $study)
     {
         $subs = array();
