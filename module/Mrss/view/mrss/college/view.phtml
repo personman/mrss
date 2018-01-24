@@ -124,7 +124,7 @@
                             <th>Modules</th>
                         <?php endif ?>
 
-                        <?php if ($this->studyConfig()->use_structures): ?>
+                        <?php if (true || $this->studyConfig()->use_structures): ?>
                             <th><?= ucwords($this->studyConfig()->system_label) ?></th>
                         <?php endif ?>
 
@@ -179,7 +179,7 @@
                             </td>
                         <?php endif ?>
 
-                        <?php if ($this->studyConfig()->use_structures): ?>
+                        <?php if (true || $this->studyConfig()->use_structures): ?>
                             <td>
                                 <?= implode(', ', $subscription->getCollege()->getSystemNames($subscription->getYear())) ?>
                             </td>

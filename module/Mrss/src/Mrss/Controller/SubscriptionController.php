@@ -1064,6 +1064,8 @@ class SubscriptionController extends SubscriptionBaseController
                 ->createOrUpdateUser($dataContactForm, 'data', $college, $defaultState);
         }
 
+        // Handle system memberships
+        $this->continueSystems($subscription);
 
         // Save it all to the db
         $this->getServiceLocator()->get('em')->flush();
@@ -1096,6 +1098,36 @@ class SubscriptionController extends SubscriptionBaseController
             $method = $subscription->getPaymentMethod();
             $routeParams = array('paymentMethod' => $method);
             return $this->redirect()->toRoute('membership', $routeParams);
+        }
+    }
+
+    protected function continueSystems(Subscription $subscription)
+    {
+        // Get last year's subscription
+        $year = intval($subscription->getYear());
+        $studyId = $subscription->getStudy()->getId();
+
+        $prevSubscription = null;
+
+        while ($year > 2007 && !$prevSubscription) {
+            $year--;
+            $prevSubscription = $subscription->getCollege()
+                ->getSubscriptionByStudyAndYear($studyId, $year);
+        }
+
+        if ($prevSubscription) {
+
+            $selectedSystems = $subscription->getCollege()->getSystemsByYear($year);
+            $systemIds = array();
+            foreach ($selectedSystems as $sys) {
+                $systemIds[] = $sys->getId();
+            }
+
+            $this->updateSystemMemberships(
+                $subscription->getCollege(),
+                $systemIds,
+                $subscription->getYear()
+            );
         }
     }
 
