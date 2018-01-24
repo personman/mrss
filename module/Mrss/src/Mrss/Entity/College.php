@@ -615,7 +615,7 @@ class College
             $subs[$sub->getYear()] = $sub;
         }
 
-        krsort($subs);
+        ksort($subs);
 
         return array_pop($subs);
     }
