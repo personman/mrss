@@ -46,6 +46,33 @@ $this->headScript()->appendFile(
 </style>
 
 
+<ul class="nav nav-pills form-nav">
+    <?php /*<li class="form-nav-head">
+        <h3>
+            Year:
+        </h3>
+    </li> */ ?>
+
+    <?php foreach ($years as $listYear): ?>
+        <?
+        $route = 'data-entry/print';
+        $params = array (
+            'year' => $listYear
+        );
+
+        ?>
+
+        <li<? if ($listYear == $year) echo ' class="active"' ?>>
+            <a href="<?= $this->url(
+                $route,
+                $params
+            ) ?>" title="<?= $listYear ?>" class="infotip">
+                <?= $listYear ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+</ul>
+
 <?php foreach ($forms as $formInfo): ?>
     <?php $form = $formInfo['form']; $benchmarkGroup = $formInfo['benchmarkGroup']; ?>
 

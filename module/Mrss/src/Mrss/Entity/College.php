@@ -762,14 +762,20 @@ class College
 
     public function getYears($systemId = null)
     {
+        $systemMemberships = $this->getSystemMemberships();
+
         $years = array();
         if ($systemId) {
             $years = $this->getYearsBySystem($systemId);
-        } else {
-            foreach ($this->getSystemMemberships() as $systemMembership) {
+        } elseif (count($systemMemberships)) {
+            foreach ($systemMemberships as $systemMembership) {
                 if (!in_array($systemMembership->getYear(), $years)) {
                     $years[] = $systemMembership->getYear();
                 }
+            }
+        } else {
+            foreach ($this->getSubscriptions() as $subscription) {
+                $years[] = $subscription->getYear();
             }
         }
 

@@ -202,7 +202,13 @@ class ObservationController extends BaseController
 
         $latestSub = $this->getCollege()->getLatestSubscription($this->getCurrentStudy());
 
-        $year = $latestSub->getYear();
+        $year = $this->params()->fromRoute('year');
+
+        $latestYear = $latestSub->getYear();
+
+        if ($year > $latestYear) {
+            $year = $latestYear;
+        }
 
         /*$year = $this->getYearFromRouteOrStudy();
         if (!$this->getCurrentStudy()->getDataEntryOpen()) {
@@ -247,7 +253,9 @@ class ObservationController extends BaseController
 
         return array(
             'forms' => $forms,
-            'variable' => $this->getVariableSubstitutionService()
+            'variable' => $this->getVariableSubstitutionService(),
+            'year' => $year,
+            'years' => $this->getCollege()->getYears($this->getActiveSystemId()),
         );
     }
 
