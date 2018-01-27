@@ -436,6 +436,8 @@ class CustomReportController extends ReportController
         $can = false;
         if ($this->getCurrentUser()->isAdmin()) {
             $can = true;
+        } elseif ($this->getCurrentUser()->isSystemAdmin()) {
+            $can = true;
         } elseif ($this->userOwnsReport($reportId)) {
             $can = true;
         }
@@ -489,11 +491,12 @@ class CustomReportController extends ReportController
 
 
             $elapsed = round(microtime(true) - $start);
-            $this->flashMessenger()->addSuccessMessage(
-                "Report copied to all users at peer group members ($count) in $elapsed seconds." .
-                "$duplicatesSkipped duplicates skipped." .
-                "Now <a href='/reports/custom/admin'>rebuild the cache</a>."
-            );
+            $message = "Report copied to all users at peer group members ($count) in $elapsed seconds. ";
+            if ($this->getCurrentUser()->isAdmin()) {
+                $message .= "Now <a href='/reports/custom/admin'>rebuild the cache</a>.";
+            }
+
+            $this->flashMessenger()->addSuccessMessage($message);
         } else {
             $this->flashMessenger()->addErrorMessage('Copy already done.');
         }
@@ -506,7 +509,28 @@ class CustomReportController extends ReportController
     {
         $peerGroup = $this->getPeerGroupModel()->find($peerGroupId);
 
-        $colleges = $this->getCollegeModel()->findByIds($peerGroup->getPeers());
+        $collegeIds = $peerGroup->getPeers();
+
+        // Make sure system admins don't copy the report outside of their system/network
+        if ($this->getCurrentUser()->isSystemAdmin()) {
+            $systems = $this->getCurrentUser()->getSystemsAdministered();
+            $memberIds = array();
+            foreach ($systems as $system) {
+                foreach ($system->getColleges() as $memberCollege) {
+                    $memberIds[] = $memberCollege->getId();
+                }
+            }
+
+            $newIds = array();
+            foreach ($collegeIds as $collegeId) {
+                if (in_array($collegeId, $memberIds)) {
+                    $newIds[] = $collegeId;
+                }
+            }
+            $collegeIds = $newIds;
+        }
+
+        $colleges = $this->getCollegeModel()->findByIds($collegeIds);
 
         // Add their own college, too, so they can copy it to colleagues.
         $colleges[] = $this->currentCollege();

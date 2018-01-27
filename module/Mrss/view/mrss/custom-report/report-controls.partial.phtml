@@ -34,7 +34,7 @@
         Print
     </a>
 
-    <?php if ($this->isAllowed('adminMenu', 'view')): ?>
+    <?php if ($this->isAllowed('adminMenu', 'view') || $this->isAllowed('systemSwitch', 'view')): ?>
     <a href="<?= $this->url('reports/custom/publish', array('id' => $report->getId())) ?>"
        class="btn btn-default<?php if ($active == 'copy') echo ' active' ?>"
        title="Copy this report to other <?= $this->studyConfig()->institutions_label ?>.">

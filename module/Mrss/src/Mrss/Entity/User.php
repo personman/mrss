@@ -414,6 +414,11 @@ class User implements UserInterface, ProviderInterface
         return ($this->getRole() == 'admin');
     }
 
+    public function isSystemAdmin()
+    {
+        return ($this->getRole() == 'system_admin');
+    }
+
     /**
      * @return \Zend\Permissions\Acl\Role\RoleInterface[]
      */
@@ -570,6 +575,10 @@ class User implements UserInterface, ProviderInterface
         return $this;
     }
 
+    /**
+     * @param bool $asArray
+     * @return array|System[]
+     */
     public function getSystemsAdministered($asArray = false)
     {
         $systemIds = $this->systemsAdministered;
