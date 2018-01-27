@@ -42,11 +42,31 @@ class CustomReportController extends ReportController
 
         $currentUser = $this->getCurrentUser();
 
+        $reports = $this->getReportModel()
+            ->findByUserAndStudy($currentUser, $this->currentStudy(), $this->getImpersonatedCollege());
+
         return array(
             'webinarLink' => $webinarLink,
-            'reports' => $this->getReportModel()
-                    ->findByUserAndStudy($currentUser, $this->currentStudy())
+            'reports' => $reports
         );
+    }
+
+    /**
+     * Is a system admin impersonating another college?
+     *
+     * @return \Mrss\Entity\College|null
+     */
+    protected function getImpersonatedCollege()
+    {
+        $currentUser = $this->getCurrentUser();
+        $currentCollege = $this->currentCollege();
+
+        $impersonatedCollege = null;
+        if ($currentUser->getCollege()->getId() != $currentCollege->getId()) {
+            $impersonatedCollege = $currentCollege;
+        }
+
+        return $impersonatedCollege;
     }
 
     protected function getSystems()
@@ -278,7 +298,14 @@ class CustomReportController extends ReportController
                 $college = $report->getUser()->getCollege();
 
                 if (!$admin && !$public && $college->getId() != $this->currentCollege()->getId()) {
-                    throw new \Exception('You cannot edit reports that do not belong to your college.');
+                    // Are they a system admin editing a report they created while impersonating?
+                    $college = $report->getCollege();
+                    $impersonatedCollege = $this->getImpersonatedCollege();
+                    if (!$impersonatedCollege || $impersonatedCollege->getId() != $college->getId()) {
+                        throw new \Exception('You cannot edit reports that do not belong to your college.');
+                    }
+
+
                 }
             }
         }
@@ -288,7 +315,7 @@ class CustomReportController extends ReportController
         if (empty($report)) {
             $report = new Report;
             $report->setUser($currentUser);
-            $report->setCollege($currentUser->getCollege());
+            $report->setCollege($this->getImpersonatedCollege());
             $report->setStudy($this->currentStudy());
         }
 
@@ -520,7 +547,7 @@ class CustomReportController extends ReportController
 
 
         $report = $this->getOrCreateReport($user);
-        //$report->setCollege($college);
+        //$report->setCollege($user->getCollege());
 
         $report->setName($sourceReport->getName());
         $report->setDescription($sourceReport->getDescription());

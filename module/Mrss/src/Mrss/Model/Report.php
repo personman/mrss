@@ -60,17 +60,41 @@ class Report extends AbstractModel
      * @param $study
      * @return ReportEntity[]
      */
-    public function findByUserAndStudy($user, $study)
+    public function findByUserAndStudy($user, $study, $college = null)
     {
-        return $this->getRepository()->findBy(
+        $collegePart = 'r.college IS NULL';
+        if ($college) {
+            $collegePart = 'r.college = :collegeId';
+        }
+
+        $sql = "SELECT r
+            FROM Mrss\Entity\Report r
+            WHERE r.user = :userId
+            AND r.study = :studyId
+            AND $collegePart
+            ORDER BY r.name ASC";
+
+        $query = $this->getEntityManager()->createQuery($sql);
+        $query->setParameter('studyId', $study->getId());
+        $query->setParameter('userId', $user->getId());
+
+        if ($college) {
+            $query->setParameter('collegeId', $college->getId());
+        }
+
+        return $query->getResult();
+
+
+
+        /*return $this->getRepository()->findBy(
             array(
                 'user' => $user,
-                'study' => $study
+                'study' => $study,
             ),
             array(
                 'name' => 'ASC'
             )
-        );
+        );*/
     }
 
     /**
