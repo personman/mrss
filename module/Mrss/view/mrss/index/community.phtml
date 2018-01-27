@@ -31,7 +31,7 @@
         if (!window.console.log) window.console.log = function () { };
 
 
-        if (false) {
+        if (true) {
             window.addEventListener('message', function(e) {
                 console.log(e.data)
 
@@ -39,7 +39,7 @@
                     var unreadCount = e.data.data;
 
                     //console.log(e.data.eventName); // event name
-                    console.log(e.data.data); // event data
+                    //console.log(e.data.data); // event data
 
                     //console.log(unreadCount)
                     var menuItem = $('.community-menu a');

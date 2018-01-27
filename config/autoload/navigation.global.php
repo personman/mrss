@@ -661,15 +661,15 @@ $navigation = array(
                         'uri' => '/data-dictionary'
                     ),
                 )
-            ),/*
-            'community' => array(
-                'label' => 'Community',
-                'uri' => '/community',
-                'class' => 'community-menu'
-            ),*/
+            ),
             'contact' => array(
                 'label' => 'Contact Us',
                 'uri' => '/contact',
+                'class' => 'float-right'
+            ),
+            'community' => array(
+                'label' => 'Community Chat',
+                'uri' => '/community',
                 'class' => 'float-right community-menu'
             ),
             'help' => array(

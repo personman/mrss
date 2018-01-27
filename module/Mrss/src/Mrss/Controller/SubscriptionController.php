@@ -543,7 +543,7 @@ class SubscriptionController extends SubscriptionBaseController
                     $subscription->getYear()
                 );
 
-                $modules = $this->params()->fromPost('modules');
+                $modules = $this->params()->fromPost('modules', array());
                 $this->updateSections(
                     $subscription,
                     $modules

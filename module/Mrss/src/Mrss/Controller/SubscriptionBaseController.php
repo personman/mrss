@@ -97,7 +97,7 @@ class SubscriptionBaseController extends BaseController
                 // Now, either way, update the system memberships, too
                 $this->updateSystemMemberships($college, $systems, $year);
 
-                $this->updateSections($subscription, $this->params()->fromPost('modules'));
+                $this->updateSections($subscription, $this->params()->fromPost('modules', array()));
 
                 // Message and redirect
                 $systemLabel = $this->getStudyConfig()->system_label;
