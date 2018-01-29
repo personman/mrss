@@ -1518,17 +1518,17 @@ class SubscriptionController extends SubscriptionBaseController
 
         if ($adminUser && $dataUser) {
             $body .= "
-            Admin User:
-                {$adminUser->getFullName()}
-                {$adminUser->getTitle()}
-                {$adminUser->getEmail()}
-                {$adminUser->getPhone()} {$adminUser->getExtension()}
-
-            Data User:
-                {$dataUser->getFullName()}
-                {$dataUser->getTitle()}
-                {$dataUser->getEmail()}
-                {$dataUser->getPhone()} {$dataUser->getExtension()}
+            Admin User:<br>
+                {$adminUser->getFullName()}<br>
+                {$adminUser->getTitle()}<br>
+                {$adminUser->getEmail()}<br>
+                {$adminUser->getPhone()} {$adminUser->getExtension()}<br>
+                <br>
+            Data User:<br>
+                {$dataUser->getFullName()}<br>
+                {$dataUser->getTitle()}<br>
+                {$dataUser->getEmail()}<br>
+                {$dataUser->getPhone()} {$dataUser->getExtension()}<br>
             ";
         }
 
