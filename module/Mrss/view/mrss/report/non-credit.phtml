@@ -24,6 +24,15 @@ $cssVersion = 13;
 <h1>Non-credit Report</h1>
 
 <div id="executiveReport" class="page">
+    <div id="printButton">
+        <a class="btn btn-default" href="<?= $this->url('reports/non-credit', array('year' => $year, 'format' => 'print')) ?>">
+            <span class="glyphicon glyphicon-print"></span>
+            Print
+        </a>
+    </div>
+
+
+
     <?php if (empty($open)): ?>
 
         <p>The <?= $year ?> Non-credit Report is not yet available.</p>

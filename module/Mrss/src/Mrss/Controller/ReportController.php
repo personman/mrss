@@ -384,6 +384,12 @@ class ReportController extends ReportAdminController
         $autoPrint = false;
         $college = $this->currentCollege();
 
+        $format = $this->params()->fromRoute('format');
+        if ($format == 'print') {
+            $media = 'print,screen';
+            $autoPrint = true;
+        }
+
         $service = $this->getNonCreditService();
         $subscriptions = $college->getSubscriptionsForStudy($this->currentStudy());
 
