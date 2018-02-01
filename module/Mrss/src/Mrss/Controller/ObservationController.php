@@ -198,7 +198,7 @@ class ObservationController extends BaseController
     {
         $formService = $this->getFormBuilder();
         $showData = $this->params()->fromRoute('showData');
-
+        $formsToSkip = array(41); // Social mobility
 
         $latestSub = $this->getCollege()->getLatestSubscription($this->getCurrentStudy());
 
@@ -231,6 +231,10 @@ class ObservationController extends BaseController
         $forms = array();
 
         foreach ($benchmarkGroups as $benchmarkGroup) {
+            if (in_array($benchmarkGroup->getId(), $formsToSkip)) {
+                continue;
+            }
+
             $form = $formService->buildForm(
                 $benchmarkGroup,
                 $year,
