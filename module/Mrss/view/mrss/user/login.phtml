@@ -47,3 +47,9 @@ $form->get('submit')->setAttribute('class', 'btn btn-primary');
     <p>Not registered? <a href="<?php echo $this->url('zfcuser/register') . ($this->redirect ? '?redirect='.$this->redirect : '') ?>">Sign up!</a></p>
 <?php endif; ?>
 
+<?php if ($extra = $this->studyConfig()->login_extra_text): ?>
+    <p class="passwordResetLink">
+        <?= $extra ?>
+    </p>
+<?php endif ?>
+

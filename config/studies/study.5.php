@@ -41,6 +41,7 @@ return array(
     'benchmark_label' => 'measure',
     'form_label' => 'service area',
     'use_gravatar' => true,
+    'login_extra_text' => '<a href="https://www.envisio.com/govbenchmark/lite-signup">Not a member? Sign up now.</a>',
     'contact_recipient' => array('govbenchmark@envisio.com'),
     'contact_instructions' => 'You can also reach us by phone: Mike Daniel, Director govBenchmark, 604-256-7055',
     'copyright' => date('Y') . " Envisio",

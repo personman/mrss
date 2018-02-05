@@ -60,6 +60,7 @@ return array(
     'your_institution_label' => 'Your Institution',
     'institution_label' => 'Institution',
     'institutions_label' => 'Institutions',
+    'login_extra_text' => '',
     'news_page_id' => null,
     'muut' => null,
     'prior_year_edits' => false,
