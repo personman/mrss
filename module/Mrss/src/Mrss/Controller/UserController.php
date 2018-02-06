@@ -514,7 +514,7 @@ class UserController extends BaseController
 
         if (empty($hasMembership) || !$this->isAllowed('systemSwitch', 'view')) {
             throw new \Exception(
-                'You do not have permission to enter data for that college'
+                "You do not have permission to enter data for that college. Has membership: $hasMembership. "
             );
         }
 
