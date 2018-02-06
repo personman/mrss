@@ -301,7 +301,7 @@ class CustomReportController extends ReportController
                     // Are they a system admin editing a report they created while impersonating?
                     $college = $report->getCollege();
                     $impersonatedCollege = $this->getImpersonatedCollege();
-                    if (!$impersonatedCollege || $impersonatedCollege->getId() != $college->getId()) {
+                    if (!$impersonatedCollege || $this->getCurrentUser()->administersSystem($this->getActiveSystem())) {
                         throw new \Exception('You cannot edit reports that do not belong to your college.');
                     }
 
