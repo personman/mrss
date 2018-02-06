@@ -73,7 +73,7 @@ return array(
                     // the "wear" privilege on the resource "pants"
                     array(array('admin'), 'adminMenu', 'view'),
                     array(array('data'), 'dataEntry', 'view'),
-                    array(array('system_admin', 'system_viewer'), 'systemSwitch', 'view'),
+                    array(array('system_admin', 'system_viewer', 'admin'), 'systemSwitch', 'view'),
                     // 'membership' = editing yr college, users, renewing
                     array(array('contact'), 'membership', 'view'),
                 ),
