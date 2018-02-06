@@ -106,7 +106,13 @@ class Report
      */
     public function getCollege()
     {
-        return $this->college;
+        $college = $this->college;
+
+        if (!$college) {
+            $college = $this->getUser()->getCollege();
+        }
+
+        return $college;
     }
 
 
