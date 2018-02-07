@@ -117,7 +117,8 @@ class Report extends AbstractModel
     {
         $sql = "SELECT r.id, r.name, c.name AS college
         FROM reports r
-        INNER JOIN colleges c ON r.college_id = c.id
+        INNER JOIN users u ON r.user_id = u.id
+        INNER JOIN colleges c ON u.college_id = c.id
         WHERE EXISTS (SELECT i.id FROM report_items i WHERE i.cache IS NULL AND i.report_id = r.id)
         AND r.study_id = :study_id;";
 
