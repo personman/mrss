@@ -513,9 +513,11 @@ class CustomReportController extends ReportController
 
         // Make sure system admins don't copy the report outside of their system/network
         if ($this->getCurrentUser()->isSystemAdmin()) {
-            $systems = $this->getCurrentUser()->getSystemsAdministered();
+            $systems = $this->getCurrentUser()->getSystemsAdministered(true);
             $memberIds = array();
             foreach ($systems as $system) {
+                $system = $this->getSystemModel()->find($system);
+
                 foreach ($system->getColleges() as $memberCollege) {
                     $memberIds[] = $memberCollege->getId();
                 }
