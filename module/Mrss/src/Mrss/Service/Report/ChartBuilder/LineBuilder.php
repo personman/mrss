@@ -93,11 +93,11 @@ class LineBuilder extends ChartBuilder
 
         $chart = new Line;
         $chart->setTitle($title)
+            ->setSeries($series)
             ->setSubtitle($subtitle)
             ->setYLabel($yLabel)
             ->setYFormat($this->getFormat($benchmark))
             ->setCategories($xCategories)
-            ->setSeries($series)
             ->setWidth($this->getWidthSetting());
 
         // Percentages should have the axis as 0-100
@@ -106,7 +106,6 @@ class LineBuilder extends ChartBuilder
             $chart->setYAxisMax(100);
             $chart->setYAxisMin($this->getYMin($series));
         }
-
 
         return $chart->getConfig();
     }

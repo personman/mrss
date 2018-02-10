@@ -198,13 +198,18 @@ abstract class AbstractChart
 
     public function convertFormatForAxisLabel($format)
     {
+        //pr($format);
         $search = array('y', '.2f', '.4f');
         $replace = array('value', '.0f', '.2f');
 
         // Don't round non-percent benchmarks with 2 decimal places
         if ($format == '{y:,.2f}') {
             $replace[1] = '.2f';
+        } else {
+            //echo 'format = ' . $format;
         }
+
+        //pr($replace);
 
         return str_replace($search, $replace, $format);
     }

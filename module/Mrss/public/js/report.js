@@ -230,7 +230,32 @@ function setUpCancelAndPreview()
     })
 }
 
+function axisLabelFormatter(axis, formatter, otherAxis)
+{
+    var format = otherAxis.userOptions.labels.format;
+    var formatted = formatter.call(axis);
 
+    if (hasDecimal(axis.value)) {
+        formatted = axis.value;
+
+        if (format.slice(-1) == '%') {
+            formatted += '%'
+        }
+
+        if (format.substring(0, 1) == '$') {
+            formatted = '$' + formatted;
+        }
+
+    }
+
+
+    return formatted;
+}
+
+function hasDecimal(number)
+{
+    return (Math.floor(number) != number);
+}
 
 function legendLabelFormatter(label, multiTrend)
 {

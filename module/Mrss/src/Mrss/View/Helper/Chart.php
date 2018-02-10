@@ -108,6 +108,9 @@ class Chart extends AbstractHelper
         $largeMoneyFormatter  = 'ormatter":function () {return formatLargeMoney(this)}';
         $config = str_replace('ormatter":"formatLargeMoney"', $largeMoneyFormatter, $config);
 
+        $axisLabelFormatter = 'ormatter":function () {var formatter = this.axis.defaultLabelFormatter; return axisLabelFormatter(this, formatter, this.axis)}';
+        $config = str_replace('ormatter":"axisLabelFormatter"', $axisLabelFormatter, $config);
+
 
         $regex = '/ormat":"{numericalOptions: {(.*?)}"/';
         preg_match($regex, $config, $matches);
