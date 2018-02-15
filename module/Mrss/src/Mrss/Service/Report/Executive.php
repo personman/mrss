@@ -497,6 +497,11 @@ class Executive extends Report
             $type = $config['type'];
         }
 
+        $xAxisTitle = 'Percentiles';
+        if ($type == 'bar') {
+            $xAxisTitle = '';
+        }
+
         $highChartsConfig = array(
             'id' => $id,
             'chart' => array(
@@ -515,7 +520,7 @@ class Executive extends Report
                 'categories' => $chartXCategories,
                 'tickLength' => 0,
                 'title' => array(
-                    'text' => 'Percentiles',
+                    'text' => $xAxisTitle,
                     'style' => array(
                         'color' => '#336699'
                     )
