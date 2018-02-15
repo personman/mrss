@@ -55,7 +55,7 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'll_cancellation_rate' => 'Life and Leisure',
                     'enrollment_information_cancellation_rate' => 'Workforce Training',
-                    'abe_cancellation_rate' => 'Adult Basis Education',
+                    'abe_cancellation_rate' => 'Adult Basic Education',
                 ),
                 'description' => 'Percentage of courses cancelled of courses offered by program.'
             ),
@@ -69,7 +69,7 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'retention_percent_returning_ll_students' => 'Life and Leisure',
                     'retention_percent_returning_students' => 'Workforce Training',
-                    'retention_percent_returning_abe_students' => 'Adult Basis Education',
+                    'retention_percent_returning_abe_students' => 'Adult Basic Education',
                     'retention_percent_returning_ce_students' => 'Continuing Education'
                 ),
                 'description' => 'Percentage of returning students of total enrolled Continuing Education students.'
@@ -84,7 +84,7 @@ class NonCredit extends Executive
                 'benchmarks' => array(
                     'transition_ll_students' => 'Life and Leisure',
                     'transition_students' => 'Workforce Training',
-                    'transition_abe_students' => 'Adult Basis Education',
+                    'transition_abe_students' => 'Adult Basic Education',
                     'transition_ce_students' => 'Continuing Education'
                 ),
                 'description' => 'Percentage of continuing education students who enroll in a credit course.'
@@ -130,7 +130,6 @@ class NonCredit extends Executive
                 'flipData' => true,
                 'percentiles' => array(50),
                 'benchmarks' => array(
-                    // @todo
                     'expenditures_salaries_percent' => 'Salaries',
                     'expenditures_benefits_percent' => 'Benefits',
                     'expenditures_supplies_percent' => 'Supplies',

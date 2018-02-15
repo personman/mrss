@@ -490,6 +490,8 @@ class Executive extends Report
 
     protected function getHighchartsConfig($config, $id, $title, $chartXCategories, $series, $format, $roundedFormat)
     {
+
+        //pr($config); pr($format); pr($roundedFormat);
         $type = 'column';
         if (isset($config['type'])) {
             $type = $config['type'];
@@ -517,7 +519,7 @@ class Executive extends Report
                     'style' => array(
                         'color' => '#336699'
                     )
-                )
+                ),
             ),
             'yAxis' => array(
                 'title' => false,
@@ -527,7 +529,7 @@ class Executive extends Report
                     'format' => str_replace('y', 'total', $roundedFormat)
                 ),
                 'labels' => array(
-                    'format' => str_replace('y', 'value', $format)
+                    'format' => str_replace('y', 'value', $roundedFormat)
                 )
             ),
             'tooltip' => array(
