@@ -31,7 +31,7 @@
                         <li role="separator" class="divider"></li>
                     <?php else: ?>
                     <li class="<?= $child->getClass() ?>">
-                        <a href="<?php echo $child->getHref() ?>" title="<?php echo $child->getTitle() ?>">
+                        <a href="<?php echo $child->getHref() ?>" title="<?php echo $child->getTitle() ?>" target="<?php echo $child->getTarget() ?>">
                             <?php echo $this->translate($child->getLabel()) ?>
                         </a>
                     </li>

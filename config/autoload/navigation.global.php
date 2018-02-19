@@ -660,6 +660,11 @@ $navigation = array(
                         'label' => 'Data Dictionary',
                         'uri' => '/data-dictionary'
                     ),
+                    'samples' => array(
+                        'label' => 'Sample Reports',
+                        'uri' => 'http://www.envisio.com/resources/icma-benchmarking-service-areas',
+                        'target' => '_blank'
+                    )
                 )
             ),
             'contact' => array(

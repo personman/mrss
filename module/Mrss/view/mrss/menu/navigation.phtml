@@ -1,6 +1,6 @@
 <?php $unique = rand(1, 100); ?>
 
-<ul class="nav pull-right">
+<ul class="nav pull-right test">
     <?php $count = 0 ?>
     <?php foreach ($this->container as $page): ?>
         <?php /* @var $page Zend\Navigation\Page\Mvc */ ?>
@@ -9,7 +9,7 @@
         <?php $hasChildren = $page->hasPages() ?>
         <?php if( ! $hasChildren): ?>
             <li class="<?= $page->getClass() ?>">
-            <a href="<?php echo $page->getHref() ?>" <?php echo ($page->isActive()) ? 'class="active"' : '' ?>  title="<?php echo $page->getTitle() ?>">
+            <a href="<?php echo $page->getHref() ?>" <?php echo ($page->isActive()) ? 'class="active"' : '' ?>  title="<?php echo $page->getTitle() ?>" target="<?php echo $page->getTarget() ?>">
                 <?php echo $page->getLabel() ?>
             </a>
         <?php else: ?>
@@ -24,7 +24,7 @@
                     <?php // when using partials we need to manually check for ACL conditions ?>
                     <?php if( ! $child->isVisible() || !$this->navigation()->accept($child)) continue; ?>
                     <li class="<?= $child->getClass() ?>">
-                        <a href="<?php echo $child->getHref() ?>" title="<?php echo $child->getTitle() ?>">
+                        <a href="<?php echo $child->getHref() ?>" title="<?php echo $child->getTitle() ?>" target="<?php echo $page->getTarget() ?>">
                             <?php echo $child->getLabel() ?>
                         </a>
                     </li>
