@@ -1566,6 +1566,11 @@ class SubscriptionController extends SubscriptionBaseController
         // Add recipients
         $users = $subscription->getCollege()->getUsersByStudy($study);
         foreach ($users as $user) {
+            // Don't send this to people who can view only. They don't care.
+            if ($user->getRole() == 'viewer') {
+                continue;
+            }
+
             $message->setTo($user->getEmail());
 
             $oneTimeLogin = $renderer->serverUrl(
