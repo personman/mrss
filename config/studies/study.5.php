@@ -29,6 +29,7 @@ return array(
     'system_label' => 'network',
     'show_institution_in_report_heading' => true,
     'anonymous_peers' => false,
+    'allow_peer_report_download' => false,
     'peer_percentiles' => false,
     'prior_year_edits' => true,
     'min_peers' => 0,
