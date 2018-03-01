@@ -625,7 +625,7 @@ class ReportController extends ReportAdminController
 
         $report = $peerService->getPeerReport($benchmarks, $peers, $this->currentCollege(), $year, $peerGroupName);
 
-        if ($format == 'excel') {
+        if ($format == 'excel' && $this->getStudyConfig()->allow_peer_report_download) {
             $peerService->downloadPeerReport($report, $this->getStudyConfig());
         }
 

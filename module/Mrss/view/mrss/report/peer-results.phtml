@@ -36,6 +36,7 @@ $this->headScript()->appendFile(
 </p>
 <?php endif ?>
 
+<?php if ($this->studyConfig()->allow_peer_report_download): ?>
 <div class="reportDownloads">
     <a href="<?= $this->url(
         'reports/peer-results',
@@ -45,6 +46,8 @@ $this->headScript()->appendFile(
         Download
     </a>
 </div>
+
+<?php endif ?>
 
 <div class="container-fluid report">
     <?php foreach ($report['sections'] as $section): ?>
