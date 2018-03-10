@@ -716,6 +716,7 @@ class CustomReportController extends ReportController
 
         $item->setSequence($sourceItem->getSequence());
         $item->setType($sourceItem->getType());
+        $item->setCache(null);
         $item->setDescription($sourceItem->getDescription());
         $item->setYear($sourceItem->getYear());
         $item->setConfig($config);
