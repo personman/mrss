@@ -501,6 +501,7 @@ class CustomReportController extends ReportController
             $this->flashMessenger()->addErrorMessage('Copy already done.');
         }
 
+        //die('debugging');
 
         return $this->redirect()->toRoute('reports/custom');
     }
@@ -581,8 +582,28 @@ class CustomReportController extends ReportController
 
         $this->getReportModel()->save($report);
 
+        /*pr($user->getEmail());
+        pr($sourceReport->getDescription());
+        pr($report->getId());
+        */
+
+        // Old ones we might delete (if the source item was deleted)
+        $oldItems = array();
+        foreach ($report->getItems() as $oldItem) {
+            if ($oldItem->getSourceItemId()) {
+                $oldItems[$oldItem->getSourceItemId()] = $oldItem;
+            }
+        }
+
+        // Update/create items
         foreach ($sourceReport->getItems() as $reportItem) {
             $this->copyItem($reportItem, $report, $peerGroupId);
+            unset($oldItems[$reportItem->getId()]);
+        }
+
+        // Now $oldItems should only contain items to delete
+        foreach ($oldItems as $oldItem) {
+            $this->getReportItemModel()->delete($oldItem);
         }
 
         $this->getReportModel()->getEntityManager()->flush();

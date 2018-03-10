@@ -59,7 +59,10 @@ class Line extends AbstractChart
         $config['yAxis']['labels']['formatter'] = 'axisLabelFormatter';
 
         // Tooltip
-        $config['tooltip'] = array('pointFormat' => $this->convertFormatForTooltip($this->getYFormat()));
+        $config['tooltip'] = array(
+            'pointFormat' => $this->convertFormatForTooltip($this->getYFormat()),
+            'headerFormat' => '<span style="font-size: 10px">{series.name} {point.key}</span><br/>'
+        );
 
         // Data label
         $config['plotOptions']['line']['dataLabels']['format'] = $this->getYFormat();
