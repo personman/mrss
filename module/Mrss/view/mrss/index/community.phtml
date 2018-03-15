@@ -1,6 +1,10 @@
 <h1>Community</h1>
 
-<?//= $this->muut($currentUser); ?>
+<?php if ($this->studyConfig()->muut): ?>
+
+<?= $this->muut($currentUser); ?>
+
+<?php else: ?>
 
 <style>
     .sidebar__footer {
@@ -70,3 +74,5 @@
             Fallback link for browsers that don't support iframes
     </p>
 </iframe>
+
+<?php endif ?>
