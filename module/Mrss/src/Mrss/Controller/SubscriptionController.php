@@ -1510,7 +1510,8 @@ class SubscriptionController extends SubscriptionBaseController
             "State: {$college->getState()}<br>\n" .
             "Zip: {$college->getZip()}<br>\n" .
             "Digital Signature: {$subscription->getDigitalSignature()}<br>\n" .
-            "Title: {$subscription->getDigitalSignatureTitle()}<br>\n";
+            "Title: {$subscription->getDigitalSignatureTitle()}<br>\n" .
+            "Email: {$this->getCurrentUser()->getEmail()}<br>\n";
 
         if ($sections = $subscription->getSectionNames()) {
             $body .= "Module(s): " . $sections . "<br>\n";
