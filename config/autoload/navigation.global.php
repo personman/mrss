@@ -148,6 +148,7 @@ $navigation = array(
                         'uri' => '/faq'
                     ),                )
             ),
+
             'schedule-demo' => array(
                 'label' => 'Schedule a Demo',
                 'uri' => '/schedule-demo'
@@ -349,6 +350,10 @@ $navigation = array(
                         'uri' => '/changes'
                     ),*/
                 )
+            ),
+            'chat' => array(
+                'label' => 'Chat',
+                'uri' => '/community'
             ),
             'help' => array(
                 'label' => 'Help',

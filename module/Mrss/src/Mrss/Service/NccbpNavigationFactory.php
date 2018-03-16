@@ -71,7 +71,11 @@ class NccbpNavigationFactory extends NavigationFactory
                 if (!empty($pages['reports'])) {
                     $pages['reports']['pages']['social-mobility'] = $mobility;
                 }
+            }
 
+            // Chat
+            if (empty($this->getStudyConfig()->muut)) {
+                unset($pages['chat']);
             }
         } else {
             unset($pages['help']);
