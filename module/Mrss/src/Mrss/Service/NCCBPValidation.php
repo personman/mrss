@@ -8,18 +8,22 @@ class NCCBPValidation extends AbstractValidation
 {
     public function validateAutomatic()
     {
-        // Everyone gets these issues, automatically
-        $message = "For Pell Grant Eligible Students, include both those that did receive them and those " .
-            "that did not receive them because of administrative or other hurdles.";
-        $code = "auto_pell";
-        $form = '1';
-        $this->addIssue($message, $code, $form);
+        // Everyone gets these issues, if they've filled them out
+        if (null !== $this->observation->get('pell_grant_eligble')) {
+            $message = "For Pell Grant Eligible Students, include both those that did receive them and those " .
+                "that did not receive them because of administrative or other hurdles.";
+            $code = "auto_pell";
+            $form = '1';
+            $this->addIssue($message, $code, $form);
+        }
 
-        $message = 'Under revenue sources, include all revenue, even if it is labeled as “non-operating” ' .
-            'on your financial statements.';
-        $code = "auto_revenue_sources";
-        $form = '21';
-        $this->addIssue($message, $code, $form);
+        if (null !== $this->observation->get('dollars_tuition_fees_sour')) {
+            $message = 'Under revenue sources, include all revenue, even if it is labeled as “non-operating” ' .
+                'on your financial statements.';
+            $code = "auto_revenue_sources";
+            $form = '21';
+            $this->addIssue($message, $code, $form);
+        }
     }
 
     public function validateZeros()
