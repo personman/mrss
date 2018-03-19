@@ -383,7 +383,7 @@ class SystemController extends BaseController
                 $data = $form->getData();
 
                 // Get the user
-                $userModel = $this->getServiceLocator()->get('model.user');
+                $userModel = $this->getUserModel();
                 $user = $userModel->find($data['user_id']);
 
                 if (empty($user)) {
@@ -392,6 +392,9 @@ class SystemController extends BaseController
 
                 // Set the role and save
                 $user->setRole($data['role']);
+
+                $user->addSystemViewer($systemId);
+
                 $userModel->save($user);
                 $this->getServiceLocator()->get('em')->flush();
 

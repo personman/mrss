@@ -202,7 +202,8 @@
     </div>
 <?php endif ?>
 
-<?= $this->systemAdmin($this->isAllowed('systemSwitch', 'view')) ?>
+<?php $allowSwitch = $this->isAllowed('systemSwitch', 'view');  ?>
+<?= $this->systemAdmin($allowSwitch) ?>
 
 <?php if (empty($this->noWrapper)): ?>
     <div id="content">

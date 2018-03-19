@@ -50,7 +50,11 @@ class SystemAdmin extends AbstractHelper
 
         $allowed = false;
         if ($user) {
-            $allowed = $user->administersSystem($systemId);
+            if ($user->getRole() == 'system_admin') {
+                $allowed = $user->administersSystem($systemId);
+            } elseif ($user->getRole() == 'system_viewer') {
+                $allowed = $user->viewsSystem($systemId);
+            }
         }
 
         return $allowed;
@@ -66,9 +70,13 @@ class SystemAdmin extends AbstractHelper
             return false;
         }
 
-        if (!$user->administersSystem($this->getActiveSystemId())) {
+        if ($user->getRole() == 'system_admin' && !$user->administersSystem($this->getActiveSystemId())) {
             return false;
 
+        }
+
+        if ($user->getRole() == 'system_viewer' && !$user->viewsSystem($this->getActiveSystemId())) {
+            return false;
         }
 
         if (!empty($user) && $allowed) {

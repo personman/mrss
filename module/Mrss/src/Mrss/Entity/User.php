@@ -630,6 +630,19 @@ class User implements UserInterface, ProviderInterface
     }
 
     /**
+     * Check to see if the user is a system admin for the given system
+     *
+     * @param $systemId
+     * @return bool
+     */
+    public function viewsSystem($systemId)
+    {
+        $systemIds = $this->getSystemsViewer(true);
+
+        return (in_array($systemId, $systemIds));
+    }
+
+    /**
      * @param array $systemIds
      * @return $this
      */
