@@ -56,7 +56,13 @@ class Line extends AbstractChart
 
         // Y axis
         $config['yAxis']['labels']['format'] = $this->convertFormatForAxisLabel($this->getYFormat());
-        $config['yAxis']['labels']['formatter'] = 'axisLabelFormatter';
+
+        if ($config['yAxis']['labels']['format'] != 'minuteSecondFormatter') {
+            $config['yAxis']['labels']['formatter'] = 'axisLabelFormatter';
+        } else {
+            unset($config['yAxis']['labels']['formatter']);
+        }
+
 
         // Tooltip
         $config['tooltip'] = array(
