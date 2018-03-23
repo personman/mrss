@@ -1432,7 +1432,7 @@ class ToolController extends BaseController
         $message = "$date - Test log message from toolController.";
         $this->getLog('error')->alert($message);
 
-        $this->flashMessenger()->addSuccessMessage("Wrote message to error.log: $message");
+        $this->flashMessenger()->addSuccessMessage("Wrote message to error.log: $message <a href='/tools/log'>Again.</a>");
         return $this->redirect()->toUrl('/tools');
     }
 
