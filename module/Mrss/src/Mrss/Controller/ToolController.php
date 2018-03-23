@@ -1428,11 +1428,12 @@ class ToolController extends BaseController
 
     public function logAction()
     {
+        $log = 'postback';
         $date = date('c');
         $message = "$date - Test log message from toolController.";
-        $this->getLog('error')->alert($message);
+        $this->getLog($log)->alert($message);
 
-        $this->flashMessenger()->addSuccessMessage("Wrote message to error.log: $message <a href='/tools/log'>Again.</a>");
+        $this->flashMessenger()->addSuccessMessage("Wrote message to $log.log: $message <a href='/tools/log'>Again.</a>");
         return $this->redirect()->toUrl('/tools');
     }
 
