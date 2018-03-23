@@ -26,6 +26,7 @@ use Zend\Log\Writer\Stream;
 class BaseController extends AbstractActionController
 {
     protected $activeSystemContainer;
+    protected $log = array();
 
     public function getActiveSystemContainer()
     {
@@ -320,18 +321,18 @@ class BaseController extends AbstractActionController
     /**
      * @return Logger
      */
-    protected function getLog()
+    protected function getLog($log = 'postback')
     {
-        if (empty($this->log)) {
-            $filename = 'postback.log';
+        if (empty($this->log[$log])) {
+            $filename = $log . '.log';
             $logger = new Logger;
             $writer = new Stream($filename);
             $logger->addWriter($writer);
 
-            $this->log = $logger;
+            $this->log[$log] = $logger;
         }
 
-        return $this->log;
+        return $this->log[$log];
     }
 
     protected function getPasswordResetKey($userId)

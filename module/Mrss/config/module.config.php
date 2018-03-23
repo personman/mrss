@@ -2493,6 +2493,15 @@ return array(
                             )
                         )
                     ),
+                    'log' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/log',
+                            'defaults' => array(
+                                'action' => 'log',
+                            )
+                        )
+                    ),
                 )
             ),
             'criteria' => array(

@@ -1426,6 +1426,16 @@ class ToolController extends BaseController
             ->setSQLLogger(null);
     }
 
+    public function logAction()
+    {
+        $date = date('c');
+        $message = "$date - Test log message from toolController.";
+        $this->getLog('error')->alert($message);
+
+        $this->flashMessenger()->addSuccessMessage("Wrote message to error.log: $message");
+        return $this->redirect()->toUrl('/tools');
+    }
+
     /**
      * @return \Mrss\Model\BenchmarkHeading
      */
