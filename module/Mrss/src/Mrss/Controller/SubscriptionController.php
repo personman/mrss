@@ -1151,7 +1151,7 @@ class SubscriptionController extends SubscriptionBaseController
 
         // Update the subscription sections
         $sections = $this->getSelectedSections($subscriptionDraft);
-        $subscription->setSections($sections);
+        $subscription->updateSections($sections);
 
         // Update the payment amount (new total)
         $this->oldTotal = $oldTotal = $subscription->getPaymentAmount();
