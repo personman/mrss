@@ -103,12 +103,12 @@ class NCCBPValidation extends AbstractValidation
                 'tot_operate_rev',
                 // Parts:
                 array(
-                    '$tuition_fees_sour',
-                    '$loc_sour',
-                    '$state_sour',
+                    'dollars_tuition_fees_sour',
+                    'dollars_loc_sour',
+                    'dollars_state_sour',
                     'private_sour',
-                    '$sales_sour',
-                    '$other_sour'
+                    'dollars_sales_sour',
+                    'dollars_other_sour'
                 )
             ),
         );
