@@ -7,6 +7,11 @@ allow from all
 </Files>
 
 
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+
 #favicon
 RewriteCond %{HTTP_HOST} ^maximizingresources.org$ [NC]
 RewriteRule ^favicon\.ico$ images/max-favicon.ico [L,NC]
