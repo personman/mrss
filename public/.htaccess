@@ -64,6 +64,10 @@ RewriteRule ^(.*)$ http://maximizingresources.org/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} nccwtbp\.org [NC]
 RewriteRule ^(.*)$ http://workforceproject.org/$1 [R=301,L]
 
+# Redirect subdomains that are not in use
+RewriteCond %{HTTP_HOST} mail\.nccbp\.org [NC]
+RewriteRule ^(.*)$ https://nccbp.org/$1 [R=301,L]
+
 # Redirect nccwtbp.org to workforceproject.org
 RewriteCond %{HTTP_HOST} ^(www\.)?nccbp\.org [NC]
 RewriteCond %{REQUEST_URI} ^(/about)$ [NC]
