@@ -1,7 +1,7 @@
 <h1><?php echo $this->translate('An error occurred') ?></h1>
 <h2><?php echo $this->message ?></h2>
 
-<p>Please make a note of the time of this error and provide it to NHEBI staff to help us identify the error in our logs: <?= date('c') ?>: <a href="mailto:dfergu15@jccc.edu?subject=Error report: <?= date('c') ?>&body=Please describe what you were trying to do when you received this error and provide any other details that might help us solve this problem. ">Report error</a>.</p>
+<p>Please make a note of the time of this error and provide it to our staff to help us identify the error in our logs: <?= date('c') ?>: <a href="mailto:<?= $this->studyConfig()->support_email ?>?subject=Error report: <?= date('c') ?>&body=Please describe what you were trying to do when you received this error and provide any other details that might help us solve this problem. ">Report error</a>.</p>
 
 <?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
 
