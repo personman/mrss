@@ -75,20 +75,6 @@ class ChartBuilder extends Report
             $color = $this->adjustBrightness($color, $lighten);
         }
 
-
-        if ($this->getStudyConfig()->hardcode_colors && !is_null($percentile)) {
-            //pr($percentile);
-
-            if ($percentile == 0) {
-                $color = '#70AD47';
-            } elseif ($percentile == 100) {
-                $color = '#5b9bd5';
-            } elseif ($percentile == 50) {
-                $color = '#9933FF';
-            }
-        }
-
-        //return '#FF0000';
         return $color;
     }
 
@@ -112,7 +98,7 @@ class ChartBuilder extends Report
         return $adjusted;
     }
 
-    public function getPeerColor($variation = false, $lighten = 0)
+    public function getPeerColor($variation = false, $lighten = 0, $percentile = null)
     {
         $color = '#8F7AB5';
         if ($variation) {
@@ -122,6 +108,19 @@ class ChartBuilder extends Report
         if ($lighten) {
             $color = $this->adjustBrightness($color, $lighten);
         }
+
+        if ($this->getStudyConfig()->hardcode_colors && !is_null($percentile)) {
+            //pr($percentile);
+
+            if ($percentile == 0) {
+                $color = '#70AD47';
+            } elseif ($percentile == 100) {
+                $color = '#5b9bd5';
+            } elseif ($percentile == 50) {
+                $color = '#9933FF';
+            }
+        }
+
 
         return $color;
     }

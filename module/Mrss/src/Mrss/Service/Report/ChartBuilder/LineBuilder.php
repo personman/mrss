@@ -333,7 +333,7 @@ class LineBuilder extends ChartBuilder
                     $series[] = array(
                         'name' => $this->getSeriesName($label, $dbColumn),
                         'data' => array_values($peerMedianData),
-                        'color' => $this->getPeerColor($i, $lighten)
+                        'color' => $this->getPeerColor($i, $lighten, $percentile)
                     );
 
                     $i++;
