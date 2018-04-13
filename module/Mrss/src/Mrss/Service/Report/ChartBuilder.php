@@ -63,7 +63,7 @@ class ChartBuilder extends Report
         return $this->peers;
     }
 
-    public function getNationalColor($variation = false, $lighten = 0)
+    public function getNationalColor($variation = false, $lighten = 0, $percentile = null)
     {
         $color = '#0065A1';
 
@@ -75,6 +75,20 @@ class ChartBuilder extends Report
             $color = $this->adjustBrightness($color, $lighten);
         }
 
+
+        if ($this->getStudyConfig()->hardcode_colors && !is_null($percentile)) {
+            //pr($percentile);
+
+            if ($percentile == 0) {
+                $color = '#70AD47';
+            } elseif ($percentile == 100) {
+                $color = '#5b9bd5';
+            } elseif ($percentile == 50) {
+                $color = '#9933FF';
+            }
+        }
+
+        //return '#FF0000';
         return $color;
     }
 

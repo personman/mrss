@@ -56,6 +56,7 @@ return array(
     'use_gravatar' => false,
     'benchmark_completion_heatmap' => false,
     'chart_colors' => '#9cc03e|#0065A1',
+    'hardcode_colors' => false,
     'head_logo_url' => '/',
     'national_report_name' => 'Report of National Aggregate Data',
     'your_institution_label' => 'Your Institution',

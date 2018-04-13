@@ -310,7 +310,7 @@ class LineBuilder extends ChartBuilder
                     $series[] = array(
                         'name' => $this->getSeriesName($nationalLabel, $dbColumn),
                         'data' => array_values($medianData),
-                        'color' => $this->getNationalColor($i, $lighten)
+                        'color' => $this->getNationalColor($i, $lighten, $percentile)
                     );
 
                     $i++;
@@ -357,10 +357,16 @@ class LineBuilder extends ChartBuilder
 
 
             if (!empty($peerGroup) && !empty($config['peerGroupAverage']) && !empty($peerMeansData)) {
-                $series[] = array(
+                $peerGroupAverage = array(
                     'name' => $this->getSeriesName($peerGroup->getName() . ' Average', $dbColumn),
-                    'data' => array_values($peerMeansData)
+                    'data' => array_values($peerMeansData),
                 );
+
+                if ($this->getStudyConfig()->hardcode_colors) {
+                    $peerGroupAverage['color'] = '#ed7d31';
+                }
+
+                $series[] = $peerGroupAverage;
             }
 
             $i++;
