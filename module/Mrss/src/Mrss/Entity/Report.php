@@ -67,6 +67,12 @@ class Report
     protected $user;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $displayFootnotes = true;
+
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $description;
@@ -279,6 +285,25 @@ class Report
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayFootnotes()
+    {
+        return $this->displayFootnotes;
+    }
+
+    /**
+     * @param mixed $displayFootnotes
+     * @return Report
+     */
+    public function setDisplayFootnotes($displayFootnotes)
+    {
+        $this->displayFootnotes = $displayFootnotes;
+
         return $this;
     }
 }

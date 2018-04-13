@@ -38,6 +38,7 @@ class Report extends AbstractForm
         }
         
         $this->addDescription();
+        $this->addFootnote();
     }
 
     public function addPublic()
@@ -57,6 +58,19 @@ class Report extends AbstractForm
         );
     }
 
+    public function addFootnote()
+    {
+        $this->add(
+            array(
+                'name' => 'displayFootnotes',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => 'Display Footnotes?'
+                )
+            )
+        );
+
+    }
 
     public function addPublicHidden()
     {
