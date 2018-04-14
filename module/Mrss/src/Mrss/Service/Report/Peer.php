@@ -299,10 +299,10 @@ class Peer extends Report
         $anonymous = $this->getStudyConfig()->anonymous_peers;
 
         if ($sort) {
+            $data = $this->sortWithKeys($data);
+
             if ($benchmark->getIncludeInBestPerformer() && !$benchmark->getHighIsBetter()) {
-                asort($data);
-            } else {
-                arsort($data);
+                $data = array_reverse($data);
             }
         }
 
@@ -330,6 +330,51 @@ class Peer extends Report
 
         return $dataWithLabels;
     }
+
+    /**
+     * In the unlikely event that two colleges have the same value, this sort method orders those equal colleges
+     * alphabetically by college name. So far, this should only apply to bond ratings.
+     * @param $data
+     * @return array
+     */
+    protected function sortWithKeys($data)
+    {
+        // First, convert the keys (college id) to part of the data
+        $newData = array();
+        foreach ($data as $key => $value) {
+            $newData[] = array(
+                'collegeId' => $key,
+                'value' => $value
+            );
+        }
+
+        // Now sort using an anonymous function
+        usort($newData, function($a, $b)
+        {
+            $aValue = floatval($a['value']);
+            $bValue = floatval($b['value']);
+
+            if ($aValue == $bValue) {
+                $aName = $this->getCollegeModel()->find($a['collegeId'])->getName();
+                $bName = $this->getCollegeModel()->find($b['collegeId'])->getName();
+
+                return ($aName > $bName);
+            } else {
+                return ($aValue < $bValue);
+            }
+
+        });
+
+        // Now convert back to $collegeId => $value structure
+        $newerData = array();
+        foreach ($newData as $item) {
+            $newerData[$item['collegeId']] = $item['value'];
+        }
+
+        return $newerData;
+    }
+
+
 
     public function getYourCollegeColor()
     {
