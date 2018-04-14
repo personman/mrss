@@ -119,7 +119,11 @@ class ReportItemController extends CustomReportController
         $footnotes = $this->subFootnoteVariables($footnotes, $year);
 
         if (empty($data)) {
-            $data = array();
+            $data = array(
+                'highlightMyData' => true
+            );
+
+            $form->setData($data);
         }
 
         $selectedExtraBenchmarks = array();

@@ -404,7 +404,8 @@ class Peer extends Report
         $title = null,
         $subtitle = null,
         $widthSetting = 'half',
-        $percentScaleZoom = false
+        $percentScaleZoom = false,
+        $highlightMyData = true
     ) {
         $benchmark = $benchmarks[0];
 
@@ -420,6 +421,8 @@ class Peer extends Report
 
         $chartXCategories = array();
 
+
+
         $i = 0;
         foreach ($series as $key => $serie) {
             $isYours = false;
@@ -434,7 +437,7 @@ class Peer extends Report
                 $label = $this->shortenCollegeName($name);
 
                 // Your college
-                if ($name == $this->currentCollege->getNameAndState()) {
+                if ($highlightMyData && $name == $this->currentCollege->getNameAndState()) {
                     $isYours = true;
                     $dataLabelEnabled = true;
                     $color = $this->getYourCollegeColor();

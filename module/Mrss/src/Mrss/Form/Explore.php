@@ -263,6 +263,21 @@ class Explore extends AbstractForm
             );
         }
 
+        if (!$this->studyConfig->anonymous_peers) {
+            $this->add(
+                array(
+                    'name' => 'highlightMyData',
+                    'type' => 'Zend\Form\Element\Checkbox',
+                    'options' => array(
+                        'label' => 'Highlight My Data'
+                    ),
+                    'attributes' => array(
+                        'id' => 'highlightMyData'
+                    )
+                )
+            );
+        }
+
         if ($this->studyConfig->use_structures) {
             $this->add(
                 array(
@@ -468,6 +483,10 @@ class Explore extends AbstractForm
 
         if ($filter->has('peerGroupAverage')) {
             $filter->get('peerGroupAverage')->setRequired(false);
+        }
+
+        if ($filter->has('highlightMyData')) {
+            $filter->get('highlightMyData')->setRequired(false);
         }
 
 

@@ -116,9 +116,13 @@ class PeerBuilder extends BarBuilder
         $allChartValues = $this->fillInGaps($allChartValues);
 
         $percentScaleZoom = $config['percentScaleZoom'];
+        $highlightMyData = true;
+        if (!$this->getStudyConfig()->anonymous_peers && empty($config['highlightMyData'])) {
+            $highlightMyData = false;
+        }
 
         $chart = $this->getPeerService()
-            ->getPeerBarChart($benchmarks, $allChartValues, $title, $subtitle, $this->getWidthSetting(), $percentScaleZoom);
+            ->getPeerBarChart($benchmarks, $allChartValues, $title, $subtitle, $this->getWidthSetting(), $percentScaleZoom, $highlightMyData);
 
         return $chart;
     }
