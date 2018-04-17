@@ -1498,7 +1498,17 @@ class SubscriptionController extends SubscriptionBaseController
             $amounts .= "Amount Due: $amountDue<br>\n";
         }
 
-        $userEmail = $dataUser->getEmail();
+        $userEmail = null;
+        if ($dataUser) {
+            $userEmail = $dataUser->getEmail();
+        }
+
+        if (empty($userEmail) && $dataUsers = $college->getDataUsers()) {
+            foreach ($dataUsers as $dUser) {
+                $userEmail = $dUser->getEmail();
+            }
+        }
+
         if (empty($userEmail) && $currentUser = $this->getCurrentUser()) {
             $userEmail = $currentUser->getEmail();
         }
