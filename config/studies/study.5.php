@@ -36,6 +36,9 @@ return array(
     'min_peers' => 0,
     'include_canada' => true,
     'chart_colors' => '#a2ce5d|#007ca0|#828387|#fbb41e',
+    'system_logos' => array(
+        1 => 'ValleyBenchmarkCities_Color.png'
+    ),
     'hardcode_colors' => true,
     'national_report_name' => 'Benchmark Report',
     'your_institution_label' => 'Your City',

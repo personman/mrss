@@ -16,6 +16,7 @@
 <?php
 $this->headLink()->appendStylesheet('/css/custom-report.css?v=6');
 $this->headLink()->appendStylesheet('/css/chosen.min.css');
+$this->headLink()->appendStylesheet('/css/spectrum.css');
 
 $this->headScript()->appendFile(
     '/js/report.js?v=7',
@@ -32,12 +33,17 @@ $this->headScript()->appendFile(
 );*/
 
 $this->headScript()->appendFile(
-    '/js/explore.js?v=39',// . microtime(1),
+    '/js/explore.js?v=39'. microtime(1),
     'text/javascript'
 );
 
 $this->headScript()->appendFile(
     '/ckeditor/ckeditor.js?v=2',
+    'text/javascript'
+);
+
+$this->headScript()->appendFile(
+    '/js/spectrum.js?v=2',
     'text/javascript'
 );
 
@@ -51,6 +57,8 @@ $this->headScript()->appendFile(
         var peerMembers = <?= json_encode($peerMembers) ?>;
         var originalFormData = <?= json_encode($formData) ?>;
         var selectedExtraBenchmarks = <?= json_encode(array_values($selectedExtraBenchmarks)) ?>;
+        var chartConfig = <?= json_encode($chart) ?>;
+
         //console.log(originalFormData['colleges'])
         <?php $this->headScript()->captureEnd() ?>
     </script>
@@ -73,6 +81,16 @@ $this->headScript()->appendFile(
                     <?= $this->chart($chart) ?>
                 <?php endif ?>
             </div>
+
+            <?php if (false): ?>
+            <div id="colors" style="margin-top: 20px; ">
+                <h2>Colors</h2>
+
+                <div id="colorSeries">
+
+                </div>
+            </div>
+            <?php endif ?>
             
             <div id="text-editor" style="display: none">
                 <form action="#">

@@ -179,8 +179,30 @@ class CustomReportController extends ReportController
         return array(
             'report' => $report,
             'print' => $print,
-            'printMedia' => $printMedia
+            'printMedia' => $printMedia,
+            'systemLogo' => $this->getSystemLogo($report)
         );
+    }
+
+    /**
+     * @param Report $report
+     * @return string
+     */
+    protected function getSystemLogo($report)
+    {
+        $logo = null;
+
+        if ($system = $report->getSystem()) {
+            $systemId = $system->getId();
+
+            $logos = $this->getStudyConfig()->system_logos;
+
+            if (!empty($logos[$systemId])) {
+                $logo = $logos[$systemId];
+            }
+        }
+
+        return $logo;
     }
 
     /**

@@ -677,11 +677,11 @@ $navigation = array(
                 'uri' => '/contact',
                 'class' => 'float-right'
             ),
-            'community' => array(
+            /*'community' => array(
                 'label' => 'Community Chat',
                 'uri' => '/community',
                 'class' => 'float-right community-menu'
-            ),
+            ),*/
             'help' => array(
                 'label' => 'Help',
                 'uri' => '#',

@@ -58,6 +58,7 @@ return array(
     'chart_colors' => '#9cc03e|#0065A1',
     'hardcode_colors' => false,
     'head_logo_url' => '/',
+    'system_logos' => array(),
     'national_report_name' => 'Report of National Aggregate Data',
     'your_institution_label' => 'Your Institution',
     'institution_label' => 'Institution',

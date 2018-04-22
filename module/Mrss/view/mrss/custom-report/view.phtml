@@ -14,8 +14,35 @@ $this->headScript()->appendFile(
     <script>
         <?php $this->headScript()->captureStart() ?>
         $(function() {
+            if (true) {
+                var systemLogo = '<?= $systemLogo ?>';
+
+                if (systemLogo) {
+                    // Move header logo to bottom
+                    var oldLogo = $('.header .logo-benchmark').clone();
+
+                    // Network/system logo
+                    $('.header .logo-benchmark').css('background-image', 'url(/images/' + systemLogo + ')');
+                    $('.header .logo-benchmark').css('height', '80px');
+                    $('.header .logo-benchmark').css('background-size', '150px');
+                    $('.header .logo-benchmark img').css('height', '80px');
+                    $('.header .logo-benchmark img').attr('src', '/images/' + systemLogo);
+                    $('.container.header').css('margin-left', '40px');
+
+                    oldLogo.find('img').css('height', '40px');
+                    oldLogo.find('img').css('margin-left', '40px');
+                    $('#content').append(oldLogo);
+
+                }
+
+            }
+
+
+            // Show print
             setTimeout(function() {window.print()}, 2000);
         });
+
+
         <?php $this->headScript()->captureEnd() ?>
     </script>
 
