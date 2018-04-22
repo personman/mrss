@@ -1498,6 +1498,21 @@ class SubscriptionController extends SubscriptionBaseController
             $amounts .= "Amount Due: $amountDue<br>\n";
         }
 
+        $userEmail = null;
+        if ($dataUser) {
+            $userEmail = $dataUser->getEmail();
+        }
+
+        if (empty($userEmail) && $dataUsers = $college->getDataUsers()) {
+            foreach ($dataUsers as $dUser) {
+                $userEmail = $dUser->getEmail();
+            }
+        }
+
+        if (empty($userEmail) && $currentUser = $this->getCurrentUser()) {
+            $userEmail = $currentUser->getEmail();
+        }
+
         $body =
             "Study: {$study->getName()}<br>\n" .
             "Year: $year<br>\n" .
@@ -1511,7 +1526,7 @@ class SubscriptionController extends SubscriptionBaseController
             "Zip: {$college->getZip()}<br>\n" .
             "Digital Signature: {$subscription->getDigitalSignature()}<br>\n" .
             "Title: {$subscription->getDigitalSignatureTitle()}<br>\n" .
-            "Email: {$this->getCurrentUser()->getEmail()}<br>\n";
+            "Email: {$userEmail}<br>\n";
 
         if ($sections = $subscription->getSectionNames()) {
             $body .= "Module(s): " . $sections . "<br>\n";
