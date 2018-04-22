@@ -50,3 +50,6 @@ a[href]:after {
     margin: 10mm 10mm 10mm 10mm;
 }
 
+tspan {
+    font-size: 155% !important;
+}
