@@ -310,9 +310,12 @@ class Peer extends Report
 
         $i = 1;
         foreach ($data as $collegeId => $value) {
+            $label = null;
             if (!$anonymous) {
-                $college = $this->getCollegeModel()->find($collegeId);
-                $label = $college->getNameAndState();
+                if ($college = $this->getCollegeModel()->find($collegeId)) {
+                    $label = $college->getNameAndState();
+                }
+
             } elseif ($collegeId == $currentCollege->getId()) {
                 $label = $currentCollege->getNameAndState();
             } else {
