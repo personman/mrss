@@ -279,16 +279,6 @@ class LineBuilder extends ChartBuilder
             $peerIds = $dataForBenchmark['peerIds'];
             $peerMeansData = $dataForBenchmark['peerMeansData'];
 
-            if (empty($config['hideMine'])) {
-                $name = $this->getSeriesName($this->getCollege()->getNameAndState(), $dbColumn);
-
-                $series[] = array(
-                    'name' => $name,
-                    'data' => array_values($data),
-                    'color' => $this->getYourColor($i)
-                );
-            }
-
             if (empty($config['hideNational'])) {
                 $i = 1;
                 foreach ($mediansData as $percentile => $medianData) {
@@ -367,6 +357,16 @@ class LineBuilder extends ChartBuilder
                 }
 
                 $series[] = $peerGroupAverage;
+            }
+
+            if (empty($config['hideMine'])) {
+                $name = $this->getSeriesName($this->getCollege()->getNameAndState(), $dbColumn);
+
+                $series[] = array(
+                    'name' => $name,
+                    'data' => array_values($data),
+                    'color' => $this->getYourColor($i)
+                );
             }
 
             $i++;
