@@ -437,7 +437,7 @@ class CustomReportController extends ReportController
                 $data = $form->getData();
                 $this->peerGroupIdToCopy = $reportId;
 
-                return $this->copyReport($report, $data['target'], $data['group']);
+                return $this->copyReport($report, $data['target'], $data['group'], $data['addThisCollege']);
             }
         }
 
@@ -480,7 +480,7 @@ class CustomReportController extends ReportController
         return $form;
     }
 
-    public function copyReport(Report $report, $targetPeerGroupId, $peerGroup)
+    public function copyReport(Report $report, $targetPeerGroupId, $peerGroup, $addThisCollege = false)
     {
         $this->longRunningScript();
         $start = microtime(true);
@@ -503,7 +503,7 @@ class CustomReportController extends ReportController
                     }
 
                     if (true) {
-                        $this->copyCustomReport($report, $user);
+                        $this->copyCustomReport($report, $user, $addThisCollege);
                         $count++;
                     } else {
                         $duplicatesSkipped++;
@@ -574,12 +574,37 @@ class CustomReportController extends ReportController
         */
     }
 
+    protected function addThisCollegeToPeerGroup(PeerGroup $peerGroup)
+    {
+        $peers = $peerGroup->getPeers();
+        $sampleGroup = $this->getPeerGroupModel()->find($this->peerGroupIdToCopy);
+
+        $sourceCollege = $sampleGroup->getCollege();
+        if (empty($sourceCollege)) {
+            $sourceCollege = $sampleGroup->getUser()->getCollege();
+        }
+
+        if (!empty($sourceCollege)) {
+            $sourceCollegeId = $sourceCollege->getId();
+
+            if (!in_array($sourceCollege, $peers)) {
+                $peers[] = $sourceCollegeId;
+            }
+        }
+
+        $peerGroup->setPeers($peers);
+        $this->getPeerGroupModel()->save($peerGroup);
+        $this->getPeerGroupModel()->getEntityManager()->flush();
+
+        return $peerGroup;
+    }
+
     /**
      * @param Report $sourceReport
      * @param User $user
      * @return bool
      */
-    protected function copyCustomReport(Report $sourceReport, $user)
+    protected function copyCustomReport(Report $sourceReport, $user, $addThisCollege = false)
     {
         // Don't copy to yourself
         if ($sourceReport->getUser()->getId() == $user->getId()) {
@@ -588,10 +613,13 @@ class CustomReportController extends ReportController
 
         // Get or create the sample peer group.
         if ($peerGroup = $this->getSamplePeerGroup($user)) {
+            if ($addThisCollege) {
+                $peerGroup = $this->addThisCollegeToPeerGroup($peerGroup);
+            }
             $peerGroupId = $peerGroup->getId();
         } else {
             //$peerGroupIdToCopy = null; // Peer group for sample reports
-            $peerGroupId = $this->copyPeerGroup($this->peerGroupIdToCopy, $user);
+            $peerGroupId = $this->copyPeerGroup($this->peerGroupIdToCopy, $user, $addThisCollege);
         }
 
 
@@ -682,7 +710,7 @@ class CustomReportController extends ReportController
      * @return null
      * @internal param College $college
      */
-    protected function copyPeerGroup($peerGroupIdToCopy, User $user)
+    protected function copyPeerGroup($peerGroupIdToCopy, User $user, $addThisCollege = false)
     {
         $newPeerGroupId = null;
         if (!empty($peerGroupIdToCopy)) {
@@ -692,6 +720,22 @@ class CustomReportController extends ReportController
             // Remove the owning college from the peer group
             if (($key = array_search($user->getCollege()->getId(), $peers)) !== false) {
                 unset($peers[$key]);
+            }
+
+            // Add the source college to the destination peer group?
+            if ($addThisCollege) {
+                $sourceCollege = $sampleGroup->getCollege();
+                if (empty($sourceCollege)) {
+                    $sourceCollege = $sampleGroup->getUser()->getCollege();
+                }
+
+                if (!empty($sourceCollege)) {
+                    $sourceCollegeId = $sourceCollege->getId();
+
+                    if (!in_array($sourceCollege, $peers)) {
+                        $peers[] = $sourceCollegeId;
+                    }
+                }
             }
 
             // Create the new peer group
