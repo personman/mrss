@@ -350,9 +350,13 @@ class LineBuilder extends ChartBuilder
                         $years = $this->getYears();
                         $data = $this->getDataForCollege($dbColumn, $college, $years);
 
+                        $seriesName = $this->getSeriesName($college->getNameAndState(), $dbColumn);
+                        $seriesColor = $this->getColorByName($seriesName);
+
                         $series[] = array(
-                            'name' => $this->getSeriesName($college->getNameAndState(), $dbColumn),
+                            'name' => $seriesName,
                             'data' => array_values($data),
+                            'color' => $seriesColor
                         );
                     }
                 }
