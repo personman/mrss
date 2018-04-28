@@ -125,6 +125,24 @@ class ChartBuilder extends Report
         return $color;
     }
 
+    public function getColorByName($name)
+    {
+        $config = $this->getConfig();
+        $colors = array();
+        $color = null;
+
+        if (!empty($config['colors'])) {
+            $colors = $config['colors'];
+            $colors = json_decode($colors, true);
+
+            if (!empty($colors[$name])) {
+                $color = $colors[$name];
+            }
+        }
+
+        return $color;
+    }
+
     public function getFootnotes()
     {
         $this->substituteVariablesInFootnotes();

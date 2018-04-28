@@ -29,7 +29,87 @@ $(function() {
     })
 
     repopulateColleges();
+
+    setupColorButtons();
 });
+
+function setupColors()
+{
+    if ($('#colors').length) {
+        var div = $('#colorSeries');
+
+        $.each(chartConfig['series'], function (i, e) {
+            //console.log(e.name)
+
+            div.append($('<div />').html('<input type="text" id="color-' + i + '" value="' + e.color + '" name="color[' + e.name + '"> ' + '<span class="colorName">' + e.name + '</span>'));
+
+            $("#color-" + i).spectrum({
+                color: e.color,
+                preferredFormat: "hex",
+                showInput: true,
+                showPalette: true,
+                change: function (color) {
+                    // @todo: update chart and form
+                    updateColorField(color, e.name);
+                    //$("#basic-log").text("change called: " + color.toHexString());
+                }
+            });
+
+            //console.log(e);
+
+            // Add submit button that just submits the form
+            //div.append('<div />').html('<a href="#"')
+        });
+    }
+}
+
+function setupColorButtons()
+{
+    // First, the button to show the controls
+    $('#customizeColors').click(function() {
+        //console.log('clicked');
+        $('#colors').show();
+        setupColors();
+        $('#customizeColors').hide();
+        return false;
+    });
+
+    // Then the button to save
+    $('#saveColors').click(function() {
+        $('#explore').submit();
+        //$('#submitButton').click();
+        return false;
+    })
+}
+
+/**
+ * Loop over each color and add it to the JSON in the form
+ * @param color
+ * @param name
+ */
+function updateColorField(color, name)
+{
+    var colorField = $('#colorField');
+    var colorJson = colorField.val();
+
+    var colors = {};
+    if (colorJson) {
+        colors = $.parseJSON(colorJson);
+    }
+
+    $('#colors').find('div').each(function(i, colorDiv) {
+        var oneColor = $(colorDiv).find('input').val();
+        var oneName = $(colorDiv).find('span').html();
+
+        colors[oneName] = oneColor;
+    });
+
+
+    // Update the form
+    colorField.val(JSON.stringify(colors));
+
+    //console.log(colorField.val());
+}
 
 function setUpSelects()
 {

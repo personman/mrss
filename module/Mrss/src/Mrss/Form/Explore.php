@@ -31,6 +31,7 @@ class Explore extends AbstractForm
         $this->addPeerGroupDropdown($peerGroups, $colleges);
         $this->addAdvancedFields($benchmarks, $years);
         $this->addMoreAdvancedFields($allBreakpoints);
+        $this->addColorField();
 
         $this->add($this->getButtons());
     }
@@ -498,6 +499,21 @@ class Explore extends AbstractForm
             $filter->get('benchmark2' . $key)->setRequired(false);
         }
         return $filter;
+    }
+
+    protected function addColorField()
+    {
+        $this->add(
+            array(
+                'name' => 'colors',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'id' => 'colorField'
+                )
+
+            )
+        );
+
     }
 
     public static function getPresentationOptions($includeTrends)
