@@ -628,6 +628,7 @@ class CustomReportController extends ReportController
 
         $report->setName($sourceReport->getName());
         $report->setDescription($sourceReport->getDescription());
+        $report->setDisplayFootnotes($sourceReport->getDisplayFootnotes());
         $report->setSourceReportId($sourceReport->getId());
 
         $this->getReportModel()->save($report);
