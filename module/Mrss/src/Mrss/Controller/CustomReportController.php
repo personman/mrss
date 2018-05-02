@@ -8,6 +8,7 @@ use Mrss\Form\PublishCustomReport;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Mrss\Form\Report as ReportForm;
 use Mrss\Entity\Report;
+use Mrss\Entity\College;
 use Mrss\Entity\ReportItem;
 use Mrss\Entity\User as User;
 use Zend\View\Model\ViewModel;
@@ -774,8 +775,11 @@ class CustomReportController extends ReportController
         //pr($targetCollege->getId());
         //pr($config);
 
-        $config = $this->handleItemColleges($config, $sourceCollege, $targetCollege);
 
+        $config = $this->handleItemColleges($config, $sourceCollege, $targetCollege);
+        $config = $this->handleItemCollegeColor($config, $sourceCollege, $targetCollege);
+
+        //prd($config);
         //prd($config);
 
         $item = $this->getOrCreateItem($sourceItem, $newReport->getId());
@@ -812,6 +816,29 @@ class CustomReportController extends ReportController
             $newColleges[] = $sourceCollege->getId();
 
             $config['colleges'] = $newColleges;
+        }
+
+        return $config;
+    }
+
+    protected function handleItemCollegeColor($config, College $sourceCollege, College $targetCollege)
+    {
+        // Only do this if My Data is not hidden
+        if (empty($config['hideMine']) && !empty($config['colors'])) {
+            $colors = json_decode($config['colors'], true);
+
+            $sourceName = $sourceCollege->getNameAndState();
+            $targetName = $targetCollege->getNameAndState();
+
+            if (!empty($colors[$sourceName])) {
+                $myDataColor = $colors[$sourceName];
+                unset($colors[$sourceName]);
+
+                $colors[$targetName] = $myDataColor;
+
+                $config['colors'] = json_encode($colors);
+            }
+
         }
 
         return $config;
