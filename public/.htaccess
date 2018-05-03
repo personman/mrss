@@ -180,3 +180,8 @@ ExpiresDefault "access plus 1 month"
 </IfModule>
 
 
+deny from 186.137.195.14
+deny from 51.15.251.229
+deny from 152.169.174.45
+deny from 89.146.133.220
+deny from 189.26.67.192

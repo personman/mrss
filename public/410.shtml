@@ -1,0 +1,7 @@
+<h2>410 Gone</h2>
+
+The requested resource
+<!--#echo var="REQUEST_URI" -->
+is no longer available on this server and there is no forwarding address. Please remove all references to this resource.
+
+Try the <a href="/">home page</a>.
