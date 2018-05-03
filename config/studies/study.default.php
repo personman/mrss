@@ -56,6 +56,7 @@ return array(
     'use_gravatar' => false,
     'benchmark_completion_heatmap' => false,
     'chart_colors' => '#9cc03e|#0065A1',
+    'allow_custom_colors' => false,
     'hardcode_colors' => false,
     'head_logo_url' => '/',
     'system_logos' => array(),

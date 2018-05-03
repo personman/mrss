@@ -20,6 +20,7 @@ class PublishCustomReport extends AbstractForm
         $this->addBasicFields();
         $this->addPeerGroupTarget();
         $this->addPeerGroupGroup();
+        $this->addThisCollegeCheckbox();
 
         $this->add($this->getButtonFieldset('Copy'));
 
@@ -65,6 +66,22 @@ class PublishCustomReport extends AbstractForm
                 'attributes' => array(
                     'id' => 'group',
                     'options' => $this->getPeerGroups()
+                )
+            )
+        );
+    }
+
+    protected function addThisCollegeCheckbox()
+    {
+        $thisCollegeName = $this->user->getCollege()->getName();
+
+        $this->add(
+            array(
+                'name' => 'addThisCollege',
+                'type' => 'Checkbox',
+                'options' => array(
+                    'label' => "Add $thisCollegeName to Peer Group to Include in the Report",
+                    //'help-block' => "Should your college be added to the p"
                 )
             )
         );

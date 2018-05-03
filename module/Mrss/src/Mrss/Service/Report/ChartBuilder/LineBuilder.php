@@ -297,10 +297,16 @@ class LineBuilder extends ChartBuilder
                     $nationalLabel = "$nationalOrNetwork $label";
                     $lighten = $i * 5;
 
+                    $seriesName = $this->getSeriesName($nationalLabel, $dbColumn);
+                    $seriesColor = $this->getColorByName($seriesName);
+                    if (!$seriesColor) {
+                        $seriesColor = $this->getNationalColor($i, $lighten, $percentile);
+                    }
+
                     $series[] = array(
-                        'name' => $this->getSeriesName($nationalLabel, $dbColumn),
+                        'name' => $seriesName,
                         'data' => array_values($medianData),
-                        'color' => $this->getNationalColor($i, $lighten, $percentile)
+                        'color' => $seriesColor
                     );
 
                     $i++;
@@ -320,10 +326,17 @@ class LineBuilder extends ChartBuilder
                     $lighten = $i * 5;
 
                     $label = $peerGroup->getName() . ' ' . $label;
+
+                    $seriesName = $this->getSeriesName($label, $dbColumn);
+                    $seriesColor = $this->getColorByName($seriesName);
+                    if (!$seriesColor) {
+                        $seriesColor = $this->getPeerColor($i, $lighten, $percentile);
+                    }
+
                     $series[] = array(
-                        'name' => $this->getSeriesName($label, $dbColumn),
+                        'name' => $seriesName,
                         'data' => array_values($peerMedianData),
-                        'color' => $this->getPeerColor($i, $lighten, $percentile)
+                        'color' => $seriesColor
                     );
 
                     $i++;
@@ -337,9 +350,13 @@ class LineBuilder extends ChartBuilder
                         $years = $this->getYears();
                         $data = $this->getDataForCollege($dbColumn, $college, $years);
 
+                        $seriesName = $this->getSeriesName($college->getNameAndState(), $dbColumn);
+                        $seriesColor = $this->getColorByName($seriesName);
+
                         $series[] = array(
-                            'name' => $this->getSeriesName($college->getNameAndState(), $dbColumn),
+                            'name' => $seriesName,
                             'data' => array_values($data),
+                            'color' => $seriesColor
                         );
                     }
                 }
@@ -347,25 +364,35 @@ class LineBuilder extends ChartBuilder
 
 
             if (!empty($peerGroup) && !empty($config['peerGroupAverage']) && !empty($peerMeansData)) {
+                $seriesName = $this->getSeriesName($peerGroup->getName() . ' Average', $dbColumn);
+
+                $seriesColor = $this->getColorByName($seriesName);
+                if (empty($seriesColor) && $this->getStudyConfig()->hardcode_colors) {
+                    $seriesColor = '#ed7d31';
+                }
+
+
                 $peerGroupAverage = array(
-                    'name' => $this->getSeriesName($peerGroup->getName() . ' Average', $dbColumn),
+                    'name' => $seriesName,
                     'data' => array_values($peerMeansData),
+                    'color' => $seriesColor
                 );
 
-                if ($this->getStudyConfig()->hardcode_colors) {
-                    $peerGroupAverage['color'] = '#ed7d31';
-                }
 
                 $series[] = $peerGroupAverage;
             }
 
             if (empty($config['hideMine'])) {
                 $name = $this->getSeriesName($this->getCollege()->getNameAndState(), $dbColumn);
+                $seriesColor = $this->getColorByName($name);
+                if (!$seriesColor) {
+                    $seriesColor = $this->getYourColor($i);
+                }
 
                 $series[] = array(
                     'name' => $name,
                     'data' => array_values($data),
-                    'color' => $this->getYourColor($i)
+                    'color' => $seriesColor
                 );
             }
 

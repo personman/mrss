@@ -82,12 +82,22 @@ $this->headScript()->appendFile(
                 <?php endif ?>
             </div>
 
-            <?php if (false): ?>
-            <div id="colors" style="margin-top: 20px; ">
+            <?php if ($this->studyConfig()->allow_custom_colors): ?>
+                <div style="margin-top: 15px">
+                    <a href="#" class="btn btn-default" id="customizeColors">
+                        Customize Colors
+                    </a>
+                </div>
+
+            <div id="colors" style="margin-top: 20px; display:none">
                 <h2>Colors</h2>
 
                 <div id="colorSeries">
 
+                </div>
+
+                <div style="margin-top: 15px">
+                    <a href="#" class="btn btn-default" id="saveColors">Save</a>
                 </div>
             </div>
             <?php endif ?>

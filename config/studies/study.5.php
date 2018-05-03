@@ -36,6 +36,7 @@ return array(
     'min_peers' => 0,
     'include_canada' => true,
     'chart_colors' => '#a2ce5d|#007ca0|#828387|#fbb41e',
+    'allow_custom_colors' => true,
     'system_logos' => array(
         1 => 'ValleyBenchmarkCities_Color.png'
     ),
