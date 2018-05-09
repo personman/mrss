@@ -411,6 +411,26 @@ class SubscriptionController extends SubscriptionBaseController
         return $viewModel->setTemplate($template);
     }
 
+    public function agreementPublicAction()
+    {
+        $viewModel = new ViewModel(
+            array(
+                'form' => null,
+                'subscription' => null,
+                'isRenewal' => false,
+                'paymentAmount' => null
+            )
+        );
+
+        // Set the template
+        $template = 'mrss/subscription/agreement';
+        if ($configTemplate = $this->getStudyConfig()->agreement_template) {
+            $template = 'mrss/subscription/' . $configTemplate;
+        }
+
+        return $viewModel->setTemplate($template);
+    }
+
     public function modulesAction()
     {
         $study = $this->getStudy();

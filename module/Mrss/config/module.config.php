@@ -512,6 +512,17 @@ return array(
                     )
                 )
             ),
+            'agreement' => array(
+                'type' => 'segment',
+                'priority' => 10,
+                'options' => array(
+                    'route' => '/agreement',
+                    'defaults' => array(
+                        'controller' => 'subscription',
+                        'action' => 'agreementPublic'
+                    )
+                ),
+            ),
             'subscribe' => array(
                 'type' => 'segment',
                 'priority' => 10,

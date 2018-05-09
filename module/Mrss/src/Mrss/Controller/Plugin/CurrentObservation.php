@@ -48,8 +48,14 @@ class CurrentObservation extends AbstractPlugin
      */
     public function getCurrentObservation($year = null)
     {
+        $college = $this->getCurrentCollegePlugin()->getCurrentCollege();
+
+        if (empty($college)) {
+            return null;
+        }
+
         // Find the observation by the year and the user's college
-        $collegeId = $this->getCurrentCollegePlugin()->getCurrentCollege()->getId();
+        $collegeId = $college->getId();
 
         if ($year === null) {
             $config = $this->getStudyConfig();
