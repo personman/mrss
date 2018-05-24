@@ -17,7 +17,8 @@ class NCCBPValidation extends AbstractValidation
             $this->addIssue($message, $code, $form);
         }
 
-        if (null !== $this->observation->get('dollars_tuition_fees_sour')) {
+        // Disabled. Caused confusion
+        if (false &&null !== $this->observation->get('dollars_tuition_fees_sour')) {
             $message = 'Under revenue sources, include all revenue, even if it is labeled as “non-operating” ' .
                 'on your financial statements.';
             $code = "auto_revenue_sources";
