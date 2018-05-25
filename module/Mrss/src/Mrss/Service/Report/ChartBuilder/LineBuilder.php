@@ -348,14 +348,14 @@ class LineBuilder extends ChartBuilder
                     foreach ($config['colleges'] as $collegeId) {
                         $college = $this->getCollegeModel()->find($collegeId);
                         $years = $this->getYears();
-                        $data = $this->getDataForCollege($dbColumn, $college, $years);
+                        $collegeData = $this->getDataForCollege($dbColumn, $college, $years);
 
                         $seriesName = $this->getSeriesName($college->getNameAndState(), $dbColumn);
                         $seriesColor = $this->getColorByName($seriesName);
 
                         $series[] = array(
                             'name' => $seriesName,
-                            'data' => array_values($data),
+                            'data' => array_values($collegeData),
                             'color' => $seriesColor
                         );
                     }

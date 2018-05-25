@@ -302,7 +302,7 @@ class Peer extends Report
             $data = $this->sortWithKeys($data);
 
             if ($benchmark->getIncludeInBestPerformer() && !$benchmark->getHighIsBetter()) {
-                $data = array_reverse($data);
+                $data = array_reverse($data, TRUE);
             }
         }
 
