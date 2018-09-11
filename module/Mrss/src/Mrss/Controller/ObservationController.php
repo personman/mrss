@@ -788,7 +788,7 @@ class ObservationController extends BaseController
         return $message;
     }
 
-    protected function getDataEntryLayout(BenchmarkGroup $benchmarkGroup)
+    protected function getDataEntryLayout($benchmarkGroup)
     {
         $studyConfig = $this->getStudyConfig();
 
