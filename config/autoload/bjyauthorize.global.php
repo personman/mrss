@@ -145,7 +145,7 @@ return array(
                 // Only authenticated users can look at these:
                 array(
                     'controller' => 'users',
-                    'action' => array('account', 'accountedit', 'definitions', 'unimpersonate'),
+                    'action' => array('account', 'accountedit', 'definitions', 'unimpersonate', 'accountSettings'),
                     'roles' => array('user')
                 ),
                 array(
