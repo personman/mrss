@@ -49,7 +49,7 @@ class PeerBuilder extends BarBuilder
 
             $includedPeers = array();
             $peerGroupName = null;
-            if ($peerGroup = $this->getPeerGroupModel()->find($peerGroupId)) {
+            if ($peerGroupId && $peerGroup = $this->getPeerGroupModel()->find($peerGroupId)) {
                 $peerGroupName = $peerGroup->getName();
 
                 // Loop over peers
