@@ -618,7 +618,6 @@ class ObservationController extends BaseController
                 $changeSet = $observationAudit
                     ->logChangesNew($oldData, $newData, 'dataEntry', $subscription);
 
-
                 $this->getServiceLocator()->get('computedFields')
                     ->calculateAllForObservation($observation);
 

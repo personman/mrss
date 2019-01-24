@@ -335,7 +335,7 @@ class Subscription extends AbstractModel
         // The query
         $qb->select('DISTINCT(year)');
         $qb->from('subscriptions', 's');
-        $qb->andWhere('study_id = :study_id');
+        $qb->where('study_id = :study_id');
         $qb->setParameter('study_id', $study->getId());
         $qb->orderBy('year', 'DESC');
 

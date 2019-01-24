@@ -533,12 +533,14 @@ class Subscription
             $field = 'benchmark';
         } else {
             $field = 'dbColumn';
+            $benchmark = trim($benchmark);
         }
+
+        $datum = null;
 
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq($field, $benchmark));
 
-        $datum = null;
         if ($data) {
             $datums = $data->matching($criteria);
             if ($datums && $datums->count() > 0) {
@@ -546,9 +548,18 @@ class Subscription
             }
         }
 
+        /*foreach ($data as $oneDatum) {
+            //pr($oneDatum->getDbColumn());
+            if ($oneDatum->getDbColumn() == $benchmark) {
+                $datum = $oneDatum;
+                if ($benchmark == 'vbc_sust_effluentEnvironmental') print('found it');
+                break;
+            }
+        }*/
+
         if (false && $benchmark == 'ipeds_enr') {
             echo 'count: ';
-            pr($datums->count());
+            //pr($datums->count());
             pr($datum->getId());
             pr($datum->getSubscription()->getId());
             //pr($criteria);
