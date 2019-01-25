@@ -27,7 +27,7 @@ class ToolController extends BaseController
     public function indexAction()
     {
 
-        $this->removeDuplicates();
+        //$this->removeDuplicates();
         $baseTime = round(microtime(1) - REQUEST_MICROTIME, 3);
         $loadAverage = sys_getloadavg();
         $loadAverage = array_map('round', $loadAverage, array(2, 2, 2));
