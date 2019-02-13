@@ -17,7 +17,7 @@ return array(
     'news_page_id' => 65,
     'enable_min_max_breakpoints' => true,
     'allow_public_custom_report' => true,
-    'benchmark_completion_heatmap' => true,
+    'benchmark_completion_heatmap' => false,
     'college_report_access_checkbox' => true,
     'percent_change_report_columns' => array(
     ),

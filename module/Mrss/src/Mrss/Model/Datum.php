@@ -134,7 +134,7 @@ having count > 1;";
                 $dupeRemoved = false;
                 foreach ($duplicates as $datum) {
                     $value = $datum->getValue();
-                    if (!$dupeRemoved && $value !== null) {
+                    if (!$dupeRemoved && $value) {
                         // Keep this one. Trim the dbColumn (probable cause of issue)
                         $datum->setDbColumn(trim($datum->getDbColumn()));
                         $dupeRemoved = true;

@@ -503,8 +503,6 @@ class Peer extends Report
             }
         }
 
-
-
         $barChart = new Bar;
         $barChart->setTitle($title)
             ->setSubtitle($subtitle)
