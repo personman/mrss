@@ -598,6 +598,8 @@ class Module
                         ->get('currentStudy');
                     $helper->setCurrentStudyPlugin($plugin);
 
+                    $helper->setStudyConfig($sm->getServiceLocator()->get('study'));
+
                     $systemModel = $sm->getServiceLocator()->get('model.system');
                     $helper->setSystemModel($systemModel);
 

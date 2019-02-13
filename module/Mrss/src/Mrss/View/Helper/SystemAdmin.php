@@ -35,6 +35,8 @@ class SystemAdmin extends AbstractHelper
 
     protected $systemModel;
 
+    protected $studyConfig;
+
     public function __invoke($allowed = false)
     {
 
@@ -104,15 +106,35 @@ class SystemAdmin extends AbstractHelper
                 $returnOr = "<a href='$overviewUrl'>return to the $systemName system</a> or ";
             }
 
+            $label = $this->getInstitutionLabel();
+
             $html = "<div class='well system-impersonation'>
                 You are working as <strong>$collegeName</strong>. You
-                may $returnOr switch to another institution:
+                may $returnOr switch to another $label:
                 $form
             </div>";
 
         }
 
         return $html;
+    }
+
+    protected function getInstitutionLabel($addIndefiniteArticle = false)
+    {
+        $label = $this->getStudyConfig()->institution_label;
+        $label = strtolower($label);
+
+        if ($addIndefiniteArticle) {
+            $vowels = array('a', 'e', 'i', 'o', 'u');
+            $article = 'a';
+            if (in_array($label[0], $vowels)) {
+                $article = 'an';
+            }
+
+            $label = "$article $label";
+        }
+
+        return $label;
     }
 
     public function getOverviewUrl()
@@ -141,12 +163,15 @@ class SystemAdmin extends AbstractHelper
             $value = $college->getId();
         }
 
+        $institutionLabel = $this->getInstitutionLabel(true);
+
+
         $form->add(
             array(
                 'name' => 'college_id',
                 'type' => 'Select',
                 'options' => array(
-                    'empty_option' => '== Choose an institution. ==',
+                    'empty_option' => "== Choose $institutionLabel . ==",
                 ),
                 'attributes' => array(
                     'value' => $value,
@@ -309,5 +334,24 @@ class SystemAdmin extends AbstractHelper
     public function setSystemModel($systemModel)
     {
         $this->systemModel = $systemModel;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStudyConfig()
+    {
+        return $this->studyConfig;
+    }
+
+    /**
+     * @param mixed $studyConfig
+     * @return $this
+     */
+    public function setStudyConfig($studyConfig)
+    {
+        $this->studyConfig = $studyConfig;
+
+        return $this;
     }
 }
