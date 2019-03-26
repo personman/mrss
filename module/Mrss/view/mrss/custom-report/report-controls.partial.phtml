@@ -4,7 +4,7 @@
     <a href="<?= $this->url('reports/custom/public', array('id' => $report->getId())) ?>"
        class="btn btn-default"
        title="Public URL of report.">
-        <span class="glyphicon glyphicon-share"></span>
+        <span class="glyphicon glyphicon-globe"></span>
         Public
     </a>
     <?php endif ?>
@@ -38,10 +38,17 @@
     <a href="<?= $this->url('reports/custom/publish', array('id' => $report->getId())) ?>"
        class="btn btn-default<?php if ($active == 'copy') echo ' active' ?>"
        title="Copy this report to other <?= $this->studyConfig()->institutions_label ?>.">
-        <span class="glyphicon glyphicon-duplicate"></span>
-        Copy
+        <span class="glyphicon glyphicon-share"></span>
+        Publish
     </a>
     <?php endif ?>
+
+    <a href="<?= $this->url('reports/custom/duplicate', array('id' => $report->getId())) ?>"
+       class="btn btn-default"
+       title="Make a duplicate copy of this for yourself.">
+        <span class="glyphicon glyphicon-duplicate"></span>
+        Duplicate
+    </a>
 
     <a href="<?= $this->url('reports/custom/delete', array('id' => $report->getId())) ?>"
        class="btn btn-default delete-confirm"

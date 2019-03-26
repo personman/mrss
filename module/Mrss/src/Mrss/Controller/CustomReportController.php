@@ -448,6 +448,25 @@ class CustomReportController extends ReportController
         );
     }
 
+    public function duplicateAction()
+    {
+        $reportId = $this->params()->fromRoute('id');
+        $newReportId = null;
+        if ($sourceReport = $this->getReportModel()->find($reportId)) {
+            if ($newReportId = $this->copyCustomReport($sourceReport, $this->getCurrentUser(), false, true)) {
+                $message = "Your report has been duplicated. Please rename it below.";
+            }
+        }
+
+        if (!empty($message)) {
+            $this->flashMessenger()->addSuccessMessage($message);
+            return $this->redirect()->toRoute('reports/custom/edit', array('id' => $newReportId));
+        } else {
+            $this->flashMessenger()->addErrorMessage('Problem duplicating report.');
+            return $this->redirect()->toRoute('reports/custom');
+        }
+    }
+
     /**
      * Can the current user publish the report?
      *
@@ -461,17 +480,20 @@ class CustomReportController extends ReportController
             $can = true;
         } elseif ($this->getCurrentUser()->isSystemAdmin()) {
             $can = true;
-        } elseif ($this->userOwnsReport($reportId)) {
+        }/* elseif ($this->userOwnsReport($reportId)) {
             $can = true;
-        }
+        }*/
 
         return $can;
     }
 
-    protected function userOwnsReport($reportId)
+    /**
+     * @param Report $report
+     * @return bool
+     */
+    protected function userOwnsReport($report)
     {
-        // @todo: implement
-        return false;
+        return ($report->getUser()->getId() == $this->getCurrentUser()->getId());
     }
 
     protected function getPublishForm()
@@ -605,32 +627,42 @@ class CustomReportController extends ReportController
      * @param User $user
      * @return bool
      */
-    protected function copyCustomReport(Report $sourceReport, $user, $addThisCollege = false)
+    protected function copyCustomReport(Report $sourceReport, $user, $addThisCollege = false, $duplicate = false)
     {
         // Don't copy to yourself
-        if ($sourceReport->getUser()->getId() == $user->getId()) {
+        if (!$duplicate && $sourceReport->getUser()->getId() == $user->getId()) {
             return false;
         }
 
-        // Get or create the sample peer group.
-        if ($peerGroup = $this->getSamplePeerGroup($user)) {
-            if ($addThisCollege) {
-                $peerGroup = $this->addThisCollegeToPeerGroup($peerGroup);
-            }
-            $peerGroupId = $peerGroup->getId();
+        // If duplicating, use the same peer group id
+        if ($duplicate) {
+            $peerGroupId = 'same';
         } else {
-            //$peerGroupIdToCopy = null; // Peer group for sample reports
-            $peerGroupId = $this->copyPeerGroup($this->peerGroupIdToCopy, $user, $addThisCollege);
+            // If not duplicating, get or create the sample peer group.
+            if ($peerGroup = $this->getSamplePeerGroup($user)) {
+                if ($addThisCollege) {
+                    $peerGroup = $this->addThisCollegeToPeerGroup($peerGroup);
+                }
+                $peerGroupId = $peerGroup->getId();
+            } else {
+                //$peerGroupIdToCopy = null; // Peer group for sample reports
+                $peerGroupId = $this->copyPeerGroup($this->peerGroupIdToCopy, $user, $addThisCollege);
+            }
         }
-
 
         $report = $this->getOrCreateReport($user);
         //$report->setCollege($user->getCollege());
 
-        $report->setName($sourceReport->getName());
+        $newName = $sourceReport->getName();
+        if ($duplicate) {
+            $newName .= ' copy';
+        }
+
+        $report->setName($newName);
         $report->setDescription($sourceReport->getDescription());
         $report->setDisplayFootnotes($sourceReport->getDisplayFootnotes());
         $report->setSourceReportId($sourceReport->getId());
+        $report->setPermission('private');
 
         $this->getReportModel()->save($report);
 
@@ -659,6 +691,8 @@ class CustomReportController extends ReportController
         }
 
         $this->getReportModel()->getEntityManager()->flush();
+
+        return $report->getId();
     }
 
     protected function getOrCreateReport(User $user)
@@ -767,7 +801,9 @@ class CustomReportController extends ReportController
     protected function copyItem(ReportItem $sourceItem, Report $newReport, $peerGroupId = null)
     {
         $config = $sourceItem->getConfig();
-        $config['peerGroup'] = $peerGroupId;
+        if ($peerGroupId != 'same') {
+            $config['peerGroup'] = $peerGroupId;
+        }
 
         $sourceCollege = $sourceItem->getReport()->getUser()->getCollege();
         $targetCollege = $newReport->getUser()->getCollege();

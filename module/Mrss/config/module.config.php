@@ -1670,6 +1670,16 @@ return array(
                                     )
                                 )
                             ),
+                            'duplicate' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/duplicate/:id',
+                                    'defaults' => array(
+                                        'action' => 'duplicate',
+                                        'id' => 0
+                                    )
+                                )
+                            ),
                             'delete' => array(
                                 'type' => 'segment',
                                 'options' => array(
