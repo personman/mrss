@@ -6,6 +6,11 @@
     float: left;
 }
 
+.complete-chart-box .custom-report-text {
+    height: 390px;
+    overflow: hidden;
+}
+
 .complete-chart-box.full-width {
     width: 1040px;
     height: 640px;
@@ -17,6 +22,7 @@
 }
 
 .complete-chart-box.full-width.report-text-wrapper .custom-report-text {
+    height: auto !important;
     min-height: 30px !important;
 }
 
