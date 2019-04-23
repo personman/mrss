@@ -1,6 +1,7 @@
 <?php /** @var \Mrss\Entity\Report $report */ ?>
 <? $this->headLink()->appendStylesheet('/css/custom-report.css?v=13', 'screen,print') ?>
 <? $this->headLink()->appendStylesheet('/css/custom-report-print.css?v=4', $printMedia) ?>
+<?php if (!empty($embed)) $this->headLink()->appendStylesheet('/css/custom-report-embed.css?v=1'); ?>
 <?php
 $this->headScript()->appendFile(
     '/js/report.js?v=7',

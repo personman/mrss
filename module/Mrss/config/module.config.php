@@ -1603,10 +1603,11 @@ return array(
                             'public' => array(
                                 'type' => 'segment',
                                 'options' => array(
-                                    'route' => '/public/:id',
+                                    'route' => '/public/:id[/:embed]',
                                     'defaults' => array(
                                         'action' => 'publicView',
                                         'id' => 0,
+                                        'embed' => false
                                     )
                                 )
                             ),

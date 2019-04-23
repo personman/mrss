@@ -166,6 +166,7 @@ class CustomReportController extends ReportController
     {
         $reportId = $this->params()->fromRoute('id');
         $print = $this->params()->fromRoute('print');
+        $embed = $this->params()->fromRoute('embed');
         $report = $this->getReport($reportId);
         $this->populateCache($report);
 
@@ -181,6 +182,7 @@ class CustomReportController extends ReportController
             'report' => $report,
             'print' => $print,
             'printMedia' => $printMedia,
+            'embed' => $embed,
             'systemLogo' => $this->getSystemLogo($report)
         );
     }
