@@ -1,3 +1,7 @@
+html {
+    overflow: hidden !important;
+}
+
 .header, .navbar-nav {
     display: none;
 }
