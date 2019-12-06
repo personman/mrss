@@ -529,6 +529,10 @@ class Peer extends Report
             $barChart->setYAxisMin($this->getYMin($series));
         }
 
+	// Bond rating limits for Envisio
+	if ($benchmark && $benchmark->getDbColumn() == 'bondrating') {
+            $barChart->setYAxisMin(3.0);
+        }
 
         return $barChart->getConfig();
 
