@@ -1429,7 +1429,7 @@ class SubscriptionController extends SubscriptionBaseController
             $invoice->addTo($toEmail);
         } else {
             $invoice->addTo('dfergu15@jccc.edu');
-            $invoice->addTo('michelletaylor@jccc.edu');
+            //$invoice->addTo('michelletaylor@jccc.edu');
         }
 
         $paymentMethod = $subscription->getPaymentMethod();
