@@ -140,6 +140,7 @@ class ChartBuilder extends Report
             }
         }
 
+//if ($_SERVER['REMOTE_ADDR'] == '136.32.5.49') { pr($colors); pr($name); prd($color); }
         return $color;
     }
 
