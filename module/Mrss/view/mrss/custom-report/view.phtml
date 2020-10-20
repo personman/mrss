@@ -71,9 +71,6 @@ $this->headScript()->appendFile(
 
     <p class="reportDescription">
         <?= $report->getDescription() ?>
-        <?php if ($dateUpdated = $report->getUpdated()): ?>
-            Last updated on <?= $dateUpdated ?>
-        <?php endif ?>
     </p>
 
     <div class="reportItems">
