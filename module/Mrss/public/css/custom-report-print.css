@@ -51,7 +51,7 @@ a[href]:after {
 }
 
 tspan {
-    font-size: 155% !important;
+    /*font-size: 155% !important;*/
 }
 
 .highcharts-title {
