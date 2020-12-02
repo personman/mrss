@@ -301,6 +301,7 @@ abstract class AbstractChart
             $config['chart']['height'] = 600;
 
             $config['legend']['layout'] = "horizontal";
+            $config['legend']['align'] = "center";
             $config['legend']['width'] = 860;
             $config['legend']['itemWidth'] = 210;
             $config['legend']['itemStyle'] = array(
@@ -308,6 +309,7 @@ abstract class AbstractChart
             );
         } else {
             $config['legend']['layout'] = "horizontal";
+            $config['legend']['align'] = "center";
             $config['legend']['width'] = 430;
             $config['legend']['itemWidth'] = 210;
             $config['legend']['itemStyle'] = array(
