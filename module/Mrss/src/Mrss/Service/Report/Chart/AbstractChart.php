@@ -27,6 +27,7 @@ abstract class AbstractChart
             ),
             'title' => array(
                 'text' => '',
+                'style'
             ),
             'subtitle' => array(
                 'text' => '',

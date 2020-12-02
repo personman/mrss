@@ -53,3 +53,7 @@ a[href]:after {
 tspan {
     font-size: 155% !important;
 }
+
+.highcharts-title {
+    font-size: 13px !important;
+}
