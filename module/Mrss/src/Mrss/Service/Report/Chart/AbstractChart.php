@@ -302,7 +302,6 @@ abstract class AbstractChart
 
             $config['legend']['layout'] = "horizontal";
             $config['legend']['align'] = "center";
-            $config['legend']['backgroundColor'] = "#EEE";
             $config['legend']['width'] = 660;
             $config['legend']['itemWidth'] = 210;
             $config['legend']['itemStyle'] = array(
