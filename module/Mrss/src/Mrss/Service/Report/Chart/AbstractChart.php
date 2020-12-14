@@ -308,8 +308,7 @@ abstract class AbstractChart
                 'width' => '175px'
             );
         } else {
-            $config['chart']['width'] = 430;
-            //$config['chart']['width'] = 430;
+            $config['chart']['width'] = 400;
 
             $config['legend']['layout'] = "horizontal";
             $config['legend']['align'] = "center";
