@@ -43,7 +43,7 @@ abstract class AbstractChart
             'lang' => array(
                 'thousandsSep' => ','
             ),
-            colors => array(
+            'colors' => array(
                 '#7cb5ec',
                 '#434348',
                 '#90ed7d',
