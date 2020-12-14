@@ -54,7 +54,8 @@ abstract class AbstractChart
                 '#2b908f',
                 '#f45b5b',
                 '#91e8e1',
-                '#6328e0'
+                '#6328e0',
+                '#73280a',
             ),
         );
 
