@@ -110,6 +110,10 @@ select {
     width: 80%;
 }
 
+#content .container {
+    width: 895px !important;
+}
+
 #control-group-submitButton, #control-group-previewButton, #control-group-cancelButton {
     width: 27%;
     float: right;
