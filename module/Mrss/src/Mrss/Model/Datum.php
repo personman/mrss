@@ -121,7 +121,7 @@ having count > 1;";
                 foreach ($duplicates as $datum) {
                     if (!$firstDone) {
                         // Keep this one. Trim the dbColumn (probable cause of issue)
-                        $datum->setDbColumn(trim($datum->getDbColumn()));
+                        $datum->setDbColumn(trim($datum->getBenchmark()->getDbColumn()));
                         $this->save($datum);
                         $firstDone = true;
                     } else {
@@ -136,7 +136,7 @@ having count > 1;";
                     $value = $datum->getValue();
                     if (!$dupeRemoved && $value) {
                         // Keep this one. Trim the dbColumn (probable cause of issue)
-                        $datum->setDbColumn(trim($datum->getDbColumn()));
+                        $datum->setDbColumn(trim($datum->getBenchmark()->getDbColumn()));
                         $dupeRemoved = true;
                     } else {
                         // Delete it
