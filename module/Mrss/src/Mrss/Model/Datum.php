@@ -74,7 +74,11 @@ class Datum extends AbstractModel
 
     public function removeDuplicates()
     {
-        $year = 2019;
+        $year = 2020;
+        if (!empty($_GET['year'])) {
+            $year = $_GET['year'];
+        }
+
         $connection = $this->getEntityManager()->getConnection();
 
         $sql = "select *, count(*) count
